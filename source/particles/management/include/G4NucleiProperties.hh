@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NucleiProperties.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -99,16 +99,16 @@ private:
 private: 
   // table of orbit electrons mass - binding energy 
   enum  {MaxZ = 120};
-  static G4double electronMass[MaxZ];
+  static G4ThreadLocal G4double electronMass[MaxZ];
 
 private:
-  static G4bool   isIntialized;
-  static G4double mass_proton;
-  static G4double mass_neutron;
-  static G4double mass_deuteron;
-  static G4double mass_triton;
-  static G4double mass_alpha;
-  static G4double mass_He3;
+  static G4ThreadLocal G4bool   isIntialized;
+  static G4ThreadLocal G4double mass_proton;
+  static G4ThreadLocal G4double mass_neutron;
+  static G4ThreadLocal G4double mass_deuteron;
+  static G4ThreadLocal G4double mass_triton;
+  static G4ThreadLocal G4double mass_alpha;
+  static G4ThreadLocal G4double mass_He3;
  	
 };
 

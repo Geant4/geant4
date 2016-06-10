@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TransportationManager.hh 68709 2013-04-05 09:03:07Z gcosmo $
 //
 // class G4TransportationManager
 //
@@ -100,6 +100,7 @@ class G4TransportationManager
        // or the pointer to world physical volume. If not existing already
        // create it and register it in the collection
 
+     G4bool RegisterWorld( G4VPhysicalVolume* aWorld );
      void DeRegisterNavigator( G4Navigator* aNavigator );
      G4int  ActivateNavigator( G4Navigator* aNavigator );
      void DeActivateNavigator( G4Navigator* aNavigator );
@@ -117,7 +118,6 @@ class G4TransportationManager
 
      void ClearNavigators();
        // Clear collection of navigators and delete allocated objects
-     G4bool RegisterWorld( G4VPhysicalVolume* aWorld );
      void DeRegisterWorld( G4VPhysicalVolume* aWorld );
        // Register/de-register an already allocated world volume.
        // The pointed object is not deleted.
@@ -136,7 +136,7 @@ class G4TransportationManager
      G4GeometryMessenger*    fGeomMessenger;
      G4SafetyHelper*         fSafetyHelper;
 
-     static G4TransportationManager*  fTransportationManager;
+     static G4ThreadLocal G4TransportationManager*  fTransportationManager;
 };
 
 #include "G4TransportationManager.icc"

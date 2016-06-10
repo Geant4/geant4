@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.cc 68763 2013-04-05 12:36:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:fDetector(Det)
+:fDetector(Det), fTestemDir(0), fDetDir(0), fWallMater(0), fWallThick(0),
+ fCavThick(0), fWorldRadius(0), fUpdateCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");

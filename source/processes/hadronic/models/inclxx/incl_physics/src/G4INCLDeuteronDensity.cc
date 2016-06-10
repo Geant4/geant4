@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -50,128 +48,137 @@
 
 namespace G4INCL {
 
-  /// \brief Coefficients for the deuteron wave function
-  const G4double DeuteronDensity::coeff1[coeffTableSize] = {
-    0.88688076e+0,
-    -0.34717093e+0,
-    -0.30502380e+1,
-    0.56207766e+2,
-    -0.74957334e+3,
-    0.53365279e+4,
-    -0.22706863e+5,
-    0.60434469e+5,
-    -0.10292058e+6,
-    0.11223357e+6,
-    -0.75925226e+5,
-    0.29059715e+5,
-    -0.48157368e+4
-  };
+  namespace DeuteronDensity {
 
-  /// \brief Coefficients for the deuteron wave function
-  const G4double DeuteronDensity::coeff2[coeffTableSize] = {
-    0.23135193e-1,
-    -0.85604572e+0,
-    0.56068193e+1,
-    -0.69462922e+2,
-    0.41631118e+3,
-    -0.12546621e+4,
-    0.12387830e+4,
-    0.33739172e+4,
-    -0.13041151e+5,
-    0.19512524e+5,
-    -0.15634324e+5,
-    0.66231089e+4,
-    -0.11698185e+4
-  };
+    namespace {
 
-  /// \brief Normalisation coefficient for the r-space deuteron wave function
-  const G4double DeuteronDensity::normalisationR = std::sqrt(32. * Math::pi) * 0.28212;
+      const G4int coeffTableSize = 13;
 
-  /// \brief Normalisation coefficient for the p-space deuteron wave function
-  const G4double DeuteronDensity::normalisationP = normalisationR / (std::sqrt(4. * Math::pi) * std::pow(PhysicalConstants::hc,1.5));
+      /// \brief Coefficients for the deuteron wave function
+      const G4double coeff1[coeffTableSize] = {
+        0.88688076e+0,
+        -0.34717093e+0,
+        -0.30502380e+1,
+        0.56207766e+2,
+        -0.74957334e+3,
+        0.53365279e+4,
+        -0.22706863e+5,
+        0.60434469e+5,
+        -0.10292058e+6,
+        0.11223357e+6,
+        -0.75925226e+5,
+        0.29059715e+5,
+        -0.48157368e+4
+      };
 
-  /// \brief Mysterious coefficient that appears in the wavefunctions
-  const G4double DeuteronDensity::al = 0.23162461;
+      /// \brief Coefficients for the deuteron wave function
+      const G4double coeff2[coeffTableSize] = {
+        0.23135193e-1,
+        -0.85604572e+0,
+        0.56068193e+1,
+        -0.69462922e+2,
+        0.41631118e+3,
+        -0.12546621e+4,
+        0.12387830e+4,
+        0.33739172e+4,
+        -0.13041151e+5,
+        0.19512524e+5,
+        -0.15634324e+5,
+        0.66231089e+4,
+        -0.11698185e+4
+      };
 
-  G4double DeuteronDensity::densityR(const G4double r) {
-    const G4double sWave = wavefunctionR(0, r);
-    const G4double dWave = wavefunctionR(2, r);
-    return r*r*(sWave*sWave + dWave*dWave);
-  }
+      /// \brief Normalisation coefficient for the r-space deuteron wave function
+      const G4double normalisationR = std::sqrt(32. * Math::pi) * 0.28212;
 
-  G4double DeuteronDensity::derivDensityR(const G4double r) {
-    const G4double sWave = wavefunctionR(0, r);
-    const G4double dWave = wavefunctionR(2, r);
-    const G4double sWaveDeriv = derivWavefunctionR(0, r);
-    const G4double dWaveDeriv = derivWavefunctionR(2, r);
-    return (sWave*sWaveDeriv + dWave*dWaveDeriv) / Math::twoPi;
-  }
+      /// \brief Normalisation coefficient for the p-space deuteron wave function
+      const G4double normalisationP = normalisationR / (std::sqrt(4. * Math::pi) * std::pow(PhysicalConstants::hc,1.5));
 
-  G4double DeuteronDensity::densityP(const G4double p) {
-    const G4double sWave = wavefunctionP(0, p);
-    const G4double dWave = wavefunctionP(2, p);
-    return p*p*(sWave*sWave + dWave*dWave);
-  }
+      /// \brief Mysterious coefficient that appears in the wavefunctions
+      const G4double al = 0.23162461;
 
-  G4double DeuteronDensity::wavefunctionR(const G4int l, const G4double theR) {
-// assert(l==0 || l==2); // only s- and d-waves in a deuteron
-    const G4double r = 2. * std::max(theR, 1.e-4);
-
-    G4double result = 0.;
-    G4double fmr;
-
-    for(G4int i=0; i<coeffTableSize; ++i) {
-      fmr = r * (al+i);
-      if(l==0) { // s-wave
-        result += coeff1[i] * std::exp(-fmr);
-      } else { // d-wave
-        result += coeff2[i] * std::exp(-fmr) * (1.+3./fmr+3./(fmr*fmr));
-      }
     }
 
-    result *= normalisationR/r;
-    return result;
-  }
-
-  G4double DeuteronDensity::derivWavefunctionR(const G4int l, const G4double theR) {
-// assert(l==0 || l==2); // only s- and d-waves in a deuteron
-    const G4double r = 2. * std::max(theR, 1.e-4);
-
-    G4double result = 0.;
-    G4double fmr;
-
-    for(G4int i=0; i<coeffTableSize; ++i) {
-      fmr = r * (al+i);
-      if(l==0) { // s-wave
-        result += coeff1[i] * std::exp(-fmr) * (fmr + 1.);
-      } else { // d-wave
-        result += coeff2[i] * std::exp(-fmr) * (fmr + 4. + 9./fmr + 9./(fmr*fmr));
-      }
+    G4double densityR(const G4double r) {
+      const G4double sWave = wavefunctionR(0, r);
+      const G4double dWave = wavefunctionR(2, r);
+      return r*r*(sWave*sWave + dWave*dWave);
     }
 
-    result *= -normalisationR/(r*r);
-    return result;
-  }
-
-  G4double DeuteronDensity::wavefunctionP(const G4int l, const G4double theQ) {
-// assert(l==0 || l==2); // only s- and d-waves in a deuteron
-    const G4double q = theQ / PhysicalConstants::hc;
-    const G4double q2 = q*q;
-    G4double result=0.;
-    G4double fmq, alPlusI;
-    for(G4int i=0; i<coeffTableSize; ++i) {
-      alPlusI = al+i;
-      fmq = q2 + alPlusI*alPlusI;
-      if(l==0) { // s-wave
-        result += coeff1[i] / fmq;
-      } else { // d-wave
-        result += coeff2[i] / fmq;
-      }
+    G4double derivDensityR(const G4double r) {
+      const G4double sWave = wavefunctionR(0, r);
+      const G4double dWave = wavefunctionR(2, r);
+      const G4double sWaveDeriv = derivWavefunctionR(0, r);
+      const G4double dWaveDeriv = derivWavefunctionR(2, r);
+      return (sWave*sWaveDeriv + dWave*dWaveDeriv) / Math::twoPi;
     }
 
-    result *= normalisationP;
-    return result;
+    G4double densityP(const G4double p) {
+      const G4double sWave = wavefunctionP(0, p);
+      const G4double dWave = wavefunctionP(2, p);
+      return p*p*(sWave*sWave + dWave*dWave);
+    }
+
+    G4double wavefunctionR(const G4int l, const G4double theR) {
+// assert(l==0 || l==2); // only s- and d-waves in a deuteron
+      const G4double r = 2. * std::max(theR, 1.e-4);
+
+      G4double result = 0.;
+      G4double fmr;
+
+      for(G4int i=0; i<coeffTableSize; ++i) {
+        fmr = r * (al+i);
+        if(l==0) { // s-wave
+          result += coeff1[i] * std::exp(-fmr);
+        } else { // d-wave
+          result += coeff2[i] * std::exp(-fmr) * (1.+3./fmr+3./(fmr*fmr));
+        }
+      }
+
+      result *= normalisationR/r;
+      return result;
+    }
+
+    G4double derivWavefunctionR(const G4int l, const G4double theR) {
+// assert(l==0 || l==2); // only s- and d-waves in a deuteron
+      const G4double r = 2. * std::max(theR, 1.e-4);
+
+      G4double result = 0.;
+      G4double fmr;
+
+      for(G4int i=0; i<coeffTableSize; ++i) {
+        fmr = r * (al+i);
+        if(l==0) { // s-wave
+          result += coeff1[i] * std::exp(-fmr) * (fmr + 1.);
+        } else { // d-wave
+          result += coeff2[i] * std::exp(-fmr) * (fmr + 4. + 9./fmr + 9./(fmr*fmr));
+        }
+      }
+
+      result *= -normalisationR/(r*r);
+      return result;
+    }
+
+    G4double wavefunctionP(const G4int l, const G4double theQ) {
+// assert(l==0 || l==2); // only s- and d-waves in a deuteron
+      const G4double q = theQ / PhysicalConstants::hc;
+      const G4double q2 = q*q;
+      G4double result=0.;
+      G4double fmq, alPlusI;
+      for(G4int i=0; i<coeffTableSize; ++i) {
+        alPlusI = al+i;
+        fmq = q2 + alPlusI*alPlusI;
+        if(l==0) { // s-wave
+          result += coeff1[i] / fmq;
+        } else { // d-wave
+          result += coeff2[i] / fmq;
+        }
+      }
+
+      result *= normalisationP;
+      return result;
+    }
+
   }
 
 }
-

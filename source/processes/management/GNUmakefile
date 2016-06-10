@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2000-10-24 13:24:15 gcosmo Exp $
+# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
 # --------------------------------------------------------------------
 # GNUmakefile for process management library.  Gabriele Cosmo, 4/4/97.
 # --------------------------------------------------------------------

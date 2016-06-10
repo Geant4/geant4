@@ -1,4 +1,4 @@
-/* $Id: win32def.c,v 1.3 2004-06-18 16:10:06 gcosmo Exp $ */
+/* $Id: win32def.c 66368 2012-12-18 09:20:17Z gcosmo $ */
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
 /* |   Permission to use, copy, modify, and distribute this software       | */

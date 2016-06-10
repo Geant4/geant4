@@ -53,6 +53,50 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:complexType name="multiUnionNode">
+    <xs:annotation>
+      <xs:documentation>Base node for Multi-Union structure</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="SolidType">
+	<xs:sequence>
+          <xs:choice minOccurs="0">
+            <xs:element name="position" type="positionType"></xs:element>
+            <xs:element name="positionref" type="ReferenceType"></xs:element>
+          </xs:choice>
+          <xs:choice minOccurs="0">
+            <xs:element name="rotation" type="rotationType"></xs:element>
+            <xs:element name="rotationref" type="ReferenceType"></xs:element>
+          </xs:choice>
+	</xs:sequence>
+        <xs:attribute name="solid" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="multiUnion" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>MultiUnion is a Solid created by Union of many Solids.
+       This Solid is constructed by multiUnionNodes;
+       each Node is described by solid with its position and rotation.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:sequence>
+	    <xs:element name="node" minOccurs="1" maxOccurs="unbounded" type="multiUnionNode"/>	
+	  </xs:sequence>
+	 </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>  
+ 
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
   <xs:element name="reflectedSolid" substitutionGroup="Solid">
@@ -474,6 +518,35 @@
     <xs:attribute default="0.0" name="rmin" type="ExpressionOrIDREFType"></xs:attribute>
     <xs:attribute name="rmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
   </xs:complexType>
+
+ <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="genericPolycone" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>Generic polycone or polycone segment described by
+        startphi starting angle of the segment in radians
+        deltaphi delta angle of the segment in radians
+	and a set of points with (r,z)coordinates
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:sequence>
+	    <xs:element name="rzpoint" minOccurs="3" maxOccurs="unbounded" type="RZPointType"/>	
+	  </xs:sequence>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute default="0.0" name="startphi" type="ExpressionOrIDREFType"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>  
+  <!-- +++++++++++++ -->
+  <xs:complexType name="RZPointType">
+    <xs:attribute name="r" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+    <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>  
+  </xs:complexType>
+
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   
   <xs:element name="para" substitutionGroup="Solid">
@@ -610,6 +683,30 @@
 	<xs:extension base="SolidType">
 	  <xs:sequence>
 	    <xs:element name="zplane" minOccurs="1" maxOccurs="unbounded" type="ZPlaneType"/>	
+	  </xs:sequence>
+	  
+	  <xs:attribute name="startphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="deltaphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="numsides" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>	
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
+  <xs:element name="genericPolyhedra" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>Polyhedra is described by
+	startphi     initial phi starting angle
+	totalphi     total phi angle
+	numsides  number sides
+	and a set of points with (r,z) coordinates.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:sequence>
+	    <xs:element name="rzpoint" minOccurs="3" maxOccurs="unbounded" type="RZPointType"/>	
 	  </xs:sequence>
 	  
 	  <xs:attribute name="startphi" type="ExpressionOrIDREFType" use="required"></xs:attribute>

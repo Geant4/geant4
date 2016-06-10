@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id$
+// $Id: EventAction.hh 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,8 +48,8 @@ public:
   EventAction();
   ~EventAction();
 
-  void BeginOfEventAction(const G4Event*);
-  void   EndOfEventAction(const G4Event*);
+  virtual void BeginOfEventAction(const G4Event*);
+  virtual void   EndOfEventAction(const G4Event*);
     
   inline void SetPrintModulo(G4int val) { fPrintModulo = val; };
             

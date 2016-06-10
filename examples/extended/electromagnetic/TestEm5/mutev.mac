@@ -35,5 +35,5 @@
 #
 /testem/stack/killSecondaries 2
 #
-/testem/event/printModulo 100
+/run/printProgress 100
 /run/beamOn 1000

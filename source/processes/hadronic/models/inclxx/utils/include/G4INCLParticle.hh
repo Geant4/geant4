@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -51,7 +49,7 @@
 #include "G4INCLParticleType.hh"
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLLogger.hh"
-#include <list>
+#include <vector>
 #include <sstream>
 #include <string>
 #include <algorithm>
@@ -60,14 +58,44 @@ namespace G4INCL {
 
   class Particle;
 
-  typedef std::list<G4INCL::Particle*> ParticleList;
-  typedef std::list<G4INCL::Particle*>::const_iterator ParticleIter;
+  template<class T>
+    class UnorderedVector : private std::vector<T> {
+      public:
+        UnorderedVector() {}
+        using std::vector<T>::push_back;
+        using std::vector<T>::pop_back;
+        using std::vector<T>::size;
+        using std::vector<T>::begin;
+        using std::vector<T>::end;
+        using std::vector<T>::rbegin;
+        using std::vector<T>::rend;
+        using std::vector<T>::front;
+        using std::vector<T>::back;
+        using std::vector<T>::clear;
+        using std::vector<T>::empty;
+        using std::vector<T>::insert;
+        using std::vector<T>::erase;
+        using typename std::vector<T>::iterator;
+        using typename std::vector<T>::reverse_iterator;
+        using typename std::vector<T>::const_iterator;
+        using typename std::vector<T>::const_reverse_iterator;
+        void remove(const T &t) {
+          const typename std::vector<T>::iterator removeMe = std::find(begin(), end(), t);
+// assert(removeMe!=end());
+          *removeMe = back();
+          pop_back();
+        }
+    };
+
+  typedef UnorderedVector<Particle*>   ParticleList;
+  typedef ParticleList::const_iterator ParticleIter;
+  typedef ParticleList::iterator       ParticleMutableIter;
 
   class Particle {
   public:
     Particle();
-    Particle(ParticleType t, G4double energy, ThreeVector momentum, ThreeVector position);
-    Particle(ParticleType t, ThreeVector momentum, ThreeVector position);
+    Particle(ParticleType t, G4double energy, ThreeVector const &momentum, ThreeVector const &position);
+    Particle(ParticleType t, ThreeVector const &momentum, ThreeVector const &position);
     virtual ~Particle() {}
 
     /** \brief Copy constructor
@@ -87,6 +115,8 @@ namespace G4INCL {
       nCollisions(rhs.nCollisions),
       nDecays(rhs.nDecays),
       thePotentialEnergy(rhs.thePotentialEnergy),
+      rpCorrelated(rhs.rpCorrelated),
+      uncorrelatedMomentum(rhs.uncorrelatedMomentum),
       theHelicity(rhs.theHelicity),
       emissionTime(rhs.emissionTime),
       outOfWell(rhs.outOfWell),
@@ -134,6 +164,8 @@ namespace G4INCL {
       std::swap(outOfWell, rhs.outOfWell);
 
       std::swap(theMass, rhs.theMass);
+      std::swap(rpCorrelated, rhs.rpCorrelated);
+      std::swap(uncorrelatedMomentum, rhs.uncorrelatedMomentum);
     }
 
   public:
@@ -196,14 +228,14 @@ namespace G4INCL {
           theZ = -1;
           break;
         case Composite:
-         // ERROR("Trying to set particle type to Composite! Construct a Cluster object instead" << std::endl);
+         // INCL_ERROR("Trying to set particle type to Composite! Construct a Cluster object instead" << std::endl);
           theA = 0;
           theZ = 0;
           break;
         case UnknownParticle:
           theA = 0;
           theZ = 0;
-          ERROR("Trying to set particle type to Unknown!" << std::endl);
+          INCL_ERROR("Trying to set particle type to Unknown!" << std::endl);
           break;
       }
 
@@ -346,7 +378,7 @@ namespace G4INCL {
           break;
 
         default:
-          ERROR("Particle::getINCLMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getINCLMass: Unknown particle type." << std::endl);
           return 0.0;
           break;
       }
@@ -375,7 +407,7 @@ namespace G4INCL {
           break;
 
         default:
-          ERROR("Particle::getTableMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getTableMass: Unknown particle type." << std::endl);
           return 0.0;
           break;
       }
@@ -404,7 +436,7 @@ namespace G4INCL {
           break;
 
         default:
-          ERROR("Particle::getRealMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getRealMass: Unknown particle type." << std::endl);
           return 0.0;
           break;
       }
@@ -496,7 +528,7 @@ namespace G4INCL {
     G4double getInvariantMass() const {
       const G4double mass = std::pow(theEnergy, 2) - theMomentum.dot(theMomentum);
       if(mass < 0.0) {
-        ERROR("E*E - p*p is negative." << std::endl);
+        INCL_ERROR("E*E - p*p is negative." << std::endl);
         return 0.0;
       } else {
         return std::sqrt(mass);
@@ -719,8 +751,39 @@ namespace G4INCL {
      * Return a NULL pointer
      */
     ParticleList const *getParticles() const {
-      WARN("Particle::getParticles() method was called on a Particle object" << std::endl);
+      INCL_WARN("Particle::getParticles() method was called on a Particle object" << std::endl);
       return 0;
+    }
+
+    /** \brief Return the reflection momentum
+     *
+     * The reflection momentum is used by calls to getSurfaceRadius to compute
+     * the radius of the sphere where the nucleon moves. It is necessary to
+     * introduce fuzzy r-p correlations.
+     */
+    G4double getReflectionMomentum() const {
+      if(rpCorrelated)
+        return theMomentum.mag();
+      else
+        return uncorrelatedMomentum;
+    }
+
+    /// \brief Set the uncorrelated momentum
+    void setUncorrelatedMomentum(const G4double p) { uncorrelatedMomentum = p; }
+
+    /// \brief Make the particle follow a strict r-p correlation
+    void rpCorrelate() { rpCorrelated = true; }
+
+    /// \brief Make the particle not follow a strict r-p correlation
+    void rpDecorrelate() { rpCorrelated = false; }
+
+    /// \brief Get the cosine of the angle between position and momentum
+    G4double getCosRPAngle() const {
+      const G4double norm = thePosition.mag2()*thePropagationMomentum->mag2();
+      if(norm>0.)
+        return thePosition.dot(*thePropagationMomentum) / std::sqrt(norm);
+      else
+        return 1.;
     }
 
   protected:
@@ -739,13 +802,16 @@ namespace G4INCL {
     G4double thePotentialEnergy;
     long ID;
 
+    G4bool rpCorrelated;
+    G4double uncorrelatedMomentum;
+
   private:
     G4double theHelicity;
     G4double emissionTime;
     G4bool outOfWell;
 
     G4double theMass;
-    static long nextID;
+    static G4ThreadLocal long nextID;
 
   };
 }

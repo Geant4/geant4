@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsGeometrySet.cc 66870 2013-01-14 23:38:59Z adotti $
 
 // /vis/geometry commands - John Allison  31st January 2006
 

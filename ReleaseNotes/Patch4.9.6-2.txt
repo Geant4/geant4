@@ -1,0 +1,216 @@
+
+                 Geant4 9.6 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                              17 May 2013
+
+List of fixes included in this public patch since the public release 9.6.p01:
+
+  o Error Propagation:
+    -----------------
+    + Introduced fixes for problem reports #1435, #1447, #1448 and #1453.
+    + Fixed memory leak in G4ErrorPropagator::PropagateOneStep() for track
+      creation at the first step. Addresses problem report #1466.
+      Corrected composed printout. Removed unused data.
+
+  o Event:
+    -----
+    + Ensure deletion of "angsigmayCmd1" G4UIcommand instance in destructor
+      of G4GeneralParticleSourceMessenger, fixing minor memory leak.
+    + Removed unused variables in G4AdjointPosOnPhysVolGenerator,
+      G4AdjointPosOnPhysVolGenerator, G4GeneralParticleSource,
+      G4SPSEneDistribution, and G4SPSRandomGenerator.
+
+  o G3toG4:
+    ------
+    + Fixed missing inclusion of <assert.h> in G3Division source.
+
+  o Geometry:
+    --------
+    + divisions:
+      o Corrected G4PVDivisionFactory instance accessor.
+      o Corrected composed cout in exceptions for G4ParameterisationBox
+        and G4ParameterisationTrd.
+    + magneticfield:
+      o Updated numerical value of the neutron anomaly in G4Mag_SpinEqRhs.
+      o Removed unused private data-members in G4Mag_UsualEqRhs and
+        G4RKG3_Stepper.
+    + solids/CSG:
+      o Fix in G4Cons::DistanceToIn(p,v) for initialisation of 'dRmax'
+        for the case of shape with Rmin1=Rmax1=0.
+    + solids/specific:
+      o Fix in G4ExtrudedSolid::IsSameLine() to use the perpendicular
+        distance to a line when deciding, and not the y-intercept difference.
+        Issue responsible for a problem observed in ATLAS in a Boolean
+        subtraction composition.
+      o Fix in calculation of normal in G4Tet::DistanceToOut(p,v,..) and
+        SurfaceNormal(p).
+      o Fix in G4Polycone::GetPointOnCone() for cases of shape with decreasing
+        Z. Fixes cases of false report for overlaps detection.
+        Added check with exception in constructor for polycone with
+        rInner > rOuter for the same Z.
+        Addressing problem report #1462.
+      o G4TessellatedSolid: fixed problem with navigation in solids with
+        concave surfaces. Addresses problem report #1456.
+      o Removed unused private data member in G4TwistTrapParallelSide.
+
+  o Global:
+    ------
+    + G4Pow: fixed bug in interpolation inside logA() and A13() methods,
+      now interpolation is accurate at better than per mille level; in worse
+      cases (x~1.45 or x~0.75) better than 2% level.
+    + Minor changes to G4ConvergenceTester: output can now optionally be
+      redirected a different stream (defaults is cout).
+      Accessors are made public and check if data has been added.
+    + Removed unused private members in G4JTPolynomialSolver.
+    + Updated date and version for 9.6.p02.
+
+  o Graphics Representations:
+    ------------------------
+    + HepPolyhedron: introduced 'spatialTolerance' constant, equal to 0.01*nm,
+      allowing for creation of nm-sized objects.
+      Addresses problem report #1452.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Adjoint:
+      o G4AdjointhMultipleScattering: use msc95 instead of obsolete msc90.
+      o Removed unused variables detected with clang compilation warnings.
+    + Muons:
+      o G4MuPairProductionModel, G4MuBremsstrahlungModel: fixed rare case
+        of division by zero in cross-section computation.
+        Addressing problem report #1471.
+    + Polarisation
+      o G4PolarizedComptonCrossSection: removed unused class members.
+    + Standard:
+      o G4UrbanMscModel93/95/96: disabled 'sampleZ' option by default (this
+        option enables/disables sampling of true step length); helps in
+        removing rare cases of e+- interactions/decay on geometry boundary
+        and observed zero step length; a minor (~0.1%) change in sampling
+        calorimeter response is expected.
+        Correctly use "static const" for const parameters (minor CPU
+        speedup).
+      o G4WentzelOKandVIxSection: use different screening parameter formula
+        for e+- and other charged particles, improving agreement with data
+        both for e+- and muons.
+
+  o Generic Processes:
+    -----------------
+    + parameterisation:
+      o Fixed MacOS Clang compiler warning for unused private variable in
+        G4FastSimulationManagerProcess.
+    + Scoring:
+      o Set verbosity to false in G4ParallelWorldProcess for navigation
+        in parallel and mass world, reducing warning messages. 
+    + Transportation:
+      o G4CoupledTransportation: corrected condition for warning message
+        in AlongStepDoIt().
+      o G4CoupledTransportation, G4Transportation: removed unnecessary
+        static local variables.
+      o Removed unused data members causing compilation warnings in
+        MacOS clang.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4HadronFissionDataSet: always return zero (only HP may simulate
+        fission as a separate process).
+    + models/im_r_matrix:
+      o Fix in G4MesonAbsorption for loss of optimisation shortcut.
+        Addressing problem report #1416.
+      o Fix in G4CollisionMesonBaryonElastic::IsInCharge(): method always
+        returned false, effectively blocking meson-baryon elastic.
+        Expect to change distributions. Addressing problem report #1415.
+    + models/lll_fission:
+      o Fixed MacOS Clang compiler warning for appending int to string
+        in G4SmpWatt.
+    + models/neutron_hp:
+      o Fixed MacOS clang compiler warnings for unused private variables.
+    + models/parton_string/diffraction:
+      o Fix in G4FTFModel::PutOnMassShell() for K^+ Fe interactions at
+        T=4.6748 GeV, resolving observed cases of loops in central collision
+        due to sum of the excitation energy and energies of the ejected
+        nucleons larger than the initial energy (energy-momentum
+        non-conservation). Addressing problem report #1459.
+    + models/qmd:
+      o Fixed MacOS Clang compiler warnings for unused private variables in
+        G4QMDCollision.
+    + models/utils:
+      o G4NuclearFermiDensity: removed unused data member.
+    + stopping:
+      o G4EmCaptureCascade: fixed array initialisation.
+      o G4MuonMinusBoundDecay: improved muon capture rate data/lookup and
+        calculation of bound muon decay rate.
+        Corrected calculations and lookup of MuonCaptureRate in
+        G4StopElementSelector. Addresses problem report #1457.
+
+  o Parameterisations/gflash
+    ------------------------
+    + Fixed compilation warning in clang for unused data member in
+      GFlashShowerModelMessenger.
+
+  o Particles:
+    ---------
+    + Removed unused variable of thePDGiSpin from G4PDGCodeChecker.
+
+  o Persistency:
+    -----------
+    + ascii:
+      o Corrected problem in placement of an assembly in G4tgbVolume.
+        Addressing problem report #1433.
+      o Removed unused data member in G4tgbRotationMatrix.
+      o Corrected composed text in exception in G4tgrSolidBoolean.
+    + gdml:
+      o Removed unused data member in G4STRead.
+    + mctruth:
+      o Removed unused data member in G4PersistencyCenter.
+
+  o Physics Lists:
+    -------------
+    + Increased low limit from 10 eV to 100 eV in G4EmStandardPhysics_option4,
+      to fix range of electrons at low energy.
+    + G4EmLivermorePhysics: increased low limit to 100 eV and number of bins
+      for tables to 220 to avoid problems in Livermore ionisation for
+      electron stopping powers and ranges.
+
+  o Track:
+    -----
+    + Fix in G4ParticleChange for velocity of neutrons and recoil in elastic
+      scattering; correspondingly, fixed time of neutron hits in calorimeters.
+      Addressing problem report #1451.
+    + G4ParticleChangeForEloss, G4ParticleChangeForGamma: clean up
+      computation of velocity (expected little performance improvement).
+
+  o Tracking:
+    --------
+    + Fix in G4SteppingManager to allow for proper handling of multiple AtRest
+      processes. Addressing problem report #1397.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/composite_calorimeter:
+      o Fixed compilation error in main() for missing inclusion of
+        G4UImanager header. Fixed compilation warnings for
+        variables/parameters shadowing.
+    + advanced/lAr_calorimeter:
+      o Fixed bug in the primary generator, causing event abortion.
+    + novice/N02:
+      o ExN02PhysicsList: added ions. Addressing problem report #1444.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.6.
+  o  Technical notes distributed for release 9.6 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.6.p02 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

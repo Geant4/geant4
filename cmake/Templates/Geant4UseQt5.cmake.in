@@ -1,0 +1,23 @@
+# - Forward compatibility use file for Qt5
+include_directories("@Qt5Core_INCLUDE_DIRS@")
+include_directories("@Qt5Gui_INCLUDE_DIRS@")
+include_directories("@Qt5Widgets_INCLUDE_DIRS@")
+include_directories("@Qt5OpenGL_INCLUDE_DIRS@")
+include_directories("@Qt5PrintSupport_INCLUDE_DIRS@")
+
+add_definitions(@Qt5Core_DEFINITIONS@)
+add_definitions(@Qt5Gui_DEFINITIONS@)
+add_definitions(@Qt5Widgets_DEFINITIONS@)
+add_definitions(@Qt5OpenGL_DEFINITIONS@)
+add_definitions(@Qt5PrintSupport_DEFINITIONS@)
+
+list(APPEND QT_QTCORE_LIBRARY
+  "@Qt5Core_LIBRARIES@;@Qt5PrintSupport_LIBRARIES@")
+list(APPEND QT_QTGUI_LIBRARY
+  "@Qt5Widgets_LIBRARIES@;@Qt5Gui_LIBRARIES@")
+list(APPEND QT_QTOPENGL_LIBRARY
+  "@Qt5OpenGL_LIBRARIES@;@Qt5Gui_LIBRARIES@")
+
+list(APPEND QT_LIBRARIES
+  "@Qt5OpenGL_LIBRARIES@;@Qt5Gui_LIBRARIES@;@Qt5PrintSupport_LIBRARIES@;@Qt5Widgets_LIBRARIES@")
+

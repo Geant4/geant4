@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: FTFP_BERT_TRV.icc 67969 2013-03-13 09:44:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsFTFP_BERT_TRV.hh"
+#include "G4HadronPhysicsFTFP_BERT_TRV.hh"
 
 #include "G4WarnPLStatus.hh"
 
@@ -93,7 +93,7 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsFTFP_BERT_TRV(ver));
+  this->RegisterPhysics(  new G4HadronPhysicsFTFP_BERT_TRV(ver));
 
   // Stopping Physics
   this->RegisterPhysics( new G4StoppingPhysics(ver) );

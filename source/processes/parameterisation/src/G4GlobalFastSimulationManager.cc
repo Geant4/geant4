@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GlobalFastSimulationManager.cc 68056 2013-03-13 14:44:48Z gcosmo $
 //
 //  
 //---------------------------------------------------------------
@@ -63,7 +63,7 @@
 // ------------------------------------------
 // -- static instance pointer initialisation:
 // ------------------------------------------
-G4GlobalFastSimulationManager* G4GlobalFastSimulationManager::fGlobalFastSimulationManager = 0;
+G4ThreadLocal G4GlobalFastSimulationManager* G4GlobalFastSimulationManager::fGlobalFastSimulationManager = 0;
 
 // --------------------------------------------------
 // -- static methods to retrieve the manager pointer:

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id$
+// $Id: RunAction.hh 68996 2013-04-15 09:19:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,13 +49,12 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*,
-              HistoManager*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
     void CountProcesses(G4String);
     
@@ -74,7 +73,7 @@ class RunAction : public G4UserRunAction
     void StepInWall   (G4double s)  { fStepWall += s; fStepWall2 += s*s; 
                                       fNbStepWall++;};
     void StepInCavity (G4double s)  { fStepCavity += s; fStepCavity2 += s*s; 
-                                      fNbStepCavity++;};                                      
+                                      fNbStepCavity++;};
     
   private:
     DetectorConstruction*   fDetector;

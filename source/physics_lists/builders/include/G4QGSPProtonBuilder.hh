@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4QGSPProtonBuilder.hh 75290 2013-10-30 09:20:47Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,7 +49,6 @@
 
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"
@@ -57,13 +56,11 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4ProjectileDiffractiveChannel.hh"
 
 class G4QGSPProtonBuilder : public G4VProtonBuilder
 {
   public: 
-    G4QGSPProtonBuilder(G4bool quasiElastic=false,
-                        G4bool projectileDiffraction=false);
+    G4QGSPProtonBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSPProtonBuilder();
 
   public: 
@@ -80,9 +77,7 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
-    G4ProjectileDiffractiveChannel * theProjectileDiffraction;
     G4QGSMFragmentation * theQGSM;
-    G4ExcitationHandler * theHandler;
     G4double theMin;
 
 };

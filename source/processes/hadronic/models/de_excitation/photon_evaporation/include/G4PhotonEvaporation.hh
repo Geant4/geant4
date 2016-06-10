@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PhotonEvaporation.hh 70091 2013-05-23 08:55:18Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -75,7 +75,8 @@ class G4PhotonEvaporation : public G4VEvaporationChannel {
 
 public:
 
-    G4PhotonEvaporation();
+    G4PhotonEvaporation(const G4String & aName = "Anonymous",
+                        G4EvaporationChannelType timeType = fDelayedEmission);
 
     virtual ~G4PhotonEvaporation();
 
@@ -103,34 +104,29 @@ public:
  
     void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 
-    G4ElectronOccupancy GetEOccupancy () { return _eOccupancy;} ;
+    G4ElectronOccupancy GetEOccupancy () { return eOccupancy;} ;
    
-    G4int GetVacantShellNumber () { return _vShellNumber;};
+    G4int GetVacantShellNumber () { return vShellNumber;};
 
 private:
 
-    G4int _verbose;
-    G4bool _myOwnProbAlgorithm;
-    G4VEmissionProbability * _probAlgorithm;
-    G4VGammaDeexcitation * _discrDeexcitation;
-    G4VGammaDeexcitation * _contDeexcitation;
+    G4int verbose;
+    G4bool myOwnProbAlgorithm;
+    G4VEmissionProbability * probAlgorithm;
+    G4VGammaDeexcitation * discrDeexcitation;
+    G4VGammaDeexcitation * contDeexcitation;
 
-    G4ElectronOccupancy _eOccupancy;
-    G4int _vShellNumber;
+    G4ElectronOccupancy eOccupancy;
+    G4int vShellNumber;
 
-    G4Fragment* _nucleus;
-    G4double _gammaE;
+    G4Fragment* nucleus;
+    G4double gammaE;
 
     G4PhotonEvaporation(const G4PhotonEvaporation & right);
     const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
 
     G4bool operator == (const G4PhotonEvaporation & right) const;
     G4bool operator != (const G4PhotonEvaporation & right) const;
-
-  //#ifdef debug
-  //  void CheckConservation(const G4Fragment & theInitialState, G4FragmentVector * Result) const;
-  //#endif
-
 
 };
 

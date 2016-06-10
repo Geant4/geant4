@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -58,43 +58,39 @@ G4MIRDRightOvary::~G4MIRDRightOvary()
 
 }
 
-G4VPhysicalVolume* G4MIRDRightOvary::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
-						    const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
-{ 
-  G4cout << "Construct "<< volumeName << G4endl;
- 
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
- 
- G4double ax= 1. *cm;
- G4double by= 0.5*cm;
- G4double cz= 2.*cm;
 
- G4Ellipsoid* OneOvary = new G4Ellipsoid("OneOvary",
-					 ax, by, cz);
+G4VPhysicalVolume* G4MIRDRightOvary::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
+					       const G4String& colourName, G4bool wireFrame,G4bool)
+{ 
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
+
+ 
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
+ 
+  G4double ax= 1. *cm;
+  G4double by= 0.5*cm;
+  G4double cz= 2.*cm;
+
+  G4Ellipsoid* OneOvary = new G4Ellipsoid("OneOvary",
+					  ax, by, cz);
 
   G4LogicalVolume* logicRightOvary = new G4LogicalVolume(OneOvary,
-						    soft,
-						    "logical" + volumeName,
-						    0, 0, 0);
+							 soft,
+							 "logical" + volumeName,
+							 0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physRightOvary = new G4PVPlacement(0,
-			       G4ThreeVector(6. *cm,0.0*cm, -20*cm),
-      			       "physicalRightOvary",
-  			       logicRightOvary,
-			       mother,
-			       false,
-			       0, true);
+							G4ThreeVector(6. *cm,0.5*cm, -20*cm),
+							"physicalRightOvary",
+							logicRightOvary,
+							mother,
+							false,
+							0, true);
 
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicRightOvary->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
-
+ 
   // Visualization Attributes
   // G4VisAttributes* RightOvaryVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();

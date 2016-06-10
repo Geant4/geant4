@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -61,7 +61,7 @@ public:
   inline void SetKillAll(G4bool value)  {fKillAll = value;};
   inline void SetKillEM (G4bool value)  {fKillEM  = value;};
      
-  G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
 private:
 

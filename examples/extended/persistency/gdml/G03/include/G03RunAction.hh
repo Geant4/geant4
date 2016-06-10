@@ -27,7 +27,7 @@
 /// \brief Definition of the G03RunAction class
 //
 //
-// $Id$
+// $Id: G03RunAction.hh 69987 2013-05-21 12:33:52Z gcosmo $
 //
 // Class G03RunAction
 //
@@ -54,8 +54,8 @@ class G03RunAction : public G4UserRunAction
     G03RunAction();
    ~G03RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
       
 };
 

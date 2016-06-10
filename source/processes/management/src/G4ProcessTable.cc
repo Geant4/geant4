@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProcessTable.cc 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -147,13 +147,13 @@ G4int G4ProcessTable::operator!=(const G4ProcessTable &right) const
 }
 
 // Static class variable: ptr to single instance of class
-G4ProcessTable* G4ProcessTable::fProcessTable =0;
+G4ThreadLocal G4ProcessTable* G4ProcessTable::fProcessTable =0;
 
 
 //////////////////////////
 G4ProcessTable* G4ProcessTable::GetProcessTable()
 {
-    static G4ProcessTable theProcessTable;
+    static G4ThreadLocal G4ProcessTable *theProcessTable_G4MT_TLS_ = 0 ; if (!theProcessTable_G4MT_TLS_) theProcessTable_G4MT_TLS_ = new  G4ProcessTable  ;  G4ProcessTable &theProcessTable = *theProcessTable_G4MT_TLS_;
     if (!fProcessTable){
       fProcessTable =  &theProcessTable;
     }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLXmVWidgetContainer.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 //Base class for all Motif container widgets

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SolidStore.cc 67975 2013-03-13 10:19:44Z gcosmo $
 //
 // G4SolidStore
 //
@@ -43,8 +43,8 @@
 // ***************************************************************************
 //
 G4SolidStore* G4SolidStore::fgInstance = 0;
-G4VStoreNotifier* G4SolidStore::fgNotifier = 0;
-G4bool G4SolidStore::locked = false;
+G4ThreadLocal G4VStoreNotifier* G4SolidStore::fgNotifier = 0;
+G4ThreadLocal G4bool G4SolidStore::locked = false;
 
 // ***************************************************************************
 // Protected constructor: Construct underlying container with
@@ -63,7 +63,13 @@ G4SolidStore::G4SolidStore()
 //
 G4SolidStore::~G4SolidStore() 
 {
+  // In multi-threaded mode, since parameterised solids are replicated
+  // by threads, the master thread can not free them when thread private
+  // malloc library is used. May let the master thread to replicate.
+
+#ifndef G4MULTITHREADED  
   Clean();
+#endif
 }
 
 // ***************************************************************************

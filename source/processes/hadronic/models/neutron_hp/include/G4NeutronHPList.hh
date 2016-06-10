@@ -58,9 +58,9 @@ class G4NeutronHPList
 
   void Dump();
   
-  void Init(std::ifstream & aDataFile, G4int nPar, G4double unit=1.);
+  void Init(std::istream & aDataFile, G4int nPar, G4double unit=1.);
   
-  void Init(std::ifstream & aDataFile, G4double unit=1.);
+  void Init(std::istream & aDataFile, G4double unit=1.);
 
   inline void SetLabel(G4double aLabel) { theLabel = aLabel; }
   

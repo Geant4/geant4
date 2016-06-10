@@ -1,0 +1,64 @@
+#
+# Test macro file for exampleB5
+#
+
+# Turn off randomization 
+/B5/generator/randomizePrimary false
+/B5/generator/sigmaMomentum 0. 
+/B5/generator/sigmaAngle 0.
+/run/printProgress 5
+#
+/B5/detector/armAngle 30. deg
+/gun/particle proton
+/B5/generator/momentum 100. GeV
+/B5/field/value 100. tesla
+/run/beamOn 5
+#
+/B5/detector/armAngle 60. deg
+/gun/particle pi+
+/B5/generator/momentum 100. GeV
+/B5/field/value 200. tesla
+/run/beamOn 5
+#
+/gun/particle e+
+/B5/detector/armAngle 30. deg
+/B5/generator/momentum 100. GeV
+/B5/field/value 100. tesla
+/run/beamOn 5
+#
+/B5/detector/armAngle 30. deg
+/gun/particle proton
+/B5/generator/momentum 10. GeV
+/B5/field/value 10. tesla
+/run/beamOn 5
+#
+/B5/detector/armAngle 60. deg
+/gun/particle pi+
+/B5/generator/momentum 10. GeV
+/B5/field/value 20. tesla
+/run/beamOn 5
+#
+/gun/particle e+
+/B5/detector/armAngle 30. deg
+/B5/generator/momentum 10. GeV
+/B5/field/value 10. tesla
+/run/beamOn 5
+#
+#
+/B5/detector/armAngle 30. deg
+/gun/particle proton
+/B5/generator/momentum 1. GeV
+/B5/field/value 1. tesla
+/run/beamOn 5
+#
+/B5/detector/armAngle 60. deg
+/gun/particle pi+
+/B5/generator/momentum 1. GeV
+/B5/field/value 2. tesla
+/run/beamOn 5
+#
+/gun/particle e+
+/B5/detector/armAngle 30. deg
+/B5/generator/momentum 1. GeV
+/B5/field/value 1. tesla
+/run/beamOn 5

@@ -1,4 +1,4 @@
-# $Id: multiLayers.mac,v 1.5 2009-09-22 14:20:31 maire Exp $
+# $Id: multiLayers.mac 74997 2013-10-25 10:52:13Z gcosmo $
 #
 # multiLayers
 #
@@ -23,6 +23,6 @@
 /analysis/setFileName bone
 /analysis/h1/set 1 300 0. 300. mm		#edep profile
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 #
 /run/beamOn 1000000

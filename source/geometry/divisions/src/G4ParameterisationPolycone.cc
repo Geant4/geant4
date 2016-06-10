@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParameterisationPolycone.cc 75219 2013-10-29 16:12:13Z gcosmo $
 //
 // class G4ParameterisationPolycone Implementation file
 //
@@ -49,14 +49,6 @@ G4VParameterisationPolycone( EAxis axis, G4int nDiv, G4double width,
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
   G4Polycone* msol = (G4Polycone*)(msolid);
-  if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
-  {
-    std::ostringstream message;
-    message << "Generic construct for G4Polycone NOT supported." << G4endl
-            << "Sorry! Solid: " << msol->GetName() << ".";
-    G4Exception("G4VParameterisationPolycone::G4VParameterisationPolycone()",
-                "GeomDiv0001", FatalException, message);
-  }
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
     // Get constituent solid  

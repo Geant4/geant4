@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VPreCompoundFragment.cc 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // J. M. Quesada (August 2008).  Based  on previous work by V. Lara
 //
@@ -48,13 +48,15 @@ G4VPreCompoundFragment::G4VPreCompoundFragment(
   theA = particle->GetBaryonNumber();
   theZ = G4int(particle->GetPDGCharge()/eplus + 0.1);
   theMass = particle->GetPDGMass();
-  theParameters = G4PreCompoundParameters::GetAddress();
+  theParameters = new G4PreCompoundParameters();
   g4pow = G4Pow::GetInstance();
   theRestNucleusA13 = 0;
 }
 
 G4VPreCompoundFragment::~G4VPreCompoundFragment()
-{}
+{
+  delete theParameters;
+}
 
 std::ostream& 
 operator << (std::ostream &out, const G4VPreCompoundFragment &theFragment)

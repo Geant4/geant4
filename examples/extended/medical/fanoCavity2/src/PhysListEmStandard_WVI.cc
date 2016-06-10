@@ -26,13 +26,12 @@
 /// \file medical/fanoCavity2/src/PhysListEmStandard_WVI.cc
 /// \brief Implementation of the PhysListEmStandard_WVI class
 //
-// $Id$
+// $Id: PhysListEmStandard_WVI.cc 72961 2013-08-14 14:35:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard_WVI.hh"
-#include "DetectorConstruction.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -61,9 +60,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard_WVI::PhysListEmStandard_WVI(const G4String& name,
-                               DetectorConstruction* det)
-: G4VPhysicsConstructor(name), fDetector(det)
+PhysListEmStandard_WVI::PhysListEmStandard_WVI(const G4String& name)
+: G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,9 +76,9 @@ void PhysListEmStandard_WVI::ConstructProcess()
   // Add standard EM Processes
   //
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      

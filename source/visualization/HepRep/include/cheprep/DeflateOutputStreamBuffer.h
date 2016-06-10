@@ -13,7 +13,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DeflateOutputStreamBuffer.h,v 1.6 2009-05-08 09:26:58 gcosmo Exp $
+ * @version $Id: DeflateOutputStreamBuffer.h 66870 2013-01-14 23:38:59Z adotti $
  */
 namespace cheprep {
 

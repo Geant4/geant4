@@ -102,7 +102,7 @@ class G4DigiManager
       void List() const;
 
   private: 
-      static G4DigiManager * fDManager;
+      static G4ThreadLocal G4DigiManager * fDManager;
       G4int verboseLevel;
       std::vector<G4VDigitizerModule*> DMtable;
       G4DCtable* DCtable;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorPropagatorManager.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -62,7 +62,7 @@
 #include "G4RunManager.hh"
 #include "G4VParticleChange.hh"
 
-G4ErrorPropagatorManager*
+G4ThreadLocal G4ErrorPropagatorManager*
 G4ErrorPropagatorManager::theG4ErrorPropagatorManager = 0;
 
 //-----------------------------------------------------------------------

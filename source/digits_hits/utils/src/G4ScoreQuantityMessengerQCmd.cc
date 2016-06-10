@@ -24,13 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoreQuantityMessengerQCmd.cc 73819 2013-09-12 15:52:52Z gcosmo $
 //
 // ---------------------------------------------------------------------
 // Modifications
 // 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
-//  01-Jun-2012  T.Aso  Support weighted/dividedByArea options 
+// 01-Jun-2012 T.Aso Support weighted/dividedByArea options 
 //                      in flatCurrent and flatFulx commands.
+// 29-Mar-2013 T.Aso Support weighted options in the nOfTrack command.
+//                   Support a boundary flag option in the nOfStep command
+//                  for skipping stepLength=0 steps.
+// 
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -161,14 +165,21 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qnOfStepCmd->SetGuidance("Number of step scorer.");
   qnOfStepCmd->
   SetGuidance("[usage] /score/quantiy/nOfStep qname");
+  qnOfStepCmd->
+  SetGuidance("[usage] /score/quantiy/nOfStep qname  bflag"); 
   qnOfStepCmd->SetGuidance("  qname  :(String) scorer name");
+  qnOfStepCmd->SetGuidance("  bflag  :(Bool) Skip zero step ");
+  qnOfStepCmd->SetGuidance("          at geometry boundary if true");
   param = new G4UIparameter("qname",'s',false);
+  qnOfStepCmd->SetParameter(param);
+  param = new G4UIparameter("bflag",'b',true);  
+  param->SetDefaultValue("false");
   qnOfStepCmd->SetParameter(param);
   //
   qnOfSecondaryCmd = new G4UIcommand("/score/quantity/nOfSecondary",this);
   qnOfSecondaryCmd->SetGuidance("Number of secondary scorer.");
   qnOfSecondaryCmd->
-  SetGuidance("[usage] /score/quantiy/nOfSecondary qname");
+  SetGuidance("[usage] /score/quantiy/nOfSecondary qname"); 
   qnOfSecondaryCmd->SetGuidance("  qname  :(String) scorer name");
   param = new G4UIparameter("qname",'s',false);
   qnOfSecondaryCmd->SetParameter(param);
@@ -200,19 +211,14 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qPassCellCurrCmd = new G4UIcommand("/score/quantity/passageCellCurrent",this);
   qPassCellCurrCmd->SetGuidance("Passage cell current scorer.");
   qPassCellCurrCmd->
-    SetGuidance("[usage] /score/quantiy/passageCellCurrent qname wflag");
-    //SetGuidance("[usage] /score/quantiy/passageCellCurrent qname wflag unit");
+  SetGuidance("[usage] /score/quantiy/passageCellCurrent qname wflag");
   qPassCellCurrCmd->SetGuidance("  qname  :(String) scorer name");
   qPassCellCurrCmd->SetGuidance("  wflag  :(Bool) weighted");
-  //qPassCellCurrCmd->SetGuidance("  unit  :(Bool) unit");
   param = new G4UIparameter("qname",'s',false);
   qPassCellCurrCmd->SetParameter(param);
   param = new G4UIparameter("wflag",'b',true);
   param->SetDefaultValue("true");
   qPassCellCurrCmd->SetParameter(param);
-  //param = new G4UIparameter("unit",'s',true);
-  //param->SetDefaultValue("parcm2");
-  //qPassCellCurrCmd->SetParameter(param);
   //
   qPassTrackLengthCmd = new G4UIcommand("/score/quantity/passageTrackLength",this);
   qPassTrackLengthCmd->SetGuidance("Passage track length scorer.");
@@ -455,9 +461,13 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qMinKinEAtGeneCmd = new G4UIcommand("/score/quantity/minKinEAtGeneration",this);
   qMinKinEAtGeneCmd->SetGuidance("Min Kinetic Energy at Generation");
   qMinKinEAtGeneCmd->
-  SetGuidance("[usage] /score/quantiy/minKinEAtGeneration qname");
+  SetGuidance("[usage] /score/quantiy/minKinEAtGeneration qname unit");
   qMinKinEAtGeneCmd->SetGuidance("  qname  :(String) scorer name");
+  qMinKinEAtGeneCmd->SetGuidance("  unit   :(String) unit name");
   param = new G4UIparameter("qname",'s',false);
+  qMinKinEAtGeneCmd->SetParameter(param);
+  param = new G4UIparameter("unit",'s',true);
+  param->SetDefaultValue("MeV");
   qMinKinEAtGeneCmd->SetParameter(param);
   //
   qStepCheckerCmd = new G4UIcommand("/score/quantity/stepChecker",this);

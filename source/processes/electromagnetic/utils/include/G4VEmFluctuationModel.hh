@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VEmFluctuationModel.hh 76333 2013-11-08 14:31:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,6 +62,8 @@
 class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4Material;
+class G4MaterialCutsCouple;
+class G4LossTableManager;
 
 class G4VEmFluctuationModel 
 {
@@ -76,16 +78,16 @@ public:
   // Virtual methods to be implemented for the concrete model
   //------------------------------------------------------------------------
 
-  virtual G4double SampleFluctuations(const G4Material*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
 				      const G4DynamicParticle*,
-				      G4double& tmax,
-				      G4double& length,
-				      G4double& meanLoss) = 0;
+				      G4double tmax,
+				      G4double length,
+				      G4double meanLoss) = 0;
 
   virtual G4double Dispersion(const G4Material*,
                               const G4DynamicParticle*,
-			      G4double& tmax,
-			      G4double& length) = 0;
+			      G4double tmax,
+			      G4double length) = 0;
 
   //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 
@@ -107,7 +109,8 @@ private:
   G4VEmFluctuationModel & operator=(const  G4VEmFluctuationModel &right);
   G4VEmFluctuationModel(const  G4VEmFluctuationModel&);
 
-  const G4String   name;
+  const G4String      name;
+  G4LossTableManager* fManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

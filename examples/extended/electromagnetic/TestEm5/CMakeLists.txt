@@ -31,8 +31,8 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(TestEm5 TestEm5.cc ${sources} ${headers})
-target_link_libraries(TestEm5 ${Geant4_LIBRARIES} )
+add_executable(TestEm5 TestEm5.cc ${sources} ${headers} ${TOOLS_FORTRAN_OBJECTS})
+target_link_libraries(TestEm5 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

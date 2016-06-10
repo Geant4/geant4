@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VViewer.icc 71534 2013-06-17 16:07:53Z gcosmo $
 //
 // 
 // John Allison  30th December 1996
@@ -61,6 +61,11 @@ inline const G4ViewParameters& G4VViewer::GetViewParameters () const {
 
 inline const G4ViewParameters& G4VViewer::GetDefaultViewParameters () const {
   return fDefaultVP;
+}
+
+inline const std::vector<G4ModelingParameters::VisAttributesModifier>*
+  G4VViewer::GetPrivateVisAttributesModifiers() const {
+    return 0;
 }
 
 inline void G4VViewer::SetDefaultViewParameters (const G4ViewParameters& vp) {

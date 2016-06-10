@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4bEventAction.cc 75604 2013-11-04 13:17:26Z gcosmo $
 // 
 /// \file B4bEventAction.cc
 /// \brief Implementation of the B4bEventAction class
@@ -33,7 +33,6 @@
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
-#include "G4GenericMessenger.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
@@ -42,27 +41,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4bEventAction::B4bEventAction()
- : G4UserEventAction(),
-   fMessenger(0),
-   fPrintModulo(1)
-{
-  // Define /B4/event commands using generic messenger class
-  fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
-
-  // Define /B4/event/setPrintModulo command
-  G4GenericMessenger::Command& setPrintModulo 
-    = fMessenger->DeclareProperty("setPrintModulo", 
-                                  fPrintModulo, 
-                                 "Print events modulo n");
-  setPrintModulo.SetRange("value>0");                                
-}
+ : G4UserEventAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4bEventAction::~B4bEventAction()
-{
-  delete fMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,37 +71,35 @@ void B4bEventAction::PrintEventStatistics(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4bEventAction::BeginOfEventAction(const G4Event* evt)
+void B4bEventAction::BeginOfEventAction(const G4Event* /*event*/)
 {  
-
-  G4int eventID = evt->GetEventID();
-  if ( eventID % fPrintModulo == 0 )  { 
-    G4cout << "\n---> Begin of event: " << eventID << G4endl;
-    //CLHEP::HepRandom::showEngineStatus();
-  }
-
-  B4bRunData::GetInstance()->Reset();  
+  B4bRunData* runData 
+    = static_cast<B4bRunData*>(
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  runData->Reset();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4bEventAction::EndOfEventAction(const G4Event* event)
 {
-  //accumulates statistic
-  //
-  B4bRunData::GetInstance()->FillPerEvent();
-  
+  B4bRunData* runData 
+    = static_cast<B4bRunData*>(
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  runData->FillPerEvent();
+
   //print per event (modulo n)
   //
   G4int eventID = event->GetEventID();
-  if ( eventID % fPrintModulo == 0) {
+  G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
 
     PrintEventStatistics(
-      B4bRunData::GetInstance()->GetEdep(kAbs),
-      B4bRunData::GetInstance()->GetTrackLength(kAbs),
-      B4bRunData::GetInstance()->GetEdep(kGap),
-      B4bRunData::GetInstance()->GetTrackLength(kGap));
+      runData->GetEdep(kAbs),
+      runData->GetTrackLength(kAbs),
+      runData->GetEdep(kGap),
+      runData->GetTrackLength(kGap));
   }
 }  
 

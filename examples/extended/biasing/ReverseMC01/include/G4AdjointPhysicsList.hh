@@ -26,14 +26,14 @@
 /// \file biasing/ReverseMC01/include/G4AdjointPhysicsList.hh
 /// \brief Definition of the G4AdjointPhysicsList class
 //
-// $Id$
+// $Id: G4AdjointPhysicsList.hh 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        G4AdjointPhysicsList
+//  Class Name:             G4AdjointPhysicsList
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -47,7 +47,6 @@
 
 #ifndef G4AdjointPhysicsList_h
 #define G4AdjointPhysicsList_h 1
-
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 #include "G4eIonisation.hh"
@@ -59,69 +58,57 @@ class G4AdjointPhysicsMessenger;
 class G4AdjointPhysicsList: public G4VUserPhysicsList
 {
   public:
-    G4AdjointPhysicsList();
-    virtual ~G4AdjointPhysicsList();
-   
-    void SetLossFluctuationFlag(bool aBool);
-    inline void SetUseIonisation(bool aBool){fUse_eionisation = aBool;}
-    inline void SetUseProtonIonisation(bool aBool){
-                                                         fUse_pionisation = aBool;}
-    inline void SetUseBrem(bool aBool){fUse_brem = aBool;}
-    inline void SetUseCompton(bool aBool){fUse_compton = aBool;}
-    inline void SetUseMS(bool aBool){fUse_ms = aBool;}
-    inline void SetUsePEEffect(bool aBool){fUse_peeffect = aBool;}
-    inline void SetUseGammaConversion(bool aBool){
-                                                                                        fUse_gamma_conversion = aBool;}
-    inline void SetUseEgainFluctuation(bool aBool){
-                                                                                       fUse_egain_fluctuation = aBool;}
-    inline void SetEminAdjModels(G4double aVal){
-                                                                                              fEmin_adj_models = aVal;}
-    inline void SetEmaxAdjModels(G4double aVal){
-                                                      fEmax_adj_models = aVal;}
+   G4AdjointPhysicsList();
+   virtual ~G4AdjointPhysicsList();
+   void SetLossFluctuationFlag(bool aBool);
+   inline void SetUseIonisation(bool aBool){fUse_eionisation = aBool;}
+   inline void SetUseProtonIonisation(bool aBool){fUse_pionisation = aBool;}
+   inline void SetUseBrem(bool aBool){fUse_brem = aBool;}
+   inline void SetUseCompton(bool aBool){fUse_compton = aBool;}
+   inline void SetUseMS(bool aBool){fUse_ms = aBool;}
+   inline void SetUsePEEffect(bool aBool){fUse_peeffect = aBool;}
+   inline void SetUseGammaConversion(bool aBool){ fUse_gamma_conversion
+                       = aBool;}
+   inline void SetUseEgainFluctuation(bool aBool){ fUse_egain_fluctuation
+                        = aBool;}
+   inline void SetEminAdjModels(G4double aVal){ fEmin_adj_models = aVal;}
+   inline void SetEmaxAdjModels(G4double aVal){ fEmax_adj_models = aVal;}
   
   protected:
     // Construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-    void SetCuts();
+   virtual void ConstructParticle();
+   virtual void ConstructProcess();
+   virtual void SetCuts();
 
-  protected:
     // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
-    void ConstructAdjointParticles();
+   void ConstructBosons();
+   void ConstructLeptons();
+   void ConstructMesons();
+   void ConstructBaryons();
+   void ConstructAdjointParticles();
 
-  protected:
     // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
-    
-//    G4eIonisationWithAdjoint* fEminusIonisation; 
+   void ConstructGeneral();
+   void ConstructEM();
    G4eIonisation* fEminusIonisation;
    G4hIonisation* fPIonisation;
 
   private:
-  
-     G4AdjointPhysicsMessenger* fPhysicsMessenger;
-
-     G4bool fUse_eionisation;
-     G4bool fUse_pionisation;
-     G4bool fUse_brem;
-     G4bool fUse_compton;
-     G4bool fUse_ms; 
-     G4bool fUse_egain_fluctuation;
-     G4bool fUse_peeffect;
-     G4bool fUse_gamma_conversion;
-     
-     G4double fEmin_adj_models;
-     G4double fEmax_adj_models;
-     
-     G4double fCS_biasing_factor_compton;
-     G4double fCS_biasing_factor_brem;
-     G4double fCS_biasing_factor_ionisation;
-     G4double fCS_biasing_factor_PEeffect;
+   G4AdjointPhysicsMessenger* fPhysicsMessenger;
+   G4bool fUse_eionisation;
+   G4bool fUse_pionisation;
+   G4bool fUse_brem;
+   G4bool fUse_compton;
+   G4bool fUse_ms;
+   G4bool fUse_egain_fluctuation;
+   G4bool fUse_peeffect;
+   G4bool fUse_gamma_conversion;
+   G4double fEmin_adj_models;
+   G4double fEmax_adj_models;
+   G4double fCS_biasing_factor_compton;
+   G4double fCS_biasing_factor_brem;
+   G4double fCS_biasing_factor_ionisation;
+   G4double fCS_biasing_factor_PEeffect;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

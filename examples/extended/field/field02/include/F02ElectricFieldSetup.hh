@@ -26,11 +26,15 @@
 /// \file field/field02/include/F02ElectricFieldSetup.hh
 /// \brief Definition of the F02ElectricFieldSetup class
 //
-// $Id$
 //
+// $Id: F02ElectricFieldSetup.hh 76247 2013-11-08 11:18:52Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef F02ElectricFieldSetup_H
-#define F02ElectricFieldSetup_H
+#ifndef F02ElectricFieldSetup_h
+#define F02ElectricFieldSetup_h 1
 
 #include "G4ElectricField.hh"
 #include "G4UniformElectricField.hh"
@@ -41,24 +45,23 @@ class G4EquationOfMotion;
 class G4Mag_EqRhs;
 class G4EqMagElectricField;
 class G4MagIntegratorStepper;
-class G4MagInt_Driver; 
+class G4MagInt_Driver;
 class F02FieldMessenger;
 
 /// A class for control of the Electric Field of the detector.
 ///
 /// The field for this case is uniform.
-/// It is simply a 'setup' class that creates the field and necessary 
+/// It is simply a 'setup' class that creates the field and necessary
 /// other parts
 
-class F02ElectricFieldSetup 
+class F02ElectricFieldSetup
 {
 public:
+  F02ElectricFieldSetup(G4ThreeVector);  //  The value of the field
+  F02ElectricFieldSetup();               //  A zero field
 
-  F02ElectricFieldSetup(G4ThreeVector) ;  //  The value of the field
-  F02ElectricFieldSetup() ;               //  A zero field
+  virtual ~F02ElectricFieldSetup();
 
- ~F02ElectricFieldSetup() ;  
-      
   void SetStepperType( G4int i) { fStepperType = i ; }
 
   void SetStepper();
@@ -73,26 +76,28 @@ public:
 
 protected:
 
-      // Find the global Field Manager
-  G4FieldManager*         GetGlobalFieldManager() ;
+  // Find the global Field Manager
+
+  G4FieldManager*         GetGlobalFieldManager();
 
 private:
-  G4FieldManager*         fFieldManager ;
 
-  G4ChordFinder*          fChordFinder ;
+  G4FieldManager*         fFieldManager;
 
-  G4EqMagElectricField*   fEquation ;
+  G4ChordFinder*          fChordFinder;
+
+  G4EqMagElectricField*   fEquation;
 
   G4ElectricField*        fEMfield;
  
-  G4ThreeVector           fElFieldValue ; 
+  G4ThreeVector           fElFieldValue;
 
-  G4MagIntegratorStepper* fStepper ;
+  G4MagIntegratorStepper* fStepper;
   G4MagInt_Driver*        fIntgrDriver;
 
-  G4int                   fStepperType ;
+  G4int                   fStepperType;
 
-  G4double                fMinStep ;
+  G4double                fMinStep;
  
   F02FieldMessenger*      fFieldMessenger;
 

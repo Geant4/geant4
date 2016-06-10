@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProductionCuts.cc 73044 2013-08-15 09:44:11Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
@@ -37,10 +37,10 @@
 #include "G4ProductionCutsTable.hh"
 #include <iomanip>
 
-const G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
-const G4ParticleDefinition* G4ProductionCuts::electDef = 0;
-const G4ParticleDefinition* G4ProductionCuts::positDef = 0;
-const G4ParticleDefinition* G4ProductionCuts::protonDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::electDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::positDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::protonDef = 0;
 
 G4ProductionCuts::G4ProductionCuts() :
   isModified(true)
@@ -51,7 +51,11 @@ G4ProductionCuts::G4ProductionCuts() :
 }
 
 G4ProductionCuts::G4ProductionCuts(const G4ProductionCuts& right) 
+  :   isModified(true)
 {
+  for (G4int i=0; i< NumberOfG4CutIndex; i++) {
+    fRangeCuts.push_back(0.0);
+  }
   *this = right;
 }
 
@@ -87,10 +91,10 @@ G4int G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
 
 G4int  G4ProductionCuts::GetIndex(const G4String& name)
 {
-  static G4String gamma("gamma");
-  static G4String electron("e-");
-  static G4String positron("e+");
-  static G4String proton("proton");
+  static const G4String gamma ("gamma");
+  static const G4String electron("e-");
+  static const G4String positron("e+");
+  static const G4String proton("proton");
   
   G4int index;
   if       ( name == gamma )        { index =  0; }
@@ -107,16 +111,16 @@ G4int  G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
 { 
   if(!ptcl) return -1;
   // In the first call, pointers are set 
-  if(gammaDef==0  && ptcl->GetParticleName()=="gamma")  { gammaDef = ptcl; }
-  if(electDef==0  && ptcl->GetParticleName()=="e-")     { electDef = ptcl; }
-  if(positDef==0  && ptcl->GetParticleName()=="e+")     { positDef = ptcl; }
-  if(protonDef==0 && ptcl->GetParticleName()=="proton") { protonDef = ptcl; }
+  if(gammaDef==0  && ptcl->GetParticleName()=="gamma")  { gammaDef = (G4ParticleDefinition*) ptcl; }
+  if(electDef==0  && ptcl->GetParticleName()=="e-")     { electDef = (G4ParticleDefinition*) ptcl; }
+  if(positDef==0  && ptcl->GetParticleName()=="e+")     { positDef = (G4ParticleDefinition*) ptcl; }
+  if(protonDef==0 && ptcl->GetParticleName()=="proton") { protonDef = (G4ParticleDefinition*) ptcl; }
 
   G4int index;
-  if(ptcl==gammaDef)       { index = 0;  }
-  else if(ptcl==electDef)  { index = 1;  }
-  else if(ptcl==positDef)  { index = 2;  }
-  else if(ptcl==protonDef) { index = 3;  }
+  if(ptcl==(const G4ParticleDefinition*) gammaDef)       { index = 0;  }
+  else if(ptcl==(const G4ParticleDefinition*) electDef)  { index = 1;  }
+  else if(ptcl==(const G4ParticleDefinition*) positDef)  { index = 2;  }
+  else if(ptcl==(const G4ParticleDefinition*) protonDef) { index = 3;  }
   else                     { index = -1; }
 
   return index;

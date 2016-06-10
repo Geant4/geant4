@@ -32,6 +32,8 @@
 // 080904 Add Protection for negative energy results in very low energy ( 1E-6 eV ) scattering by T. Koi
 //
 #include "G4NeutronHPElasticFS.hh"
+#include "G4NeutronHPManager.hh"
+
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ReactionProduct.hh"
@@ -42,8 +44,10 @@
 #include "G4Alpha.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4NeutronHPDataUsed.hh"
+
+#include "zlib.h"
 
   void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
   {
@@ -61,7 +65,10 @@
       hasXsec = false;
       return;
     }
-    std::ifstream theData(filename, std::ios::in);
+   //130205 For compressed data files 
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
+   //130205 END
     theData >> repFlag >> targetMass >> frameFlag;
     if(repFlag==1)
     {
@@ -177,7 +184,8 @@
       G4cout << "unusable number for repFlag: repFlag="<<repFlag<<G4endl;
       throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPElasticFS::Init -- unusable number for repFlag");
     }
-    theData.close();
+   //130205 For compressed data files(theData changed from ifstream to istringstream)
+   //theData.close();
   }
   G4HadFinalState * G4NeutronHPElasticFS::ApplyYourself(const G4HadProjectile & theTrack)
   {  
@@ -385,8 +393,10 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
     }
     else
     {
-      theRecoil->SetDefinition(G4ParticleTable::GetParticleTable()
-                               ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ)));
+      //theRecoil->SetDefinition(G4ParticleTable::GetParticleTable()
+      //                         ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ)));
+      theRecoil->SetDefinition(G4IonTable::GetIonTable()
+                               ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0 ));
     }
     theRecoil->SetMomentum(theTarget.GetMomentum());
     theResult.AddSecondary(theRecoil);

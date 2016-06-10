@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/include/MyMollerBhabhaModel.hh
 /// \brief Definition of the MyMollerBhabhaModel class
 //
-// $Id$
+// $Id: MyMollerBhabhaModel.hh 68763 2013-04-05 12:36:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -46,7 +46,7 @@ public:
   MyMollerBhabhaModel(const G4ParticleDefinition* p = 0, 
                       const G4String& nam = "myMollerBhabha");
 
-  virtual ~MyMollerBhabhaModel();
+ ~MyMollerBhabhaModel();
                                                                  
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                 const G4ParticleDefinition*,

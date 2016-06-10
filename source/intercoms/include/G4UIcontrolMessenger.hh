@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIcontrolMessenger.hh 67965 2013-03-13 09:35:29Z gcosmo $
 //
 
 #ifndef G4UIcontrolMessenger_h

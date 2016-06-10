@@ -1,0 +1,6 @@
+#control the physics
+/control/execute physics.mac
+#/tracking/verbose 1
+/run/initialize
+/control/execute primary.mac
+/run/beamOn 1000

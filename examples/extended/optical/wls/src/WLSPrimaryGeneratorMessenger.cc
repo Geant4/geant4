@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSPrimaryGeneratorMessenger.cc 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/src/WLSPrimaryGeneratorMessenger.cc
 /// \brief Implementation of the WLSPrimaryGeneratorMessenger class
 //
 //
-//
-
 #include "G4UIdirectory.hh"
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -36,46 +36,52 @@
 #include "WLSPrimaryGeneratorAction.hh"
 #include "WLSPrimaryGeneratorMessenger.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSPrimaryGeneratorMessenger::
                    WLSPrimaryGeneratorMessenger(WLSPrimaryGeneratorAction* gun)
-  : action(gun)
+  : fAction(gun)
 {
-  gunDir = new G4UIdirectory("/WLS/gun/");
-  gunDir->SetGuidance("WLSPrimaryGenerator control");
+  fGunDir = new G4UIdirectory("/WLS/gun/");
+  fGunDir->SetGuidance("WLSPrimaryGenerator control");
 
-  SetPolarizationCmd =
+  fSetPolarizationCmd =
                  new G4UIcmdWithADoubleAndUnit("/WLS/gun/optPhotonPolar",this);
-  SetPolarizationCmd->SetGuidance("Set linear polarization");
-  SetPolarizationCmd->SetGuidance("  angle w.r.t. (k,n) plane");
-  SetPolarizationCmd->SetParameterName("angle",true);
-  SetPolarizationCmd->SetUnitCategory("Angle");
-  SetPolarizationCmd->SetDefaultValue(0.);
-  SetPolarizationCmd->AvailableForStates(G4State_Idle);
+  fSetPolarizationCmd->SetGuidance("Set linear polarization");
+  fSetPolarizationCmd->SetGuidance("  angle w.r.t. (k,n) plane");
+  fSetPolarizationCmd->SetParameterName("angle",true);
+  fSetPolarizationCmd->SetUnitCategory("Angle");
+  fSetPolarizationCmd->SetDefaultValue(0.);
+  fSetPolarizationCmd->AvailableForStates(G4State_Idle);
  
-  SetDecayTimeConstantCmd =
+  fSetDecayTimeConstantCmd =
            new G4UIcmdWithADoubleAndUnit("/WLS/gun/setDecayTimeConstant",this);
-  SetDecayTimeConstantCmd->SetGuidance("Set the decay time constant");
-  SetDecayTimeConstantCmd->SetGuidance("for the starting time of each photon");
-  SetDecayTimeConstantCmd->SetParameterName("time_const",false);
-  SetDecayTimeConstantCmd->SetUnitCategory("Time");
-  SetDecayTimeConstantCmd->SetRange("time_const>=0");
-  SetDecayTimeConstantCmd->AvailableForStates(G4State_Idle);
+  fSetDecayTimeConstantCmd->SetGuidance("Set the decay time constant");
+  fSetDecayTimeConstantCmd->SetGuidance("for the starting time of each photon");
+  fSetDecayTimeConstantCmd->SetParameterName("time_const",false);
+  fSetDecayTimeConstantCmd->SetUnitCategory("Time");
+  fSetDecayTimeConstantCmd->SetRange("time_const>=0");
+  fSetDecayTimeConstantCmd->AvailableForStates(G4State_Idle);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSPrimaryGeneratorMessenger::~WLSPrimaryGeneratorMessenger()
 {
-  delete gunDir;
-  delete SetPolarizationCmd;
-  delete SetDecayTimeConstantCmd;
+  delete fGunDir;
+  delete fSetPolarizationCmd;
+  delete fSetDecayTimeConstantCmd;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPrimaryGeneratorMessenger::
                            SetNewValue(G4UIcommand * command,G4String val)
 {
-  if ( command == SetPolarizationCmd )
-     action->
+  if ( command == fSetPolarizationCmd )
+     fAction->
           SetOptPhotonPolar(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
-  else if ( command == SetDecayTimeConstantCmd )
-     action->
+  else if ( command == fSetDecayTimeConstantCmd )
+     fAction->
        SetDecayTimeConstant(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
 }

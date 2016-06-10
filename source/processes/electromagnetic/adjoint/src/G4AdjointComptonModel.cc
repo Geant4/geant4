@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointComptonModel.cc 75591 2013-11-04 12:33:11Z gcosmo $
 //
 #include "G4AdjointComptonModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -171,7 +171,7 @@ void G4AdjointComptonModel::RapidSampleSecondaries(const G4Track& aTrack,
   
  
  
- G4double diffCSUsed=currentMaterial->GetElectronDensity()*twopi_mc2_rcl2; 
+ G4double diffCSUsed=0.1*currentMaterial->GetElectronDensity()*twopi_mc2_rcl2;
  G4double gammaE1=0.;
  G4double gammaE2=0.;
  if (!IsScatProjToProjCase){
@@ -388,7 +388,7 @@ G4double G4AdjointComptonModel::AdjointCrossSection(const G4MaterialCutsCouple* 
   	Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(primEnergy);
   	Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(primEnergy);
 	if (Emax_proj>Emin_proj ){
-		 Cross= std::log((Emax_proj-float (primEnergy))*Emin_proj/Emax_proj/(Emin_proj-primEnergy))
+		 Cross= 0.1*std::log((Emax_proj-float (primEnergy))*Emin_proj/Emax_proj/(Emin_proj-primEnergy))
 		 						*(1.+2.*std::log(float(1.+electron_mass_c2/primEnergy)));
 	}	 
   }
@@ -396,7 +396,7 @@ G4double G4AdjointComptonModel::AdjointCrossSection(const G4MaterialCutsCouple* 
         Emax_proj = GetSecondAdjEnergyMaxForScatProjToProjCase(primEnergy);
 	Emin_proj = GetSecondAdjEnergyMinForScatProjToProjCase(primEnergy,0.);
 	if (Emax_proj>Emin_proj) {
-		Cross = std::log(Emax_proj/Emin_proj);
+		Cross = 0.1*std::log(Emax_proj/Emin_proj);
 		//+0.5*primEnergy*primEnergy(1./(Emin_proj*Emin_proj) - 1./(Emax_proj*Emax_proj)); neglected at the moment
 	}
   	

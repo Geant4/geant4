@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:57:01 bmorgan Exp $
+# $Id: sources.cmake 75575 2013-11-04 11:51:07Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -35,6 +35,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -53,15 +54,16 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLElasticChannel.hh
         G4INCLDeltaDecayChannel.hh
         G4INCLNucleus.hh
+        G4INCLCrossSectionsINCL46.hh
         G4INCLCluster.hh
         G4INCLParticleEntryChannel.hh
         G4INCLNDFGaussian.hh
         G4INCLKinematicsUtils.hh
         G4INCLPionNucleonChannel.hh
-        G4INCLEventAction.hh
         G4INCLClustering.hh
         G4INCLNuclearDensityFactory.hh
         G4INCLSurfaceAvatar.hh
+        G4INCLCascadeAction.hh
         G4INCLReflectionChannel.hh
         G4INCLBinaryCollisionAvatar.hh
         G4INCLNDFHardSphere.hh
@@ -77,8 +79,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNuclearPotentialEnergyIsospin.hh
         G4INCLCoulombDistortion.hh
         G4INCLClusteringModelNone.hh
-        G4INCLClusterUtils.hh
-        G4INCLAvatarAction.hh
         G4INCLIClusteringModel.hh
         G4INCLDeJongSpin.hh
         G4INCLParticleEntryAvatar.hh
@@ -93,6 +93,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNuclearPotentialConstant.hh
         G4INCLNDFModifiedHarmonicOscillator.hh
         G4INCLPauliStrict.hh
+        G4INCLPhaseSpaceDecay.hh
         G4INCLNuclearPotentialIsospin.hh
         G4INCLICoulomb.hh
         G4INCLCrossSections.hh
@@ -100,7 +101,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLPauliStrictStandard.hh
         G4INCLNuclearDensity.hh
         G4INCLParticleSampler.hh
-        G4INCLPropagationAction.hh
+        G4INCLICrossSections.hh
         G4INCLConstantRandom.hh
         G4INCLNDFParis.hh
         G4INCLClusteringModelIntercomparison.hh
@@ -122,6 +123,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLParticleEntryChannel.cc
         G4INCLPauliBlocking.cc
         G4INCLDeuteronDensity.cc
+        G4INCLCrossSectionsINCL46.cc
         G4INCLSurfaceAvatar.cc
         G4INCLDeltaDecayChannel.cc
         G4INCLNuclearPotentialIsospin.cc
@@ -130,23 +132,21 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLRecombinationChannel.cc
         G4INCLParticleEntryAvatar.cc
         G4INCLDeltaProductionChannel.cc
-        G4INCLAvatarAction.cc
         G4INCLDeJongSpin.cc
         G4INCLStandardPropagationModel.cc
         G4INCLElasticChannel.cc
         G4INCLDecayAvatar.cc
-        G4INCLPropagationAction.cc
-        G4INCLEventAction.cc
         G4INCLNuclearDensity.cc
         G4INCLClusterDecay.cc
+        G4INCLPhaseSpaceDecay.cc
         G4INCLCoulombNonRelativistic.cc
         G4INCLTransmissionChannel.cc
         G4INCLPauliStrict.cc
         G4INCLKinematicsUtils.cc
         G4INCLPauliGlobal.cc
         G4INCLPauliStrictStandard.cc
-        G4INCLClusterUtils.cc
         G4INCLCrossSections.cc
+        G4INCLCascadeAction.cc
         G4INCLNucleus.cc
         G4INCLClusteringModelIntercomparison.cc
         G4INCLClustering.cc
@@ -171,7 +171,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4track
         G4volumes
         G4intercoms
-        utils
+        G4had_preequ_exciton
+        G4hadronic_deex_evaporation
+        G4hadronic_deex_fermi_breakup
+        G4hadronic_deex_handler
+        G4hadronic_deex_management
+        G4hadronic_deex_multifragmentation
+        G4hadronic_deex_photon_evaporation
+        G4hadronic_deex_util
+        G4hadronic_inclxx_utils
 
     GLOBAL_DEPENDENCIES
         G4geometry

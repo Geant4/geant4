@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrMaterialFactory.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrMaterialFactory
@@ -111,7 +111,7 @@ class G4tgrMaterialFactory
                             const G4bool bNoRepeating = true );
   private:
 
-    static G4tgrMaterialFactory* theInstance;
+    static G4ThreadLocal G4tgrMaterialFactory* theInstance;
 
     G4mstgrisot theG4tgrIsotopes;
       // List of all G4tgrIsotopes created

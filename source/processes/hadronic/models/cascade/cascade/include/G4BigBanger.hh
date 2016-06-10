@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BigBanger.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100407  M. Kelsey -- Replace std::vector<> returns with data members.
@@ -33,40 +33,41 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
 // 20100928  M. Kelsey -- Migrate to integer A and Z
+// 20130620  Address Coverity complaint about missing copy actions
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
 
-#include "G4CascadeColliderBase.hh"
+#include "G4CascadeDeexciteBase.hh"
 #include "G4InuclElementaryParticle.hh"
 #include <vector>
 
-class G4CollisionOutput;
 
-
-class G4BigBanger : public G4CascadeColliderBase {
+class G4BigBanger : public G4CascadeDeexciteBase {
 public:
   G4BigBanger();
   virtual ~G4BigBanger() {};
 
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       G4CollisionOutput& output);
+  virtual void deExcite(const G4Fragment& target, G4CollisionOutput& output);
 
 private: 
   void generateBangInSCM(G4double etot, G4int a, G4int z);
-
   void generateMomentumModules(G4double etot, G4int a, G4int z); 
-
   G4double xProbability(G4double x, G4int a) const; 
-
   G4double maxProbability(G4int a) const;
-
   G4double generateX(G4int ia, G4double promax) const; 
 
   // Buffers for big-bang results
   std::vector<G4InuclElementaryParticle> particles;
   std::vector<G4double> momModules;
   std::vector<G4LorentzVector> scm_momentums;
+
+private:
+  // Copying of modules is forbidden
+  G4BigBanger(const G4BigBanger&);
+  G4BigBanger& operator=(const G4BigBanger&);
 };        
 
 #endif /* G4BIG_BANGER_HH */

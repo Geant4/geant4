@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Ellipsoid.cc,v 1.2 2007-07-13 04:57:50 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4Ellipsoid.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4Ellipsoid.cc
 //
@@ -51,7 +50,7 @@ G4Ellipsoid* CreateEllipsoid(const G4String& name,
                          pzBottomCut, pzTopCut);
 }
 
-BOOST_PYTHON_FUNCTION_OVERLOADS(f_CreateEllipsoid, CreateEllipsoid, 4,6); 
+BOOST_PYTHON_FUNCTION_OVERLOADS(f_CreateEllipsoid, CreateEllipsoid, 4,6)
 
 }
 
@@ -67,7 +66,7 @@ void export_G4Ellipsoid()
     // constructors
     .def(init<const G4String&, G4double, G4double, G4double>())
     .def(init<const G4String&, G4double, G4double, G4double, G4double>())
-    .def(init<const G4String&, G4double, G4double, G4double, G4double, 
+    .def(init<const G4String&, G4double, G4double, G4double, G4double,
                                G4double>())
     // ---
     .def("GetSemiAxisMax", &G4Ellipsoid::GetSemiAxisMax)
@@ -78,7 +77,7 @@ void export_G4Ellipsoid()
     // operators
     .def(self_ns::str(self))
     ;
-  
+
     // Create solid
     def("CreateEllipsoid", CreateEllipsoid,
         f_CreateEllipsoid()[return_value_policy<manage_new_object>()]);

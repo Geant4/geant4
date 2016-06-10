@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id$
+// $Id: StepMax.cc 74994 2013-10-25 10:47:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX)
+ : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX),fMess(0)
 {
   fMess = new StepMaxMessenger(this);
 }
@@ -55,7 +55,10 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetMaxStep(G4double step) {fMaxChargedStep = step;}
+void StepMax::SetMaxStep(G4double step) 
+{
+  fMaxChargedStep = step;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

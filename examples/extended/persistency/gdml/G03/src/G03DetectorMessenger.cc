@@ -27,7 +27,7 @@
 /// \brief Implementation of the G03DetectorMessenger class
 //
 //
-// $Id$
+// $Id: G03DetectorMessenger.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G03DetectorMessenger implementation
 //
@@ -43,7 +43,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G03DetectorMessenger::G03DetectorMessenger( G03DetectorConstruction* myDet )
-  : fTheDetector( myDet )
+  : G4UImessenger(),
+    fTheDetector( myDet ),
+    fTheDetectorDir(0),
+    fTheReadCommand(0),
+    fTheWriteCommand(0)
 { 
   fTheDetectorDir = new G4UIdirectory( "/mydet/" );
   fTheDetectorDir->SetGuidance("Detector control.");

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VRML1SceneHandlerFunc.icc 76287 2013-11-08 13:03:49Z gcosmo $
 //
 // G4VRML1SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -106,10 +106,10 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Tubs& tubs)
 	fCurrentDEF = "tubs_" + tubs.GetName();
 
 	// Get data
-	const G4double R  = tubs.GetRMax(); // outside radius
-	const G4double r  = tubs.GetRMin(); // inside radius
-	const G4double dz = tubs.GetDz();   // half length in z
-	const G4double dp = tubs.GetDPhi(); // angle interval
+	const G4double R  = tubs.GetOuterRadius();   // outside radius
+	const G4double r  = tubs.GetInnerRadius();   // inside radius
+	const G4double dz = tubs.GetZHalfLength();   // half length in z
+	const G4double dp = tubs.GetDeltaPhiAngle(); // angle interval
 
 	// Send data
 	if ( r == 0.0 && dp >= 360. * CLHEP::deg ) {
@@ -144,13 +144,13 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Cons& cons)
 	fCurrentDEF = "cons_" + cons.GetName();
 
 	// Get data
-	const G4double r1 = cons.GetRmin1(); // inside radius  at -dz
-	const G4double R1 = cons.GetRmax1(); // outside radius at -dz
-	const G4double r2 = cons.GetRmin2(); // inside radius  at +dz
-	const G4double R2 = cons.GetRmax2(); // outside radius at +dz
-	const G4double dz = cons.GetDz();    // half length in z
-	//const G4double sp = cons.GetSPhi();  // starting angle
-	const G4double dp = cons.GetDPhi();  // angle width
+	const G4double r1 = cons.GetInnerRadiusMinusZ(); // inside radius at -dz
+	const G4double R1 = cons.GetOuterRadiusMinusZ(); // outside radius at -dz
+	const G4double r2 = cons.GetInnerRadiusPlusZ(); // inside radius at +dz
+	const G4double R2 = cons.GetOuterRadiusPlusZ(); // outside radius at +dz
+	const G4double dz = cons.GetZHalfLength();      // half length in z
+	//const G4double sp = cons.GetStartPhiAngle();  // starting angle
+	const G4double dp = cons.GetDeltaPhiAngle();    // angle width
 
 	// Send data
 	if ( r1 == 0.0 && r2 == 0.0 && R1 == R2 && dp >= 360. * CLHEP::deg) {
@@ -213,10 +213,10 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Sphere& sphere)
 	fCurrentDEF = "sphere_" + sphere.GetName();
 
 	// Get data
-	G4double  dphi   = sphere.GetDPhi  () ;
-	G4double  dtheta = sphere.GetDTheta() ;
-	G4double  rmax   = sphere.GetRmax  () ;
-	G4double  rmin   = sphere.GetRmin  () ;
+	G4double  dphi   = sphere.GetDeltaPhiAngle  () ;
+	G4double  dtheta = sphere.GetDeltaThetaAngle() ;
+	G4double  rmax   = sphere.GetOuterRadius  () ;
+	G4double  rmin   = sphere.GetInnerRadius  () ;
 
 	// Send data
 	if ( (dphi >= 360. * CLHEP::deg) && (dtheta >= 180. * CLHEP::deg) && (rmin == 0.0)  ) {
@@ -368,19 +368,6 @@ void G4VRML1SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 
 	fDest << "\t" << "}" << "\n"; // (DEF) Separator
 	fDest << "}" << "\n"; // Separator
-
-}
-
-
-void G4VRML1SCENEHANDLER::AddPrimitive(const G4NURBS&)
-{
-#if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cout << "***** AddPrimitive nurbs" << "\n" ;
-#endif 
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cout << "G4VRML1File::AddPrimitive(G4NURBS&): not implemented. " << "\n" ;
-	VRMLBeginModeling () ;
 
 }
 

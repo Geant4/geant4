@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RA, EventAction* EA)
-:fRunaction(RA), fEventaction(EA)
+:G4UserSteppingAction(),fRunaction(RA), fEventaction(EA)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

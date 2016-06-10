@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04GlobalField.hh 76690 2013-11-14 08:45:07Z gcosmo $
+//
 /// \file field/field04/include/F04GlobalField.hh
 /// \brief Definition of the F04GlobalField class
 //
-//
+
 #ifndef F04GlobalField_h
 #define F04GlobalField_h 1
 
@@ -49,6 +51,8 @@
 #include "F04FieldMessenger.hh"
 #include "F04ElementField.hh"
 
+#include "F04DetectorConstruction.hh"
+
 //  F04GlobalField - handles the global ElectroMagnetic field
 //
 //  There is a single G04GlobalField object.
@@ -66,7 +70,7 @@ class F04GlobalField : public G4ElectroMagneticField {
 
 private:
 
-  F04GlobalField();
+  F04GlobalField(F04DetectorConstruction* const);
   F04GlobalField(const F04GlobalField&);
 
   virtual ~F04GlobalField();
@@ -79,6 +83,7 @@ public:
 
   /// GetObject() returns the single F04GlobalField object.
   /// It is constructed, if necessary.
+  static F04GlobalField* GetObject(F04DetectorConstruction* const);
   static F04GlobalField* GetObject();
 
   /// GetFieldValue() returns the field value at a given point[].
@@ -91,12 +96,18 @@ public:
 
   /// AddElementField() adds the ElementField object for a single
   /// element to the global field.
-  void AddElementField(F04ElementField* f) { if (fFields) fFields->push_back(f); }
+  void AddElementField(F04ElementField* f)
+  {
+    if (fFields) fFields->push_back(f);
+  }
 
   /// Clear() removes all ElementField-s from the global object,
   /// and destroys them. Used before the geometry is completely
   /// re-created.
   void Clear();
+
+  /// constructs all field tracking objects
+  void ConstructField();
 
   /// updates all field tracking objects and Clear()
   void UpdateField();
@@ -135,7 +146,7 @@ protected:
 
 private:
 
-  static F04GlobalField* fObject;
+  static G4ThreadLocal F04GlobalField* fObject;
 
   G4int fNfp;
   G4bool fFirst;
@@ -167,6 +178,8 @@ private:
   G4ChordFinder*          fChordFinder;
 
   F04FieldMessenger*         fFieldMessenger;
+
+  F04DetectorConstruction* fDetectorConstruction;
 
 };
 

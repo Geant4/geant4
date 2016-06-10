@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10StepCut class
 //
 //
-// $Id$
+// $Id: Em10StepCut.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 
 #include "Em10StepCut.hh"

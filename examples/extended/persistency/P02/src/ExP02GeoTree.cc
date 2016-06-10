@@ -26,7 +26,7 @@
 /// \file persistency/P02/src/ExP02GeoTree.cc
 /// \brief Implementation of the ExP02GeoTree class
 //
-// $Id$
+// $Id: ExP02GeoTree.cc 71727 2013-06-21 07:55:45Z gcosmo $
 // Include files
 
 // local
@@ -41,7 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP02GeoTree::ExP02GeoTree(  ): fTopV(0)
+ExP02GeoTree::ExP02GeoTree(  )
+ : fTopV(0), fEltab(0), fMattab(0)
 {
   fEltab = G4Element::GetElementTable();
   fMattab = G4Material::GetMaterialTable();
@@ -49,8 +50,9 @@ ExP02GeoTree::ExP02GeoTree(  ): fTopV(0)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP02GeoTree::ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et, const G4MaterialTable* mt): 
-  fTopV(vol), fEltab(et), fMattab(mt)
+ExP02GeoTree::ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et, 
+                           const G4MaterialTable* mt)
+ : fTopV(vol), fEltab(et), fMattab(mt)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,30 +26,31 @@
 /// \file field/field02/src/F02PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the F02PrimaryGeneratorMessenger class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F02PrimaryGeneratorMessenger.cc 77893 2013-11-29 08:57:22Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F02PrimaryGeneratorMessenger.hh"
-#include "F02PrimaryGeneratorAction.hh"
 
+#include "F02PrimaryGeneratorAction.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4SystemOfUnits.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02PrimaryGeneratorMessenger::F02PrimaryGeneratorMessenger(
-                                        F02PrimaryGeneratorAction* action)
+                                           F02PrimaryGeneratorAction* action)
  : G4UImessenger(),
    fAction(action),
    fRndmCmd(0),
    fSetXVertexCmd(0),
    fSetYVertexCmd(0),
    fSetZVertexCmd(0)
-{ 
+{
   fRndmCmd = new G4UIcmdWithAString("/gun/random",this);
   fRndmCmd->SetGuidance("Shoot randomly the incident particle.");
   fRndmCmd->SetGuidance("  Choice : on, off(default)");
@@ -61,21 +62,24 @@ F02PrimaryGeneratorMessenger::F02PrimaryGeneratorMessenger(
   fSetXVertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/xvertex",this);
   fSetXVertexCmd->SetGuidance(" Set x coord. of the primary vertex.");
   fSetXVertexCmd->SetParameterName("xv",true);
-  fSetXVertexCmd->SetDefaultValue(0.0*mm) ; 
-  
+  fSetXVertexCmd->SetDefaultValue(0.0*mm);
+  fSetXVertexCmd->SetDefaultUnit("mm");
+
   fSetYVertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/yvertex",this);
   fSetYVertexCmd->SetGuidance(" Set y coord. of the primary vertex.");
   fSetYVertexCmd->SetParameterName("yv",true);
-  fSetYVertexCmd->SetDefaultValue(0.0*mm) ; 
-  
+  fSetYVertexCmd->SetDefaultValue(0.0*mm);
+  fSetYVertexCmd->SetDefaultUnit("mm");
+
   fSetZVertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/zvertex",this);
   fSetZVertexCmd->SetGuidance(" Set z coord. of the primary vertex.");
   fSetZVertexCmd->SetParameterName("zv",true);
-  fSetZVertexCmd->SetDefaultValue(0.0*mm) ; 
-  
+  fSetZVertexCmd->SetDefaultValue(0.0*mm);
+  fSetZVertexCmd->SetDefaultUnit("mm");
+
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02PrimaryGeneratorMessenger::~F02PrimaryGeneratorMessenger()
 {
@@ -85,19 +89,19 @@ F02PrimaryGeneratorMessenger::~F02PrimaryGeneratorMessenger()
   delete fSetZVertexCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,
                                                G4String newValue)
-{ 
+{
   if( command == fRndmCmd )
    { fAction->SetRndmFlag(newValue);}
-  if( command == fSetXVertexCmd)
+  if( command == fSetXVertexCmd )
    { fAction->SetXVertex(fSetXVertexCmd->GetNewDoubleValue(newValue));}
-  if( command == fSetYVertexCmd)
+  if( command == fSetYVertexCmd )
    { fAction->SetYVertex(fSetYVertexCmd->GetNewDoubleValue(newValue));}
-  if( command == fSetZVertexCmd)
+  if( command == fSetZVertexCmd )
    { fAction->SetZVertex(fSetZVertexCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

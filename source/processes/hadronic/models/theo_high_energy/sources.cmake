@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:07:26 bmorgan Exp $
+# $Id: sources.cmake 72365 2013-07-16 13:54:52Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/quasi_elastic/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/quasi_elastic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/common/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
@@ -51,11 +51,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_theo_max
     HEADERS
-        G4ProjectileDiffractiveChannel.hh
         G4QuasiElasticChannel.hh
         G4TheoFSGenerator.hh
     SOURCES
-        G4ProjectileDiffractiveChannel.cc
         G4QuasiElasticChannel.cc
         G4TheoFSGenerator.cc
     GRANULAR_DEPENDENCIES
@@ -66,9 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_theo_max
         G4had_im_r_matrix
         G4had_mod_man
         G4had_mod_util
-		G4hadronic_quasi_elastic
-        G4hadronic_body_ci
-        G4hadronic_crosec_ci
+        G4hadronic_quasi_elastic
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_util

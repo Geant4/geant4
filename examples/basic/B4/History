@@ -15,6 +15,90 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02 December 2013 Ivana Hrivnacova 
+- Fixed gui.mac:
+  corrected wireframe parameter, removed run2.mac from gui 
+
+28/11/13 I. Hrivnacova (exampleB4-V09-06-18)
+- Clean-up macros (fixed obsolete comments)
+
+26/11/13 I. Hrivnacova (exampleB4-V09-06-17)
+- Fixed deleting fMagFieldMessenger with use of G4AutoDelete utility
+
+30/10/13 I. Hrivnacova (exampleB4-V09-06-16)
+- Added a protection when /run/printProgress value is set to zero 
+
+30/10/13 I. Hrivnacova (exampleB4-V09-06-15)
+- Updated README
+
+29/10/13 I. Hrivnacova (exampleB4-V09-06-14)
+- Fixed macro (using /run/printProgress)
+
+29/10/13 I. Hrivnacova (exampleB4-V09-06-13)
+- Using G4GlobalMagFieldMessenger
+- Using G4Exception for warnings and error messages
+- Using G4RunManager::SetPrintProgress()
+- Using Gent4 default number of threads when not set via command line
+- Updated README
+
+01/10/13 I. Hrivnacova (exampleB4-V09-06-12) 
+- Updated for changes in analysis:
+  removal of G4AnalysisManager::Create(isMaster)
+
+19/08/13 I. Hrivnacova (exampleB4-V09-06-11)
+- Fixed B4[b]RunAction::EndOfRunAction() again: to get the printed 
+  histogram statistics correct
+
+24/07/13 P. Gumplinger (exampleB4-V09-06-10)
+- remove unused B4RunAction* fRunAction in B4aEventAction.hh
+
+11/06/13 I. Hrivnacova (exampleB4-V09-06-09)
+- Fixed B4[b]RunAction::EndOfRunAction(): to get the analysis file
+  closed also when no events are processed
+- Fixed names for newly added data members (in B4dEventAction)
+
+10/06/13 I. Hrivnacova (exampleB4-V09-06-08)
+- Fixed names for newly added data members (in B4cEventAction)
+
+03/06/13 I. Hrivnacova (exampleB4-V09-06-07)
+- Updated README files for changes for MT
+
+03/06/13 I. Hrivnacova (exampleB4-V09-06-06)
+- Moved creating analysis manager and booking histograms & ntuples
+  in run action constructor; this makes available /analysis commands
+
+29/05/13 I. Hrivnacova (exampleB4-V09-06-05)
+- Fixed detector construction classes:
+  Moving creating setMagField command from the constructor in 
+  ConstructSDandField(), as the command has to be created per thread,
+  and declaring fMagField and fMessenger data members as static 
+  G4ThreadLocal
+
+24/04/13 M. Asai (exampleB4-V09-06-04)
+- Recover GNUmakefiles.
+
+23/04/13 I. Hrivnacova (exampleB4-V09-06-03)
+- Use G4Random::setTheEngine instead of CLHEP::HepRandom in main 
+  (needed for MT)
+- In B4b: merged  B4bRunAction and B4RunAction in one class
+- Removed unnecessary includes in run action files
+- Minor fixes of coding guidelines 
+
+18/04/13 M. Asai (exampleB4-V09-06-02)
+- Migrated to the new G4VUserActionInitialization class.
+
+08/04/13 M. Asai (exampleB4-V09-06-01)
+- Fixed the use of thread-local G4Allocator for B4c.
+
+06/04/13 M. Asai (exampleB4-V09-06-00)
+- Migrated to multi-threading.
+
+28/02/13 I. Hrivnacova
+- When building materials with NistManager
+  do not set fromIsotopes argument (which was set to false), 
+  as since 9.6 all materials have to be built from isotopes.
+  Thanks to V. Ivantchenko for pointing at this.
+
 01/11/12 I. Hrivnacova (exampleB4-V09-05-02)
 - Implemented new way of handling program arguments in main()
 

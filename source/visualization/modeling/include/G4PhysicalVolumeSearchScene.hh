@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicalVolumeSearchScene.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 // 
 // John Allison  10th August 1998.
@@ -55,7 +55,8 @@ public:
   G4PhysicalVolumeSearchScene
   (G4PhysicalVolumeModel*,
    const G4String& requiredPhysicalVolumeName,
-   G4int requiredCopyNo);
+   G4int requiredCopyNo,
+   G4int verbosity = 99);
   virtual ~G4PhysicalVolumeSearchScene ();
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		    const G4VisAttributes&);
@@ -96,7 +97,6 @@ public:
   virtual void AddPrimitive (const G4Square&)     {}
   virtual void AddPrimitive (const G4Polymarker&) {}
   virtual void AddPrimitive (const G4Polyhedron&) {}
-  virtual void AddPrimitive (const G4NURBS&)      {}
 
 private:
   void FindVolume (const G4VSolid&);
@@ -110,6 +110,7 @@ private:
   G4VPhysicalVolume*   fpFoundPV;                   // Found physical volume.
   G4LogicalVolume*     fpFoundLV;                   // Found logical volume.
   G4Transform3D        fFoundObjectTransformation;  // Found transformation.
+  G4int                fVerbosity;
   G4bool               fMultipleOccurrence;
 };
 

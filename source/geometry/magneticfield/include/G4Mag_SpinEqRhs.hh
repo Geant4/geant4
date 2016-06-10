@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Mag_SpinEqRhs.hh 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 // class G4Mag_SpinEqRhs
@@ -44,6 +44,7 @@
 
 #include "G4Types.hh"
 #include "G4Mag_EqRhs.hh"
+#include "G4ChargeState.hh"
 
 class G4MagneticField;
 
@@ -55,7 +56,7 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
     ~G4Mag_SpinEqRhs();
        // Constructor and destructor. No actions.
 
-     void SetChargeMomentumMass(G4double particleCharge, // in e+ units
+     void SetChargeMomentumMass(G4ChargeState particleCharge,
                                 G4double MomentumXc,
                                 G4double mass); 
 
@@ -71,12 +72,12 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
 
    private:
 
-     G4double omegac;
-     G4double anomaly;
-     G4double pcharge;
-     G4double E;
-     G4double gamma;
-     G4double beta;
+     G4double charge, mass, magMoment, spin;
+
+     G4double omegac, anomaly;
+
+     G4double beta, gamma;
+
 };
 
 #endif /* G4MAG_SPIN_EQRHS */

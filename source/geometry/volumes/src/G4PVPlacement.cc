@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PVPlacement.cc 74459 2013-10-07 15:24:43Z gcosmo $
 //
 // 
 // class G4PVPlacement Implementation
@@ -158,7 +158,7 @@ G4PVPlacement::G4PVPlacement( __void__& a )
 //
 G4PVPlacement::~G4PVPlacement()
 {
-  if( fallocatedRotM ){ delete frot; }
+  if( fallocatedRotM ){ delete this->GetRotation() ; }
 }
 
 // ----------------------------------------------------------------------
@@ -241,13 +241,17 @@ G4int G4PVPlacement::GetRegularStructureId() const
 // ----------------------------------------------------------------------
 // CheckOverlaps
 //
-G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
+G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
+                                    G4bool verbose, G4int maxErr)
 {
   if (res<=0) { return false; }
 
   G4VSolid* solid = GetLogicalVolume()->GetSolid();
   G4LogicalVolume* motherLog = GetMotherLogical();
   if (!motherLog) { return false; }
+
+  G4int trials = 0;
+  G4bool retval = false;
 
   G4VSolid* motherSolid = motherLog->GetSolid();
 
@@ -277,6 +281,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
       G4double distin = motherSolid->DistanceToIn(mp);
       if (distin > tol)
       {
+        trials++; retval = true;
         std::ostringstream message;
         message << "Overlap with mother volume !" << G4endl
                 << "          Overlap is detected for volume "
@@ -286,9 +291,15 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
                 << "          at mother local point " << mp << ", "
                 << "overlapping by at least: "
                 << G4BestUnit(distin, "Length");
+        if (trials>=maxErr)
+        {
+          message << G4endl
+                  << "NOTE: Reached maximum fixed number -" << maxErr
+                  << "- of overlaps reports for this volume !";
+        }
         G4Exception("G4PVPlacement::CheckOverlaps()",
                     "GeomVol1002", JustWarning, message);
-        return true;
+        if (trials>=maxErr)  { return true; }
       }
     }
 
@@ -312,6 +323,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
         G4double distout = daughterSolid->DistanceToOut(md);
         if (distout > tol)
         {
+          trials++; retval = true;
           std::ostringstream message;
           message << "Overlap with volume already placed !" << G4endl
                   << "          Overlap is detected for volume "
@@ -321,9 +333,15 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
                   << "          local point " << md << ", "
                   << "overlapping by at least: "
                   << G4BestUnit(distout,"Length");
+          if (trials>=maxErr)
+          {
+            message << G4endl
+                    << "NOTE: Reached maximum fixed number -" << maxErr
+                    << "- of overlaps reports for this volume !";
+          }
           G4Exception("G4PVPlacement::CheckOverlaps()",
                       "GeomVol1002", JustWarning, message);
-          return true;
+          if (trials>=maxErr)  { return true; }
         }
       }
 
@@ -345,6 +363,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
 
         if (solid->Inside(msi)==kInside)
         {
+          trials++; retval = true;
           std::ostringstream message;
           message << "Overlap with volume already placed !" << G4endl
                   << "          Overlap is detected for volume "
@@ -354,7 +373,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
                   << "          at the same level !";
           G4Exception("G4PVPlacement::CheckOverlaps()",
                       "GeomVol1002", JustWarning, message);
-          return true;
+          if (trials>=maxErr)  { return true; }
         }
       }
     }
@@ -365,7 +384,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
     G4cout << "OK! " << G4endl;
   }
 
-  return false;
+  return retval;
 }
 
 // ----------------------------------------------------------------------

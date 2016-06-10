@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Qt.hh 70674 2013-06-04 07:36:41Z gcosmo $
 //
 //  To unify Qt event treatment between 
 // G4/interfaces Qt sessions and G4/visualizations Qt drivers.
@@ -60,7 +60,9 @@ public:
   bool IsExternalApp();
 
 private:
+  G4Qt (const G4Qt&);
   G4Qt (int,char**,char*);                     
+  G4Qt& operator= (const G4Qt&);
   static G4Qt* instance; // Pointer to single instance.
   int    argn;
   char** args;

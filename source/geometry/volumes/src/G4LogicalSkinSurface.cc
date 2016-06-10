@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LogicalSkinSurface.cc 73926 2013-09-17 07:59:06Z gcosmo $
 //
 // --------------------------------------------------------------------
 // G4LogicalSkinSurface Implementation
@@ -41,7 +41,7 @@
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalVolume.hh"
 
-G4LogicalSkinSurfaceTable G4LogicalSkinSurface::theSkinSurfaceTable;
+G4LogicalSkinSurfaceTable *G4LogicalSkinSurface::theSkinSurfaceTable = 0;
 
 //
 // Constructors & destructor
@@ -53,21 +53,30 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&   name,
   : G4LogicalSurface(name, surfaceProperty),
     LogVolume(logicalVolume)
 {
+  if (!theSkinSurfaceTable)
+  {
+    theSkinSurfaceTable = new G4LogicalSkinSurfaceTable;
+  }
   // Store in the table of Surfaces
   //
-  theSkinSurfaceTable.push_back(this);
+  theSkinSurfaceTable->push_back(this);
 }
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface& right)
   : G4LogicalSurface(right.GetName(), right.GetSurfaceProperty())
 {
+  if (!theSkinSurfaceTable)
+  {
+    theSkinSurfaceTable = new G4LogicalSkinSurfaceTable;
+  }
   SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
   LogVolume = right.LogVolume;
-  theSkinSurfaceTable = right.theSkinSurfaceTable;
+  (*theSkinSurfaceTable) = (*right.theSkinSurfaceTable);
 }
 
 G4LogicalSkinSurface::~G4LogicalSkinSurface()
 {
+//  delete theSkinSurfaceTable; theSkinSurfaceTable = 0;
 }
 
 //
@@ -84,7 +93,7 @@ G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
     SetName(right.GetName());
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     LogVolume = right.LogVolume;
-    theSkinSurfaceTable = right.theSkinSurfaceTable;
+    (*theSkinSurfaceTable) = (*right.theSkinSurfaceTable);
   }
   return *this;
 }
@@ -107,49 +116,68 @@ G4LogicalSkinSurface::operator!=(const G4LogicalSkinSurface& right) const
 
 const G4LogicalSkinSurfaceTable* G4LogicalSkinSurface::GetSurfaceTable()
 {
-  return &theSkinSurfaceTable;
+  if (!theSkinSurfaceTable)
+  {
+    theSkinSurfaceTable = new G4LogicalSkinSurfaceTable;
+  }
+  return theSkinSurfaceTable;
 }
 
 size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
 {
-  return theSkinSurfaceTable.size();
+  if (theSkinSurfaceTable)
+  {
+    return theSkinSurfaceTable->size();
+  }
+  return 0;
 }
 
 G4LogicalSkinSurface*
 G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
-  for (size_t i=0; i<theSkinSurfaceTable.size(); i++)
+  if (theSkinSurfaceTable)
   {
-    if(theSkinSurfaceTable[i]->GetLogicalVolume() == vol)
-      return theSkinSurfaceTable[i];
+    for (size_t i=0; i<theSkinSurfaceTable->size(); i++)
+    {
+      if((*theSkinSurfaceTable)[i]->GetLogicalVolume() == vol)
+        return (*theSkinSurfaceTable)[i];
+    }
   }
-  return NULL;
+  return 0;
 }
 
 // Dump info for known surfaces
 //
 void G4LogicalSkinSurface::DumpInfo() 
 {
-    G4cout << "***** Skin Surface Table : Nb of Surfaces = "
-           << GetNumberOfSkinSurfaces() << " *****" << G4endl;
+  G4cout << "***** Skin Surface Table : Nb of Surfaces = "
+         << GetNumberOfSkinSurfaces() << " *****" << G4endl;
 
-    for (size_t i=0; i<theSkinSurfaceTable.size(); i++)
+  if (theSkinSurfaceTable)
+  {
+    for (size_t i=0; i<theSkinSurfaceTable->size(); i++)
     {
-      G4LogicalSkinSurface* pSkinSurface = theSkinSurfaceTable[i];
+      G4LogicalSkinSurface* pSkinSurface = (*theSkinSurfaceTable)[i];
       G4cout << pSkinSurface->GetName() << " : " << G4endl
              << " Skin of logical volume "
              << pSkinSurface->GetLogicalVolume()->GetName()
              << G4endl;
     }
-    G4cout << G4endl;
+  }
+  G4cout << G4endl;
 }
 
 void G4LogicalSkinSurface::CleanSurfaceTable()
-{  
-  G4LogicalSkinSurfaceTable::iterator pos;
-  for(pos=theSkinSurfaceTable.begin(); pos!=theSkinSurfaceTable.end(); pos++)
+{
+  if (theSkinSurfaceTable)
   {
-    if (*pos) delete *pos;
+    G4LogicalSkinSurfaceTable::iterator pos;
+    for(pos=theSkinSurfaceTable->begin();
+        pos!=theSkinSurfaceTable->end(); pos++)
+    {
+      if (*pos) { delete *pos; }
+    }
+    theSkinSurfaceTable->clear();
   }
-  theSkinSurfaceTable.clear();
+  return;
 }

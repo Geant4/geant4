@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F06ExtraPhysics.cc 69762 2013-05-14 08:08:54Z gcosmo $
+//
 /// \file field/field06/src/F06ExtraPhysics.cc
 /// \brief Implementation of the F06ExtraPhysics class
 //
 //
-//
-
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -44,19 +44,27 @@
 
 #include "F06ExtraPhysics.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F06ExtraPhysics::F06ExtraPhysics() 
     : G4VPhysicsConstructor("Extra") {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F06ExtraPhysics::~F06ExtraPhysics() {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F06ExtraPhysics::ConstructParticle() {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F06ExtraPhysics::ConstructProcess()
 {
-    theParticleIterator->reset();
+    aParticleIterator->reset();
 
-    while ((*theParticleIterator)()) {
-        G4ParticleDefinition* particle = theParticleIterator->value();
+    while ((*aParticleIterator)()) {
+        G4ParticleDefinition* particle = aParticleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
 
@@ -74,13 +82,15 @@ void F06ExtraPhysics::ConstructProcess()
     AddBetaDecay();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F06ExtraPhysics::AddBetaDecay()
 {
-    theParticleIterator->reset();
+    aParticleIterator->reset();
 
-    while ((*theParticleIterator)()) {
+    while ((*aParticleIterator)()) {
 
-        G4ParticleDefinition* particle = theParticleIterator->value();
+        G4ParticleDefinition* particle = aParticleIterator->value();
         G4String particleName = particle->GetParticleName();
 
         if (particleName == "neutron") {
@@ -89,7 +99,8 @@ void F06ExtraPhysics::AddBetaDecay()
            particle->SetPDGStable(false);
 
            G4DecayTable * table = new G4DecayTable();
-           G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
+           G4VDecayChannel* mode = 
+                                new G4NeutronBetaDecayChannel("neutron",1.00);
            table->Insert(mode);
            particle->SetDecayTable(table);
 

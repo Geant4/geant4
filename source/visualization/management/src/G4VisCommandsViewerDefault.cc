@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4VisCommandsDefault.cc,v 1.4 2007-01-05 16:29:38 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/default commands - John Allison  30th October 2011
 
@@ -115,6 +114,7 @@ G4VisCommandViewerDefaultStyle::G4VisCommandViewerDefaultStyle()
   fpCommand->SetGuidance 
     ("(Default hidden line drawing is controlled by \"/vis/viewer/default/hiddenEdge\".)");
   fpCommand->SetParameterName ("style",omitable = false);
+  fpCommand->SetCandidates("w wireframe s surface");
 }
 
 G4VisCommandViewerDefaultStyle::~G4VisCommandViewerDefaultStyle()

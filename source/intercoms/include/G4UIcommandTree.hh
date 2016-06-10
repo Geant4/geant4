@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIcommandTree.hh 77651 2013-11-27 08:47:55Z gcosmo $
 //
 
 #ifndef G4UIcommandTree_h
@@ -51,8 +51,8 @@ class G4UIcommandTree
       G4int operator!=(const G4UIcommandTree &right) const;
 
   public:
-      void AddNewCommand(G4UIcommand * newCommand);
-      void RemoveCommand(G4UIcommand * aCommand);
+      void AddNewCommand(G4UIcommand * newCommand, G4bool workerThreadOnly=false);
+      void RemoveCommand(G4UIcommand * aCommand, G4bool workerThreadOnly=false);
       G4UIcommand* FindPath(const char* commandPath) const;
       G4UIcommandTree* FindCommandTree(const char* commandPath);
       G4String CompleteCommandPath(const G4String& commandPath);
@@ -73,6 +73,7 @@ class G4UIcommandTree
       std::vector<G4UIcommandTree*> tree;
       G4UIcommand *guidance;
       G4String pathName;
+      G4bool broadcastCommands;
 
   public:
       inline const G4UIcommand * GetGuidance() const

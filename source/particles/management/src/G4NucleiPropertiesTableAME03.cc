@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NucleiPropertiesTableAME03.cc 72955 2013-08-14 14:23:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -51,8 +51,8 @@
 // Class G4NucleiPropertiesTableAME03 
 // Determine the table index for a Nuclide with Z protons and A nucleons
 
-G4bool  G4NucleiPropertiesTableAME03::isIntialized = false;
-G4double G4NucleiPropertiesTableAME03::electronMass[ZMax];
+G4ThreadLocal G4bool  G4NucleiPropertiesTableAME03::isIntialized = false;
+G4ThreadLocal G4double G4NucleiPropertiesTableAME03::electronMass[ZMax];
 
 G4NucleiPropertiesTableAME03::G4NucleiPropertiesTableAME03()
 {
@@ -175,8 +175,9 @@ G4bool G4NucleiPropertiesTableAME03::IsInTable(G4int Z, G4int A)
 //| Table of Z (number of protons) and A (number of nucleons)  |
 //|        indexArray[0][ ] --> Z                              |
 //|        indexArray[1][ ] --> A                              |
-//+------------------------------------------------------------+
-G4int G4NucleiPropertiesTableAME03::indexArray[2][G4NucleiPropertiesTableAME03::nEntries] = {
+//+------------------------------------------------------------
+
+const G4int G4NucleiPropertiesTableAME03::indexArray[2][G4NucleiPropertiesTableAME03::nEntries] = {
   // ---------- Z ----------
   {
 
@@ -829,7 +830,7 @@ G4int G4NucleiPropertiesTableAME03::indexArray[2][G4NucleiPropertiesTableAME03::
 //| Table of Mass Excess |
 //+----------------------+
 // unit: keV
-G4double G4NucleiPropertiesTableAME03::MassExcess[G4NucleiPropertiesTableAME03::nEntries] = {
+const G4double G4NucleiPropertiesTableAME03::MassExcess[G4NucleiPropertiesTableAME03::nEntries] = {
     8071.3171,    7288.9705,  13135.72158,    14949.806,  14931.21475,        28667,    25901.518,   2424.91565,    25323.185,     32892.44,
     11386.233,    11678.886,        37996,    41863.757,    17595.106,    14086.793,    18374.947,        43603,        49135,    26101.038,
     14908.141,    15770.034,    27868.346,    31598.044,    20946.844,     4941.672,     22921.49,     35094.06,    40939.429,    24954.264,
@@ -1155,7 +1156,7 @@ G4double G4NucleiPropertiesTableAME03::MassExcess[G4NucleiPropertiesTableAME03::
 //| Table of Beta Decay Energy |
 //+----------------------------+
 //unit: keV
-G4double G4NucleiPropertiesTableAME03::BetaEnergy[G4NucleiPropertiesTableAME03::nEntries] = {
+const G4double G4NucleiPropertiesTableAME03::BetaEnergy[G4NucleiPropertiesTableAME03::nEntries] = {
 
       782.347,            0,            0,       18.591,       -13736,            0,    23476.602,    -22898.27,            0,    21506.207,
      -292.653,       -26317,            0,    24268.651,     3508.313,    -4288.154,       -25228,            0,        23034,    11192.898,
@@ -1481,7 +1482,7 @@ G4double G4NucleiPropertiesTableAME03::BetaEnergy[G4NucleiPropertiesTableAME03::
 //         The index in this table coincide with A-1
 //         For each A value shortTable[A-1] has the index of 
 //         the 1st occurrence in the indexArray[][]
-G4int G4NucleiPropertiesTableAME03::shortTable[G4NucleiPropertiesTableAME03::MaxA+1]=
+const G4int G4NucleiPropertiesTableAME03::shortTable[G4NucleiPropertiesTableAME03::MaxA+1]=
 {
     0,    2,    3,    6,    9,   13,   18,   23,   28,   33,
    39,   44,   50,   55,   61,   67,   74,   80,   87,   95,

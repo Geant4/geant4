@@ -17,8 +17,12 @@
 /process/inactivate phot
 /process/inactivate compt
 /process/inactivate conv
+/process/inactivate Rayl
 #
-/testem/det/setField 0.1 tesla
+/testem/det/setField 0.5 tesla
+#
+/gun/particle e-
+/gun/energy 9.9994890009 GeV
 #
 # Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0
@@ -88,3 +92,6 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
+#
+/run/beamOn 1
+#

@@ -26,13 +26,15 @@
 /// \file field/field03/src/F03CalorimeterSD.cc
 /// \brief Implementation of the F03CalorimeterSD class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F03CalorimeterSD.cc 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F03CalorimeterSD.hh"
+
 #include "F03CalorHit.hh"
 #include "F03DetectorConstruction.hh"
 
@@ -41,59 +43,54 @@
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
-#include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F03CalorimeterSD::F03CalorimeterSD(G4String name, 
+F03CalorimeterSD::F03CalorimeterSD(G4String name,
                                    F03DetectorConstruction* det)
- : G4VSensitiveDetector(name),
-   fCalCollection(0),
-   fDetector(det),
-   fHitID(new G4int[500])
+: G4VSensitiveDetector(name),
+  fCalCollection(0),
+  fDetector(det),
+  fHitID(new G4int[500])
 {
   collectionName.insert("CalCollection");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03CalorimeterSD::~F03CalorimeterSD()
 {
   delete [] fHitID;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  fCalCollection = new F03CalorHitsCollection(SensitiveDetectorName,
-                                              collectionName[0]); 
-  for (G4int j=0;j<1; j++)
-  {
-    fHitID[j] = -1;
-  }
+  fCalCollection = new F03CalorHitsCollection
+                       (SensitiveDetectorName,collectionName[0]);
+  for (G4int j=0;j<1; j++) {fHitID[j] = -1;};
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool F03CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
   G4double edep = step->GetTotalEnergyDeposit();
-  
   G4double stepl = 0.;
 
   stepl = step->GetStepLength();
 
-  if ((edep == 0.) && (stepl == 0.) ) return false;      
+  if ((edep == 0.) && (stepl == 0.) ) return false;
 
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
-    
-  G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
 
-  G4int number = 0 ;
+  G4VPhysicalVolume* physVol = theTouchable->GetVolume();
+
+  G4int number = 0;
   if (fHitID[number]==-1)
-    { 
+    {
       F03CalorHit* calHit = new F03CalorHit();
       if (physVol == fDetector->GetAbsorber()) calHit->AddAbs(edep,stepl);
       fHitID[number] = fCalCollection->insert(calHit) - 1;
@@ -101,36 +98,23 @@ G4bool F03CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
         G4cout << " New Calorimeter Hit on F03: " << number << G4endl;
     }
   else
-    { 
+    {
       if (physVol == fDetector->GetAbsorber())
          (*fCalCollection)[fHitID[number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
         G4cout << " Energy added to F03: " << number << G4endl; 
     }
-    
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03CalorimeterSD::EndOfEvent(G4HCofThisEvent* hce)
 {
   static G4int hcID = -1;
   if (hcID<0)
   { hcID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
-  hce->AddHitsCollection(hcID, fCalCollection);
+  hce->AddHitsCollection(hcID,fCalCollection);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F03CalorimeterSD::clear()
-{} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-void F03CalorimeterSD::PrintAll()
-{} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

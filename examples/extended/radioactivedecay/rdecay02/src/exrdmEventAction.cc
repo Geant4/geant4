@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmEventAction.cc 68030 2013-03-13 13:51:27Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmEventAction.cc
 /// \brief Implementation of the exrdmEventAction class
 //
@@ -43,7 +45,9 @@ extern G4bool drawEvent;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmEventAction::exrdmEventAction()
-  : fDrawFlag("all")
+  : G4UserEventAction(),
+    fDrawFlag("all"), 
+    fEventMessenger(0)
 {
   fEventMessenger = new exrdmEventActionMessenger(this);
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StatMFMicroManager.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -47,8 +47,8 @@ public:
 
     // G4StatMFMicroManager class must be initialized with a G4Fragment, multiplicity,
     // free internal energy and the entropy of the compund nucleus.
-    G4StatMFMicroManager(const G4Fragment & theFragment, const G4int multiplicity,
-			 const G4double FreeIntE, const G4double SCompNuc);
+    G4StatMFMicroManager(const G4Fragment & theFragment, G4int multiplicity,
+			 G4double FreeIntE, G4double SCompNuc);
 
     // destructor
     ~G4StatMFMicroManager();
@@ -73,11 +73,11 @@ public:
 public:
 
     // Choice of fragment atomic numbers and charges.
-    G4StatMFChannel * ChooseChannel(const G4double A0, const G4double Z0, const G4double MeanT);
+    G4StatMFChannel * ChooseChannel(G4int A0, G4int Z0, G4double MeanT);
 	
     G4double GetProbability(void) const {return _WW;}
 
-    void Normalize(const G4double Norm);
+    void Normalize(G4double Norm);
 	
     G4double GetMeanMultiplicity(void) const {return _MeanMultiplicity; }
 
@@ -88,10 +88,10 @@ public:
 private:
 
     // Initailization method
-    void Initialize(const G4Fragment & theFragment, const G4int m,
-		    const G4double FreeIntE, const G4double SCompNuc);
+    void Initialize(const G4Fragment & theFragment, G4int m,
+		    G4double FreeIntE, G4double SCompNuc);
 
-    G4bool MakePartition(const G4int k, G4int * ANumbers); 
+    G4bool MakePartition(G4int k, G4int * ANumbers); 
 								
 
 

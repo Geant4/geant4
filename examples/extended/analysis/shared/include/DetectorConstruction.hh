@@ -27,7 +27,7 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id$
+// $Id: DetectorConstruction.hh 77256 2013-11-22 10:10:23Z gcosmo $
 //
 // 
 
@@ -53,7 +53,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-   ~DetectorConstruction();
+    virtual ~DetectorConstruction();
 
   public:
      
@@ -66,10 +66,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetCalorSizeYZ(G4double);          
      void SetNbOfLayers (G4int);   
      
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
 
-     void UpdateGeometry();
-     
   public:
   
      void PrintCalorParameters(); 

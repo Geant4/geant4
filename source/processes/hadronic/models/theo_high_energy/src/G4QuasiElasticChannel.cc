@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4QuasiElasticChannel.cc 70688 2013-06-04 09:01:01Z gcosmo $
 //
 
 // Author : Gunter Folger March 2007
@@ -51,6 +51,7 @@
 #include "G4Nucleus.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4QuasiElRatios.hh"
 #include "globals.hh"
 #include <vector>
@@ -114,7 +115,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
   G4double residualNucleusMass;
   if(resZ)
   {
-    resDef=G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);
+    resDef=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(resZ,resA,0);
     residualNucleusMass=resDef->GetPDGMass();
   }
   else {
@@ -145,7 +146,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
     //return 0;       //no scatter
     scatteredHadron4Mom=thePrimary.Get4Momentum();
     residualNucleus4Mom=G4LorentzVector(0.,0.,0.,targetNucleusMass);
-    resDef=G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
+    resDef=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0);
   }
 
 #ifdef debug_scatter

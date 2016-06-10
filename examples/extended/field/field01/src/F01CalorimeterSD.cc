@@ -27,12 +27,11 @@
 /// \brief Implementation of the F01CalorimeterSD class
 //
 //
-// $Id$
+// $Id: F01CalorimeterSD.cc 76248 2013-11-08 11:19:52Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F01CalorimeterSD.hh"
 
@@ -44,10 +43,8 @@
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
-  
-#include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01CalorimeterSD::F01CalorimeterSD(G4String name,
                                    F01DetectorConstruction* det)
@@ -59,23 +56,23 @@ F01CalorimeterSD::F01CalorimeterSD(G4String name,
   collectionName.insert("CalCollection");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01CalorimeterSD::~F01CalorimeterSD()
 {
   delete [] fHitID;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   fCalCollection = new F01CalorHitsCollection
-                       (SensitiveDetectorName,collectionName[0]); 
+                       (SensitiveDetectorName,collectionName[0]);
   for (G4int j=0;j<1; j++) {fHitID[j] = -1;};
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool F01CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
@@ -84,33 +81,33 @@ G4bool F01CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 
   stepl = step->GetStepLength();
 
-  if ((edep == 0.) && (stepl == 0.) ) return false;      
+  if ((edep == 0.) && (stepl == 0.) ) return false;
 
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
-    
-  G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
 
-  G4int F01Number = 0 ;
-  if (fHitID[F01Number]==-1)
-    { 
+  G4VPhysicalVolume* physVol = theTouchable->GetVolume();
+
+  G4int number = 0;
+  if (fHitID[number]==-1)
+    {
       F01CalorHit* calHit = new F01CalorHit();
       if (physVol == fDetector->GetAbsorber()) calHit->AddAbs(edep,stepl);
-      fHitID[F01Number] = fCalCollection->insert(calHit) - 1;
+      fHitID[number] = fCalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on F01: " << F01Number << G4endl;
+        G4cout << " New Calorimeter Hit on F01: " << number << G4endl;
     }
   else
-    { 
+    {
       if (physVol == fDetector->GetAbsorber())
-         (*fCalCollection)[fHitID[F01Number]]->AddAbs(edep,stepl);
+         (*fCalCollection)[fHitID[number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to F01: " << F01Number << G4endl; 
+        G4cout << " Energy added to F01: " << number << G4endl; 
     }
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01CalorimeterSD::EndOfEvent(G4HCofThisEvent* hce)
 {
@@ -120,15 +117,4 @@ void F01CalorimeterSD::EndOfEvent(G4HCofThisEvent* hce)
   hce->AddHitsCollection(hcID,fCalCollection);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void F01CalorimeterSD::clear()
-{} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-void F01CalorimeterSD::PrintAll()
-{} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

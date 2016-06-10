@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT0npChannel.cc,v 1.3 2010-08-04 05:28:24 mkelsey Exp $
+// $Id: G4CascadeNPChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
@@ -670,7 +670,7 @@ namespace {
 
 // Initialize n-p channel
 
-G4CascadeNPChannelData::data_t
+const G4CascadeNPChannelData::data_t
 G4CascadeNPChannelData::data(np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
 			     np8bfs, np9bfs, npCrossSections, npTotXSec,
 			     neu*pro, "NeutronProton");

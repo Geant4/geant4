@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -58,10 +56,8 @@ namespace G4INCL {
        *
        * \param A the mass number
        * \param Z the charge number
-       * \param rCDFTable the interpolation table for the inverse CDF in r-space
-       * \param pCDFTable the interpolation table for the inverse CDF in p-space
        */
-      ParticleSampler(const G4int A, const G4int Z, InverseInterpolationTable const * const rCDFTable, InverseInterpolationTable const * const pCDFTable);
+      ParticleSampler(const G4int A, const G4int Z);
 
       /// \brief Destructor
       ~ParticleSampler();
@@ -72,24 +68,43 @@ namespace G4INCL {
       /// \brief Getter for thePotential
       NuclearPotential::INuclearPotential const *getPotential() const { return thePotential; }
 
+      /// \brief Getter for rpCorrelationCoefficient
+      G4double getRPCorrelationCoefficient(const ParticleType t) const {
+// assert(t==Proton || t==Neutron);
+        return rpCorrelationCoefficient[t];
+      }
+
       /// \brief Setter for theDensity
       void setDensity(NuclearDensity const * const d);
 
       /// \brief Setter for thePotential
       void setPotential(NuclearPotential::INuclearPotential const * const p);
 
-      ParticleList sampleParticles(ThreeVector const &position) const;
+      /// \brief Setter for rpCorrelationCoefficient
+      void setRPCorrelationCoefficient(const ParticleType t, const G4double corrCoeff) {
+// assert(t==Proton || t==Neutron);
+        rpCorrelationCoefficient[t] = corrCoeff;
+      }
+
+      ParticleList sampleParticles(ThreeVector const &position);
 
     private:
 
-      void updateSampleOneParticleMethod();
+      void updateSampleOneParticleMethods();
 
       typedef Particle *(ParticleSampler::*ParticleSamplerMethod)(const ParticleType t) const;
+
       /** \brief Sample a list of particles.
        *
-       * This method is a pointer to the method that does the real work.
+       * This method is a pointer to the method that does the real work for protons.
        */
-      ParticleSamplerMethod sampleOneParticle;
+      ParticleSamplerMethod sampleOneProton;
+
+      /** \brief Sample a list of particles.
+       *
+       * This method is a pointer to the method that does the real work for neutrons.
+       */
+      ParticleSamplerMethod sampleOneNeutron;
 
       /// \brief Sample one particle taking into account the rp-correlation
       Particle *sampleOneParticleWithRPCorrelation(const ParticleType t) const;
@@ -97,23 +112,29 @@ namespace G4INCL {
       /// \brief Sample one particle not taking into account the rp-correlation
       Particle *sampleOneParticleWithoutRPCorrelation(const ParticleType t) const;
 
+      /// \brief Sample one particle with a fuzzy rp-correlation
+      Particle *sampleOneParticleWithFuzzyRPCorrelation(const ParticleType t) const;
+
       /// \brief Mass number
       const G4int theA;
 
       /// \brief Charge number
       const G4int theZ;
 
-      /// \brief Pointer to the r-space CDF table
-      InverseInterpolationTable const *theRCDFTable;
+      /// \brief Array of pointers to the r-space CDF table
+      InverseInterpolationTable const *theRCDFTable[UnknownParticle];
 
-      /// \brief Pointer to the p-space CDF table
-      InverseInterpolationTable const *thePCDFTable;
+      /// \brief Array of pointers to the p-space CDF table
+      InverseInterpolationTable const *thePCDFTable[UnknownParticle];
 
       /// \brief Pointer to the Cluster's NuclearDensity
       NuclearDensity const *theDensity;
 
       /// \brief Pointer to the Cluster's NuclearPotential
       NuclearPotential::INuclearPotential const *thePotential;
+
+      /// \brief Correlation coefficients for the r-p correlation
+      G4double rpCorrelationCoefficient[UnknownParticle];
   };
 
 }

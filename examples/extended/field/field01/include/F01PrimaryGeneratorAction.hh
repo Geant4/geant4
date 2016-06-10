@@ -27,54 +27,52 @@
 /// \brief Definition of the F01PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: F01PrimaryGeneratorAction.hh 77881 2013-11-29 08:37:53Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01PrimaryGeneratorAction_h
 #define F01PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4ParticleGun;
 class G4Event;
 class F01DetectorConstruction;
 class F01PrimaryGeneratorMessenger;
+class G4ParticleDefinition;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    F01PrimaryGeneratorAction(F01DetectorConstruction*);    
-    ~F01PrimaryGeneratorAction();
+    F01PrimaryGeneratorAction(F01DetectorConstruction*);
+    virtual ~F01PrimaryGeneratorAction();
 
   public:
     virtual void GeneratePrimaries(G4Event*);
-    void SetRndmFlag(G4String val) { fRndmFlag = val;}
-    void SetXVertex(G4double x) ;
-    void SetYVertex(G4double y) ;
-    void SetZVertex(G4double z) ;
+    void SetRndmFlag(G4String val) { fRndmFlag = val; }
+    void SetXVertex(G4double x);
+    void SetYVertex(G4double y);
+    void SetZVertex(G4double z);
 
-    static G4String GetPrimaryName() ;                
+    static G4String GetPrimaryName();
 
   private:
     G4ParticleGun*                fParticleGun; //pointer a to G4 service class
     F01DetectorConstruction*      fDetector;    //pointer to the geometry
-    
-    F01PrimaryGeneratorMessenger* fGunMessenger; //messenger of this class
-    G4String                      fRndmFlag;     //flag for a random impact point       
 
-    static G4String fgPrimaryParticleName ;
+    F01PrimaryGeneratorMessenger* fGunMessenger; //messenger of this class
+    G4String                      fRndmFlag;     //flag for random impact point
+
+    static G4ParticleDefinition* fgPrimaryParticle;
     G4double fXVertex, fYVertex, fZVertex;
-    G4bool fVertexDefined ;
+    G4bool fVertexDefined;
 
 };
 
 #endif
-
-

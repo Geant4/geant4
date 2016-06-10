@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -69,8 +67,11 @@ namespace G4INCL {
       /// \brief Max number of iterations for the determination of the local-energy Q-value
       static const G4int maxIterLocE;
 
+      /// \brief Release the memory allocated for the backup particles
+      static void deleteBackupParticles();
+
     protected:
-      virtual G4INCL::IChannel* getChannel() const = 0;
+      virtual G4INCL::IChannel* getChannel() = 0;
 
       G4bool bringParticleInside(Particle * const p);
 
@@ -106,21 +107,16 @@ namespace G4INCL {
         else
           theLocalEnergyType = theNucleus->getStore()->getConfig()->getLocalEnergyBBType();
 
-        const G4bool firstAvatar = (theNucleus->getStore()->getBook()->getAcceptedCollisions() == 0);
+        const G4bool firstAvatar = (theNucleus->getStore()->getBook().getAcceptedCollisions() == 0);
         return ((theLocalEnergyType == FirstCollisionLocalEnergy && firstAvatar) ||
             theLocalEnergyType == AlwaysLocalEnergy);
       }
 
-      G4INCL::Nucleus *theNucleus;
-      G4INCL::Particle *particle1, *particle2;
+      Nucleus *theNucleus;
+      Particle *particle1, *particle2;
+      static G4ThreadLocal Particle *backupParticle1, *backupParticle2;
       ThreeVector boostVector;
-      ParticleType oldParticle1Type, oldParticle2Type;
-      G4double oldParticle1Energy, oldParticle2Energy, oldTotalEnergy, oldXSec;
-      G4double oldParticle1Potential, oldParticle2Potential;
-      G4double oldParticle1Mass, oldParticle2Mass;
-      G4double oldParticle1Helicity, oldParticle2Helicity;
-      ThreeVector oldParticle1Momentum, oldParticle2Momentum;
-      ThreeVector oldParticle1Position, oldParticle2Position;
+      G4double oldTotalEnergy, oldXSec;
       G4bool isPiN;
 
     private:
@@ -155,10 +151,6 @@ namespace G4INCL {
           Nucleus *theNucleus;
           /// \brief Pointer to the boost vector
           ThreeVector const *boostVector;
-          /// \brief true if we must apply local energy to nucleons
-          G4bool hasLocalEnergy;
-          /// \brief true if we must apply local energy to deltas
-          G4bool hasLocalEnergyDelta;
 
           /// \brief True if we should use local energy
           const G4bool shouldUseLocalEnergy;
@@ -168,7 +160,7 @@ namespace G4INCL {
            * Set the momenta of the modified and created particles to alpha times
            * their original momenta (stored in particleMomenta). You must call
            * init() before using this method.
-           * 
+           *
            * \param alpha scale factor
            */
           void scaleParticleMomenta(const G4double alpha) const;
@@ -182,7 +174,7 @@ namespace G4INCL {
            *
            * The constructor sets the private class members.
            */
-          ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState);
+          ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState, const G4bool localE);
           virtual ~ViolationEEnergyFunctor() {}
 
           /** \brief Compute the energy-conservation violation.
@@ -217,6 +209,8 @@ namespace G4INCL {
            * The particle (a delta) cannot have less than this energy.
            */
           G4double energyThreshold;
+          /// \brief Whether we should use local energy
+          const G4bool shouldUseLocalEnergy;
       };
 
       RootFunctor *violationEFunctor;

@@ -70,7 +70,7 @@ class G4VPHitIO
 
     protected:
       G4int m_verbose;
-      static G4VPHitIO* f_G4VPHitIO;
+      static G4ThreadLocal G4VPHitIO* f_G4VPHitIO;
       G4HCIOcatalog*    f_catalog;
 
 }; // End of class G4VPHitIO

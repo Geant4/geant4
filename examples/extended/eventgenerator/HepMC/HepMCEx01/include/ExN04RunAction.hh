@@ -26,9 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04RunAction.hh
 /// \brief Definition of the ExN04RunAction class
 //
+// $Id: ExN04RunAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-// $Id$
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,25 +37,14 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class G4Run;
 
-class ExN04RunAction : public G4UserRunAction
-{
-  public:
-    ExN04RunAction();
-   ~ExN04RunAction();
+class ExN04RunAction : public G4UserRunAction {
+public:
+  ExN04RunAction();
+  ~ExN04RunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run*);
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-
-
-
-
-

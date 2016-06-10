@@ -32,7 +32,7 @@
 //    *                                   *
 //    *************************************
 //
-// $Id$
+// $Id: PurgMagTabulatedField3D.cc 69086 2013-04-18 07:29:59Z gcosmo $
 //
 
 #include "PurgMagTabulatedField3D.hh"

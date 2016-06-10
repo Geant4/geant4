@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GEMChannel.cc 74869 2013-10-23 09:26:17Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -40,6 +40,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
                            G4GEMProbability * aEmissionStrategy,
@@ -199,7 +201,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
 							     fragment.GetZ_asInt());
   G4double aCN = theLevelDensityPtr->LevelDensityParameter(fragment.GetA_asInt(),
 							   fragment.GetZ_asInt(),U-deltaCN);   
-  G4double UxCN = (2.5 + 150.0/fragment.GetA())*MeV;
+  G4double UxCN = (2.5 + 150.0/G4double(fragment.GetA_asInt()))*MeV;
   G4double ExCN = UxCN + deltaCN;
   G4double TCN = 1.0/(std::sqrt(aCN/UxCN) - 1.5/UxCN);
   //                       ***end PARENT***
@@ -207,15 +209,15 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
   //JMQ quantities calculated for  CN in InitialLevelDensity
   if ( U < ExCN ) 
     {
-      G4double E0CN = ExCN - TCN*(std::log(TCN/MeV) - std::log(aCN*MeV)/4.0 
-				  - 1.25*std::log(UxCN/MeV) + 2.0*std::sqrt(aCN*UxCN));
-      InitialLevelDensity = (pi/12.0)*std::exp((U-E0CN)/TCN)/TCN;
+      G4double E0CN = ExCN - TCN*(G4Log(TCN/MeV) - G4Log(aCN*MeV)/4.0 
+				  - 1.25*G4Log(UxCN/MeV) + 2.0*std::sqrt(aCN*UxCN));
+      InitialLevelDensity = (pi/12.0)*G4Exp((U-E0CN)/TCN)/TCN;
     } 
   else 
     {
       G4double x  = U-deltaCN;
       G4double x1 = std::sqrt(aCN*x);
-      InitialLevelDensity = (pi/12.0)*std::exp(2*x1)/(x*std::sqrt(x1));
+      InitialLevelDensity = (pi/12.0)*G4Exp(2*x1)/(x*std::sqrt(x1));
       //InitialLevelDensity = 
       //(pi/12.0)*std::exp(2*std::sqrt(aCN*(U-deltaCN)))/std::pow(aCN*std::pow(U-deltaCN,5.0),1.0/4.0);
     }
@@ -271,13 +273,13 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
 	
       if ( theEnergy-KineticEnergy < Ex) 
 	{
-	  G4double E0 = Ex - T*(std::log(T/MeV) - std::log(a*MeV)/4.0 
-				- 1.25*std::log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
-	  Probability *= std::exp((theEnergy-KineticEnergy-E0)/T)/T;
+	  G4double E0 = Ex - T*(G4Log(T/MeV) - G4Log(a*MeV)/4.0 
+				- 1.25*G4Log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
+	  Probability *= G4Exp((theEnergy-KineticEnergy-E0)/T)/T;
 	} 
       else 
 	{
-	  Probability *= std::exp(2*std::sqrt(a*(theEnergy-KineticEnergy-delta0)))/
+	  Probability *= G4Exp(2*std::sqrt(a*(theEnergy-KineticEnergy-delta0)))/
 	    std::pow(a*fG4pow->powN(theEnergy-KineticEnergy-delta0,5), 0.25);
 	}
     }

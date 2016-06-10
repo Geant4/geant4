@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VTwistSurface.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -156,8 +156,8 @@ G4VTwistSurface::~G4VTwistSurface()
 //* AmIOnLeftSide -----------------------------------------------------
 
 G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me, 
-                                const G4ThreeVector &vec,
-                                      G4bool        withtol) 
+                                     const G4ThreeVector &vec,
+                                     G4bool        withtol) 
 {
    // AmIOnLeftSide returns phi-location of "me"
    // (phi relation between me and vec projected on z=0 plane).
@@ -168,10 +168,10 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me,
    //  of me.cross(vec).)
    // If me is on boundary of vec, return 0.
 
-   static const G4double kAngTolerance
+   const G4double kAngTolerance
      = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
-   static G4RotationMatrix unitrot;  // unit matrix
+   G4RotationMatrix unitrot;
    static const G4RotationMatrix rottol    = unitrot.rotateZ(0.5*kAngTolerance);
    static const G4RotationMatrix invrottol = unitrot.rotateZ(-1.*kAngTolerance);
 
@@ -796,7 +796,7 @@ void G4VTwistSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 void G4VTwistSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 {
    if (areacode & sCorner) {
-      if (areacode & sC0Min1Max) {
+      if (areacode & sC0Min1Min) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMin[1];
       } else if (areacode & sC0Max1Min) {

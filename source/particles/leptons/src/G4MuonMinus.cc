@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4MuonMinus.cc 69015 2013-04-15 09:46:48Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -76,9 +76,9 @@ G4MuonMinus* G4MuonMinus::Definition()
                 false,           "mu"
               );
     // Bohr Magnetron
-   G4double muB =  -0.5*eplus*hbar_Planck/(0.1056584*GeV/c_squared) ;
+   G4double muB =  -0.5*eplus*hbar_Planck/(anInstance->GetPDGMass()/c_squared) ;
    
-   anInstance->SetPDGMagneticMoment( muB * 2. * 1.0011659208);
+   anInstance->SetPDGMagneticMoment( muB * 1.0011659209);
 
   //create Decay Table 
   G4DecayTable* table = new G4DecayTable();

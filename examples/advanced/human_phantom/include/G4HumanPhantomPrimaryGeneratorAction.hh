@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
-//
 #ifndef G4HumanPhantomPrimaryGeneratorAction_h
 #define G4HumanPhantomPrimaryGeneratorAction_h 1
 
@@ -38,9 +32,7 @@
 #include "globals.hh"
 #include <vector>
 
-//class G4HumanPhantomConstruction;
-class G4HumanPhantomPrimaryGeneratorMessenger;
-class G4ParticleGun;
+class G4GeneralParticleSource;
 class G4Event;
 
 class G4HumanPhantomPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
@@ -51,27 +43,10 @@ class G4HumanPhantomPrimaryGeneratorAction : public G4VUserPrimaryGeneratorActio
 
   public:
     void GeneratePrimaries(G4Event* anEvent);
-    void GenerateBeamAlongZ();
-    void GenerateBeamAlongX();
-    void GenerateBeamAlongY();
-    void GenerateIsotropicFlux();
-    void SetBeam(G4String);
 
   private:
-    G4ParticleGun* particleGun;
-
-    G4double x0;
-    G4double y0;
-    G4double z0;
-    
-    std::vector<G4double> probability;
-   
-    G4HumanPhantomPrimaryGeneratorMessenger* messenger;
-    
-    G4String beamKind;
-    G4double worldLength;
+    G4GeneralParticleSource* particleGun;
 };
-
 #endif
 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2010-12-02 08:06:06 kmura Exp $
+$Id: History 76884 2013-11-18 12:54:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V09-06-00 / 15 November 2013 Koichi Murakami
+[g4py]
+ - add support for CMake build (experimental)
+ - updated for 10.0 release
+ - suppress warnings
+[MOMO]
+  - MOMO.jar updated (GPE disactivated, EnvPanel update)
+  - momo-src.jar updated
+  - On-line Help document updated
 
 envs-V09-05-03 / 8 November 2012 Koichi Murakami
 [g4py]

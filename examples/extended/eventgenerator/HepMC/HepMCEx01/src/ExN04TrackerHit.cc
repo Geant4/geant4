@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackerHit.cc
 /// \brief Implementation of the ExN04TrackerHit class
 //
+// $Id: ExN04TrackerHit.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #include "ExN04TrackerHit.hh"
 #include "G4VVisManager.hh"
@@ -33,15 +35,20 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Allocator<ExN04TrackerHit> ExN04TrackerHitAllocator;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04TrackerHit::ExN04TrackerHit()
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04TrackerHit::~ExN04TrackerHit()
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04TrackerHit::ExN04TrackerHit(const ExN04TrackerHit &right)
   : G4VHit()
 {
@@ -49,6 +56,7 @@ ExN04TrackerHit::ExN04TrackerHit(const ExN04TrackerHit &right)
   pos = right.pos;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 const ExN04TrackerHit& ExN04TrackerHit::operator=(const ExN04TrackerHit &right)
 {
   edep = right.edep;
@@ -56,11 +64,13 @@ const ExN04TrackerHit& ExN04TrackerHit::operator=(const ExN04TrackerHit &right)
   return *this;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
 {
   return (this==&right) ? 1 : 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -76,7 +86,7 @@ void ExN04TrackerHit::Draw()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerHit::Print()
-{;}
-
-
+{
+}

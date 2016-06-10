@@ -26,6 +26,8 @@
 /// \file persistency/P02/src/ExP02DetConstrReader.cc
 /// \brief Implementation of the ExP02DetConstrReader class
 //
+// $Id: ExP02DetConstrReader.cc 71727 2013-06-21 07:55:45Z gcosmo $
+//
 //ROOT
 #include "TROOT.h"
 #include "TFile.h"
@@ -43,6 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP02DetConstrReader::ExP02DetConstrReader()
+ : G4VUserDetectorConstruction()
 {  
   // initialize ROOT
   TSystem ts;

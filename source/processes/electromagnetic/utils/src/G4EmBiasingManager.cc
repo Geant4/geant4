@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmBiasingManager.cc 76765 2013-11-15 09:38:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -198,8 +198,8 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
   }
   const G4Region* reg = regionStore->GetRegion(name, false);
   if(!reg) { 
-    G4cout << "### G4EmBiasingManager::ActivateBremsstrahlungSplitting WARNING: "
-	   << " G4Region <"
+    G4cout << "### G4EmBiasingManager::ActivateBremsstrahlungSplitting "
+	   << "WARNING: G4Region <"
 	   << rname << "> is unknown" << G4endl;
     return; 
   }
@@ -344,7 +344,7 @@ G4EmBiasingManager::ApplySecondaryBiasing(
 	if(safety > fSafetyMin) { ApplyRangeCut(vd, track, eloss, safety); }
 
 	// Russian Roulette
-      } if(1 == nsplit) { 
+      } else if(1 == nsplit) { 
 	weight = ApplyRussianRoulette(vd, index);
 
 	// Splitting
@@ -405,14 +405,16 @@ G4EmBiasingManager::ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
 {
   size_t n = vd.size();
   if(!eIonisation) { 
-    eIonisation = G4LossTableManager::Instance()->GetEnergyLossProcess(theElectron);
+    eIonisation = 
+      G4LossTableManager::Instance()->GetEnergyLossProcess(theElectron);
   }
   if(eIonisation) { 
     for(size_t k=0; k<n; ++k) {
       const G4DynamicParticle* dp = vd[k];
       if(dp->GetDefinition() == theElectron) {
 	G4double e = dp->GetKineticEnergy();
-        if(eIonisation->GetRangeForLoss(e, track.GetMaterialCutsCouple()) < safety) {
+        if(eIonisation->GetRangeForLoss(e, track.GetMaterialCutsCouple()) 
+	   < safety) {
 	  eloss += e;
 	  delete dp;
           vd[k] = 0;
@@ -455,7 +457,8 @@ G4EmBiasingManager::ApplySplitting(std::vector<G4DynamicParticle*>& vd,
     const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
     for(G4int k=1; k<nsplit; ++k) {  
       tmpSecondaries.clear();
-      currentModel->SampleSecondaries(&tmpSecondaries, couple, dynParticle, tcut);
+      currentModel->SampleSecondaries(&tmpSecondaries, couple, dynParticle, 
+				      tcut);
       for (size_t kk=0; kk<tmpSecondaries.size(); ++kk) {
 	vd.push_back(tmpSecondaries[kk]);
       }

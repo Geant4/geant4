@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE01Trajectory class
 //
 //
-// $Id$
+// $Id: RE01Trajectory.cc 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #include "RE01Trajectory.hh"
@@ -47,11 +47,12 @@
 #include "G4PrimaryParticle.hh"
 #include "RE01TrackInformation.hh"
 
-G4Allocator<RE01Trajectory> myTrajectoryAllocator;
+G4ThreadLocal G4Allocator<RE01Trajectory> * myTrajectoryAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01Trajectory::RE01Trajectory(const G4Track* aTrack)
-:G4VTrajectory()
+:G4VTrajectory(),
+ fPositionRecord(0),fParticleDefinition(0)
 {
    fParticleDefinition = aTrack->GetDefinition();
    fParticleName = fParticleDefinition->GetParticleName();
@@ -123,7 +124,7 @@ void RE01Trajectory::ShowTrajectory(std::ostream& os) const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-void RE01Trajectory::DrawTrajectory(G4int /*i_mode*/) const
+void RE01Trajectory::DrawTrajectory() const
 {
 
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();

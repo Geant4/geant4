@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParallelWorldProcess.hh 68733 2013-04-05 09:45:28Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -173,9 +173,9 @@ public:
   static const G4Step* GetHyperStep();
   static G4int GetHypNavigatorID();
 private:
-  static G4Step* fpHyperStep;
-  static G4int nParallelWorlds;
-  static G4int fNavIDHyp;
+  static G4ThreadLocal G4Step* fpHyperStep;
+  static G4ThreadLocal G4int nParallelWorlds;
+  static G4ThreadLocal G4int fNavIDHyp;
   G4int iParallelWorld;
 };
 

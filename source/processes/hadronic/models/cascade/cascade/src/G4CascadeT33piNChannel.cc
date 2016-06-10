@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeT33piNChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100612  M. Kelsey -- BUG FIX:  Swapped eight-body channel final-states
 // 20100804  M. Kelsey -- Add name string to ctor
@@ -536,13 +536,13 @@ namespace {
 
 // Initialize both |T Tz> = |3/2 3/2> channels, using pipP cross-section table
 
-G4CascadePiPlusPChannelData::data_t
+const G4CascadePiPlusPChannelData::data_t
 G4CascadePiPlusPChannelData::data(pipP2bfs, pipP3bfs, pipP4bfs,
 				  pipP5bfs, pipP6bfs, pipP7bfs,
 				  pipP8bfs, pipP9bfs, pipPCrossSections,
 				  pipPtotXSec, pip*pro, "PiPlusP");
 
-G4CascadePiMinusNChannelData::data_t
+const G4CascadePiMinusNChannelData::data_t
 G4CascadePiMinusNChannelData::data(pimN2bfs, pimN3bfs, pimN4bfs,
 				   pimN5bfs, pimN6bfs, pimN7bfs,
 				   pimN8bfs, pimN9bfs, pipPCrossSections,

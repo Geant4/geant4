@@ -3,7 +3,7 @@
 #
 /gunExample/selectGunAction 2
 #
-/gunExample/histo/setFileName run2
-/gunExample/histo/setHisto 1  100  0. 200. keV	#energy spectrum for gun #2
+/analysis/setFileName run2
+/analysis/h1/set 1  100  0. 200. keV	#energy spectrum for gun #2
 #  
 /run/beamOn 100000

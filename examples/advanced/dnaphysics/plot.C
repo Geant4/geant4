@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id$
+// $Id: plot.C 70323 2013-05-29 07:57:44Z gcosmo $
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -16,10 +16,13 @@ Double_t scale;
 c1 = new TCanvas ("c1","",20,20,1000,500);
 c1.Divide(2,1);
 
+system ("rm -rf dna.root");
+system ("hadd dna.root dna_*.root");
+
 TFile f("dna.root"); 
 
 TNtuple* ntuple;
-ntuple = (TNtuple*)f->Get("ntuple"); 
+ntuple = (TNtuple*)f->Get("dna"); 
      
 c1.cd(1);
   gStyle->SetOptStat(000000);

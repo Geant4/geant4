@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIQt.hh 76743 2013-11-14 15:48:22Z gcosmo $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -78,13 +78,22 @@ class QToolBar;
 class G4QTabWidget : public QTabWidget {
 public :
   G4QTabWidget();
-  G4QTabWidget(QSplitter*&);
+  G4QTabWidget(QWidget* aParent, int sizeX, int sizeY);
   void paintEvent  ( QPaintEvent * event );
-  inline void setTabSelected(bool a) { tabSelected = a; };
-  inline void setLastTabCreated(int a) { lastCreated = a; };
-  inline bool isTabSelected() { return tabSelected; };
-  bool tabSelected;
-  int lastCreated;
+  inline void setTabSelected(bool a) { fTabSelected = a; };
+  inline void setLastTabCreated(int a) { fLastCreated = a; };
+  inline bool isTabSelected() { return fTabSelected; };
+  bool fTabSelected;
+  int fLastCreated;
+  int fPreferedSizeX;
+  int fPreferedSizeY;
+  inline void setPreferredSize(QSize s) {
+    fPreferedSizeX = s.width() + 6; // tab label height + margin left+right
+    fPreferedSizeY = s.height() + 58; // margin left+right
+  }
+  inline QSize sizeHint () const {
+    return QSize(fPreferedSizeX, fPreferedSizeY);
+  }
 };
 
 class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSession {
@@ -109,8 +118,9 @@ public: // With description
   void AddIcon(const char* userLabel, const char* iconFile, const char* command, const char* file_name="");
   // To add a icon in the toolbar
   // First argument is the label of the icon.
-  // Second argument is the icon file.
+  // Second argument is the selected icon type (open save move rotate pick zoom_in zoom_out wireframe solid hidden_line_removal hidden_line_and_surface_removal perspective ortho user_icon).
   // Third argument is the Geant4 command executed when the button is fired.
+  // Fourth argument is the path to the icon file if "user_icon" selected
   // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background"); 
 
   bool AddTabWidget(QWidget*,QString,int,int);
@@ -149,6 +159,10 @@ public: // With description
   void SetIconPerspectiveSelected();
   void SetIconOrthoSelected();
 
+  inline QMainWindow * GetMainWindow() {
+    return fMainWindow;
+  };
+
 public:
   ~G4UIQt();
   void Prompt(G4String);
@@ -175,10 +189,14 @@ private:
   void ActivateCommand(G4String);
   QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
 
-  void CreateVisParametersTBWidget();
-  void CreateHelpTBWidget();
-  void CreateCoutTBWidget();
-  void CreateHistoryTBWidget();
+  QWidget* CreateVisParametersTBWidget();
+  QWidget* CreateHelpTBWidget();
+  QWidget* CreateCoutTBWidget();
+  QWidget* CreateHistoryTBWidget();
+  QWidget* CreateUITabWidget();
+  QWidget* CreateSceneTreeComponentsTBWidget();
+  QWidget* CreateRightSplitterWidget();
+  QWidget* CreateLeftSplitterWidget();
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);
@@ -209,13 +227,16 @@ private:
   QLabel *fEmptyViewerTabLabel;
   QSplitter * fMainSplitterWidget;
   QSplitter* fRightSplitterWidget;
+  QWidget* fLeftSplitterWidget;
   QSplitter * fHelpVSplitter;
-  int fLastQTabSizeX;
-  int fLastQTabSizeY;
+  QWidget* fViewerTabHandleWidget;
 
   QToolBar *fToolbarApp;
   QToolBar *fToolbarUser;
-
+  QString fStringSeparator;
+  G4String fLastErrMessage;
+  QString fLastOpenPath;
+  
   bool fMoveSelected;
   bool fRotateSelected;
   bool fPickSelected;
@@ -226,6 +247,7 @@ private Q_SLOTS :
   void ExitSession();
   void ClearButtonCallback();
   void CommandEnteredCallback();
+  void CommandEditedCallback(const QString & text);
   void ButtonCallback(const QString&);
   void HelpTreeClicCallback();
   void HelpTreeDoubleClicCallback();

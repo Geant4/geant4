@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.5 2009-09-22 14:20:31 maire Exp $
+# $Id: run02.mac 74997 2013-10-25 10:52:13Z gcosmo $
 #
 # limit the step size by geometry
 #
@@ -27,6 +27,6 @@
 #
 /testem/applyAutomaticStepMax false
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000

@@ -40,13 +40,13 @@
 //
 #include "UltraPMTSD.hh"
 
-#include "G4RunManager.hh"
 #include "G4Material.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
-#include "G4ios.hh"
+#include "G4OpticalPhoton.hh"
+#include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -72,13 +72,13 @@ void UltraPMTSD::Initialize(G4HCofThisEvent* HCE)
   static int HCID1 = -1;
 
 
-// SensitiveDetectorName and collectionName are data members of G4VSensitiveDetector
+  // SensitiveDetectorName and collectionName are data members of G4VSensitiveDetector
 
-OpticalHitsCollection = 
-  new UltraOpticalHitsCollection(SensitiveDetectorName,collectionName[0]);
+  OpticalHitsCollection = 
+    new UltraOpticalHitsCollection(SensitiveDetectorName,collectionName[0]);
 
   if(HCID1<0)
-  { HCID1 = GetCollectionID(0); }
+    { HCID1 = GetCollectionID(0); }
   HCE->AddHitsCollection(HCID1,OpticalHitsCollection);
 
 }
@@ -87,43 +87,44 @@ OpticalHitsCollection =
 
 G4bool UltraPMTSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
+ 
+  // Get Material 
+  
+  G4String thisVolume = aStep->GetTrack()->GetVolume()->GetName() ;
+  const G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition();
+
+
+  if (thisVolume != "PMT1" && thisVolume != "PMT2") 
+    return false;
+  if (particle != G4OpticalPhoton::Definition() ) 
+    return false;
+
+  if(particle == G4OpticalPhoton::Definition()) 
+    aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+
+  G4double      kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
+  G4ThreeVector HitPosition   = aStep->GetPreStepPoint()->GetPosition() ;
+
+  UltraOpticalHit* OpticalHit = new UltraOpticalHit ;
+  OpticalHit->SetEnergy(kineticEnergy);
+  OpticalHit->SetPosition(HitPosition);
 
  
-  
-// Get Material 
-  
-G4String thisVolume = aStep->GetTrack()->GetVolume()->GetName() ;
-G4String particleName = aStep->GetTrack()->GetDefinition()->GetParticleName();
-
-
-if (thisVolume != "PMT1" && thisVolume != "PMT2") return false;
-if (particleName != "opticalphoton" ) return false;
-
-if(particleName == "opticalphoton") aStep->GetTrack()->SetTrackStatus(fStopAndKill);
-
-G4double      kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
-G4ThreeVector HitPosition   = aStep->GetPreStepPoint()->GetPosition() ;
-
-UltraOpticalHit* OpticalHit = new UltraOpticalHit ;
-OpticalHit->SetEnergy(kineticEnergy);
-OpticalHit->SetPosition(HitPosition);
-
- 
-OpticalHitsCollection->insert(OpticalHit);
+  OpticalHitsCollection->insert(OpticalHit);
 
 
 #ifdef ULTRA_VERBOSE
- G4cout << "*******************************" << G4endl;
- G4cout << "             PMT HIT           " << G4endl;
- G4cout << "  Volume:                      " << thisVolume << G4endl;
- G4cout << "  Photon energy (eV) :         " << kineticEnergy/eV << G4endl;
- G4cout << "  POSITION (mm) :              " 
-        << HitPosition.x()/mm << " " << HitPosition.y()/mm << " " << HitPosition.z()/mm << G4endl;
- G4cout << "*******************************" << G4endl;
+  G4cout << "*******************************" << G4endl;
+  G4cout << "             PMT HIT           " << G4endl;
+  G4cout << "  Volume:                      " << thisVolume << G4endl;
+  G4cout << "  Photon energy (eV) :         " << kineticEnergy/eV << G4endl;
+  G4cout << "  POSITION (mm) :              " 
+	 << HitPosition.x()/mm << " " << HitPosition.y()/mm << " " << HitPosition.z()/mm << G4endl;
+  G4cout << "*******************************" << G4endl;
 #endif
 
 
- return true;
+  return true;
 }
 
 

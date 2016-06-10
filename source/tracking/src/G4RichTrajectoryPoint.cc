@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RichTrajectoryPoint.cc 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //
 // ---------------------------------------------------------------
@@ -61,7 +61,7 @@
 
 #include <sstream>
 
-G4Allocator<G4RichTrajectoryPoint> aRichTrajectoryPointAllocator;
+G4ThreadLocal G4Allocator<G4RichTrajectoryPoint> *aRichTrajectoryPointAllocator = 0;
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint():
   fpAuxiliaryPointVector(0),
@@ -113,33 +113,6 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep):
   fpPostStepPointVolume = postStepPoint->GetTouchableHandle();
   fPreStepPointWeight = preStepPoint->GetWeight();
   fPostStepPointWeight = postStepPoint->GetWeight();
-
-  /*
-  G4cout << "fpAuxiliaryPointVector "
-	 << (void*) fpAuxiliaryPointVector;
-  G4cout << ": ";
-  if (fpAuxiliaryPointVector) {
-    G4cout << "size: " << fpAuxiliaryPointVector->size();
-    for (size_t i = 0; i < fpAuxiliaryPointVector->size(); ++i)
-      G4cout << "\n  " << (*fpAuxiliaryPointVector)[i];
-  } else {
-    G4cout << "non-existent";
-  }
-  G4cout << G4endl;
-
-  static const G4Step* lastStep = 0;
-  if (aStep && aStep == lastStep) {
-    G4cout << "********* aStep is same as last" << G4endl;
-  }
-  lastStep = aStep;
-
-  static std::vector<G4ThreeVector>*  lastAuxiliaryPointVector = 0;
-  if (fpAuxiliaryPointVector &&
-      fpAuxiliaryPointVector == lastAuxiliaryPointVector) {
-    G4cout << "********* fpAuxiliaryPointVector is same as last" << G4endl;
-  }
-  lastAuxiliaryPointVector = fpAuxiliaryPointVector;
-  */
 }
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint

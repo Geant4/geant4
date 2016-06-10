@@ -1,0 +1,26 @@
+# Macro file for example B5
+# 
+# Can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
+#
+# Defaults:
+# armAngle 30. deg
+# field value: 1.0*tesla
+/run/beamOn 3
+#
+/B5/detector/armAngle 0. deg
+/B5/field/value 0. tesla
+/run/beamOn 3
+#
+/B5/detector/armAngle 60. deg
+/B5/field/value 2. tesla
+/run/beamOn 3
+#
+/B5/detector/armAngle 30. deg
+/B5/field/value 1. tesla
+/B5/generator/momentum 2. GeV
+/B5/generator/sigmaMomentum 0. 
+/B5/generator/sigmaAngle 0.
+/B5/generator/sigmaAngle 2. deg
+/run/beamOn 3
+

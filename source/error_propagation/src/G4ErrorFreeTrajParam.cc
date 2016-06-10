@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorFreeTrajParam.cc 69014 2013-04-15 09:42:51Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -48,8 +48,8 @@ G4ErrorFreeTrajParam::G4ErrorFreeTrajParam( const G4Point3D& pos,
 void G4ErrorFreeTrajParam::SetParameters( const G4Point3D& pos,
                                           const G4Vector3D& mom )
 {
-  fDir = mom;
   fInvP = 1./mom.mag();
+  fDir = mom*fInvP;
   fLambda = 90.*deg - mom.theta();
   fPhi = mom.phi();
   G4Vector3D vxPerp(0.,0.,0.);
@@ -64,8 +64,11 @@ void G4ErrorFreeTrajParam::SetParameters( const G4Point3D& pos,
   //  fXPerp = pos.proj( mom );
   G4ThreeVector posv(pos);
   if( vyPerp.mag() != 0. ) {
-    fYPerp = posv.project( vyPerp ).mag();
-    fZPerp = posv.project( vzPerp ).mag();
+    // now all 2 scalar memeber variables retain the signs
+    //  fYPerp = posv.project( vyPerp ).mag();
+    //  fZPerp = posv.project( vzPerp ).mag();
+    fYPerp = posv.dot( vyPerp );
+    fZPerp = posv.dot( vzPerp );
   } else {
     fYPerp = 0.;
     fZPerp = 0.;

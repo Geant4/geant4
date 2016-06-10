@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryPionBuilder.hh 54715 2011-11-11 16:16:06Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4BinaryPionBuilder.hh 67969 2013-03-13 09:44:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

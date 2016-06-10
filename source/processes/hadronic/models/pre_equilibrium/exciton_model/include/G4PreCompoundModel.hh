@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PreCompoundModel.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // by V. Lara
 //
@@ -106,12 +106,13 @@ private:
   // Data Members 
   //==============
 
-  G4PreCompoundParameters*   theParameters;
   G4PreCompoundEmission*     theEmission;
   G4VPreCompoundTransitions* theTransition;
 
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
+
+  G4double fLevelDensity;
 
   G4bool useHETCEmission;
   G4bool useGNASHTransition;

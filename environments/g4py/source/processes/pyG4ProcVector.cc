@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ProcVector.cc,v 1.4 2006-06-29 15:34:52 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4ProcVector.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4ProcVector.cc
 //
@@ -40,7 +39,7 @@ namespace pyG4ProcVector {
 
 typedef std::vector<G4VProcess*> G4ProcVector;
 
-};
+}
 
 using namespace pyG4ProcVector;
 

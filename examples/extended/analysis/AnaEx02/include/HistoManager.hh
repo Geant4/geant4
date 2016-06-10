@@ -26,7 +26,7 @@
 /// \file analysis/AnaEx02/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 59868 2012-06-20 13:59:51Z gcosmo $
+// $Id: HistoManager.hh 74272 2013-10-02 14:48:50Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,14 +67,15 @@ class HistoManager
         
   private:
   
-    TFile*   rootFile;
-    TH1D*    histo[MaxHisto];            
-    TTree*   ntupl;    
+    TFile*   fRootFile;
+    TH1D*    fHisto[MaxHisto];            
+    TTree*   fNtuple1;    
+    TTree*   fNtuple2;    
 
-    G4double Eabs;
-    G4double Egap;
-    G4double Labs;
-    G4double Lgap;
+    G4double fEabs;
+    G4double fEgap;
+    G4double fLabs;
+    G4double fLgap;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

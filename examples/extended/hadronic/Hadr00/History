@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2010-10-11 11:03:56 vnivanch Exp $
+$Id: History 77735 2013-11-27 17:55:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,35 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-11-13  I. Hrivnacova (exhadr00-V09-06-06)
+- Removed #ifdef G4MULTITHREADED from RunAction (not needed)
+- Fixed .README 
+
+21-11-13  A. Dotti      (exhadr00-V09-06-05)
+- USe G4RunManager::ReinitializeGeometry() to trigger geometry
+  rebuilds. 
+- Remove ui command /testhadr/Update and corresponding
+  DetectorConstruction::Update method
+- Mark UI command to change detector as ToBeBroadcasted(false)
+- Update README file for change in ui command 
+
+06-11-13  V.Ivanchenko (exhadr00-V09-06-04)
+- Fixed for MT
+
+05-11-13  V.Ivanchenko (exhadr00-V09-06-03)
+- Fixed for sequential
+
+05-11-13  V.Ivanchenko (exhadr00-V09-06-02)
+- Appling review recommendations, migration to MT, simplified access 
+    to histograms
+
+05-06-13  I. Hrivnacova (exhadr00-V09-06-01)
+- Applied coding guidelines (data members names and initialization, 
+  tabulations, separators)
+
+05-04-13  V.Ivanchenko (exhadr00-V09-06-00)
+- Appling code guidelines
 
 15-11-12 I. Hrivnacova (exhadr00-V09-05-07)
 - Synchronized .README with changes in README

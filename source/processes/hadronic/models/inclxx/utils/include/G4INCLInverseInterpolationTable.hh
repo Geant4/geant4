@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -81,11 +79,6 @@ namespace G4INCL {
 
       G4bool operator>=(const InterpolationNode &rhs) const {
         return (x >= rhs.x);
-      }
-
-      /// \brief Overloaded comparison operator for STL algorithms
-      friend G4bool operator<(const InterpolationNode &lhs, const G4double rhs) {
-        return lhs.x < rhs;
       }
 
       G4double getX() const { return x; }

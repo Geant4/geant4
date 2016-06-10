@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4MultiNavigator.cc 70934 2013-06-07 13:29:05Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -543,7 +543,7 @@ G4MultiNavigator::PrintLimited()
 {
   // Report results -- for checking   
 
-  static G4String StrDoNot("DoNot"), StrUnique("Unique"),
+  static const G4String StrDoNot("DoNot"), StrUnique("Unique"),
                   StrUndefined("Undefined"),
                   StrSharedTransport("SharedTransport"),
                   StrSharedOther("SharedOther");
@@ -716,7 +716,7 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
       for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
       {
         G4ThreeVector oneNormal;
-        if( fLimitedStep[ num ] ) 
+        if( fLimitTruth[ num ] )  // Did this geometry limit the step ? 
         { 
           G4ThreeVector newNormal= (*pNavIter)-> GetGlobalExitNormal( argPoint, &oneObtained );
           if( oneObtained )
@@ -795,7 +795,7 @@ G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
     normalGlobalCrd= fpNavigator[ fIdNavLimiting ]->GetLocalExitNormal( &isObtained); 
     *argpObtained= isObtained;
 
-    G4int static numberWarnings= 0;
+    static G4ThreadLocal G4int numberWarnings= 0;
     G4int noWarningsStart= 10, noModuloWarnings=100; 
     numberWarnings++; 
     if( (numberWarnings < noWarningsStart ) || (numberWarnings%noModuloWarnings==0) ) 

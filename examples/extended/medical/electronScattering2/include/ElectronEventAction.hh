@@ -23,15 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ElectronEventAction.hh 70325 2013-05-29 08:06:02Z gcosmo $
+//
 /// \file medical/electronScattering2/include/ElectronEventAction.hh
 /// \brief Definition of the ElectronEventAction class
-//
 
 #ifndef ElectronEventAction_h
 #define ElectronEventAction_h 1
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ElectronEventAction : public G4UserEventAction
 {
@@ -43,6 +46,6 @@ class ElectronEventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event*);
 };
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    
+#endif

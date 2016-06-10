@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/MyKleinNishinaMessenger.hh
 /// \brief Definition of the MyKleinNishinaMessenger class
 //
-// $Id$
+// $Id: MyKleinNishinaMessenger.hh 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ class MyKleinNishinaMessenger: public G4UImessenger
     MyKleinNishinaMessenger(MyKleinNishinaCompton* );
    ~MyKleinNishinaMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:  
     MyKleinNishinaCompton* fKleinNishina;  

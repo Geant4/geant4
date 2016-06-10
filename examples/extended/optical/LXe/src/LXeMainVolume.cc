@@ -23,23 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeMainVolume.cc 77561 2013-11-26 09:00:04Z gcosmo $
+//
 /// \file optical/LXe/src/LXeMainVolume.cc
 /// \brief Implementation of the LXeMainVolume class
 //
 //
-#include "LXeMainVolume.hh"
 #include "globals.hh"
-#include "G4SDManager.hh"
+
+#include "LXeMainVolume.hh"
+
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
-#include "LXePMTSD.hh"
-#include "LXeScintSD.hh"
+
 #include "G4SystemOfUnits.hh"
-
-LXeScintSD* LXeMainVolume::fScint_SD=NULL;
-LXePMTSD* LXeMainVolume::fPmt_SD=NULL;
-
-G4LogicalVolume* LXeMainVolume::fHousing_log=NULL;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,126 +56,99 @@ LXeMainVolume::LXeMainVolume(G4RotationMatrix *pRot,
 {
   CopyValues();
 
-  if(!fHousing_log || fUpdated){
+  G4double housing_x=fScint_x+2.*fD_mtl;
+  G4double housing_y=fScint_y+2.*fD_mtl;
+  G4double housing_z=fScint_z+2.*fD_mtl;
  
-    G4double housing_x=fScint_x+fD_mtl;
-    G4double housing_y=fScint_y+fD_mtl;
-    G4double housing_z=fScint_z+fD_mtl;
+  //*************************** housing and scintillator
+  fScint_box = new G4Box("scint_box",fScint_x/2.,fScint_y/2.,fScint_z/2.);
+  fHousing_box = new G4Box("housing_box",housing_x/2.,housing_y/2.,
+                           housing_z/2.);
  
-    //*************************** housing and scintillator
-    fScint_box = new G4Box("scint_box",fScint_x/2.,fScint_y/2.,fScint_z/2.);
-    fHousing_box = new G4Box("housing_box",housing_x/2.,housing_y/2.,
-                            housing_z/2.);
+  fScint_log = new G4LogicalVolume(fScint_box,G4Material::GetMaterial("LXe"),
+                                   "scint_log",0,0,0);
+  fHousing_log = new G4LogicalVolume(fHousing_box,
+                                     G4Material::GetMaterial("Al"),
+                                     "housing_log",0,0,0);
  
-    fScint_log = new G4LogicalVolume(fScint_box,G4Material::GetMaterial("LXe"),
-                                    "scint_log",0,0,0);
-    fHousing_log = new G4LogicalVolume(fHousing_box,
-                                      G4Material::GetMaterial("Al"),
-                                      "housing_log",0,0,0);
+  new G4PVPlacement(0,G4ThreeVector(),fScint_log,"scintillator",
+                                 fHousing_log,false,0);
  
-    new G4PVPlacement(0,G4ThreeVector(),fScint_log,"scintillator",
-                                   fHousing_log,false,0);
- 
-    //*************** Miscellaneous sphere to demonstrate skin surfaces
-    fSphere = new G4Sphere("sphere",0.*mm,2.*cm,0.*deg,360.*deg,0.*deg,
-                          360.*deg);
-    fSphere_log = new G4LogicalVolume(fSphere,G4Material::GetMaterial("Al"),
-                                     "sphere_log");
-    if(fSphereOn)
-      new G4PVPlacement(0,G4ThreeVector(5.*cm,5.*cm,5.*cm),
+  //*************** Miscellaneous sphere to demonstrate skin surfaces
+  fSphere = new G4Sphere("sphere",0.*mm,2.*cm,0.*deg,360.*deg,0.*deg,360.*deg);
+  fSphere_log = new G4LogicalVolume(fSphere,G4Material::GetMaterial("Al"),
+                                    "sphere_log");
+  if(fSphereOn)
+    new G4PVPlacement(0,G4ThreeVector(5.*cm,5.*cm,5.*cm),
                                       fSphere_log,"sphere",fScint_log,false,0);
  
-    //****************** Build PMTs
-    G4double innerRadius_pmt = 0.*cm;
-    G4double height_pmt = fD_mtl/2.;
-    G4double startAngle_pmt = 0.*deg;
-    G4double spanningAngle_pmt = 360.*deg;
+  //****************** Build PMTs
+  G4double innerRadius_pmt = 0.*cm;
+  G4double height_pmt = fD_mtl/2.;
+  G4double startAngle_pmt = 0.*deg;
+  G4double spanningAngle_pmt = 360.*deg;
  
-    fPmt = new G4Tubs("pmt_tube",innerRadius_pmt,fOuterRadius_pmt,
-                     height_pmt,startAngle_pmt,spanningAngle_pmt);
+  fPmt = new G4Tubs("pmt_tube",innerRadius_pmt,fOuterRadius_pmt,
+                    height_pmt,startAngle_pmt,spanningAngle_pmt);
  
-    //the "photocathode" is a metal slab at the back of the glass that
-    //is only a very rough approximation of the real thing since it only
-    //absorbs or detects the photons based on the efficiency set below
-    fPhotocath = new G4Tubs("photocath_tube",innerRadius_pmt,fOuterRadius_pmt,
-                           height_pmt/2,startAngle_pmt,spanningAngle_pmt);
+  //the "photocathode" is a metal slab at the back of the glass that
+  //is only a very rough approximation of the real thing since it only
+  //absorbs or detects the photons based on the efficiency set below
+  fPhotocath = new G4Tubs("photocath_tube",innerRadius_pmt,fOuterRadius_pmt,
+                          height_pmt/2,startAngle_pmt,spanningAngle_pmt);
  
-    fPmt_log = new G4LogicalVolume(fPmt,G4Material::GetMaterial("Glass"),
-                                  "pmt_log");
-    fPhotocath_log = new G4LogicalVolume(fPhotocath,
-                                        G4Material::GetMaterial("Al"),
-                                        "photocath_log");
+  fPmt_log = new G4LogicalVolume(fPmt,G4Material::GetMaterial("Glass"),
+                                 "pmt_log");
+  fPhotocath_log = new G4LogicalVolume(fPhotocath,
+                                       G4Material::GetMaterial("Al"),
+                                       "photocath_log");
  
-    new G4PVPlacement(0,G4ThreeVector(0,0,-height_pmt/2),
-                                       fPhotocath_log,"photocath",
-                                       fPmt_log,false,0);
+  new G4PVPlacement(0,G4ThreeVector(0,0,-height_pmt/2),
+                                    fPhotocath_log,"photocath",
+                                    fPmt_log,false,0);
  
-    //***********Arrange pmts around the outside of housing**********
-    //---pmt sensitive detector
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  //***********Arrange pmts around the outside of housing**********
 
-    if(!fPmt_SD){
-      fPmt_SD = new LXePMTSD("/LXeDet/pmtSD");
-      SDman->AddNewDetector(fPmt_SD);
-      //Created here so it exists as pmts are being placed
-    }
-    fPmt_SD->InitPMTs((fNx*fNy+fNx*fNz+fNy*fNz)*2); //let pmtSD know # of pmts
-    //-------
+  G4double dx = fScint_x/fNx;
+  G4double dy = fScint_y/fNy;
+  G4double dz = fScint_z/fNz;
  
-    G4double dx = fScint_x/fNx;
-    G4double dy = fScint_y/fNy;
-    G4double dz = fScint_z/fNz;
+  G4double x,y,z;
+  G4double xmin = -fScint_x/2. - dx/2.;
+  G4double ymin = -fScint_y/2. - dy/2.;
+  G4double zmin = -fScint_z/2. - dz/2.;
+  G4int k=0;
  
-    G4double x,y,z;
-    G4double xmin = -fScint_x/2. - dx/2.;
-    G4double ymin = -fScint_y/2. - dy/2.;
-    G4double zmin = -fScint_z/2. - dz/2.;
-    G4int k=0;
- 
-    z = -fScint_z/2. - height_pmt;      //front
-    PlacePMTs(fPmt_log,0,x,y,dx,dy,xmin,ymin,fNx,fNy,x,y,z,k,fPmt_SD);
-    G4RotationMatrix* rm_z = new G4RotationMatrix();
-    rm_z->rotateY(180*deg);
-    z = fScint_z/2. + height_pmt;       //back
-    PlacePMTs(fPmt_log,rm_z,x,y,dx,dy,xmin,ymin,fNx,fNy,x,y,z,k,fPmt_SD);
- 
-    G4RotationMatrix* rm_y1 = new G4RotationMatrix();
-    rm_y1->rotateY(-90*deg);
-    x = -fScint_x/2. - height_pmt;      //left
-    PlacePMTs(fPmt_log,rm_y1,y,z,dy,dz,ymin,zmin,fNy,fNz,x,y,z,k,fPmt_SD);
-    G4RotationMatrix* rm_y2 = new G4RotationMatrix();
-    rm_y2->rotateY(90*deg);
-    x = fScint_x/2. + height_pmt;      //right
-    PlacePMTs(fPmt_log,rm_y2,y,z,dy,dz,ymin,zmin,fNy,fNz,x,y,z,k,fPmt_SD);
- 
-    G4RotationMatrix* rm_x1 = new G4RotationMatrix();
-    rm_x1->rotateX(90*deg);
-    y = -fScint_y/2. - height_pmt;     //bottom
-    PlacePMTs(fPmt_log,rm_x1,x,z,dx,dz,xmin,zmin,fNx,fNz,x,y,z,k,fPmt_SD);
-    G4RotationMatrix* rm_x2 = new G4RotationMatrix();
-    rm_x2->rotateX(-90*deg);
-    y = fScint_y/2. + height_pmt;      //top
-    PlacePMTs(fPmt_log,rm_x2,x,z,dx,dz,xmin,zmin,fNx,fNz,x,y,z,k,fPmt_SD);
- 
-    //**********Setup Sensitive Detectors***************
-    if(!fScint_SD){//determine if it has already been created
-      fScint_SD = new LXeScintSD("/LXeDet/scintSD");
-      SDman->AddNewDetector(fScint_SD);
-    }
-    fScint_log->SetSensitiveDetector(fScint_SD);
- 
-    //sensitive detector is not actually on the photocathode.
-    //processHits gets done manually by the stepping action.
-    //It is used to detect when photons hit and get absorbed&detected at the
-    //boundary to the photocathode (which doesnt get done by attaching it to a
-    //logical volume.
-    //It does however need to be attached to something or else it doesnt get
-    //reset at the begining of events
-    fPhotocath_log->SetSensitiveDetector(fPmt_SD);
+  z = -fScint_z/2. - height_pmt;      //front
+  PlacePMTs(fPmt_log,0,x,y,dx,dy,xmin,ymin,fNx,fNy,x,y,z,k);
 
-    VisAttributes();
-    SurfaceProperties();
-  }
+  G4RotationMatrix* rm_z = new G4RotationMatrix();
+  rm_z->rotateY(180*deg);
+  z = fScint_z/2. + height_pmt;       //back
+  PlacePMTs(fPmt_log,rm_z,x,y,dx,dy,xmin,ymin,fNx,fNy,x,y,z,k);
+ 
+  G4RotationMatrix* rm_y1 = new G4RotationMatrix();
+  rm_y1->rotateY(-90*deg);
+  x = -fScint_x/2. - height_pmt;      //left
+  PlacePMTs(fPmt_log,rm_y1,y,z,dy,dz,ymin,zmin,fNy,fNz,x,y,z,k);
+
+  G4RotationMatrix* rm_y2 = new G4RotationMatrix();
+  rm_y2->rotateY(90*deg);
+  x = fScint_x/2. + height_pmt;      //right
+  PlacePMTs(fPmt_log,rm_y2,y,z,dy,dz,ymin,zmin,fNy,fNz,x,y,z,k);
+ 
+  G4RotationMatrix* rm_x1 = new G4RotationMatrix();
+  rm_x1->rotateX(90*deg);
+  y = -fScint_y/2. - height_pmt;     //bottom
+  PlacePMTs(fPmt_log,rm_x1,x,z,dx,dz,xmin,zmin,fNx,fNz,x,y,z,k);
+
+  G4RotationMatrix* rm_x2 = new G4RotationMatrix();
+  rm_x2->rotateX(-90*deg);
+  y = fScint_y/2. + height_pmt;      //top
+  PlacePMTs(fPmt_log,rm_x2,x,z,dx,dz,xmin,zmin,fNx,fNz,x,y,z,k);
+ 
+  VisAttributes();
+  SurfaceProperties();
 
   SetLogicalVolume(fHousing_log);
 }
@@ -186,8 +156,6 @@ LXeMainVolume::LXeMainVolume(G4RotationMatrix *pRot,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeMainVolume::CopyValues(){
-  fUpdated=fConstructor->GetUpdated();
-
   fScint_x=fConstructor->GetScintX();
   fScint_y=fConstructor->GetScintY();
   fScint_z=fConstructor->GetScintZ();
@@ -208,7 +176,7 @@ void LXeMainVolume::PlacePMTs(G4LogicalVolume* pmt_log,
                               G4double db, G4double amin,
                               G4double bmin, G4int na, G4int nb,
                               G4double &x, G4double &y, G4double &z,
-                              G4int &k,LXePMTSD* sd){
+                              G4int &k){
 /*PlacePMTs : a different way to parameterize placement that does not depend on
   calculating the position from the copy number
 
@@ -230,7 +198,7 @@ void LXeMainVolume::PlacePMTs(G4LogicalVolume* pmt_log,
       b+=db;
       new G4PVPlacement(rot,G4ThreeVector(x,y,z),pmt_log,"pmt",
                         fHousing_log,false,k);
-      sd->SetPMTPos(k,x,y,z);
+      fPmtPositions.push_back(G4ThreeVector(x,y,z));
       k++;
     }
   }

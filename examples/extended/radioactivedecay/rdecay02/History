@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2010-11-17 15:31:08 flei Exp $
+$Id: History 76940 2013-11-19 09:54:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18/11/2013  Ivana Hrivnacova (rdecay02-V09-06-06)
+- Fixed .README
+
+04/11/2013  Dennis Wright (rdecay02-V09-06-05)
+- exrdmPhysicsList - replace G4LElastic and G4LCapture with G4HadronElastic
+  and G4NeutronRadCapture
+
+23/08/2013  Vladimir Ivanchenko (rdecay02-V09-06-04)
+- exrdmPhysicsList - use standard constructors for EM physics, removed
+    local low-energy EM physics
+
+23/08/2013  Vladimir Ivanchenko (rdecay02-V09-06-03)
+- exrdmPhysicsList - use standard constructors for hadronic builders
+    instead of obsolete
+
+22/08/2013  Vladimir Ivanchenko (rdecay02-V09-06-02)
+- Removed unused include of G4UrbanMscModel93.hh 
+
+01/04/2013 A.Dotti (rdecay02-V09-06-01)
+- New API for phsyics list
+
+19/02/2013 I. Hrivnacova 
+- Applied coding guidelines (data members initialization)    
+
+01/02/2013  Vladimir Ivanchenko (rdecay02-V09-06-00)
+- Migration to new physics_lists directory structure
 
 28/11/2012  Gabriele Cosmo (rdecay02-V09-05-05)
 - Fixed cases of variable shadowing.

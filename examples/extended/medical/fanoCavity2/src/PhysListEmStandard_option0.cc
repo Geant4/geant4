@@ -26,13 +26,12 @@
 /// \file medical/fanoCavity2/src/PhysListEmStandard_option0.cc
 /// \brief Implementation of the PhysListEmStandard_option0 class
 //
-// $Id$
+// $Id: PhysListEmStandard_option0.cc 72961 2013-08-14 14:35:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard_option0.hh"
-#include "DetectorConstruction.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -58,9 +57,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard_option0::PhysListEmStandard_option0(const G4String& name,
-                               DetectorConstruction* det)
-: G4VPhysicsConstructor(name), fDetector(det)
+PhysListEmStandard_option0::PhysListEmStandard_option0(const G4String& name)
+
+: G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,9 +74,9 @@ void PhysListEmStandard_option0::ConstructProcess()
   // Add standard EM Processes
   //
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      

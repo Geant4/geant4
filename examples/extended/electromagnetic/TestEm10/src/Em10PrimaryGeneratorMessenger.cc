@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10PrimaryGeneratorMessenger class
 //
 //
-// $Id$
+// $Id: Em10PrimaryGeneratorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 
@@ -44,7 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em10PrimaryGeneratorMessenger::Em10PrimaryGeneratorMessenger(Em10PrimaryGeneratorAction* Em10Gun)
-:Em10Action(Em10Gun)
+:G4UImessenger(),Em10Action(Em10Gun)
 { 
   RndmCmd = new G4UIcmdWithAString("/gun/random",this);
   RndmCmd->SetGuidance("Shoot randomly the incident particle.");

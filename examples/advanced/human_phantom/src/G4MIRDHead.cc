@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -49,18 +49,22 @@
 
 G4MIRDHead::G4MIRDHead()
 {
-  material = new G4HumanPhantomMaterial();
+
 }
 
 G4MIRDHead::~G4MIRDHead()
 {
-  delete material;
+
 }
 
+
 G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
-					      const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
+					 const G4String& colourName, G4bool wireFrame, G4bool)
 {
-  G4cout << "Construct " << volumeName <<G4endl;
+  G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
+ 
+  G4HumanPhantomMaterial * material = new G4HumanPhantomMaterial();
+  
   G4Material* soft = material -> GetMaterial("soft_tissue");
   
   // MIRD male model
@@ -73,50 +77,42 @@ G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalV
 
   G4Ellipsoid* head1 = new G4Ellipsoid("Head1", ax, by, cz, zcut1, zcut2);
 
-   G4double dx = 7.0 * cm;
-   G4double dy = 10.0 * cm;
-   G4double dz = 7.75 * cm;
+  G4double dx = 7.0 * cm;
+  G4double dy = 10.0 * cm;
+  G4double dz = 7.75 * cm;
  
 
   G4EllipticalTube* head2 = new G4EllipticalTube("Head2", dx, dy, dz);
 
   G4UnionSolid* head = new G4UnionSolid("Head",head2,head1,
-  				0, // Rotation 
-  				G4ThreeVector(0.* cm, 0.*cm, 7.7500 * cm) );
+					0, // Rotation 
+					G4ThreeVector(0.* cm, 0.*cm, 7.7500 * cm) );
 
   G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,"logical" + volumeName,
 						   0, 0,0);
-  G4RotationMatrix* rm = new G4RotationMatrix();
-  rm -> rotateX(90.* degree);
-  
   // Define rotation and position here!
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm->rotateX(180.*degree); 
+  rm->rotateY(180.*degree); 
+  
   G4VPhysicalVolume* physHead = new G4PVPlacement(rm,
-						  G4ThreeVector(0.* cm,77.75 *cm, 0.*cm),
+						  //G4ThreeVector(0.* cm,0.*cm, 70.75*cm), //FA
+						  G4ThreeVector(0.* cm,0.*cm, 77.75*cm),
 						  "physicalHead",
 						  logicHead,
 						  mother,
 						  false,
 						  0, true);
 
-  // Sensitive Body Part
  
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicHead->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-    G4cout <<SDman->FindSensitiveDetector("BodyPartSD")->GetName()<< G4endl;
-    SDman->FindSensitiveDetector("BodyPartSD")->SetVerboseLevel(1);
-
-  }
-
   // Visualization Attributes
 
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   G4VisAttributes* HeadVisAtt = new G4VisAttributes(colour);
 
- HeadVisAtt->SetForceSolid(wireFrame);
- // HeadVisAtt->SetLineWidth(0.7* mm);
+  HeadVisAtt->SetForceSolid(wireFrame);
+  // HeadVisAtt->SetLineWidth(0.7* mm);
   //HeadVisAtt-> SetForceAuxEdgeVisible(true);
   logicHead->SetVisAttributes(HeadVisAtt);
 

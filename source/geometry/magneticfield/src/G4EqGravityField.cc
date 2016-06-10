@@ -41,7 +41,7 @@
 #include "G4PhysicalConstants.hh"
 
 void
-G4EqGravityField::SetChargeMomentumMass(G4double,
+G4EqGravityField::SetChargeMomentumMass(G4ChargeState,
                                         G4double,
                                         G4double particleMass )
 {
@@ -70,9 +70,9 @@ G4EqGravityField::EvaluateRhsGivenB(const G4double y[],
   dydx[1] = y[4]*inv_momentum_magnitude;       //  (d/ds)y = Vy/V
   dydx[2] = y[5]*inv_momentum_magnitude;       //  (d/ds)z = Vz/V
 
-  dydx[3] = G[0]*cof1*cof2;
-  dydx[4] = G[1]*cof1*cof2;                    //  m*g
-  dydx[5] = G[2]*cof1*cof2;
+  dydx[3] = G[0]*cof1*cof2/c_light;
+  dydx[4] = G[1]*cof1*cof2/c_light;            //  m*g
+  dydx[5] = G[2]*cof1*cof2/c_light;
 
   // Lab Time of flight
   dydx[7] = inverse_velocity;

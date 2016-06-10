@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Navigator.cc,v 1.1 2007-11-13 10:23:51 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4Navigator.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4Navigator.cc
 //
@@ -42,7 +41,8 @@ using namespace boost::python;
 // ====================================================================
 void export_G4Navigator()
 {
-  class_<G4Navigator, G4Navigator*>("G4Navigator", "navigator")
+  class_<G4Navigator, G4Navigator*, boost::noncopyable>
+    ("G4Navigator", "navigator")
     // ---
     .def("GetWorldVolume",        &G4Navigator::GetWorldVolume,
          return_value_policy<reference_existing_object>())

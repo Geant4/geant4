@@ -124,11 +124,6 @@ private:
      G4VPhysicalVolume* physiColl_helmet_Fe;
 
 
- 
-
-  G4double patientRotationX;
-  G4double patientRotationZ;
-
   GammaKnifeDetectorMessenger* detectorMessenger;
 
 };

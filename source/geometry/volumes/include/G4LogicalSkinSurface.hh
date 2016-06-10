@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LogicalSkinSurface.hh 73926 2013-09-17 07:59:06Z gcosmo $
 //
 // class G4LogicalSkinSurface
 //
@@ -88,7 +88,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     G4LogicalVolume* LogVolume;
       // Logical Volume pointer on side 1.
 
-    static G4LogicalSkinSurfaceTable theSkinSurfaceTable;
+    static G4LogicalSkinSurfaceTable *theSkinSurfaceTable;
       // The static Table of SkinSurfaces.
 
 };

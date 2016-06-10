@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbMaterialMgr.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgbMaterialMgr
@@ -119,7 +119,7 @@ class G4tgbMaterialMgr
   
  private:
 
-    static G4tgbMaterialMgr* theInstance;
+    static G4ThreadLocal G4tgbMaterialMgr* theInstance;
 
     G4mstgbisot theG4tgbIsotopes;
       // List of all tgbIsotopes created

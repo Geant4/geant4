@@ -27,7 +27,7 @@
 /// \brief Definition of the B02ImportanceDetectorConstruction class
 //
 //
-// $Id$
+// $Id: B02ImportanceDetectorConstruction.hh 77324 2013-11-22 14:26:57Z ahoward$
 //
 
 #ifndef B02ImportanceDetectorConstruction_hh 
@@ -43,6 +43,8 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4VIStore;
+class G4VWeightWindowStore;
 
 
 
@@ -50,7 +52,7 @@ class B02ImportanceDetectorConstruction : public G4VUserParallelWorld
 {
 public:
   B02ImportanceDetectorConstruction(G4String worldName);
-  ~B02ImportanceDetectorConstruction();
+  virtual ~B02ImportanceDetectorConstruction();
 
   const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
   G4VPhysicalVolume &GetWorldVolumeAddress() const;
@@ -62,16 +64,28 @@ public:
 
   void SetSensitive();
 
+  virtual void Construct();
+  virtual void ConstructSD();
+
+  G4VIStore* CreateImportanceStore();
+    // create an importance store, caller is responsible for deleting it
+
+  G4VWeightWindowStore *CreateWeightWindowStore();
+    // create an weight window  store, caller is responsible for 
+    // deleting it
+
+
 private:
-  void Construct();
   B02PVolumeStore fPVolumeStore;
+
+
 
   //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
   std::vector< G4LogicalVolume * > fLogicalVolumeVector;
 
   //  G4VPhysicalVolume *fWorldVolume;
 
-  G4VPhysicalVolume* ghostWorld;
+  G4VPhysicalVolume* fGhostWorld;
 
 };
 

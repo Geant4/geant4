@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01CalorimeterHit.hh
 /// \brief Definition of the RE01CalorimeterHit class
 //
-// $Id$
+// $Id: RE01CalorimeterHit.hh 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #ifndef RE01CalorimeterHit_h
@@ -40,6 +40,8 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "RE01TrackInformation.hh"
+
+#include "G4Types.hh"
 
 class G4AttDef;
 class G4AttValue;
@@ -97,18 +99,18 @@ private:
 
 typedef G4THitsCollection<RE01CalorimeterHit> RE01CalorimeterHitsCollection;
 
-extern G4Allocator<RE01CalorimeterHit> RE01CalorimeterHitAllocator;
+extern G4ThreadLocal G4Allocator<RE01CalorimeterHit> * RE01CalorimeterHitAllocator;
 
 inline void* RE01CalorimeterHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) RE01CalorimeterHitAllocator.MallocSingle();
-  return aHit;
+  if(!RE01CalorimeterHitAllocator)
+    RE01CalorimeterHitAllocator = new G4Allocator<RE01CalorimeterHit>;
+  return (void *) RE01CalorimeterHitAllocator->MallocSingle();
 }
 
 inline void RE01CalorimeterHit::operator delete(void *aHit)
 {
-  RE01CalorimeterHitAllocator.FreeSingle((RE01CalorimeterHit*) aHit);
+  RE01CalorimeterHitAllocator->FreeSingle((RE01CalorimeterHit*) aHit);
 }
 
 #endif

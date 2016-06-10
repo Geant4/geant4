@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -49,12 +47,6 @@
 #include <utility>
 #include <iostream>
 
-#ifdef INCL_ROOT_USE
-#include "TSystem.h"
-#else
-#include <cstdlib>
-#endif
-
 namespace G4INCL {
 
   Isotope::Isotope(const G4int A, const G4double abundance) :
@@ -67,13 +59,13 @@ namespace G4INCL {
   {
     G4double previousAbundance = 0.;
     // Cumulate the abundances
-    for(IsotopeIter i=theIsotopes.begin(); i!=theIsotopes.end(); ++i) {
+    for(IsotopeIter i=theIsotopes.begin(), e=theIsotopes.end(); i!=e; ++i) {
       i->theAbundance += previousAbundance;
       previousAbundance = i->theAbundance;
     }
     // Normalize the abundances to 1
     const G4double normalisation = 1./theIsotopes.back().theAbundance;
-    for(IsotopeIter i=theIsotopes.begin(); i!=theIsotopes.end(); ++i)
+    for(IsotopeIter i=theIsotopes.begin(), e=theIsotopes.end(); i!=e; ++i)
       i->theAbundance *= normalisation;
   }
 
@@ -95,12 +87,7 @@ namespace G4INCL {
     if(i!=theDistributions.end())
       return i->second;
     else {
-      FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << std::endl);
-#ifdef INCL_ROOT_USE
-      gSystem->Exit(EXIT_FAILURE);
-#else
-      std::exit(EXIT_FAILURE);
-#endif
+      INCL_FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << std::endl);
       return theDistributions.begin()->second;
     }
   }

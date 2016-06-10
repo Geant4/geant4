@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIXm.cc 74547 2013-10-14 12:51:17Z gcosmo $
 //
 // G.Barrand
 
@@ -423,7 +423,6 @@ void G4UIXm::ButtonCallback (
   G4UIXm* This = (G4UIXm*)a_tag;
   if(This->fHelp==true) return; // Disabled when in help.
   G4String ss = This->GetCommand (a_widget);
-  //printf ("debug : execute:\n%s\n",ss.data());
   This->ApplyShellCommand(ss,exitSession,exitPause);
 }
 /***************************************************************************/

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPLabAngularEnergy_h
 #define G4NeutronHPLabAngularEnergy_h 1
@@ -65,7 +64,7 @@ class G4NeutronHPLabAngularEnergy : public G4VNeutronHPEnergyAngular
   
   public:
   
-  void Init(std::ifstream & aDataFile);
+  void Init(std::istream & aDataFile);
      G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
   G4double MeanEnergyOfThisInteraction()
   {

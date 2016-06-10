@@ -1,4 +1,4 @@
-# $Id: TestEm12.in,v 1.9 2009-09-22 15:18:20 maire Exp $
+# $Id: TestEm12.in 69108 2013-04-18 13:10:10Z gcosmo $
 #
 # limit the step size from histos 1 and 8
 #
@@ -18,14 +18,13 @@
 /gun/particle e-
 /gun/energy 4 MeV
 #
-###/testem/histo/setFileName testem12
-###/testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
-###/testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
-###/testem/histo/setHisto 3 100  0.    3. cm	#true track length
-###/testem/histo/setHisto 4 100  0.  500. um	#true step length
-###/testem/histo/setHisto 5 200 -3.    3. cm	#proj range
-###/testem/histo/setcsdaRange       2.037 cm
-###/testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
+###/analysis/setFileName testem12
+###/analysis/h1/set 1 120  0.   2.4 cm	#edep profile
+###/analysis/h1/set 2 180  0.   4.5 MeV	#total Edep
+###/analysis/h1/set 3 100  0.    3. cm	#true track length
+###/analysis/h1/set 4 100  0.  500. um	#true step length
+###/analysis/h1/set 5 200 -3.    3. cm	#proj range
+###/analysis/h1/set 8 120  0.   1.2 none	#normalized edep profile
 #
 /testem/event/printModulo 1000
 #

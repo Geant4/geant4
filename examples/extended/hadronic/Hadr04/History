@@ -1,0 +1,45 @@
+$Id: History 71654 2013-06-19 18:20:04Z maire $
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Hadr04 History file
+                    -------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+21-11-13 A.Dotti       (exhadr04-V09-06-07)
+- Use G4RunManager::ReinitializeGeometry() to trigger geometry
+  rebuild
+- Remove ui command to Update geometry and corresponding method
+  in DetectorConstruction
+
+07-11-13 I. Hrivnacova (exhadr04-V09-06-06)
+- Setting SteppingVerbose in main only in seguential mode.
+     
+07-11-13 mma (exhadr04-V09-06-05)
+- BeginOfRunAction() : suppress printing
+
+05-11-13 I. Hrivnacova (exhadr04-V09-06-04)
+- Improved Run class:  define just one map of struct ParticleData
+  instead of four maps of G4int/G4double.
+
+04-11-13 I. Hrivnacova (exhadr04-V09-06-03)
+- Added merging for maps, fixed endOfRunAction,
+  use G4Random instead of CLHEP::Random
+     
+03-11-13 mma(exhadr04-V09-06-02)
+- MT: Hadr04.cc + ActionInitialisation + RunAction + Run
+- rm EventAction and EventActionMessenger
+     
+09-09-13 mma (exhadr04-V09-06-01)
+- cosmetic in RunAction
+     
+01-09-13 Michel Maire (exhadr04-V09-06-00)
+- created from Hadr03 and rdecay01

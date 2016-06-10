@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id$
+// $Id: EventAction.hh 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,8 +48,8 @@ class EventAction : public G4UserEventAction
    ~EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
                                              
     void SetDrawFlag(G4String val)  {fDrawFlag = val;};
     void SetPrintModulo(G4int val)  {fPrintModulo = val;};

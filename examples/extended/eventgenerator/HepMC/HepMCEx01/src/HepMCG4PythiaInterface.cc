@@ -26,21 +26,18 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4PythiaInterface.cc
 /// \brief Implementation of the HepMCG4PythiaInterface class
 //
-// ====================================================================
+// $Id: HepMCG4PythiaInterface.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   HepMCG4PythiaInterface.cc
-//   $Id$
-//
-// ====================================================================
 
 #ifdef G4LIB_USE_PYTHIA
 
 #include "HepMCG4PythiaInterface.hh"
 #include "HepMCG4PythiaMessenger.hh"
 
-#include "HepMC/GenEvent.h" 
-#include "HepMC/PythiaWrapper6_4.h" 
+#include "HepMC/GenEvent.h"
+#include "HepMC/PythiaWrapper6_4.h"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // additional pythia calls
 #define pygive pygive_
 #define pyrget pyrget_
@@ -56,74 +53,65 @@ void call_pygive(G4String s) { pygive(s.c_str(), s.length()); }
 void call_pyrget(int a, int b) { pyrget(&a, &b); }
 void call_pyrset(int a, int b) { pyrset(&a, &b); }
 
-////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 HepMCG4PythiaInterface::HepMCG4PythiaInterface()
   : verbose(0), mpylist(0)
-////////////////////////////////////////////////
 {
-#ifdef NEED_INITPYDATA  
+#ifdef NEED_INITPYDATA
   initpydata();
-  // Some platforms may require the initialization of pythia PYDATA block 
-  // data as external - if you get pythia initialization errors try 
+  // Some platforms may require the initialization of pythia PYDATA block
+  // data as external - if you get pythia initialization errors try
   // commenting in/out the below call to initpydata().
 #endif
 
   messenger= new HepMCG4PythiaMessenger(this);
 }
 
-/////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 HepMCG4PythiaInterface::~HepMCG4PythiaInterface()
-/////////////////////////////////////////////////
 {
   delete messenger;
 }
 
-/////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::CallPygive(G4String par)
-/////////////////////////////////////////////////////
 {
   call_pygive(par);
 }
 
-//////////////////////////////////////////////////////////////////////
-void HepMCG4PythiaInterface::CallPyinit(G4String frame, G4String beam, 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void HepMCG4PythiaInterface::CallPyinit(G4String frame, G4String beam,
                                         G4String target, G4double win)
-//////////////////////////////////////////////////////////////////////
 {
   call_pyinit(frame.c_str(), beam.c_str(), target.c_str(), win);
 }
 
-////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::CallPystat(G4int istat)
-////////////////////////////////////////////////////
 {
   call_pystat(istat);
 }
 
-///////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::SetRandomSeed(G4int iseed)
-///////////////////////////////////////////////////////
 {
   pydatr.mrpy[1-1]= iseed;
 }
 
-//////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::CallPyrget(G4int lun, G4int move)
-//////////////////////////////////////////////////////////////
 {
   call_pyrget(lun, move);
 }
 
-//////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::CallPyrset(G4int lun, G4int move)
-//////////////////////////////////////////////////////////////
 {
   call_pyrset(lun, move);
 }
 
-//////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::PrintRandomStatus(std::ostream& ostr) const
-//////////////////////////////////////////////////////////////////////////
 {
   ostr << "# Pythia random numbers status" << G4endl;
   for (G4int j=0; j<6; j++) {
@@ -134,24 +122,22 @@ void HepMCG4PythiaInterface::PrintRandomStatus(std::ostream& ostr) const
   }
 }
 
-////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::SetUserParameters()
-////////////////////////////////////////////////
 {
   G4cout << "set user parameters of PYTHIA common." << G4endl
          << "nothing to be done in default."
          << G4endl;
 }
 
-/////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 HepMC::GenEvent* HepMCG4PythiaInterface::GenerateHepMCEvent()
-/////////////////////////////////////////////////////////////
 {
   static G4int nevent= 0; // event counter
 
   call_pyevnt(); // generate one event with Pythia
   if(mpylist >=1 && mpylist<= 3) call_pylist(mpylist);
-  
+
   call_pyhepc(1);
 
   HepMC::GenEvent* evt= hepevtio.read_next_event();
@@ -161,9 +147,8 @@ HepMC::GenEvent* HepMCG4PythiaInterface::GenerateHepMCEvent()
   return evt;
 }
 
-//////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::Print() const
-//////////////////////////////////////////
 {
   G4cout << "PythiaInterface::Print()..." << G4endl;
 }

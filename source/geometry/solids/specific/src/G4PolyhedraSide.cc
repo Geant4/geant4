@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PolyhedraSide.cc 70648 2013-06-03 15:15:16Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -47,6 +47,24 @@
 
 #include "Randomize.hh"
 
+// This static member is thread local. For each thread, it points to the
+// array of G4PhSideData instances.
+//
+template <class G4PhSideData> G4ThreadLocal
+         G4PhSideData* G4GeomSplitter<G4PhSideData>::offset = 0;
+
+// This new field helps to use the class G4PhSideManager.
+//
+G4PhSideManager G4PolyhedraSide::subInstanceManager;
+
+//
+// Returns the private data instance manager.
+//
+const G4PhSideManager& G4PolyhedraSide::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
+
 //
 // Constructor
 //
@@ -63,10 +81,13 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                                         G4bool thePhiIsOpen,
                                         G4bool isAllBehind )
 {
+
+  instanceID = subInstanceManager.CreateSubInstance();
+
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea=0.;
-  fPhi.first = G4ThreeVector(0,0,0);
-  fPhi.second= 0.0;
+  G4MT_phphi.first = G4ThreeVector(0,0,0);
+  G4MT_phphi.second= 0.0;
 
   //
   // Record values
@@ -296,7 +317,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 G4PolyhedraSide::G4PolyhedraSide( __void__&)
   : numSide(0), startPhi(0.), deltaPhi(0.), endPhi(0.),
     phiIsOpen(false), allBehind(false), cone(0), vecs(0), edges(0),
-    lenRZ(0.), edgeNorm(0.), kCarTolerance(0.), fSurfaceArea(0.)
+    lenRZ(0.), edgeNorm(0.), kCarTolerance(0.), fSurfaceArea(0.), instanceID(0)
 {
   r[0] = r[1] = 0.;
   z[0] = z[1] = 0.;
@@ -321,6 +342,8 @@ G4PolyhedraSide::~G4PolyhedraSide()
 G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
   : G4VCSGface()
 {
+  instanceID = subInstanceManager.CreateSubInstance();
+
   CopyStuff( source );
 }
 
@@ -987,15 +1010,15 @@ G4double G4PolyhedraSide::GetPhi( const G4ThreeVector& p )
 {
   G4double val=0.;
 
-  if (fPhi.first != p)
+  if (G4MT_phphi.first != p)
   {
     val = p.phi();
-    fPhi.first = p;
-    fPhi.second = val;
+    G4MT_phphi.first = p;
+    G4MT_phphi.second = val;
   }
   else
   {
-    val = fPhi.second;
+    val = G4MT_phphi.second;
   }
   return val;
 }

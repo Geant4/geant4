@@ -58,7 +58,7 @@ class G4VScatteringCollision : public G4VCollision
 public:
 
   G4VScatteringCollision();
-
+  void establish_G4MT_TLS_G4VScatteringCollision();
   virtual ~G4VScatteringCollision();
 
   G4bool operator==(const G4VScatteringCollision &right) const;

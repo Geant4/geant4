@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PSCellCharge.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4PSCellCharge
 #include "G4PSCellCharge.hh"

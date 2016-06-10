@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Sphere.icc 74258 2013-10-02 14:27:36Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -181,7 +181,6 @@ void G4Sphere::CheckDPhiAngle(G4double dPhi)
   if ( dPhi >= CLHEP::twopi-kAngTolerance*0.5 )
   {
     fDPhi=CLHEP::twopi;
-    fSPhi=0;
   }
   else
   {

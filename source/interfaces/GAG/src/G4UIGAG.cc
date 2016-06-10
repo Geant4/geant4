@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIGAG.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal
@@ -812,7 +812,7 @@ void G4UIGAG::NotifyParameterUpdate(G4UIcommand* com)
 //####### update check routines ####################################
 void G4UIGAG::UpdateState(void)
 {
-   static G4ApplicationState previousState= G4State_PreInit;
+   static G4ThreadLocal G4ApplicationState *previousState_G4MT_TLS_ = 0 ; if (!previousState_G4MT_TLS_) {previousState_G4MT_TLS_ = new  G4ApplicationState  ; *previousState_G4MT_TLS_= G4State_PreInit ; }  G4ApplicationState &previousState = *previousState_G4MT_TLS_;
    G4ApplicationState  newState;
    G4StateManager *statM = G4StateManager::GetStateManager();
    newState = statM->GetCurrentState();

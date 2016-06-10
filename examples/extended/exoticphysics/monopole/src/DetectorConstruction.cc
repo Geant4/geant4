@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,15 +59,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
+ : G4VUserDetectorConstruction(),
+   fWorldMaterial(0),           
+   fAbsorMaterial(0),
+   fMagField(0),
+   fMonFieldSetup(0),
+   fLogAbsor(0),
+   fDetectorMessenger(0)
 {
   // default parameter values
   fAbsorSizeX = fAbsorSizeYZ = 10 * cm;
   fWorldSizeX = fWorldSizeYZ = 1.2 * fAbsorSizeX;
   fMaxStepSize = 5 * mm;
 
-  fAbsorMaterial = 0;
-  fMagField = 0;
-  fLogAbsor   = 0;
   fMonFieldSetup = G4MonopoleFieldSetup::GetMonopoleFieldSetup();
 
   SetMaterial("G4_Al");

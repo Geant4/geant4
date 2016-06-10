@@ -9,7 +9,7 @@
 #
 # Paths are always hardcoded in the build tree version as this is never
 # intended to be relocatable.
-# The Install Tree script uses self-location based on that in 
+# The Install Tree script uses self-location based on that in
 # {root,clehep}-config is the install itself is relocatable, otherwise
 # absolute paths are encoded.
 #
@@ -42,7 +42,7 @@ function(get_system_include_dirs _dirs)
     execute_process(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -v -E -x c++ -dD g4dummy
       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMakeFiles
       ERROR_VARIABLE _cxxOutput
-      OUTPUT_VARIABLE _cxxStdout 
+      OUTPUT_VARIABLE _cxxStdout
       )
 
     file(REMOVE "${CMAKE_BINARY_DIR}/CMakeFiles/g4dummy")
@@ -57,7 +57,7 @@ function(get_system_include_dirs _dirs)
         list(APPEND _resultIncludeDirs "${_includePath}")
       endforeach()
     endif()
-   
+
     # Restore original locale
     set(ENV{LC_ALL}      ${_orig_lc_all})
     set(ENV{LC_MESSAGES} ${_orig_lc_messages})
@@ -69,8 +69,6 @@ function(get_system_include_dirs _dirs)
   endif()
 endfunction()
 
-
-
 #-----------------------------------------------------------------------
 # Only create script if we have a global library build...
 #
@@ -79,6 +77,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   get_system_include_dirs(_cxx_compiler_dirs)
 
   # Setup variables needed for expansion in configuration file
+  # - Multithreading
+  if(GEANT4_BUILD_MULTITHREADED)
+    set(G4_BUILTWITH_MULTITHREADING "yes")
+  else()
+    set(G4_BUILTWITH_MULTITHREADING "no")
+  endif()
+
   # - CLHEP
   if(GEANT4_USE_SYSTEM_CLHEP)
     set(G4_BUILTWITH_CLHEP "no")
@@ -115,10 +120,22 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_G3TOG4 "no")
   endif()
 
+  # - USolids
+  if(GEANT4_USE_USOLIDS)
+    set(G4_BUILTWITH_USOLIDS "yes")
+  else()
+    set(G4_BUILTWITH_USOLIDS "no")
+  endif()
+
   # - Qt
   if(GEANT4_USE_QT)
     set(G4_BUILTWITH_QT "yes")
-    set(G4_QT_INCLUDE_DIRS ${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
+    if(QT4_FOUND)
+      set(G4_QT_INCLUDE_DIRS ${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
+    else()
+      set(G4_QT_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+    endif()
+
     list(REMOVE_DUPLICATES G4_QT_INCLUDE_DIRS)
     list(REMOVE_ITEM G4_QT_INCLUDE_DIRS ${_cxx_compiler_dirs})
 
@@ -129,6 +146,20 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
 
   else()
     set(G4_BUILTWITH_QT "no")
+  endif()
+
+  # - Wt
+  if(GEANT4_USE_WT)
+    set(G4_BUILTWITH_WT "yes")
+    set(G4_WT_INCLUDE_DIRS ${Wt_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
+
+    set(G4_WT_CFLAGS )
+    foreach(_dir ${G4_WT_INCLUDE_DIRS})
+      set(G4_WT_CFLAGS "${G4_WT_CFLAGS} -I${_dir}")
+    endforeach()
+
+  else()
+    set(G4_BUILTWITH_WT "no")
   endif()
 
   # - Motif
@@ -162,7 +193,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_INVENTOR "no")
   endif()
 
-  # If we have a module that uses X11, We have to play with the X11 
+  # If we have a module that uses X11, We have to play with the X11
   # paths to get a clean set suitable for inclusion
   if(G4_CONFIG_NEEDS_X11)
     set(_raw_x11_includes ${X11_INCLUDE_DIR})
@@ -176,8 +207,8 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
 
   # Configure the script
   # - BUILD TREE
-  # Ouch, the include path will be LONG, but at least we always have absolute
-  # paths...
+  # Ouch, the include path will be LONG, but at least we always have
+  # absolute paths...
   set(GEANT4_CONFIG_SELF_LOCATION "# BUILD TREE IS NON-RELOCATABLE")
   set(GEANT4_CONFIG_INSTALL_PREFIX "${PROJECT_BINARY_DIR}")
   set(GEANT4_CONFIG_INSTALL_EXECPREFIX \"\")
@@ -191,27 +222,34 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     ${_dir}")
   endforeach()
 
+  # - Data
+  geant4_export_datasets(BUILD GEANT4_CONFIG_DATASET_DESCRIPTIONS)
+
   # Configure the build tree script
   # If we're on CMake 2.8 and above, we try to use file(COPY) to create an
   # executable script
   # Not sure if version check is o.k., but I'll be shocked if we ever see
   # a CMake 2.7 in the wild...
   if(${CMAKE_VERSION} VERSION_GREATER 2.7)
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
+    configure_file(
+      ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
       ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/geant4-config
-      @ONLY)
+      @ONLY
+      )
 
-    file(COPY 
+    file(COPY
       ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/geant4-config
       DESTINATION ${PROJECT_BINARY_DIR}
       FILE_PERMISSIONS
-      OWNER_READ OWNER_WRITE OWNER_EXECUTE
-      GROUP_READ GROUP_EXECUTE
-      WORLD_READ WORLD_EXECUTE)
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+      )
   else()
     # Changing permissions is awkward, so just configure and document
     # that you have to do 'sh geant4-config' in this case.
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
+    configure_file(
+      ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
       ${PROJECT_BINARY_DIR}/geant4-config
       @ONLY
       )
@@ -227,7 +265,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(GEANT4_CONFIG_LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
     set(GEANT4_CONFIG_INCLUDE_DIRS "${CMAKE_INSTALL_FULL_INCLUDEDIR}/Geant4")
   else()
-    # Calculate base of self contained install based on relative path from 
+    # Calculate base of self contained install based on relative path from
     # CMAKE_INSTALL_FULL_BINDIR to CMAKE_INSTALL_PREFIX.
     file(RELATIVE_PATH _bin_to_prefix ${CMAKE_INSTALL_FULL_BINDIR} ${CMAKE_INSTALL_PREFIX})
     # Strip any trailing path separators just for neatness.
@@ -237,10 +275,14 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(GEANT4_CONFIG_INSTALL_EXECPREFIX \"\")
     set(GEANT4_CONFIG_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
     set(GEANT4_CONFIG_INCLUDE_DIRS "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}/Geant4")
-  endif() 
+  endif()
+
+  # - Data
+  geant4_export_datasets(INSTALL GEANT4_CONFIG_DATASET_DESCRIPTIONS)
 
   # Configure the install tree script
-  configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
+  configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
     ${PROJECT_BINARY_DIR}/InstallTreeFiles/geant4-config
     @ONLY
     )

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisFeaturesOfDAWNFILE.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 #ifndef G4VISFEATURESOFDAWNFILE_HH
 #define G4VISFEATURESOFDAWNFILE_HH

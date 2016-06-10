@@ -1,0 +1,177 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_free_seg
+#define tools_wroot_free_seg
+
+#include "seek"
+#include "wbuf"
+
+#include <ostream>
+
+namespace tools {
+namespace wroot {
+
+class free_seg {
+  static uint32 START_BIG_FILE() {return 2000000000;}
+public:
+  free_seg(std::ostream& a_out,seek a_first,seek a_last)
+  :m_out(a_out),m_first(a_first),m_last(a_last){}
+  virtual ~free_seg(){}
+public:
+  free_seg(const free_seg& a_from)
+  :m_out(a_from.m_out),m_first(a_from.m_first),m_last(a_from.m_last)
+  {}
+  free_seg& operator=(const free_seg& a_from){
+    m_first = a_from.m_first;
+    m_last = a_from.m_last;
+    return *this;
+  }
+public:
+  std::ostream& out() const {return m_out;}
+
+  seek first() const {return m_first;}
+  seek last() const {return m_last;}
+
+  void set_first(seek a_v) {m_first = a_v;}
+  void set_last(seek a_v) {m_last = a_v;}
+
+  unsigned int record_size() const {
+    //GB if(fLast>RIO_START_BIG_FILE) {
+    if((m_first>START_BIG_FILE())|| //GB
+       (m_last>START_BIG_FILE()) ){
+      return sizeof(short) +  2 * sizeof(seek);
+    } else {
+      return sizeof(short) +  2 * sizeof(seek32);
+    }
+  }
+
+  bool fill_buffer(wbuf& a_wb) {
+    short version = 1;
+
+    //GB if(fLast>START_BIG_FILE()) version += 1000;
+    if((m_first>START_BIG_FILE())||
+       (m_last>START_BIG_FILE())) version += 1000;
+
+    if(!a_wb.write(version)) return false;
+
+    if(version>1000) {
+      if(!a_wb.write(m_first)) return false;
+      if(!a_wb.write(m_last)) return false;
+    } else {
+      if(m_first>START_BIG_FILE()) { //GB
+        m_out << "tools::wroot::free_seg::fill_buffer :"
+             << " attempt to write big Seek "
+             << m_first << " on 32 bits."
+             << std::endl;
+        return false;
+      }
+      if(!a_wb.write((seek32)m_first)) return false;
+      if(m_last>START_BIG_FILE()) { //GB
+        m_out << "tools::wroot::free_seg::fill_buffer :"
+             << " attempt to write big seek "
+             << m_last << " on 32 bits."
+             << std::endl;
+        return false;
+      }
+      if(!a_wb.write((seek32)m_last)) return false;
+    }
+
+    return true;
+  }
+
+protected:
+  std::ostream& m_out;
+  seek m_first;  //First free word of segment
+  seek m_last;   //Last free word of segment
+};
+
+}}
+
+#include <list>
+
+namespace tools {
+namespace wroot {
+
+inline free_seg* find_after(const std::list<free_seg*>& a_list,
+                            free_seg* a_what) {
+  std::list<free_seg*>::const_iterator it;
+  for(it=a_list.begin();it!=a_list.end();++it) {
+    if((*it)==a_what) {
+      it++;
+      if(it==a_list.end()) return 0;
+      return *it;
+    }
+  }
+  return 0;
+}
+
+inline void remove(std::list<free_seg*>& a_list,free_seg* a_what) {
+  //NOTE : it does not delete a_what.
+  std::list<free_seg*>::iterator it;
+  for(it=a_list.begin();it!=a_list.end();++it) {
+    if((*it)==a_what) {
+      a_list.erase(it);
+      return;
+    }
+  }
+}
+
+inline void add_before(std::list<free_seg*>& a_list,
+                       free_seg* a_what,free_seg* a_new) {
+  std::list<free_seg*>::iterator it;
+  for(it=a_list.begin();it!=a_list.end();++it) {
+    if((*it)==a_what) {
+      a_list.insert(it,a_new);
+      return;
+    }
+  }
+}
+
+inline free_seg* add_free(std::list<free_seg*>& a_list,
+                            seek a_first,seek a_last) {
+  // Add a new free segment to the list of free segments
+  // ===================================================
+  //  If last just preceedes an existing free segment, then first becomes
+  //     the new starting location of the free segment.
+  //  if first just follows an existing free segment, then last becomes
+  //     the new ending location of the free segment.
+  //  if first just follows an existing free segment AND last just preceedes
+  //     an existing free segment, these two segments are merged into
+  //     one single segment.
+  //
+
+  free_seg* idcur = a_list.front();
+
+  while (idcur) {
+    seek curfirst = idcur->first();
+    seek curlast  = idcur->last();
+    if (curlast == (a_first-1)) {
+      idcur->set_last(a_last);
+      free_seg* idnext = find_after(a_list,idcur);
+      if (idnext == 0) return idcur;
+      if (idnext->first() > (a_last+1)) return idcur;
+      idcur->set_last(idnext->last());
+      remove(a_list,idnext); //idnext not deleted.
+      delete idnext;
+      return idcur;
+    }
+    if (curfirst == (a_last+1)) {
+      idcur->set_first(a_first);
+      return idcur;
+    }
+    if (a_first < curfirst) {
+      free_seg* newfree = new free_seg(idcur->out(),a_first,a_last);
+      add_before(a_list,idcur,newfree);
+      return newfree;
+    }
+    idcur = find_after(a_list,idcur);
+  }
+
+  return 0;
+}
+
+
+}}
+
+#endif

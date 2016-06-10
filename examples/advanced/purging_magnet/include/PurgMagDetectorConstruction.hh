@@ -32,7 +32,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id$
+// $Id: PurgMagDetectorConstruction.hh 69086 2013-04-18 07:29:59Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

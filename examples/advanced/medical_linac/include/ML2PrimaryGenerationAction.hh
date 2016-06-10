@@ -106,7 +106,7 @@ private:
 
 	static CML2PrimaryGenerationAction * instance;
 
-	G4int nBeam, nRecycling, nLoopsPhSpParticles, idGunType, nMaxParticlesInRamPhaseSpace, idParticleSource;
+	G4int nRecycling, nLoopsPhSpParticles, nMaxParticlesInRamPhaseSpace, idParticleSource;
 	G4double GunMeanEnegy, GunStdEnegy, GunRadious;
 	G4String calculatedPhaseSpaceFileIN;
 
@@ -124,7 +124,6 @@ private:
 	G4ParticleDefinition *gamma;
 	G4ParticleDefinition *electron;
 	G4ParticleDefinition *positron;
-	G4int nEventsPerRun;
 	SPrimaryParticle *primaryParticleData;
 	Sparticle *particles, *particle;
 	int nParticle, nPhSpParticles, nRandomParticles, idCurrentParticleSource;

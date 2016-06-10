@@ -27,7 +27,7 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 68030 2013-03-13 13:51:27Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -44,10 +44,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
-  
+
   fParticleGun->SetParticleEnergy(0*eV);
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));          
@@ -73,8 +75,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
        = G4ParticleTable::GetParticleTable()->GetIon(Z,A,excitEnergy);
     fParticleGun->SetParticleDefinition(ion);
     fParticleGun->SetParticleCharge(ionCharge);
-  }  
-  
+  }    
   //create vertex
   //   
   fParticleGun->GeneratePrimaryVertex(anEvent);

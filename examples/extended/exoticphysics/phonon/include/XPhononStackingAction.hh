@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/include/XPhononStackingAction.hh
 /// \brief Definition of the XPhononStackingAction class
 //
-// $Id$
+// $Id: XPhononStackingAction.hh 76246 2013-11-08 11:17:29Z gcosmo $
 //
 #ifndef XPhononStackingAction_h
 #define XPhononStackingAction_h 1

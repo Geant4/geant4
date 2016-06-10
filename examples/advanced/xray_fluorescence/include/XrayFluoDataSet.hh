@@ -108,7 +108,6 @@ private:
 
   G4bool LoadData(const G4String& dataFile);
 
-  G4int z;
   G4int FindBinLocation(G4double energy) const;
 
   G4DataVector* energies; // Owned pointer

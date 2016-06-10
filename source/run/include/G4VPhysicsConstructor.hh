@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPhysicsConstructor.hh 68802 2013-04-05 13:54:41Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -61,9 +61,62 @@
 #define G4VPhysicsConstructor_h 1
 
 #include "globals.hh"
+#include "rundefs.hh"
 #include "G4ios.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicsListHelper.hh"
+#include "G4VUPLSplitter.hh"
+
+
+class G4VPCData
+{
+    //Encapsulate the fields of class G4VPhysicsConstructor
+    //that are per-thread.
+public:
+    void initialize();
+    G4ParticleTable::G4PTblDicIterator* _aParticleIterator;
+};
+
+// The type G4VPCManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4VPCData. When each thread
+// changes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4VPhysicsConstructor instance,
+// there is a corresponding G4VPCData instance. All G4VPCData instances
+// are organized by the class G4VUPLManager as an array.
+// The field "int g4vuplInstanceID" is added to the class G4VUserPhysicsList.
+// The value of this field in each G4VUserPhysicsList instance is the
+// subscript of the corresponding G44VUPLData instance.
+// In order to use the class G44VUPLManager, we add a static member in the class
+// G4VUserPhysicsList as follows: "static G4VUPLManager subInstanceManager".
+// Both the master thread and worker threads change the length of the array
+// for G44VUPLData instances mutually along with G4VUserPhysicsList
+// instances are created. For each worker thread, it dynamically creates ions.
+// Consider any thread A, if there is any other thread which creates an ion.
+// This ion is shared by the thread A. So the thread A leaves an empty space
+// in the array of G4PDefData instances for the ion.
+//
+// Important Note: you may wonder why we are introducing this mechanism
+//                 since there is only one PL for each application.
+//                 This is true, in the sense that only one PL is allowed
+//                 to be associated to a G4RunManager, however user can instantiate
+//                 as many PLs are needed and at run-time select one of the PLs to be used
+//                 we thus need this mechanism to guarantee that the system works without
+//                 problems in case of this (unusual) case. This may be reviewed in the future
+typedef G4VUPLSplitter<G4VPCData> G4VPCManager;
+typedef G4VPCManager G4VPhyscicsConstructorManager;
+
+// This macros change the references to fields that are now encapsulated
+// in the class G4VPCData.
+//
+// Note1:  the use of this-> this is needed to avoid compilation errors
+// when using templated class with T=G4VUserPhysicsList. Don't know why.
+// Note2: the name of the first #define is different, because otherwise
+//        we need to change its use in all classes that inherits from
+//        this base class (all examples). However one should note comment
+//        on JIRA task: http://jira-geant4.kek.jp/browse/DEV-27
+
+#define aParticleIterator ((subInstanceManager.offset[g4vpcInstanceID])._aParticleIterator)
 
 class G4VPhysicsConstructor
 {
@@ -110,10 +163,15 @@ class G4VPhysicsConstructor
     G4int    typePhysics;
 
     G4ParticleTable* theParticleTable;
-    G4ParticleTable::G4PTblDicIterator* theParticleIterator;
-      // the particle table has the complete List of existing particle types
+    G4int g4vpcInstanceID;
+    G4RUN_DLL static G4VPCManager subInstanceManager;
+public:
+    inline G4int GetInstanceID() const;
+    static const G4VPCManager& GetSubInstanceManager();
+    //G4ParticleTable::G4PTblDicIterator* aParticleIterator;
+    // the particle table has the complete List of existing particle types
 
-    G4PhysicsListHelper* thePLHelper;
+    //G4PhysicsListHelper* aPLHelper;
 };
 
 // Inlined methods
@@ -152,7 +210,14 @@ inline
  G4bool G4VPhysicsConstructor::RegisterProcess(G4VProcess*            process,
 					       G4ParticleDefinition*  particle)
 {
-  return thePLHelper->RegisterProcess(process, particle);
+    return G4PhysicsListHelper::GetPhysicsListHelper()->RegisterProcess(process,particle);
+  //return aPLHelper->RegisterProcess(process, particle);
+}
+
+inline
+const G4VPCManager& G4VPhysicsConstructor::GetSubInstanceManager()
+{
+    return subInstanceManager;
 }
 #endif
 

@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01TrackerHit class
 //
 //
-// $Id$
+// $Id: ExP01TrackerHit.hh 71397 2013-06-14 15:05:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,27 +57,27 @@ class ExP01TrackerHit : public G4VHit
       inline void* operator new(size_t);
       inline void  operator delete(void*);
 
-      void Draw();
-      void Print();
+      virtual void Draw();
+      virtual void Print();
 
   public:
   
-      void SetTrackID  (G4int track)      { trackID = track; };
-      void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
-      void SetEdep     (G4double de)      { edep = de; };
-      void SetPos      (G4ThreeVector xyz){ pos = xyz; };
+      void SetTrackID  (G4int track)      { fTrackID = track; };
+      void SetChamberNb(G4int chamb)      { fChamberNb = chamb; };  
+      void SetEdep     (G4double de)      { fEdep = de; };
+      void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
       
-      G4int GetTrackID()    { return trackID; };
-      G4int GetChamberNb()  { return chamberNb; };
-      G4double GetEdep()    { return edep; };      
-      G4ThreeVector GetPos(){ return pos; };
+      G4int GetTrackID()    { return fTrackID; };
+      G4int GetChamberNb()  { return fChamberNb; };
+      G4double GetEdep()    { return fEdep; };      
+      G4ThreeVector GetPos(){ return fPos; };
       
   private:
   
-      G4int         trackID;
-      G4int         chamberNb;
-      G4double      edep;
-      G4ThreeVector pos;
+      G4int         fTrackID;
+      G4int         fChamberNb;
+      G4double      fEdep;
+      G4ThreeVector fPos;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

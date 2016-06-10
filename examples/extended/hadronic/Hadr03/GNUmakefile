@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 2008-06-11 22:15:20 maire Exp $
+# $Id: GNUmakefile 67981 2013-03-13 10:34:11Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -18,9 +18,6 @@ include $(G4INSTALL)/config/architecture.gmk
 
 include $(G4INSTALL)/config/binmake.gmk
 
-histclean:
-	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/HistoManager.o
-			
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl
 	rm -f .DAWN_*

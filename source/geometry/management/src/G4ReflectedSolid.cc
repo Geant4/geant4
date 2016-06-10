@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ReflectedSolid.cc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 //
 // Implementation for G4ReflectedSolid class for boolean 
@@ -47,8 +47,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-// #include "G4NURBSbox.hh"
 
 
 /////////////////////////////////////////////////////////////////
@@ -623,18 +621,6 @@ G4ReflectedSolid::CreatePolyhedron () const
                 "GeomMgt1001", JustWarning, message);
     return 0;
   }
-}
-
-/////////////////////////////////////////////////////////
-//
-//
-
-G4NURBS*      
-G4ReflectedSolid::CreateNURBS      () const 
-{
-  // Take into account local transformation - see CreatePolyhedron.
-  // return fPtrSolid->CreateNURBS() ;
-  return 0;
 }
 
 /////////////////////////////////////////////////////////

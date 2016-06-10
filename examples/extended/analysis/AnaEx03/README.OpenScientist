@@ -1,0 +1,44 @@
+
+ Working with the OpenScientist packages :
+ ---------------------------------------
+  To create the analysis file, you can install the light "osc_batch"
+ binary kit (See http://OpenScientist.lal.in2p3.fr ). For example
+ from a UNIX sh flavoured shell :
+    sh> cd /usr/local
+    sh> <arrange to be su>
+    sh> <get an osc_batch binary kit>
+    sh> unzip -q osc_batch<platform>.zip
+    sh> cd osc_batch/<version>
+    sh> ./install
+  
+  Then before building the example you have to source the OpenScientist
+  environment with :
+    <create another terminal>
+    sh> . /usr/local/osc_batch/<version>/aida-setup.sh
+    or
+    csh> source /usr/local/osc_batch/<version>/aida-setup.csh
+   
+  Depending of the file format, you can visualize the produced
+ file with various interactive tools (CERN/PAW, CERN/ROOT, jas).
+ But if installing also an OpenScientist osc_vis binary kit,
+ you shall be able to visualize all formats by using
+ the osc-plot program. To install an osc_vis kit :
+    sh> cd /usr/local
+    sh> <arrange to be su>
+    sh> <get an osc_vis binary kit>
+    sh> unzip -q osc_vis<platform>.zip
+    sh> cd osc_vis/<version>
+    sh> ./install
+  Then to browse the AnaEx03.<format> file (for exa from an UNIX sh shell) :
+    <create another terminal>
+    sh> . /usr/local/osc_vis/<version>/setup.sh
+    sh> <setenv DISPLAY if needed>
+    sh> osc-plot AnaEx03.[aida,root,hbook]
+
+  The OpenScientist URL is : 
+    http://OpenScientist.lal.in2p3.fr.
+
+  Note that OpenScientist is installed on CERN/lxplus under :
+    /afs/cern.ch/sw/contrib/[osc_batch,osc_vis].
+
+

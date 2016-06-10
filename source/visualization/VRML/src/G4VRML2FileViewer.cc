@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VRML2FileViewer.cc 77479 2013-11-25 10:01:22Z gcosmo $
 //
 // G4VRML2FileViewer.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -39,6 +39,7 @@
 #include "G4VRML2FileViewer.hh"
 #include "G4VRML2FileSceneHandler.hh"
 #include "G4VRML2File.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 G4VRML2FileViewer::G4VRML2FileViewer(G4VRML2FileSceneHandler& sceneHandler,
@@ -49,8 +50,8 @@ G4VRML2FileViewer::G4VRML2FileViewer(G4VRML2FileSceneHandler& sceneHandler,
  fSceneHandler(sceneHandler),
  fDest(sceneHandler.fDest)
 {
-	fViewHalfAngle = 0.5 * 0.785398 ; // 0.5 * 45*deg
-	fsin_VHA       = std::sin ( fViewHalfAngle ) ;	
+  fViewHalfAngle = 30. * deg;
+	fsin_VHA = std::sin ( fViewHalfAngle ) ;	
 }
 
 G4VRML2FileViewer::~G4VRML2FileViewer()

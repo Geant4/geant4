@@ -1,4 +1,4 @@
-$Id: README,v 1.28 2010-02-22 15:41:29 maire Exp $
+$Id: README 77305 2013-11-22 11:16:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -32,7 +32,7 @@ $Id: README,v 1.28 2010-02-22 15:41:29 maire Exp $
      (MaxBin = 500 in both directions)	 
 
      An uniform magnetic field along the cylinder axis can be set.
-     eg: /testem/det/setField 5 tesla 
+     eg: /globalField/setValue 0 0 5 tesla 
      
  2- PHYSICS LISTS
  
@@ -99,6 +99,11 @@ $Id: README,v 1.28 2010-02-22 15:41:29 maire Exp $
 
      - Execute TestEm2 in 'batch' mode from macro files
  		% TestEm2   run01.mac
+
+     - Execute TestEm2 in 'batch' mode using multi-threading
+ 		% TestEm2   run01.mac 4
+       here 4 is number of threads, it should be user defined,
+       optimel value dependents on hardware
 
      - Execute TestEm2 in 'interactive mode' with visualization
  		% TestEm2

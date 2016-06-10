@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StatMFParameters.hh 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -36,60 +36,53 @@
 
 class G4StatMFParameters
 {
-private:
-  static G4StatMFParameters  theStatMFParameters;
+public:
   
+  G4StatMFParameters();
+
+  ~G4StatMFParameters();
+  
+  static G4double GetKappa();
+  
+  static G4double GetKappaCoulomb(); 
+  
+  static G4double GetEpsilon0();
+  
+  static G4double GetE0();
+  
+  static G4double GetBeta0(); 
+  
+  static G4double GetGamma0();
+  
+  static G4double GetCriticalTemp();
+  
+  static G4double Getr0();
+  
+  static G4double Beta(G4double T);
+  
+  static G4double DBetaDT(G4double T);
+  
+  static G4double GetMaxAverageMultiplicity(G4int A);
+
   // +----------------------+
   // | Constant Parameters: |
   // +----------------------+
-  // Kappa is used for calculate volume V_f for translational motion of fragments
-  static const G4double _Kappa;
+  // Kappa is used for calculate volume V_f for translational 
+  // motion of fragments
+  static const G4double fKappa;
   // KappaCoulomb is used for calculate Coulomb term energy
-  static const G4double _KappaCoulomb;
+  static const G4double fKappaCoulomb;
   // Inverse level density
-  static const G4double _Epsilon0;
+  static const G4double fEpsilon0;
   // Bethe-Weizsacker coefficients
-  static const G4double _E0;
-  static const G4double _Beta0;
-  static const G4double _Gamma0;
+  static const G4double fE0;
+  static const G4double fBeta0;
+  static const G4double fGamma0;
   // Critical temperature (for liquid-gas phase transitions)
-  static const G4double _CriticalTemp;
+  static const G4double fCriticalTemp;
   // Nuclear radius
-  static const G4double _r0;
-  
-  
-  // default constructor
-  G4StatMFParameters() 
-  {}
+  static const G4double fr0;
 
-
-public:
-  
-  ~G4StatMFParameters() {};
-  
-  static G4StatMFParameters * GetAddress();
-  
-  static G4double GetKappa() { return _Kappa; }
-  
-  static G4double GetKappaCoulomb() { return _KappaCoulomb; } 
-  
-  static G4double GetEpsilon0() { return _Epsilon0; }
-  
-  static G4double GetE0() { return _E0; }
-  
-  static G4double GetBeta0() { return _Beta0; } 
-  
-  static G4double GetGamma0() { return _Gamma0; }
-  
-  static G4double GetCriticalTemp() { return _CriticalTemp; }
-  
-  static G4double Getr0() { return _r0; }
-  
-  static G4double Beta(const G4double T);
-  
-  static G4double DBetaDT(const G4double T);
-  
-  static G4double GetMaxAverageMultiplicity(const G4int A);
 };
 
 #endif

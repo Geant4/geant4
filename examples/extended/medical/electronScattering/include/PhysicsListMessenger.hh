@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id$
+// $Id: PhysicsListMessenger.hh 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ class PhysicsListMessenger: public G4UImessenger
     PhysicsListMessenger(PhysicsList* );
    ~PhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
   

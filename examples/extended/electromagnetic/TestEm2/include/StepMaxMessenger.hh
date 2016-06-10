@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/StepMaxMessenger.hh
 /// \brief Definition of the StepMaxMessenger class
 //
-// $Id$
+// $Id: StepMaxMessenger.hh 74994 2013-10-25 10:47:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,15 +44,15 @@ class G4UIcmdWithADoubleAndUnit;
 
 class StepMaxMessenger: public G4UImessenger
 {
-  public:
-    StepMaxMessenger(StepMax*);
-   ~StepMaxMessenger();
+public:
+  StepMaxMessenger(StepMax*);
+  virtual ~StepMaxMessenger();
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    StepMax* fStepMax;
-    G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
+private:
+  StepMax* fStepMax;
+  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -119,7 +118,7 @@ private:
   G4AtomicTransitionManager& operator=(const G4AtomicTransitionManager& right);
   G4AtomicTransitionManager(const G4AtomicTransitionManager&);
  
-  static G4AtomicTransitionManager* instance;
+  static G4ThreadLocal G4AtomicTransitionManager* instance;
   
   // the first element of the map is the atomic number Z.
   // the second element is a vector of G4AtomicShell*.

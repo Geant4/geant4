@@ -1,7 +1,5 @@
 /tracking/storeTrajectory 1
 
-/microbeam/phys/addPhysics emlivermore
-
 /run/initialize
 
 /process/inactivate nuclearStopping

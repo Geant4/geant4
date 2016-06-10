@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VIntraNuclearTransportModel.hh 69717 2013-05-13 09:47:57Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -36,6 +36,8 @@
 //	    Add data member and Set method to store original projectile
 //      V.Ivanchenko 03.01.2012
 //          Added G4VPreCompoundModel pointer to the constructor and cleanup
+//      V. Uzhinsky Nov. 2012
+//          Added method PropagateNuclNucl for simulation of nucleus-nucleus inter. 
 // -----------------------------------------------------------------------------
 
 #ifndef G4VIntraNuclearTransportModel_h
@@ -71,6 +73,11 @@ public:
   virtual 
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
 				     G4V3DNucleus* theNucleus) = 0;
+
+  virtual 
+  G4ReactionProductVector* PropagateNuclNucl(G4KineticTrackVector* theSecondaries,
+				     G4V3DNucleus* theNucleus,
+                                     G4V3DNucleus* theProjectileNucleus);    // Uzhi Nov. 2012
 
   inline void SetDeExcitation(G4VPreCompoundModel* ptr);
 

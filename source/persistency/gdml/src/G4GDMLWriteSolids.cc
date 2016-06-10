@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GDMLWriteSolids.cc 76271 2013-11-08 11:51:39Z gcosmo $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -48,6 +48,7 @@
 #include "G4Paraboloid.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4Polycone.hh"
+#include "G4GenericPolycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4ReflectedSolid.hh"
 #include "G4Sphere.hh"
@@ -409,32 +410,59 @@ ParaboloidWrite(xercesc::DOMElement* solElement,
    paraboloidElement->setAttributeNode(NewAttribute("lunit","mm"));
    solElement->appendChild(paraboloidElement);
 }
-
 void G4GDMLWriteSolids::
 PolyconeWrite(xercesc::DOMElement* solElement,
               const G4Polycone* const polycone)
 {
    const G4String& name = GenerateName(polycone->GetName(),polycone);
-
-   xercesc::DOMElement* polyconeElement = NewElement("polycone");
-   polyconeElement->setAttributeNode(NewAttribute("name",name));
-   polyconeElement->setAttributeNode(NewAttribute("startphi",
+  
+    xercesc::DOMElement* polyconeElement = NewElement("polycone");
+    polyconeElement->setAttributeNode(NewAttribute("name",name));
+    polyconeElement->setAttributeNode(NewAttribute("startphi",
                     polycone->GetOriginalParameters()->Start_angle/degree));
-   polyconeElement->setAttributeNode(NewAttribute("deltaphi",
+    polyconeElement->setAttributeNode(NewAttribute("deltaphi",
                     polycone->GetOriginalParameters()->Opening_angle/degree));
-   polyconeElement->setAttributeNode(NewAttribute("aunit","deg"));
-   polyconeElement->setAttributeNode(NewAttribute("lunit","mm"));
-   solElement->appendChild(polyconeElement);
+    polyconeElement->setAttributeNode(NewAttribute("aunit","deg"));
+    polyconeElement->setAttributeNode(NewAttribute("lunit","mm"));
+    solElement->appendChild(polyconeElement);
 
-   const size_t num_zplanes = polycone->GetOriginalParameters()->Num_z_planes;
-   const G4double* z_array = polycone->GetOriginalParameters()->Z_values;
-   const G4double* rmin_array = polycone->GetOriginalParameters()->Rmin;
-   const G4double* rmax_array = polycone->GetOriginalParameters()->Rmax;
+    const size_t num_zplanes = polycone->GetOriginalParameters()->Num_z_planes;
+    const G4double* z_array = polycone->GetOriginalParameters()->Z_values;
+    const G4double* rmin_array = polycone->GetOriginalParameters()->Rmin;
+    const G4double* rmax_array = polycone->GetOriginalParameters()->Rmax;
 
-   for (size_t i=0; i<num_zplanes; i++)
-   {
+    for (size_t i=0; i<num_zplanes; i++)
+    {
       ZplaneWrite(polyconeElement,z_array[i],rmin_array[i],rmax_array[i]);
-   }
+    }
+   
+  
+}
+
+void G4GDMLWriteSolids::
+GenericPolyconeWrite(xercesc::DOMElement* solElement,
+              const G4GenericPolycone* const polycone)
+{
+   const G4String& name = GenerateName(polycone->GetName(),polycone);
+   xercesc::DOMElement* polyconeElement = NewElement("genericPolycone");
+   const G4double startPhi=polycone->GetStartPhi();
+    polyconeElement->setAttributeNode(NewAttribute("name",name));
+    polyconeElement->setAttributeNode(NewAttribute("startphi",
+		    startPhi/degree));
+    polyconeElement->setAttributeNode(NewAttribute("deltaphi",
+		    (polycone->GetEndPhi()-startPhi)/degree));
+    polyconeElement->setAttributeNode(NewAttribute("aunit","deg"));
+    polyconeElement->setAttributeNode(NewAttribute("lunit","mm"));
+    solElement->appendChild(polyconeElement);
+
+    const size_t num_rzpoints = polycone->GetNumRZCorner();
+    for (size_t i=0; i<num_rzpoints; i++)
+    {
+      const G4double r_point=polycone->GetCorner(i).r;
+      const G4double z_point=polycone->GetCorner(i).z;
+      RZPointWrite(polyconeElement,r_point,z_point);
+    }
+   
 }
 
 void G4GDMLWriteSolids::
@@ -442,33 +470,56 @@ PolyhedraWrite(xercesc::DOMElement* solElement,
                const G4Polyhedra* const polyhedra)
 {
    const G4String& name = GenerateName(polyhedra->GetName(),polyhedra);
-
-   xercesc::DOMElement* polyhedraElement = NewElement("polyhedra");
-   polyhedraElement->setAttributeNode(NewAttribute("name",name));
-   polyhedraElement->setAttributeNode(NewAttribute("startphi",
+   if(polyhedra->IsGeneric() == false){
+    xercesc::DOMElement* polyhedraElement = NewElement("polyhedra");
+    polyhedraElement->setAttributeNode(NewAttribute("name",name));
+    polyhedraElement->setAttributeNode(NewAttribute("startphi",
                      polyhedra->GetOriginalParameters()->Start_angle/degree));
-   polyhedraElement->setAttributeNode(NewAttribute("deltaphi",
+    polyhedraElement->setAttributeNode(NewAttribute("deltaphi",
                      polyhedra->GetOriginalParameters()->Opening_angle/degree));
-   polyhedraElement->setAttributeNode(NewAttribute("numsides",
+    polyhedraElement->setAttributeNode(NewAttribute("numsides",
                      polyhedra->GetOriginalParameters()->numSide));
-   polyhedraElement->setAttributeNode(NewAttribute("aunit","deg"));
-   polyhedraElement->setAttributeNode(NewAttribute("lunit","mm"));
-   solElement->appendChild(polyhedraElement);
+    polyhedraElement->setAttributeNode(NewAttribute("aunit","deg"));
+    polyhedraElement->setAttributeNode(NewAttribute("lunit","mm"));
+    solElement->appendChild(polyhedraElement);
 
-   const size_t num_zplanes = polyhedra->GetOriginalParameters()->Num_z_planes;
-   const G4double* z_array = polyhedra->GetOriginalParameters()->Z_values;
-   const G4double* rmin_array = polyhedra->GetOriginalParameters()->Rmin;
-   const G4double* rmax_array = polyhedra->GetOriginalParameters()->Rmax;
+    const size_t num_zplanes = polyhedra->GetOriginalParameters()->Num_z_planes;
+    const G4double* z_array = polyhedra->GetOriginalParameters()->Z_values;
+    const G4double* rmin_array = polyhedra->GetOriginalParameters()->Rmin;
+    const G4double* rmax_array = polyhedra->GetOriginalParameters()->Rmax;
 
-   const G4double convertRad =
+    const G4double convertRad =
          std::cos(0.5*polyhedra->GetOriginalParameters()->Opening_angle
        / polyhedra->GetOriginalParameters()->numSide);
 
-   for (size_t i=0;i<num_zplanes;i++)
-   {
+    for (size_t i=0;i<num_zplanes;i++)
+    {
       ZplaneWrite(polyhedraElement,z_array[i],
                   rmin_array[i]*convertRad, rmax_array[i]*convertRad);
-   }
+    }
+   }else{//generic polyhedra
+   
+    xercesc::DOMElement* polyhedraElement = NewElement("genericPolyhedra");
+    polyhedraElement->setAttributeNode(NewAttribute("name",name));
+    polyhedraElement->setAttributeNode(NewAttribute("startphi",
+                     polyhedra->GetOriginalParameters()->Start_angle/degree));
+    polyhedraElement->setAttributeNode(NewAttribute("deltaphi",
+                     polyhedra->GetOriginalParameters()->Opening_angle/degree));
+    polyhedraElement->setAttributeNode(NewAttribute("numsides",
+                     polyhedra->GetOriginalParameters()->numSide));
+    polyhedraElement->setAttributeNode(NewAttribute("aunit","deg"));
+    polyhedraElement->setAttributeNode(NewAttribute("lunit","mm"));
+    solElement->appendChild(polyhedraElement);
+
+    const size_t num_rzpoints = polyhedra->GetNumRZCorner();
+    
+    for (size_t i=0;i<num_rzpoints;i++)
+    {
+      const G4double r_point = polyhedra->GetCorner(i).r;
+      const G4double z_point = polyhedra->GetCorner(i).z;
+      RZPointWrite(polyhedraElement,r_point,z_point);
+    }
+  }
 }
 
 void G4GDMLWriteSolids::
@@ -479,7 +530,7 @@ SphereWrite(xercesc::DOMElement* solElement, const G4Sphere* const sphere)
    xercesc::DOMElement* sphereElement = NewElement("sphere");
    sphereElement->setAttributeNode(NewAttribute("name",name));
    sphereElement->setAttributeNode(NewAttribute("rmin",
-                  sphere->GetInsideRadius()/mm));
+                  sphere->GetInnerRadius()/mm));
    sphereElement->setAttributeNode(NewAttribute("rmax",
                   sphere->GetOuterRadius()/mm));
    sphereElement->setAttributeNode(NewAttribute("startphi",
@@ -873,6 +924,16 @@ ZplaneWrite(xercesc::DOMElement* element, const G4double& z,
 }
 
 void G4GDMLWriteSolids::
+RZPointWrite(xercesc::DOMElement* element, const G4double& r,
+            const G4double& z)
+{
+   xercesc::DOMElement* rzpointElement = NewElement("rzpoint");
+   rzpointElement->setAttributeNode(NewAttribute("r",r/mm));
+   rzpointElement->setAttributeNode(NewAttribute("z",z/mm));
+   element->appendChild(rzpointElement);
+}
+
+void G4GDMLWriteSolids::
 OpticalSurfaceWrite(xercesc::DOMElement* solElement,
                     const G4OpticalSurface* const surf)
 {
@@ -944,6 +1005,9 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4Polycone* const polyconePtr
      = dynamic_cast<const G4Polycone*>(solidPtr))
      { PolyconeWrite(solidsElement,polyconePtr); } else
+   if (const G4GenericPolycone* const genpolyconePtr
+     = dynamic_cast<const G4GenericPolycone*>(solidPtr))
+     { GenericPolyconeWrite(solidsElement,genpolyconePtr); } else
    if (const G4Polyhedra* const polyhedraPtr
      = dynamic_cast<const G4Polyhedra*>(solidPtr))
      { PolyhedraWrite(solidsElement,polyhedraPtr); } else

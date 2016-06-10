@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmDetectorMessenger.cc 68030 2013-03-13 13:51:27Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmDetectorMessenger.cc
 /// \brief Implementation of the exrdmDetectorMessenger class
 //
@@ -39,7 +41,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmDetectorMessenger::exrdmDetectorMessenger(exrdmDetectorConstruction* myDet)
-:fMyDetector(myDet)
+:G4UImessenger(),
+ fMyDetector(myDet),
+ fExrdmDir(0),
+ fDetDir(0),
+ fTargMatCmd(0),
+ fDetectMatCmd(0),
+ fTargRadiusCmd(0),
+ fDetectThicknessCmd(0),
+ fTargLengthCmd(0),
+ fDetectLengthCmd(0)
 { 
   fExrdmDir = new G4UIdirectory("/exrdm/");
   fExrdmDir->SetGuidance("UI commands specific to this example.");

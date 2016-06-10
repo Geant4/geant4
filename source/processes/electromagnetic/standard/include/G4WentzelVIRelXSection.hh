@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WentzelVIRelXSection.hh 67990 2013-03-13 10:56:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -100,9 +100,6 @@ public:
   inline G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
   
   inline void SetTargetMass(G4double value);
-
-  //obsolete method
-  inline void SetRelativisticMass(G4double value);
 
   inline G4double GetMomentumSquare() const;
 
@@ -196,13 +193,6 @@ inline void G4WentzelVIRelXSection::SetTargetMass(G4double value)
 {
   targetMass = value;
   factD = std::sqrt(mom2)/value;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4WentzelVIRelXSection::SetRelativisticMass(G4double value)
-{
-  mass = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

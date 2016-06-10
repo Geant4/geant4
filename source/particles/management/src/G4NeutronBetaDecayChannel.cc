@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NeutronBetaDecayChannel.cc 78171 2013-12-04 13:22:18Z gunter $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -34,7 +34,8 @@
 //      History: first implementation, based on object model of
 //      18 Sep  2001 H.Kurashige
 //---
-//      Fix energy of proton and neutrino May  2011 H.Kurashige
+//      Fix energy of proton and neutrino     May 2011 H.Kurashige
+//      Fix direction of proton and neutrino  Nov 2013 H.Kurashige
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -134,24 +135,24 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4NeutronBetaDecayChannel::DecayIt ";
 #endif
 
-  if (parent == 0) FillParent();  
-  if (daughters == 0) FillDaughters();
+  if (G4MT_parent == 0) FillParent();  
+  if (G4MT_daughters == 0) FillDaughters();
  
   // parent mass
-  G4double parentmass = parent->GetPDGMass();
+  G4double parentmass = G4MT_parent->GetPDGMass();
 
   //daughters'mass
   G4double daughtermass[3]; 
   G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<3; index++){
-    daughtermass[index] = daughters[index]->GetPDGMass();
+    daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
   G4double xmax = parentmass-sumofdaughtermass;  
 
    //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
 
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -190,7 +191,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4ThreeVector direction0(0.0, 0.0, 1.0);
   direction0 = rm * direction0;
   G4DynamicParticle * daughterparticle0 
-         = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
+         = new G4DynamicParticle( G4MT_daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle0);
 
   // daughter 1 (nutrino) in XZ plane
@@ -198,12 +199,13 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   eNu = (parentmass-daughtermass[2])*(parentmass+daughtermass[2])+(dm*dm)-2.*parentmass*(x+dm);
   eNu /= 2.*(parentmass+p*w-(x+dm));
   G4double cosn = w;
+  G4double phin  = twopi*G4UniformRand()*rad;
   G4double sinn = std::sqrt((1.0-cosn)*(1.0+cosn));
 
-  G4ThreeVector direction1(sinn, 0.0, cosn);
+  G4ThreeVector direction1(sinn*std::cos(phin), sinn*std::sin(phin), cosn);
   direction1 = rm * direction1;
   G4DynamicParticle * daughterparticle1 
-         = new G4DynamicParticle( daughters[1], direction1*eNu);
+         = new G4DynamicParticle( G4MT_daughters[1], direction1*eNu);
   products->PushProducts(daughterparticle1);
 
   // daughter 2 (proton) at REST
@@ -212,9 +214,9 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double pPx = -eNu*sinn;
   G4double pPz = -p-eNu*cosn;
   G4double pP  = std::sqrt(eP*(eP+2.*daughtermass[2]));
-  G4ThreeVector direction2(pPx/pP, 0.0, pPz/pP);
+  G4ThreeVector direction2(pPx/pP*std::cos(phin), pPx/pP*std::sin(phin), pPz/pP);
     G4DynamicParticle * daughterparticle2 
-         = new G4DynamicParticle( daughters[2], direction2);
+         = new G4DynamicParticle( G4MT_daughters[2], direction2);
   products->PushProducts(daughterparticle2);
  
 

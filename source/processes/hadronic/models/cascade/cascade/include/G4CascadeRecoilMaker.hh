@@ -25,7 +25,7 @@
 //
 #ifndef G4CASCADE_RECOIL_MAKER_HH
 #define G4CASCADE_RECOIL_MAKER_HH
-// $Id$
+// $Id: G4CascadeRecoilMaker.hh 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // Collects generated cascade data (using Collider::collide() interface)
 // and computes the nuclear recoil kinematics needed to balance the event.
@@ -43,6 +43,7 @@
 // 20100924  M. Kelsey -- Add raw excitation energy (mass difference) function
 // 20110214  M. Kelsey -- Replace "model" with G4InuclParticle::Model enum
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
+// 20130620  Address Coverity complaint about missing copy actions
 
 #include <cmath>
 #include <vector>
@@ -123,6 +124,11 @@ private:
 
   G4InuclNuclei theRecoilNuclei;	// Reusable buffers for recoil
   G4Fragment theRecoilFragment;
+
+private:
+  // Copying of modules is forbidden
+  G4CascadeRecoilMaker(const G4CascadeRecoilMaker&);
+  G4CascadeRecoilMaker& operator=(const G4CascadeRecoilMaker&);
 };
 
 #endif	/* G4CASCADE_RECOIL_MAKER_HH */

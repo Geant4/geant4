@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VIsotopeTable.hh 69557 2013-05-08 12:01:40Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -32,12 +32,15 @@
 //
 //----------------------------------------------------------
 //      New design                               5 Oct. 99 H.Kurashige
+//      Add  additinal GetIsotope method        30 Apr. 2013  H.Kurashige
 #ifndef G4VIsotopeTable_h
 #define G4VIsotopeTable_h 1
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4IsotopeProperty.hh"
+
+class G4IsotopeProperty;
+
 class G4VIsotopeTable
 {
  // Class Description
@@ -59,14 +62,16 @@ class G4VIsotopeTable
 
  public: // With Description
   // pure virtual method
-  virtual G4bool FindIsotope(G4IsotopeProperty* property) = 0;  
-  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E) = 0;
+  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E)=0;
+  virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int level=0);
   // Search the isotope in the G4VIsotopeTable. 
   // The isotope is desingated by 
   //    G4int    Z:  number of proton (Atomic number)
   //    G4int    A:  number of nucleon (Atomic mass)
   //      and
   //    G4double E:  excited energy
+  //      or
+  //    G4int  level: isomer level
   // in the given G4IsotopeProperty.
   // If corresopnding isotope exist in the table, this method returns
   // 'true' as well as fills other properties such as spin, lifetime,
@@ -79,42 +84,21 @@ class G4VIsotopeTable
   G4int                GetVerboseLevel() const;
   void                 SetVerboseLevel(G4int level);  
 
+  // Dump table
+  void                 DumpTable(G4int Zmin=1, G4int Zmax=118);
+
+  // 
+  const G4String&      GetName() const;
+
  private:
   G4String             fName;
   G4int                verboseLevel;
 };
 
 inline
- G4VIsotopeTable::G4VIsotopeTable()
-  : fName(""), verboseLevel(0)
+  const G4String&  G4VIsotopeTable::GetName() const
 {
-}
-
-inline
- G4VIsotopeTable::G4VIsotopeTable(const G4String& name)
-  : fName(name), verboseLevel(0)
-{
-}
-
-inline
- G4VIsotopeTable::G4VIsotopeTable(const G4VIsotopeTable & right)
-  : fName(right.fName), verboseLevel(right.verboseLevel)
-{
-}
-
-inline
- G4VIsotopeTable& G4VIsotopeTable::operator=(const G4VIsotopeTable & right)
-{
-  if (this != &right){
-    fName = right.fName;
-    verboseLevel = right.verboseLevel;
-  }
-  return *this;
-}
-
-inline
- G4VIsotopeTable::~G4VIsotopeTable()
-{
+  return fName;
 }
 
 inline 

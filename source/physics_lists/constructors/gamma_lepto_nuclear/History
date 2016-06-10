@@ -1,0 +1,28 @@
+$Id: History 71038 2013-06-10 09:22:40Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+     Hadronic physics-list/constructors/gamma_lepto_nuclear History
+     --------------------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+08-Jun-2013, A.Dotti (phys-ctor-glnuclear-V09-06-03)
+- Fix for MT: make data memebers TLS
+
+27-Feb-2013, V.Ivanchenko (phys-ctor-glnuclear-V09-06-02)
+- G4EmExtraPhysics - fixed warning from the clang compiler on MacOS
+
+01-Feb-2013, V.Ivanchenko (phys-ctor-glnuclear-V09-06-01)
+-  G4EmExtraPhysics and G4EmMessenger are added 
+
+10-Jan-2013, Gunter Folger              (phys-ctor-glnuclear-V09-06-00)
+- new directory structure introduced. 
+   constructors/gamma_lepto_nuclear classes

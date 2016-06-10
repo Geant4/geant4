@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -44,6 +44,8 @@
 #include "G4Event.hh"
 #include "HistoManager.hh"
 #include "EventActionMessenger.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4UImanager.hh"
 #include "G4ios.hh"

@@ -23,15 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4EvaporationLevelDensityParameter.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and comment out unused part
 
 #include "G4EvaporationLevelDensityParameter.hh"
+
+G4EvaporationLevelDensityParameter::G4EvaporationLevelDensityParameter() 
+{}
+
+G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter() 
+{}
+
+/*
+
+#include "G4ShellCorrections.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 
@@ -48,8 +58,13 @@ const G4double G4EvaporationLevelDensityParameter::beta = 0.257/MeV;
 const G4double G4EvaporationLevelDensityParameter::gamma = 0.059/MeV;
 const G4double G4EvaporationLevelDensityParameter::Bs = 1.0;
 
-G4EvaporationLevelDensityParameter::G4EvaporationLevelDensityParameter() {}
-G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter() {}
+G4EvaporationLevelDensityParameter::G4EvaporationLevelDensityParameter() 
+{
+  //  SPtr = G4ShellCorrections::GetInstance()->GetCameronTruranHilfShellCorrections();
+}
+
+G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter() 
+{}
 
 G4double 
 G4EvaporationLevelDensityParameter::LevelDensityParameter(G4int A, G4int, G4double) const 
@@ -75,4 +90,4 @@ G4EvaporationLevelDensityParameter::LevelDensityParameter(G4int A, G4int, G4doub
 //    G4double a = AsymptoticLDP*(1. + ShellCorrection(Z,N)*f/U);
 //    return a;
 }
-
+*/

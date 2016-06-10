@@ -30,7 +30,7 @@
 
 #include "G4VPHitIO.hh"
 
-G4VPHitIO* G4VPHitIO::f_G4VPHitIO = 0;
+G4ThreadLocal G4VPHitIO* G4VPHitIO::f_G4VPHitIO = 0;
 
 // Implementation of Constructor #1
 G4VPHitIO::G4VPHitIO()

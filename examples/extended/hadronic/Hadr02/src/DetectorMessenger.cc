@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -52,6 +52,8 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "HistoManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

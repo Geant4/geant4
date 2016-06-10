@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RTSteppingAction.cc 74050 2013-09-20 09:38:19Z gcosmo $
 //
 //
 //
@@ -40,10 +40,10 @@
 #include "G4StepStatus.hh"
 #include "G4TransportationManager.hh"
 
+G4bool G4RTSteppingAction::ignoreTransparency = false;
+
 G4RTSteppingAction::G4RTSteppingAction()
-{
-  ignoreTransparency=false;
-}
+{}
 
 void G4RTSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
@@ -79,3 +79,7 @@ void G4RTSteppingAction::UserSteppingAction(const G4Step* aStep)
   }
 }
 
+void G4RTSteppingAction::SetIgnoreTransparency(G4bool val)
+{ ignoreTransparency = val; }
+G4bool G4RTSteppingAction::GetIgnoreTransparency()
+{ return ignoreTransparency; }

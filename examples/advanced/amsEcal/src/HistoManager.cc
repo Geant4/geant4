@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: HistoManager.cc 73008 2013-08-15 08:43:13Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:factoryOn(false),af(0),tree(0)
+#ifdef G4ANALYSIS_USE
+: factoryOn(false),af(0),tree(0)
+#endif
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory

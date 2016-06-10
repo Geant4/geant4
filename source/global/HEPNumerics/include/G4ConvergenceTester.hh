@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ConvergenceTester.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // Class description:
 //
@@ -59,7 +59,7 @@ class G4ConvergenceTester
 {
    public:
 
-      G4ConvergenceTester();
+      G4ConvergenceTester( G4String theName="NONAME" );
      ~G4ConvergenceTester();
       G4ConvergenceTester( G4double );
 
@@ -67,8 +67,9 @@ class G4ConvergenceTester
 
       void AddScore( G4double );
 
-      void ShowHistory();
-      void ShowResult();
+      // default to G4cout but can redirected to another ostream
+      void ShowHistory(std::ostream& out = G4cout);
+      void ShowResult(std::ostream& out = G4cout);
 
       inline G4double GetValueOfMinimizingFunction( std::vector<G4double> x )
              { return slope_fitting_function( x ); }
@@ -76,21 +77,32 @@ class G4ConvergenceTester
    private:
 
       void calStat();
+      // boolean value of “statsAreUpdated” is set to TRUE at end of calStat
+      // and set to FALSE at end of AddScore
+      // NOTE : A thread lock for Geant4-MT needs to be put in AddScore so calStat is not
+      // executed in one thread while AddScore is modifying/adding data
+      void CheckIsUpdated() { if(!statsAreUpdated) { calStat(); } }
+      
+   public:
+      // Public function to explicitly calculate statistics
+      void ComputeStatistics() { calStat(); }
+   
+      // All “Get” functions check to make sure value is current before returning
+      G4double GetMean() { CheckIsUpdated(); return mean; }
+      G4double GetStandardDeviation() { CheckIsUpdated(); return sd; }
+      G4double GetVariance() { CheckIsUpdated(); return var; }
+      G4double GetR() { CheckIsUpdated(); return r; }
+      G4double GetEfficiency() { CheckIsUpdated(); return efficiency; }
+      G4double GetR2eff() { CheckIsUpdated(); return r2eff; }
+      G4double GetR2int() { CheckIsUpdated(); return r2int; }
+      G4double GetShift() { CheckIsUpdated(); return shift; }
+      G4double GetVOV() { CheckIsUpdated(); return vov; }
+      G4double GetFOM() { CheckIsUpdated(); return fom; }
 
-      G4double GetMean() { return mean; }
-      G4double GetStandardDeviation() { return sd; }
-      G4double GetVariance() { return var; }
-      G4double GetR() { return r; }
-      G4double GetEfficiency() { return efficiency; }
-      G4double GetR2eff() { return r2eff; }
-      G4double GetR2int() { return r2int; }
-      G4double GetShift() { return shift; }
-      G4double GetVOV() { return vov; }
-      G4double GetFOM() { return fom; }
-
+   private:
       void calc_grid_point_of_history();
       void calc_stat_history();
-      void check_stat_history();
+      void check_stat_history(std::ostream& out = G4cout);
       G4double calc_Pearson_r( G4int, std::vector<G4double>,
                                std::vector<G4double> );
       G4bool is_monotonically_decrease( std::vector<G4double> ); 
@@ -99,6 +111,7 @@ class G4ConvergenceTester
 
    private:
 
+      G4String name;
       std::map< G4int , G4double > nonzero_histories;
         // (ith-history , score value)
       G4int n;
@@ -153,6 +166,7 @@ class G4ConvergenceTester
       G4int noPass;
       G4int noTotal; // Total number of tests
 
+      G4bool statsAreUpdated;
 };
 #endif
 

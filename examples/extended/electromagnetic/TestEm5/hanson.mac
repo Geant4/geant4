@@ -1,4 +1,4 @@
-# $Id: hanson.mac,v 1.5 2009-06-19 12:42:04 vnivanch Exp $
+# $Id: hanson.mac 76464 2013-11-11 10:22:56Z gcosmo $
 #
 # macro file for TestEm5.cc    
 #
@@ -28,8 +28,8 @@
 /gun/energy 15.7 MeV
 #
 /analysis/setFileName hanson/19um.local
-/anlysis/h1/set 12  120 0 30 deg		#space angle    
+/analysis/h1/set 12  120 0 30 deg		#space angle    
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 # 
 /run/beamOn 1000000

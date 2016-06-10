@@ -4,12 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+PhysicsList::SetCuts:CutLength : 1 um 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -20,12 +21,10 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
-  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
-  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLImmediateXm (OGLI, OGLIXm)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -57,15 +56,14 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-PhysicsList::SetCuts:CutLength : 1 um 
 ### Added msc model order= -15 for e- and msc
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
       ===== EM models for the G4Region  Target ======
-          UrbanMsc93 :  Emin=        1 MeV   Emax=       10 TeV  Table with 49 bins Emin=      1 MeV   Emax=     10 TeV
+            UrbanMsc :  Emin=        1 MeV   Emax=       10 TeV  Table with 49 bins Emin=      1 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -74,7 +72,7 @@ eIoni:   for  e-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
       ===== EM models for the G4Region  Target ======
-        MollerBhabha :  Emin=      990 keV   Emax=       10 TeV
+        MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV
 
 e-_G4DNAElastic:   for  e-    SubType= 51
  Total cross sections computed from DummyModel model
@@ -114,7 +112,7 @@ DNASancheExcitationModel :  Emin=        0 eV    Emax=      100 eV
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -153,7 +151,7 @@ DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      100 MeV
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -167,7 +165,7 @@ ionIoni:   for  GenericIon    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -201,14 +199,14 @@ DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -217,17 +215,14 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
+##### Create analysis manager   0x2513450
+Using Root analysis manager
 ... open Root analysis file : microdosimetry.root - done
-
-----> Histogram file is opened in microdosimetry.root
 ... write Root file : microdosimetry.root - done
-... close Root file : microdosimetry.root - done
-
-----> Histograms are saved in microdosimetry.root
 Number and type of particles created outside region "Target" :
-N e- : 2690
+N e- : 5153
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 22823
+N e- : 48166
 Graphics systems deleted.
 Visualization Manager deleting...

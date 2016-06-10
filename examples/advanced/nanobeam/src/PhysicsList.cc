@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
@@ -35,10 +34,10 @@
 PhysicsList::PhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 1*micrometer;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
-  cutForProton    = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
+  fCutForProton    = defaultCutValue;
   
   SetVerboseLevel(1);
 }
@@ -89,6 +88,7 @@ void PhysicsList::ConstructBarions()
   //  barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
+  G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -215,14 +215,14 @@ void PhysicsList::SetCuts()
   
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
   
   // set cut values for proton and anti_proton before all other hadrons
   // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
+  SetCutValue(fCutForProton, "proton");
+  SetCutValue(fCutForProton, "anti_proton");
   
   //SetCutValueForOthers(defaultCutValue);
   
@@ -284,7 +284,7 @@ void PhysicsList::SetGELowLimit(G4double lowcut)
 void PhysicsList::SetGammaCut(G4double val)
 {
   ResetCuts();
-  cutForGamma = val;
+  fCutForGamma = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -292,7 +292,7 @@ void PhysicsList::SetGammaCut(G4double val)
 void PhysicsList::SetElectronCut(G4double val)
 {
   //  ResetCuts();
-  cutForElectron = val;
+  fCutForElectron = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -300,7 +300,7 @@ void PhysicsList::SetElectronCut(G4double val)
 void PhysicsList::SetPositronCut(G4double val)
 {
   //  ResetCuts();
-  cutForPositron = val;
+  fCutForPositron = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -308,7 +308,7 @@ void PhysicsList::SetPositronCut(G4double val)
 void PhysicsList::SetProtonCut(G4double val)
 {
   //ResetCuts();
-  cutForProton = val;
+  fCutForProton = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

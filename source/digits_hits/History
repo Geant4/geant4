@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2010-11-10 16:38:39 gcosmo Exp $
+$Id: History 78057 2013-12-03 08:31:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,49 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 2, 2013, M.Asai (digits_hits-V09-06-13)
+- Remove uninitialized and unused datamember from G4ScoringMessenger.
+
+Nov 29, 2013, M.Asai (digits_hits-V09-06-12)
+- Remove self-deletion in G4ScoringManager::~G4Scoringmanager().
+
+Nov 7, 2013, G.Cosmo (digits_hits-V09-06-11)
+- Replaced deprecated calls to G4Sphere accessor methods in scorer classes.
+
+Oct 14, 2013, M. Asai (digits_hits-V09-06-10)
+- Fix the logic in G4SDStructure for issuing G4Exception for the same detector name.
+
+Sep 20, 2013, M. Asai (digits_hits-V09-06-09)
+- Fix G4SDStructure::RemoveSD() method.
+
+Sep 19, 2013, M. Asai (digits_hits-V09-06-08)
+- G4VReadOutGeometry now issues a G4Exception warning message if it is used.
+
+Sep 14, 2013, M. Asai (digits_hits-V09-06-07)
+- The pointer is now overwritten if a detector of same name is registered to G4SDManager.
+
+Sep 11, 2013, M. Asai (digits_hits-V09-06-06)
+- Remove unnecessary G4Exception.
+
+Mar 29, 2013, T. Aso  (digits_hits-V09-06-05)
+- Adding missing options in command-based scorers in G4ScoreQuantityMessenger and
+  G4ScoreQuantityMessengerQCmd.
+
+Mar 22, 2013, M. Asai (digits_hits-V09-06-04)
+- Adding Merge() for scoring meshes to be used in multi-threaded mode to reduce the score after the run.
+
+Mar 12, 2013, M. Asai (digits_hits-V09-06-03)
+- Changing method names in G4VScoringMesh and its derived classes.
+
+Mar 12, 2013, M. Asai (digits_hits-V09-06-02)
+- Adding Merge() methods to G4ScoringManager and G4VScoringMesh (needed for multi-threaded)
+
+Mar 4, 2013, A. Dotti (digits_hits-V09-06-01)
+- Fixing unused variables warnings
+
+Feb 26, 2013, A.Dotti (digits_hits-V09-06-00)
+- Adding of protoype cloning mechansim for SD (needed for multi-threaded) 
 
 Jun 14, 2012, G.Cosmo (digits_hits-V09-05-05)
 - Explicitly use inclusion of headers for system of units and physical

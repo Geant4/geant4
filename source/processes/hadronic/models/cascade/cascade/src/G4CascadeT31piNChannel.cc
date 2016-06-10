@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeT31piNChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -688,13 +688,13 @@ namespace {
 
 // Initialize both |T Tz> = |3/2 1/2> channels, using pipP cross-section table
 
-G4CascadePiMinusPChannelData::data_t
+const G4CascadePiMinusPChannelData::data_t
 G4CascadePiMinusPChannelData::data(pimP2bfs, pimP3bfs, pimP4bfs,
 				   pimP5bfs, pimP6bfs, pimP7bfs,
 				   pimP8bfs, pimP9bfs, pimPCrossSections,
 				   pimPtotXSec, pim*pro, "PiMinusP");
 
-G4CascadePiPlusNChannelData::data_t
+const G4CascadePiPlusNChannelData::data_t
 G4CascadePiPlusNChannelData::data(pipN2bfs, pipN3bfs, pipN4bfs,
 				  pipN5bfs, pipN6bfs, pipN7bfs,
 				  pipN8bfs, pipN9bfs, pimPCrossSections,

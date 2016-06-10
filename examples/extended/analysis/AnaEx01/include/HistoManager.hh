@@ -27,7 +27,7 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// $Id$
+// $Id: HistoManager.hh 74272 2013-10-02 14:48:50Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -68,8 +68,8 @@ class HistoManager
 
   private:
 
-    G4String      fileName[2];
-    G4bool        factoryOn;    
+    G4String      fFileName[2];
+    G4bool        fFactoryOn;    
 
     G4int         fHistId[MaxHisto];
     G4AnaH1*      fHistPt[MaxHisto];

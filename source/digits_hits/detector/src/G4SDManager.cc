@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SDManager.cc 73819 2013-09-12 15:52:52Z gcosmo $
 //
 
 #include "G4SDManager.hh"
@@ -35,7 +35,7 @@
 #include "G4ios.hh"
 
 
-G4SDManager* G4SDManager::fSDManager = 0;
+G4ThreadLocal G4SDManager* G4SDManager::fSDManager = 0;
 
 G4SDManager* G4SDManager::GetSDMpointer()
 {
@@ -91,10 +91,8 @@ void G4SDManager::AddNewCollection(G4String SDname,G4String DCname)
   if(verboseLevel>0)
   {
     if(i<0) {
-     G4ExceptionDescription ED;
-     ED << "G4SDManager::AddNewCollection : the collection <"
-      << SDname << "/" << DCname << "> has already been reginstered." << G4endl;
-     G4Exception("G4SDManager::AddNewCollection","Det0001",JustWarning,ED);
+       if(verboseLevel>1) G4cout << "G4SDManager::AddNewCollection : the collection <"
+        << SDname << "/" << DCname << "> has already been reginstered." << G4endl;
     }
     else
     {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B2aDetectorMessenger.cc 69706 2013-05-13 09:12:40Z gcosmo $
 // 
 /// \file B2aDetectorMessenger.cc
 /// \brief Implementation of the B2aDetectorMessenger class
@@ -57,13 +57,6 @@ B2aDetectorMessenger::B2aDetectorMessenger(B2aDetectorConstruction* Det)
   fChamMatCmd->SetParameterName("choice",false);
   fChamMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fSetFieldCmd = new G4UIcmdWithADoubleAndUnit("/B2/det/setField",this);
-  fSetFieldCmd->SetGuidance("Define magnetic field.");
-  fSetFieldCmd->SetGuidance("Magnetic field will be in X direction.");
-  fSetFieldCmd->SetParameterName("Bx",false);
-  fSetFieldCmd->SetUnitCategory("Magnetic flux density");
-  fSetFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/B2/det/stepMax",this);
   fStepMaxCmd->SetGuidance("Define a step max");
   fStepMaxCmd->SetParameterName("stepMax",false);
@@ -77,7 +70,6 @@ B2aDetectorMessenger::~B2aDetectorMessenger()
 {
   delete fTargMatCmd;
   delete fChamMatCmd;
-  delete fSetFieldCmd;
   delete fStepMaxCmd;
   delete fB2Directory;
   delete fDetDirectory;
@@ -92,11 +84,6 @@ void B2aDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fChamMatCmd )
    { fDetectorConstruction->SetChamberMaterial(newValue);}
-
-  if( command == fSetFieldCmd ) {
-    fDetectorConstruction
-      ->SetMagField(fSetFieldCmd->GetNewDoubleValue(newValue));
-  }
 
   if( command == fStepMaxCmd ) {
     fDetectorConstruction

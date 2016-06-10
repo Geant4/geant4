@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -60,10 +58,14 @@ namespace G4INCL {
 
   const G4double InteractionAvatar::locEAccuracy = 1.E-4;
   const G4int InteractionAvatar::maxIterLocE = 50;
+  G4ThreadLocal Particle *InteractionAvatar::backupParticle1 = NULL;
+  G4ThreadLocal Particle *InteractionAvatar::backupParticle2 = NULL;
 
   InteractionAvatar::InteractionAvatar(G4double time, G4INCL::Nucleus *n, G4INCL::Particle *p1)
     : IAvatar(time), theNucleus(n),
-    particle1(p1), particle2(NULL), isPiN(false)
+    particle1(p1), particle2(NULL),
+    isPiN(false),
+    violationEFunctor(NULL)
   {
   }
 
@@ -71,35 +73,39 @@ namespace G4INCL {
       G4INCL::Particle *p2)
     : IAvatar(time), theNucleus(n),
     particle1(p1), particle2(p2),
-    isPiN((p1->isPion() && p2->isNucleon()) || (p2->isPion() && p1->isNucleon()))
+    isPiN((p1->isPion() && p2->isNucleon()) || (p2->isPion() && p1->isNucleon())),
+    violationEFunctor(NULL)
   {
   }
 
   InteractionAvatar::~InteractionAvatar() {
   }
 
+  void InteractionAvatar::deleteBackupParticles() {
+    delete backupParticle1;
+    if(backupParticle2)
+      delete backupParticle2;
+    backupParticle1 = NULL;
+    backupParticle2 = NULL;
+  }
+
   void InteractionAvatar::preInteractionBlocking() {
-    oldParticle1Type = particle1->getType();
-    oldParticle1Energy = particle1->getEnergy();
-    oldParticle1Potential = particle1->getPotentialEnergy();
-    oldParticle1Momentum = particle1->getMomentum();
-    oldParticle1Position = particle1->getPosition();
-    oldParticle1Mass = particle1->getMass();
-    oldParticle1Helicity = particle1->getHelicity();
+    if(backupParticle1)
+      (*backupParticle1) = (*particle1);
+    else
+      backupParticle1 = new Particle(*particle1);
 
     if(particle2) {
-      oldParticle2Type = particle2->getType();
-      oldParticle2Energy = particle2->getEnergy();
-      oldParticle2Potential = particle2->getPotentialEnergy();
-      oldParticle2Momentum = particle2->getMomentum();
-      oldParticle2Position = particle2->getPosition();
-      oldParticle2Mass = particle2->getMass();
-      oldParticle2Helicity = particle2->getHelicity();
-      oldTotalEnergy = oldParticle1Energy + oldParticle2Energy
+      if(backupParticle2)
+        (*backupParticle2) = (*particle2);
+      else
+        backupParticle2 = new Particle(*particle2);
+
+      oldTotalEnergy = particle1->getEnergy() + particle2->getEnergy()
         - particle1->getPotentialEnergy() - particle2->getPotentialEnergy();
       oldXSec = CrossSections::total(particle1, particle2);
     } else {
-      oldTotalEnergy = oldParticle1Energy - particle1->getPotentialEnergy();
+      oldTotalEnergy = particle1->getEnergy() - particle1->getPotentialEnergy();
     }
   }
 
@@ -129,7 +135,11 @@ namespace G4INCL {
   }
 
   G4bool InteractionAvatar::bringParticleInside(Particle * const p) {
+    if(!theNucleus)
+      return false;
+
     ThreeVector pos = p->getPosition();
+    p->rpCorrelate();
     G4double pos2 = pos.mag2();
     const G4double r = theNucleus->getSurfaceRadius(p);
     short iterations=0;
@@ -145,7 +155,7 @@ namespace G4INCL {
     }
     if( iterations < maxIterations)
     {
-      DEBUG("Particle position vector length was : " << p->getPosition().mag() << ", rescaled to: " << pos.mag() << std::endl);
+      INCL_DEBUG("Particle position vector length was : " << p->getPosition().mag() << ", rescaled to: " << pos.mag() << std::endl);
       p->setPosition(pos);
       return true;
     }
@@ -154,6 +164,7 @@ namespace G4INCL {
   }
 
   FinalState *InteractionAvatar::postInteraction(FinalState *fs) {
+    INCL_DEBUG("postInteraction: final state: " << std::endl << fs->print() << std::endl);
     ParticleList modified = fs->getModifiedParticles();
     ParticleList modifiedAndCreated = modified;
     ParticleList created = fs->getCreatedParticles();
@@ -161,7 +172,7 @@ namespace G4INCL {
 
     if(!isPiN) {
       // Boost back to lab
-      for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i )
+      for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i )
         (*i)->boost(-boostVector);
     }
 
@@ -170,12 +181,12 @@ namespace G4INCL {
 
     // Mark pions that have been created outside their well (we will force them
     // to be emitted later).
-    for( ParticleIter i = created.begin(); i != created.end(); ++i )
+    for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
       if((*i)->isPion() && (*i)->getPosition().mag() > theNucleus->getSurfaceRadius(*i)) {
         (*i)->makeParticipant();
         (*i)->setOutOfWell();
         fs->addOutgoingParticle(*i);
-        DEBUG("Pion was created outside its potential well." << std::endl
+        INCL_DEBUG("Pion was created outside its potential well." << std::endl
             << (*i)->print());
       }
 
@@ -185,13 +196,13 @@ namespace G4INCL {
     if(!isPiN || shouldUseLocalEnergy())
       success = enforceEnergyConservation(fs);
     if(!success) {
-      DEBUG("Enforcing energy conservation: failed!" << std::endl);
+      INCL_DEBUG("Enforcing energy conservation: failed!" << std::endl);
 
       // Restore the state of the initial particles
       restoreParticles();
 
       // Delete newly created particles
-      for( ParticleIter i = created.begin(); i != created.end(); ++i )
+      for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
       FinalState *fsBlocked = new FinalState;
@@ -201,20 +212,22 @@ namespace G4INCL {
 
       return fsBlocked; // Interaction is blocked. Return an empty final state.
     }
-    DEBUG("Enforcing energy conservation: success!" << std::endl);
+    INCL_DEBUG("Enforcing energy conservation: success!" << std::endl);
+
+    INCL_DEBUG("postInteraction after energy conservation: final state: " << std::endl << fs->print() << std::endl);
 
     // Check that outgoing delta resonances can decay to pi-N
-    for( ParticleIter i = modified.begin(); i != modified.end(); ++i )
+    for(ParticleIter i=modified.begin(), e=modified.end(); i!=e; ++i )
       if((*i)->isDelta() &&
           (*i)->getMass() < ParticleTable::effectiveDeltaDecayThreshold) {
-        DEBUG("Mass of the produced delta below decay threshold; forbidding collision. deltaMass=" <<
+        INCL_DEBUG("Mass of the produced delta below decay threshold; forbidding collision. deltaMass=" <<
             (*i)->getMass() << std::endl);
 
         // Restore the state of the initial particles
         restoreParticles();
 
         // Delete newly created particles
-        for( ParticleIter j = created.begin(); j != created.end(); ++j )
+        for(ParticleIter j=created.begin(), end=created.end(); j!=end; ++j )
           delete *j;
 
         FinalState *fsBlocked = new FinalState;
@@ -225,17 +238,18 @@ namespace G4INCL {
         return fsBlocked; // Interaction is blocked. Return an empty final state.
       }
 
+    INCL_DEBUG("Random seeds before Pauli blocking: " << Random::getSeeds() << std::endl);
     // Test Pauli blocking
     G4bool isBlocked = Pauli::isBlocked(modifiedAndCreated, theNucleus);
 
     if(isBlocked) {
-      DEBUG("Pauli: Blocked!" << std::endl);
+      INCL_DEBUG("Pauli: Blocked!" << std::endl);
 
       // Restore the state of the initial particles
       restoreParticles();
 
       // Delete newly created particles
-      for( ParticleIter i = created.begin(); i != created.end(); ++i )
+      for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
       FinalState *fsBlocked = new FinalState;
@@ -245,19 +259,19 @@ namespace G4INCL {
 
       return fsBlocked; // Interaction is blocked. Return an empty final state.
     }
-    DEBUG("Pauli: Allowed!" << std::endl);
+    INCL_DEBUG("Pauli: Allowed!" << std::endl);
 
     // Test CDPP blocking
     G4bool isCDPPBlocked = Pauli::isCDPPBlocked(created, theNucleus);
 
     if(isCDPPBlocked) {
-      DEBUG("CDPP: Blocked!" << std::endl);
+      INCL_DEBUG("CDPP: Blocked!" << std::endl);
 
       // Restore the state of the initial particles
       restoreParticles();
 
       // Delete newly created particles
-      for( ParticleIter i = created.begin(); i != created.end(); ++i )
+      for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
       FinalState *fsBlocked = new FinalState;
@@ -267,22 +281,22 @@ namespace G4INCL {
 
       return fsBlocked; // Interaction is blocked. Return an empty final state.
     }
-    DEBUG("CDPP: Allowed!" << std::endl);
+    INCL_DEBUG("CDPP: Allowed!" << std::endl);
 
     // If all went well, try to bring particles inside the nucleus...
-    for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i )
+    for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i )
     {
       // ...except for pions beyond their surface radius.
       if((*i)->isOutOfWell()) continue;
 
       const G4bool successBringParticlesInside = bringParticleInside(*i);
       if( !successBringParticlesInside ) {
-        ERROR("Failed to bring particle inside the nucleus!" << std::endl);
+        INCL_ERROR("Failed to bring particle inside the nucleus!" << std::endl);
       }
     }
 
     // Collision accepted!
-    for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i ) {
+    for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i ) {
       if(!(*i)->isOutOfWell()) {
         // Decide if the particle should be made into a spectator
         // (Back to spectator)
@@ -300,46 +314,32 @@ namespace G4INCL {
 
         // Increment or decrement the participant counters
         if(goesBackToSpectator) {
-          DEBUG("The following particle goes back to spectator:" << std::endl
+          INCL_DEBUG("The following particle goes back to spectator:" << std::endl
               << (*i)->print() << std::endl);
           if(!(*i)->isTargetSpectator()) {
-            theNucleus->getStore()->getBook()->decrementCascading();
+            theNucleus->getStore()->getBook().decrementCascading();
           }
           (*i)->makeTargetSpectator();
         } else {
           if((*i)->isTargetSpectator()) {
-            theNucleus->getStore()->getBook()->incrementCascading();
+            theNucleus->getStore()->getBook().incrementCascading();
           }
           (*i)->makeParticipant();
         }
       }
     }
     ParticleList destroyed = fs->getDestroyedParticles();
-    for( ParticleIter i = destroyed.begin(); i != destroyed.end(); ++i )
+    for(ParticleIter i=destroyed.begin(), e=destroyed.end(); i!=e; ++i )
       if(!(*i)->isTargetSpectator())
-        theNucleus->getStore()->getBook()->decrementCascading();
+        theNucleus->getStore()->getBook().decrementCascading();
 
     return fs;
   }
 
   void InteractionAvatar::restoreParticles() const {
-    particle1->setType(oldParticle1Type);
-    particle1->setEnergy(oldParticle1Energy);
-    particle1->setPotentialEnergy(oldParticle1Potential);
-    particle1->setMomentum(oldParticle1Momentum);
-    particle1->setPosition(oldParticle1Position);
-    particle1->setMass(oldParticle1Mass);
-    particle1->setHelicity(oldParticle1Helicity);
-
-    if(particle2) {
-      particle2->setType(oldParticle2Type);
-      particle2->setEnergy(oldParticle2Energy);
-      particle2->setPotentialEnergy(oldParticle2Potential);
-      particle2->setMomentum(oldParticle2Momentum);
-      particle2->setPosition(oldParticle2Position);
-      particle2->setMass(oldParticle2Mass);
-      particle2->setHelicity(oldParticle2Helicity);
-    }
+    (*particle1) = (*backupParticle1);
+    if(particle2)
+      (*particle2) = (*backupParticle2);
   }
 
   G4bool InteractionAvatar::enforceEnergyConservation(FinalState * const fs) {
@@ -354,19 +354,20 @@ namespace G4INCL {
       // correctly. A similar condition exists in INCL4.6.
       if(p->getMass() < ParticleTable::effectiveDeltaDecayThreshold)
         return false;
-      violationEFunctor = new ViolationEEnergyFunctor(theNucleus, fs);
+      violationEFunctor = new ViolationEEnergyFunctor(theNucleus, fs, shouldUseLocalEnergy());
     }
 
     // Apply the root-finding algorithm
-    const G4bool success = RootFinder::solve(violationEFunctor, 1.0);
-    if(success) { // Apply the solution
-      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
-      (*violationEFunctor)(theSolution.first);
-    } else {
-      WARN("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
+    const RootFinder::Solution theSolution = RootFinder::solve(violationEFunctor, 1.0);
+    if(theSolution.success) { // Apply the solution
+      (*violationEFunctor)(theSolution.x);
+    } else if(theNucleus){
+      INCL_DEBUG("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
+      theNucleus->getStore()->getBook().incrementEnergyViolationInteraction();
     }
     delete violationEFunctor;
-    return success;
+    violationEFunctor = NULL;
+    return theSolution.success;
   }
 
   /* ***                                                      ***
@@ -382,13 +383,13 @@ namespace G4INCL {
   {
     // Set up the finalParticles list
     finalParticles = finalState->getModifiedParticles();
-    ParticleList created = finalState->getCreatedParticles();
-    finalParticles.splice(finalParticles.end(), created);
+    ParticleList const &created = finalState->getCreatedParticles();
+    finalParticles.insert(finalParticles.end(), created.begin(), created.end());
 
     // Store the particle momenta (necessary for the calls to
     // scaleParticleMomenta() to work)
     particleMomenta.clear();
-    for(ParticleIter i=finalParticles.begin(); i!=finalParticles.end(); ++i) {
+    for(ParticleIter i=finalParticles.begin(), e=finalParticles.end(); i!=e; ++i) {
       (*i)->boost(*boostVector);
       particleMomenta.push_back((*i)->getMomentum());
     }
@@ -398,7 +399,7 @@ namespace G4INCL {
     scaleParticleMomenta(alpha);
 
     G4double deltaE = 0.0;
-    for(ParticleIter i=finalParticles.begin(); i!=finalParticles.end(); ++i)
+    for(ParticleIter i=finalParticles.begin(), e=finalParticles.end(); i!=e; ++i)
       deltaE += (*i)->getEnergy() - (*i)->getPotentialEnergy();
     deltaE -= initialEnergy;
     return deltaE;
@@ -407,9 +408,10 @@ namespace G4INCL {
   void InteractionAvatar::ViolationEMomentumFunctor::scaleParticleMomenta(const G4double alpha) const {
 
     std::list<ThreeVector>::const_iterator iP = particleMomenta.begin();
-    for(ParticleIter i=finalParticles.begin(); i!=finalParticles.end(); ++i, ++iP) {
+    for(ParticleIter i=finalParticles.begin(), e=finalParticles.end(); i!=e; ++i, ++iP) {
       (*i)->setMomentum((*iP)*alpha);
       (*i)->adjustEnergyFromMomentum();
+      (*i)->rpCorrelate();
       (*i)->boost(-(*boostVector));
       if(theNucleus)
         theNucleus->updatePotentialEnergy(*i);
@@ -445,16 +447,16 @@ namespace G4INCL {
    * *** InteractionAvatar::ViolationEEnergyFunctor methods ***
    * ***                                                    ***/
 
-  InteractionAvatar::ViolationEEnergyFunctor::ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState) :
+  InteractionAvatar::ViolationEEnergyFunctor::ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState, const G4bool localE) :
     RootFunctor(0., 1E6),
     initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
     theNucleus(nucleus),
     theParticle(finalState->getModifiedParticles().front()),
     theEnergy(theParticle->getEnergy()),
     theMomentum(theParticle->getMomentum()),
-    energyThreshold(KinematicsUtils::energy(theMomentum,ParticleTable::effectiveDeltaDecayThreshold))
+    energyThreshold(KinematicsUtils::energy(theMomentum,ParticleTable::effectiveDeltaDecayThreshold)),
+    shouldUseLocalEnergy(localE)
   {
-// assert(theNucleus);
 // assert(finalState->getModifiedParticles().size()==1);
 // assert(theParticle->isDelta());
   }
@@ -466,7 +468,12 @@ namespace G4INCL {
 
   void InteractionAvatar::ViolationEEnergyFunctor::setParticleEnergy(const G4double alpha) const {
 
-    G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // Initial value of local energy
+    G4double locE;
+    if(shouldUseLocalEnergy) {
+// assert(theNucleus); // Local energy without a nucleus doesn't make sense
+      locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // Initial value of local energy
+    } else
+      locE = 0.;
     G4double locEOld;
     G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
     for(G4int iterLocE=0;
@@ -478,8 +485,14 @@ namespace G4INCL {
       theParticle->setMass(theMass);
       theParticle->setEnergy(particleEnergy + locE); // Update the energy of the particle...
       theParticle->adjustMomentumFromEnergy();
-      theNucleus->updatePotentialEnergy(theParticle); // ...update its potential energy...
-      locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // ...and recompute locE.
+      if(theNucleus) {
+        theNucleus->updatePotentialEnergy(theParticle); // ...update its potential energy...
+        if(shouldUseLocalEnergy)
+          locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // ...and recompute locE.
+        else
+          locE = 0.;
+      } else
+        locE = 0.;
       deltaLocE = std::abs(locE-locEOld);
     }
 

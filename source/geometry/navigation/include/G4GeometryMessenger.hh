@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GeometryMessenger.hh 73253 2013-08-22 13:24:02Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -47,15 +47,11 @@
 
 class G4UIdirectory;
 class G4UIcommand;
-class G4UIcmdWith3VectorAndUnit;
-class G4UIcmdWith3Vector;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
-class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4TransportationManager;
-class G4GeomTestStreamLogger;
 class G4GeomTestVolume;
 
 class G4GeometryMessenger : public G4UImessenger
@@ -77,31 +73,18 @@ class G4GeometryMessenger : public G4UImessenger
     void SetVerbosity(G4String newValue);
     void SetCheckMode(G4String newValue);
     void SetPushFlag(G4String newValue);
-    void LineTest();
-    void RecursiveLineTest();
-    void GridTest();
-    void RecursiveGridTest();
-    void CylinderTest();
-    void RecursiveCylinderTest();
+    void RecursiveOverlapTest();
 
     G4UIdirectory             *geodir, *navdir, *testdir;
-    G4UIcmdWith3VectorAndUnit *posCmd, *dirCmd;
-    G4UIcmdWith3Vector        *grzCmd, *cyzCmd;
-    G4UIcmdWithABool          *chkCmd, *pchkCmd, *linCmd,
-                              *grdCmd, *cylCmd, *runCmd;
+    G4UIcmdWithABool          *chkCmd, *pchkCmd, *verCmd;
     G4UIcmdWithoutParameter   *recCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
-    G4UIcmdWithAnInteger      *verbCmd, *rcsCmd, *rcdCmd;
-    G4UIcmdWithADouble        *cfzCmd, *cfrCmd;
+    G4UIcmdWithAnInteger      *verbCmd, *rslCmd, *rcsCmd, *rcdCmd, *errCmd;
 
-    G4ThreeVector x, p, grdRes, cylRes;
-    G4double      cylfZ, cylfR;
-    G4bool        newtol;
     G4double      tol;
     G4int         recLevel, recDepth;
 
     G4TransportationManager* tmanager;
-    G4GeomTestStreamLogger* tlogger;
     G4GeomTestVolume* tvolume;
 };
 

@@ -51,8 +51,8 @@
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
   : myA(0), myZ(0), theNucleons(250), currentNucleon(-1), theDensity(0), 
-    nucleondistance(0.8*fermi), places(250), momentum(250), fermiM(250),
-    testSums(250)
+    nucleondistance(0.8*fermi),excitationEnergy(0.),
+    places(250), momentum(250), fermiM(250), testSums(250)
 {
 //G4cout <<"G4Fancy3DNucleus::G4Fancy3DNucleus()"<<G4endl;
 }
@@ -81,6 +81,7 @@ void G4Fancy3DNucleus::Init(G4int theA, G4int theZ)
 
   myZ = theZ;
   myA= theA;
+  excitationEnergy=0;
 
   theNucleons.resize(myA);	// Pre-loads vector with empty elements
   
@@ -211,20 +212,24 @@ void G4Fancy3DNucleus::DoLorentzBoost(const G4ThreeVector & theBeta)
 
 void G4Fancy3DNucleus::DoLorentzContraction(const G4ThreeVector & theBeta)
 {
-	G4double factor=(1-std::sqrt(1-theBeta.mag2()))/theBeta.mag2(); // (gamma-1)/gamma/beta**2
-	G4ThreeVector rprime;
-	for (G4int i=0; i< myA; i++) {
-	  rprime = theNucleons[i].GetPosition() - 
-	    factor * (theBeta*theNucleons[i].GetPosition()) * theBeta;  
-	  theNucleons[i].SetPosition(rprime);
+	G4double beta2=theBeta.mag2();
+	if (beta2 > 0) {
+	   G4double factor=(1-std::sqrt(1-beta2))/beta2; // (gamma-1)/gamma/beta**2
+	   G4ThreeVector rprime;
+	   for (G4int i=0; i< myA; i++) {
+	     rprime = theNucleons[i].GetPosition() - 
+	       factor * (theBeta*theNucleons[i].GetPosition()) * theBeta;  
+	     theNucleons[i].SetPosition(rprime);
+	   }
 	}    
 }
 
 void G4Fancy3DNucleus::DoLorentzContraction(const G4LorentzVector & theBoost)
 {
-	G4ThreeVector beta = theBoost.vect()/theBoost.e();
-	// DoLorentzBoost(beta); 
-	DoLorentzContraction(beta);
+	if (theBoost.e() !=0 ) {
+	   G4ThreeVector beta = theBoost.vect()/theBoost.e();
+	   DoLorentzContraction(beta);
+	}
 }
 
 
@@ -283,7 +288,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 	G4int i=0;
 	G4ThreeVector	aPos, delta;
 	G4bool		freeplace;
-	static G4double nd2 = sqr(nucleondistance);
+	static G4ThreadLocal G4double *nd2_G4MT_TLS_ = 0 ; if (!nd2_G4MT_TLS_) {nd2_G4MT_TLS_ = new  G4double  ; *nd2_G4MT_TLS_= sqr(nucleondistance) ; }  G4double &nd2 = *nd2_G4MT_TLS_;
 	G4double maxR=GetNuclearRadius(0.001);   //  there are no nucleons at a
 	                                        //  relative Density of 0.01
 	G4int jr=0;
@@ -300,7 +305,8 @@ void G4Fancy3DNucleus::ChoosePositions()
 		if ( jr < 3 ) 
 		{
 		    jr=std::min(600,9*(myA - i));
-		    CLHEP::RandFlat::shootArray(jr, prand );
+            G4RandFlat::shootArray(jr,prand);
+		    //CLHEP::RandFlat::shootArray(jr, prand );
 		}
 		jx=--jr;
 		jy=--jr;

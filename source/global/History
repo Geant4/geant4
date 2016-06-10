@@ -17,6 +17,376 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20, 2013 A.Dotti      (global-V09-06-82)
+- Patched G4HepRandom to create default engine if G4Random::setTheSeed
+  is called at beginning of job (allowed in SEQ).
+
+November 20, 2013 G.Cosmo      (global-V09-06-81)
+- Patched definition of G4MUTEXINIT() for Windows in G4Threading.hh
+  to allow for compilation.
+
+October 30, 2013 G.Cosmo       (global-V09-06-80)
+- Moved G4Poisson to inline on suggestion by K.Genser.
+- Updated dates and tag-ID for release 10.0.
+
+October 30, 2013 A.Dotti       (global-V09-06-79)
+- Corrected compilation warning for non-used parameter in
+  G4ThreadLocalSingleton class.
+- Fix for WIN32/VC9 compilation errors for G4Cache.
+
+Octover 29, 2013 A.Dotti       (global-V09-06-78)
+- Adding G4ThreadPrivateSingleton class for thread-private singleton
+  handling and G4AutoDelete namespace with utility function for 
+  simplified garbage-collection: management/include/G4AutoDelete.hh
+  management/include/G4ThreadLocalSingleton.hh. Two unit tests have
+  been developed management/test/testAutoDelete.cc and 
+  management/test/testG4TLSSingleton.cc
+- Adding G4MUTEXINIT macro that expands to pthread_mutex_init
+
+October 29, 2013 A.Dotti       (global-V09-06-77)
+- Retagging, wrong commit previous tag
+
+October 28, 2013 A.Dotti       (global-V09-06-76)
+- Bug fixing in G4Cache::Put method signature
+
+October 23, 2013 A.Dotti       (global-V09-06-75)
+- Adding G4Cache classes for a thread-private data members in 
+  shared classes.
+
+October 18, 2013 V.Ivantchenko (global-V09-06-74)
+- G4PhysicsVector - in the FindBinLocation method extra checks
+    are added for Log and Lin vectors to avoid rare cases when bin 
+    is computed incorrectly due to limited numerical precision of 
+    computations (P.Arce report)
+
+October 02, 2013 V.Ivantchenko (global-V09-06-73)
+- G4Pow - fixed typo in previous tag
+
+October 02, 2013 V.Ivantchenko (global-V09-06-72)
+- G4Pow - is now static not G4ThreadLocal, added check that it is 
+    instantiated in the master thread
+- G4PhysicsVector - FindBinLocation is now inlined and not virtual,
+    using table type different algorithms are invoked to compute bin
+    number; use G4Log
+- G4PhysicsLogVector,  G4PhysicsLinearVector, G4PhysicsOrderedFreeVector,
+  G4LPhysicsFreeVector, G4PhysicsFreeVector, G4PhysicsLnVector - removed
+    FindBinLocation methods
+- G4PhysicsLogVector - use G4Log and G4Exp instead of log10
+
+October 1, 2013 T.Koi (global-V09-06-71)
+- Add data member of name to G4ConvergenceTester
+  Tune format of output result
+
+September 26, 2013 M.Asai (global-V09-06-70)
+- Fix a typo of class name in sources.cmake.
+
+September 26, 2013 M.Asai (global-V09-06-69)
+- Introducing G4PhysicsModelCatalog class to be used my physics models
+  and G4Track.
+
+September 16, 2013 V.Ivantchenko (global-V09-06-68)
+- G4Pow: optimized logA() and logX() functions.
+
+September 4, 2013 G.Cosmo (global-V09-06-67)
+- Added inclusion of <stdin.h> in G4Exp and G4Log headers.
+  Make them matching to std::exp and std::log on Windows plaatform.
+- Use G4Log and G4Exp within G4Pow and G4Poisson. Expected slight
+  performance boost; numerical results to be validated.
+
+September 3, 2013 M.Asai (global-V09-06-66)
+- Introducing G4Threading::IsWorkerThread() method. It returns true when
+  it is invoked in a worker thread, while it returns true for masther
+  thread and for sequential mode.
+
+September 3, 2013 G.Cosmo, V.Ivantchenko (global-V09-06-65, global-V09-06-64)
+- Added G4Log and G4Exp headers for fast log and exp; converted from
+  the VDT library (http://svnweb.cern.ch/world/wsvn/vdt).
+
+August 31, 2013 M.Asai (global-V09-06-63)
+- G4Threading::G4GetThreadId() returns -2 instead of 0 for the case 
+  of sequential mode.
+
+August 26, 2013 A.Dotti(global-V09-06-62)
+- Add namespace G4Threading to functions defined in G4Threading.hh
+
+August 26, 2013 A.Dotti(global-V09-06-61)
+- Correct MT defects identified by DRD:
+   i. Protect G4MTcoutDestination
+  ii. Correct check of already-locked condition for G4AutoLock
+ iii. Protect creation of shared resource in G4MTHepRandom
+- Add performance test for RNG engines 
+
+August 15, 2013 M.Asai (global-V09-06-60)
+- G4MTcoutDestination now has a capabilitu of printing out only for 
+  the selected thread to make the display readable.
+
+August 6, 2013 V.Ivantchenko (global-V09-06-59)
+- Fixed compillation
+August 6, 2013 V.Ivantchenko (global-V09-06-58)
+- G4PhysicsLogVector, G4PhysicsLnVector - more accurate check of 
+    bin inside FindBinLocation method to avoid non-reproducibility
+
+July 24, 2013 V.Ivantchenko (global-V09-06-57)
+- G4StatDouble: new method add(G4StatDouble*) to be used in MT mode
+
+July 16, 2013 G.Cosmo (global-V09-06-56)
+- Correction to CMake scripts for granular build.
+- Updated date and tag-ID in G4Version.hh.
+
+July 3, 2013 A.Dotti (global-V09-06-55)
+- Previous tag was broken.
+
+July 3, 2013 A.Dotti (global-V09-06-54)
+- Adding missing implementation of fucntion G4SetThreadId for sequential builds
+
+July 3, 2013 V.Ivantchenko (global-V09-06-53)
+- G4PhysicsVector: added pointer to G4Pow in order to speedup
+    bin location for logarithmic vectors (result are identical)
+- G4PhysicsLogVector - use in FindBinLocation G4Pow::log10A instead
+    of std::log
+- G4PhysicsLnVector - use in FindBinLocation G4Pow::logX instead
+    of std::log
+
+July 1, 2013 V.Ivantchenko (global-V09-06-52)
+- G4PhysicsVector: make FindBin method public, added method
+    FindLinearEnergy for sampling of energy for vectors
+    with cumulative probability function 
+- G4Physics2DVector: make FindBinLocationX and FindBinLocationY  
+    methods public, add method FindLinearX for sampling of energy
+    for 2D cumulative probability functions, added new inlined 
+    method Value with different signature
+
+June 26, 2013 G.Cosmo (global-V09-06-51)
+- Restore default precision in cout in G4AllocatorList.
+
+June 24, 2013 G.Cosmo (global-V09-06-50)
+- Added tag ID specific for MT mode in G4Version.hh.
+
+June 21, 2013 M.Asai (global-V09-06-49)
+- G4AllocatorList::Destroy() takes the verbosity. Also, due to the revised
+  order of deletion of kernel classes, G4cout is available for this method
+  for worker thread as well.
+
+June 21, 2013 G.Cosmo (global-V09-06-48)
+- Refined printout of statistics in G4AllocatorList::Destroy().
+
+June 19, 2013 G.Cosmo (global-V09-06-47)
+- Protected printout of statistics in G4AllocatorList::Destroy() within
+  G4VERBOSE and avoid it in MT-mode.
+
+June 18, 2013 G.Cosmo (global-V09-06-46)
+- Made pure virtual utility methods in G4AllocatorBase, so statistics
+  are accessible from allocator's base class pointer.
+- Corrected logic in G4AllocatorList::Destroy() to effectively delete
+  allocated pools and release memory.
+  Added statistics on pools and amount of memory released.
+
+June 17, 2013 M.Asai (global-V09-06-45)
+- Split destructor and Destroy() method in G4AllocatorList.
+  They should be invoked separately. Destroy() now may take
+  an integer argument that is the number of static G4Allocator
+  objects. Such static G4Allocator objects are not deleted.
+
+June 17, 2013 G.Cosmo
+- Move virtual destructor of G4AllocatorBase to source, to avoid
+  misalignments on deletion on exit through the base-class pointer.
+- Comment out deletion of allocators pointers for testing and reset
+  storage.
+
+June 17, 2013 G.Cosmo (global-V09-06-44)
+- Temporarly avoid resetting storage in G4AllocatorList::Destroy().
+
+June 16, 2013 M.Asai (global-V09-06-43)
+- Introducing G4AllocatorList class which stores pointers of all
+  G4Allocator objects for each thread so that they all are cleanly
+  deleted at the program termination.
+- Adding G4AllocatorBase base class to define virtual destructor
+  and virtual method for G4Allocator.
+
+June 15, 2013 V.Ivantchenko (global-V09-06-42)
+- G4PhysicsVector: added protection to avoid check energy value
+  outside vector when bin location is performed/
+
+June 14, 2013 V.Ivantchenko (global-V09-06-41)
+- G4PhysicsVector: make class read-only in run time, access to
+  value only via const methods; to enable Spline, SetSpline command
+  should be applied after vector is filled, or equivalently
+  direct call to fill second derivatives should be done.
+
+June 14, 2013 G.Cosmo (global-V09-06-40)
+- Removed split mechanism from G4PhysicsVector; removed G4PhysicsVectorCache
+  class; removed G4PVSplitter. Made G4PhysicsVector a read-only class.
+- Removed G4Physics2DVectorCache class, no longer used.
+- Updated tag-id in G4Version.hh to "1000".
+
+June 12, 2013 G.Cosmo (global-V09-06-39)
+- Simplified implementation of new/delete operators for G4PhysicsVector
+  and G4PhysicsVectorCache and avoid deletion of allocator global pointers
+  in respective destructors.
+
+June 7, 2013 G.Cosmo (global-V09-06-38)
+- Added call to clear() in G4PhysicsTable::clearAndDestroy().
+- Added 'safe' inclusion of <windows.h> from G4Threading.hh, in new
+  header windefs.hh.
+- Updated date and tag for 10.0-Beta.
+
+June 5, 2013 G.Folger (global-V09-06-37)
+- In management/G4FPEDetection.hh add first version of stack backtrace 
+   when FPE exception is detected. Linux only.
+    
+May 29, 2013 G.Cosmo (global-V09-06-36)
+- Fix for allowing compilation on Windows in G4Threading: disable definition
+  of min()/max() and 'pascal' from inclusion of <windows.h>.
+
+May 29, 2013 G.Cosmo (global-V09-06-35)
+- Removed unnecessary thread-local specifications in G4GeometryTolerance
+  singleton, as it is initialised and configured only once by master thread
+  before the event loop.
+- Consistently use wrappers and typedefs from G4Threading for pthreads
+  functions and types in G4MTHepRandom, G4PVSplitter and G4PhysicsVector,
+  to allow for porting on Windows.
+
+May 23, 2013 M.Asai (global-V09-06-34)
+- Replaced G4coutIdDestination class to G4MTcoutDestination class for cleaner 
+  handling of thread-local cout/cerr.
+
+May 22, 2013 G.Cosmo (global-V09-06-33)
+- Fix in G4Threading for sequential mode in definition of G4GetNumberOfCores().
+- Some code cleanup.
+
+May 18, 2013 A.Dotti (global-V09-06-32)
+- Fix for sequentual compilation error introduced in latest tag.
+
+May 17, 2013 A.Dotti (global-V09-06-31)
+- Adding new cout streaming for MT: on file and with header 
+  at each line (with optional buffering) 
+- Adding G4GetNumberOfCores and G4GetThreadId global helper functions
+
+May 16, 2013 V.Ivanchenko (global-V09-06-30)
+- G4Physics2DVector - removed cache; changed signature of 
+    several methods; all run time methods become const;
+    the class become read only in run time
+
+May 16, 2013 A.Dotti (global-V09-06-29)
+- Adding explicit creation of worker threads as "joinable"
+
+May 14, 2013 G.Cosmo (global-V09-06-28)
+- Restored thread-local instance pointer in G4Pow...
+
+May 13, 2013 M.Asai (global-V09-06-27)
+- Roll back G4Physics2DVector class to global-V09-06-24 to avoid
+  G4Physics2DVectorCache thread-local.
+- G4Pow: removed G4ThreadLocal declaration.
+  Fixed compilation warning from gcc-4.7 in logA() method.
+
+May 11, 2013 M.Asai (global-V09-06-26)
+- Fixed Windows runtime error of the previous tag.
+
+May 10, 2013 M.Asai (global-V09-06-25)
+- Make G4Physics2DVectorCache used in G4Physics2DVector class thread-local.
+
+May 8, 2013 G.Cosmo (global-V09-06-24)
+- Improved accuracy for log10A() and powA() in G4Pow (V.Ivantchenko).
+- Get rid of thread-local specifications for constant variables and data
+  in HEPNumerics module.
+
+May 7, 2013 V.Ivanchenko (global-V09-06-23)
+- G4Pow: added new methods logX() and expA(); improved accuracy of
+  logA() and A13(): now all these methods provide accuracy better than 0.1%
+  for any value of argument.
+- Added post-const qualifier to all methods in G4Pow (G.Cosmo).
+
+May 2, 2013 V.Ivanchenko (global-V09-06-22)
+- Fixed typo introduced in G4Pow in tag "06-20".
+
+May 2, 2013 G.Cosmo (global-V09-06-21)
+- Updated tags in G4Version.
+
+April 30, 2013 V.Ivanchenko (global-V09-06-20)
+- G4Pow: fixed bug in interpolation inside logA() and A13() methods,
+  now interpolation is accurate at better than per mille level; in worse
+  cases (x~1.45 or x~0.75) better than 2% level.
+
+April 18, 2013 G.Cosmo (global-V09-06-19)
+- Moved 'tpmalloc' and 'memoryprotection' modules to source/externals.
+
+April 9, 2013 A.Dotti (global-V09-06-18, global-V09-06-17)
+- Fix for compilation on Windows, bug introduced in latest tag
+  for Conditions
+
+April 9, 2013 A.Dotti (global-V09-06-16)
+- Adding typedef for new G4Condtion type (pthread_cond_t) and macros
+  G4CONDITIONWAIT and G4CONDITIONBROADCAST
+
+April 7, 2013 A.Dotti (global-V09-06-15)
+- Bug fixing: do not delete static data mamber theGenerator 
+  (only affects MT builds)
+
+March 29, 2013 G.Cosmo (global-V09-06-14)
+- Code cleanup for HEPRandom module and new introduced MT classes.
+  Added G4heprandom sub-library to the build system.i
+  Moved G4Poisson to non-inline.
+
+March 18, 2013 A.Dotti (global-V09-06-13)
+- Enable MT mode for MacOSX with gcc >= 4.7.
+- Corrected getpid() problem in G4Threading.
+- Fixed shadowing warning from G4Autolock (G.Cosmo).
+
+March 12, 2013 G.Cosmo (global-V09-06-12, global-V09-06-11)
+- Added public accessors for MT data to G4PhysicsVector.
+
+March 11, 2013 G.Cosmo (global-V09-06-10)
+- Further optimisation in G4ReferenceCountedHandle for the use of allocators.
+- Redefined G4DLL_API to G4GLOB_DLL to avoid cases of macro redefinition.
+
+March 9, 2013 G.Cosmo (global-V09-06-09)
+- Take out G4Threading revision picked up from trunk, causing compilation
+  errors on Linux and Windows. Restored version as in "global-V09-06-05".
+
+March 8, 2013 G.Cosmo (global-V09-06-08)
+- Renamed MT macro to safer ID in G4PhysicsVector.
+
+March 7, 2013 G.Cosmo (global-V09-06-07)
+- Renamed internal type name in G4PhysicsVector for MT split.
+
+March 7, 2013 G.Cosmo (global-V09-06-06)
+- Renamed G4MTTransitoryPhysicsVector to G4PVSplitter and adopt export/import
+  flag for static members to overcome problems on Windows DLLs build.
+- Cleanup of code for MT changes in G4PhysicsVector, G4ios and G4strstreambuf.
+- Moved G4MTTransitory and G4MTTransitoryParticle headers in geometry and
+  particles categories respectively.
+- Simplified setup for import/export flags on Windows in G4Types.hh.
+  Replacing G4DLLIMPORT/G4DLLEXPORT flags with G4DLL_API.
+
+February 25, 2013 A.Dotti (global-V09-06-05)
+- Fixing naming clash with G4MT for G4cout variables.
+
+February 25, 2013 A.Dotti (global-V09-06-04)
+- Fixed compilation warning and naming issue in G4AutoLock and G4Threading.
+
+February 22, 2013 G.Cosmo (global-V09-06-03)
+- Removed unused private members in G4JTPolynomialSolver.
+
+February 21, 2013 J.Madsen
+- Minor changes to G4ConvergenceTester: output can now optionally be
+  redirected a different stream (defaults is cout).
+  Accessors are made public and check if data has been added.
+
+February 20, 2013 A.Dotti (global-V09-06-02)
+- Added new classes implementing platform independent threading
+  G4AutoLock and G4Threading. Not yet activated.
+- Generalised flags for MacOS multi-threaded mode (G.Cosmo).
+
+February 13, 2013 G.Cosmo (global-V09-06-01)
+- Withdrawn changes introduced in previous tag for G4UnitsTable.
+- Cleanup of MT code on kernel G4 classes.
+
+February 08, 2013 J.Jacquemier (global-V09-06-00)
+- G4UnitsTable: Migrated to STL map, iterator and algorithm
+
+January 14, 2013 A.Dotti, G.Cosmo
+- Merged changes for MT development.
+
 November 16, 2012 V.Ivantchenko (global-V09-05-15)
 - G4Physics2DVector: fixed comments, more correct references.
 - Updated date for release 9.6.

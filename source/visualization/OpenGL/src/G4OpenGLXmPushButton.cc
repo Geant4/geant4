@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLXmPushButton.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //Push button class. Inherits from G4OpenGLXmVWidgetComponent
 
@@ -39,7 +39,9 @@
 #include "globals.hh"
 
 G4OpenGLXmPushButton::G4OpenGLXmPushButton (const char* n,
-					    XtCallbackRec* c) 
+					    XtCallbackRec* c)
+: button(0)
+, parent(0)
 {
   name = n;
   callback = c;

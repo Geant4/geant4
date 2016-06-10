@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLSceneHandler.hh 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -64,7 +64,6 @@ public:
   void AddPrimitivesSquare (const std::vector <G4VMarker>&);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
-  void AddPrimitive (const G4NURBS&);
 
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		    const G4VisAttributes&);
@@ -87,6 +86,36 @@ public:
   G4int GetEventsDrawInterval() {return fEventsDrawInterval;}
   void SetEventsDrawInterval(G4int interval) {fEventsDrawInterval = interval;}
 
+#ifdef G4OPENGL_VERSION_2
+private :
+  // vertex vector to be given to the graphic card
+  std::vector<double> fOglVertex;
+  // indices vector to be given to the graphic card
+  std::vector<unsigned short> fOglIndices;
+  // before, drawyType (as GL_QUADS, GL_TRIANGLES...) was
+  // given in glBegin. Now it has to be given in glDrawArray (at the end)
+  GLenum fDrawArrayType;
+  // emulate GL_QUADS behaviour by inverting two last positions
+  bool fEmulate_GL_QUADS;
+  // Try to optimize a bit the pipeline
+  void OptimizeVBOForTrd();
+  void OptimizeVBOForCons(G4int aNoFacet);
+  // emulating glEnd and glBegin
+  void glEndVBO();
+  void glBeginVBO(GLenum type);
+  void drawVBOArray(std::vector<double> vertices);
+  
+// Buffers used to access vertex and indices elements
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+  GLuint fVertexBufferObject;
+  GLuint fIndicesBufferObject;
+#else
+  Wt::WGLWidget::Buffer fVertexBufferObject;
+  Wt::WGLWidget::Buffer fIndicesBufferObject;
+#endif
+
+#endif
+
 protected:
 
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
@@ -100,6 +129,17 @@ protected:
 
   void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
 
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  // Special case for Wt, we want to have acces to the Wt drawer everywhere
+  // because instead of OpenGL call which are static, Wt openGL functions are functions of an WGLWidget
+  // object(G4OpenGLImmediateViewer in our case)
+
+  inline void setWtDrawer(G4OpenGLWtDrawer* drawer) {
+    fWtDrawer = drawer;
+  }
+  G4OpenGLWtDrawer* fWtDrawer;
+#endif
+  
   GLuint fPickName;
   std::map<GLuint, G4AttHolder*> fPickMap;  // For picking.
 

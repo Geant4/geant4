@@ -23,104 +23,90 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: Microbeam.cc,v 1.12 2010-11-17 20:42:14 allison Exp $
-// -------------------------------------------------------------------
-//  GEANT4 - Microbeam example
-//  Developed by S. Incerti et al.
-//  Centre d'Etudes Nucleaires de Bordeaux-Gradignan
-//  CNRS / IN2P3 / Bordeaux 1 University
-//  33175 Gradignan, France
-//  incerti@cenbg.in2p3.fr
-// -------------------------------------------------------------------
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+// 
+// If you use this example, please cite the following publication:
+// Rad. Prot. Dos. 133 (2009) 2-11
 
-#include "G4RunManager.hh"
+#ifdef G4MULTITHREADED
+  #include "G4MTRunManager.hh"
+#else
+  #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
-#include "Randomize.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
+  #include "G4VisExecutive.hh"
 #endif
 
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
-
-#include "MicrobeamDetectorConstruction.hh"
-#include "MicrobeamPhysicsList.hh"
-#include "MicrobeamPrimaryGeneratorAction.hh"
-#include "MicrobeamRunAction.hh"
-#include "MicrobeamEventAction.hh"
-#include "MicrobeamTrackingAction.hh"
-#include "MicrobeamSteppingAction.hh"
-#include "MicrobeamSteppingVerbose.hh"
-#include "MicrobeamHistoManager.hh"
+#include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
 
 int main(int argc,char** argv) {
 
-  // choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  // Choose the Random engine
   
-  // verbose output class
-  G4VSteppingVerbose::SetInstance(new MicrobeamSteppingVerbose);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
-  // construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  // Construct the default run manager
 
-  // set mandatory initialization classes
-  MicrobeamDetectorConstruction* detector = new MicrobeamDetectorConstruction;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  // runManager->SetNumberOfThreads(2);
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
+  // Set mandatory user initialization classes
+  
+  DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-
-  runManager->SetUserInitialization(new MicrobeamPhysicsList);
+  
+  runManager->SetUserInitialization(new PhysicsList);
     
+  // User action initialization
+  
+  runManager->SetUserInitialization(new ActionInitialization(detector));
+  
+  // Initialize G4 kernel
+  
+  runManager->Initialize();
+
 #ifdef G4VIS_USE
-  // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
-  // set user action classes
-  MicrobeamPrimaryGeneratorAction* KinAct = new MicrobeamPrimaryGeneratorAction(detector);
-  runManager->SetUserAction(KinAct);
- 
-  MicrobeamHistoManager*  histo = new MicrobeamHistoManager();
-
-  MicrobeamRunAction* RunAct = new MicrobeamRunAction(detector,histo);
+  // Get the pointer to the User Interface manager 
   
-  runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new MicrobeamEventAction(RunAct,histo));
-  runManager->SetUserAction(new MicrobeamTrackingAction(RunAct)); 
-  runManager->SetUserAction(new MicrobeamSteppingAction(RunAct,detector,histo));
-  
-  // initialize G4 kernel
-  // runManager->Initialize();
-    
-  // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
   
-  // local user files created by the simulation
-  remove ("microbeam.root");
-       
-  if (argc==1)   // define UI session for interactive mode.
-    {
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute microbeam.mac");     
+  if (argc==1)   // Define UI session for interactive mode.
+  { 
+#ifdef _WIN32
+    G4UIsession * session = new G4UIterminal();
+#else
+    G4UIsession * session = new G4UIterminal(new G4UItcsh);
 #endif
-      ui->SessionStart();
-      delete ui;
-#endif
-    }
-  else           // batch mode
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
+    UImanager->ApplyCommand("/control/execute microbeam.mac");    
+    session->SessionStart();
+    delete session;
+  }
+  else           // Batch mode
+  { 
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
 
-  // job termination
 #ifdef G4VIS_USE
   delete visManager;
 #endif

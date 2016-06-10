@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIcmdWithADoubleAndUnit.cc 77308 2013-11-22 11:22:28Z gcosmo $
 //
 //
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
+#include "G4UIcommandStatus.hh"
 #include <sstream>
 #include <vector>
 
@@ -58,6 +59,8 @@ G4int G4UIcmdWithADoubleAndUnit::DoIt(G4String parameterList)
   G4String converted_parameter;
   G4String default_unit = GetParameter(1)-> GetDefaultValue();
   if (default_unit != "" && token_vector.size() >= 2) {
+    if(CategoryOf(token_vector[1])!=CategoryOf(default_unit))
+    { return fParameterOutOfCandidates+1; }
     G4double value_given = ValueOf(token_vector[1]);
     G4double value_default = ValueOf(default_unit);
     G4double value = ConvertToDouble(token_vector[0])

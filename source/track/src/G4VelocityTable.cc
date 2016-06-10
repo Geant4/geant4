@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VelocityTable.cc 69005 2013-04-15 09:26:47Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -46,7 +46,7 @@
 
 #include "G4ios.hh" 
 
-G4VelocityTable* G4VelocityTable::theInstance = new G4VelocityTable();
+G4ThreadLocal G4VelocityTable* G4VelocityTable::theInstance = 0;
 
 ////////////////
 G4VelocityTable::G4VelocityTable()
@@ -160,6 +160,7 @@ G4double G4VelocityTable::Value(G4double theEnergy)
 G4VelocityTable* G4VelocityTable::GetVelocityTable()
 ///////////////////
 {
+  if (!theInstance)  { theInstance = new G4VelocityTable(); }
   return theInstance;
 }
 
@@ -167,6 +168,8 @@ G4VelocityTable* G4VelocityTable::GetVelocityTable()
 void G4VelocityTable::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin)
 ///////////////////
 {
+  if (theInstance == 0)  { theInstance = new G4VelocityTable(); }
+
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   
@@ -189,15 +192,20 @@ void G4VelocityTable::SetVelocityTableProperties(G4double t_max, G4double t_min,
 ///////////////////
 G4double G4VelocityTable::GetMaxTOfVelocityTable()
 ///////////////////
-{ return theInstance->maxT; }
+{
+  return GetVelocityTable()->maxT; 
+}
 
 ///////////////////
 G4double G4VelocityTable::GetMinTOfVelocityTable() 
 ///////////////////
-{ return theInstance->minT; }
+{
+  return GetVelocityTable()->minT; 
+}
 
 ///////////////////
 G4int    G4VelocityTable::GetNbinOfVelocityTable() 
 ///////////////////
-{ return theInstance->NbinT; }
-
+{
+  return GetVelocityTable()->NbinT; 
+}

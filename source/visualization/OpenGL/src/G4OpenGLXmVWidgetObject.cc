@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLXmVWidgetObject.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //Virtual base class for all Motif widgets.
 
@@ -34,6 +34,9 @@
 #include "G4OpenGLXmVWidgetObject.hh"
 
 G4OpenGLXmVWidgetObject::G4OpenGLXmVWidgetObject ()
+: pView(0)
+, visual(0)
+, top(0)
 {}
 
 G4OpenGLXmVWidgetObject::~G4OpenGLXmVWidgetObject ()

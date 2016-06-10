@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -53,7 +53,7 @@ G4ORNLFemaleBodyFactory::~G4ORNLFemaleBodyFactory()
 
 G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile, G4VPhysicalVolume* motherVolume,
 							const G4String& colourName, G4bool visAttribute, 
-							G4bool sensitivity)
+							G4bool)
 {
   G4cout<< "ORNLBodyFactory: "<< "gdmlData/Female/ORNL"<< gdmlFile <<".gdml" << G4endl;
 
@@ -79,12 +79,6 @@ G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile
 			       false,
 			       0);
 
-  // Sensitive Body Part
-    if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicOrgan->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
 
      if ( (gdmlFile == "Trunk" ) ||
        (gdmlFile == "Head" ) ||

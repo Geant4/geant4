@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.hh 69009 2013-04-15 09:33:05Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,23 +39,21 @@
 
 class DetectorConstruction;
 class RunAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*,RunAction*,HistoManager* );
+    TrackingAction(DetectorConstruction*,RunAction* );
    ~TrackingAction() {};
    
-    void  PreUserTrackingAction(const G4Track*);   
-    void PostUserTrackingAction(const G4Track*);
+    virtual void  PreUserTrackingAction(const G4Track*);   
+    virtual void PostUserTrackingAction(const G4Track*);
     
   private:
     DetectorConstruction* fDetector;
     RunAction*            fRunAction;    
-    HistoManager*         fHistoManager;
     
     G4double              fZend;
 };

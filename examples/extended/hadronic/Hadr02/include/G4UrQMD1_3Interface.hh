@@ -32,6 +32,9 @@
 /// \file hadronic/Hadr02/include/G4UrQMD1_3Interface.hh
 /// \brief Definition of the G4UrQMD1_3Interface class
 //
+// $Id: G4UrQMD1_3Interface.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4UrQMD1_3Interface_hh
 #define G4UrQMD1_3Interface_hh
 
@@ -57,7 +60,10 @@
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+
 //  coms
 //
 const G4int  nmax  = 500;
@@ -149,6 +155,7 @@ const G4int jmax=7;
 
 typedef G4int ftnlogical;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Standard common block for UrQMD
 // Common options for coms.f
@@ -162,14 +169,16 @@ G4double u_elab,u_imp;
 G4int u_sptar,u_spproj;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 struct ccurqmd13sys
-{
-  
-G4int   npart, nbar, nmes, ctag,nsteps,uid_cnt,
-        ranseed,event,ap,at,zp,zt,eos,dectag,
-        nhardres, nsoftres, ndecres, nelcoll, nblcoll;
+{  
+G4int npart, nbar, nmes, ctag,nsteps,uid_cnt,
+  ranseed,event,ap,at,zp,zt,eos,dectag,
+  nhardres, nsoftres, ndecres, nelcoll, nblcoll;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13rsys
 {
@@ -178,140 +187,147 @@ G4double time,acttime,bdist,bimp,bmin,ebeam,ecm;
 
 struct ccurqmd13comseed
 {
-  ftnlogical
-            firstseed;
+  ftnlogical firstseed;
 };
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13logic
 {
-  ftnlogical
-            lsct[nmax], logSky, logYuk, logCb, logPau;
-
+  ftnlogical lsct[nmax], logSky, logYuk, logCb, logPau;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13mdprop
 {
- G4double 
-        r0_t[nmax], rx_t[nmax], ry_t[nmax], rz_t[nmax];
+ G4double r0_t[nmax], rx_t[nmax], ry_t[nmax], rz_t[nmax];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13cuts
 {
-  G4double
-          cutmax, cutPau, cutCb, cutYuk, cutSky, cutdww;
+  G4double cutmax, cutPau, cutCb, cutYuk, cutSky, cutdww;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13spdata
 {
-  G4double
-          spx[nspl], spPauy[nspl], outPau[nspl], 
-          spCby[nspl],  outCb[nspl],
-          spYuky[nspl], outYuk[nspl],
-          spSkyy[nspl], outSky[nspl],
-          spdwwy[nspl], outdww[nspl];
+  G4double spx[nspl], spPauy[nspl], outPau[nspl], 
+    spCby[nspl],  outCb[nspl],
+    spYuky[nspl], outYuk[nspl],
+    spSkyy[nspl], outSky[nspl],
+    spdwwy[nspl], outdww[nspl];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13isys
 {
   
 G4int spin[nmax],ncoll[nmax],charge[nmax],ityp[nmax],
-      lstcoll[nmax],
-      iso3[nmax],origin[nmax],strid[nmax],uid[nmax];
+  lstcoll[nmax],
+  iso3[nmax],origin[nmax],strid[nmax],uid[nmax];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13coor
 {
-G4double 
-        r0[nmax], rx[nmax], ry[nmax], rz[nmax],
-        p0[nmax], px[nmax], py[nmax], pz[nmax],
-        fmass[nmax], rww[nmax],dectime[nmax];
+G4double r0[nmax], rx[nmax], ry[nmax], rz[nmax],
+  p0[nmax], px[nmax], py[nmax], pz[nmax],
+  fmass[nmax], rww[nmax],dectime[nmax];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13frag
 {
-G4double
-        tform[nmax], xtotfac[nmax];
+G4double tform[nmax], xtotfac[nmax];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13aios
 {
-G4double 
-        airx[nmax], airy[nmax], airz[nmax],
-        aipx[nmax], aipy[nmax], aipz[nmax],
-        aorx [4][nmax], aory[4][nmax], aorz[4][nmax],
-        aopx[4][nmax], aopy[4][nmax], aopz[4][nmax];
+G4double airx[nmax], airy[nmax], airz[nmax],
+  aipx[nmax], aipy[nmax], aipz[nmax],
+  aorx [4][nmax], aory[4][nmax], aorz[4][nmax],
+  aopx[4][nmax], aopy[4][nmax], aopz[4][nmax];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13pots
 {
-
-G4double
-       Cb0, Yuk0, Pau0, Sky20, Sky30, gamSky, 
-       gamYuk, drPau, dpPau, gw, sgw, delr, fdel,
-       dt,da, db,dtimestep;
+G4double Cb0, Yuk0, Pau0, Sky20, Sky30, gamSky, 
+  gamYuk, drPau, dpPau, gw, sgw, delr, fdel,
+  dt,da, db,dtimestep;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13scoor
 {
-
-G4double 
-     r0s[smax], rxs[smax], rys[smax], rzs[smax],
-     p0s[smax], pxs[smax], pys[smax], pzs[smax],
-     sfmass[smax];
+G4double r0s[smax], rxs[smax], rys[smax], rzs[smax],
+  p0s[smax], pxs[smax], pys[smax], pzs[smax],
+  sfmass[smax];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13sisys
 {
-  G4int
-      sspin[smax], scharge[smax], sityp[smax], siso3[smax],
-     suid[smax];
+  G4int sspin[smax], scharge[smax], sityp[smax], siso3[smax],
+    suid[smax];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13ssys
 {
   G4int  nspec;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 struct ccurqmd13rtdelay
 {
-G4double
-        p0td[nmax][2],pxtd[nmax][2],pytd[nmax][2],pztd[nmax][2],
-        fmasstd[nmax][2];
+G4double p0td[nmax][2],pxtd[nmax][2],pytd[nmax][2],pztd[nmax][2],
+  fmasstd[nmax][2];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13itdelay
 {
-G4int
-    ityptd[nmax][2],iso3td[nmax][2];
+G4int ityptd[nmax][2],iso3td[nmax][2];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13svinfo
 {
-G4int
-     itypt[2],uidt[2],origint[2],iso3t[2];
+G4int itypt[2],uidt[2],origint[2],iso3t[2];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13ffermi
 {
-G4double
-       ffermpx[nmax], ffermpy[nmax], ffermpz[nmax];
+G4double ffermpx[nmax], ffermpy[nmax], ffermpz[nmax];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13peq
 {
 G4double peq1, peq2;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Definition for Collision Term
 // Commons  comres
@@ -323,35 +339,38 @@ struct ccurqmd13versioning
 char versiontag[45];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13resonances
 {
 
-      G4double massres[maxbar-minbar+1],widres[maxbar-minbar+1];
-      G4double massmes[maxmes-minmes+1];
-      G4double widmes[maxmes-minmes+1];
-      G4double mmesmn[maxmes-minmes+1];
-      G4double branres[maxdel-minnuc][maxbra+1];
-      G4double branmes[maxmes-minmes][maxbrm+1];
+  G4double massres[maxbar-minbar+1],widres[maxbar-minbar+1];
+  G4double massmes[maxmes-minmes+1];
+  G4double widmes[maxmes-minmes+1];
+  G4double mmesmn[maxmes-minmes+1];
+  G4double branres[maxdel-minnuc][maxbra+1];
+  G4double branmes[maxmes-minmes][maxbrm+1];
       
-      G4double branbs1[maxsig-minlam][maxbrs1+1];
-      G4double branbs2[maxcas-mincas][maxbrs2+1];
+  G4double branbs1[maxsig-minlam][maxbrs1+1];
+  G4double branbs2[maxcas-mincas][maxbrs2+1];
 
-      G4int  bs1type[maxbrs1+1][4],bs2type[maxbrs2+1][4];
-      G4int lbs1[maxsig-minlam][maxbrs1+1];
-      G4int lbs2[maxcas-mincas][maxbrs2+1];
-      G4int lbm[maxmes-minmes][maxbrm+1];
+  G4int  bs1type[maxbrs1+1][4],bs2type[maxbrs2+1][4];
+  G4int lbs1[maxsig-minlam][maxbrs1+1];
+  G4int lbs2[maxcas-mincas][maxbrs2+1];
+  G4int lbm[maxmes-minmes][maxbrm+1];
 
-      G4int  jres[maxbar-minbar+1];
-      G4int  jmes[maxmes-minmes+1];
-      G4int lbr[maxdel-minnuc][maxbra+1];
-      G4int  brtype[maxbra+1][4];
-      G4int  pares[maxbar-minbar+1],pames[maxmes-minmes+1];
-      G4int  bmtype[maxbrm+1][4];
-      G4int  isores[maxbar-minbar+1], isomes[maxmes-minmes+1];
-      G4int  strres[maxbar-minbar+1],strmes[maxmes-minmes+1];
-      G4int mlt2it[maxmes-minmes];
+  G4int  jres[maxbar-minbar+1];
+  G4int  jmes[maxmes-minmes+1];
+  G4int lbr[maxdel-minnuc][maxbra+1];
+  G4int  brtype[maxbra+1][4];
+  G4int  pares[maxbar-minbar+1],pames[maxmes-minmes+1];
+  G4int  bmtype[maxbrm+1][4];
+  G4int  isores[maxbar-minbar+1], isomes[maxmes-minmes+1];
+  G4int  strres[maxbar-minbar+1],strmes[maxmes-minmes+1];
+  G4int mlt2it[maxmes-minmes];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13sigtabi
 {
@@ -359,12 +378,14 @@ G4int sigmaln[maxreac][2][maxpsig];
 G4int sigmainf[20][nsigs];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct  ccurqmd13sigtabr
 {
-
 G4double  sigmas[itblsz][nsigs],sigmascal[5][nsigs];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //comwid
 struct ccurqmd13decaywidth
@@ -378,6 +399,7 @@ G4int     wtabflg;
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13brwignorm
 {
@@ -385,6 +407,7 @@ G4double bwbarnorm[maxbar-minbar+1];
 G4double bwmesnorm[maxmes-minmes+1];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13xsections
 {
@@ -392,22 +415,24 @@ G4double tabxnd [widnsp];
 G4double frrtaby[maxdel-1][2][2][widnsp];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13tabnames
 {
 char tabname[77];
 };
-//-----------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // options
 //
 struct ccurqmd13options
 {
 G4int    CTOption[numcto];
-
 G4double CTParam[numctp];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13optstrings
 {
@@ -415,12 +440,15 @@ char ctodc[numcto][2];
 char ctpdc[numctp][2];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 struct ccurqmd13loptions
 {
-ftnlogical
-         fixedseed,bf13,bf14,bf15,bf16,bf17,bf18,bf19,
-         bf20;
+ftnlogical fixedseed,bf13,bf14,bf15,bf16,bf17,bf18,bf19,
+  bf20;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13stables
 {
@@ -428,28 +456,23 @@ G4int nstable;
 G4int stabvec[maxstables];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //colltab
 //
 struct ccurqmd13colltab
 {
-G4double 
-           cttime[ncollmax+1],ctsqrts[ncollmax],
-           ctsigtot[ncollmax],tmin;
-G4int      
-           cti1[ncollmax],cti2[ncollmax];
-G4int      
-           nct,actcol;
-ftnlogical 
-           ctvalid[ncollmax];
-G4int      
-           ctsav[ncollmax];
-G4int      
-           nsav,apt;
-G4double   
-           ctcolfluc[ncollmax];
+G4double cttime[ncollmax+1],ctsqrts[ncollmax],
+  ctsigtot[ncollmax],tmin;
+G4int    cti1[ncollmax],cti2[ncollmax];
+G4int    nct,actcol;
+ftnlogical ctvalid[ncollmax];
+G4int    ctsav[ncollmax];
+G4int    nsav,apt;
+G4double ctcolfluc[ncollmax];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // inputs
 //
@@ -460,49 +483,61 @@ G4int  trspflg,spiso3[2],outsteps,bflag,srtflag,efuncflag;
 G4int  nsrt,firstev,npb;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 struct ccurqmd13input2
 {
 G4double srtmin,srtmax,pbeam,betann,betatar,betapro;
 G4double pbmin,pbmax;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 struct ccurqmd13protarints
 {
-
 G4int pt_iso3[2][aamax],pt_ityp[2][aamax],pt_spin[2][aamax];
-
 G4int pt_charge[2][aamax],pt_aa[2],pt_uid[2][aamax];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13protarreals
 {
 G4double pt_r0[2][aamax],pt_rx[2][aamax],pt_ry[2][aamax],
-         pt_rz[2][aamax],pt_fmass[2][aamax],pt_dectime[2][aamax];
+  pt_rz[2][aamax],pt_fmass[2][aamax],pt_dectime[2][aamax];
 G4double pt_p0[2][aamax],pt_px[2][aamax],pt_py[2][aamax],
-         pt_pz[2][aamax];
+  pt_pz[2][aamax];
 G4double pt_rho[2][aamax];
 G4double pt_pmax[2][aamax];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // newpart
 struct ccurqmd13inewpart
 {
 G4int itypnew[mprt],i3new[mprt],itot[mprt],inew[mprt],nexit;
 G4int iline,strcount,pslot[oprt],nstring1, nstring2,
-      sidnew[mprt],itypold[oprt],iso3old[oprt];
+  sidnew[mprt],itypold[oprt],iso3old[oprt];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13rnewpart
 {
-G4double  pnew[mprt][5],xnew[mprt][4],betax,betay,betaz, 
-          pold[oprt][5],p0nn,pxnn,pynn,pznn,pnn, mstring[2],
-          pnnout,xtotfacold[oprt];
-
+G4double pnew[mprt][5],xnew[mprt][4],betax,betay,betaz, 
+  pold[oprt][5],p0nn,pxnn,pynn,pznn,pnn, mstring[2],
+  pnnout,xtotfacold[oprt];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13fnewpart
 {
 G4double leadfac[mprt];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // boxinc
 //
@@ -515,6 +550,8 @@ G4int bptityp[bptmax],bptiso3[bptmax],bptpart[bptmax];
 G4int edensflag,para,solid, mbflag,mtest;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 struct ccurqmd13boxrc
 {
 G4double bptpmax[bptmax];
@@ -524,76 +561,88 @@ G4double lboxhalbe;
 G4double lboxd;
 G4double mbp0, mbpx, mbpy, mbpz;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // comnorm
 struct ccurqmd13normsplin
 {
 G4double x_norm[n][4],y_norm[n][4];
 G4double y2a[n][4],y2b[n][4], dx;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // comstr
 struct ccurqmd13FRGSPA
 {
-G4double 
-          pjspns, pmix1s[njspin][3], pmix2s[njspin][3]
-          , pbars, parqls, parrs;
+G4double pjspns, pmix1s[njspin][3], pmix2s[njspin][3], pbars, parqls, parrs;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 struct ccurqmd13FRGCPA
 {
-G4double 
-          pjspnc, pmix1c[njspin][3], pmix2c[njspin][3], pbarc;
+G4double pjspnc, pmix1c[njspin][3], pmix2c[njspin][3], pbarc;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 struct ccurqmd13coparm
 {
 G4double parm[njspin];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 struct ccurqmd13const
 {
 G4double pi;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //// freezeout
 //
 struct ccurqmd13frcoor
 {
 G4double frr0[nmax], frrx[nmax], frry[nmax], frrz[nmax],
-         frp0[nmax], frpx[nmax], frpy[nmax], frpz[nmax];
+  frp0[nmax], frpx[nmax], frpy[nmax], frpz[nmax];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //  input
 struct ccurqmd13values
 {
 G4double valint[1];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // cascinit
 struct ccurqmd13ini
 {
 ftnlogical bcorr;
 };
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // iso
 struct ccurqmd13factorials
 {
 G4double logfak[101];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 struct ccurqmd13cgks
 {
-
 G4double cgktab[jmax+1][2*jmax+1][2*jmax+1][jmax+1][jmax+1];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // UrQMD
 //
 struct ccurqmd13energies
 {
-G4double ekinbar, ekinmes, esky2, esky3,
-         eyuk, ecb, epau;
+G4double ekinbar, ekinmes, esky2, esky3, eyuk, ecb, epau;
 };
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // urqmd
 extern "C"
 {
@@ -679,5 +728,6 @@ extern struct ccurqmd13factorials factorials_;
 extern struct ccurqmd13cgks  cgks_;
 
 }
- 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 #endif

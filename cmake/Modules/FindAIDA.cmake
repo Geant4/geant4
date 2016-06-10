@@ -14,11 +14,6 @@ else()
   set(AIDA_FOUND TRUE)
 
   execute_process(
-    COMMAND ${AIDA_CONFIG_EXECUTABLE} --version 
-    OUTPUT_VARIABLE AIDA_VERSION
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  execute_process(
     COMMAND ${AIDA_CONFIG_EXECUTABLE} --include
     OUTPUT_VARIABLE AIDA_INCLUDE_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -31,15 +26,30 @@ else()
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   execute_process(
+    COMMAND ${AIDA_CONFIG_EXECUTABLE} --version 
+    OUTPUT_VARIABLE AIDA_VERSION
+    ERROR_VARIABLE AIDA_VERSION_ERROR
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  execute_process(
     COMMAND ${AIDA_CONFIG_EXECUTABLE} --implementation
     OUTPUT_VARIABLE AIDA_IMPLEMENTATION
+    ERROR_VARIABLE AIDA_IMPLEMENTATION_ERROR
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   # Make variables changeble to the advanced user
   mark_as_advanced(AIDA_CONFIG_EXECUTABLE)
 
   if(NOT AIDA_FIND_QUIETLY)
-    message(STATUS "Found AIDA ${AIDA_VERSION} implemented by ${AIDA_IMPLEMENTATION}")
+    set (OUTPUT "Found AIDA")
+    if (AIDA_VERSION)
+      set (OUTPUT "${OUTPUT} ${AIDA_VERSION}")
+    endif()  
+    if (AIDA_IMPLEMENTATION)
+      set (OUTPUT "${OUTPUT} implemented by ${AIDA_IMPLEMENTATION}")
+    endif()  
+    message(STATUS "${OUTPUT}")
   endif()
+  
 endif()
   

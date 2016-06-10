@@ -26,83 +26,86 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04EventAction.cc
 /// \brief Implementation of the ExN04EventAction class
 //
-
-#include "ExN04EventAction.hh"
-
-#include "ExN04TrackerHit.hh"
-#include "ExN04CalorimeterHit.hh"
-#include "ExN04MuonHit.hh"
+// $Id: ExN04EventAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UImanager.hh"
+#include "G4VHitsCollection.hh"
+#include "ExN04EventAction.hh"
+#include "ExN04CalorimeterHit.hh"
+#include "ExN04MuonHit.hh"
+#include "ExN04TrackerHit.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04EventAction::ExN04EventAction()
 {
-  trackerCollID = -1;
-  calorimeterCollID = -1;
-  muonCollID = -1;
+  ftrackerCollID = -1;
+  fcalorimeterCollID = -1;
+  fmuonCollID = -1;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04EventAction::~ExN04EventAction()
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04EventAction::BeginOfEventAction(const G4Event*)
 {
-  G4SDManager * SDman = G4SDManager::GetSDMpointer();
-  if(trackerCollID<0||calorimeterCollID<0||muonCollID<0)
-  {
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  if ( ftrackerCollID<0 || fcalorimeterCollID<0 || fmuonCollID<0) {
     G4String colNam;
-    trackerCollID = SDman->GetCollectionID(colNam="trackerCollection");
-    calorimeterCollID = SDman->GetCollectionID(colNam="calCollection");
-    muonCollID = SDman->GetCollectionID(colNam="muonCollection");
+    ftrackerCollID = SDman-> GetCollectionID(colNam="trackerCollection");
+    fcalorimeterCollID = SDman-> GetCollectionID(colNam="calCollection");
+    fmuonCollID = SDman-> GetCollectionID(colNam="muonCollection");
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4cout << ">>> Event " << evt->GetEventID() << G4endl;
-  
-  if(trackerCollID<0||calorimeterCollID<0||muonCollID<0) return;
 
-  G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
-  ExN04TrackerHitsCollection* THC = 0;
-  ExN04CalorimeterHitsCollection* CHC = 0;
-  ExN04MuonHitsCollection* MHC = 0;
-  if(HCE)
-  {
-    THC = (ExN04TrackerHitsCollection*)(HCE->GetHC(trackerCollID));
-    CHC = (ExN04CalorimeterHitsCollection*)(HCE->GetHC(calorimeterCollID));
-    MHC = (ExN04MuonHitsCollection*)(HCE->GetHC(muonCollID));
+  if( ftrackerCollID<0 || fcalorimeterCollID<0 || fmuonCollID<0) return;
+
+  G4HCofThisEvent* HCE = evt-> GetHCofThisEvent();
+  ExN04TrackerHitsCollection* THC = NULL;
+  ExN04CalorimeterHitsCollection* CHC = NULL;
+  ExN04MuonHitsCollection* MHC = NULL;
+
+  if( HCE ) {
+    THC = (ExN04TrackerHitsCollection*)(HCE->GetHC(ftrackerCollID));
+    CHC = (ExN04CalorimeterHitsCollection*)(HCE->GetHC(fcalorimeterCollID));
+    MHC = (ExN04MuonHitsCollection*)(HCE->GetHC(fmuonCollID));
   }
 
-  if(THC)
-  {
-    int n_hit = THC->entries();
+  if( THC ) {
+    G4int n_hit = THC-> entries();
     G4cout << "     " << n_hit
          << " hits are stored in ExN04TrackerHitsCollection." << G4endl;
   }
-  if(CHC)
-  {
-    int n_hit = CHC->entries();
+
+  if( CHC ) {
+    G4int n_hit = CHC-> entries();
     G4cout << "     " << n_hit
          << " hits are stored in ExN04CalorimeterHitsCollection." << G4endl;
     G4double totE = 0;
-    for(int i=0;i<n_hit;i++)
-    { totE += (*CHC)[i]->GetEdep(); }
+    for( int i = 0; i < n_hit; i++ ) {
+      totE += (*CHC)[i]-> GetEdep();
+    }
     G4cout << "     Total energy deposition in calorimeter : "
          << totE / GeV << " (GeV)" << G4endl;
   }
-  if(MHC)
-  {
-    int n_hit = MHC->entries();
+
+  if( MHC ) {
+    G4int n_hit = MHC-> entries();
     G4cout << "     " << n_hit
          << " hits are stored in ExN04MuonHitsCollection." << G4endl;
   }
 }
-

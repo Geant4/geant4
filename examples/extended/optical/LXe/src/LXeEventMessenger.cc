@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeEventMessenger.cc 70256 2013-05-28 07:29:30Z gcosmo $
+//
 /// \file optical/LXe/src/LXeEventMessenger.cc
 /// \brief Implementation of the LXeEventMessenger class
 //
@@ -39,7 +41,8 @@ LXeEventMessenger::LXeEventMessenger(LXeEventAction* event)
  : fLXeEvent(event)
 {
   fSaveThresholdCmd = new G4UIcmdWithAnInteger("/LXe/saveThreshold",this);
-  fSaveThresholdCmd->SetGuidance("Set the photon count threshold for saving the random number seed for an event.");
+  fSaveThresholdCmd->
+SetGuidance("Set the photon count threshold for saving the random number seed");
   fSaveThresholdCmd->SetParameterName("photons",true);
   fSaveThresholdCmd->SetDefaultValue(4500);
   fSaveThresholdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);

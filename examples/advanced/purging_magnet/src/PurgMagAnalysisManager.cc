@@ -32,69 +32,24 @@
 //    *                                  *
 //    ************************************
 //
-// $Id$
+// $Id: PurgMagAnalysisManager.cc 72385 2013-07-17 07:59:08Z gcosmo $
 //
-#ifdef  G4ANALYSIS_USE
-#include <stdlib.h>
-#include <fstream>
 #include "PurgMagAnalysisManager.hh"
 
-#include "G4ios.hh"
-
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-
-#include "AIDA/IManagedObject.h"
-#include "AIDA/IAnalysisFactory.h"
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-#include "AIDA/ITuple.h"
 
 PurgMagAnalysisManager* PurgMagAnalysisManager::instance = 0;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagAnalysisManager::PurgMagAnalysisManager() : 
-  aFact(0), theTree(0), tupFact(0)
-  
-
-{
-  // Build the factories
-  aFact = AIDA_createAnalysisFactory();
-  
-  AIDA::ITreeFactory *treeFact = aFact->createTreeFactory();
-  
-  
-  // Parameters for the TreeFactory
-  
-  std::string fileName="purgmag.hbk";
-  theTree = treeFact->create(fileName,"hbook",false, true);
-  
-  delete treeFact;
-  
-  tupFact  = aFact->createTupleFactory    ( *theTree );
-}
+PurgMagAnalysisManager::PurgMagAnalysisManager() 
+{;}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PurgMagAnalysisManager::~PurgMagAnalysisManager() 
-{ 
-  delete tupFact;
-  tupFact=0;
-
-  delete histFact;
-  histFact=0;
-  
-  delete theTree;
-  histFact=0;
-  
-  delete aFact;
-  aFact = 0;
-}
+{;}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -110,92 +65,96 @@ PurgMagAnalysisManager* PurgMagAnalysisManager::getInstance()
 
 void PurgMagAnalysisManager::book() 
 {
+  // Get/create analysis manager
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
+ 
+  // Open an output file
+  man->OpenFile("purgmag");
+  man->SetFirstNtupleId(1);
   
-  // N-tuple
-  std::string options = "";
+  // Create 1st ntuple (id = 1)
+  //    
+  man->CreateNtuple("101", "Electron");
+  man->CreateNtupleDColumn("ex");
+  man->CreateNtupleDColumn("ey");
+  man->CreateNtupleDColumn("ez");
+  man->CreateNtupleDColumn("ee");
+  man->CreateNtupleDColumn("epx");
+  man->CreateNtupleDColumn("epy");
+  man->CreateNtupleDColumn("epz");
+  man->FinishNtuple();
+  G4cout << "Ntuple-1 created" << G4endl;
 
-  // Electrons
-  std::string columnNames1 = "double ex; double ey; double ez; double ee; double epx; double epy; double epz";
-  if (tupFact) ntuple1 = tupFact->create("1","1",columnNames1, options);
-  // check for non-zero ...
-  if (ntuple1) G4cout<<"N-tuple 1 is non-zero"<<G4endl;
+  // Create 2nd ntuple (id = 2)
+  //    
+  man->CreateNtuple("102", "Gamma");
+  man->CreateNtupleDColumn("gx");
+  man->CreateNtupleDColumn("gy");
+  man->CreateNtupleDColumn("gz");
+  man->CreateNtupleDColumn("ge");
+  man->CreateNtupleDColumn("gpx");
+  man->CreateNtupleDColumn("gpy");
+  man->CreateNtupleDColumn("gpz");
+  man->FinishNtuple();
+  G4cout << "Ntuple-2 created" << G4endl;
+ 
+  // Create 3rd ntuple (id = 3)
+  //
+  man->CreateNtuple("103", "Positron");
+  man->CreateNtupleDColumn("px");
+  man->CreateNtupleDColumn("py");
+  man->CreateNtupleDColumn("pz");
+  man->CreateNtupleDColumn("pe");
+  man->CreateNtupleDColumn("ppx");
+  man->CreateNtupleDColumn("ppy");
+  man->CreateNtupleDColumn("ppz");
+  man->FinishNtuple();
+  G4cout << "Ntuple-3 created" << G4endl;
 
-  // Photons (gamma)
-  std::string columnNames2 = "double gx; double gy; double gz; double ge; double gpx; double gpy; double gpz";
-  if (tupFact) ntuple2 = tupFact->create("2","2",columnNames2, options);
-  // check for non-zero ...
-  if (ntuple2) G4cout<<"N-tuple 2 is non-zero"<<G4endl;
-
-  // Positrons
-  std::string columnNames3 = "double px; double py; double pz; double pe; double ppx; double ppy; double ppz";
-  if (tupFact) ntuple3 = tupFact->create("3","3",columnNames3, options);
-  // check for non-zero ...
-  if (ntuple3) G4cout<<"N-tuple 3 is non-zero"<<G4endl;
-
-   }
+  return;
+}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 // This function fills a N-tuple with position, energy and momentum of 
 // electrons entering the measurement volume. 
 void PurgMagAnalysisManager::fill_Tuple_Electrons(G4double ex, G4double ey, G4double ez,     // Position
-					     G4double ee,                               // Energy
-					     G4double epx, G4double epy, G4double epz)  // Momentum
+						  G4double ee,                               // Energy
+						  G4double epx, G4double epy, G4double epz)  // Momentum
 {
+  // Get/create analysis manager
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
 
-  if (ntuple1 == 0) {
-    G4cout << "N-tuple 1 is zero " << "\n";
-    return;
-  }
-  
-  int iex = ntuple1->findColumn( "ex" );
-  int iey = ntuple1->findColumn( "ey" );
-  int iez = ntuple1->findColumn( "ez" );
-  int iee = ntuple1->findColumn( "ee" );
-  int iepx = ntuple1->findColumn( "epx" );
-  int iepy = ntuple1->findColumn( "epy" );
-  int iepz = ntuple1->findColumn( "epz" );
-  ntuple1->fill(iex, ex);                  // fill ( int column, double value )
-  ntuple1->fill(iey, ey);
-  ntuple1->fill(iez, ez);
-  ntuple1->fill(iee, ee);
-  ntuple1->fill(iepx, epx);
-  ntuple1->fill(iepy, epy);
-  ntuple1->fill(iepz, epz);
-
-  ntuple1->addRow();
-  
+  // Fill 1st ntuple ( id = 1)
+  man->FillNtupleDColumn(1,0, ex);
+  man->FillNtupleDColumn(1,1, ey);
+  man->FillNtupleDColumn(1,2, ez);
+  man->FillNtupleDColumn(1,3, ee);
+  man->FillNtupleDColumn(1,4, epx);
+  man->FillNtupleDColumn(1,5, epy);
+  man->FillNtupleDColumn(1,6, epz);
+  man->AddNtupleRow(1);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 // This function fills a N-tuple with position, energy and momentum of 
 // photons entering the measurement volume. 
 void PurgMagAnalysisManager::fill_Tuple_Gamma(G4double gx, G4double gy, G4double gz,     // Position 
-					 G4double ge,                               // Energy
-					 G4double gpx, G4double gpy, G4double gpz)  // Momentum
-{
+					      G4double ge,                               // Energy
+       					      G4double gpx, G4double gpy, G4double gpz)  // Momentum
+{ 
+  // Get/create analysis manager
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
 
-  if (ntuple2 == 0) {
-    G4cout << "N-tuple 2 is zero" << "\n";
-    return;
-  }
-
-  int igx = ntuple2->findColumn( "gx" );
-  int igy = ntuple2->findColumn( "gy" );
-  int igz = ntuple2->findColumn( "gz" );
-  int ige = ntuple2->findColumn( "ge" );
-  int igpx = ntuple2->findColumn( "gpx" );
-  int igpy = ntuple2->findColumn( "gpy" );
-  int igpz = ntuple2->findColumn( "gpz" );
-  ntuple2->fill(igx, gx);                   // fill ( int column, double value )
-  ntuple2->fill(igy, gy);
-  ntuple2->fill(igz, gz);
-  ntuple2->fill(ige, ge);
-  ntuple2->fill(igpx, gpx);
-  ntuple2->fill(igpy, gpy);
-  ntuple2->fill(igpz, gpz);
-
-  ntuple2->addRow();
+  // Fill 2nd ntuple ( id = 2)
+  man->FillNtupleDColumn(2,0, gx);
+  man->FillNtupleDColumn(2,1, gy);
+  man->FillNtupleDColumn(2,2, gz);
+  man->FillNtupleDColumn(2,3, ge);
+  man->FillNtupleDColumn(2,4, gpx);
+  man->FillNtupleDColumn(2,5, gpy);
+  man->FillNtupleDColumn(2,6, gpz);
+  man->AddNtupleRow(2);  
 
 }
 
@@ -206,39 +165,30 @@ void PurgMagAnalysisManager::fill_Tuple_Positrons(G4double px, G4double py, G4do
 					     G4double pe,                               // Energy
 					     G4double ppx, G4double ppy, G4double ppz)  // Momentum
 {
+  // Get/create analysis manager
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
 
-  if (ntuple3 == 0) {
-    G4cout << "N-tuple 3 is zero" << "\n";
-    return;
-  }
-
-  int ipx = ntuple3->findColumn( "px" );
-  int ipy = ntuple3->findColumn( "py" );
-  int ipz = ntuple3->findColumn( "pz" );
-  int ipe = ntuple3->findColumn( "pe" );
-  int ippx = ntuple3->findColumn( "ppx" );
-  int ippy = ntuple3->findColumn( "ppy" );
-  int ippz = ntuple3->findColumn( "ppz" );
-  ntuple3->fill(ipx, px);                  // fill ( int column, double value )
-  ntuple3->fill(ipy, py);
-  ntuple3->fill(ipz, pz);
-  ntuple3->fill(ipe, pe);
-  ntuple3->fill(ippx, ppx);
-  ntuple3->fill(ippy, ppy);
-  ntuple3->fill(ippz, ppz);
-
-  ntuple3->addRow();
+  // Fill 3rd ntuple ( id = 3)
+  man->FillNtupleDColumn(3,0, px);
+  man->FillNtupleDColumn(3,1, py);
+  man->FillNtupleDColumn(3,2, pz);
+  man->FillNtupleDColumn(3,3, pe);
+  man->FillNtupleDColumn(3,4, ppx);
+  man->FillNtupleDColumn(3,5, ppy);
+  man->FillNtupleDColumn(3,6, ppz);
+  man->AddNtupleRow(3);  
 
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void PurgMagAnalysisManager::finish() 
 {  
-  // Writes all histograms to file
-  theTree->commit();
-
-  // Close (will again commit)
-  theTree->close();
+  // Save histograms
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+  // Complete clean-up
+  delete G4CsvAnalysisManager::Instance();
 }
-#endif
+
 

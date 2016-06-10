@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Trd.cc 76263 2013-11-08 11:41:52Z gcosmo $
 //
 //
 // Implementation for G4Trd class
@@ -41,6 +41,8 @@
 
 #include "G4Trd.hh"
 
+#if !defined(G4GEOM_USE_UTRD)
+
 #include "G4VPVParameterisation.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -48,8 +50,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 
 using namespace CLHEP;
 
@@ -1473,8 +1473,4 @@ G4Polyhedron* G4Trd::CreatePolyhedron () const
   return new G4PolyhedronTrd2 (fDx1, fDx2, fDy1, fDy2, fDz);
 }
 
-G4NURBS* G4Trd::CreateNURBS () const
-{
-  //  return new G4NURBSbox (fDx, fDy, fDz);
-  return 0;
-}
+#endif

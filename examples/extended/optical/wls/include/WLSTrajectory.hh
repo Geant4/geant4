@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSTrajectory.hh 72065 2013-07-05 09:54:59Z gcosmo $
+//
 /// \file optical/wls/include/WLSTrajectory.hh
 /// \brief Definition of the WLSTrajectory class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -61,7 +60,7 @@ class WLSTrajectory : public G4VTrajectory
 // Constructor/Destructor
 
      WLSTrajectory();
-     WLSTrajectory(const G4Track* aTrack);
+     WLSTrajectory(const G4Track* );
      WLSTrajectory(WLSTrajectory &);
      virtual ~WLSTrajectory();
 
@@ -74,18 +73,18 @@ class WLSTrajectory : public G4VTrajectory
 
 // Get/Set functions
 
-     inline G4int GetTrackID() const { return fTrackID; }
-     inline G4int GetParentID() const { return fParentID; }
-     inline G4String GetParticleName() const { return ParticleName; }
-     inline G4double GetCharge() const { return PDGCharge; }
-     inline G4int GetPDGEncoding() const { return PDGEncoding; }
-     inline G4ThreeVector GetInitialMomentum() const { return initialMomentum; }
+     inline virtual G4int GetTrackID() const { return fTrackID; }
+     inline virtual G4int GetParentID() const { return fParentID; }
+     inline virtual G4String GetParticleName() const { return fParticleName; }
+     inline virtual G4double GetCharge() const { return fPDGCharge; }
+     inline virtual G4int GetPDGEncoding() const { return fPDGEncoding; }
+     inline virtual G4ThreeVector GetInitialMomentum() const 
+                                                    {return fInitialMomentum;}
 
 // Other member functions
 
      virtual void ShowTrajectory(std::ostream& os=G4cout) const;
      virtual void DrawTrajectory() const;
-     virtual void DrawTrajectory(G4int i_mode=0) const;
      virtual void AppendStep(const G4Step* aStep);
      virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 
@@ -99,10 +98,10 @@ class WLSTrajectory : public G4VTrajectory
     virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
     virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-    void SetDrawTrajectory(G4bool b){drawit=b;}
-    void WLS(){wls=true;}
-    void SetForceDrawTrajectory(G4bool b){forceDraw=b;}
-    void SetForceNoDrawTrajectory(G4bool b){forceNoDraw=b;}
+    void SetDrawTrajectory(G4bool b){fDrawIt=b;}
+    void WLS(){fWLS=true;}
+    void SetForceDrawTrajectory(G4bool b){fForceDraw=b;}
+    void SetForceNoDrawTrajectory(G4bool b){fForceNoDraw=b;}
 
 //---------
    private:
@@ -114,29 +113,30 @@ class WLSTrajectory : public G4VTrajectory
 
      G4int fTrackID;
      G4int fParentID;
-     G4double PDGCharge;
-     G4int    PDGEncoding;
-     G4String ParticleName;
-     G4ThreeVector initialMomentum;
+     G4double fPDGCharge;
+     G4int    fPDGEncoding;
+     G4String fParticleName;
+     G4ThreeVector fInitialMomentum;
 
-     G4bool wls;
-     G4bool drawit;
-     G4bool forceNoDraw;
-     G4bool forceDraw;
+     G4bool fWLS;
+     G4bool fDrawIt;
+     G4bool fForceNoDraw;
+     G4bool fForceDraw;
 
-     G4ParticleDefinition* particleDefinition;
+     G4ParticleDefinition* fParticleDefinition;
 
 };
 
-extern G4Allocator<WLSTrajectory> WLSTrajectoryAllocator;
+extern G4ThreadLocal G4Allocator<WLSTrajectory>* WLSTrajectoryAllocator;
 
 inline void* WLSTrajectory::operator new(size_t) {
-    void* aTrajectory = (void*) WLSTrajectoryAllocator.MallocSingle();
-    return aTrajectory;
+    if(!WLSTrajectoryAllocator)
+      WLSTrajectoryAllocator = new G4Allocator<WLSTrajectory>;
+    return (void*) WLSTrajectoryAllocator->MallocSingle();
 }
 
 inline void WLSTrajectory::operator delete(void* aTrajectory) {
-    WLSTrajectoryAllocator.FreeSingle((WLSTrajectory*)aTrajectory);
+    WLSTrajectoryAllocator->FreeSingle((WLSTrajectory*)aTrajectory);
 }
 
 #endif

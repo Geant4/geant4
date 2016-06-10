@@ -26,27 +26,31 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04PrimaryGeneratorMessenger.hh
 /// \brief Definition of the ExN04PrimaryGeneratorMessenger class
 //
-// ====================================================================
+// $Id: ExN04PrimaryGeneratorMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   ExN04PrimaryGeneratorMessenger.hh
-//   $Id$
-//
-// ====================================================================
+
 #ifndef EXN04_PRIMARY_GENERATOR_MESSENGER_H
 #define EXN04_PRIMARY_GENERATOR_MESSENGER_H
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class ExN04PrimaryGeneratorAction;
 class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
+class ExN04PrimaryGeneratorAction;
 
 class ExN04PrimaryGeneratorMessenger : public G4UImessenger {
+public:
+  ExN04PrimaryGeneratorMessenger(ExN04PrimaryGeneratorAction* genaction);
+  ~ExN04PrimaryGeneratorMessenger();
+
+  void SetNewValue(G4UIcommand* command, G4String newValues);
+  G4String GetCurrentValue(G4UIcommand* command);
+
 private:
   ExN04PrimaryGeneratorAction* primaryAction;
 
@@ -54,13 +58,6 @@ private:
   G4UIdirectory* mydetdir;
   G4UIcmdWithAString* select;
 
-public:
-  ExN04PrimaryGeneratorMessenger(ExN04PrimaryGeneratorAction* genaction);
-  ~ExN04PrimaryGeneratorMessenger();
-  
-  void SetNewValue(G4UIcommand* command, G4String newValues);
-  G4String GetCurrentValue(G4UIcommand* command);  
 };
-
 
 #endif

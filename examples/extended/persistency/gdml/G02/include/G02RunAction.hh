@@ -27,7 +27,7 @@
 /// \brief Definition of the G02RunAction class
 //
 //
-// $Id$
+// $Id: G02RunAction.hh 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02RunAction
 //
@@ -56,8 +56,8 @@ class G02RunAction : public G4UserRunAction
     G02RunAction();
    ~G02RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
       
 };
 

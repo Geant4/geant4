@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GeneratorPrecompoundInterface.hh 66812 2013-01-12 16:06:46Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -33,6 +33,8 @@
 //      HPW, 10DEC 98, the decay part originally written by Gunter Folger
 //                in his FTF-test-program.
 //
+//      V. Uzhinsky Nov. 2012 
+//      introduced new method PropagateNuclNucl for nucleus-nucleus interactions
 //
 // -----------------------------------------------------------------------------
 //
@@ -68,6 +70,10 @@ public:
   virtual G4ReactionProductVector*
   Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
 
+  virtual G4ReactionProductVector*                               // Uzhi Nov. 2012
+  PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus,
+                                                  G4V3DNucleus* theProjectileNucleus);
+
   inline void SetCaptureThreshold(G4double);
 
   virtual void PropagateModelDescription(std::ostream&) const;
@@ -82,6 +88,19 @@ private:
   G4double CaptureThreshold;
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
+
+  const G4ParticleDefinition* deuteron;
+  const G4ParticleDefinition* triton;
+  const G4ParticleDefinition* He3;
+  const G4ParticleDefinition* He4;
+
+  const G4ParticleDefinition* ANTIproton;
+  const G4ParticleDefinition* ANTIneutron;
+
+  const G4ParticleDefinition* ANTIdeuteron;
+  const G4ParticleDefinition* ANTItriton;
+  const G4ParticleDefinition* ANTIHe3;
+  const G4ParticleDefinition* ANTIHe4;
 };
 
 inline

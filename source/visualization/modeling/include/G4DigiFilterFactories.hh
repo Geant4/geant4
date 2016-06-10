@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4DigiFilterFactories.hh,v 1.1 2010-05-30 11:24:30 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// $Id: G4DigiFilterFactories.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //
 // Digi filter model factories creating filters

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
 //
-// $Id$
+// $Id: StepMaxMessenger.cc 68763 2013-04-05 12:36:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:fStepMax(stepM)
+:fStepMax(stepM), fStepMaxCmd(0)
 { 
   fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
   fStepMaxCmd->SetGuidance("Set max allowed step length");

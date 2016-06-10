@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: QGSP_BERT.icc 67969 2013-03-13 09:44:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
 
 template<class T> TQGSP_BERT<T>::TQGSP_BERT(G4int ver):  T()
 {
@@ -93,7 +93,7 @@ template<class T> TQGSP_BERT<T>::TQGSP_BERT(G4int ver):  T()
   this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
   // Hadron Physics
-  this->RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
+  this->RegisterPhysics( new G4HadronPhysicsQGSP_BERT(ver));
 
   // Stopping Physics
   this->RegisterPhysics( new G4StoppingPhysics(ver) );

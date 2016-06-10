@@ -36,13 +36,18 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
    //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
    G4int iZ = aTarg.GetZ_asInt();
    G4int iA = aTarg.GetA_asInt();
+   //G4int iM = aTarg.GetM_asInt();
+   G4int iM = 0;
+   if ( aTarg.GetIsotope() != NULL ) {
+      iM = aTarg.GetIsotope()->Getm();
+   }
 
    G4double ke = aTrack.GetKineticEnergy();
 
    G4HadFinalState* theResult = &theParticleChange;
    theResult->Clear();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
    std::vector<G4GIDI_Product>* products = aTarget->getFissionFinalState( ke*MeV, temp, NULL, NULL );
    if ( products != NULL ) 
    {

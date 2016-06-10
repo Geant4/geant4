@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VAdjointReverseReaction.cc 68044 2013-03-13 14:29:07Z gcosmo $
 //
 #include "G4VAdjointReverseReaction.hh"
 #include "G4SystemOfUnits.hh"
@@ -49,8 +49,6 @@ G4VAdjointReverseReaction::
  fParticleChange=new G4ParticleChange();
  IsFwdCSUsed=false;
  IsIntegralModeUsed=false;
- currentMaterialIndex=100000;
- currentTcut=0.;
  lastCS=0.;
 }
 //////////////////////////////////////////////////////////////////////////////

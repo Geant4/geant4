@@ -1,0 +1,51 @@
+#
+# This file permits to customize, with commands,
+# the menu bar of the G4UIXm, G4UIQt, G4UIWin32 sessions.
+# It has no effect with G4UIterminal.
+#
+# Process vis.mac (and draw geometry)
+#
+/control/execute vis.mac
+#
+# Add icons of general interest
+#
+/control/execute icons.mac
+#
+# File menu :
+/gui/addMenu file File
+/gui/addButton file Quit exit
+#
+# Run menu :
+/gui/addMenu run Run
+/gui/addButton run "beamOn 1" "/run/beamOn 1"
+#/gui/addButton run run1 "/control/execute run1.mac"
+#/gui/addButton run run2 "/control/execute run2.mac"
+#
+# Gun menu :
+/gui/addMenu gun Gun
+/gui/addButton gun "50 MeV"  "/gun/energy 50 MeV"
+/gui/addButton gun "1 GeV"   "/gun/energy 1 GeV"
+/gui/addButton gun "10 GeV"  "/gun/energy 10 GeV"
+/gui/addButton gun "e-"      "/gun/particle e-"
+/gui/addButton gun "pi0"     "/gun/particle pi0"
+/gui/addButton gun "pi+"     "/gun/particle pi+"
+/gui/addButton gun "neutron" "/gun/particle neutron"
+/gui/addButton gun "proton"  "/gun/particle proton"
+#
+# Field menu :
+#/gui/addMenu field Field
+#/gui/addButton field "off"       "/B2/det/setField 0.2 tesla"
+#/gui/addButton field "0.2 tesla" "/B2/det/setField 0.2 tesla"
+#/gui/addButton field "2.0 tesla" "/B2/det/setField 2.0 tesla"
+#
+# Viewer menu :
+/gui/addMenu viewer Viewer
+/gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"
+/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wireframe"
+/gui/addButton viewer "Refresh viewer" "/vis/viewer/refresh"
+/gui/addButton viewer "Update viewer (interaction or end-of-file)" "/vis/viewer/update"
+/gui/addButton viewer "Flush viewer (= refresh + update)" "/vis/viewer/flush"
+/gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
+#
+# User defined icon :
+/gui/addIcon "Run beam on" user_icon "/run/beamOn 1" run.png 

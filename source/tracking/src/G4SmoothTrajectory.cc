@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SmoothTrajectory.cc 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //
 // ---------------------------------------------------------------
@@ -53,7 +53,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
+G4ThreadLocal G4Allocator<G4SmoothTrajectory> *aSmoothTrajectoryAllocator = 0;
 
 G4SmoothTrajectory::G4SmoothTrajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),
@@ -76,7 +76,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
    positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition()));
 
    // The first point has no auxiliary points, so set the auxiliary
-   // points vector to NULL (jacek 31/10/2002)
+   // points vector to NULL
    positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition(), 0));
 }
 
@@ -100,10 +100,11 @@ G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory
 
 G4SmoothTrajectory::~G4SmoothTrajectory()
 {
-  if (positionRecord) {
-    //  positionRecord->clearAndDestroy();
+  if (positionRecord)
+  {
     size_t i;
-    for(i=0;i<positionRecord->size();i++){
+    for(i=0;i<positionRecord->size();i++)
+    {
       delete  (*positionRecord)[i];
     }
     positionRecord->clear();
@@ -118,19 +119,10 @@ void G4SmoothTrajectory::ShowTrajectory(std::ostream& os) const
   // ... or override with your own code here.
 }
 
-/***
 void G4SmoothTrajectory::DrawTrajectory() const
 {
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::DrawTrajectory();
-  // ... or override with your own code here.
-}
-***/
-
-void G4SmoothTrajectory::DrawTrajectory(G4int i_mode) const
-{
-  // Invoke the default implementation in G4VTrajectory...
-  G4VTrajectory::DrawTrajectory(i_mode);
   // ... or override with your own code here.
 }
 
@@ -217,7 +209,6 @@ std::vector<G4AttValue>* G4SmoothTrajectory::CreateAttValues() const
 
 void G4SmoothTrajectory::AppendStep(const G4Step* aStep)
 {
-  // (jacek 30/10/2002)
   positionRecord->push_back(
       new G4SmoothTrajectoryPoint(aStep->GetPostStepPoint()->GetPosition(),
 				  aStep->GetPointerToVectorOfAuxiliaryPoints()));
@@ -237,10 +228,7 @@ void G4SmoothTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
   for(G4int i=1;i<ent;i++) // initial point of the second trajectory should not be merged
   { 
     positionRecord->push_back((*(seco->positionRecord))[i]);
-    //    positionRecord->push_back(seco->positionRecord->removeAt(1));
   }
   delete (*seco->positionRecord)[0];
   seco->positionRecord->clear();
 }
-
-

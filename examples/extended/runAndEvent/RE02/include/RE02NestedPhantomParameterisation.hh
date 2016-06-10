@@ -27,7 +27,7 @@
 /// \brief Definition of the RE02NestedPhantomParameterisation class
 //
 //
-// $Id$
+// $Id: RE02NestedPhantomParameterisation.hh 73475 2013-08-28 15:23:19Z gcosmo $
 //
 #ifndef RE02NESTEDPARAMETERISATION_HH
 #define RE02NESTEDPARAMETERISATION_HH
@@ -51,6 +51,7 @@ class G4Trap;
 class G4Cons;
 class G4Sphere;
 class G4Orb;
+class G4Ellipsoid;
 class G4Torus;
 class G4Para;
 class G4Polycone;
@@ -95,25 +96,25 @@ class RE02NestedPhantomParameterisation: public G4VNestedParameterisation
     RE02NestedPhantomParameterisation(const G4ThreeVector& voxelSize,
                                       G4int nz,
                                       std::vector<G4Material*>& mat);
-    virtual ~RE02NestedPhantomParameterisation(); 
+   ~RE02NestedPhantomParameterisation(); 
 
     // Methods required in derived classes
     // -----------------------------------
-    virtual G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
-                                        const G4int repNo, 
-                                        const G4VTouchable *parentTouch=0
+    G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
+                                const G4int repNo, 
+                                const G4VTouchable *parentTouch=0
                                         );
   // Required method, as it is the reason for this class.
   //   Must cope with parentTouch=0 for navigator's SetupHierarchy
 
-    virtual G4int       GetNumberOfMaterials() const;
-    virtual G4Material* GetMaterial(G4int idx) const;
+    G4int       GetNumberOfMaterials() const;
+    G4Material* GetMaterial(G4int idx) const;
       // Needed to define materials for instances of Nested Parameterisation 
       //   Current convention: each call should return the materials 
       //   of all instances with the same mother/ancestor volume.
 
-    virtual void ComputeTransformation(const G4int no,
-                                       G4VPhysicalVolume *currentPV) const;
+    void ComputeTransformation(const G4int no,
+                               G4VPhysicalVolume *currentPV) const;
 
     // Methods optional in derived classes
     // -----------------------------------
@@ -121,32 +122,35 @@ class RE02NestedPhantomParameterisation: public G4VNestedParameterisation
     // Additional standard Parameterisation methods, 
     //   which can be optionally defined, in case solid is used.
 
-    virtual void ComputeDimensions(G4Box &,
+    void ComputeDimensions(G4Box &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const;
 
 private:  // Dummy declarations to get rid of warnings ...
-  virtual void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) 
+
+  void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*)
+  void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) 
     const {}
-  virtual void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) 
+  void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*)
+    const {}
+  void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) 
     const {}
 //  G4Material* ComputeMaterial(const G4int repNo,
 //                              G4VPhysicalVolume* currentVol,
@@ -155,6 +159,7 @@ private:  // Dummy declarations to get rid of warnings ...
   using G4VNestedParameterisation::ComputeMaterial;
 
 private:
+
   G4double fdX,fdY,fdZ;
   G4int fNz;
   //

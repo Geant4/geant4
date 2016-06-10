@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4CutTubs.hh 76263 2013-11-08 11:41:52Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -47,9 +46,9 @@
 #ifndef G4CUTTUBS_HH
 #define G4CUTTUBS_HH
 
-#include "G4Tubs.hh"
+#include "G4OTubs.hh"
 
-class G4CutTubs : public G4Tubs
+class G4CutTubs : public G4OTubs
 {
   public:  // with description
 
@@ -152,6 +151,10 @@ class G4CutTubs : public G4Tubs
     G4bool fPhiFullCutTube;
       //
       // Flag for identification of section or full tube
+
+    G4double halfCarTolerance, halfRadTolerance, halfAngTolerance;
+      //
+      // Cached half tolerance values
 };
 
 #include "G4CutTubs.icc"

@@ -7,11 +7,9 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:56:10 bmorgan Exp $
+# $Id: CMakeLists.txt 67758 2013-03-06 23:28:25Z mkelsey $
 #
+# 20130225  Remove evaporation and utils subdirectories
 #------------------------------------------------------------------------------
 
 add_subdirectory(cascade)
-add_subdirectory(evaporation)
-add_subdirectory(utils)
-

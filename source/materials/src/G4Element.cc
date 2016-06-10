@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Element.cc 69704 2013-05-13 09:06:12Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,7 +48,7 @@
 // 26-02-02: fIndexInTable renewed
 // 30-03-05: warning in GetElement(elementName)
 // 15-11-05: GetElement(elementName, G4bool warning=true) 
-// 17-10-06: Add fNaturalAbandances (V.Ivanchenko)
+// 17-10-06: Add fNaturalAbundances (V.Ivanchenko)
 // 27-07-07: improve destructor (V.Ivanchenko) 
 // 18-10-07: move definition of material index to ComputeDerivedQuantities (VI) 
 // 25.10.11: new scheme for G4Exception  (mma)
@@ -75,17 +75,17 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
                      G4double zeff, G4double aeff)
   : fName(name), fSymbol(symbol)		     
 {
-  G4int iz = (G4int)zeff;
-  if (zeff<1.) {
+  G4int iz = G4lrint(zeff);
+  if (iz < 1) {
     G4ExceptionDescription ed;
     ed << "Fail to create G4Element " << name 
-       << " Z= " << zeff << " < 1 !" << G4endl;
+       << " Z= " << zeff << " < 1 !";
     G4Exception ("G4Element::G4Element()", "mat011",  FatalException, ed);
   }
   if (std::abs(zeff - iz) > perMillion) {
     G4ExceptionDescription ed;
     ed << "G4Element Warning:  " << name << " Z= " << zeff 
-       << " A= " << aeff/(g/mole) << G4endl; 
+       << " A= " << aeff/(g/mole); 
     G4Exception("G4Element::G4Element()", "mat017", JustWarning, ed);
   }
 
@@ -102,7 +102,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
     ed << "Fail to create G4Element " << name 
        << " with Z= " << zeff << "  N= " << fNeff 
        << "   N < Z is not allowed" << G4endl;
-    G4Exception ("G4Element::G4Element()", "mat012",  FatalException, ed);
+    G4Exception("G4Element::G4Element()", "mat012",  FatalException, ed);
   }
    
   fNbOfAtomicShells      = G4AtomicShells::GetNumberOfShells(iz);
@@ -132,8 +132,12 @@ G4Element::G4Element(const G4String& name,
 
   size_t n = size_t(nIsotopes);
 
-  if(0 == nIsotopes) {
-    AddNaturalIsotopes();
+  if(0 >= nIsotopes) {
+    G4ExceptionDescription ed;
+    ed << "Fail to create G4Element " << name 
+       << " <" << symbol << "> with " << nIsotopes
+       << " isotopes";
+    G4Exception ("G4Element::G4Element()", "mat012",  FatalException, ed);
   } else {
     theIsotopeVector         = new G4IsotopeVector(n,0);
     fRelativeAbundanceVector = new G4double[nIsotopes];
@@ -149,7 +153,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
   if (theIsotopeVector == 0) {
     G4ExceptionDescription ed;
     ed << "Fail to add Isotope to G4Element " << fName 
-       << " with Z= " << fZeff << "  N= " << fNeff << G4endl;
+       << " with Z= " << fZeff << "  N= " << fNeff;
     G4Exception ("G4Element::AddIsotope()", "mat013",  FatalException, ed);
     return;
   }
@@ -162,8 +166,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     else if (G4double(iz) != fZeff) { 
       G4ExceptionDescription ed;
       ed << "Fail to add Isotope Z= " << iz << " to G4Element " << fName 
-	 << " with different Z= " << fZeff << fNeff 
-	 << G4endl;
+	 << " with different Z= " << fZeff << fNeff;
       G4Exception ("G4Element::AddIsotope()", "mat014",  FatalException, ed);
       return;
     }
@@ -171,11 +174,11 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
     (*theIsotopeVector)[fNumberOfIsotopes] = isotope;
     ++fNumberOfIsotopes;
-    isotope->increaseCountUse();
+
   } else {
     G4ExceptionDescription ed;
     ed << "Fail to add Isotope Z= " << iz << " to G4Element " << fName 
-       << " - more isotopes than declaired " << G4endl;
+       << " - more isotopes than declaired ";
     G4Exception ("G4Element::AddIsotope()", "mat015",  FatalException, ed);
     return;
   }
@@ -185,14 +188,19 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     // Compute Neff, Aeff
     G4double wtSum=0.0;
 
-    fNeff = fAeff = 0.0;
+    G4double aeff = 0.0;
+    G4double neff = 0.0;
     for (size_t i=0;i<fNumberOfIsotopes;i++) {
-      fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
-      fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
+      aeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
+      neff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
       wtSum +=  fRelativeAbundanceVector[i];
     }
-    fAeff  /= wtSum;
-    fNeff  /= wtSum;
+    aeff  /= wtSum;
+    neff  /= wtSum;
+    if(0.0 == fAeff) {
+      fAeff  = aeff;
+      fNeff  = neff;
+    }
 
     if(wtSum != 1.0) {
       for(size_t i=0; i<fNumberOfIsotopes; ++i) { 
@@ -224,17 +232,14 @@ void G4Element::InitializePointers()
   fNbOfShellElectrons = 0;
   fIonisation = 0;
   fNumberOfIsotopes = 0;
-  fNaturalAbandances = false;
+  fNaturalAbundance = false;
 
   // add initialisation of all remaining members
   fZeff = 0;
   fNeff = 0;
   fAeff = 0;
   fNbOfAtomicShells = 0; 
-  fCountUse = 0;
-  fIndexZ = 0;
   fIndexInTable = 0;
-  fNaturalAbandances = false;
   fCoulomb = 0.0;
   fRadTsai = 0.0;
 }
@@ -275,14 +280,6 @@ void G4Element::ComputeDerivedQuantities()
   // Store in table
   theElementTable.push_back(this);
   fIndexInTable = theElementTable.size() - 1;
-      
-  // check if elements with same Z already exist
-  fIndexZ = 0; 
-  for (size_t J=0 ; J<fIndexInTable ; J++) {
-    if (theElementTable[J]->GetZ() == fZeff) { ++fIndexZ; }
-  }
-  //nb of materials which use this element
-  fCountUse = 0;
 
   // Radiation Length
   ComputeCoulombFactor();
@@ -300,7 +297,7 @@ void G4Element::ComputeCoulombFactor()
   //
   //  Compute Coulomb correction factor (Phys Rev. D50 3-1 (1994) page 1254)
 
-  const G4double k1 = 0.0083 , k2 = 0.20206 ,k3 = 0.0020 , k4 = 0.0369 ;
+  static const G4double k1 = 0.0083 , k2 = 0.20206 ,k3 = 0.0020 , k4 = 0.0369 ;
 
   G4double az2 = (fine_structure_const*fZeff)*(fine_structure_const*fZeff);
   G4double az4 = az2 * az2;
@@ -316,8 +313,8 @@ void G4Element::ComputeLradTsaiFactor()
   //  Compute Tsai's Expression for the Radiation Length
   //  (Phys Rev. D50 3-1 (1994) page 1254)
 
-  const G4double Lrad_light[]  = {5.31  , 4.79  , 4.74 ,  4.71} ;
-  const G4double Lprad_light[] = {6.144 , 5.621 , 5.805 , 5.924} ;
+  static const G4double Lrad_light[]  = {5.31  , 4.79  , 4.74 ,  4.71} ;
+  static const G4double Lprad_light[] = {6.144 , 5.621 , 5.805 , 5.924} ;
   
   const G4double logZ3 = std::log(fZeff)/3.;
 
@@ -360,6 +357,7 @@ void G4Element::AddNaturalIsotopes()
   if(xsum != 0.0 && xsum != 1.0) {
     for(G4int i=0; i<idx; ++i) { fRelativeAbundanceVector[i] /= xsum; }
   }
+  fNaturalAbundance = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -370,8 +368,7 @@ G4double G4Element::GetAtomicShell(G4int i) const
     G4ExceptionDescription ed;
     ed << "Invalid argument " << i << " in for G4Element " << fName 
        << " with Z= " << fZeff 
-       << " and Nshells= " << fNbOfAtomicShells  
-       << G4endl;
+       << " and Nshells= " << fNbOfAtomicShells;
     G4Exception("G4Element::GetAtomicShell()", "mat016", FatalException, ed);
     return 0.0;
   }
@@ -386,8 +383,7 @@ G4int G4Element::GetNbOfShellElectrons(G4int i) const
     G4ExceptionDescription ed;
     ed << "Invalid argument " << i << " for G4Element " << fName 
        << " with Z= " << fZeff 
-       << " and Nshells= " << fNbOfAtomicShells  
-       << G4endl;
+       << " and Nshells= " << fNbOfAtomicShells;
     G4Exception("G4Element::GetNbOfShellElectrons()", "mat016", FatalException, ed);
     return 0;
   }
@@ -396,7 +392,7 @@ G4int G4Element::GetNbOfShellElectrons(G4int i) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4ElementTable* G4Element::GetElementTable()
+G4ElementTable* G4Element::GetElementTable()
 {
   return &theElementTable;
 }

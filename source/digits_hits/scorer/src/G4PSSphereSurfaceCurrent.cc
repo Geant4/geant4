@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PSSphereSurfaceCurrent.cc 76272 2013-11-08 11:53:00Z gcosmo $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"
@@ -99,7 +99,7 @@ G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4int dirFlag =IsSelectedSurface(aStep,sphereSolid);
   if ( dirFlag > 0 ) {
     if ( fDirection == fCurrent_InOut || fDirection == dirFlag ){
-	G4double radi   = sphereSolid->GetInsideRadius();
+	G4double radi   = sphereSolid->GetInnerRadius();
 	G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
 	G4double stth   = sphereSolid->GetStartThetaAngle()/radian;
 	G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
@@ -135,7 +135,7 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
     //G4double InsideRadius2 = 
     //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
     //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
-    G4double InsideRadius = sphereSolid->GetInsideRadius();
+    G4double InsideRadius = sphereSolid->GetInnerRadius();
     if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
 	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fCurrent_In;
@@ -153,7 +153,7 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
     //G4double InsideRadius2 = 
     //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
     //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
-    G4double InsideRadius = sphereSolid->GetInsideRadius();
+    G4double InsideRadius = sphereSolid->GetInnerRadius();
     if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
 	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fCurrent_Out;

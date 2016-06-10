@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ElectronRunAction.hh 75702 2013-11-05 13:08:48Z gcosmo $
+//
 /// \file medical/electronScattering2/include/ElectronRunAction.hh
 /// \brief Definition of the ElectronRunAction class
-//
 
 #ifndef ELECTRONRUNACTION_HH
 #define ELECTRONRUNACTION_HH
@@ -35,20 +36,22 @@
 
 class G4Run;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class ElectronRunAction : public G4UserRunAction {
 
 public:
-  ElectronRunAction(G4String&);
+  ElectronRunAction(const G4String&);
   virtual ~ElectronRunAction();
 
   virtual G4Run* GenerateRun();
   
-  virtual void BeginOfRunAction(const G4Run*);
   virtual void EndOfRunAction(const G4Run*);
 
 private:
   G4String fOutputFileSpec;
 };
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif

@@ -26,7 +26,7 @@
 /// \file eventgenerator/particleGun/src/PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the PrimaryGeneratorMessenger class
 //
-// $Id$
+// $Id: PrimaryGeneratorMessenger.cc 68734 2013-04-05 09:47:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,17 +40,20 @@
 
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                              PrimaryGeneratorAction* Gun)
-:Action(Gun)
+:G4UImessenger(),
+ Action(Gun),
+ fDir(0),       
+ fSelectActionCmd(0)
 {
   fDir = new G4UIdirectory("/gunExample/");
   fDir->SetGuidance("this example");
     
   fSelectActionCmd = new G4UIcmdWithAnInteger("/gunExample/selectGunAction",this);
   fSelectActionCmd->SetGuidance("Select primary generator action");
-  fSelectActionCmd->SetGuidance(" id = 1 : Generate several vertices and particles per event");
-  fSelectActionCmd->SetGuidance(" id = 2 : Show how to sample a tabulated function");  
-  fSelectActionCmd->SetGuidance(" id = 3 : Divergent beam in an arbitrary direction");
-  fSelectActionCmd->SetGuidance(" id = 4 : In spherical coordinates with rotation matrix");
+  fSelectActionCmd->SetGuidance("id=1 Generate several vertices and particles per event");
+  fSelectActionCmd->SetGuidance("id=2 Show how to sample a tabulated function");  
+  fSelectActionCmd->SetGuidance("id=3 Divergent beam in an arbitrary direction");
+  fSelectActionCmd->SetGuidance("id=4 In spherical coordinates with rotation matrix");
   fSelectActionCmd->SetParameterName("id",false);
   fSelectActionCmd->SetRange("id>0 && id<5");
 }

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/MyKleinNishinaCompton.hh
 /// \brief Definition of the MyKleinNishinaCompton class
 //
-// $Id$
+// $Id: MyKleinNishinaCompton.hh 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -49,7 +49,7 @@ public:
                         const G4ParticleDefinition* p = 0, 
                         const G4String& nam = "myKlein-Nishina");
 
-  virtual ~MyKleinNishinaCompton();
+ ~MyKleinNishinaCompton();
                                       
   virtual G4double CrossSectionPerVolume(
                                 const G4Material*,

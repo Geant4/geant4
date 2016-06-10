@@ -19,35 +19,34 @@
 #   For development of the toolkit. It adds debugging, and enables the use
 #   of library specific debugging via standardized definitions.
 #
-# Compiler flags specific to these build types are set in the cache, and the 
-# types are added to the CMAKE_BUILD_TYPE cache string and to
+# Compiler flags specific to these build types are set in the cache, and 
+# the  types are added to the CMAKE_BUILD_TYPE cache string and to
 # CMAKE_CONFIGURATION_TYPES if appropriate to the build tool being used.
 #
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Add TestRelease{Debug} Modes and cache init flags
 #
 set(CMAKE_CXX_FLAGS_TESTRELEASE "${CMAKE_CXX_FLAGS_TESTRELEASE_INIT}"
   CACHE STRING "Flags used by the compiler during TestRelease builds"
-)
+  )
 
-
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Add Maintainer Mode
 #
 set(CMAKE_CXX_FLAGS_MAINTAINER "${CMAKE_CXX_FLAGS_MAINTAINER_INIT}"
   CACHE STRING "Flags used by the compiler during Maintainer builds"
-)
+  )
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Mark all the additional mode flags as advanced because most users will 
 # never need to see them
 mark_as_advanced(
   CMAKE_CXX_FLAGS_TESTRELEASE
   CMAKE_CXX_FLAGS_MAINTAINER
-)
+  )
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Add the new configuration types ONLY if the build tool supports multiple
 # configurations
 #
@@ -61,7 +60,7 @@ if(CMAKE_CONFIGURATION_TYPES)
     )
 endif()
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Update build type information ONLY for single mode build tools, adding
 # default type if none has been set, but otherwise leaving value alone.
 # NB: this doesn't allow "None" for the build type - would need something

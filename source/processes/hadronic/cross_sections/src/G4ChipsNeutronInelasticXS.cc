@@ -25,7 +25,6 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-May-09
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4ChipsNeutronInelasticXS for gamma+A cross sections
@@ -101,12 +100,12 @@ G4double G4ChipsNeutronInelasticXS::GetIsoCrossSection(const G4DynamicParticle* 
 // Make pMom in independent units ! (Now it is MeV)
 G4double G4ChipsNeutronInelasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int)
 {
-  static G4int j;                      // A#0f Z/N-records already tested in AMDB
-  static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
-  static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
-  static std::vector <G4double> colP;  // Vector of last momenta for the reaction
-  static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
-  static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
+  static G4ThreadLocal G4int j;                      // A#0f Z/N-records already tested in AMDB
+  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
+  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
+  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
 
@@ -1259,12 +1258,40 @@ G4double G4ChipsNeutronInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
   G4double sigma=0.;
   if(tZ==1 && !tN)                        // np interaction from G4QuasiElasticRatios
   {
+
+    G4double El(0.), To(0.);              // Uzhi
+    if(P<0.1)                             // Copied from G4QuasiElasticRatios Uzhi / start
+    {
+      G4double p2=P*P;
+      El=1./(0.00012+p2*(0.051+0.1*p2));
+      To=El;
+    }
+    else if(P>1000.)
+    {
+      G4double lp=std::log(P)-3.5;
+      G4double lp2=lp*lp;
+      El=0.0557*lp2+6.72;
+      To=0.3   *lp2+38.2;
+    }
+    else
+    {
+      G4double p2=P*P;
+      G4double LE=1./(0.00012+p2*(0.051+0.1*p2));
+      G4double lp=std::log(P)-3.5;
+      G4double lp2=lp*lp;
+      G4double rp2=1./p2;
+      El=LE+(0.0557*lp2+6.72+30./P)/(1.+0.49*rp2/P);
+      To=LE+(0.3   *lp2+38.2)/(1.+0.54*rp2*rp2);
+    }                                   // Copied from G4QuasiElasticRatios Uzhi / end
+
+/*                                                          // Uzhi 4.03.2013
     G4double p2=P*P;
     G4double lp=lP-3.5;
     G4double lp2=lp*lp;
     G4double rp2=1./p2;
     G4double El=(.0557*lp2+6.72+32.6/P)/(1.+rp2/P);
     G4double To=(.3*lp2+38.2+52.7*rp2)/(1.+2.72*rp2*rp2);
+*/                                                          // Uzhi 4.03.2013
     sigma=To-El;
   }
   else if(tZ<97 && tN<152)                // General solution

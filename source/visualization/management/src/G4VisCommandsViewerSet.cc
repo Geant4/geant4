@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsViewerSet.cc 76477 2013-11-11 10:39:56Z gcosmo $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -308,7 +308,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
 
   fpCommandProjection = new G4UIcommand("/vis/viewer/set/projection",this);
   fpCommandProjection->SetGuidance
-    ("Orthogonal or perspective projection.");
+    ("Set projection style - o[rthogonal] or p[erspective]."
+     "\nIf p[erspective], also set field half angle.");
   parameter = new G4UIparameter("projection",'s',omitable = true);
   parameter->SetParameterCandidates("o orthogonal p perspective");
   parameter->SetDefaultValue("orthogonal");
@@ -378,6 +379,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandStyle->SetGuidance 
     ("(Hidden line drawing is controlled by \"/vis/viewer/set/hiddenEdge\".)");
   fpCommandStyle->SetParameterName ("style",omitable = false);
+  fpCommandStyle->SetCandidates("w wireframe s surface");
 
   fpCommandTargetPoint = new G4UIcmdWith3VectorAndUnit
     ("/vis/viewer/set/targetPoint", this);
@@ -532,6 +534,15 @@ void G4VisCommandsViewerSet::SetNewValue
       currentViewer->GetViewParameters().IsAutoRefresh();
     vp = fromViewer->GetViewParameters();
     vp.SetAutoRefresh(currentAutoRefresh);
+    // Concatenate any private vis attributes modifiers...
+    const std::vector<G4ModelingParameters::VisAttributesModifier>*
+      privateVAMs = fromViewer->GetPrivateVisAttributesModifiers();
+    if (privateVAMs) {
+      std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator i;
+      for (i = privateVAMs->begin(); i != privateVAMs->end(); ++i) {
+        vp.AddVisAttributesModifier(*i);
+      }
+    }
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "View parameters of viewer \"" << currentViewer->GetName()
 	     << "\"\n  set to those of viewer \"" << fromViewer->GetName()

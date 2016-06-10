@@ -1,4 +1,4 @@
-$Id: History,v 1.173 2010-12-15 17:05:06 gcosmo Exp $
+$Id: History 77024 2013-11-20 16:08:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,113 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 19th, 2013 J.Apostolakis         - geomvol-V09-06-20
+- Fix(es) for issues identified by Coverity:
+   G4GeometryWorkspace: initialisation of data member.
+   G4GeometryWorkspacePool: fixed implementation of singleton.
+
+November  8th, 2013 J.Apostolakis         - geomvol-V09-06-19
+- Cleanup: reduced verbosity of G4GeometryWorkspace by making
+   it optional.  
+  Added Set/Get Verbose methods to toggle and view it.
+
+November  7th, 2013 J.Apostolakis         - geomvol-V09-06-18
+- Restored the ability to 'clone' Nested Parameterisations.
+   This allows the use of Nested Parameterizations with MT.
+   This precaution is not needed - 'good' user code will cope with 
+   the changing of target solid in each thread.
+  Note: The restriction on parameterizations which use multiple types
+   of solids remains. 
+
+November  1st, 2013 G.Cosmo               - geomvol-V09-06-17
+- Restored use of G4EnhancedVecAllocator in G4NavigationHistory for
+  sequential mode.
+
+October 18th, 2013 J.Apostolakis          - geomvol-V09-06-16
+- G4GeometryWorkspace: Add new method CloneReplicaSolid, to 
+  ensure that the solid for each Replica is separate object.
+
+October 17th, 2013 J.Apostolakis, A.Dotti - geomvol-V09-06-15
+- Cleanup of the code removing unnecessary lines of codes and comments
+- G4GeometryWorkspacePool::CreateWorkspace
+  Do not create a second object G4GeometryWorkspace'.
+- Fixed Singleton G4GeometryWorkspacePool - for thread safe creation
+  of object. 
+
+  G4GeometryWorkspacePool: CreateWorkspace will not create a second 
+   object G4GeometryWorkspace (in the same thread)
+  Fixed Singleton G4GeometryWorkspacePool - for thread safe creation 
+   of object. 
+
+October 4th, 2013 J.Apostolakis - geomvol-V09-06-14
+- Retag due to issue with testing (needed to ensure use of geommng-V09-06-12)
+  Co-works with geommng-V09-06-12 and geom-specific-V09-06-19.
+
+October 4th, 2013 J.Apostolakis - geomvol-V09-06-13
+- Separated functionality for Solids (PCone/PHedra Sides) from 
+  G4GeometryWorkspace into separate class G4SolidsWorkspace in 
+  solids/specific.  Needed to satisfy dependence issue.
+  Co-works with geommng-V09-06-12 and geom-specific-V09-06-18.
+
+October 3rd, 2013 J.Apostolakis - geomvol-V09-06-12
+- Added new classes G4GeometryWorkspace - to create and manage MT objects.
+  and G4GeometryWorkspacePool which keeps Workspace objects. 
+- Small improvements and description in G4GeometryWorkspace.
+
+September 17th, 2013 G.Cosmo - geomvol-V09-06-10
+- Test: use G4EnhancedVecAllocator in G4NavigationHistory only in MT mode.
+
+September 16th, 2013 I.Hrivnacova - geomvol-V09-06-09
+- Removed thread-local specification for G4LogicalBorderSurfaceTable and
+  G4LogicalSkinSurfaceTable, as now supposed to be shared.
+
+August 22nd, 2013 G.Cosmo - geomvol-V09-06-08
+- Added parameter to specify maximum number of overlap errors to report.
+  Adapted code in CheckOverlaps() in G4PVPlacement and G4PVParameterised
+  to take into account the threshold.
+
+April 2nd, 2013 G.Cosmo - geomvol-V09-06-07
+- More optimisation to G4LogicalBorderSurface and G4LogicalSkinSurface
+  in the use of static tables.
+
+March 18th, 2013 G.Cosmo - geomvol-V09-06-06
+- More cleanup from MT changes in G4TouchableHistory.
+
+March 12th, 2013 A.Dotti - geomvol-V09-06-05
+- Added missing implementation of member function GetSubInstanceManager()
+  in G4PVReplica.
+
+March 12th, 2013 G.Cosmo - geomvol-V09-06-04
+- Added public accessors for MT data to G4PVReplica.
+
+March 11th, 2013 G.Cosmo - geomvol-V09-06-03
+- Fixed accessors adding check for existance of static surface table.
+
+March 10th, 2013 G.Cosmo - geomvol-V09-06-02
+- Redefined G4DLL_API to G4GEOM_DLL to avoid cases of macro redefinition.
+
+March 8th, 2013 G.Cosmo - geomvol-V09-06-01
+- Renamed G4MTTransitory to G4GeomSplitter. Adapted G4PVReplica.
+- More cleanup of MT changes in G4PVReplica split class and other classes:
+  G4NavigationLevel, G4NavigationLevelRep, G4TouchableHistory,
+  G4LogicalBorderSurface and G4LogicalSkinSurface.
+
+February 12th, 2013 J.Apostolakis - geomvol-V09-06-00
+- G4TouchableHistory: inspected changes for Geant4-MT.
+  Took out unneeded calls that initialised allocator in many methods.
+  Only the call in new() is needed, and is kept.
+  Cleared extra code introducing a performance penalty and also complicating
+  the code without reason.
+  Note: constructors cannot check that the Allocator is initialised.
+        They could be called first to create an object which was created
+        in a different way (e.g. on the stack, via new(prealloc) or new[ ] ).
+
+January 13th, 2013 A.Dotti
+- Introduced changes for thread-safety from G4MT prototype.
+  Classes with Allocator: all methods now initialising allocator pointer.
+  Revised key classes, to separate the part of the state which is
+  thread-dependent (changed in event loop), including: 
+  G4LogicalVolume, G4PhysicalVolume, G4PVReplica, G4PVPlacement.
 
 November 6th, 2012 G.Cosmo - geomvol-V09-05-02
 - Fix in G4EnhancedVecAllocator for porting on AIX.

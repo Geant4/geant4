@@ -14,6 +14,206 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 November 2013 John Apostolakis (hadr-hpn-V09-06-24)
+Made the data arrays 'const' in place of G4ThreadLocal.
+    in G4NeutronHPFastLegendre (and its subfiles)
+
+
+12 November 2013 Tatsumi Koi (hadr-hpn-V09-06-23)
+Fix compiler warnings: 
+       include/G4ENDFTapeRead.hh
+       src/G4WendtFissionFragmentGenerator.cc
+       src/G4ENDFTapeRead.cc
+
+
+10 November 2013 Tatsumi Koi (hadr-hpn-V09-06-22)
+Fix compiler warnings: 
+       src/G4WendtFissionFragmentGenerator.cc
+       src/G4FPYBiasedLightFragmentDist.cc
+       src/G4FPYSamplingOps.cc
+       src/G4FissionProductYieldDist.cc
+Fix on problems on gnumake
+       GNUmakefile
+
+
+8 November 2013 Tatsumi Koi (hadr-hpn-V09-06-21)
+Fix problem on Wendt model
+       src/G4FPYSamplingOps.cc
+       src/G4FissionProductYieldDist.cc
+       src/G4FissionFragmentGenerator.cc
+       src/G4WendtFissionFragmentGenerator.cc
+       src/G4NeutronHPChannel.cc
+       src/G4NeutronHPFission.cc
+
+
+8 November 2013 Tatsumi Koi (hadr-hpn-V09-06-20)
+Merging branch of "FissFragGen" for update of fix for windows platform and reading data file in Wendt model
+-%svn merge --dry-run -r 75913:76341 svn+ssh://svn.cern.ch/reps/geant4/branches/geant4/source/processes/hadronic/models/neutron_hp/_symbols/FissFragGen
+
+
+7 November 2013 Tatsumi Koi (hadr-hpn-V09-06-19)
+Merging branch of "FissFragGen" where fission fragments generator is developed
+-%svn merge -r 69414:75913 svn+ssh://svn.cern.ch/reps/geant4/branches/geant4/source/processes/hadronic/models/neutron_hp/_symbols/FissFragGen
+Please read FissFragGen.History for detail information
+
+
+31 October 2013 Tatsumi Koi (hadr-hpn-V09-06-18)
+-Fix problem on Windows platform to echo environment variable
+	src/G4NeutronHPInelasticBaseFS.cc
+
+
+15 October 2013 Tatsumi Koi (hadr-hpn-V09-06-17)
+-Change G4ParticleTable::GetParticleTable()->GetIon(,,) 
+     to G4IonTable::GetIonTable()->GetIon(,,);
+	src/G4NeutronHPFinalState.cc
+	src/G4NeutronHPInelasticBaseFS.cc
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHPIsotropic.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPChannelList.cc
+	src/G4NeutronHPInelasticCompFS.cc
+	src/G4NeutronHPElasticFS.cc
+	src/G4NeutronHPContAngularPar.cc
+
+
+12 Jun 2013 Tatsumi Koi (hadr-hpn-V09-06-16)
+-Fix for warning message
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+10 Jun 2013 Tatsumi Koi (hadr-hpn-V09-06-15)
+-Fix "UNINIT", "FORWARD_NULL"
+	src/G4NeutronHPThermalScattering.cc
+-Replace "abs" to "fabs"
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+7 Jun 2013 Tatsumi Koi (hadr-hpn-V09-06-14)
+-Fix for hadr-hpn-V09-06-13
+	src/G4NeutronHPThermalScattering.cc
+-Fix for "INVALIDATE_ITERATOR"
+-Enable to use single temperature data file
+	src/G4NeutronHPThermalScatteringData.cc
+-Fix for extrapolation problem reported by CIEMAT group
+	src/G4NeutronHPThermalScattering.cc
+-Add trick for fixing problem in dynamically generated materials
+	include/G4NeutronHPThermalScattering.hh
+	src/G4NeutronHPThermalScattering.cc
+
+
+29 May 2013 Tatsumi Koi (hadr-hpn-V09-06-13)
+-Adding a capability register user prepared thermal scattering file
+	include/G4NeutronHPThermalScatteringNames.hh
+	include/G4NeutronHPThermalScatteringData.hh
+	include/G4NeutronHPThermalScattering.hh
+	src/G4NeutronHPThermalScatteringData.cc
+	src/G4NeutronHPThermalScattering.cc
+	src/G4NeutronHPThermalScatteringNames.cc
+
+
+28 May 2013 Tatsumi Koi (hadr-hpn-V09-06-12)
+-Adding a capability to disable adjustment of final state photons in capture 
+Fix for Bugzilla #1279
+	include/G4NeutronHPFinalState.hh
+	src/G4NeutronHPCaptureFS.cc
+
+
+17 May 2013 Tatsumi Koi (hadr-hpn-V09-06-11)
+- Activate capability of reading zlibed data file
+	src/G4NeutronHPManager.cc
+
+
+7 May 2013 Tatsumi Koi (hadr-hpn-V09-06-10)
+- Making GetVerboseLevel into const member function 
+
+
+2 May 2013 Tatsumi Koi (hadr-hpn-V09-06-09)
+Add package-wide verbose level control 
+Sharing one value on entire package 
+	include/G4NeutronHPManager.hh
+	include/G4NeutronHPCapture.hh
+	include/G4NeutronHPCaptureData.hh
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPElasticData.hh
+	include/G4NeutronHPFission.hh
+	include/G4NeutronHPFissionData.hh
+	include/G4NeutronHPInelastic.hh
+	include/G4NeutronHPInelasticData.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPElastic.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPInelasticData.cc
+Delete (Comment out) BuildPhysicsTable from constructor 
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+Construction for UR-14 
+	src/G4NeutronHPName.cc
+	
+
+30 April 2013 Tatsumi Koi (hadr-hpn-V09-06-08)
+Fix UNINIT_CTOR "theBuffer"
+	src/G4NeutronHPElementData.cc
+Replace std::cout to G4cout
+	src/G4NeutronHPThermalScattering.cc
+
+
+16 April 2013 Tatsumi Koi (hadr-hpn-V09-06-07)
+Deactivate capability of reading zlibed G4NEUTRONHPDATA library 
+	src/G4NeutronHPManager.cc
+
+
+16 April 2013 Tatsumi Koi (hadr-hpn-V09-06-06)
+Merging branch of "hpz" which enable to read zlibed data files 
+Step 1 merge trunk to the branch
+svn merge -r 67425:68410 svn+ssh://svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp
+Step 2 merge the branch to trunk
+g4svn merge --branch hpz
+Step 3 restore test before commit
+svn update --force test
+Step 4 
+svn commit
+
+
+26 March 2013  Ben Morgan (hadr-hpn-V09-06-05)
+- sources.cmake : Use new ZLIB variables for include paths and library
+  links to allow transparent use of internal/external zlib.
+  NB: The code does not use ZLIB at present, but this patch allows
+  usage from now on as you require.
+
+
+12 March 2013  Dennis Wright (hadr-hpn-V09-06-04)
+- fix MacOS Clang compiler warnings: 
+  G4NeutronHPCapture.hh : remove unused private variable "it"
+  G4NeutronHPCaptureFS.hh : remove unused private variables "theCurrentA"
+                            and "theCurrentZ"  
+  G4NeutronHPThermalScattering.hh : remove unused private variable "xSec" 
+                            and "numEle"  
+
+
+9 January  2013  Tatsumi Koi (hadr-hpn-V09-06-03)
+Fixed improper use of abort() 
+	src/G4NeutronHPThermalScattering.cc
+
+
+11 December 2012  Tatsumi Koi (hadr-hpn-V09-06-02)
+Delete HP or Low Energy Parameterization Models and data sets from sources.cmake
+
+
+6 December 2012  Tatsumi Koi (hadr-hpn-V09-06-01)
+Delete HP or Low Energy Parameterization Models and data sets from repository
+
+
+6 December 2012  Tatsumi Koi (hadr-hpn-V09-06-00)
+Delete legacy lines for cvs
+
+
 29 November 2012 Alberto Ribon (hadr-hpn-V09-05-26)
 Added protection against negative argument in square root
 	src/G4NeutronHPInelasticCompFS.cc

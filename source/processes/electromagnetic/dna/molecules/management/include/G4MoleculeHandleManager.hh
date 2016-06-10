@@ -58,7 +58,7 @@ public:
 
 private:
     G4MoleculeHandleManager();
-    static G4MoleculeHandleManager* fInstance;
+    static G4ThreadLocal G4MoleculeHandleManager* fInstance;
 
     struct CompMoleculePointer
     {

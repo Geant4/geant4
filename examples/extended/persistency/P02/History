@@ -13,6 +13,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 20th, 2013 W. Pokorski (exampleP02-V09-06-02)
+- corrected a missing coma in ExP02DetectorConstruction.cc
+
+June 18th, 2013 I. Hrivnacova (exampleP02-V09-06-01)
+- Applied coding guidelines (long lines, data members initialization)
+- Code clean-up (removed redundant public/protected keyword, indention)
+
+June 18th, 2013 W. Pokorski (exampleP02-V09-06-00)
+- changes for coding conventions
+
+May 27th, 2013 I. Hrivnacova
+- Fixed handling required packages/options in CMake files
+
 October 11th, 2012 A. Dotti (exampleP02-V09-05-00)
 - Adding protection in case GCCXML is not available, disabling the example
 

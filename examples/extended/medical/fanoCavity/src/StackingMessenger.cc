@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/StackingMessenger.cc
 /// \brief Implementation of the StackingMessenger class
 //
-// $Id$
+// $Id: StackingMessenger.cc 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:fStacking(stack)
+:fStacking(stack), fKillCmd(0)
 {   
   fKillCmd = new G4UIcmdWithABool("/testem/killTracks",this);
   fKillCmd->SetGuidance("kill selected secondaries");  

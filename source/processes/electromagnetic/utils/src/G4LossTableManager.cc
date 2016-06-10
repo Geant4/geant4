@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LossTableManager.cc 76333 2013-11-08 14:31:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -69,7 +69,10 @@
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 // 18-06-07 Move definition of msc parameters to G4EmProcessOptions (V.Ivanchenko)
 // 21-02-08 Added G4EmSaturation (V.Ivanchenko)
-// 12-04-10 Added PreparePhsyicsTables and BuildPhysicsTables entries (V.Ivanchenko)
+// 12-04-10 Added PreparePhysicsTables and BuildPhysicsTables entries (V.Ivanchenko)
+// 04-06-13 (V.Ivanchenko) Adaptation for MT mode; new method LocalPhysicsTables; 
+//          ions expect G4GenericIon are not included in the map of energy loss
+//          processes for performnc reasons  
 //
 // Class Description:
 //
@@ -99,24 +102,29 @@
 #include "G4LossTableBuilder.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4Region.hh"
+#include "G4PhysicalConstants.hh"
 
-G4LossTableManager* G4LossTableManager::theInstance = 0;
+//G4ThreadLocal G4LossTableManager* G4LossTableManager::theInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4LossTableManager* G4LossTableManager::Instance()
 {
-  if(0 == theInstance) {
-    static G4LossTableManager manager;
-    theInstance = &manager;
+  /*
+  if(!theInstance) {
+    theInstance = new G4LossTableManager;
   }
   return theInstance;
+  */
+  static G4ThreadLocalSingleton<G4LossTableManager> instance;
+  return instance.Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4LossTableManager::~G4LossTableManager()
 {
+  //G4cout << "### G4LossTableManager::~G4LossTableManager()" << G4endl;
   for (G4int i=0; i<n_loss; ++i) {
     if( loss_vector[i] ) { delete loss_vector[i]; }
   }
@@ -129,10 +137,17 @@ G4LossTableManager::~G4LossTableManager()
     if( emp_vector[k] ) { delete emp_vector[k]; }
   }
   size_t mod = mod_vector.size();
-  for (size_t a=0; a<mod; ++a) {
-    if( mod_vector[a] ) { delete mod_vector[a]; }
-  }
   size_t fmod = fmod_vector.size();
+  for (size_t a=0; a<mod; ++a) {
+    if( mod_vector[a] ) { 
+      for (size_t b=0; b<fmod; ++b) {
+	if((G4VEmModel*)(fmod_vector[b]) == mod_vector[a]) {
+	  fmod_vector[b] = 0;
+	}
+      }
+      delete mod_vector[a]; 
+    }
+  }
   for (size_t b=0; b<fmod; ++b) {
     if( fmod_vector[b] ) { delete fmod_vector[b]; }
   }
@@ -151,7 +166,7 @@ G4LossTableManager::~G4LossTableManager()
 G4LossTableManager::G4LossTableManager()
 {
   n_loss = 0;
-  run = 0;
+  run = -1;
   startInitialisation = false;
   all_tables_are_built = false;
   currentLoss = 0;
@@ -177,11 +192,13 @@ G4LossTableManager::G4LossTableManager()
   stepFunctionActive = false;
   flagLPM = true;
   splineFlag = true;
+  isMaster = false;
   bremsTh = DBL_MAX;
   factorForAngleLimit = 1.0;
   verbose = 1;
   theMessenger = new G4EnergyLossMessenger();
   theElectron  = G4Electron::Electron();
+  theGenericIon= 0;
   tableBuilder = new G4LossTableBuilder();
   emCorrections= new G4EmCorrections();
   emSaturation = new G4EmSaturation();
@@ -238,7 +255,8 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   if(!lossFluctuationFlag) { p->SetLossFluctuations(false); }
   if(subCutoffFlag)        { p->ActivateSubCutoff(true); }
   if(rndmStepFlag)         { p->SetRandomStep(true); }
-  if(stepFunctionActive)   { p->SetStepFunction(maxRangeVariation, maxFinalStep); }
+  if(stepFunctionActive)   { p->SetStepFunction(maxRangeVariation, 
+						maxFinalStep); }
   if(integralActive)       { p->SetIntegral(integral); }
   if(minEnergyActive)      { p->SetMinKinEnergy(minKinEnergy); }
   if(maxEnergyActive)      { p->SetMaxKinEnergy(maxKinEnergy); }
@@ -352,14 +370,6 @@ void G4LossTableManager::DeRegister(G4VEmFluctuationModel* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::RegisterIon(const G4ParticleDefinition* ion, 
-				     G4VEnergyLossProcess* p)
-{
-  loss_map[ion] = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 void G4LossTableManager::RegisterExtraParticle(
      const G4ParticleDefinition* part,
      G4VEnergyLossProcess* p)
@@ -388,7 +398,8 @@ void G4LossTableManager::RegisterExtraParticle(
 
 void 
 G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
-					G4VEnergyLossProcess* p)
+					G4VEnergyLossProcess* p,
+					G4bool theMaster)
 {
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
@@ -396,38 +407,57 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 	   << " and " << p->GetProcessName() << " run= " << run 
 	   << "   loss_vector " << loss_vector.size() << G4endl;
   }
-  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
+  isMaster = theMaster;
+
+  if(!startInitialisation) { 
+    tableBuilder->SetInitialisationFlag(false); 
+    if (1 < verbose) {
+      G4cout << "====== G4LossTableManager::PreparePhysicsTable start ====="
+	     << G4endl;
+    } 
+  }
 
   // start initialisation for the first run
-  startInitialisation = true;
-
-  if( 0 == run ) {
+  if( -1 == run ) {
     emConfigurator->PrepareModels(particle, p);
 
     // initialise particles for given process
     for (G4int j=0; j<n_loss; ++j) {
-      if (p == loss_vector[j]) {
-	if (!part_vector[j]) { part_vector[j] = particle; }
+      if (p == loss_vector[j] && !part_vector[j]) { 
+	part_vector[j] = particle;
+	if(particle->GetParticleName() == "GenericIon") {
+	  theGenericIon = particle;
+	}
       }
     }
   }
+  startInitialisation = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void 
 G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
-					G4VEmProcess* p)
+					G4VEmProcess* p, G4bool theMaster)
 {
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << G4endl;
   }
-  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+  isMaster = theMaster;
+
+  if(!startInitialisation) { 
+    tableBuilder->SetInitialisationFlag(false); 
+    if (1 < verbose) {
+      G4cout << "====== G4LossTableManager::PreparePhysicsTable start ====="
+	     << G4endl;
+    } 
+  }
 
   // start initialisation for the first run
-  if( 0 == run ) {
+  if( -1 == run ) {
     emConfigurator->PrepareModels(particle, p);
   }
   startInitialisation = true;
@@ -437,19 +467,30 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 
 void 
 G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
-					G4VMultipleScattering* p)
+					G4VMultipleScattering* p,
+					G4bool theMaster)
 {
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << G4endl;
   }
-  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
+  isMaster = theMaster;
+
+  if(!startInitialisation) { 
+    tableBuilder->SetInitialisationFlag(false); 
+    if (1 < verbose) {
+      G4cout << "====== G4LossTableManager::PreparePhysicsTable start ====="
+	     << G4endl;
+    } 
+  }
 
   // start initialisation for the first run
-  if( 0 == run ) {
+  if( -1 == run ) {
     emConfigurator->PrepareModels(particle, p);
   } 
+  startInitialisation = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -457,8 +498,97 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 void 
 G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition*)
 {
-  if(0 == run && startInitialisation) {
+  if(-1 == run && startInitialisation) {
     emConfigurator->Clear();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::LocalPhysicsTables(
+     const G4ParticleDefinition* aParticle,
+     G4VEnergyLossProcess* p)
+{
+  if(1 < verbose) {
+    G4cout << "### G4LossTableManager::SlavePhysicsTable() for "
+	   << aParticle->GetParticleName()
+  	   << " and process " << p->GetProcessName()
+	   << G4endl;
+  }
+
+  if(-1 == run && startInitialisation) {
+    emConfigurator->Clear();
+    firstParticle = aParticle; 
+  }
+
+  if(startInitialisation) {
+    ++run;
+    if(1 < verbose) {
+      G4cout << "===== G4LossTableManager::SlavePhysicsTable() for run "
+	     << run << " =====" << G4endl;
+    }
+    if(atomDeexcitation) {
+      atomDeexcitation->InitialiseAtomicDeexcitation();
+    }
+    currentParticle = 0;
+    startInitialisation = false;
+    for (G4int i=0; i<n_loss; ++i) {
+      if(loss_vector[i]) {
+	tables_are_built[i] = false;
+      } else {
+	tables_are_built[i] = true;
+        part_vector[i] = 0;
+      }
+    }
+  }
+
+  all_tables_are_built= true;
+  for (G4int i=0; i<n_loss; ++i) {
+    if(p == loss_vector[i]) {
+      tables_are_built[i] = true;
+      isActive[i] = true;
+      /*
+      const G4ProcessManager* pm = p->GetProcessManager();
+      isActive[i] = false;
+      if(pm) { isActive[i] = pm->GetProcessActivation(p); }
+      */
+      part_vector[i] = p->Particle(); 
+      base_part_vector[i] = p->BaseParticle(); 
+      dedx_vector[i] = p->DEDXTable();
+      range_vector[i] = p->RangeTableForLoss();
+      inv_range_vector[i] = p->InverseRangeTable();
+      if(0 == run && p->IsIonisationProcess()) {
+	loss_map[part_vector[i]] = loss_vector[i];
+      }
+
+      if(1 < verbose) { 
+	G4cout << i <<".   "<< p->GetProcessName(); 
+	if(part_vector[i]) {
+	  G4cout << "  for "  << part_vector[i]->GetParticleName();
+	}
+	G4cout << "  active= " << isActive[i]
+	       << "  table= " << tables_are_built[i]
+	       << "  isIonisation= " << p->IsIonisationProcess()
+	       << G4endl;
+      }
+      break;
+    } else if(!tables_are_built[i]) {
+      all_tables_are_built = false;
+    }
+  }
+
+  // Set run time parameters 
+  SetParameters(aParticle, p);
+
+  if(1 < verbose) {
+    G4cout << "### G4LossTableManager::SlavePhysicsTable end"
+	   << G4endl;
+  }
+  if(all_tables_are_built) { 
+    if(1 < verbose) {
+      G4cout << "%%%%% All dEdx and Range tables for worker are ready for run "
+	     << run << " %%%%%" << G4endl;
+    }
   }
 }
 
@@ -469,23 +599,31 @@ void G4LossTableManager::BuildPhysicsTable(
      G4VEnergyLossProcess* p)
 {
   if(1 < verbose) {
-    G4cout << "### G4LossTableManager::BuildDEDXTable() is requested for "
+    G4cout << "### G4LossTableManager::BuildPhysicsTable() for "
            << aParticle->GetParticleName()
 	   << " and process " << p->GetProcessName() << G4endl;
   }
   // clear configurator
-  if(0 == run && startInitialisation) {
+  if(-1 == run && startInitialisation) {
     emConfigurator->Clear();
     firstParticle = aParticle; 
   }
-  if(startInitialisation && atomDeexcitation) {
-    atomDeexcitation->InitialiseAtomicDeexcitation();
+  if(startInitialisation) {
+    ++run;
+    if(1 < verbose) {
+      G4cout << "===== G4LossTableManager::BuildPhysicsTable() for run "
+	     << run << " =====" << G4endl;
+    }
+    if(atomDeexcitation) {
+      atomDeexcitation->InitialiseAtomicDeexcitation();
+    }
+    currentParticle = 0;
+    startInitialisation = false;
+    all_tables_are_built= true;
   }
-  startInitialisation = false;
 
   // initialisation before any table is built
   if ( aParticle == firstParticle ) {
-    all_tables_are_built = true;
 
     if(1 < verbose) {
       G4cout << "### G4LossTableManager start initilisation for first particle "
@@ -496,13 +634,19 @@ void G4LossTableManager::BuildPhysicsTable(
       G4VEnergyLossProcess* el = loss_vector[i];
 
       if(el) {
-	const G4ProcessManager* pm = el->GetProcessManager();
+        isActive[i] = true;
+	/*
+ 	const G4ProcessManager* pm = el->GetProcessManager();
         isActive[i] = false;
         if(pm) { isActive[i] = pm->GetProcessActivation(el); }
-      	if(0 == run) { base_part_vector[i] = el->BaseParticle(); }
+	*/
+      	base_part_vector[i] = el->BaseParticle(); 
         tables_are_built[i] = false;
 	all_tables_are_built= false;
-        if(!isActive[i]) { el->SetIonisation(false); }
+        if(!isActive[i]) { 
+	  el->SetIonisation(false); 
+	  tables_are_built[i] = true;
+	}
   
 	if(1 < verbose) { 
 	  G4cout << i <<".   "<< el->GetProcessName();
@@ -513,17 +657,17 @@ void G4LossTableManager::BuildPhysicsTable(
                  << "  table= " << tables_are_built[i]
 		 << "  isIonisation= " << el->IsIonisationProcess();
 	  if(base_part_vector[i]) { 
-	    G4cout << "  base particle " << base_part_vector[i]->GetParticleName();
+	    G4cout << "  base particle " 
+		   << base_part_vector[i]->GetParticleName();
 	  }
 	  G4cout << G4endl;
 	}
       } else {
         tables_are_built[i] = true;
         part_vector[i] = 0;
+	isActive[i] = false;
       }
     }
-    ++run;
-    currentParticle = 0;
   }
 
   // Set run time parameters 
@@ -538,23 +682,25 @@ void G4LossTableManager::BuildPhysicsTable(
     if(p == loss_vector[i] && !tables_are_built[i] && !base_part_vector[i]) {
       const G4ParticleDefinition* curr_part = part_vector[i];
       if(1 < verbose) {
-        G4cout << "### BuildPhysicsTable for " << p->GetProcessName()
-               << " and " << curr_part->GetParticleName()
-               << " start BuildTable " << G4endl;
+        G4cout << "### Build Table for " << p->GetProcessName()
+               << " and " << curr_part->GetParticleName() << G4endl;
       }
       G4VEnergyLossProcess* curr_proc = BuildTables(curr_part);
       if(curr_proc) { CopyTables(curr_part, curr_proc); }
     }
     if ( !tables_are_built[i] ) { all_tables_are_built = false; }
   }
+  if(0 == run && p->IsIonisationProcess()) { loss_map[aParticle] = p; }
 
   if(1 < verbose) {
-    G4cout << "### G4LossTableManager::BuildDEDXTable end: "
+    G4cout << "### G4LossTableManager::BuildPhysicsTable end: "
            << "all_tables_are_built= " << all_tables_are_built
            << G4endl;
-    
-    if(all_tables_are_built) {
-      G4cout << "### All dEdx and Range tables are built #####" << G4endl;
+  }
+  if(all_tables_are_built) { 
+    if(1 < verbose) {
+      G4cout << "%%%%% All dEdx and Range tables are built for master run= " 
+	     << run << " %%%%%" << G4endl;
     }
   }
 }
@@ -562,13 +708,11 @@ void G4LossTableManager::BuildPhysicsTable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
-                                          G4VEnergyLossProcess* base_proc)
+				    G4VEnergyLossProcess* base_proc)
 {
   for (G4int j=0; j<n_loss; ++j) {
 
     G4VEnergyLossProcess* proc = loss_vector[j];
-    //if(proc == base_proc || proc->Particle() == part) 
-    //  tables_are_built[j] = true;
 
     if (!tables_are_built[j] && part == base_part_vector[j]) {
       tables_are_built[j] = true;
@@ -581,7 +725,11 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
       proc->SetLambdaTable(base_proc->LambdaTable());
       proc->SetSubLambdaTable(base_proc->SubLambdaTable());
       proc->SetIonisation(base_proc->IsIonisationProcess());
-      loss_map[part_vector[j]] = proc;
+      if(proc->IsIonisationProcess()) { 
+	range_vector[j] = base_proc->RangeTableForLoss();
+	inv_range_vector[j] = base_proc->InverseRangeTable();
+	loss_map[part_vector[j]] = proc; 
+      }
       if (1 < verbose) {
          G4cout << "For " << proc->GetProcessName()
                 << " for " << part_vector[j]->GetParticleName()
@@ -619,13 +767,12 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   for (i=0; i<n_loss; ++i) {
     p = loss_vector[i];
     if (p && aParticle == part_vector[i] && !tables_are_built[i]) {
-      if ((p->IsIonisationProcess() && isActive[i]) || 
-	  !em || (em && !isActive[iem]) ) {
+      if ((p->IsIonisationProcess() && isActive[i]) || !em) {
         em = p;
         iem= i;
       }
       dedx = p->BuildDEDXTable(fRestricted);
-      //      G4cout << "Build DEDX table for " << aParticle->GetParticleName()
+      //G4cout << "Build DEDX table for " << aParticle->GetParticleName()
       //	     << "  " << dedx << " " << dedx->length() << G4endl;
       p->SetDEDXTable(dedx,fRestricted); 
       t_list.push_back(dedx);
@@ -651,14 +798,25 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 	   << G4endl;
   }
 
-  dedx = em->IonisationTable();
+  dedx = em->DEDXTable(); 
+  em->SetIonisation(true);
+
   if (1 < n_dedx) {
     em->SetDEDXTable(dedx, fIsIonisation);
     dedx = 0;
-    dedx  = G4PhysicsTableHelper::PreparePhysicsTable(dedx);
+    dedx = G4PhysicsTableHelper::PreparePhysicsTable(dedx);
     tableBuilder->BuildDEDXTable(dedx, t_list);
     em->SetDEDXTable(dedx, fRestricted);
   }
+  /*
+  if(2==run && "e-" == aParticle->GetParticleName()) {
+    G4cout << "G4LossTableManager::BuildTables for e- " << dedx << G4endl;
+    G4cout << (*dedx) << G4endl;
+    G4cout << "%%%%% Instance ID= " << (*dedx)[0]->GetInstanceID() << G4endl;
+    G4cout << "%%%%% LastValue= " << (*dedx)[0]->GetLastValue() << G4endl;
+    G4cout << "%%%%% 1.2 " << (*(dedx))[0]->Value(1.2) << G4endl;
+  }
+  */
   dedx_vector[iem] = dedx;
 
   G4PhysicsTable* range = em->RangeTableForLoss();
@@ -669,9 +827,8 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   if(!invrange) invrange = G4PhysicsTableHelper::PreparePhysicsTable(invrange);
   inv_range_vector[iem]  = invrange;
 
-  G4bool flag = em->IsIonisationProcess();
-  tableBuilder->BuildRangeTable(dedx, range, flag);
-  tableBuilder->BuildInverseRangeTable(range, invrange, flag);
+  tableBuilder->BuildRangeTable(dedx, range, true);
+  tableBuilder->BuildInverseRangeTable(range, invrange, true);
 
   //  if(1<verbose) G4cout << *dedx << G4endl;
 
@@ -685,14 +842,14 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   for (i=0; i<n_dedx; ++i) {
     p = loss_list[i];
-    p->SetIonisation(false);
+    if(p != em) { p->SetIonisation(false); }
     p->SetLambdaTable(p->BuildLambdaTable(fRestricted));
     if (0 < nSubRegions) {
       dedx = p->BuildDEDXTable(fSubRestricted);
       p->SetDEDXTable(dedx,fSubRestricted);
       listSub.push_back(dedx);
       p->SetSubLambdaTable(p->BuildLambdaTable(fSubRestricted));
-      if(p != em) em->AddCollaborativeProcess(p);
+      if(p != em) { em->AddCollaborativeProcess(p); }
     }
     if(buildCSDARange) { 
       dedx = p->BuildDEDXTable(fTotal);
@@ -720,13 +877,10 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
       em->SetDEDXTable(dedxCSDA,fTotal);
     }
     G4PhysicsTable* rCSDA = em->CSDARangeTable();
-    if(!rCSDA) rCSDA = G4PhysicsTableHelper::PreparePhysicsTable(rCSDA);
-    tableBuilder->BuildRangeTable(dedxCSDA, rCSDA, flag);
+    if(!rCSDA) { rCSDA = G4PhysicsTableHelper::PreparePhysicsTable(rCSDA); }
+    tableBuilder->BuildRangeTable(dedxCSDA, rCSDA, true);
     em->SetCSDARangeTable(rCSDA);
   }
-
-  em->SetIonisation(true);
-  loss_map[aParticle] = em;
 
   if (1 < verbose) {
     G4cout << "G4LossTableManager::BuildTables: Tables are built for "
@@ -751,7 +905,7 @@ void G4LossTableManager::ParticleHaveNoLoss(
 {
   G4ExceptionDescription ed;
   ed << "Energy loss process not found for " << aParticle->GetParticleName() 
-     << " !" << G4endl;
+     << " !";
   G4Exception("G4LossTableManager::ParticleHaveNoLoss", "em0001",
 	      FatalException, ed);
 
@@ -968,7 +1122,9 @@ void
 G4LossTableManager::SetParameters(const G4ParticleDefinition* aParticle,
 				  G4VEnergyLossProcess* p)
 {
-  if(stepFunctionActive) { p->SetStepFunction(maxRangeVariation, maxFinalStep); }
+  if(stepFunctionActive) { 
+    p->SetStepFunction(maxRangeVariation, maxFinalStep); 
+  }
   if(integralActive)     { p->SetIntegral(integral); }
   if(minEnergyActive)    { p->SetMinKinEnergy(minKinEnergy); }
   if(maxEnergyActive)    { p->SetMaxKinEnergy(maxKinEnergy); }
@@ -1029,6 +1185,13 @@ void G4LossTableManager::SetSplineFlag(G4bool val)
 G4bool G4LossTableManager::SplineFlag() const
 {
   return splineFlag;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4bool G4LossTableManager::IsMaster() const
+{
+  return isMaster;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1134,7 +1297,11 @@ G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
       currentLoss = (*pos).second;
     } else {
       currentLoss = 0;
-      //ParticleHaveNoLoss(aParticle);
+      if(aParticle->GetParticleType() == "nucleus") {
+	if ((pos = loss_map.find(theGenericIon)) != loss_map.end()) {
+	  currentLoss = (*pos).second;
+	}
+      }
     }
   }
   return currentLoss;
@@ -1149,8 +1316,6 @@ G4double G4LossTableManager::GetDEDX(const G4ParticleDefinition *aParticle,
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = 0.0;
   if(currentLoss) { x = currentLoss->GetDEDX(kineticEnergy, couple); }
-  else            { x = G4EnergyLossTables::GetDEDX(currentParticle,
-						    kineticEnergy,couple,false); }
   return x;
 }
 
@@ -1180,16 +1345,14 @@ G4double G4LossTableManager::GetCSDARange(const G4ParticleDefinition *aParticle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4double 
-G4LossTableManager::GetRangeFromRestricteDEDX(const G4ParticleDefinition *aParticle,
-					      G4double kineticEnergy,
-					      const G4MaterialCutsCouple *couple)
+G4double G4LossTableManager::GetRangeFromRestricteDEDX(
+                             const G4ParticleDefinition *aParticle,
+			     G4double kineticEnergy,
+			     const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x;
+  G4double x = DBL_MAX;
   if(currentLoss) { x = currentLoss->GetRangeForLoss(kineticEnergy, couple); }
-  else { x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,
-					  couple,false); }
   return x;
 }
 
@@ -1200,10 +1363,8 @@ G4double G4LossTableManager::GetRange(const G4ParticleDefinition *aParticle,
 				      const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x;
+  G4double x = DBL_MAX;
   if(currentLoss) { x = currentLoss->GetRange(kineticEnergy, couple); }
-  else { x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,
-					  couple,false); }
   return x;
 }
 
@@ -1214,18 +1375,17 @@ G4double G4LossTableManager::GetEnergy(const G4ParticleDefinition *aParticle,
 				       const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x;
+  G4double x = 0;
   if(currentLoss) { x = currentLoss->GetKineticEnergy(range, couple); }
-  else { x = G4EnergyLossTables::GetPreciseEnergyFromRange(currentParticle,range,
-							   couple,false); }
   return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4LossTableManager::GetDEDXDispersion(const G4MaterialCutsCouple *couple,
-					       const G4DynamicParticle* dp,
-					       G4double& length)
+G4double G4LossTableManager::GetDEDXDispersion(
+                             const G4MaterialCutsCouple *couple,
+			     const G4DynamicParticle* dp,
+			     G4double& length)
 {
   const G4ParticleDefinition* aParticle = dp->GetParticleDefinition();
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }

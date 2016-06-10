@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
-// $Id$
+// $Id: StepMax.hh 68753 2013-04-05 10:26:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

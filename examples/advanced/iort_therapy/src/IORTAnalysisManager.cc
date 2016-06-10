@@ -62,7 +62,11 @@ metaData(0),
 eventCounter(0)
 #endif
 {
+#ifdef G4ANALYSIS_USE_ROOT
     fMess = new IORTAnalysisFileMessenger(this);
+#else
+    fMess = new IORTAnalysisFileMessenger();
+#endif
 }
 /////////////////////////////////////////////////////////////////////////////
 

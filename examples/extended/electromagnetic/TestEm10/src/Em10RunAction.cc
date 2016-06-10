@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10RunAction class
 //
 //
-// $Id$
+// $Id: Em10RunAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 
@@ -48,7 +48,8 @@
 //////////////////////////////////////////////////////////////////////////////
 
 Em10RunAction::Em10RunAction()
-  :histName("histfile"),nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
+  :G4UserRunAction(),
+   histName("histfile"),nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),
    nbinvertexz(0)
 {

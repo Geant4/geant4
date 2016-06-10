@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITType.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITType.cc 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -34,8 +34,13 @@
 // -------------------------------------------------------------------
 
 #include "G4ITType.hh"
+#include "G4AutoLock.hh"
 
-G4ITTypeManager* G4ITTypeManager::fgInstance = 0;
+/*G4ThreadLocal*/ G4ITTypeManager* G4ITTypeManager::fgInstance = 0;
+G4ThreadLocal G4ITTypeManager* G4ITTypeManager::fgInstance_local = 0;
+
+G4Mutex deleteMutex=G4MUTEX_INITIALIZER;
+G4Mutex ressourceMutex=G4MUTEX_INITIALIZER;
 
 // static method
 size_t G4ITType::size()
@@ -61,7 +66,26 @@ G4ITTypeManager*  G4ITTypeManager::Instance()
 
 void G4ITTypeManager::DeleteInstance()
 {
-    delete fgInstance ;
+	G4AutoLock lock(&deleteMutex);
+	if(fgInstance)
+	{
+		delete fgInstance ;
+		fgInstance = 0;
+	}
+}
+
+void G4ITTypeManager::ReserveRessource()
+{
+	G4AutoLock lock(&ressourceMutex);
+	fRessource++;
+}
+
+void G4ITTypeManager::ReleaseRessource()
+{
+	G4AutoLock lock(&ressourceMutex);
+	fRessource--;
+
+	if(fRessource <= 0) DeleteInstance();
 }
 
 G4ITTypeManager::G4ITTypeManager()

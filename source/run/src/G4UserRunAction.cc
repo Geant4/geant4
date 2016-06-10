@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UserRunAction.cc 68997 2013-04-15 09:21:24Z gcosmo $
 //
 
 #include "G4UserRunAction.hh"
@@ -33,6 +33,7 @@
 
 
 G4UserRunAction::G4UserRunAction()
+:isMaster(true)
 {
  if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
  {

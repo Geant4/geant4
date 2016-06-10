@@ -88,6 +88,10 @@ class G4NeutronHPThermalScatteringData : public G4VCrossSectionDataSet
       void BuildPhysicsTable(const G4ParticleDefinition&);
 
       void DumpPhysicsTable(const G4ParticleDefinition&);
+
+      //For user prepared thermal files 
+                              //Name of G4Element , Name of NDL file
+      void AddUserThermalScatteringFile( G4String , G4String );
    
    private:
 

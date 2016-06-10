@@ -21,6 +21,7 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
+find_package(AIDA QUIET)
 if(NOT AIDA_FOUND)
   message(STATUS "G4 Examples: AIDA package not found. --> CompositeCalorimeter example disabled")  
   return()

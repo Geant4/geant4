@@ -25,7 +25,6 @@
 //
 //
 // $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -161,4 +160,13 @@ G4double G4StatDouble::rms(G4double ext_sum_w, G4int ext_n)
   // only a few particles reach that volume) 
 
   return rms(m_sum_wx, m_sum_wx2, ext_sum_w, ext_n);
+}
+
+void G4StatDouble::add(G4StatDouble* ptr)
+{
+  m_n       += ptr->n();
+  m_sum_w   += ptr->sum_w();
+  m_sum_w2  += ptr->sum_w2();
+  m_sum_wx  += ptr->sum_wx();
+  m_sum_wx2 += ptr->sum_wx2();
 }

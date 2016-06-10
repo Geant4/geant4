@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSEventAction.cc 70603 2013-06-03 11:23:16Z gcosmo $
+//
 /// \file optical/wls/src/WLSEventAction.cc
 /// \brief Implementation of the WLSEventAction class
 //
 //
-//
-
 #include "WLSEventAction.hh"
 
 #include "WLSRunAction.hh"
@@ -44,41 +44,47 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 
-//#include "G4ThreeVector.hh"
-
-//#include "G4UnitsTable.hh"
-
 #include "Randomize.hh"
 
 // Purpose: Invoke visualization at the end
 //          Also can accumulate statistics regarding hits
 //          in the PhotonDet detector
 
-WLSEventAction::WLSEventAction(WLSRunAction* RA)
- : runaction(RA), verboselevel(0),
-   printModulo(100), drawFlag("all")
-{
-  eventMessenger = new WLSEventActionMessenger(this);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  forcedrawphotons = false;
-  forcenophotons   = false;
+WLSEventAction::WLSEventAction(WLSRunAction* runaction)
+ : fRunAction(runaction), fVerboseLevel(0),
+   fPrintModulo(100), fDrawFlag("all")
+{
+  fMPPCCollID = 0;
+
+  fEventMessenger = new WLSEventActionMessenger(this);
+
+  fForceDrawPhotons = false;
+  fForceNoPhotons   = false;
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSEventAction::~WLSEventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSEventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
- if (evtNb%printModulo == 0)
+ if (evtNb%fPrintModulo == 0)
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
 
- if(verboselevel>0)
+ if(fVerboseLevel>0)
     G4cout << "<<< Event  " << evtNb << " started." << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSEventAction::EndOfEventAction(const G4Event* evt)
 {
@@ -92,48 +98,48 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
    G4int n_trajectories = 0;
    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
    G4cout << "n_trajectories: " << n_trajectories << G4endl;
-   if (drawFlag == "all") G4cout << "draw all trajectories" << G4endl;
-   if (drawFlag == "charged") G4cout << "draw only charged" << G4endl;
+   if (fDrawFlag == "all") G4cout << "draw all trajectories" << G4endl;
+   if (fDrawFlag == "charged") G4cout << "draw only charged" << G4endl;
 
    for(G4int i=0; i<n_trajectories; i++)
       { WLSTrajectory* trj = 
                       (WLSTrajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-        if (drawFlag == "all") {
+        if (fDrawFlag == "all") {
            G4cout << "Now calling DrawTrajectory" << G4endl;
            G4cout << "Particle Name: " << trj->GetParticleName() << G4endl;
-           trj->DrawTrajectory(50);
+           trj->DrawTrajectory();
         }
-        else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(50);
+        else if ((fDrawFlag == "charged")&&(trj->GetCharge() != 0.))
+                               trj->DrawTrajectory();
         else if (trj->GetParticleName()=="opticalphoton")
         {
           G4cout << "We should be drawing an opticalphoton" << G4endl;
-          trj->SetForceDrawTrajectory(forcedrawphotons);
-          trj->SetForceNoDrawTrajectory(forcenophotons);
-          trj->DrawTrajectory(50);
+          trj->SetForceDrawTrajectory(fForceDrawPhotons);
+          trj->SetForceNoDrawTrajectory(fForceNoPhotons);
+          trj->DrawTrajectory();
         }
       }
   }
 
-  if (verboselevel>0)
+  if (fVerboseLevel>0)
      G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
  
   // Save the Random Engine Status at the of event
-  if (runaction->GetRndmFreq() == 2)
+  if (fRunAction->GetRndmFreq() == 2)
   {
-     CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");
+     G4Random::saveEngineStatus("endOfEvent.rndm");
      G4int evtNb = evt->GetEventID();
-     if (evtNb%printModulo == 0)
+     if (evtNb%fPrintModulo == 0)
      {
         G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        CLHEP::HepRandom::showEngineStatus();
+        G4Random::showEngineStatus();
      }
   }
 
   // Get Hits from the detector if any
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   G4String colName = "PhotonDetHitCollection";
-  mppcCollID = SDman->GetCollectionID(colName);
+  fMPPCCollID = SDman->GetCollectionID(colName);
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   WLSPhotonDetHitsCollection* mppcHC = 0;
@@ -141,8 +147,8 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
   // Get the hit collections
   if (HCE)
   {
-     if (mppcCollID>=0) mppcHC = 
-                        (WLSPhotonDetHitsCollection*)(HCE->GetHC(mppcCollID));
+     if (fMPPCCollID>=0) mppcHC = 
+                        (WLSPhotonDetHitsCollection*)(HCE->GetHC(fMPPCCollID));
   }
 
   // Get hit information about photons that reached the detector in this event
@@ -152,13 +158,16 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int WLSEventAction::GetEventNo()
 {
-  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID();
-  return evno;
+  return fpEventManager->GetConstCurrentEvent()->GetEventID();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSEventAction::SetEventVerbose(G4int level)
 {
-  verboselevel = level;
+  fVerboseLevel = level;
 }

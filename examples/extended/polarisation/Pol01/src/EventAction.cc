@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 68753 2013-04-05 10:26:04Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

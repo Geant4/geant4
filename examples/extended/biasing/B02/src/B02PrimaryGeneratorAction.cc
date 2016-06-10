@@ -27,7 +27,7 @@
 /// \brief Implementation of the B02PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: B02PrimaryGeneratorAction.cc 70238 2013-05-27 11:59:40Z gcosmo $
 //
 
 #include "globals.hh"
@@ -40,22 +40,31 @@
 #include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B02PrimaryGeneratorAction::B02PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
   G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
-  particleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
-  particleGun->SetParticleEnergy(10.0*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
+  fParticleGun = new G4ParticleGun(n_particle);
+  fParticleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
+  fParticleGun->SetParticleEnergy(10.0*MeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B02PrimaryGeneratorAction::~B02PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

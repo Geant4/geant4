@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RToEConvForGamma.cc 70745 2013-06-05 10:54:00Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -41,7 +41,13 @@
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 
-G4RToEConvForGamma::G4RToEConvForGamma() : G4VRangeToEnergyConverter()
+G4RToEConvForGamma::G4RToEConvForGamma()  
+  : G4VRangeToEnergyConverter(),
+    Z(-1),  
+    s200keV(0.), s1keV(0.),
+    tmin(0.),    tlow(0.), 
+    smin(0.),    slow(0.),
+    cmin(0.),    clow(0.), chigh(0.)
 {    
   theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("gamma");
   if (theParticle ==0) {
@@ -97,20 +103,15 @@ void G4RToEConvForGamma::BuildAbsorptionLengthVector(
 // ********************** ComputeCrossSection ****************************
 // ***********************************************************************
 G4double G4RToEConvForGamma::ComputeCrossSection(G4double AtomicNumber,
-						 G4double KineticEnergy) const
+						 G4double KineticEnergy) 
 {
   //  Compute the "absorption" cross section of the photon "absorption"
   //  cross section means here the sum of the cross sections of the
   //  pair production, Compton scattering and photoelectric processes
-  static G4double Z;  
   const  G4double t1keV = 1.*keV;
   const  G4double t200keV = 200.*keV;
   const  G4double t100MeV = 100.*MeV;
 
-  static G4double s200keV, s1keV;
-  static G4double tmin, tlow; 
-  static G4double smin, slow;
-  static G4double cmin, clow, chigh;
   //  compute Z dependent quantities in the case of a new AtomicNumber
   if(std::abs(AtomicNumber-Z)>0.1)  {
     Z = AtomicNumber;

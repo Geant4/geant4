@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-// $Id$
+// $Id: PhysicsListMessenger.hh 67235 2013-02-08 16:34:49Z vnivanch $
 //
 //---------------------------------------------------------------------------
 //
@@ -73,6 +73,7 @@ private:
   G4UIcmdWithAnInteger*      fEBCmd;
   G4UIcmdWithAnInteger*      fCBCmd;
   G4UIcmdWithAString*        fListCmd;
+  G4UIcmdWithADoubleAndUnit* fADCCmd;
     
 };
 

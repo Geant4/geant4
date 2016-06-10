@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StatMFMicroPartition.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -42,7 +42,7 @@ class G4StatMFMicroPartition {
 
 public:
     // Constructor
-    G4StatMFMicroPartition(const G4int A, const G4double Z) :
+    G4StatMFMicroPartition(G4int A, G4int Z) :
 	theA(A), theZ(Z), _Probability(0.0), _Temperature(0.0), 
 	_Entropy(0.0) {};
 
@@ -67,26 +67,23 @@ public:
 public:
 
     // Gives fragments charges
-    G4StatMFChannel * ChooseZ(const G4double A0, const G4double Z0, const G4double MeanT);	
+    G4StatMFChannel * ChooseZ(G4int A0, G4int Z0, G4double MeanT);	
 
     G4double GetProbability(void)
 	{ return _Probability; }
 	
-
-
-    void SetPartitionFragment(const G4int anA)
+    void SetPartitionFragment(G4int anA)
 	{ 
 	    _thePartition.push_back(anA);
 	    CoulombFreeEnergy(anA);
 	}
 	
-    void Normalize(const G4double Normalization)
+    void Normalize(G4double Normalization)
 	{ _Probability /= Normalization; }
 
-
-    G4double CalcPartitionProbability(const G4double U,
-				      const G4double FreeInternalE0,
-				      const G4double SCompound);
+    G4double CalcPartitionProbability(G4double U,
+				      G4double FreeInternalE0,
+				      G4double SCompound);
 								
     G4double GetTemperature(void)
 	{
@@ -99,18 +96,19 @@ public:
 	}
 
 private:
-    void CoulombFreeEnergy(const G4double anA);
 
-    G4double CalcPartitionTemperature(const G4double U, 
-				      const G4double FreeInternalE0);
+    void CoulombFreeEnergy(G4int anA);
 
-    G4double GetPartitionEnergy(const G4double T);
+    G4double CalcPartitionTemperature(G4double U, 
+				      G4double FreeInternalE0);
+
+    G4double GetPartitionEnergy(G4double T);
 	
     G4double GetCoulombEnergy(void);
 
-    G4double GetDegeneracyFactor(const G4int A);
+    G4double GetDegeneracyFactor(G4int A);
 	
-    G4double InvLevelDensity(const G4double Af) 
+    G4double InvLevelDensity(G4double Af) 
 	{
 	    // Calculate Inverse Density Level
 	    // Epsilon0*(1 + 3 /(Af - 1))
@@ -121,8 +119,8 @@ private:
 private:
 
     // A and Z of initial nucleus
-    G4double theA;
-    G4double theZ;
+    G4int theA;
+    G4int theZ;
 
     // Partition probability
     G4double _Probability;
@@ -135,7 +133,6 @@ private:
 	
     // The partition itself
     std::vector<G4int> _thePartition;
-	
 	
     std::vector<G4double> _theCoulombFreeEnergy;
 

@@ -21,19 +21,10 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Find AIDA (optional package)
-#
-find_package(AIDA)
-if(AIDA_FOUND)
-  add_definitions(-DG4ANALYSIS_USE)   
-endif()
-
-#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${AIDA_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -41,7 +32,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(Pol01 Pol01.cc ${sources} ${headers})
-target_link_libraries(Pol01 ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
+target_link_libraries(Pol01 ${Geant4_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -64,4 +55,3 @@ endforeach()
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS Pol01 DESTINATION bin)
-

@@ -27,7 +27,7 @@
 /// \brief Implementation of the IonDPMJETPhysics class
 //
 // $Id: IonABPhysics.cc,v 1.1 2006/10/28 16:00:25 vnivanch Exp $
-// GEANT4 tag $Name: gras-02-05-02 $
+// GRAS tag Name: gras-02-05-02
 //
 //---------------------------------------------------------------------------
 //
@@ -76,9 +76,14 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4_USE_DPMJET
 IonDPMJETPhysics::IonDPMJETPhysics(G4bool val)
-  : G4VHadronPhysics("ionInelasticDPMJET"),fIonBC(0),fDPM(0),
+  : G4VHadronPhysics("ionInelasticDPMJET"),fIonBC(0) ,fDPM(0),
     fUseDPMJETXS(val)
+#else
+IonDPMJETPhysics::IonDPMJETPhysics(G4bool)
+  : G4VHadronPhysics("ionInelasticDPMJET"),fIonBC(0)
+#endif
 {
   fTripathi = fTripathiLight = fShen = fIonH = 0;
   SetPhysicsType(bIons);

@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ExErrorDetectorConstruction.cc 68019 2013-03-13 13:32:43Z gcosmo $
+//
 /// \file ExErrorDetectorConstruction.cc
 /// \brief Implementation of the ExErrorDetectorConstruction class
-
+//
 
 #include "ExErrorDetectorConstruction.hh"
 #include "ExErrorDetectorMessenger.hh"
@@ -47,9 +49,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExErrorDetectorConstruction::ExErrorDetectorConstruction()
-  : fXBEAM(5.*cm), fXCDET(20.*cm), fXECAL(40.*cm), fXSOLN(10.*cm), fXHCAL(100.*cm), 
+  : G4VUserDetectorConstruction(),
+    fXBEAM(5.*cm), fXCDET(20.*cm), fXECAL(40.*cm), fXSOLN(10.*cm), fXHCAL(100.*cm), 
     fXMUON(50.*cm), fNdivECAL(40./10.), fNdivHCAL(100./10.), fYZLength(50.*cm), 
-    fXHalfWorldLength(fXBEAM + fXCDET + fXECAL + fXSOLN + fXHCAL + fXMUON)
+    fXHalfWorldLength(fXBEAM + fXCDET + fXECAL + fXSOLN + fXHCAL + fXMUON),
+    fUserLimits(0), fMagField(0), fDetectorMessenger(0) 
 {
 
   // create UserLimits

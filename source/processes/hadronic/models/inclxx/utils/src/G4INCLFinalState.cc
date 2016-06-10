@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -103,19 +101,19 @@ namespace G4INCL {
   std::string FinalState::print() const {
     std::stringstream ss;
     ss << "Modified particles:" << std::endl;
-    for(ParticleIter iter = modified.begin(); iter != modified.end(); ++iter)
+    for(ParticleIter iter=modified.begin(), e=modified.end(); iter!=e; ++iter)
       ss << (*iter)->print();
     ss << "Outgoing particles:" << std::endl;
-    for(ParticleIter iter = outgoing.begin(); iter != outgoing.end(); ++iter)
+    for(ParticleIter iter=outgoing.begin(), e=outgoing.end(); iter!=e; ++iter)
       ss << (*iter)->print();
     ss << "Destroyed particles:" << std::endl;
-    for(ParticleIter iter = destroyed.begin(); iter != destroyed.end(); ++iter)
+    for(ParticleIter iter=destroyed.begin(), e=destroyed.end(); iter!=e; ++iter)
       ss << (*iter)->print();
     ss << "Created particles:" << std::endl;
-    for(ParticleIter iter = created.begin(); iter != created.end(); ++iter)
+    for(ParticleIter iter=created.begin(), e=created.end(); iter!=e; ++iter)
       ss << (*iter)->print();
     ss << "Entering particles:" << std::endl;
-    for(ParticleIter iter = entering.begin(); iter != entering.end(); ++iter)
+    for(ParticleIter iter=entering.begin(), e=entering.end(); iter!=e; ++iter)
       ss << (*iter)->print();
     return ss.str();
   }

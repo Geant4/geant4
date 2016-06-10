@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ElectronIonPair.hh 69580 2013-05-08 13:57:53Z gcosmo $
 //
 //
 #ifndef G4ElectronIonPair_h
@@ -64,6 +64,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ThreeVector.hh"
 #include "G4VProcess.hh"
+#include "Randomize.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,7 +150,7 @@ G4int G4ElectronIonPair::SampleNumberOfIonsAlongStep(const G4Step* step)
   // use gamma distribution with mean value n=meanion and 
   // dispersion D=meanion/invFanoFactor
   G4double meanion = MeanNumberOfIonsAlongStep(step);
-  return G4lrint(CLHEP::RandGamma::shoot(meanion*invFanoFactor,invFanoFactor));
+  return G4lrint(G4RandGamma::shoot(meanion*invFanoFactor,invFanoFactor));
 } 
 
 inline 

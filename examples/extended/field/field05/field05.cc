@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: field05.cc 78053 2013-12-03 08:25:13Z gcosmo $
+//
 /// \file field/field05/field05.cc
 /// \brief Main program of the field/field05 example
 //
@@ -36,17 +38,21 @@
 #include <unistd.h>
 #endif
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "F05SteppingVerbose.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-
-#include "Randomize.hh"
+#endif
 
 #include "F05PhysicsList.hh"
 #include "F05DetectorConstruction.hh"
-#include "F05PrimaryGeneratorAction.hh"
 
-#include "G4SteppingVerbose.hh"
-#include "F05SteppingAction.hh"
+#include "F05ActionInitialization.hh"
+
+#include "G4UImanager.hh"
+
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -60,71 +66,77 @@
 
 int main(int argc,char** argv)
 {
-  G4int seed = 1234;
-  if (argc  > 2) seed = atoi(argv[argc-1]);
-
   // Choose the Random engine
   //
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheSeed(seed);
-  
-  // User Verbose output class
-  //
-  G4VSteppingVerbose::SetInstance(new G4SteppingVerbose());
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+
+  G4int myseed = 1234;
+  if (argc  > 2) myseed = atoi(argv[argc-1]);
 
   // Construct the default run manager
   //
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+#else
+  G4VSteppingVerbose::SetInstance(new F05SteppingVerbose);
   G4RunManager * runManager = new G4RunManager;
+#endif
+
+  G4Random::setTheSeed(myseed);
 
   // Set mandatory initialization classes
   //
+  // Detector construction
   runManager->SetUserInitialization(new F05DetectorConstruction());
-  //
+  // Physics list
   runManager->SetUserInitialization(new F05PhysicsList());
+  // User action initialization
+  runManager->SetUserInitialization(new F05ActionInitialization());
 
-#ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new G4VisExecutive();
-  visManager->Initialize();
-
-#endif
-    
-  // Set mandatory user action class
-  //
-  runManager->SetUserAction( new F05PrimaryGeneratorAction() );
-
-  // Set optional user action class
-  //  
-  runManager->SetUserAction(new F05SteppingAction());
-  
   // Initialize G4 kernel
   //
   runManager->Initialize();
+
+#ifdef G4VIS_USE
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
+#endif
   
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
   if (argc!=1)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
-    }
+  {
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UImanager->ApplyCommand(command+fileName);    
+  }
   else
-    {  // interactive mode : define UI session
+  {  // interactive mode : define UI session
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+     UImanager->ApplyCommand("/control/execute vis.mac");
+#else
+     UImanager->ApplyCommand("/control/execute field05.in");
 #endif
-      ui->SessionStart();
-      delete ui;
+     if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
+     ui->SessionStart();
+     delete ui;
 #endif
-    }
-  
+  }
+
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
+
 #ifdef G4VIS_USE
   delete visManager;
 #endif                

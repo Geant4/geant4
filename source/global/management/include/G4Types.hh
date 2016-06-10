@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Types.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 //
 // GEANT4 native types
 //
-// History:
 
 #ifndef G4TYPES_HH
 #define G4TYPES_HH
@@ -51,12 +50,25 @@
     #define G4DLLEXPORT
     #define G4DLLIMPORT
   #endif
+  //
+  // Unique identifier for global module
+  //
+  #if defined G4GLOB_ALLOC_EXPORT
+    #define G4GLOB_DLL G4DLLEXPORT
+  #else
+    #define G4GLOB_DLL G4DLLIMPORT
+  #endif
 #else
   #define G4DLLEXPORT
   #define G4DLLIMPORT
+  #define G4GLOB_DLL
 #endif
 
 #include <complex>
+
+// Definitions for Thread Local Storage
+//
+#include "tls.hh"
 
 // Typedefs to decouple from library classes
 // Typedefs for numeric types

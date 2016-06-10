@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 72236 2013-07-12 08:38:55Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,8 @@
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
                      PrimaryGeneratorAction* kin)
- : fAnalysisManager(0), fDetector(det), fPhysics(phys), fKinematic(kin),
+ : G4UserRunAction(),
+   fAnalysisManager(0), fDetector(det), fPhysics(phys), fKinematic(kin),
    fTallyEdep(new G4double[MaxTally]), fProjRange(0.), fProjRange2(0.),
    fEdeptot(0.), fEniel(0.), fNbPrimarySteps(0), fRange(0)
 { 
@@ -69,9 +70,9 @@ RunAction::~RunAction()
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+
+  if(!fAnalysisManager) { BookHisto(); }
   
-  // save Rndm status
-  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
      
   //initialize projected range, tallies, Ebeam, and book histograms
@@ -164,19 +165,21 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << G4endl; 
   }
 
-  // normalize histograms
-  //
-  for (G4int j=1; j<3; j++) {  
-    G4double binWidth = fAnalysisManager->GetH1Width(j);
-    G4double fac = (mm/MeV)/(nbofEvents * binWidth);
-    fAnalysisManager->ScaleH1(j, fac);
-  }
-  fAnalysisManager->ScaleH1(3, 1./nbofEvents);
- 
-  // save histograms
   if (fAnalysisManager->IsActive() ) {        
+    // normalize histograms
+    //
+    for (G4int j=1; j<3; j++) {  
+      G4double binWidth = fAnalysisManager->GetH1Width(j);
+      G4double fac = (mm/MeV)/(nbofEvents * binWidth);
+      fAnalysisManager->ScaleH1(j, fac);
+    }
+    fAnalysisManager->ScaleH1(3, 1./nbofEvents);
+ 
+    // save histograms
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
+    delete fAnalysisManager;
+    fAnalysisManager = 0;
   }
    
   // show Rndm status
@@ -217,7 +220,7 @@ void RunAction::BookHisto()
     G4int ih = fAnalysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     G4bool activ = false;
     if (k == 1) activ = true;
-    fAnalysisManager->SetActivation(G4VAnalysisManager::kH1, ih, activ);
+    fAnalysisManager->SetH1Activation(ih, activ);
   }
 }
 

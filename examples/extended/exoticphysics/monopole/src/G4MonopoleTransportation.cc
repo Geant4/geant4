@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopoleTransportation.cc
 /// \brief Implementation of the G4MonopoleTransportation class
 //
-// $Id$
+// $Id: G4MonopoleTransportation.cc 69705 2013-05-13 09:09:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,24 +60,28 @@ class G4VSensitiveDetector;
 G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
                                                     G4int verb)
   : G4VProcess( G4String("MonopoleTransportation"), fTransportation ),
+    fParticleDef(mpl),
+    fMagSetup(0),
+    fLinearNavigator(0),
+    fFieldPropagator(0),
     fParticleIsLooping( false ),
     fPreviousSftOrigin (0.,0.,0.),
     fPreviousSafety    ( 0.0 ),
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
     fThresholdTrials( 10 ), 
-    fUnimportant_Energy( 1 * MeV ), 
+    // fUnimportant_Energy( 1 * MeV ), 
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fShortStepOptimisation(false),    // Old default: true (=fast short steps)
-    fVerboseLevel( verb )
+    fpSafetyHelper(0)
 {
+  verboseLevel = verb;
+
   // set Process Sub Type
   SetProcessSubType(TRANSPORTATION);  
 
-  pParticleDef = mpl;
-   
-  magSetup = G4MonopoleFieldSetup::GetMonopoleFieldSetup();
+  fMagSetup = G4MonopoleFieldSetup::GetMonopoleFieldSetup();
   
   G4TransportationManager* transportMgr ; 
 
@@ -108,7 +112,7 @@ G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
 
 G4MonopoleTransportation::~G4MonopoleTransportation()
 {
-  if( (fVerboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
+  if( (verboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
     G4cout << " G4MonopoleTransportation: Statistics for looping particles " 
            << G4endl;
     G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
@@ -130,7 +134,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                              G4double& currentSafety,
                                              G4GPILSelection* selection )
 {  
-  magSetup->SetStepperAndChordFinder(1); 
+  fMagSetup->SetStepperAndChordFinder(1); 
   // change to monopole equation
 
   G4double geometryStepLength, newSafety ; 
@@ -172,7 +176,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Is the monopole charged ?
   //
-  G4double particleMagneticCharge = pParticleDef->MagneticCharge() ; 
+  G4double particleMagneticCharge = fParticleDef->MagneticCharge() ; 
   G4double particleElectricCharge = pParticle->GetCharge();
 
   fGeometryLimitedStep = false ;
@@ -264,18 +268,25 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
   else   //  A field exerts force
   {
-     // G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
+     G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
      G4ThreeVector  EndUnitMomentum ;
      G4double       lengthAlongCurve ;
-     G4double       restMass = pParticleDef->GetPDGMass() ;
- 
-     fFieldPropagator->SetChargeMomentumMass( particleMagneticCharge,    // in Mev/c 
-                                              particleElectricCharge,    // in e+ units
-                                              restMass           ) ;  
-     
-     // SetChargeMomentumMass is _not_ used here as it would in everywhere else, 
-     // it's just a workaround to pass the electric charge as well.
-     
+     G4double       restMass = fParticleDef->GetPDGMass() ;
+
+     G4ChargeState chargeState(particleElectricCharge,             // The charge can change (dynamic)
+                               fParticleDef->GetPDGSpin(),
+                               0,   //  Magnetic moment:  pParticleDef->GetMagneticMoment(),
+                               0,   //  Electric Dipole moment - not in Particle Definition 
+                               particleMagneticCharge );   // in Mev/c 
+
+     G4EquationOfMotion* equationOfMotion = 
+     (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
+     ->GetEquationOfMotion();
+
+     equationOfMotion->SetChargeMomentumMass( chargeState,       //  Was particleMagneticCharge - in Mev/c 
+                                              momentumMagnitude, //  Was particleElectricCharge 
+                                              restMass ) ;  
+     // SetChargeMomentumMass now passes both the electric and magnetic charge - in chargeState
 
      G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
@@ -376,7 +387,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
 
-  magSetup->SetStepperAndChordFinder(0);
+  fMagSetup->SetStepperAndChordFinder(0);
   // change back to usual equation
 
   return geometryStepLength ;
@@ -479,7 +490,7 @@ G4VParticleChange* G4MonopoleTransportation::AlongStepDoIt( const G4Track& track
         if( endEnergy > fMaxEnergyKilled) { fMaxEnergyKilled= endEnergy; }
 
 #ifdef G4VERBOSE
-        if( (fVerboseLevel > 1) || 
+        if( (verboseLevel > 1) || 
             ( endEnergy > fThreshold_Warning_Energy )  ) { 
           G4cout << " G4MonopoleTransportation is killing track that is looping or stuck "
                  << G4endl
@@ -495,7 +506,7 @@ G4VParticleChange* G4MonopoleTransportation::AlongStepDoIt( const G4Track& track
       else{
         fNoLooperTrials ++; 
 #ifdef G4VERBOSE
-        if( (fVerboseLevel > 2) ){
+        if( (verboseLevel > 2) ){
           G4cout << "   G4MonopoleTransportation::AlongStepDoIt(): Particle looping -  "
                  << "   Number of trials = " << fNoLooperTrials 
                  << "   No of calls to  = " << noCalls 

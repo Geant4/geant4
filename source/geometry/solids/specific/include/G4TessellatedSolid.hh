@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4TessellatedSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -200,7 +200,6 @@ class G4TessellatedSolid : public G4VSolid
 
     virtual G4Polyhedron* CreatePolyhedron () const;
     virtual G4Polyhedron* GetPolyhedron    () const;
-    virtual G4NURBS*      CreateNURBS      () const;
     virtual void DescribeYourselfTo (G4VGraphicsScene& scene) const;
     virtual G4VisExtent   GetExtent () const;
 

@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ExTGRunAction.cc 76943 2013-11-19 09:57:34Z gcosmo $
 //
-/// \file ExTGRunAction.cc
+/// \file persistency/P03/src/ExTGRunAction.cc
 /// \brief Implementation of the ExTGRunAction class
 
 #include "ExTGRunAction.hh"
@@ -45,7 +45,7 @@ ExTGRunAction::~ExTGRunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGRunAction::BeginOfRunAction(const G4Run* )
 {
-  G4tgbGeometryDumper::GetInstance()->DumpGeometry("geom.txt");
+  if( IsMaster() ) G4tgbGeometryDumper::GetInstance()->DumpGeometry("geom.txt");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

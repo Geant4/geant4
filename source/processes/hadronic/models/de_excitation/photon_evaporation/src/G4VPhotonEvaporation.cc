@@ -41,7 +41,7 @@
 //
 // -------------------------------------------------------------------
 //
-// $Id$
+// $Id: G4VPhotonEvaporation.cc 67983 2013-03-13 10:42:03Z gcosmo $
 
 
 #include "G4VPhotonEvaporation.hh"

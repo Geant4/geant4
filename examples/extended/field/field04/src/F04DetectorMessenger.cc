@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04DetectorMessenger.cc 76690 2013-11-14 08:45:07Z gcosmo $
+//
 /// \file field/field04/src/F04DetectorMessenger.cc
 /// \brief Implementation of the F04DetectorMessenger class
 //
-//
+
 #include "F04DetectorMessenger.hh"
 
 #include "G4UIdirectory.hh"
@@ -77,20 +79,6 @@ F04DetectorMessenger::F04DetectorMessenger(F04DetectorConstruction* detector)
   fCaptureZCmd->SetRange("CSizeZ>0.");
   fCaptureZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fCaptureB1Cmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureB1",this);
-  fCaptureB1Cmd->SetGuidance("Set B1 of the Capture Magnet");
-  fCaptureB1Cmd->SetParameterName("CSizeB1",false,false);
-  fCaptureB1Cmd->SetDefaultUnit("tesla");
-  fCaptureB1Cmd->SetRange("CSizeB1>0.");
-  fCaptureB1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fCaptureB2Cmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureB2",this);
-  fCaptureB2Cmd->SetGuidance("Set B2 of the Capture Magnet");
-  fCaptureB2Cmd->SetParameterName("CSizeB2",false,false);
-  fCaptureB2Cmd->SetDefaultUnit("tesla");
-  fCaptureB2Cmd->SetRange("CSizeB2>0.");
-  fCaptureB2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fTransferRCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferR",this);
   fTransferRCmd->SetGuidance("Set Radius of the Transfer Magnet");
   fTransferRCmd->SetParameterName("TSizeR",false,false);
@@ -104,13 +92,6 @@ F04DetectorMessenger::F04DetectorMessenger(F04DetectorConstruction* detector)
   fTransferZCmd->SetDefaultUnit("cm");
   fTransferZCmd->SetRange("TSizeZ>0.");
   fTransferZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fTransferBCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferB",this);
-  fTransferBCmd->SetGuidance("Set B of the Transfer Magnet");
-  fTransferBCmd->SetParameterName("TSizeB",false,false);
-  fTransferBCmd->SetDefaultUnit("tesla");
-  fTransferBCmd->SetRange("TSizeB>0.");
-  fTransferBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fTransferPCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferP",this);
   fTransferPCmd->SetGuidance("Set Z pos of the T-Mgnt from end of C-Mgnt");
@@ -195,12 +176,9 @@ F04DetectorMessenger::~F04DetectorMessenger()
 
   delete fCaptureRCmd;
   delete fCaptureZCmd;
-  delete fCaptureB1Cmd;
-  delete fCaptureB2Cmd;
 
   delete fTransferRCmd;
   delete fTransferZCmd;
-  delete fTransferBCmd;
   delete fTransferPCmd;
 
   delete fTgtMaterCmd;
@@ -242,20 +220,11 @@ void F04DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fCaptureZCmd )
     fDetector->SetCaptureMgntLength(fCaptureZCmd->GetNewDoubleValue(newValue));
 
-  if( command == fCaptureB1Cmd )
-    fDetector->SetCaptureMgntB1(fCaptureB1Cmd->GetNewDoubleValue(newValue));
-
-  if( command == fCaptureB2Cmd )
-    fDetector->SetCaptureMgntB2(fCaptureB2Cmd->GetNewDoubleValue(newValue));
-
   if( command == fTransferRCmd )
    fDetector->SetTransferMgntRadius(fTransferRCmd->GetNewDoubleValue(newValue));
 
   if( command == fTransferZCmd )
    fDetector->SetTransferMgntLength(fTransferZCmd->GetNewDoubleValue(newValue));
-
-  if( command == fTransferBCmd )
-    fDetector->SetTransferMgntB(fTransferBCmd->GetNewDoubleValue(newValue));
 
   if( command == fTransferPCmd )
     fDetector->SetTransferMgntPos(fTransferPCmd->GetNewDoubleValue(newValue));

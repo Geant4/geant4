@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2010-12-15 22:15:07 asaim Exp $
+$Id: History 76257 2013-11-08 11:31:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,92 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 7th, 2013  L.Desorgher (event-V09-06-21)
+- Modification of adjoint classes to migrate to the new RMC schema where reverse
+ and forward trackings of  equivalent adjoint and forward primaries are processed
+ in the same events. This in preparation for the migration to the G4MT mode. 
+
+September 9th, 2013  M.Asai (event-V09-06-20)
+- Change the warning message in G4StackManager on missing process
+  manager to be issued only when the verbose level is greater than 0.
+  
+September 6th, 2013  M.Asai (event-V09-06-19)
+- Fix incorrect initialization in G4ParticleGunMessenger class for
+  /gun/ionL command.
+
+September 6th, 2013  M.Asai (event-V09-06-18)
+- Remove G4ParticleTable::GetIon() and use G4IonTable::GetIon()
+  instead.
+
+August 31st, 2013  M.Asai (event-V09-06-17)
+- Fix the way of detecting improper process namager.
+
+August 29th, 2013  M.Asai (event-V09-06-16)
+- Retagged with more optional verbosity.
+
+August 28th, 2013  M.Asai (event-V09-06-15)
+- Split class mechanism of G4ParticleDefinition has been changed.
+  Now all general ions share the object ID with GenericIon so that
+  TLS pointers to G4ProcessManager are not created for such ions.
+
+August 23rd, 2013  M.Asai (event-V09-06-14)
+- G4StackManager now checks a track having proper process manager.
+
+August 14th, 2013  M.Asai (event-V09-06-13)
+- G4ParticleGunMessenger: /gun/particle commands now consults to the particle
+  table for all the available particles except general ions.
+
+August 9th, 2013 Dennis Wright (event-V09-06-12)
+- include G4GeneralParticleSourceMessenger.cc which was omitted in previous tag
+  IonLvlCommand and relevant data members added to
+  G4GeneralParticleSourceMessenger.hh
+
+July 31st, 2013  Dennis Wright (event-V09-06-11)
+- G4ParticleGunMessenger.hh, .cc: add G4UIcommand ionLvlCmd so that particle
+  gun can shoot ions with integer isomer level
+- G4GeneralParticleSourceMessenger.hh: add ionL command (see above comment)
+
+July 11th, 2013, M.Asai (evet-V09-06-10)
+- Remove unnecessary static G4ThreadLocal variables in G4PrimaryTransformer.
+
+June 21, 2013, M.Asai (event-V09-06-09)
+- Clean up G4cout messages for beta release.
+
+June 7th, 2013, M.Asai (event-V09-06-08)
+- Move the access method of G4StateManager::GetStateManager() to the
+  constructor of G4EventManager to reduce the use of TLS pointer.
+
+June 7th, 2013, L.Desorgher (event-V09-06-07)
+- Remove the call of aSolid->SurfaceNormal() in  G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary that was 
+  generating warnings. Suggested by G. Cosmo
+
+May 26th, 2013, M.Asai (event-V09-06-06)
+- Adding additional checks on file I/O and verbosity to G4HEPEvtInterface.
+
+May 22nd, 2013, B.Morgan (event-V09-06-05)
+- Ensure deletion of "angsigmayCmd1" G4UIcommand instance in destructor of
+  G4GeneralParticleSourceMessenger, fixing minor memory leak.
+
+May 15th, 2013, M.Asai (event-V09-06-04)
+- Change the type of the argument of the constructor of G4HEPEvtInterface
+  from char* to const char*.
+
+Apr. 10th, 2013, G.Cosmo (event-V09-06-03)
+- Cleanup of automatic changes for MT in classes: G4Event, G4HEPEvtParticle,
+  G4TrajectoryContainer, G4AdjointPosOnPhysVolGenerator and G4EventManager.
+
+Feb. 26th, 2013, L.Desorgher (event-V09-06-02)
+- Remove unused variables in G4AdjointPosOnPhysVolGenerator,
+  G4AdjointPosOnPhysVolGenerator, G4GeneralParticleSource,
+  G4SPSEneDistribution, and G4SPSRandomGenerator.
+
+December 4th, 2012, M.Asai (event-V09-06-01)
+- Delete undeleted UI command in the destructor of G4StackMessenger.
+  Addressing problem report #1380.
+
+December 3rd, 2012, M.Asai (event-V09-06-00)
+- Remove obsolete classes G4CellScorer and G4CellScorerStore.
 
 November 27th, 2012, Hisaya Kurashige (event-V09-05-17)
 - Add clearAndDestory() method to G4TrackStack and G4SmartTrackStack 

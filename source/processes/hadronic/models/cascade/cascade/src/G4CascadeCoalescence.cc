@@ -41,6 +41,8 @@
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20110927  M. Kelsey -- Bug fix; missing <iterator> header, strtof -> strtod
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+// 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
+// 20130326  M. Kelsey -- Replace _TLS_ with mutable data member buffer.
 
 #include "G4CascadeCoalescence.hh"
 #include "G4CascadeParameters.hh"
@@ -252,12 +254,11 @@ void G4CascadeCoalescence::removeNucleons() {
 
 G4LorentzVector 
 G4CascadeCoalescence::getClusterMomentum(const ClusterCandidate& aCluster) const {
-  static G4LorentzVector ptot;
-  ptot.set(0.,0.,0.,0.);
+  pCluster.set(0.,0.,0.,0.);
   for (size_t i=0; i<aCluster.size(); i++)
-    ptot += getHadron(aCluster[i]).getMomentum();
+    pCluster += getHadron(aCluster[i]).getMomentum();
 
-  return ptot;
+  return pCluster;
 }
 
 
@@ -266,8 +267,7 @@ G4CascadeCoalescence::getClusterMomentum(const ClusterCandidate& aCluster) const
 G4double G4CascadeCoalescence::maxDeltaP(const ClusterCandidate& aCluster) const {
   if (verboseLevel>1) reportArgs("maxDeltaP", aCluster);
 
-  G4LorentzVector pcms = getClusterMomentum(aCluster);
-  G4ThreeVector boost = pcms.boostVector();
+  G4ThreeVector boost = getClusterMomentum(aCluster).boostVector();
 
   G4double dp, maxDP = -1.;
   for (size_t i=0; i<aCluster.size(); i++) {

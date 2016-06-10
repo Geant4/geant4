@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EvaporationInuclCollider.cc 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
@@ -33,6 +33,8 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20110728  M. Kelsey -- Fix Coverity #23843, delete evaporator in dtor.
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
 
 #include "G4EvaporationInuclCollider.hh"
 #include "G4CollisionOutput.hh"
@@ -45,7 +47,7 @@ typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 	 
 G4EvaporationInuclCollider::G4EvaporationInuclCollider()
-  : G4CascadeColliderBase("G4EvaporationInuclCollider"),
+  : G4CascadeDeexciteBase("G4EvaporationInuclCollider"),
     theEquilibriumEvaporator(new G4EquilibriumEvaporator) {}
 
 G4EvaporationInuclCollider::~G4EvaporationInuclCollider() {
@@ -54,18 +56,15 @@ G4EvaporationInuclCollider::~G4EvaporationInuclCollider() {
 
 
 void
-G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/,
-				    G4InuclParticle* target,
-				    G4CollisionOutput& globalOutput) {
+G4EvaporationInuclCollider::deExcite(const G4Fragment& target,
+				     G4CollisionOutput& globalOutput) {
   if (verboseLevel) {
-    G4cout << " >>> G4EvaporationInuclCollider::evaporate" << G4endl;
+    G4cout << " >>> G4EvaporationInuclCollider::deExcite" << G4endl;
   }
 
-  if (!dynamic_cast<G4InuclNuclei*>(target)) return;	// Only nuclei evaporate
+  if (verboseLevel>3) G4cout << target << G4endl;
 
-  if (verboseLevel>3) G4cout << *target << G4endl;
-
-  theEquilibriumEvaporator->collide(0, target, globalOutput);
+  theEquilibriumEvaporator->deExcite(target, globalOutput);
 
   if (verboseLevel > 2) {
     G4cout << " After EquilibriumEvaporator " << G4endl;

@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Histo.cc 68699 2013-04-05 08:42:28Z gcosmo $
+//
 /// \file medical/GammaTherapy/src/Histo.cc
 /// \brief Implementation of the Histo class
-//
-// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -178,27 +178,36 @@ void Histo::EndOfHisto()
 
   G4cout                    << "Number of events                             " 
                             << std::setprecision(8) << fNevt <<G4endl;
-  G4cout << std::setprecision(4) << "Average number of e-                         " 
-         << xe << G4endl;
-  G4cout << std::setprecision(4) << "Average number of gamma                      " 
-         << xg << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e+                         " 
-         << xp << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps in the phantom       " 
-         << xs << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e- steps in the target     " 
-         << xes << G4endl;
-  G4cout << std::setprecision(4) << "Average number of g  produced in the target  " 
-         << xgt << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e- produced in the target  " 
-         << xet << G4endl;
-  G4cout << std::setprecision(4) << "Average number of g produced in the phantom  " 
-         << xph << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e- produced in the phantom " 
-         << xphe << G4endl;
-  G4cout << std::setprecision(4) << "Total fGamma fluence in front of the phantom " 
-         << x*fSumR/MeV
-         << " MeV " << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of e-                         " 
+    << xe << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of gamma                      " 
+    << xg << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of e+                         " 
+    << xp << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of steps in the phantom       " 
+    << xs << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of e- steps in the target     " 
+    << xes << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of g  produced in the target  " 
+    << xgt << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of e- produced in the target  " 
+    << xet << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of g produced in the phantom  " 
+    << xph << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Average number of e- produced in the phantom " 
+    << xphe << G4endl;
+  G4cout 
+    << std::setprecision(4) << "Total fGamma fluence in front of the phantom " 
+    << x*fSumR/MeV << " MeV " << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
   G4cout<<G4endl;
@@ -257,22 +266,27 @@ void Histo::BookHisto()
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   fHisto[0] = fAnalysisManager->CreateH1("10",
-    "Energy deposit at radius (mm) normalised on 1st channel",fNBinsR,0.,fAbsorberR/mm);
+    "Energy deposit at radius (mm) normalised on 1st channel",
+    fNBinsR, 0., fAbsorberR/mm);
 
   fHisto[1] = fAnalysisManager->CreateH1("11",
-    "Energy deposit at radius (mm) normalised to integral",fNBinsR,0.,fAbsorberR/mm);
+    "Energy deposit at radius (mm) normalised to integral",
+    fNBinsR, 0., fAbsorberR/mm);
 
   fHisto[2] = fAnalysisManager->CreateH1("12",
-    "Energy deposit (MeV/kg/electron) at radius (mm)",fNBinsR,0.,fAbsorberR/mm);
+    "Energy deposit (MeV/kg/electron) at radius (mm)",
+    fNBinsR, 0., fAbsorberR/mm);
 
   fHisto[3] = fAnalysisManager->CreateH1("13",
     "Energy profile (MeV/kg/electron) over Z (mm)",fNBinsZ,0.,fAbsorberZ/mm);
 
   fHisto[4] = fAnalysisManager->CreateH1("14",
-    "Energy profile (MeV/kg/electron) over Z (mm) at Central Voxel",fNBinsZ,0.,fAbsorberZ/mm);
+    "Energy profile (MeV/kg/electron) over Z (mm) at Central Voxel",
+    fNBinsZ, 0., fAbsorberZ/mm);
 
   fHisto[5] = fAnalysisManager->CreateH1("15",
-    "Energy (MeV) of fGamma produced in the target",fNBinsE,0.,fMaxEnergy/MeV);
+    "Energy (MeV) of fGamma produced in the target",
+    fNBinsE, 0., fMaxEnergy/MeV);
 
   fHisto[6] = fAnalysisManager->CreateH1("16",
     "Energy (MeV) of fGamma before phantom",fNBinsE,0.,fMaxEnergy/MeV);
@@ -284,7 +298,8 @@ void Histo::BookHisto()
     "Energy (MeV) of electrons produced in target",fNBinsE,0.,fMaxEnergy/MeV);
 
   fHisto[9] = fAnalysisManager->CreateH1("19",
-    "Gamma Energy Fluence (MeV/cm2) at radius(mm) in front of phantom",fNBinsR,0.,fAbsorberR/mm);
+    "Gamma Energy Fluence (MeV/cm2) at radius(mm) in front of phantom",
+    fNBinsR, 0., fAbsorberR/mm);
 
 }
 

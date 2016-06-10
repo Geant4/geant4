@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrVolumeMgr.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrVolumeMgr
@@ -140,7 +140,7 @@ class G4tgrVolumeMgr
       // Hierarchy tree of G4tgrVolume's: G4String is the name
       // of the parent G4tgrVolume, G4tgrPlace* the pointers to children
 
-    static G4tgrVolumeMgr* theInstance;
+    static G4ThreadLocal G4tgrVolumeMgr* theInstance;
 
     std::vector<G4tgrVolume*> theG4tgrVolumeList;
     std::vector<G4tgrPlace*> theG4tgrPlaceList;

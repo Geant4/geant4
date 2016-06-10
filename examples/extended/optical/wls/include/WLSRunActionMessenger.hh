@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSRunActionMessenger.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSRunActionMessenger.hh
 /// \brief Definition of the WLSRunActionMessenger class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,18 +53,18 @@ class WLSRunActionMessenger : public G4UImessenger
   public:
 
     WLSRunActionMessenger(WLSRunAction* );
-    ~WLSRunActionMessenger();
+    virtual ~WLSRunActionMessenger();
 
-    void SetNewValue(G4UIcommand* ,G4String );
+    virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-    WLSRunAction*              runAction;
+    WLSRunAction*              fRunAction;
 
-    G4UIdirectory*             RndmDir;
-    G4UIcmdWithAnInteger*      RndmSaveCmd;
-    G4UIcmdWithAString*        RndmReadCmd;
-    G4UIcmdWithABool*          SetAutoSeedCmd;
+    G4UIdirectory*             fRndmDir;
+    G4UIcmdWithAnInteger*      fRndmSaveCmd;
+    G4UIcmdWithAString*        fRndmReadCmd;
+    G4UIcmdWithABool*          fSetAutoSeedCmd;
 
 };
 

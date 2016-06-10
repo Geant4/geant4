@@ -20,6 +20,7 @@ And it has been deeply reviewed by Pedro Arce in December 2007.
 Very small changes by Stephane Chauvie in January 2008.
 Stephane Chauvie, Oct 2009: changed Physics list; changes in DICOM read. 
 Stephane Chauvie and Andrea Armando; June 2010 adapted for reading  whatever DICOM file
+Jonathan Madsen, Nov 2013: updated DICOM to utilize multithreading now available in Geant4.10
 
 
 --->1) Introduction
@@ -32,11 +33,14 @@ In the application the phantom is placed on a table.
 ---> 2) Installation:
 
  - A standard Geant4 example GNUmakefile is provided            
- - Compile it with 'make'/'gmake' 
+ - Compile it with 'make'/'gmake'
+ 
+ - A standard Geant4 example CMakeLists.txt is provided
+ - Configure via cmake with 'cmake -DGeant4_DIR=/path_to_geant4_install/lib/Geant4-x.x.x /path/to/DICOM/source' then make
 
 ---> 3) Run the example:
 
- - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
+ - To run, the environment variable G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
 
  - batch mode:
    - DICOM run.mac 
@@ -44,6 +48,19 @@ In the application the phantom is placed on a table.
  - interactive mode:
    - DICOM
    the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
+   
+ - Environment variables:
+   - DICOM_CHANGE_MATERIAL_DENSITY
+     - set to the minimum density difference before making a separate material
+     - e.g. if DenseBone is from > 1.496 to <= 1.654 and DICOM_CHANGE_MATERIAL_DENSITY=0.079
+         then DenseBone would be separated into DenseBone > 1.496 to <= 1.575 and DenseBone > 1.575 to <= 1.654
+   - DICOM_PARTIAL_PARAM
+     - set to 1 to build the partial build instead of regular or nested construction (see section 9)
+   - DICOM_NESTED_PARAM
+     - set to 1 to build the nested construction (see section 9; overridden by DICOM_PARTIAL_PARAM)
+   - DICOM_NTHREADS
+     - To set the number of threads (when G4MULTITHREADED is defined via GEANT4_BUILD_MULTITHREADED=ON during Geant4 source build)
+     - Needs to be set to the number of desired threads, e.g. DICOM_NTHREADS=8 (default is 4 threads)
 
 --->4) Metadata:
 
@@ -143,7 +160,6 @@ by
 			kXAxis, nVoxelX*nVoxelY*nVoxelZ, param);
 
   Note also you must *not* set the enviromental variable DICOM_NESTED_PARAM.
-
 
 
 --->10) Calculating dose in phantom voxels for regular navigation

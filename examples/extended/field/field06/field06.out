@@ -1,7 +1,6 @@
-+++ G4StackManager uses G4SmartTrackStack. +++
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-10    (2-November-2012)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10,7 +9,9 @@
 
 ***** Table : Nb of materials = 1 *****
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 parsec  Nucl.Int.Length: 114327973.206 parsec  Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114319208.901 pc 
+                       Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -18,7 +19,18 @@
 
 
 
-MagIntDriver version: Accur-Adv: invE_nS, QuickAdv-2sqrt with Statistics  enabled 
+ *** Neutron *** 
+ magneticMoment: -1.91304
+ g_factor: -3.82609
+ charge: 0
+ anomaly: -2.91304
+ corrected anomaly: -2.91568
+ *** anomaly: -2.91568
+ *** MuonPlus *** 
+ magneticMoment: 1.00117
+ g_factor: 1.00117
+ charge: 1
+ anomaly: -0.499417
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -70,16 +82,16 @@ Available colours:
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Galactic
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  990 eV     e+  -1 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
-Start Run processing.
+### Run 0 starts.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
@@ -2280,7 +2292,7 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.12s Sys=0.03s
+  User=0.08s Real=0.12s Sys=0.03s
 #
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -2288,3 +2300,8 @@ G4 kernel has come to Quit state.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Maximum number of tracks in the urgent stack : 1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+================== Deleting memory pools ===================
+Number of memory pools allocated: 10; of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.0096 Mb
+============================================================
+RunManagerKernel is deleted. Good bye :)

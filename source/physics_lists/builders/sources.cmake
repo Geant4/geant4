@@ -11,8 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-11-29 17:23:53 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: sources.cmake 76279 2013-11-08 12:50:46Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -38,6 +37,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/factory/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/management/include)
@@ -56,11 +57,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/fragmentation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/interface/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/coherent_elastic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
@@ -69,14 +65,12 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/incl_physics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/interface/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/low_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
@@ -104,9 +98,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_builders
     HEADERS
-        G4PhysicsConstructorFactory.hh
-        G4PhysicsConstructorRegistry.hh
-        CompileTimeConstraints.hh
         G4AntiBarionBuilder.hh
         G4BertiniKaonBuilder.hh
         G4BertiniNeutronBuilder.hh
@@ -118,125 +109,42 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4BinaryPionBuilder.hh
         G4BinaryProtonBuilder.hh
         G4BuilderType.hh
-        G4ChargeExchangePhysics.hh
-        G4ChipsKaonBuilder.hh
-        G4DataQuestionaire.hh
-        G4DecayPhysics.hh
-        G4ElectroNuclearBuilder.hh
-        G4BertiniElectroNuclearBuilder.hh
-        G4EmDNAPhysicsChemistry.hh
-        G4EmDNAPhysics.hh
-        G4EmExtraPhysics.hh
-        G4EmLivermorePhysics.hh
-        G4EmLivermorePolarizedPhysics.hh
-        G4EmLowEPPhysics.hh
-        G4EmMessenger.hh
-        G4EmPenelopePhysics.hh
-        G4EmQExtraPhysics.hh
-        G4EmQMessenger.hh
-        G4EmStandardPhysics.hh
-        G4EmStandardPhysics_option1.hh
-        G4EmStandardPhysics_option2.hh
-        G4EmStandardPhysics_option3.hh
-        G4EmStandardPhysics_option4.hh
         G4FTFBinaryKaonBuilder.hh
         G4FTFBinaryNeutronBuilder.hh
         G4FTFBinaryPiKBuilder.hh
         G4FTFBinaryPionBuilder.hh
         G4FTFBinaryProtonBuilder.hh
         G4FTFBuilder.hh
-        G4FTFCNeutronBuilder.hh
-        G4FTFCPiKBuilder.hh
-        G4FTFCProtonBuilder.hh
         G4FTFPAntiBarionBuilder.hh
+        G4FTFPKaonBuilder.hh
         G4FTFPNeutronBuilder.hh
         G4FTFPPiKBuilder.hh
+        G4FTFPPionBuilder.hh
         G4FTFPProtonBuilder.hh
-        G4HadronDElasticPhysics.hh
-        G4HadronElasticPhysics.hh
-        G4HadronElasticPhysicsHP.hh
-        G4HadronElasticPhysicsLEND.hh
-        G4HadronElasticPhysicsLHEP.hh
-        G4HadronElasticPhysicsXS.hh
-        G4HadronHElasticPhysics.hh
-        G4HadronQElasticPhysics.hh
-        G4HyperonCHIPSBuilder.hh
         G4HyperonFTFPBuilder.hh
-        G4HyperonLHEPBuilder.hh
         G4INCLXXNeutronBuilder.hh
         G4INCLXXPiKBuilder.hh
         G4INCLXXProtonBuilder.hh
-        G4IonBinaryCascadePhysics.hh
-        G4IonINCLXXPhysics.hh
-        G4IonLHEPPhysics.hh
-        G4IonPhysics.hh
-        G4IonQMDPhysics.hh
         G4KaonBuilder.hh
-        G4LEPNeutronBuilder.hh
-        G4LEPPiKBuilder.hh
-        G4LEPPionBuilder.hh
-        G4LEPProtonBuilder.hh
-        G4LHEPAntiBarionBuilder.hh
-        G4LHEPNeutronBuilder.hh
-        G4LHEPPiKBuilder.hh
-        G4LHEPProtonBuilder.hh
-        G4LHEPStoppingHadronBuilder.hh
-        G4LHEPStoppingPhysics.hh
-        G4MiscBuilder.hh
-        G4MiscCHIPSBuilder.hh
-        G4MiscLHEPBuilder.hh
-        G4MiscQGSCBuilder.hh
         G4NeutronBuilder.hh
         G4NeutronCrossSectionXS.hh
         G4NeutronHPBuilder.hh
         G4NeutronLENDBuilder.hh
-        G4NeutronTrackingCut.hh
-        G4OpticalPhysics.hh
-        G4OpticalPhysicsMessenger.hh
-        G4OpticalProcessIndex.hh
         G4PiKBuilder.hh
         G4PionBuilder.hh
         G4PrecoNeutronBuilder.hh
         G4PrecoProtonBuilder.hh
         G4ProtonBuilder.hh
-        G4QAtomicPhysics.hh
-        G4QCaptureAtRestPhysics.hh
-        G4QElasticPhysics.hh
-        G4QEmExtraPhysics.hh
+        G4QGSBinaryKaonBuilder.hh
         G4QGSBinaryNeutronBuilder.hh
         G4QGSBinaryPiKBuilder.hh
+        G4QGSBinaryPionBuilder.hh
         G4QGSBinaryProtonBuilder.hh
         G4QGSBuilder.hh
-        G4QGSC_CHIPSNeutronBuilder.hh
-        G4QGSC_CHIPSPiKBuilder.hh
-        G4QGSC_CHIPSProtonBuilder.hh
-        G4QGSCEflowNeutronBuilder.hh
-        G4QGSCEflowPiKBuilder.hh
-        G4QGSCEflowProtonBuilder.hh
-        G4QGSCNeutronBuilder.hh
-        G4QGSCPiKBuilder.hh
-        G4QGSCProtonBuilder.hh
-        G4QGSC_QGSCNeutronBuilder.hh
-        G4QGSC_QGSCPiKBuilder.hh
-        G4QGSC_QGSCProtonBuilder.hh
         G4QGSPNeutronBuilder.hh
         G4QGSPPiKBuilder.hh
         G4QGSPPionBuilder.hh
         G4QGSPProtonBuilder.hh
-        G4QInelasticCHIPSBuilder.hh
-        G4QInelasticCHIPS_HPBuilder.hh
-        G4QIonPhysics.hh
-        G4QMessenger.hh
-        G4QNeutrinoPhysics.hh
-        G4QNeutronBuilder.hh
-        G4QNeutronHPBuilder.hh
-        G4QPhotoNuclearPhysics.hh
-        G4QProtonBuilder.hh
-        G4QStoppingPhysics.hh
-        G4RadioactiveDecayPhysics.hh
-        G4StepLimiterBuilder.hh
-        G4StoppingHadronBuilder.hh
-        G4StoppingPhysics.hh
         G4VAntiBarionBuilder.hh
         G4VHadronModelBuilder.hh
         G4VKaonBuilder.hh
@@ -244,10 +152,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPiKBuilder.hh
         G4VPionBuilder.hh
         G4VProtonBuilder.hh
-        G4WarnPLStatus.hh
         TheoModelFactory.hh
     SOURCES
-        G4PhysicsConstructorRegistry.cc
         G4AntiBarionBuilder.cc
         G4BertiniKaonBuilder.cc
         G4BertiniNeutronBuilder.cc
@@ -258,123 +164,42 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4BinaryPiKBuilder.cc
         G4BinaryPionBuilder.cc
         G4BinaryProtonBuilder.cc
-        G4ChargeExchangePhysics.cc
-        G4ChipsKaonBuilder.cc
-        G4DecayPhysics.cc
-        G4ElectroNuclearBuilder.cc
-        G4BertiniElectroNuclearBuilder.cc
-        G4EmDNAPhysics.cc
-        G4EmDNAPhysicsChemistry.cc
-        G4EmExtraPhysics.cc
-        G4EmLivermorePhysics.cc
-        G4EmLivermorePolarizedPhysics.cc
-        G4EmLowEPPhysics.cc
-        G4EmMessenger.cc
-        G4EmPenelopePhysics.cc
-        G4EmQExtraPhysics.cc
-        G4EmQMessenger.cc
-        G4EmStandardPhysics.cc
-        G4EmStandardPhysics_option1.cc
-        G4EmStandardPhysics_option2.cc
-        G4EmStandardPhysics_option3.cc
-        G4EmStandardPhysics_option4.cc
         G4FTFBinaryKaonBuilder.cc
         G4FTFBinaryNeutronBuilder.cc
         G4FTFBinaryPiKBuilder.cc
         G4FTFBinaryPionBuilder.cc
         G4FTFBinaryProtonBuilder.cc
         G4FTFBuilder.cc
-        G4FTFCNeutronBuilder.cc
-        G4FTFCPiKBuilder.cc
-        G4FTFCProtonBuilder.cc
         G4FTFPAntiBarionBuilder.cc
+        G4FTFPKaonBuilder.cc
         G4FTFPNeutronBuilder.cc
         G4FTFPPiKBuilder.cc
+        G4FTFPPionBuilder.cc
         G4FTFPProtonBuilder.cc
-        G4HadronDElasticPhysics.cc
-        G4HadronElasticPhysics.cc
-        G4HadronElasticPhysicsHP.cc
-        G4HadronElasticPhysicsLEND.cc
-        G4HadronElasticPhysicsLHEP.cc
-        G4HadronElasticPhysicsXS.cc
-        G4HadronHElasticPhysics.cc
-        G4HadronQElasticPhysics.cc
-        G4HyperonCHIPSBuilder.cc
         G4HyperonFTFPBuilder.cc
-        G4HyperonLHEPBuilder.cc
         G4INCLXXNeutronBuilder.cc
         G4INCLXXPiKBuilder.cc
         G4INCLXXProtonBuilder.cc
-        G4IonBinaryCascadePhysics.cc
-        G4IonINCLXXPhysics.cc
-        G4IonLHEPPhysics.cc
-        G4IonPhysics.cc
-        G4IonQMDPhysics.cc
         G4KaonBuilder.cc
-        G4LEPNeutronBuilder.cc
-        G4LEPPiKBuilder.cc
-        G4LEPPionBuilder.cc
-        G4LEPProtonBuilder.cc
-        G4LHEPAntiBarionBuilder.cc
-        G4LHEPNeutronBuilder.cc
-        G4LHEPPiKBuilder.cc
-        G4LHEPProtonBuilder.cc
-        G4LHEPStoppingHadronBuilder.cc
-        G4LHEPStoppingPhysics.cc
-        G4MiscBuilder.cc
-        G4MiscCHIPSBuilder.cc
-        G4MiscLHEPBuilder.cc
-        G4MiscQGSCBuilder.cc
         G4NeutronBuilder.cc
         G4NeutronCrossSectionXS.cc
         G4NeutronHPBuilder.cc
         G4NeutronLENDBuilder.cc
-        G4NeutronTrackingCut.cc
-        G4OpticalPhysics.cc
-        G4OpticalPhysicsMessenger.cc
         G4PiKBuilder.cc
         G4PionBuilder.cc
         G4PrecoNeutronBuilder.cc
         G4PrecoProtonBuilder.cc
         G4ProtonBuilder.cc
-        G4QAtomicPhysics.cc
-        G4QCaptureAtRestPhysics.cc
-        G4QElasticPhysics.cc
-        G4QEmExtraPhysics.cc
+        G4QGSBinaryKaonBuilder.cc
         G4QGSBinaryNeutronBuilder.cc
         G4QGSBinaryPiKBuilder.cc
+        G4QGSBinaryPionBuilder.cc
         G4QGSBinaryProtonBuilder.cc
         G4QGSBuilder.cc
-        G4QGSC_CHIPSNeutronBuilder.cc
-        G4QGSC_CHIPSPiKBuilder.cc
-        G4QGSC_CHIPSProtonBuilder.cc
-        G4QGSCEflowNeutronBuilder.cc
-        G4QGSCEflowPiKBuilder.cc
-        G4QGSCEflowProtonBuilder.cc
-        G4QGSCNeutronBuilder.cc
-        G4QGSCPiKBuilder.cc
-        G4QGSCProtonBuilder.cc
-        G4QGSC_QGSCNeutronBuilder.cc
-        G4QGSC_QGSCPiKBuilder.cc
-        G4QGSC_QGSCProtonBuilder.cc
         G4QGSPNeutronBuilder.cc
         G4QGSPPiKBuilder.cc
         G4QGSPPionBuilder.cc
         G4QGSPProtonBuilder.cc
-        G4QInelasticCHIPSBuilder.cc
-        G4QInelasticCHIPS_HPBuilder.cc
-        G4QIonPhysics.cc
-        G4QMessenger.cc
-        G4QNeutrinoPhysics.cc
-        G4QNeutronHPBuilder.cc
-        G4QNeutronBuilder.cc
-        G4QPhotoNuclearPhysics.cc
-        G4QProtonBuilder.cc
-        G4QStoppingPhysics.cc
-        G4RadioactiveDecayPhysics.cc
-        G4StepLimiterBuilder.cc
-        G4StoppingHadronBuilder.cc
-        G4StoppingPhysics.cc
         G4VAntiBarionBuilder.cc
         G4VHadronModelBuilder.cc
         G4VKaonBuilder.cc
@@ -382,8 +207,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPiKBuilder.cc
         G4VPionBuilder.cc
         G4VProtonBuilder.cc
-        G4WarnPLStatus.cc
-
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -413,9 +236,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4hadronic_LE
         G4hadronic_bert_cascade
         G4hadronic_binary
-        G4hadronic_body_ci
         G4hadronic_coherent_elastic
-        G4hadronic_crosec_ci
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
         G4hadronic_deex_handler
@@ -423,12 +244,11 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_fragm_ci
-        G4had_inclxx
-        G4hadronic_interface_ci
+        G4hadronic_inclxx_interface
+        G4hadronic_inclxx_physics
+        G4hadronic_inclxx_utils
         G4hadronic_mgt
         G4hadronic_proc
-        G4hadronic_proc_ci
         G4hadronic_qgstring
         G4hadronic_qmd
         G4hadronic_radioactivedecay

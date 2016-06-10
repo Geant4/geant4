@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PVReplica.hh 67974 2013-03-13 10:17:37Z gcosmo $
 //
 // 
 // class G4PVReplica
@@ -65,14 +65,56 @@
 //   n=0..nReplicas-1
 
 // History:
-// 29.07.95 P.Kent         First non-stub version
-// 26.10.97 J.Apostolakis  Added constructor that takes mother logical volume
-// 16.02.98 J.Apostolakis  Added copy number
+// 29.07.95 P.Kent           - First non-stub version
+// 26.10.97 J.Apostolakis    - Added constructor that takes mother LV
+// 16.02.98 J.Apostolakis    - Added copy number
+// 13.01.13 G.Cosmo, A.Dotti - Modified for thread-safety for MT
 // ----------------------------------------------------------------------
 #ifndef G4PVREPLICA_HH
 #define G4PVREPLICA_HH
 
 #include "G4VPhysicalVolume.hh"
+#include "G4GeomSplitter.hh"
+
+class G4ReplicaData
+{
+  // Encapsulates the fields of the class G4PVReplica that may not be
+  // read-only. G4PVReplica inherits from the class G4VPhysicalVolume.
+  // The fields from the ancestor that may not be read-only are handled
+  // by the ancestor class.
+
+public:
+
+  void initialize() {}
+
+  G4int    fcopyNo;
+};
+
+// The type G4PVRManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4ReplicaData. When each thread
+// initializes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4PVReplica instance, there is
+// a corresponding G4ReplicaData instance. All G4ReplicaData instances are
+// organized by the class G4PVRManager as an array.
+// The field "int instanceID" is added to the class G4PVReplica.
+// The value of this field in each G4LogicalVolume instance is the subscript
+// of the corresponding G4ReplicaData instance.
+// In order to use the class  G4PVRManager, we add a static member in the
+// class G4LogicalVolume as follows: "static G4PVRManager subInstanceManager".
+// For the master thread, the array for G4ReplicaData instances grows
+// dynamically along with G4PVReplica instances arecreated.
+// For each worker thread, it copies the array of G4ReplicaData instances
+// from the master thread.
+// In addition, it invokes a method similiar to the constructor explicitly
+// to achieve the partial effect for each instance in the array.
+//
+typedef G4GeomSplitter<G4ReplicaData> G4PVRManager;
+
+// This macro changes the references to fields that are now encapsulated
+// in the class G4ReplicaData.
+//
+#define G4MT_copyNo ((subInstanceManager.offset[instanceID]).fcopyNo)
 
 class G4PVReplica : public G4VPhysicalVolume
 {
@@ -129,13 +171,28 @@ class G4PVReplica : public G4VPhysicalVolume
     G4int GetRegularStructureId() const;
       // Accessors for specialised geometries
 
+  public:  // without description
+
+    inline G4int GetInstanceID() const  { return instanceID; }
+      // Returns the instance ID.
+
+    static const G4PVRManager& GetSubInstanceManager();
+      // Returns the private data instance manager.
+
+    void InitialiseWorker(G4PVReplica *pMasterObject);
+      // This method is similar to the constructor. It is used by each worker
+      // thread to achieve the partial effect as that of the master thread.
+
+    void TerminateWorker(G4PVReplica *pMasterObject);
+      // This method is similar to the destructor. It is used by each worker
+      // thread to achieve the partial effect as that of the master thread.
+
   protected:
 
     EAxis faxis;
     G4int fnReplicas;
     G4double fwidth,foffset;
-    G4int    fcopyNo;
-
+ 
   private:
 
     void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
@@ -147,6 +204,11 @@ class G4PVReplica : public G4VPhysicalVolume
 
     G4int fRegularStructureCode; 
     G4int fRegularVolsId;
+
+    G4int instanceID;
+      // This new field is used as instance ID.
+    G4GEOM_DLL static G4PVRManager subInstanceManager;
+      // This new field helps to use the class G4PVRManager introduced above.
 };
 
 #endif

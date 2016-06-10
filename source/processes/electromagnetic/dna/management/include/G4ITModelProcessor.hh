@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITModelProcessor.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITModelProcessor.hh 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -62,14 +62,10 @@ typedef G4ReferenceCountedHandle< std::vector<G4Track*> > G4TrackVectorHandle;
 class G4ITModelProcessor
 {
 public:
-    /** Default constructor */
     G4ITModelProcessor();
-    /** Default destructor */
     virtual ~G4ITModelProcessor();
 
-
     inline void SetModelHandler(G4ITModelHandler*);
-
     void Initialize();
     
     /**
@@ -146,7 +142,7 @@ protected:
 
     // Atribute for reactions
     std::vector<G4ITReactionChange*> fReactionInfo ;
-    static std::map<const G4Track*, G4bool> fHasReacted;
+    static G4ThreadLocal std::map<const G4Track*, G4bool> *fHasReacted;
 };
 
 ///

@@ -46,10 +46,14 @@ G4LENDModel::G4LENDModel( G4String name )
 :G4HadronicInteraction( name )
 {
 
+   proj = NULL; //will be set in an inherited class
+
    SetMinEnergy( 0.*eV );
    SetMaxEnergy( 20.*MeV );
 
-   default_evaluation = "endl99"; 
+   //default_evaluation = "endl99"; 
+   default_evaluation = "ENDF.B-VII.0";
+
    allow_nat = false;
    allow_any = false;
 
@@ -104,11 +108,12 @@ void G4LENDModel::create_used_target_map()
          {
             G4int iZ = anElement->GetIsotope( i_iso )->GetZ();
             G4int iA = anElement->GetIsotope( i_iso )->GetN();
+            G4int iIsomer = anElement->GetIsotope( i_iso )->Getm();
 
             G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iA );  
             if ( allow_nat == true ) aTarget->AllowNat();
             if ( allow_any == true ) aTarget->AllowAny();
-            usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iA ) , aTarget ) );
+            usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iA , iIsomer ) , aTarget ) );
          }
       }
       else
@@ -126,11 +131,12 @@ void G4LENDModel::create_used_target_map()
             {
                G4int iMass = nistElementBuild->GetNistFirstIsotopeN( iZ ) + ii;  
                //G4cout << iZ << " " << nistElementBuild->GetNistFirstIsotopeN( iZ ) + i << " " << nistElementBuild->GetIsotopeAbundance ( iZ , iMass ) << G4endl;  
+               G4int iIsomer = 0;
 
                G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iMass );  
                if ( allow_nat == true ) aTarget->AllowNat();
                if ( allow_any == true ) aTarget->AllowAny();
-               usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iMass ) , aTarget ) );
+               usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iMass , iIsomer ) , aTarget ) );
 
             }
 
@@ -173,12 +179,16 @@ G4HadFinalState * G4LENDModel::ApplyYourself(const G4HadProjectile& aTrack, G4Nu
    //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
    G4int iZ = aTarg.GetZ_asInt();
    G4int iA = aTarg.GetA_asInt();
+   G4int iM = 0;
+   if ( aTarg.GetIsotope() != NULL ) {
+      iM = aTarg.GetIsotope()->Getm();
+   }
 
    G4double ke = aTrack.GetKineticEnergy();
 
    G4HadFinalState* theResult = new G4HadFinalState();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
 
    G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, NULL, NULL );
 

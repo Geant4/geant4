@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeComptonModel.hh 74626 2013-10-17 07:00:59Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -34,6 +34,7 @@
 //                            to G4PenelopeOscillatorManager
 // 24 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L. Pandola   Migrated to the new AtomDeexcitation interface
+// 09 Oct 2013   L. Pandola   Migration to MT
 //
 // -------------------------------------------------------------------
 //*
@@ -70,6 +71,8 @@ public:
   virtual ~G4PenelopeComptonModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+                               G4VEmModel *masterModel);
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
                                          const G4ParticleDefinition*,
@@ -99,8 +102,11 @@ public:
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
+  const G4ParticleDefinition* fParticle;
 
 private:
+  void SetParticle(const G4ParticleDefinition*);
+
   //Differential cross section which is numerically integrated
   G4double DifferentialCrossSection (G4double cdt,G4double energy,
 				     G4PenelopeOscillator* osc);

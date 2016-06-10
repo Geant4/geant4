@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PreCompoundModel.cc 74903 2013-10-23 16:47:40Z gcosmo $
 //
 // by V. Lara
 //
@@ -62,6 +62,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4LorentzVector.hh"
+#include "G4Exp.hh"
 
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr) 
   : G4VPreCompoundModel(ptr,"PRECO"), useHETCEmission(false), 
@@ -70,7 +71,8 @@ G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr)
 				      //maxZ(9), maxA(17)
 {
   if(!ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
-  theParameters = G4PreCompoundParameters::GetAddress();
+  G4PreCompoundParameters param;
+  fLevelDensity = param.GetLevelDensity();
 
   theEmission = new G4PreCompoundEmission();
   if(useHETCEmission) { theEmission->SetHETCModel(); }
@@ -210,7 +212,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 
     theEmission->Initialize(aFragment);
     
-    G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
+    G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*fLevelDensity;
     
     G4int EquilibriumExcitonNumber = 
       G4lrint(std::sqrt(2*gg*aFragment.GetExcitationEnergy()));
@@ -220,7 +222,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
     // J. M. Quesada (Jan. 08)  equilibrium hole number could be used as preeq.
     // evap. delimiter (IAEA report)
     
-    // Loop for transitions, it is performed while there are preequilibrium transitions.
+    // Loop for transitions, it is performed while there are 
+    // preequilibrium transitions.
     G4bool ThereIsTransition = false;
     
     //        G4cout<<"----------------------------------------"<<G4endl;
@@ -228,22 +231,23 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
     //        G4double NH=aFragment.GetNumberOfHoles();
     //        G4double NE=aFragment.GetNumberOfExcitons();
     //        G4cout<<" Ex. Energy="<<aFragment.GetExcitationEnergy()<<G4endl;
-    //        G4cout<<"N. excitons="<<NE<<"  N. Part="<<NP<<"N. Holes ="<<NH<<G4endl;
+    //   G4cout<<"N. excitons="<<NE<<"  N. Part="<<NP<<"N. Holes ="<<NH<<G4endl;
     //G4int transition=0;
     do {
       //transition++;
       //G4cout<<"transition number .."<<transition<<G4endl;
       //G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
       G4bool go_ahead = false;
-      // soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
+      // soft cutoff criterium as an "ad-hoc" solution to force 
+      // increase in  evaporation  
       G4int test = aFragment.GetNumberOfExcitons();
       if (test <= EquilibriumExcitonNumber) { go_ahead=true; }
 
       //J. M. Quesada (Apr. 08): soft-cutoff switched off by default
-      if (useSCO && !go_ahead)
+      if (useSCO && go_ahead)
 	{
 	  G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1;
-	  if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = true; }
+	  if( G4UniformRand() < 1.0 -  G4Exp(-x*x/0.32) ) { go_ahead = false; }
 	} 
         
       // JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! 
@@ -271,8 +275,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	  G4double TotalEmissionProbability = 
 	    theEmission->GetTotalProbability(aFragment);
 	  //
-	  //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability<<" Nex= " 
-	  //	<<aFragment.GetNumberOfExcitons()<<G4endl;
+	  //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability
+	  // <<" Nex= " <<aFragment.GetNumberOfExcitons()<<G4endl;
 	  //
 	  // Check if number of excitons is greater than 0
 	  // else perform equilibrium emission

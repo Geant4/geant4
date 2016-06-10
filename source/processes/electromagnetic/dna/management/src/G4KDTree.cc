@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTree.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4KDTree.cc 70171 2013-05-24 13:34:18Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -71,6 +71,7 @@
 #include <stdlib.h>
 #include <cmath>
 #include "G4KDTree.hh"
+#include "G4KDMap.hh"
 #include "G4KDNode.hh"
 #include "G4KDTreeResult.hh"
 #include <list>
@@ -90,7 +91,7 @@ public:
         size_t size = fDim * sizeof(double);
         memcpy(fMin, min, size);
         memcpy(fMax, max, size);
-   }
+    }
 
 
     ~HyperRect()
@@ -166,7 +167,7 @@ private:
 
 //______________________________________________________________________
 // KDTree methods
-G4KDTree::G4KDTree (int k)
+G4KDTree::G4KDTree (int k) : fKDMap(new G4KDMap(k))
 {
     fDim = k;
     fRoot = 0;
@@ -185,6 +186,8 @@ G4KDTree::~G4KDTree ()
         delete fRect;
         fRect = 0;
     }
+
+    if(fKDMap) delete fKDMap;
 }
 
 void G4KDTree::Clear()
@@ -216,6 +219,45 @@ void G4KDTree::__Clear_Rec(G4KDNode *node)
         }
     }
     delete node;
+}
+
+G4KDNode* G4KDTree::InsertMap(const double& x, const double& y, const double& z, void *data)
+{
+    double buf[3];
+    buf[0] = x;
+    buf[1] = y;
+    buf[2] = z;
+    return InsertMap(buf, data);
+}
+
+G4KDNode* G4KDTree::InsertMap(const double *pos, void *data)
+{
+    G4KDNode* node = new G4KDNode(this,pos,data,0,-2) ;
+    // -2 = valeur intentionnellement absurde
+    fKDMap->Insert(node);
+    return node;
+}
+
+void G4KDTree::Build()
+{
+    int Nnodes = fKDMap->GetSize();
+
+    G4KDNode* root = fKDMap->PopOutMiddle(0);
+
+    fRoot = root;
+    fRect = new HyperRect(fDim,fRoot->GetPosition(),fRoot->GetPosition());
+
+    Nnodes--;
+
+    for(int n = 0 ; n < Nnodes ; n = n+fDim)
+    {
+        for(int dim = 0 ; dim < fDim ; dim ++)
+        {
+            G4KDNode* node = fKDMap->PopOutMiddle(dim);
+            fRoot->Insert(node);
+            fRect->Extend(node->GetPosition());
+        }
+    }
 }
 
 G4KDNode* G4KDTree::Insert(const double *pos, void *data)
@@ -259,7 +301,7 @@ G4KDNode* G4KDTree::Insert(const double& x, const double& y, const double& z, vo
 
 //__________________________________________________________________
 int G4KDTree::__NearestInRange(G4KDNode *node, const double *pos, const double& range_sq,
-                          const double& range, G4KDTreeResult& list, int ordered, G4KDNode *source_node)
+                               const double& range, G4KDTreeResult& list, int ordered, G4KDNode *source_node)
 {
     if(!node) return 0;
 
@@ -306,7 +348,7 @@ int G4KDTree::__NearestInRange(G4KDNode *node, const double *pos, const double& 
 
 //__________________________________________________________________
 void G4KDTree::__NearestToPosition(G4KDNode *node, const double *pos, G4KDNode *&result,
-                         double *result_dist_sq, HyperRect* rect)
+                                   double *result_dist_sq, HyperRect* rect)
 {
     int dir = node->GetAxis();
     int i;
@@ -385,7 +427,7 @@ void G4KDTree::__NearestToPosition(G4KDNode *node, const double *pos, G4KDNode *
 
 G4KDTreeResultHandle G4KDTree::Nearest(const double *pos)
 {
-//    G4cout << "Nearest(pos)" << G4endl ;
+    //    G4cout << "Nearest(pos)" << G4endl ;
 
     if (!fRect) return 0;
 
@@ -418,8 +460,8 @@ G4KDTreeResultHandle G4KDTree::Nearest(const double *pos)
 
 //__________________________________________________________________
 void G4KDTree::__NearestToNode(G4KDNode *source_node, G4KDNode *node,
-                              const double *pos, std::vector<G4KDNode*>& result, double *result_dist_sq,
-                              HyperRect* rect, int& nbresult)
+                               const double *pos, std::vector<G4KDNode*>& result, double *result_dist_sq,
+                               HyperRect* rect, int& nbresult)
 {
     int dir = node->GetAxis();
     double dummy, dist_sq;
@@ -507,7 +549,7 @@ void G4KDTree::__NearestToNode(G4KDNode *source_node, G4KDNode *node,
 
 G4KDTreeResultHandle G4KDTree::Nearest(G4KDNode* node)
 {
-//    G4cout << "Nearest(node)" << G4endl ;
+    //    G4cout << "Nearest(node)" << G4endl ;
     if (!fRect)
     {
         G4cout << "Tree empty" << G4endl ;
@@ -576,9 +618,9 @@ G4KDTreeResultHandle G4KDTree::NearestInRange(const double *pos, const double& r
 }
 
 G4KDTreeResultHandle G4KDTree::NearestInRange(const double& x,
-                                                const double& y,
-                                                const double& z,
-                                                const double& range)
+                                              const double& y,
+                                              const double& z,
+                                              const double& range)
 {
     double buf[3];
     buf[0] = x;

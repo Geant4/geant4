@@ -33,7 +33,7 @@
 #include "G4NuclearShellModelDensity.hh"
 #include "G4Nucleon.hh"
 
-// Class G4RKFieldIntegrator 
+// Class G4RKFieldIntegrator
 //*************************************************************************************************************************************
 
 // only theActive are propagated, nothing else
@@ -69,14 +69,14 @@ G4double G4RKFieldIntegrator::CalculateTotalEnergy(const G4KineticTrackVector& B
          G4double r12 = (p1->GetPosition() - p2->GetPosition()).mag()*fermi;
 
          //  Esk2
-         Etot += t1*std::pow(Alpha/pi, 3/2)*std::exp(-Alpha*r12*r12); 
+         Etot += t1*std::pow(Alpha/pi, 3/2)*std::exp(-Alpha*r12*r12);
 
          // Eyuk
          Etot += Vo*0.5/r12*std::exp(1/(4*Alpha*GammaY*GammaY))*
-            (std::exp(-r12/GammaY)*(1 - Erf(0.5/GammaY/std::sqrt(Alpha) - std::sqrt(Alpha)*r12)) - 
+            (std::exp(-r12/GammaY)*(1 - Erf(0.5/GammaY/std::sqrt(Alpha) - std::sqrt(Alpha)*r12)) -
              std::exp( r12/GammaY)*(1 - Erf(0.5/GammaY/std::sqrt(Alpha) + std::sqrt(Alpha)*r12)));
 
-         // Ecoul        
+         // Ecoul
          Etot += 1.44*p1->GetDefinition()->GetPDGCharge()*p2->GetDefinition()->GetPDGCharge()/r12*Erf(std::sqrt(Alpha)*r12);
 
          // Epaul
@@ -91,11 +91,11 @@ G4double G4RKFieldIntegrator::CalculateTotalEnergy(const G4KineticTrackVector& B
             Etot  = tGamma*std::pow(4*Alpha*Alpha/3/pi/pi, 1.5)*std::exp(-Alpha*(r12*r12 + r13*r13));
             }
          }
-      }      
+      }
    return Etot;
-}  
+}
 
-//************************************************************************************************       
+//************************************************************************************************
 // originated from the Numerical recipes error function
 G4double G4RKFieldIntegrator::Erf(G4double X)
 {
@@ -107,18 +107,20 @@ G4double G4RKFieldIntegrator::Erf(G4double X)
    const G4double Q10 = +3.2584593;
    const G4double P11 = -9.7970465E-2;
 
-   static G4double P2[5] = { 7.3738883, 6.8650185,  3.0317993, 0.56316962, 4.3187787e-5 };
-   static G4double Q2[5] = { 7.3739609, 15.184908, 12.79553,   5.3542168,  1. };
-   
+//   static G4ThreadLocal G4double P2[5] = { 7.3738883, 6.8650185,  3.0317993, 0.56316962, 4.3187787e-5 };
+//   static G4ThreadLocal G4double Q2[5] = { 7.3739609, 15.184908, 12.79553,   5.3542168,  1. };
+   const G4double P2[5] = { 7.3738883, 6.8650185,  3.0317993, 0.56316962, 4.3187787e-5 };
+   const G4double Q2[5] = { 7.3739609, 15.184908, 12.79553,   5.3542168,  1. };
+
    const G4double P30 = -1.2436854E-1;
    const G4double Q30 = +4.4091706E-1;
    const G4double P31 = -9.6821036E-2;
 
    G4double V = std::abs(X);
-   G4double H;   
+   G4double H;
    G4double Y;
    G4int c1;
-      
+
    if(V < HF)
       {
       Y = V*V;
@@ -126,7 +128,7 @@ G4double G4RKFieldIntegrator::Erf(G4double X)
       }
    else
       {
-      if(V < 4) 
+      if(V < 4)
          {
 	 G4double AP = P2[4];
 	 G4double AQ = Q2[4];
@@ -142,21 +144,21 @@ G4double G4RKFieldIntegrator::Erf(G4double X)
         Y = 1./V*V;
         H = 1 - std::exp(-V*V)*(C1+Y*(P30 + P31*Y)/(Q30 + Y))/V;
         }
-     if (X < 0) 
+     if (X < 0)
         H = -H;
      }
    return H;
 }
-   
-//************************************************************************************************       
+
+//************************************************************************************************
 //This is a QMD version to calculate excitation energy of a fragment,
 //which consists from G4KTV &the Particles
 /*
 G4double G4RKFieldIntegrator::GetExcitationEnergy(const G4KineticTrackVector &theParticles)
 {
    // Excitation energy of a fragment consisting from A nucleons and Z protons
-   // is Etot - Z*Mp - (A - Z)*Mn - B(A, Z), where B(A,Z) is the binding energy of fragment 
-   //  and Mp, Mn are proton and neutron mass, respectively. 
+   // is Etot - Z*Mp - (A - Z)*Mn - B(A, Z), where B(A,Z) is the binding energy of fragment
+   //  and Mp, Mn are proton and neutron mass, respectively.
    G4int NZ = 0;
    G4int NA = 0;
    G4double Etot = CalculateTotalEnergy(theParticles);
@@ -175,7 +177,7 @@ G4double G4RKFieldIntegrator::GetExcitationEnergy(const G4KineticTrackVector &th
 */
 
 //*************************************************************************************************************************************
-//This is a simplified method to get excitation energy of a residual 
+//This is a simplified method to get excitation energy of a residual
 // nucleus with nHitNucleons.
 G4double G4RKFieldIntegrator::GetExcitationEnergy(G4int nHitNucleons, const G4KineticTrackVector &)
 {
@@ -199,7 +201,7 @@ void G4RKFieldIntegrator::Integrate(G4KineticTrackVector& theParticles)
       pKineticTrack->SetPosition(pKineticTrack->GetPosition() + theTimeStep*pKineticTrack->Get4Momentum().boostVector());
       }
    }
-*/   
+*/
 //*************************************************************************************************************************************
 
 void G4RKFieldIntegrator::Integrate(const G4KineticTrackVector& theBarions, G4double theTimeStep)
@@ -208,9 +210,9 @@ void G4RKFieldIntegrator::Integrate(const G4KineticTrackVector& theBarions, G4do
       {
       G4KineticTrack* pKineticTrack = theBarions[cParticle];
       pKineticTrack->SetPosition(pKineticTrack->GetPosition() + theTimeStep*pKineticTrack->Get4Momentum().boostVector());
-      } 
+      }
 }
-   
+
 //*************************************************************************************************************************************
 
 // constant to calculate theCoulomb barrier
@@ -239,22 +241,22 @@ G4double G4RKFieldIntegrator::GetNeutronPotential(G4double )
    G4VNuclearDensity *theDencity;
    if(theA < 17) theDencity = new G4NuclearShellModelDensity(theA, theZ);
    else          theDencity = new G4NuclearFermiDensity(theA, theZ);
-   
-   // GetDencity() accepts only G4ThreeVector so build it:   
+
+   // GetDencity() accepts only G4ThreeVector so build it:
    G4ThreeVector aPosition(0.0, 0.0, radius);
    G4double density = theDencity->GetDensity(aPosition);
    delete theDencity;
-   
+
    G4FermiMomentum *fm = new G4FermiMomentum();
    fm->Init(theA, theZ);
    G4double fermiMomentum = fm->GetFermiMomentum(density);
    delete fm;
-   
-   return sqr(fermiMomentum)/(2 * Mn) 
+
+   return sqr(fermiMomentum)/(2 * Mn)
       + G4CreateNucleus::GetBindingEnergy(theZ, theA)/theA;
       //+ G4NucleiProperties::GetBindingEnergy(theZ, theA)/theA;
    */
-   
+
    return 0.0;
 }
 
@@ -268,20 +270,20 @@ G4double G4RKFieldIntegrator::GetProtonPotential(G4double )
    G4VNuclearDensity *theDencity;
    if(theA < 17) theDencity = new G4NuclearShellModelDensity(theA, theZ);
    else          theDencity = new G4NuclearFermiDensity(theA, theZ);
-   
-   // GetDencity() accepts only G4ThreeVector so build it:   
+
+   // GetDencity() accepts only G4ThreeVector so build it:
    G4ThreeVector aPosition(0.0, 0.0, radius);
    G4double density = theDencity->GetDensity(aPosition);
    delete theDencity;
-   
+
    G4FermiMomentum *fm = new G4FermiMomentum();
    fm->Init(theA, theZ);
    G4double fermiMomentum = fm->GetFermiMomentum(density);
    delete fm;
 
-   return sqr(fermiMomentum)/ (2 * Mp) 
+   return sqr(fermiMomentum)/ (2 * Mp)
       + G4CreateNucleus::GetBindingEnergy(theZ, theA)/theA;
-      //+ G4NucleiProperties::GetBindingEnergy(theZ, theA)/theA 
+      //+ G4NucleiProperties::GetBindingEnergy(theZ, theA)/theA
       + theCoulombBarrier;
    */
 
@@ -292,26 +294,26 @@ G4double G4RKFieldIntegrator::GetAntiprotonPotential(G4double )
 {
    /*
    //G4double theM = G4NucleiProperties::GetAtomicMass(theA, theZ);
-   G4double theM = theZ * G4Proton::Proton()->GetPDGMass() 
+   G4double theM = theZ * G4Proton::Proton()->GetPDGMass()
       + (theA - theZ) * G4Neutron::Neutron()->GetPDGMass()
       + G4CreateNucleus::GetBindingEnergy(theZ, theA);
-      
+
    const G4double Mp  = 938.27231 * MeV; // mass of proton
    G4double mu = (theM * Mp)/(theM + Mp);
-   
+
    // antiproton's potential coefficient
    //   V = coeff_antiproton * nucleus_density
    G4double coeff_antiproton = -2.*pi/mu * (1. + Mp) * a_antiproton;
-   
+
    G4VNuclearDensity *theDencity;
    if(theA < 17) theDencity = new G4NuclearShellModelDensity(theA, theZ);
    else          theDencity = new G4NuclearFermiDensity(theA, theZ);
-   
-   // GetDencity() accepts only G4ThreeVector so build it:   
+
+   // GetDencity() accepts only G4ThreeVector so build it:
    G4ThreeVector aPosition(0.0, 0.0, radius);
    G4double density = theDencity->GetDensity(aPosition);
    delete theDencity;
-   
+
    return coeff_antiproton * density;
    */
 
@@ -322,26 +324,26 @@ G4double G4RKFieldIntegrator::GetKaonPotential(G4double )
 {
    /*
    //G4double theM = G4NucleiProperties::GetAtomicMass(theA, theZ);
-   G4double theM = theZ * G4Proton::Proton()->GetPDGMass() 
+   G4double theM = theZ * G4Proton::Proton()->GetPDGMass()
       + (theA - theZ) * G4Neutron::Neutron()->GetPDGMass()
       + G4CreateNucleus::GetBindingEnergy(theZ, theA);
-      
+
    const G4double Mk  = 496. * MeV;      // mass of "kaon"
    G4double mu = (theM * Mk)/(theM + Mk);
-   
+
    // kaon's potential coefficient
    //   V = coeff_kaon * nucleus_density
    G4double coeff_kaon = -2.*pi/mu * (1. + Mk/theM) * a_kaon;
-   
+
    G4VNuclearDensity *theDencity;
    if(theA < 17) theDencity = new G4NuclearShellModelDensity(theA, theZ);
    else          theDencity = new G4NuclearFermiDensity(theA, theZ);
-   
-   // GetDencity() accepts only G4ThreeVector so build it:   
+
+   // GetDencity() accepts only G4ThreeVector so build it:
    G4ThreeVector aPosition(0.0, 0.0, radius);
    G4double density = theDencity->GetDensity(aPosition);
    delete theDencity;
-   
+
    return coeff_kaon * density;
    */
 
@@ -352,26 +354,26 @@ G4double G4RKFieldIntegrator::GetPionPotential(G4double )
 {
    /*
    //G4double theM = G4NucleiProperties::GetAtomicMass(theA, theZ);
-   G4double theM = theZ * G4Proton::Proton()->GetPDGMass() 
+   G4double theM = theZ * G4Proton::Proton()->GetPDGMass()
       + (theA - theZ) * G4Neutron::Neutron()->GetPDGMass()
       + G4CreateNucleus::GetBindingEnergy(theZ, theA);
-      
+
    const G4double Mpi = 139. * MeV;      // mass of "pion"
    G4double mu = (theM * Mpi)/(theM + Mpi);
 
    // pion's potential coefficient
    //   V = coeff_pion * nucleus_density
    G4double coeff_pion = -2.*pi/mu * (1. + Mpi) * a_pion;
-   
+
    G4VNuclearDensity *theDencity;
    if(theA < 17) theDencity = new G4NuclearShellModelDensity(theA, theZ);
    else          theDencity = new G4NuclearFermiDensity(theA, theZ);
-   
-   // GetDencity() accepts only G4ThreeVector so build it:   
+
+   // GetDencity() accepts only G4ThreeVector so build it:
    G4ThreeVector aPosition(0.0, 0.0, radius);
    G4double density = theDencity->GetDensity(aPosition);
    delete theDencity;
-   
+
    return coeff_pion * density;
    */
 

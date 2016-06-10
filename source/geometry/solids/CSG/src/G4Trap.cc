@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Trap.cc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // class G4Trap
 //
@@ -59,8 +59,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 
 using namespace CLHEP;
 
@@ -1967,10 +1965,4 @@ G4Polyhedron* G4Trap::CreatePolyhedron () const
   return new G4PolyhedronTrap(fDz, theta, phi,
                               fDy1, fDx1, fDx2, alpha1,
                               fDy2, fDx3, fDx4, alpha2);
-}
-
-G4NURBS* G4Trap::CreateNURBS () const
-{
-   // return new G4NURBSbox (fDx, fDy, fDz);
-   return 0 ;
 }

@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.hh 68753 2013-04-05 10:26:04Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

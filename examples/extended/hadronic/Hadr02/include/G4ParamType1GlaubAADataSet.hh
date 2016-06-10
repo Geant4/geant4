@@ -36,6 +36,9 @@
 /// \file hadronic/Hadr02/include/G4ParamType1GlaubAADataSet.hh
 /// \brief Definition of the G4ParamType1GlaubAADataSet class
 //
+// $Id: G4ParamType1GlaubAADataSet.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4ParamType1GlaubAADataSet_h
 #define G4ParamType1GlaubAADataSet_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -68,50 +71,53 @@
 
 #include "globals.hh"
 #include <fstream>
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
 class G4ParamType1GlaubAADataSet : public G4GlaubAADataSet,
-  public G4Type1GlauberParameterisation 
+				   public G4Type1GlauberParameterisation 
 {
-  public:
-    G4ParamType1GlaubAADataSet ();
-    G4ParamType1GlaubAADataSet (const G4int AP1, const G4int AT1);
-    G4ParamType1GlaubAADataSet (G4FullGlaubAADataSet *fullGlauberDataSet);
-    ~G4ParamType1GlaubAADataSet ();
-    G4ParamType1GlaubAADataSet (const G4ParamType1GlaubAADataSet &right);
+public:
 
-    const G4ParamType1GlaubAADataSet& operator=(G4ParamType1GlaubAADataSet &right);
+  G4ParamType1GlaubAADataSet ();
+  G4ParamType1GlaubAADataSet (const G4int AP1, const G4int AT1);
+  G4ParamType1GlaubAADataSet (G4FullGlaubAADataSet *fullGlauberDataSet);
+  ~G4ParamType1GlaubAADataSet ();
+  G4ParamType1GlaubAADataSet (const G4ParamType1GlaubAADataSet &right);
 
-    G4bool CreateGlauberData (const G4int AP1, const G4int AT1);
-    G4bool CreateGlauberData (G4FullGlaubAADataSet *fullGlauberDataSet);
-//    G4FullGlaubAADataSet *GetFullGlauberDataSet ();
+  const 
+  G4ParamType1GlaubAADataSet& operator=(G4ParamType1GlaubAADataSet &right);
 
-    G4double GetValueN (const G4double f, const G4double ppn = 0.0) const;
-    G4double GetValueM (const G4double f, const G4double ppn = 0.0) const;
+  G4bool CreateGlauberData (const G4int AP1, const G4int AT1);
+  G4bool CreateGlauberData (G4FullGlaubAADataSet *fullGlauberDataSet);
+
+  inline G4double GetValueN (const G4double f, const G4double ppn = 0.0) const;
+  inline G4double GetValueM (const G4double f, const G4double ppn = 0.0) const;
     
-//    G4double *GetArrayPointerN (const G4double ppn);
-//    G4double *GetArrayPointerM (const G4double ppn);
-    
-    std::ofstream & WriteDataToFile (std::ofstream &File) const;
-    std::ifstream & ReadDataFromFile (std::ifstream &File);
-    
-  public:
-//    G4double      bsiten[200];
-//    G4double      bsitem[200];
+  std::ofstream & WriteDataToFile (std::ofstream &File) const;
+  std::ifstream & ReadDataFromFile (std::ifstream &File);
+
 };
-    
-////////////////////////////////////////////////////////////////////////////////
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // GetValueN
 //
-inline G4double G4ParamType1GlaubAADataSet::GetValueN (const G4double f,
-  const G4double ppn) const
-  {return GetParameterisedValueN (f, ppn);}
-////////////////////////////////////////////////////////////////////////////////
+inline 
+G4double G4ParamType1GlaubAADataSet::GetValueN (const G4double f,
+						const G4double ppn) const
+{return GetParameterisedValueN (f, ppn);}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // GetValueM
 //
-inline G4double G4ParamType1GlaubAADataSet::GetValueM (const G4double f,
-  const G4double ppn) const
-  {return GetParameterisedValueM (f, ppn);}
+inline 
+G4double G4ParamType1GlaubAADataSet::GetValueM (const G4double f,
+						const G4double ppn) const
+{return GetParameterisedValueM (f, ppn);}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ExcitedBaryonConstructor.cc 77701 2013-11-27 16:39:30Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -40,7 +40,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4ShortLivedTable.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4VDecayChannel.hh"
 #include "G4DecayTable.hh"
@@ -150,7 +149,7 @@ void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
 G4double  G4ExcitedBaryonConstructor::GetCharge(G4int iIsoSpin3)
 {
   G4double charge = 0.0;
-  static G4double quark_charge[7] = 
+  static const G4double quark_charge[7] = 
   {
     0., -1./3., +2./3., -1./3., +2./3., -1./3., +2./3.
   };

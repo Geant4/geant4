@@ -56,6 +56,7 @@ class G4Box;
 class G4Trd;
 class G4Trap;
 class G4Sphere;
+class G4Ellipsoid;
 class G4Torus;
 class G4Para;
 class G4Hype;
@@ -89,6 +90,7 @@ private:
     void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}

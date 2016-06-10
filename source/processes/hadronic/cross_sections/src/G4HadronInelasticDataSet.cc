@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronInelasticDataSet.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // G4 Physics class: HadronInelasticDataSet for cross sections
 // F.W. Jones, TRIUMF, 19-MAY-98

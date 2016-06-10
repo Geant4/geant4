@@ -1,4 +1,4 @@
-// $Id: Doxymodules_analysis.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_analysis.h 78005 2013-12-02 08:29:57Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_analysis.h
@@ -79,12 +79,21 @@
 
 /** @} */
 
-/** @defgroup extended_analysis_N03Con N03Con
- *  Analysis AnaEx03 example has its 
- *  <a href="../html_N03Con/html/index.html">standalone documentation </a>
+/** @defgroup extended_analysis_B1Con B1Con
+ *  Analysis example B1Con 
  *  @ingroup extended_analysis
  *  @{
  */
+
+  class B1ConActionInitialization{};
+  class B1ConRunAction{};
+  class B1ConRun{};
+  class B1DetectorConstruction{};
+  class B1EventAction{};
+  class B1PrimaryGeneratorAction{};
+  class B1Run{};
+  class B1SteppingAction{};
+
 /** @} */
 
 

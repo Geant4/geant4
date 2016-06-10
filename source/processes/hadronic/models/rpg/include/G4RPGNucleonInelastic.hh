@@ -93,10 +93,10 @@
    static const G4int T0_8bfs[10][8];
    static const G4int T0_9bfs[12][9];
 
-   static G4double pPtot[30];
-   static G4double pNtot[30];
-   static G4double t1_dSigma_dMult[8][30];
-   static G4double t0_dSigma_dMult[8][30];
+   static G4ThreadLocal G4double pPtot[30];
+   static G4ThreadLocal G4double pNtot[30];
+   static G4ThreadLocal G4double t1_dSigma_dMult[8][30];
+   static G4ThreadLocal G4double t0_dSigma_dMult[8][30];
 
    static const G4float pPCrossSections[93][30];
    static const G4float pNCrossSections[108][30];

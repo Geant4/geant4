@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLImmediateWt.hh 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // OpenGLImmediateWt graphics system factory.
@@ -34,11 +34,18 @@
 
 #include "G4VGraphicsSystem.hh"
 
+namespace Wt {
+  class WContainerWidget;
+}
+
 class G4OpenGLImmediateWt: public G4VGraphicsSystem {
 public:
   G4OpenGLImmediateWt ();
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
+  
+private:
+    Wt::WContainerWidget* fWGLContainer;
 };
 
 #endif

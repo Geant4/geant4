@@ -1,0 +1,95 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UPolyhedra.icc
+//
+// Implementation of inline methods of UPolyhedra
+//
+// 19.09.13 Marek Gayer
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
+
+inline
+int UPolyhedra::GetNumSide() const
+{
+  return fNumSides;
+}
+
+inline
+double UPolyhedra::GetStartPhi() const
+{
+  return fStartPhi;
+}
+
+inline
+double UPolyhedra::GetEndPhi() const
+{
+  return fEndPhi;
+}
+
+inline
+bool UPolyhedra::IsOpen() const
+{
+  return fPhiIsOpen;
+}
+
+inline
+bool UPolyhedra::IsGeneric() const
+{
+  return fGenericPgon;
+}
+
+inline
+int UPolyhedra::GetNumRZCorner() const
+{
+  return fNumCorner;
+}
+
+inline
+UPolyhedraSideRZ UPolyhedra::GetCorner(const int index) const
+{
+  return fCorners[index];
+}
+
+inline
+UPolyhedraHistorical* UPolyhedra::GetOriginalParameters()
+{
+  return &fOriginalParameters;
+}
+
+inline
+void UPolyhedra::SetOriginalParameters(UPolyhedraHistorical& pars)
+{
+  fOriginalParameters = pars;
+  fCubicVolume = 0.;
+}
+
+inline
+void UPolyhedra::SetOriginalParameters()
+{
+  int fNumPlanes = (int) fNumCorner / 2;
+
+  fOriginalParameters.fZValues.resize(fNumPlanes);
+  fOriginalParameters.Rmin.resize(fNumPlanes);
+  fOriginalParameters.Rmax.resize(fNumPlanes);
+
+  for (int j = 0; j < fNumPlanes; j++)
+  {
+    fOriginalParameters.fZValues[j] = fCorners[fNumPlanes + j].z;
+    fOriginalParameters.Rmax[j] = fCorners[fNumPlanes + j].r;
+    fOriginalParameters.Rmin[j] = fCorners[fNumPlanes - 1 - j].r;
+  }
+
+  fOriginalParameters.fStartAngle = fStartPhi;
+  fOriginalParameters.fOpeningAngle = fEndPhi - fStartPhi;
+  fOriginalParameters.fNumZPlanes = fNumPlanes;
+  fOriginalParameters.fNumSide = fNumSides;
+
+}

@@ -23,73 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #ifndef RunAction_h
 #define RunAction_h 1
 
+#include <CLHEP/Matrix/Vector.h>
+
 #include "G4UserRunAction.hh"
-#include "globals.hh"
-#include <iostream>
-#include "CLHEP/Matrix/Matrix.h"
-#include "CLHEP/Matrix/Vector.h"
 
-#include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
     
-  G4int GetRow(){return row;}
-  void AddRow() {row=row+1;}
+  G4int GetRow(){return fRow;}
+  void AddRow() {fRow=fRow+1;}
   
-  void AddToXVector(float v) {xVector(row)=v;}
-  void AddToYVector(float v) {yVector(row)=v;}
-  void AddToThetaVector(float v) {thetaVector(row)=v;}
-  void AddToPhiVector(float v) {phiVector(row)=v;}
+  void AddToXVector(float v) {fXVector(fRow)=v;}
+  void AddToYVector(float v) {fYVector(fRow)=v;}
+  void AddToThetaVector(float v) {fThetaVector(fRow)=v;}
+  void AddToPhiVector(float v) {fPhiVector(fRow)=v;}
     
 private:
 
-  DetectorConstruction* detector;    
-  PrimaryGeneratorAction* primary;   
-  HistoManager* hist;
+  DetectorConstruction* fDetector;    
+  PrimaryGeneratorAction* fPrimary;   
     
   // Matrix handling 
   
-  G4int row;
+  G4int fRow;
   
-  CLHEP::HepVector xVector;
-  CLHEP::HepVector yVector;
-  CLHEP::HepVector thetaVector;
-  CLHEP::HepVector phiVector;
-  CLHEP::HepMatrix beamMatrix;
+  CLHEP::HepVector fXVector;
+  CLHEP::HepVector fYVector;
+  CLHEP::HepVector fThetaVector;
+  CLHEP::HepVector fPhiVector;
+  CLHEP::HepMatrix fBeamMatrix;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

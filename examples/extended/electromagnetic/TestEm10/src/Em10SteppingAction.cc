@@ -27,12 +27,11 @@
 /// \brief Implementation of the Em10SteppingAction class
 //
 //
-// $Id$
+// $Id: Em10SteppingAction.cc 73033 2013-08-15 09:24:45Z gcosmo $
 //
-// 
+//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em10DetectorConstruction.hh"
 #include "G4Electron.hh"
@@ -47,29 +46,27 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-Em10SteppingAction::Em10SteppingAction(Em10DetectorConstruction* DET,
-                                     Em10EventAction* EA,
-                                     Em10RunAction* RA)
-  :detector (DET),eventaction (EA),runaction (RA),
-   IDold(-1) ,evnoold(-1)
+Em10SteppingAction::Em10SteppingAction(Em10EventAction* EA,
+                                       Em10RunAction* RA)
+  :G4UserSteppingAction(),eventaction (EA),runaction (RA),
+   IDold(-1)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em10SteppingAction::~Em10SteppingAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10SteppingAction::UserSteppingAction(const G4Step* aStep)
-{ 
+{
 
-  G4double Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend ;
+  G4double Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend;
 
-  G4int evno = eventaction->GetEventno() ; 
+  G4int evno = eventaction->GetEventno();
 
   const G4Track* track = aStep->GetTrack();
   const G4StepPoint* prePoint = aStep->GetPreStepPoint();
@@ -81,26 +78,26 @@ void Em10SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4VPhysicalVolume* preVol = prePoint->GetPhysicalVolume();
   G4VPhysicalVolume* postVol = aStep->GetPostStepPoint()->GetPhysicalVolume();
 
-  IDnow = evno+10000*trackID+100000000*parentID; 
+  IDnow = evno+10000*trackID+100000000*parentID;
   if(IDnow != IDold) {
-    IDold=IDnow ;
-    if(trackID > 1 && (particle == G4Electron::Electron() || 
-                       particle == G4Positron::Positron() || 
+    IDold=IDnow;
+    if(trackID > 1 && (particle == G4Electron::Electron() ||
+                       particle == G4Positron::Positron() ||
                        particle == G4Gamma::Gamma())) {
       runaction->Fillvertexz(track->GetVertexPosition().z());
 
       if(preVol->GetName()=="Absorber") {
         if(particle == G4Gamma::Gamma()) {
-          eventaction->AddNeutral() ;
+          eventaction->AddNeutral();
         } else {
-          eventaction->AddCharged() ;
-          Tsec = track->GetKineticEnergy() ;  
-          Tsec += aStep->GetTotalEnergyDeposit() ; 
-          runaction->FillTsec(Tsec) ;
+          eventaction->AddCharged();
+          Tsec = track->GetKineticEnergy();
+          Tsec += aStep->GetTotalEnergyDeposit();
+          runaction->FillTsec(Tsec);
           if(particle == G4Electron::Electron()) {
-            eventaction->AddE() ;
+            eventaction->AddE();
           } else {
-            eventaction->AddP() ;
+            eventaction->AddP();
           }
         }
       }
@@ -108,12 +105,12 @@ void Em10SteppingAction::UserSteppingAction(const G4Step* aStep)
   }
 
   if(preVol->GetName()=="Absorber") {
-    if(particle == G4Electron::Electron() || 
+    if(particle == G4Electron::Electron() ||
        particle == G4Positron::Positron()) {
-      eventaction->CountStepsCharged() ;
+      eventaction->CountStepsCharged();
 
     } else if(particle == G4Gamma::Gamma()) {
-      eventaction->CountStepsNeutral() ;
+      eventaction->CountStepsNeutral();
     }
 
     if(prePoint->GetStepStatus() == fGeomBoundary &&
@@ -123,33 +120,32 @@ void Em10SteppingAction::UserSteppingAction(const G4Step* aStep)
         if(track->GetMomentumDirection().z()>0.) {
 
           eventaction->SetTr();
-          Theta = std::acos(track->GetMomentumDirection().z()) ;
-          runaction->FillTh(Theta) ;
-          Ttrans = track->GetKineticEnergy() ;
-          runaction->FillTt(Ttrans) ;
-          yend= aStep->GetTrack()->GetPosition().y() ;
-          zend= aStep->GetTrack()->GetPosition().x() ;
-          rend = std::sqrt(yend*yend+zend*zend) ;
+          Theta = std::acos(track->GetMomentumDirection().z());
+          runaction->FillTh(Theta);
+          Ttrans = track->GetKineticEnergy();
+          runaction->FillTt(Ttrans);
+          yend= aStep->GetTrack()->GetPosition().y();
+          zend= aStep->GetTrack()->GetPosition().x();
+          rend = std::sqrt(yend*yend+zend*zend);
           runaction->FillR(rend);
 
         } else {
           eventaction->SetRef();
           Thetaback = std::acos(aStep->GetTrack()->GetMomentumDirection().z());
-          Thetaback -= 0.5*pi ;
-          runaction->FillThBack(Thetaback) ;
-          Tback  = aStep->GetTrack()->GetKineticEnergy() ;
-          runaction->FillTb(Tback) ;
+          Thetaback -= 0.5*pi;
+          runaction->FillThBack(Thetaback);
+          Tback  = aStep->GetTrack()->GetKineticEnergy();
+          runaction->FillTb(Tback);
         }
       }
-      if(track->GetMomentumDirection().z()>0. && 
+      if(track->GetMomentumDirection().z()>0. &&
          particle == G4Gamma::Gamma()) {
-        
-        Egamma = aStep->GetTrack()->GetKineticEnergy() ;
-        runaction->FillGammaSpectrum(Egamma) ;
+ 
+        Egamma = aStep->GetTrack()->GetKineticEnergy();
+        runaction->FillGammaSpectrum(Egamma);
       }
     }
-  }      
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

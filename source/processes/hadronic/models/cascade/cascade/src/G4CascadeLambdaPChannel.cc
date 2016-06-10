@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeLambdaPChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -908,7 +908,7 @@ namespace {
       0.09, 0.11, 0.13, 0.15, 0.16, 0.17, 0.18, 0.18, 0.18, 0.17, 0.14} };
 }
 
-G4CascadeLambdaPChannelData::data_t
+const G4CascadeLambdaPChannelData::data_t
 G4CascadeLambdaPChannelData::data(lp2bfs, lp3bfs, lp4bfs,
 				  lp5bfs, lp6bfs, lp7bfs,
 				  lpCrossSections, lam*pro, "LambdaP");

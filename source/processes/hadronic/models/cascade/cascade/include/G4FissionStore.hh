@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4FissionStore.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100728  Move ::addConfig() to .cc file, add setVerboseLevel(), clear()
 // 20110801  Make configuration probs a data member array, reduce memory churn

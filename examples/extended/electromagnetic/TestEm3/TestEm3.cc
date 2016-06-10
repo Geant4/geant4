@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm3/TestEm3.cc
 /// \brief Main program of the electromagnetic/TestEm3 example
 //
-// $Id$
+// $Id: TestEm3.cc 73035 2013-08-15 09:27:10Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -61,7 +61,7 @@ int main(int argc,char** argv) {
 
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
+ 
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -69,56 +69,55 @@ int main(int argc,char** argv) {
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
-  
+
   // primary generator
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
-        
+ 
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary);
   EventAction*    evtAct = new EventAction(detector,runAct);
-  TrackingAction* trkAct = new TrackingAction(detector,runAct,evtAct);
+  TrackingAction* trkAct = new TrackingAction(detector,runAct);
   SteppingAction* stpAct = new SteppingAction(detector,runAct,evtAct);
-  
+
   runManager->SetUserAction(runAct);
   runManager->SetUserAction(evtAct);
   runManager->SetUserAction(trkAct);
   runManager->SetUserAction(stpAct);
 
-  // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  // get the pointer to the User Interface manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
 
-  if (argc!=1)   // batch mode  
+  if (argc!=1)   // batch mode
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
     }
-    
+ 
   else           //define visualization and UI terminal for interactive mode
-    { 
+    {
 #ifdef G4VIS_USE
    G4VisManager* visManager = new G4VisExecutive;
    visManager->Initialize();
 #endif
-    
+ 
 #ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
       ui->SessionStart();
       delete ui;
 #endif
-     
+ 
 #ifdef G4VIS_USE
      delete visManager;
-#endif     
+#endif
     }
 
   // job termination
-  //   
+  //
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

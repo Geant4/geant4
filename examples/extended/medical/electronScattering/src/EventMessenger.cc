@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/EventMessenger.cc
 /// \brief Implementation of the EventMessenger class
 //
-// $Id$
+// $Id: EventMessenger.cc 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventMessenger::EventMessenger(EventAction* EvAct)
-:fEventAction(EvAct)
+:fEventAction(EvAct), fEventDir(0), fDrawCmd(0), fPrintCmd(0)
 {
   fEventDir = new G4UIdirectory("/testem/event/");
   fEventDir->SetGuidance("event control");

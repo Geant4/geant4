@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 May 2013 Peter Gumplinger (exOptical-V09-06-02)
+- Collect all coding guideline changes, also those from Ivana Hrivnacova
+
+1 April 2013 Andrea Dotti (exOptical-V09-06-01)
+- Grouping changes in examples for new API physics list classes needed for MT
+
+17 December 2012 Peter Gumplinger (exOptical-V09-06-00)
+- add OpNovice which is the original /novice/N06 example
+
 15 November 2012  Ivana Hrivnacova (exOptical-V09-05-01)
 - Minor fixes in .README files
 

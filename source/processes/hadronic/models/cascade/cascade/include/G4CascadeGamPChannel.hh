@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
+// $Id: G4CascadeGamPChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 
 #ifndef G4_CASCADE_GAMP_CHANNEL_HH
@@ -35,7 +35,7 @@
 
 struct G4CascadeGamPChannelData {
   typedef G4CascadeData<30,6,6,4,5,6,7,7,7> data_t;
-  static data_t data;
+  static const data_t data;
 };
 
 typedef G4CascadeFunctions<G4CascadeGamPChannelData,G4PionNucSampler> G4CascadeGamPChannel;

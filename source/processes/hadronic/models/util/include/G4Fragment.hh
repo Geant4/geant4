@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Fragment.hh 67984 2013-03-13 10:44:01Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -166,7 +166,7 @@ private:
 
   // ============= DATA MEMBERS ==================
 
-  static G4int errCount;
+  static G4ThreadLocal G4int errCount;
 
   G4int theA;
   

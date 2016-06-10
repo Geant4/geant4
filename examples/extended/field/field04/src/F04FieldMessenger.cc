@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04FieldMessenger.cc 76690 2013-11-14 08:45:07Z gcosmo $
+//
 /// \file field/field04/src/F04FieldMessenger.cc
 /// \brief Implementation of the F04FieldMessenger class
 //
-//
+
 #include "F04FieldMessenger.hh"
 
 #include "F04GlobalField.hh"
@@ -36,13 +38,39 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
+#include "F04DetectorConstruction.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04FieldMessenger::F04FieldMessenger(F04GlobalField* pEMfield)
+F04FieldMessenger::F04FieldMessenger(F04GlobalField* pEMfield,
+                                     F04DetectorConstruction* detector)
   : fGlobalField(pEMfield)
 {
+  fDetector = detector;
+
   fDetDir = new G4UIdirectory("/field/");
   fDetDir->SetGuidance(" Field tracking control ");
+
+  fCaptureB1Cmd = new G4UIcmdWithADoubleAndUnit("/field/SetCaptureB1",this);
+  fCaptureB1Cmd->SetGuidance("Set B1 of the Capture Magnet");
+  fCaptureB1Cmd->SetParameterName("CSizeB1",false,false);
+  fCaptureB1Cmd->SetDefaultUnit("tesla");
+  fCaptureB1Cmd->SetRange("CSizeB1>0.");
+  fCaptureB1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fCaptureB2Cmd = new G4UIcmdWithADoubleAndUnit("/field/SetCaptureB2",this);
+  fCaptureB2Cmd->SetGuidance("Set B2 of the Capture Magnet");
+  fCaptureB2Cmd->SetParameterName("CSizeB2",false,false);
+  fCaptureB2Cmd->SetDefaultUnit("tesla");
+  fCaptureB2Cmd->SetRange("CSizeB2>0.");
+  fCaptureB2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fTransferBCmd = new G4UIcmdWithADoubleAndUnit("/field/SetTransferB",this);
+  fTransferBCmd->SetGuidance("Set B of the Transfer Magnet");
+  fTransferBCmd->SetParameterName("TSizeB",false,false);
+  fTransferBCmd->SetDefaultUnit("tesla");
+  fTransferBCmd->SetRange("TSizeB>0.");
+  fTransferBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fStepperCMD = new G4UIcmdWithAnInteger("/field/setStepperType",this);
   fStepperCMD->SetGuidance("Select stepper type for field");
@@ -101,6 +129,10 @@ F04FieldMessenger::~F04FieldMessenger()
 {
   delete fDetDir;
 
+  delete fCaptureB1Cmd;
+  delete fCaptureB2Cmd;
+  delete fTransferBCmd;
+
   delete fStepperCMD;
   delete fMinStepCMD;
   delete fDeltaChordCMD;
@@ -115,6 +147,16 @@ F04FieldMessenger::~F04FieldMessenger()
 
 void F04FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
 {
+
+  if( command == fCaptureB1Cmd )
+    fDetector->SetCaptureMgntB1(fCaptureB1Cmd->GetNewDoubleValue(newValue));
+
+  if( command == fCaptureB2Cmd )
+    fDetector->SetCaptureMgntB2(fCaptureB2Cmd->GetNewDoubleValue(newValue));
+
+  if( command == fTransferBCmd )
+    fDetector->SetTransferMgntB(fTransferBCmd->GetNewDoubleValue(newValue));
+
   if( command == fStepperCMD )
   {
     fGlobalField->SetStepperType(fStepperCMD->GetNewIntValue(newValue));

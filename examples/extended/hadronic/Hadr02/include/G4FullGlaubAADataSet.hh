@@ -36,6 +36,9 @@
 /// \file hadronic/Hadr02/include/G4FullGlaubAADataSet.hh
 /// \brief Definition of the G4FullGlaubAADataSet class
 //
+// $Id: G4FullGlaubAADataSet.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4FullGlaubAADataSet_h
 #define G4FullGlaubAADataSet_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,30 +68,34 @@
 
 #include <fstream>
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4FullGlaubAADataSet : public G4GlaubAADataSet
 {
-  public:
-    G4FullGlaubAADataSet ();
-    G4FullGlaubAADataSet (const G4int AP1, const G4int AT1);
-    ~G4FullGlaubAADataSet ();
-    G4FullGlaubAADataSet (const G4FullGlaubAADataSet &right);
+public:
 
-    const G4FullGlaubAADataSet& operator=(G4FullGlaubAADataSet &right);
+  G4FullGlaubAADataSet ();
+  G4FullGlaubAADataSet (const G4int AP1, const G4int AT1);
+  virtual ~G4FullGlaubAADataSet ();
 
-    G4bool CreateGlauberData (const G4int AP1, const G4int AT1);
-    G4double *GetArrayPointerN (const G4double ppn = 0.0);
-    G4double *GetArrayPointerM (const G4double ppn = 0.0);
+  G4FullGlaubAADataSet (const G4FullGlaubAADataSet &right);
 
-    std::ofstream & WriteDataToFile (std::ofstream &File) const;
-    std::ifstream & ReadDataFromFile (std::ifstream &File);
+  const G4FullGlaubAADataSet& operator=(G4FullGlaubAADataSet &right);
 
-  public:
-    G4double        bsiten[24][200];
-    G4double        bsitem[24][200];
+  G4bool CreateGlauberData (const G4int AP1, const G4int AT1);
+  G4double *GetArrayPointerN (const G4double ppn = 0.0);
+  G4double *GetArrayPointerM (const G4double ppn = 0.0);
 
-    G4double wu10;
+  std::ofstream & WriteDataToFile (std::ofstream &File) const;
+  std::ifstream & ReadDataFromFile (std::ifstream &File);
+
+  G4double bsiten[24][200];
+  G4double bsitem[24][200];
+  
+  G4double wu10;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif

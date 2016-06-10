@@ -26,14 +26,14 @@
 /// \file biasing/ReverseMC01/include/RMC01AnalysisManagerMessenger.hh
 /// \brief Definition of the RMC01AnalysisManagerMessenger class
 //
-// $Id$
+// $Id: RMC01AnalysisManagerMessenger.hh 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01AnalysisManagerMessenger
+//  Class Name:           RMC01AnalysisManagerMessenger
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -70,7 +70,7 @@ class RMC01AnalysisManagerMessenger: public G4UImessenger
   private:
     RMC01AnalysisManager* fAnalysisManager;
     
-    G4UIdirectory*             fAnalysisDir;
+    G4UIdirectory*        fAnalysisDir;
   
     G4UIcmdWithADouble* fSetPrecisionForConvergenceTestCmd;
     G4UIcommand* fSetExpSpectrumToNormaliseAdjResCmd;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VDivisionParameterisation.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // class G4VDivisionParameterisation
 //
@@ -104,7 +104,7 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4bool fReflectedSolid;
     G4bool fDeleteSolid;
   
-    static G4int verbose;
+    static G4ThreadLocal G4int verbose;
     G4int theVoluFirstCopyNo;
 
     G4double kCarTolerance;

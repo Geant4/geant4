@@ -25,7 +25,7 @@
 //
 //
 
-// $Id$
+// $Id: G4CrossSectionDataSet.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 // Code review by MGP October 2007: removed inheritance from concrete class

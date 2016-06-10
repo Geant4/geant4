@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.hh 73024 2013-08-15 09:11:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,27 +37,22 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-class DetectorConstruction;
 class RunAction;
 class PrimaryGeneratorAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*,
-                                          HistoManager*);
+    TrackingAction(RunAction*, PrimaryGeneratorAction*);
    ~TrackingAction() {};
    
     virtual void PostUserTrackingAction(const G4Track*);
     
   private:
-    DetectorConstruction*   fDetector;
     RunAction*              fRunAction;
     PrimaryGeneratorAction* fKinematic;
-    HistoManager*           fHistoManager;       
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

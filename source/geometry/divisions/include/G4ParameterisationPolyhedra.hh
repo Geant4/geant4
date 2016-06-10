@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParameterisationPolyhedra.hh 73433 2013-08-27 11:05:39Z gcosmo $
 // 
 // classes G4ParameterisationPolyhedraRho,
 //         G4ParameterisationPolyhedraPhi,
@@ -55,6 +55,7 @@ class G4Trap;
 class G4Cons;
 class G4Sphere;
 class G4Orb;
+class G4Ellipsoid;
 class G4Torus;
 class G4Para;
 class G4Hype;
@@ -113,6 +114,8 @@ class G4ParameterisationPolyhedraRho : public G4VParameterisationPolyhedra
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,
                             const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,
+                            const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,
@@ -161,6 +164,8 @@ class G4ParameterisationPolyhedraPhi : public G4VParameterisationPolyhedra
     void ComputeDimensions (G4Sphere&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,
                             const G4VPhysicalVolume*) const {}
@@ -216,6 +221,8 @@ class G4ParameterisationPolyhedraZ : public G4VParameterisationPolyhedra
     void ComputeDimensions (G4Sphere&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,
                             const G4VPhysicalVolume*) const {}

@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01ChamberParameterisation class
 //
 //
-// $Id$
+// $Id: ExP01ChamberParameterisation.cc 71791 2013-06-24 14:08:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,6 +47,7 @@ ExP01ChamberParameterisation::ExP01ChamberParameterisation(
         G4double widthChamber, 
         G4double lengthInitial, 
         G4double lengthFinal )
+ : G4VPVParameterisation()        
 {
    fNoChambers =  NoChambers; 
    fStartZ     =  startZ; 
@@ -54,6 +55,7 @@ ExP01ChamberParameterisation::ExP01ChamberParameterisation(
    fSpacing    =  spacingZ;
    fHalfLengthFirst = 0.5 * lengthInitial; 
    // fHalfLengthLast = lengthFinal;
+   fHalfLengthIncr = 0;
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
       if (spacingZ < widthChamber) {

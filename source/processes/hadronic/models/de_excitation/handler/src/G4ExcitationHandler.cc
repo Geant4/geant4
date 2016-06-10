@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ExcitationHandler.cc 74999 2013-10-25 10:56:56Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -70,6 +70,7 @@
 #include "G4NistManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleTypes.hh"
+#include "G4Ions.hh"
 
 #include "G4VMultiFragmentation.hh"
 #include "G4VFermiBreakUp.hh"
@@ -83,6 +84,7 @@
 #include "G4PhotonEvaporation.hh"
 #include "G4FermiBreakUp.hh"
 #include "G4FermiFragmentsPool.hh"
+#include "G4Pow.hh"
 
 G4ExcitationHandler::G4ExcitationHandler():
   maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4*GeV),
@@ -92,10 +94,11 @@ G4ExcitationHandler::G4ExcitationHandler():
   
   theMultiFragmentation = new G4StatMF;
   theFermiModel = new G4FermiBreakUp;
-  thePhotonEvaporation = new G4PhotonEvaporation;
+  thePhotonEvaporation = new G4PhotonEvaporation("ExcitationHandler",fDelayedEmission);
   theEvaporation = new G4Evaporation(thePhotonEvaporation);
   thePool = G4FermiFragmentsPool::Instance();
   SetParameters();
+  G4Pow::GetInstance();
 }
 
 G4ExcitationHandler::~G4ExcitationHandler()
@@ -122,10 +125,17 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
   // Variables existing until end of method
   G4Fragment * theInitialStatePtr = new G4Fragment(theInitialState);
 
-  G4FragmentVector * theTempResult = 0;      // pointer which receives temporal results
-  std::list<G4Fragment*> theEvapList;        // list to apply Evaporation or Fermi Break-Up
-  std::list<G4Fragment*> thePhotoEvapList;   // list to apply PhotonEvaporation
-  std::list<G4Fragment*> theResults;         // list to store final result
+  // pointer to fragment vector which receives temporal results
+  G4FragmentVector * theTempResult = 0;     
+ 
+  // list of fragments to apply Evaporation or Fermi Break-Up
+  std::list<G4Fragment*> theEvapList;        
+
+  // list of fragments to apply PhotonEvaporation 
+  std::list<G4Fragment*> thePhotoEvapList;
+
+  // list of fragments to store final result   
+  std::list<G4Fragment*> theResults;
   //
   //G4cout << theInitialState << G4endl;  
   
@@ -234,6 +244,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	{
 	  theTempResult = theFermiModel->BreakItUp(*(*iList));
 	  wasFBU = true; 
+	  // if initial fragment returned unchanged try to evaporate it
+          if(1 == theTempResult->size()) {
+            delete theTempResult;
+	    theTempResult = theEvaporation->BreakItUp(*(*iList)); 
+	  }
 	}
       else // apply Evaporation in another case
 	{
@@ -314,7 +329,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
       exEnergy = (*iList)->GetExcitationEnergy();
 
       // only hot fragments
-      if(exEnergy >= minExcitation) {  
+      if(exEnergy > minExcitation) {  
 	theTempResult = thePhotonEvaporation->BreakUpFragment(*iList);	  
 	size_t nsec = theTempResult->size();
 	//G4cout << "Nproducts= " << nsec << G4endl;  
@@ -340,7 +355,8 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
   //	 << thePhotoEvapList.size() << " was photo-evap; " 
   //	 << theResults.size() << " results. " << G4endl; 
     
-  G4ReactionProductVector * theReactionProductVector = new G4ReactionProductVector;
+  G4ReactionProductVector * theReactionProductVector = 
+    new G4ReactionProductVector();
 
   // MAC (24/07/08)
   // To optimise the storing speed, we reserve space in memory for the vector
@@ -353,6 +369,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
     {
       theFragmentA = (*i)->GetA_asInt();
       theFragmentZ = (*i)->GetZ_asInt();
+      G4double etot= (*i)->GetMomentum().e();
       G4ParticleDefinition* theKindOfFragment = 0;
       if (theFragmentA == 0) {       // photon or e-
 	theKindOfFragment = (*i)->GetParticleDefinition();   
@@ -369,14 +386,63 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
       } else if (theFragmentA == 4 && theFragmentZ == 2) { // alpha
 	theKindOfFragment = G4Alpha::AlphaDefinition();;
       } else {
+
+	// ground state by default
+        G4double eexc = (*i)->GetExcitationEnergy();
+        G4double excitation = eexc;
+
+	G4int level = 0;
 	theKindOfFragment = 
-	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,0.0);
+	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
+	/*
+	G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
+	       << " Eexc(MeV)= " << excitation/MeV << "  " 
+	       << theKindOfFragment << G4endl;
+	*/
+	// production of an isomer
+        if(eexc > minExcitation) {
+          G4double elevel1 = 0.0;
+          G4double elevel2 = 0.0;
+	  G4ParticleDefinition* ion = 0; 
+          for(level=1; level<9; ++level) {
+	    ion = theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
+            //G4cout << level << "  " << ion << G4endl;
+            if(ion) {
+	      G4Ions* ip = dynamic_cast<G4Ions*>(ion);
+	      if(ip) {
+		elevel2 = ip->GetExcitationEnergy();
+		//G4cout<<"   Level "<<level<<" E(MeV)= "<<elevel2/MeV<<G4endl;
+		// close level
+		if(std::fabs(eexc - elevel2) < minExcitation) {
+		  excitation = eexc - elevel2;
+		  theKindOfFragment = ion;
+		  break;
+		  // previous level was closer
+		} else if(elevel2 - eexc >= eexc - elevel1) {
+		  excitation = eexc - elevel1;
+		  break;
+		  // will check next level and save current
+		} else {
+		  theKindOfFragment = ion;
+		  excitation = eexc - elevel2;
+		  elevel1 = elevel2;
+		}
+	      }
+	    } else {
+	      break;
+	    }
+	  }
+	}
+	// correction of total energy for ground state isotopes
+	etot += excitation;
+        G4double ionmass = theKindOfFragment->GetPDGMass();
+        if(etot < ionmass) { etot = ionmass; }
       }
       if (theKindOfFragment != 0) 
 	{
 	  G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
 	  theNew->SetMomentum((*i)->GetMomentum().vect());
-	  theNew->SetTotalEnergy((*i)->GetMomentum().e());
+	  theNew->SetTotalEnergy(etot);
 	  theNew->SetFormationTime((*i)->GetCreationTime());
 	  theReactionProductVector->push_back(theNew);
 	}
@@ -430,7 +496,7 @@ void G4ExcitationHandler::SetMaxZForFermiBreakUp(G4int aZ)
 
 void G4ExcitationHandler::SetMaxAForFermiBreakUp(G4int anA)
 {
-  maxAForFermiBreakUp = std::min(5,anA);
+  maxAForFermiBreakUp = anA;
 }
 
 void G4ExcitationHandler::SetMaxAandZForFermiBreakUp(G4int anA, G4int aZ)

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmAnalysisManager.cc 68007 2013-03-13 11:28:03Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmAnalysisManager.cc
 /// \brief Implementation of the exrdmAnalysisManager class
 //

@@ -66,7 +66,7 @@ maximum energy of the external source. During the reverse tracking, reverse proc
 place where the adjoint particle being tracked can be either scattered or transformed in 
 another type of adjoint particle. During the reverse tracking the 
 G4AdjointSimulationManager replaces the user defined primary, run, stepping, ... actions, 
-by its own actions. A reverse tracking phase corresponds to one Geant4 event.
+by its own actions. 
 
 \subsection ReverseMC01_sub_s2_2 Forward tracking phase:
 
@@ -81,8 +81,12 @@ By this clear separation between adjoint and forward tracking phases, the code o
 user developed for a forward simulation should be only slightly 
 modified to adapt it for an adjoint simulation. Indeed  the computation of the signal 
 is done by the same user actions or analysis classes that the one used in the forward 
-simulation mode.  The forward tracking phase corresponds to one event in the common sense 
-of Geant4.
+simulation mode.  Before the G4.10.0 release the reverse and forward tracking mode 
+took place  in separated  events. Since the G4.10.0 release, 
+in order to preapre to  the migration of the 
+ReverseMC to the G4 Multiple Threading mode, the reverse and forward tracking
+phase of corresponding adjoint and forward primaries have been merged in the same 
+event.
 
 
 \subsection ReverseMC01_sub_s2_3 Reverse Processes
@@ -109,12 +113,13 @@ The list of type of adjoint and forward particles that are generated on the adjo
 and considered in the simulation is a function of the adjoint processes declared in the 
 physics list. For example if only the e- and gamma electromagnetic processes are considered
 , only adjoint e- and adjoint gamma will be considered as primaries. In this case an 
-adjoint event will be divided in four G4 event consisting in the reverse tracking of an 
-adjoint e-, the forward tracking of its equivalent forward e-, the reverse tracking of 
-an adjoint gamma, and the forward tracking of its equivalent forward gamma. In this case a 
-run of 100 adjoint events will consist into 400 Geant4 events. If the proton ionization is
-also considered adjoint and forward protons  are also generated as primaries and 600 Geant4
-events are processed for 100 adjoint events.
+adjoint event will be divided in two G4 events. The first event will  consist 
+into  the coupled  reverse and forward  tracking of an adjoint e- and its equivalent 
+forward e-, while the second events will process the reverse and forward trackings
+of corresponsing adjoint and forward primary gamms. In this case a 
+run of 100 adjoint events will consist into 200 Geant4 events. If the proton ionization is
+also considered adjoint and forward protons  are also generated as primaries 
+and 300 Geant4 events are processed for 100 adjoint events.
 
 \subsection ReverseMC01_sub_s2_5 Modifications to bring in a existing G4 application to use the Reverse MC method
 
@@ -262,7 +267,7 @@ This normalization factor is explained by the following:
     (See command /RMC01/analysis/SetExponentialSpectrumForAdjointSim in macrofile)
 
   - In conclusion to compare the adjoint and forward results, the forward results should
-			by multiplied by pi*R^2/cm2= pi*100.
+			be multiplied by pi*R^2/cm2= pi*100.
 
 
 

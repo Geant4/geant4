@@ -26,7 +26,8 @@
 /// \file persistency/P02/include/ExP02GeoTree.hh
 /// \brief Definition of the ExP02GeoTree class
 //
-// $Id$
+// $Id: ExP02GeoTree.hh 71727 2013-06-21 07:55:45Z gcosmo $
+
 #ifndef INCLUDE_EXP02GEOTREE_H 
 #define INCLUDE_EXP02GEOTREE_H 1
 
@@ -44,7 +45,8 @@ class ExP02GeoTree {
 public: 
 
   ExP02GeoTree( ); 
-  ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et, const G4MaterialTable* mt);
+  ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et, 
+               const G4MaterialTable* mt);
   
   virtual ~ExP02GeoTree( );
 

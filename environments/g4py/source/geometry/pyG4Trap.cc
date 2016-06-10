@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Trap.cc,v 1.6 2007-07-13 04:57:50 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4Trap.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4Trap.cc
 //

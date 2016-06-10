@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RayTracerSceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
 
 #include "G4RayTracerSceneHandler.hh"
 #include "G4VisManager.hh"

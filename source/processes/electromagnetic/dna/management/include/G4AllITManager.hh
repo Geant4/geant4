@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AllITManager.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4AllITManager.hh 71827 2013-06-25 15:58:24Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -101,7 +101,7 @@ public :
 
 private :
     G4AllITManager();
-    static std::auto_ptr<G4AllITManager> fInstance;
+    static G4ThreadLocal G4AllITManager* fpInstance;
     std::map<G4ITType, G4VITManager*> fITSubManager ;
 
     int fVerbose ;

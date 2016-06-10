@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2010-11-03 17:11:31 gunter Exp $
+$Id: History 76744 2013-11-14 15:50:20Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,17 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+14-Nov-2013, A.Ribon       (had-hadronization-V09-06-02)
+- Fixed two mistakes in the index manipulation of the BaryonWeight
+  4-dimensional vector in G4LundStringFragmentation.cc .
+
+29-July-2013, H.Kurashige  (had-hadronization-V09-06-01)
+- Remove inclusion of G4ShortLivedTable.hh (G4VLongitudinalStringDecay.cc) 
+
+02-May-2013, A.Ribon       (had-hadronization-V09-06-00)
+- For thread safety, replaced CLHEP::RandFlat with G4RandFlat in
+  G4VLongitudinalStringDecay.cc.
 
 27-Sep-2012, G.Cosmo
 - Explicitly use inclusion of headers for system of units and physical

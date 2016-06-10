@@ -1,4 +1,4 @@
-# $Id: basic.mac,v 1.11 2007-10-29 12:36:26 maire Exp $
+# $Id: basic.mac 68996 2013-04-15 09:19:55Z gcosmo $
 #
 /control/verbose 2
 /run/verbose 2
@@ -8,8 +8,8 @@
 /process/inactivate msc
 /process/eLoss/fluct false
 #
-/testem/histo/setFileName nothing
-/testem/histo/setHisto 9 100  0  1 mm	#step size in wall
+/analysis/setFileName nothing
+/analysis/h1/set 9 100  0  1 mm	#step size in wall
 #
 /testem/event/printModulo 10000
 #

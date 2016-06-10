@@ -26,14 +26,14 @@
 /// \file biasing/ReverseMC01/include/RMC01DetectorMessenger.hh
 /// \brief Definition of the RMC01DetectorMessenger class
 //
-// $Id$
+// $Id: RMC01DetectorMessenger.hh 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01DetectorMessenger
+//  Class Name:            RMC01DetectorMessenger
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -78,7 +78,6 @@ class RMC01DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit*   fSetSensitiveVolumeHeightCmd;
     G4UIcmdWithADoubleAndUnit*   fSetSensitiveVolumeRadiusCmd;
     G4UIcmdWithADoubleAndUnit*   fSetShieldingThicknessCmd;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

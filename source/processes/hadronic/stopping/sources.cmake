@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:08:23 bmorgan Exp $
+# $Id: sources.cmake 76309 2013-11-08 13:48:42Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -48,7 +48,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
@@ -65,77 +64,34 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
     HEADERS
         G4AntiNeutronAnnihilationAtRest.hh
         G4AntiProtonAbsorptionFritiof.hh
-        G4AntiProtonAnnihilationAtRest.hh
         G4AntiSigmaPlusAbsorptionFritiof.hh
-        G4DistributionGenerator.hh
         G4ElementSelector.hh
         G4EmCaptureCascade.hh
         G4HadronicAbsorptionFritiof.hh
         G4HadronStoppingProcess.hh
-        G4KaonMinusAbsorption.hh
-        G4KaonMinusAbsorptionAtRest.hh
         G4MuMinusCaptureCascade.hh
         G4MuMinusCapturePrecompound.hh
         G4MuonMinusBoundDecay.hh
         G4MuonMinusCapture.hh
         G4MuonMinusCaptureAtRest.hh
-        G4NeutronCaptureAtRest.hh
-        G4PiMinusAbsorptionAtRest.hh
         G4HadronicAbsorptionBertini.hh
         G4PiMinusAbsorptionBertini.hh
         G4KaonMinusAbsorptionBertini.hh
         G4SigmaMinusAbsorptionBertini.hh
-        G4PiMinusStopAbsorption.hh
-        G4PiMinusStopAl.hh
-        G4PiMinusStopC.hh
-        G4PiMinusStopCo.hh
-        G4PiMinusStopCu.hh
-        G4PiMinusStopLi.hh
-        G4PiMinusStopMaterial.hh
-        G4PiMinusStopN.hh
-        G4PiMinusStopO.hh
-        G4PiMinusStopPb.hh
-        G4PiMinusStopTa.hh
-        G4PionMinusAbsorptionAtRest.hh
-        G4StopDeexcitation.hh
-        G4StopDeexcitationAlgorithm.hh
-        G4StopDummyDeexcitation.hh
         G4StopElementSelector.hh
-        G4StopTheoDeexcitation.hh
     SOURCES
         G4AntiNeutronAnnihilationAtRest.cc
-        G4AntiProtonAnnihilationAtRest.cc
-        G4DistributionGenerator.cc
         G4ElementSelector.cc
         G4EmCaptureCascade.cc
         G4HadronicAbsorptionFritiof.cc
         G4HadronStoppingProcess.cc
-        G4KaonMinusAbsorption.cc
-        G4KaonMinusAbsorptionAtRest.cc
         G4MuMinusCaptureCascade.cc
         G4MuMinusCapturePrecompound.cc
         G4MuonMinusBoundDecay.cc
         G4MuonMinusCapture.cc
         G4MuonMinusCaptureAtRest.cc
-        G4NeutronCaptureAtRest.cc
-        G4PiMinusAbsorptionAtRest.cc
         G4HadronicAbsorptionBertini.cc
-        G4PiMinusStopAbsorption.cc
-        G4PiMinusStopAl.cc
-        G4PiMinusStopC.cc
-        G4PiMinusStopCo.cc
-        G4PiMinusStopCu.cc
-        G4PiMinusStopLi.cc
-        G4PiMinusStopMaterial.cc
-        G4PiMinusStopN.cc
-        G4PiMinusStopO.cc
-        G4PiMinusStopPb.cc
-        G4PiMinusStopTa.cc
-        G4PionMinusAbsorptionAtRest.cc
-        G4StopDeexcitation.cc
-        G4StopDummyDeexcitation.cc
         G4StopElementSelector.cc
-        G4StopTheoDeexcitation.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -148,11 +104,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4had_string_frag
         G4had_string_man
         G4had_theo_max
-        G4hadronic_HE
         G4hadronic_binary
-		G4hadronic_bert_cascade
-        G4hadronic_body_ci
-        G4hadronic_crosec_ci
+        G4hadronic_bert_cascade
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
         G4hadronic_deex_fission

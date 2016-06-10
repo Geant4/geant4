@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id$
+// $Id: StepMax.cc 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX)
+ : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX), fMess(0) 
 {
   fMess = new StepMaxMessenger(this);
 }

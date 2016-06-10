@@ -27,7 +27,11 @@
 /// \brief Main program of the visualization/perspective example
 //
 //
-// $Id$
+// $Id: perspective.cc 69587 2013-05-08 14:26:03Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"
@@ -37,6 +41,8 @@
 #include "G4SystemOfUnits.hh"
 
 #include "PerspectiveVisAction.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -59,3 +65,6 @@ int main(int argc,char** argv) {
   delete ui;
   delete visManager;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

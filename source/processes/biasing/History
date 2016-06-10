@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2010-07-02 11:02:40 gcosmo Exp $
+$Id: History 78011 2013-12-02 11:32:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,95 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 30th, 2013 Alex Howard (procbiasing-V09-06-18)
+    - Moved static methods in the initialiser to the body for G4GeometrySampler
+      and G4ImportanceConfigurator
+
+Nov 30th, 2013 Alex Howard (procbiasing-V09-06-17)
+    - Fixed coverity errors (uninitialised variables), 
+      EXCEPT for fGhostStep in G4ImportanceProcess, G4WeightWindowProcess
+      and G4WeightCutOffProcess
+
+Nov 29th, 2013 Alex Howard (procbiasing-V09-06-16)
+    - Put back RemoveProcess for both G4WeightWindowConfigurator and 
+      G4ImportanceConfigurator - makes test33 work.
+
+Nov 28th, 2013 Marc Verderi (procbiasing-V09-06-15)
+    - include license/disclaimer in headers in generic and management
+    - include comments and description
+    - change G4cout in G4Exception when appropriate
+
+Nov 28th, 2013 Alex Howard (procbiasing-V09-06-14)
+    - Put back RemoveProcess for G4WeightCutOffConfigurator since it is not
+      associated with a store singleton.
+
+Nov 26th, 2013 Alex Howard (procbiasing-V09-06-13)
+    - Fixing history file for actual tag names - which have probiasing instead
+      of procbiasing!!
+
+Nov 24th, 2013 Alex Howard (procbiasing-V09-06-12)
+    - Fixed segmentation fault in mass only case (deleted non-existent objects)
+
+Nov 24th, 2013 Alex Howard (probiasing-V09-06-11)
+    - Fixed segmentation fault at the end of an MT run
+    - caused by deleting fGhostStep in the destructor
+    - removed RemoveProcess from the destructor (ClearSampling) of configurators
+    - also caused an out of range index with MT
+
+Nov 22nd, 2013 Alex Howard (probiasing-V09-06-10)
+    - Included guard for single threaded backward compatability
+    - except for singleton instantiation
+
+Nov 22nd, 2013 Alex Howard (probiasing-V09-06-09 also procbiasing-V09-06-09)
+    - Migration of WeightWindow importance biasing to MT
+
+Nov 22nd, 2013 Alex Howard (probiasing-V09-06-08)
+    - Migration of geometrical importance biasing to MT
+    - moved G4VProcessPlacer and G4ProcessPlacer to management (from importance)
+
+Nov 9th, 2013 Andrea Dotti (probiasing-V09-06-07)
+    - Bug fixing for unused data members identified by clang 3.2
+
+Nov 8th, 2013 Marc Verderi (probiasing-V09-06-06)
+    - Migration to MT
+    - Adding force collision operator G4BOptrForceCollision and related classes
+
+Nov 6th, 2013 Marc Verderi (probiasing-V09-06-05)
+    - Introduce physics list configuration helper G4BiasingHelper
+    - Introduce cross section change operation G4BOptnChangeCrossSection
+
+Nov 5th, 2013 Marc Verderi (probiasing-V09-06-04)
+    - fix compilation warnings in G4BiasingProcessInterface.hh
+      for unused fWrappedProcessIsAtRest and fWrappedProcessIsPost
+    - fix warning on windows in G4VBiasingOperation.cc constructor
+    - fix error on void G4VBiasingOperator::ForgetTrack which
+      was returning a value.
+
+Nov 5th, 2013 Marc Verderi (probiasing-V09-06-03)
+- add classes to generic and management to unblock other dev in process:
+  - generic:
+	G4BiasingProcessInterface
+	G4InteractionLawPhysical
+	G4ParticleChangeForNothing
+	G4ParticleChangeForOccurenceBiasing
+  - management:
+	G4BiasingAppliedCase
+	G4BiasingOperationManager
+	G4BiasingTrackData
+	G4BiasingTrackDataStore
+	G4VBiasingInteractionLaw
+	G4VBiasingOperation
+	G4VBiasingOperator
+
+Oct 9th, 2013 Alex Howard (procbiasing-V09-06-02)
+- fixed sources.cmake for looking for non-existent files
+
+Oct 9th, 2013 Alex Howard (procbiasing-V09-06-01)
+- Added cmake and gnumake and sources.cmake files to new directory structure
+
+Oct 9th, 2013 Alex Howard (procbiasing-V09-06-00)
+- Re-ordered directory structure for generic physics biasing
 
 June 7th, 2012 Gabriele Cosmo (procbiasing-V09-05-00)
 - Fixed spurious cases of hidden variable visibility, detected with

@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id$
+// $Id: StepMax.cc 68753 2013-04-05 10:26:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01EventAction.cc
 /// \brief Implementation of the RMC01EventAction class
 //
-// $Id$
+// $Id: RMC01EventAction.cc 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01EventAction
@@ -46,6 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01EventAction::RMC01EventAction()
+ : G4UserEventAction()
 {;
 }
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -91,7 +90,7 @@ class G4NeutronHPChannelList
   }
   private:
 
-  static G4int trycounter;
+  static G4ThreadLocal G4int trycounter;
   G4NeutronHPChannel ** theChannels;
   G4int nChannels;
   G4String theDir;

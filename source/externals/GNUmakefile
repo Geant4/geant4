@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 55345 2011-11-21 17:32:27Z gcosmo $
+# $Id: GNUmakefile 69107 2013-04-18 13:09:00Z gcosmo $
 # -----------------------------------------------------------------------
 # GNUmakefile for Geant4 external packages
 # Gunter Folger 26-April-2011 
@@ -30,6 +30,14 @@ ifdef G4LIB_USE_EXPAT
   SUBDIRS += expat
   SUBLIBS += G4expat
 endif
+ifdef G4LIB_USE_ZLIB
+  SUBDIRS += zlib
+  SUBLIBS += G4zlib
+endif
+#ifdef G4MULTITHREADED
+#  SUBDIRS += tpmalloc memoryprotection
+#  SUBLIBS += G4tpmalloc G4memoryprotection
+#endif
 
 .PHONY: granular obj glob global clean
 

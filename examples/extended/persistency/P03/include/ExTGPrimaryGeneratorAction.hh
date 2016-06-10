@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGPrimaryGeneratorAction.hh
 /// \brief Definition of the ExTGPrimaryGeneratorAction class
 //
-// $Id$
+// $Id: ExTGPrimaryGeneratorAction.hh 68025 2013-03-13 13:43:46Z gcosmo $
  
 #ifndef ExTGPrimaryGeneratorAction_h
 #define ExTGPrimaryGeneratorAction_h 1

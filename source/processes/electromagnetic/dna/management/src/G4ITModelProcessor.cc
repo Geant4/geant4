@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITModelProcessor.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITModelProcessor.cc 71125 2013-06-11 15:39:09Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -37,11 +37,12 @@
 #include "G4VITTimeStepper.hh"
 #include "G4VITReactionProcess.hh"
 
-std::map<const G4Track*, G4bool> G4ITModelProcessor::fHasReacted ;
+G4ThreadLocal std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted = 0;
 
 G4ITModelProcessor::G4ITModelProcessor()
 {
     //ctor
+    if (!fHasReacted) fHasReacted = new std::map<const G4Track*, G4bool>;
     fpTrack = 0;
     fpModelHandler = 0;
     fpModel = 0;
@@ -210,8 +211,8 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
         if(trackA == 0)         continue;
 
-        std::map<const G4Track*, G4bool>::iterator it_hasReacted = fHasReacted.find(trackA);
-        if(it_hasReacted != fHasReacted.end()) continue;
+        std::map<const G4Track*, G4bool>::iterator it_hasReacted = fHasReacted->find(trackA);
+        if(it_hasReacted != fHasReacted->end()) continue;
         if(trackA->GetTrackStatus() == fStopAndKill) continue;
 
         G4IT* ITA = GetIT(trackA);
@@ -232,8 +233,8 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
             trackB = *trackB_i;
 
             if(trackB == 0)         continue;
-            it_hasReacted = fHasReacted.find(trackB);
-            if(it_hasReacted != fHasReacted.end()) continue;
+            it_hasReacted = fHasReacted->find(trackB);
+            if(it_hasReacted != fHasReacted->end()) continue;
             if(trackB->GetTrackStatus() == fStopAndKill) continue;
 
             // DEBUG
@@ -272,8 +273,8 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
             if(changes)
             {
-                fHasReacted[trackA] = true;
-                fHasReacted[trackB] = true;
+                (*fHasReacted)[trackA] = true;
+                (*fHasReacted)[trackB] = true;
                 changes -> GetTrackA();
                 changes -> GetTrackB();
 
@@ -287,5 +288,5 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
         }
     }
 
-    fHasReacted.clear();
+    fHasReacted->clear();
 }

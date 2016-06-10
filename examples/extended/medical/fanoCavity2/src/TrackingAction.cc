@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.cc 68999 2013-04-15 09:23:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,8 +39,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(RunAction* RuAct, HistoManager* histo)
-:fRunAction(RuAct), fHistoManager(histo)
+TrackingAction::TrackingAction(RunAction* RuAct)
+:fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track*)
   //
   if (fEdepCavity > 0.) {
     fRunAction->AddEdepCavity(fEdepCavity);
-    fHistoManager->FillHisto(11,fEdepCavity);
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    analysisManager->FillH1(11,fEdepCavity);
   }  
  }
 

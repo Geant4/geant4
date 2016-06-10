@@ -178,7 +178,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   ionCmd->SetGuidance("        A:(int) AtomicMass");
   ionCmd->SetGuidance("        Q:(int) Charge of Ion (in unit of e)");
   ionCmd->SetGuidance("        E:(double) Excitation energy (in keV)");
-  
+
   G4UIparameter* param;
   param = new G4UIparameter("Z",'i',false);
   param->SetDefaultValue("1");
@@ -193,6 +193,27 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   param->SetDefaultValue("0.0");
   ionCmd->SetParameter(param);
 
+  ionLvlCmd = new G4UIcommand("/gps/ionLvl",this);
+  ionLvlCmd->SetGuidance("Set properties of ion to be generated.");
+  ionLvlCmd->SetGuidance("[usage] /gps/ion Z A Q Lvl");
+  ionLvlCmd->SetGuidance("        Z:(int) AtomicNumber");
+  ionLvlCmd->SetGuidance("        A:(int) AtomicMass");
+  ionLvlCmd->SetGuidance("        Q:(int) Charge of Ion (in unit of e)");
+  ionLvlCmd->SetGuidance("        Lvl:(int) Number of metastable state excitation level (0-9)");
+
+  G4UIparameter* paramL;
+  paramL = new G4UIparameter("Z",'i',false);
+  paramL->SetDefaultValue("1");
+  ionLvlCmd->SetParameter(paramL);
+  paramL = new G4UIparameter("A",'i',false);
+  paramL->SetDefaultValue("1");
+  ionLvlCmd->SetParameter(paramL);
+  paramL = new G4UIparameter("Q",'i',true);
+  paramL->SetDefaultValue("0");
+  ionLvlCmd->SetParameter(paramL);
+  paramL = new G4UIparameter("Lvl",'i',true);
+  paramL->SetDefaultValue("0.0");
+  ionLvlCmd->SetParameter(paramL);
 
   timeCmd = new G4UIcmdWithADoubleAndUnit("/gps/time",this);
   timeCmd->SetGuidance("Set initial time of the particle.");
@@ -853,6 +874,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete maxphiCmd1;
   delete angsigmarCmd1;
   delete angsigmaxCmd1;
+  delete angsigmayCmd1;
   delete angfocusCmd;
   delete useuserangaxisCmd1;
   delete surfnormCmd1;
@@ -899,6 +921,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
 
   delete verbosityCmd;
   delete ionCmd;
+  delete ionLvlCmd;
   delete particleCmd;
   delete timeCmd;
   delete polCmd;
@@ -1312,6 +1335,8 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     { fParticleGun->SetNumberOfParticles(numberCmd->GetNewIntValue(newValues)); }
   else if( command==ionCmd )
     { IonCommand(newValues); }
+  else if( command==ionLvlCmd )
+    { IonLvlCommand(newValues); }
   else if( command==listCmd ){ 
     particleTable->DumpTable(); 
   }
@@ -1661,3 +1686,42 @@ void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
     G4cout << G4endl; 
   }
 }
+
+void G4GeneralParticleSourceMessenger::IonLvlCommand(G4String newValues)
+{
+  fShootIonL = true;
+
+  if (fShootIonL) {
+    G4Tokenizer next(newValues);
+    // check argument
+    fAtomicNumberL = StoI(next());
+    fAtomicMassL = StoI(next());
+    G4String sQ = next();
+    if (sQ.isNull()) {
+      fIonChargeL = fAtomicNumberL;
+    } else {
+      fIonChargeL = StoI(sQ);
+      sQ = next();
+      if (sQ.isNull()) {
+        fIonEnergyLevel = 0;
+      } else {
+        fIonEnergyLevel = StoI(sQ);
+      }
+    }
+
+    G4ParticleDefinition* ion;
+    ion = particleTable->GetIon(fAtomicNumberL, fAtomicMassL, fIonEnergyLevel);
+    if (ion == 0) {
+      G4cout << "Ion with Z=" << fAtomicNumberL;
+      G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;
+    } else {
+      fParticleGun->SetParticleDefinition(ion);
+      fParticleGun->SetParticleCharge(fIonChargeL*eplus);
+    }
+
+  } else {
+    G4cout << "Set /gps/particle to ion before using /gps/ionLvl command";
+    G4cout << G4endl;
+  }
+}
+

@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-// $Id$
+// $Id: PhysicsListMessenger.hh 68803 2013-04-05 13:59:55Z gcosmo $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ public:
   PhysicsListMessenger(PhysicsList* p = 0);
   virtual ~PhysicsListMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   

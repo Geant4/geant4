@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eplusAnnihilation.cc 68797 2013-04-05 13:27:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,8 +57,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Gamma.hh"
-#include "G4PhysicsVector.hh"
-#include "G4PhysicsLogVector.hh"
+#include "G4Positron.hh"
 #include "G4eeToTwoGammaModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -119,7 +118,7 @@ void G4eplusAnnihilation::PrintInfo()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
-                                                     const G4Step& )
+						   const G4Step& )
 //
 // Performs the e+ e- annihilation when both particles are assumed at rest.
 // It generates two back to back photons with energy = electron_mass.
@@ -138,17 +137,26 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
   G4ThreeVector pol(cos(phi), sin(phi), 0.0);
   pol.rotateUz(dir);
   
-  fParticleChange.ProposeWeight(aTrack.GetWeight());
+  // e+ parameters
+  G4double weight = aTrack.GetWeight();
+  G4double time   = aTrack.GetGlobalTime();
+
   // add gammas
   fParticleChange.SetNumberOfSecondaries(2);
   G4DynamicParticle* dp = 
     new G4DynamicParticle(theGamma, dir, electron_mass_c2);
-  dp->SetPolarization(pol.x(),pol.y(),pol.z()); 
-  fParticleChange.AddSecondary(dp);
+  dp->SetPolarization(pol.x(),pol.y(),pol.z());
+  G4Track* track = new G4Track(dp, time, aTrack.GetPosition());
+  track->SetTouchableHandle(aTrack.GetTouchableHandle());
+  track->SetWeight(weight); 
+  pParticleChange->AddSecondary(track);
 
   dp = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
   dp->SetPolarization(-pol.x(),-pol.y(),-pol.z()); 
-  fParticleChange.AddSecondary(dp);
+  track = new G4Track(dp, time, aTrack.GetPosition());
+  track->SetTouchableHandle(aTrack.GetTouchableHandle());
+  track->SetWeight(weight); 
+  pParticleChange->AddSecondary(track);
 
   // Kill the incident positron
   //

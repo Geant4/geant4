@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrMessenger.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrMessenger
@@ -62,7 +62,7 @@ class G4tgrMessenger : public G4UImessenger
 
     G4UIdirectory* tgDirectory;
     G4UIcmdWithAnInteger* verboseCmd;
-    static G4int theVerboseLevel;
+    static G4ThreadLocal G4int theVerboseLevel;
 };
 
 #endif

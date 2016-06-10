@@ -48,11 +48,10 @@ processes is made.                                                      |
 ------------------------------------------------------------------------|
 ----> SET-UP 
                                                                         |
-A standard Geant4 example GNUmakefile is provided                     |
+A standard Geant4 example GNUmakefile and a CMakeLists.txt file are 
+provided, for building with cmake                                       |
 
 The following environment variables can be set:                         |
-
-setenv G4ANALYSIS_USE    1
 
 setenv ULTRA_VERBOSE
 
@@ -61,22 +60,20 @@ setenv ULTRA_GROUND_USE 1 : A diffusive reflecting surface is used.
 
 ------------------------------------------------------------------------
 
-Setup for analysis with iAIDA : for details, see Appendix 2 of the Users Guide for Application Developers
+The analysis is performed using the native Geant4 analysis tools 
+(g4tools). In the default case, the output histograms are written 
+as xml files.
 
-Definition of environment variables (assuming AIDA_INSTALL is the directory where you installed iAIDA):
+The output file can be written in ROOT format by editing the file 
+ include/UltraAnalysisManager.hh
+to uncomment
+ #include "g4root.hh"
+and comment out
+ #include "g4xml.hh"
 
-setenv PATH ${PATH}:"$AIDA_INSTALL/bin"
-
-The following keywords can be used in UltraAnalysisManager.cc, 
-in order to produce HBOOK, AIDA or ROOT histograms.
-
-"hbook" for HBOOK histograms
-"xml" for AIDA histograms
-"root" for ROOT histograms
-
-For more information on the AIDA interface:
-http://aida.freehep.org
-
+The output can be get also in hbook format (but this will require a 
+FORTRAN compiler) by following the istructions of Sect. 9.2 of 
+the Geant4 application developer manual (Analysis Manager Classes)
 
 -
 
@@ -92,7 +89,7 @@ http://aida.freehep.org
 ------------------------------------------------------------------------
 ----> Simulation output                                                 |
 
-if G4ANALYSIS_USE = 1 in the set-up, the output is ultra.aida           | 
+the output is ultra.xml (or ultra.root) 		                | 
  It contains:
  1)1Dhistogram with the detected photons energy (eV)                    |
  2)1Dhistogram with the number of detected photons per event            |
@@ -107,5 +104,5 @@ to run it :  $G4WORKDIR/bin/Linux-g++/Ultra Visualisation.mac
 for comments and questions: bernardo@lip.pt
 for more info http://www.ge.infn.it/geant4/examples/
 
-last modified:  B. Tome 16/11/2009
+last modified:  L. Pandola 28/05/2013
 created by   :  B. Tome and M.C. Espirito Santo 20/05/2004

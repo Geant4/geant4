@@ -1,0 +1,50 @@
+/control/verbose 2
+
+### Add material
+/RE06/AddMaterial
+/run/initialize
+
+### retrieve physics table
+###  set store format : 0 binary   1 ascii
+/run/particle/retrievePhysicsTable physTable
+/run/particle/setStoredInAscii 0
+#/run/particle/verbose 3 
+
+### set range cut for Calor-A,B,C 
+###  range cut for Calor-A is different from the stored one
+/run/setCutForRegion Calor-A 0.1 mm
+/run/setCutForRegion Calor-B 2 mm
+/run/setCutForRegion Calor-C 2 cm
+
+### 10 event 
+#/tracking/verbose 1
+/run/beamOn 10
+
+### dump couples
+/run/dumpRegion
+/run/dumpCouples
+
+### set range cut for Calor-A same as the stored one
+/run/setCutForRegion Calor-A 0.2 mm
+
+### 10 event 
+#/tracking/verbose 1
+/run/beamOn 10
+
+### dump couples
+/run/dumpRegion
+/run/dumpCouples
+
+
+###Modify Absorber material
+/RE06/setAbsMat Tungsten 
+/RE06/setGapMat Water 
+
+### 10 event 
+#/tracking/verbose 1
+/run/beamOn 10
+
+### dump couples
+/run/dumpRegion
+/run/dumpCouples
+

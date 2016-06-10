@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPEvapSpectrum_h
 #define G4NeutronHPEvapSpectrum_h 1
@@ -50,7 +49,7 @@ class G4NeutronHPEvapSpectrum : public G4VNeutronHPEDis
   {
   }
   
-  inline void Init(std::ifstream & aDataFile)
+  inline void Init(std::istream & aDataFile)
   {
     theFractionalProb.Init(aDataFile);
     theThetaDist.Init(aDataFile);

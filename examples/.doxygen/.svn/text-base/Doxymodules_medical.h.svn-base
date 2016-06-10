@@ -16,6 +16,7 @@
  *  @{
  */
 
+  class DicomActionInitialization {};
   class DicomDetectorConstruction {};
   class DicomEventAction {};
   class DicomHandler {};
@@ -25,13 +26,12 @@
   class DicomPartialDetectorConstruction {};
   class DicomPhantomParameterisationColour {};
   class DicomPhantomZSliceHeader {};
+  class DicomPhantomZSliceMerged {};
   class DicomPhysicsList {};
   class DicomPrimaryGeneratorAction {};
   class DicomRegularDetectorConstruction {};
   class DicomRunAction {};
   class DicomRun {};
-  class NestedParamDicomDetectorConstruction {};
-  class RegularDicomDetectorConstruction {};
 
 /** @} */
 

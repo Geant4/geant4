@@ -27,22 +27,20 @@
 /// \brief Main program of the electromagnetic/TestEm2 example
 //
 //
-// $Id$
+// $Id: TestEm2.cc 76259 2013-11-08 11:37:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
+#include "G4UIcommand.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
-#include "SteppingAction.hh"
+#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
@@ -58,29 +56,33 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  //my Verbose output class
+#ifdef G4MULTITHREADED  
+  G4MTRunManager * runManager = new G4MTRunManager(); 
+
+  // Number of threads can be defined via 3rd argument
+  if (argc==3) {
+    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    runManager->SetNumberOfThreads(nThreads);
+  }
+  G4cout << "##### TestEm2 started for " << runManager->GetNumberOfThreads() 
+         << " threads" << " #####" << G4endl;
+#else
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-
-  // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  G4RunManager * runManager = new G4RunManager(); 
+  G4cout << "##### TestEm2 started in sequential mode" 
+         << " #####" << G4endl;
+#endif
 
   // set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction();
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
-  
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(primary);
-    
-  // set user action classes
-  RunAction* RunAct = new RunAction(detector,primary);
-  runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new EventAction   (RunAct));
-  runManager->SetUserAction(new TrackingAction(RunAct));
-  runManager->SetUserAction(new SteppingAction(detector,RunAct)); 
-  
+
+  // set user actions
+  runManager->SetUserInitialization(new ActionInitialization(detector));
+
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
@@ -91,14 +93,13 @@ int main(int argc,char** argv) {
       UI->ApplyCommand(command+fileName);
     }
     
-  else           // define visualization and UI terminal for interactive mode
+  else  // define visualization and UI terminal for interactive mode
     { 
 #ifdef G4VIS_USE
      G4VisManager* visManager = new G4VisExecutive;
      visManager->Initialize();
 #endif
-                 
-     
+                      
 #ifdef G4UI_USE
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
       ui->SessionStart();
@@ -113,9 +114,7 @@ int main(int argc,char** argv) {
   // job termination
   //
   delete runManager;
-
   return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

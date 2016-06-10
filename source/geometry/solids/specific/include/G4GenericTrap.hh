@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GenericTrap.hh 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -133,7 +133,6 @@ class G4GenericTrap : public G4VSolid
     void DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent() const;
     G4Polyhedron* CreatePolyhedron() const;
-    G4NURBS*      CreateNURBS() const;
        
   public:  // without description
 
@@ -197,6 +196,8 @@ class G4GenericTrap : public G4VSolid
 
     static const G4int       fgkNofVertices;
     static const G4double    fgkTolerance;
+
+    G4double halfCarTolerance;
 
     // data members
 

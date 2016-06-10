@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniKaonBuilder.hh 54715 2011-11-11 16:16:06Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4BertiniKaonBuilder.hh 67969 2013-03-13 09:44:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,7 +47,6 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VKaonBuilder.hh"
 
-#include "G4QHadronInelasticDataSet.hh"
 #include "G4CascadeInterface.hh"   
 
 class G4BertiniKaonBuilder : public G4VKaonBuilder
@@ -68,7 +66,10 @@ class G4BertiniKaonBuilder : public G4VKaonBuilder
     void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
-    G4QHadronInelasticDataSet * theKaonData;
+    G4VCrossSectionDataSet * ChipsKaonMinus;
+    G4VCrossSectionDataSet * ChipsKaonPlus;
+    G4VCrossSectionDataSet * ChipsKaonZero;
+
     G4CascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;

@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleTransportation.hh
 /// \brief Definition of the G4MonopoleTransportation class
 //
-// $Id$
+// $Id: G4MonopoleTransportation.hh 69705 2013-05-13 09:09:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +72,7 @@ class G4MonopoleTransportation : public G4VProcess
      G4MonopoleTransportation(const G4Monopole* p, G4int verbosityLevel= 1);
      ~G4MonopoleTransportation(); 
 
-     G4double      AlongStepGetPhysicalInteractionLength(
+     virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
                                    G4double  previousStepSize,
                                    G4double  currentMinimumStep, 
@@ -80,18 +80,18 @@ class G4MonopoleTransportation : public G4VProcess
                                    G4GPILSelection* selection
                             );
 
-     G4VParticleChange* AlongStepDoIt(
+     virtual G4VParticleChange* AlongStepDoIt(
                              const G4Track& track,
                              const G4Step& stepData
                             );
 
-     G4VParticleChange* PostStepDoIt(
+     virtual G4VParticleChange* PostStepDoIt(
                              const G4Track& track,
                              const G4Step&  stepData
                             );
        // Responsible for the relocation.
 
-     G4double PostStepGetPhysicalInteractionLength(
+     virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& ,
                              G4double   previousStepSize,
                              G4ForceCondition* pForceCond
@@ -102,11 +102,6 @@ class G4MonopoleTransportation : public G4VProcess
      G4PropagatorInField* GetPropagatorInField();
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
        // Access/set the assistant class that Propagate in a Field.
-
-     inline void   SetVerboseLevel( G4int verboseLevel );
-     inline G4int  GetVerboseLevel() const;
-       // Level of warnings regarding eg energy conservation
-       // in field integration.
 
      inline G4double GetThresholdWarningEnergy() const; 
      inline G4double GetThresholdImportantEnergy() const; 
@@ -131,19 +126,19 @@ class G4MonopoleTransportation : public G4VProcess
 
   public:  // without description
 
-     G4double AtRestGetPhysicalInteractionLength(
+     virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
                              G4ForceCondition* 
                             ) { return -1.0; };
      // No operation in  AtRestDoIt.
 
-     G4VParticleChange* AtRestDoIt(
+     virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& ,
                              const G4Step&
                             ) {return 0;};
      // No operation in  AtRestDoIt.
 
-  void StartTracking(G4Track* aTrack);
+  virtual void StartTracking(G4Track* aTrack);
        // Reset state for new (potentially resumed) track 
 
   protected:
@@ -153,9 +148,9 @@ class G4MonopoleTransportation : public G4VProcess
 
   private:
 
-     const G4Monopole* pParticleDef;
+     const G4Monopole* fParticleDef;
 
-     G4MonopoleFieldSetup*  magSetup;
+     G4MonopoleFieldSetup*  fMagSetup;
     
      G4Navigator*         fLinearNavigator;
      G4PropagatorInField* fFieldPropagator;
@@ -166,7 +161,7 @@ class G4MonopoleTransportation : public G4VProcess
      G4double             fTransportEndKineticEnergy;
      G4ThreeVector        fTransportEndSpin;
      G4bool               fMomentumChanged;
-     G4bool               fEnergyChanged;
+     //  G4bool               fEnergyChanged;
      G4bool               fEndGlobalTimeComputed; 
      G4double             fCandidateEndGlobalTime;
   // The particle's state after this Step, Store for DoIt
@@ -194,7 +189,7 @@ class G4MonopoleTransportation : public G4VProcess
      G4int    fThresholdTrials;              //    for this no of trials
        // Above 'important' energy a 'looping' particle in field will 
        //   *NOT* be abandoned, except after fThresholdTrials attempts.
-     G4double fUnimportant_Energy;
+     // G4double fUnimportant_Energy;
        //  Below this energy, no verbosity for looping particles is issued
 
   // Counter for steps in which particle reports 'looping',
@@ -210,10 +205,6 @@ class G4MonopoleTransportation : public G4VProcess
 
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
 
-  // Verbosity 
-     G4int    fVerboseLevel;
-       // Verbosity level for warnings
-       // eg about energy non-conservation in magnetic field.
 };
 
 #include "G4MonopoleTransportation.icc"

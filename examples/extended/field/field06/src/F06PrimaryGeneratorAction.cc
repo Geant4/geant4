@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F06PrimaryGeneratorAction.cc 75296 2013-10-30 09:34:21Z gcosmo $
+//
 /// \file field/field06/src/F06PrimaryGeneratorAction.cc
 /// \brief Implementation of the F06PrimaryGeneratorAction class
 //
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,19 +49,78 @@
 F06PrimaryGeneratorAction::F06PrimaryGeneratorAction(void)
 {
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
-  
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("neutron");
+  fParticleGun  = new G4ParticleGun(n_particle);
 
-  particleGun->SetParticleDefinition(particle);
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+
+  G4ParticleDefinition* particle = particleTable->FindParticle("proton");
+  G4double mass_proton = particle->GetPDGMass();
+
+  G4double muN = 0.5*CLHEP::eplus*CLHEP::hbar_Planck/
+                                               (mass_proton/CLHEP::c_squared);
+
+  G4cout << " *** Neutron *** " << G4endl;
+
+  particle = particleTable->FindParticle("neutron");
+  G4double mass_neutron = particle->GetPDGMass();
+
+  G4double magneticMoment = particle->GetPDGMagneticMoment();
+  G4cout << " magneticMoment: " << magneticMoment/muN << G4endl;
+
+  // g_factor for spin 1/2
+
+  G4double g_factor = 2 * magneticMoment/muN;
+  G4cout << " g_factor: " << g_factor << G4endl;
+
+  G4double charge = particle->GetPDGCharge();
+  G4cout << " charge: " << charge << G4endl;
+
+  G4double anomaly = (g_factor - 2.)/2.;
+  G4cout << " anomaly: " << anomaly << G4endl;
+
+  anomaly = (g_factor * (mass_neutron/mass_proton) - 2.)/2.;
+  G4cout << " corrected anomaly: " << anomaly << G4endl;
+
+  muN = 0.5*CLHEP::eplus*CLHEP::hbar_Planck/(mass_neutron/CLHEP::c_squared);
+  g_factor = 2 * magneticMoment/muN;
+
+  anomaly = (g_factor - 2.)/2.;
+  G4cout << " *** anomaly: " << anomaly << G4endl;
+
+    G4cout << " *** MuonPlus *** " << G4endl;
+
+  particle = particleTable->FindParticle("mu+");
+  G4double mass_muon = particle->GetPDGMass();
+
+  G4double muB = 0.5*CLHEP::eplus*CLHEP::hbar_Planck/
+                                                 (mass_muon/CLHEP::c_squared);
+
+  magneticMoment = particle->GetPDGMagneticMoment();
+  G4cout << " magneticMoment: " << magneticMoment/muB << G4endl;
+
+  // g_factor for spin 1/2
+
+  g_factor = magneticMoment/muB;
+  G4cout << " g_factor: " << g_factor << G4endl;
+
+  charge = particle->GetPDGCharge();
+  G4cout << " charge: " << charge << G4endl;
+
+  anomaly = (g_factor - 2.)/2.;
+  G4cout << " anomaly: " << anomaly << G4endl;
+
+//  anomaly = particle->CalculateAnomaly();
+//  G4cout << " *** anomaly: " << anomaly << G4endl;
+
+  particle = particleTable->FindParticle("neutron");
+  fParticleGun->SetParticleDefinition(particle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F06PrimaryGeneratorAction::~F06PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,11 +130,11 @@ void F06PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //this function is called at the begining of event
   //
 
-  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, 0.0));
-  particleGun->SetParticlePolarization(G4ThreeVector(0,1,0));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, 0.0));
+  fParticleGun->SetParticlePolarization(G4ThreeVector(0,1,0));
 
   G4double particleEnergy = G4UniformRand()*1e-7*eV;
-  particleGun->SetParticleEnergy(particleEnergy);
+  fParticleGun->SetParticleEnergy(particleEnergy);
 
   G4double theta = 2*pi*G4UniformRand();
   G4double phi = std::acos(1-2*G4UniformRand());
@@ -86,9 +144,9 @@ void F06PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double x = std::sin(phi)*std::sin(theta);
   G4double y = std::cos(phi);
 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(x,y,z));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(x,y,z));
 
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITManager.hh 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4ITManager.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -150,7 +150,7 @@ public :
 template<typename T>
 class G4ITManager : public G4VITManager
 {
-    static G4ITManager<T> *      fInstance;
+    static G4ThreadLocal G4ITManager<T> *      fInstance;
     G4ITManager<T>();
 
     typedef std::map<T,G4ITBox* > BoxMap;

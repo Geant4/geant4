@@ -27,7 +27,7 @@
 /// \brief Implementation of the B02DetectorConstruction class
 //
 //
-// $Id$
+// $Id: B02DetectorConstruction.cc 77475 2013-11-25 09:38:51Z gcosmo $
 //
 #include "G4Types.hh"
 #include "globals.hh"
@@ -57,12 +57,18 @@
 #include "G4PSTrackCounter.hh"
 #include "G4PSTrackLength.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B02DetectorConstruction::B02DetectorConstruction()
+ : G4VUserDetectorConstruction()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B02DetectorConstruction::~B02DetectorConstruction()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* B02DetectorConstruction::Construct()
 {
@@ -149,16 +155,18 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   // world solid
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 101*cm; // dont't have scoring
+  //  G4double outerRadiusCylinder = 101*cm; // dont't have scoring
+  G4double outerRadiusCylinder = 100*cm; // dont't have scoring
                    // cells coinside eith world volume boundary
-  G4double hightCylinder       = 105*cm;
+  //  G4double heightCylinder       = 105*cm;
+  G4double heightCylinder       = 100*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
                                      innerRadiusCylinder,
                                      outerRadiusCylinder,
-                                     hightCylinder,
+                                     heightCylinder,
                                      startAngleCylinder,
                                      spanningAngleCylinder);
 
@@ -168,23 +176,22 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
     new G4LogicalVolume(worldCylinder, Galactic, "worldCylinder_log");
 
   name = "shieldWorld";
-  G4VPhysicalVolume *pWorldVolume = new 
-    G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-                  name, 0, false, 0);
+  fWorldVolume = new G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log
+                                  ,name, 0, false, 0);
 
 
   // creating 18 slobs of 10 cm thick concrete
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
-  G4double hightShield       = 90*cm;
+  G4double heightShield       = 90*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
                                innerRadiusShield,
                                outerRadiusShield,
-                               hightShield,
+                               heightShield,
                                startAngleShield,
                                spanningAngleShield);
   
@@ -215,15 +222,13 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
                     0);
   
 
-  return pWorldVolume;
+  return fWorldVolume;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume *B02DetectorConstruction::GetWorldVolume() {
-   return pWorldVolume;
+   return fWorldVolume;
 }
 
-
-G4VPhysicalVolume &B02DetectorConstruction::GetWorldVolumeAddress() const{
-  return *pWorldVolume;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

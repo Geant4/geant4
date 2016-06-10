@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4OpenInventorViewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -160,7 +160,6 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
   if (
       (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
       (vp.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
-      (vp.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (vp.IsCulling ()          != fVP.IsCulling ())          ||
       (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||

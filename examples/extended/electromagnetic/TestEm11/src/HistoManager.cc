@@ -27,13 +27,14 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id$
+// $Id: HistoManager.cc 74997 2013-10-25 10:52:13Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,6 +89,6 @@ void HistoManager::Book()
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
-    analysisManager->SetActivation(G4VAnalysisManager::kH1, ih, false);
+    analysisManager->SetH1Activation(ih, false);
   }
 }

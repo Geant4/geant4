@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GMocrenFileViewer.cc 70733 2013-06-05 10:05:57Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -59,14 +59,13 @@ const bool GFDEBUG = false;
 
 //----- G4GMocrenFileViewer, constructor
 G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandler,
-					  G4GMocrenMessenger & messenger,
+					  G4GMocrenMessenger &,
 					  const G4String& name)
   : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name),
-    kSceneHandler (sceneHandler),
-    kMessenger(messenger)
+    kSceneHandler (sceneHandler)
 {
   // Set a g4.gdd-file viewer 
-  std::strncpy( kG4GddViewer, "gMocren", 7); 
+  std::strncpy( kG4GddViewer, "gMocren", 8);
   if( getenv( "G4GMocrenFile_VIEWER" ) != NULL ) {
     char * env = getenv( "G4GMocrenFile_VIEWER" );
     std::strncpy( kG4GddViewer, env, std::strlen(env));

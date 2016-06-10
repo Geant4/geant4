@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.hh 75840 2013-11-06 17:28:38Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,22 +52,19 @@
 #include "globals.hh"
 #include "G4Material.hh"
 
+#include "g4root.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Histo;
 class G4ParticleDefinition;
+class HistoManagerMessenger;
 
 class HistoManager
 {
 public:
 
-  static HistoManager* GetPointer();
-
-private:
-
   HistoManager();
-
-public: 
 
   ~HistoManager();
 
@@ -88,13 +85,12 @@ public:
   inline void SetMinMomentum(G4double val);
   inline void SetMaxMomentum(G4double val);
 
-  inline G4int GetVerbose() const;
+  inline void SetHistoName(G4String& val);
 
 private:
 
-  static HistoManager* fManager;
-
-  Histo* fHisto;
+  HistoManagerMessenger* fMessenger;
+  G4AnalysisManager*     fAnalysisManager;
 
   const G4ParticleDefinition* fNeutron;
 
@@ -110,7 +106,7 @@ private:
   G4int fBinsE;
   G4int fBinsP;
 
-  G4bool fIsInitialised;
+  G4String fHistoName;
 };
 
 inline void HistoManager::SetParticleName(const G4String& name)
@@ -153,9 +149,9 @@ inline void HistoManager::SetMaxMomentum(G4double val)
   if(val>fMinMomentum) { fMaxMomentum = val; }
 }
  
-inline G4int HistoManager::GetVerbose() const
+inline void HistoManager::SetHistoName(G4String& val) 
 {
-  return fVerbose;
+  fHistoName = val;
 }
 
 #endif

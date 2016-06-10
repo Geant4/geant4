@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmMaterialMessenger.cc 68030 2013-03-13 13:51:27Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmMaterialMessenger.cc
 /// \brief Implementation of the exrdmMaterialMessenger class
 //
@@ -38,7 +40,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 exrdmMaterialMessenger::exrdmMaterialMessenger (exrdmMaterial * exrdmMat)
-  :fMaterialsManager(exrdmMat)
+  :G4UImessenger(),
+   fMaterialsManager(exrdmMat),
+   fMaterialDir(0),
+   fListCmd(0),
+   fDeleteIntCmd(0),
+   fDeleteNameCmd(0),
+   fAddCmd(0)
 { 
   fMaterialDir = new G4UIdirectory("/geometry/material/");
   fMaterialDir->SetGuidance(" Controls for defining geometry materials" );

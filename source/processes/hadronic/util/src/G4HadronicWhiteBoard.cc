@@ -34,7 +34,7 @@ G4HadronicWhiteBoard::G4HadronicWhiteBoard()
 
 G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
 {
-  static G4HadronicWhiteBoard theInstance;
+  static G4ThreadLocal G4HadronicWhiteBoard *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4HadronicWhiteBoard  ;  G4HadronicWhiteBoard &theInstance = *theInstance_G4MT_TLS_;
   return theInstance;
 }
 

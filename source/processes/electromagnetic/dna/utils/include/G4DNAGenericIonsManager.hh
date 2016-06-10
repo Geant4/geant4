@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DNAGenericIonsManager.hh 73124 2013-08-19 07:53:33Z gcosmo $
 
 #ifndef   G4DNAGENERICIONSMANAGER_HH
  #define  G4DNAGENERICIONSMANAGER_HH 1
@@ -33,7 +33,7 @@
  
  #include <map>
  
- class G4Ions;
+ class G4DNAIons;
  class G4ParticleDefinition;
  
  class G4DNAGenericIonsManager

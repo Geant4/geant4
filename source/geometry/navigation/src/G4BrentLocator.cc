@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BrentLocator.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // Class G4BrentLocator implementation
 //
@@ -154,7 +154,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
   // Statistics for substeps
   //
-  static G4int max_no_seen= -1; 
+  static G4ThreadLocal G4int max_no_seen= -1; 
 
   // Counter for restarting Bintermed
   //

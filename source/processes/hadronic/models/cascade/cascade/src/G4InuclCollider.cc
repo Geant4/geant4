@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InuclCollider.cc 71769 2013-06-21 21:23:50Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
@@ -61,6 +61,7 @@
 //		equivalent to those from ::collide().
 // 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
 //		final-state tables instead of particle "isPhoton()"
+// 20130621  M. Kelsey -- Pass G4Fragment to de-excitation modules directly
 
 #include "G4InuclCollider.hh"
 #include "G4CascadeChannelTables.hh"
@@ -308,16 +309,14 @@ void G4InuclCollider::deexcite(const G4Fragment& fragment,
 
   if (verboseLevel) G4cout << " >>> G4InuclCollider::deexcite" << G4endl;
 
-  G4InuclNuclei frag(fragment);		// Eventually unnecessary
-
   const G4int itry_max = 10;		// Maximum number of attempts
   G4int itry = 0;
   do {
     if (verboseLevel > 2) G4cout << " deexcite itry " << itry << G4endl;
 
     DEXoutput.reset();
-    theDeexcitation->collide(0, &frag, DEXoutput);
-  } while (!validateOutput(0, &frag, DEXoutput) && (++itry < itry_max));
+    theDeexcitation->deExcite(fragment, DEXoutput);
+  } while (!validateOutput(fragment, DEXoutput) && (++itry < itry_max));
 
   // Add de-excitation products to output buffer
   globalOutput.add(DEXoutput);

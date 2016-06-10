@@ -24,8 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleDefinition.icc 73598 2013-09-02 09:18:28Z gcosmo $
 //
+
+inline 
+ G4int G4ParticleDefinition::GetInstanceID() const
+{ 
+  return g4particleDefinitionInstanceID; 
+}
 
 inline 
  G4ParticleTable* G4ParticleDefinition::GetParticleTable() const
@@ -40,11 +46,10 @@ inline
 }
 
 inline
- void          G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable) 
+ void G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable) 
 { 
   theDecayTable = aDecayTable; 
 }
-
 
 inline 
  void G4ParticleDefinition::SetVerboseLevel(G4int value)
@@ -61,26 +66,39 @@ inline
 inline
  G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
 {
-    return theProcessManager;
+    if(g4particleDefinitionInstanceID<0) return 0;
+    return G4MT_pmanager;
 }
 
 inline
- void G4ParticleDefinition::SetProcessManager(G4ProcessManager *aProcessManager)
+ G4ProcessManager* G4ParticleDefinition::GetMasterProcessManager() const
 {
-      theProcessManager = aProcessManager;
+    return theProcessManagerShadow;
+}
+
+inline
+  void G4ParticleDefinition::SetMasterProcessManager( G4ProcessManager* aNewPM )
+{
+   theProcessManagerShadow = aNewPM;
 }
 
 inline
  G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const 
 {
   G4int content = 0; 
-  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor)){
+  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor))
+  {
     content = theQuarkContent[flavor-1];
-  }else {
+  }
+  else
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel >0) {
-      G4cout << "Invalid Quark Flavor for G4ParticleDefinition::GetQuarkContent";
-      G4cout << ": flavor=" << flavor <<G4endl;
+    if (verboseLevel >0)
+    {
+      std::ostringstream message;
+      message << "Invalid Quark Flavor: " << flavor;
+      G4Exception("G4ParticleDefinition::GetQuarkContent()",
+                  "InvalidFlavor", JustWarning, message);
     }	
 #endif	
   }
@@ -91,19 +109,24 @@ inline
  G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const 
 {
   G4int content = 0;
-  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor)){
+  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor))
+  {
     content = theAntiQuarkContent[flavor-1];
-  }else {
+  }
+  else
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel >0) {
-      G4cout <<"Invalid Quark Flavor for G4ParticleDefinition::GetAntiQuarkContent";
-      G4cout << ": flavor=" << flavor <<G4endl;
+    if (verboseLevel >0)
+    {
+      std::ostringstream message;
+      message << "Invalid Quark Flavor: " << flavor;
+      G4Exception("G4ParticleDefinition::GetAntiQuarkContent()",
+                  "InvalidFlavor", JustWarning, message);
     }
 #endif
   }  
   return content;
 }
-
 
 inline 
  void G4ParticleDefinition::SetParticleSubType(const G4String& subtype)
@@ -153,14 +176,15 @@ inline
    thePDGMagneticMoment = magneticMoment;
 }
 
-inline
-  G4double G4ParticleDefinition::CalculateAnomaly()  const
+inline      
+  G4bool G4ParticleDefinition::IsGeneralIon() const
 {
-   // gives the anomaly of magnetic moment for spin 1/2 particles 
-   if (thePDGiSpin==1) {
-     G4double muB = 0.5*CLHEP::eplus*CLHEP::hbar_Planck/(thePDGMass/CLHEP::c_squared);
-     return 0.5*std::fabs(thePDGMagneticMoment/muB - 2.*thePDGCharge/CLHEP::eplus);   
-   } else {	
-     return 0.0;
-   }
+  return isGeneralIon;
 }
+
+inline
+  G4int G4ParticleDefinition::GetParticleDefinitionID() const
+{
+  return g4particleDefinitionInstanceID; 
+}
+

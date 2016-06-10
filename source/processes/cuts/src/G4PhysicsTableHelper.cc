@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PhysicsTableHelper.cc 70369 2013-05-29 14:59:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4PhysicsTableHelper.hh" 
 #include  "G4ProductionCutsTable.hh"
 
-G4int G4PhysicsTableHelper::verboseLevel = 1; 
+G4ThreadLocal G4int G4PhysicsTableHelper::verboseLevel = 1; 
 
 G4PhysicsTableHelper::G4PhysicsTableHelper()
 {
@@ -226,6 +226,16 @@ void G4PhysicsTableHelper::SetPhysicsVector(G4PhysicsTable* physTable,
 
 }
 
+
+void  G4PhysicsTableHelper::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+}
+
+G4int G4PhysicsTableHelper::GetVerboseLevel()
+{
+  return verboseLevel;
+}
 
 
 

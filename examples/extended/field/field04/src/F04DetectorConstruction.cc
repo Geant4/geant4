@@ -23,17 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04DetectorConstruction.cc 77884 2013-11-29 08:41:11Z gcosmo $
+//
 /// \file field/field04/src/F04DetectorConstruction.cc
 /// \brief Implementation of the F04DetectorConstruction class
 //
-//
-#include "G4ios.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "globals.hh"
 
 #include "F04DetectorConstruction.hh"
 #include "F04DetectorMessenger.hh"
-
-#include "F04GlobalField.hh"
 
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
@@ -42,9 +43,7 @@
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 
-#include "G4FieldManager.hh"
-#include "G4UniformMagField.hh"
-#include "G4TransportationManager.hh"
+#include "F04GlobalField.hh"
 
 #include "G4GeometryManager.hh"
 
@@ -58,8 +57,6 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "F04DetectorConstruction.hh"
-#include "F04DetectorMessenger.hh"
 #include "F04Materials.hh"
 
 #include "G4RotationMatrix.hh"
@@ -69,14 +66,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ThreadLocal F04GlobalField* F04DetectorConstruction::fField = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04DetectorConstruction::F04DetectorConstruction()
  : fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
    fSolidTarget(0), fLogicTarget(0), fPhysiTarget(0),
    fSolidDegrader(0), fLogicDegrader(0), fPhysiDegrader(0),
    fSolidCaptureMgnt(0), fLogicCaptureMgnt(0), fPhysiCaptureMgnt(0),
    fSolidTransferMgnt(0), fLogicTransferMgnt(0), fPhysiTransferMgnt(0),
-   fWorldMaterial(0), fTargetMaterial(0), fDegraderMaterial(0),
-   fFocusSolenoid(0), fSimpleSolenoid(0)
+   fWorldMaterial(0), fTargetMaterial(0), fDegraderMaterial(0)
 {
   fWorldSizeZ = 50.*m;
   fWorldSizeR =  5.*m;
@@ -102,9 +102,6 @@ F04DetectorConstruction::F04DetectorConstruction()
 
   fDegraderPos = -fTransferMgntLength/2. + fDegraderThickness/2.;
 
-  // ensure the global field is initialized
-  (void)F04GlobalField::GetObject();
-
   fDetectorMessenger = new F04DetectorMessenger(this);
 }
 
@@ -112,6 +109,7 @@ F04DetectorConstruction::F04DetectorConstruction()
 
 F04DetectorConstruction::~F04DetectorConstruction()
 {
+//  delete fField;
   delete fDetectorMessenger;
 }
 
@@ -168,10 +166,10 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
                                          fVacuum,
                                          "CaptureMgnt");
 
-  G4ThreeVector captureMgntCenter = G4ThreeVector();
+  fCaptureMgntCenter = G4ThreeVector();
 
   fPhysiCaptureMgnt = new G4PVPlacement(0,
-                                       captureMgntCenter,
+                                       fCaptureMgntCenter,
                                        "CaptureMgnt",
                                        fLogicCaptureMgnt,
                                        fPhysiWorld,
@@ -192,7 +190,7 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
                               + GetTransferMgntPos();
   G4double x =  GetTransferMgntPos()/2.;
 
-  G4ThreeVector transferMgntCenter = G4ThreeVector(x,0.,z);
+  fTransferMgntCenter = G4ThreeVector(x,0.,z);
 
   G4RotationMatrix* g4rot = new G4RotationMatrix();
   *g4rot = StringToRotationMatrix("Y30,X10");
@@ -200,7 +198,7 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
   if (*g4rot == G4RotationMatrix()) g4rot = NULL;
 
   fPhysiTransferMgnt = new G4PVPlacement(g4rot,
-                                        transferMgntCenter,
+                                        fTransferMgntCenter,
                                         "TransferMgnt",
                                         fLogicTransferMgnt,
                                         fPhysiWorld,
@@ -287,27 +285,6 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
                                         false,
                                         0);
   }
-
-  G4double l = 0.0;
-  G4double B1 = GetCaptureMgntB1();
-  G4double B2 = GetCaptureMgntB2();
-
-  if (fFocusSolenoid) delete fFocusSolenoid;
-  fFocusSolenoid = new F04FocusSolenoid(B1, B2, l,
-                                    fLogicCaptureMgnt,captureMgntCenter);
-  fFocusSolenoid -> SetHalf(true);
-
-           l = 0.0;
-  G4double B = GetTransferMgntB();
-
-  if (fSimpleSolenoid) delete fSimpleSolenoid;
-  fSimpleSolenoid = new F04SimpleSolenoid(B, l,
-                                      fLogicTransferMgnt,transferMgntCenter);
-
-  fSimpleSolenoid->SetColor("1,0,1");
-  fSimpleSolenoid->SetColor("0,1,1");
-  fSimpleSolenoid->SetMaxStep(1.5*mm);
-  fSimpleSolenoid->SetMaxStep(2.5*mm);
 
   return fPhysiWorld;
 }
@@ -485,6 +462,56 @@ void F04DetectorConstruction::SetDegraderPos(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void F04DetectorConstruction::ConstructSDandField()
+{
+  // ensure the global field is initialized
+  if (!fField)
+  {
+    fField = F04GlobalField::GetObject(this);
+
+    G4double l = 0.0;
+    G4double B1 = GetCaptureMgntB1();
+    G4double B2 = GetCaptureMgntB2();
+
+    F04FocusSolenoid* focusSolenoid =
+         new F04FocusSolenoid(B1, B2, l, fLogicCaptureMgnt,fCaptureMgntCenter);
+    focusSolenoid -> SetHalf(true);
+
+    G4double B = GetTransferMgntB();
+
+    F04SimpleSolenoid* simpleSolenoid = 
+            new F04SimpleSolenoid(B, l,fLogicTransferMgnt,fTransferMgntCenter);
+    simpleSolenoid->SetColor("1,0,1");
+    simpleSolenoid->SetColor("0,1,1");
+    simpleSolenoid->SetMaxStep(1.5*mm);
+    simpleSolenoid->SetMaxStep(2.5*mm);
+
+    FieldList* fields = fField->GetFields();
+
+    if (fields) {
+       if (fields->size()>0) {
+          FieldList::iterator i;
+          for (i=fields->begin(); i!=fields->end(); ++i)
+          { (*i)->Construct(fPhysiWorld); }
+       }
+    }
+  }
+  else
+  {
+    FieldList* fields = fField->GetFields();
+
+    if (fields) {
+       if (fields->size()>0) {
+          FieldList::iterator i;
+          for (i=fields->begin(); i!=fields->end(); ++i)
+          { (*i)->UpdateWorld(fPhysiWorld); }
+       }
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04DetectorConstruction::UpdateGeometry()
 {
   if (!fPhysiWorld) return;
@@ -497,9 +524,8 @@ void F04DetectorConstruction::UpdateGeometry()
   G4SolidStore::GetInstance()->Clean();
 
   //define new one
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 
   G4RegionStore::GetInstance()->UpdateMaterialList(fPhysiWorld);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NeutronCaptureXS.hh 68720 2013-04-05 09:18:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,8 @@
 #include "G4ElementData.hh"
 #include <vector>
 #include <iostream>
+
+const G4int MAXZCAPTURE = 93;
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
@@ -95,19 +97,22 @@ private:
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
 
+  G4double IsoCrossSection(G4double ekin, G4int Z, G4int A);
+
   G4NeutronCaptureXS & operator=(const G4NeutronCaptureXS &right);
   G4NeutronCaptureXS(const G4NeutronCaptureXS&);
 
   G4double emax;
-  G4int    maxZ;
+  G4double elimit;
   G4bool   isInitialized;
 
   G4ElementData data;
-  std::vector<G4PhysicsVector*> work;
-  std::vector<G4double> temp;
 
-  static const G4int amin[93];
-  static const G4int amax[93];
+  std::vector<G4PhysicsVector*> work;
+  std::vector<G4double>         temp;
+
+  static const G4int amin[MAXZCAPTURE];
+  static const G4int amax[MAXZCAPTURE];
 
 };
 

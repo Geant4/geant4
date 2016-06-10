@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -45,8 +43,8 @@
  * \author Davide Mancusi
  */
 
-#ifndef G4INCLEVENTINFO_HH
-#define G4INCLEVENTINFO_HH 1
+#ifndef G4INCLEVENTINFO_HH_HH
+#define G4INCLEVENTINFO_HH_HH 1
 
 #include "G4INCLParticleType.hh"
 #ifdef INCL_ROOT_USE
@@ -67,135 +65,132 @@ namespace G4INCL {
 
     struct EventInfo {
       EventInfo() :
-        projectileType(UnknownParticle),
-        At(0), Zt(0), Ap(0), Zp(0),
-        Ep(0.),
-        impactParameter(0.0), nCollisions(0), stoppingTime(0.0),
-        EBalance(0.0), pLongBalance(0.0), pTransBalance(0.0),
-        nCascadeParticles(0), nRemnants(0), nParticles(0),
-        transparent(true),
+        nParticles(0),
+        nRemnants(0),
+        projectileType(0),
+        At(0),
+        Zt(0),
+        Ap(0),
+        Zp(0),
+        Ep((Float_t)0.0),
+        impactParameter((Float_t)0.0),
+        nCollisions(0),
+        stoppingTime((Float_t)0.0),
+        EBalance((Float_t)0.0),
+        pLongBalance((Float_t)0.0),
+        pTransBalance((Float_t)0.0),
+        nCascadeParticles(0),
+        transparent(false),
         forcedCompoundNucleus(false),
-        nucleonAbsorption(false), pionAbsorption(false), nDecays(0),
-        nBlockedCollisions(0), nBlockedDecays(0),
-        effectiveImpactParameter(0.0),
+        nucleonAbsorption(false),
+        pionAbsorption(false),
+        nDecays(0),
+        nBlockedCollisions(0),
+        nBlockedDecays(0),
+        effectiveImpactParameter((Float_t)0.0),
         deltasInside(false),
         forcedDeltasInside(false),
         forcedDeltasOutside(false),
         clusterDecay(false),
-        firstCollisionTime(0.),
-        firstCollisionXSec(0.),
+        firstCollisionTime((Float_t)0.0),
+        firstCollisionXSec((Float_t)0.0),
+        firstCollisionSpectatorPosition((Float_t)0.0),
+        firstCollisionSpectatorMomentum((Float_t)0.0),
+        firstCollisionIsElastic(false),
         nReflectionAvatars(0),
         nCollisionAvatars(0),
         nDecayAvatars(0),
-        nUnmergedSpectators(0)
-      {
-        std::fill_n(ARem, maxSizeRemnants, 0);
-        std::fill_n(ZRem, maxSizeRemnants, 0);
-        std::fill_n(EStarRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(JRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(EKinRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(pxRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(pyRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(pzRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(thetaRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(phiRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(jxRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(jyRem, maxSizeRemnants, ((Float_t)0.));
-        std::fill_n(jzRem, maxSizeRemnants, ((Float_t)0.));
+        nUnmergedSpectators(0),
+        nEnergyViolationInteraction(0)
+#ifdef INCL_INVERSE_KINEMATICS
 
+#endif
+      {
         std::fill_n(A, maxSizeParticles, 0);
         std::fill_n(Z, maxSizeParticles, 0);
-        std::fill_n(emissionTime, maxSizeParticles, ((Float_t)0.));
-        std::fill_n(EKin, maxSizeParticles, ((Float_t)0.));
-        std::fill_n(px, maxSizeParticles, ((Float_t)0.));
-        std::fill_n(py, maxSizeParticles, ((Float_t)0.));
-        std::fill_n(pz, maxSizeParticles, ((Float_t)0.));
-        std::fill_n(theta, maxSizeParticles, ((Float_t)0.));
-        std::fill_n(phi, maxSizeParticles, ((Float_t)0.));
+        std::fill_n(EKin, maxSizeParticles, (Float_t)0.0);
+        std::fill_n(px, maxSizeParticles, (Float_t)0.0);
+        std::fill_n(py, maxSizeParticles, (Float_t)0.0);
+        std::fill_n(pz, maxSizeParticles, (Float_t)0.0);
+        std::fill_n(theta, maxSizeParticles, (Float_t)0.0);
+        std::fill_n(phi, maxSizeParticles, (Float_t)0.0);
         std::fill_n(origin, maxSizeParticles, 0);
-      };
+        std::fill_n(emissionTime, maxSizeParticles, (Float_t)0.0);
+        std::fill_n(ARem, maxSizeRemnants, 0);
+        std::fill_n(ZRem, maxSizeRemnants, 0);
+        std::fill_n(EStarRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(JRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(EKinRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(pxRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(pyRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(pzRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(thetaRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(phiRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(jxRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(jyRem, maxSizeRemnants, (Float_t)0.0);
+        std::fill_n(jzRem, maxSizeRemnants, (Float_t)0.0);
+#ifdef INCL_INVERSE_KINEMATICS
+        std::fill_n(EKinPrime, maxSizeParticles, (Float_t)0.0);
+        std::fill_n(pzPrime, maxSizeParticles, (Float_t)0.0);
+        std::fill_n(thetaPrime, maxSizeParticles, (Float_t)0.0);
+#endif
+      }
 
       /** \brief Number of the event */
-      static Int_t eventNumber;
-      /** \brief Protjectile particle type */
-      ParticleType projectileType;
-
-      /** \brief Mass number of the target nucleus */
-      Short_t At;
-      /** \brief Charge number of the target nucleus */
-      Short_t Zt;
-
-      /** \brief Mass number of the projectile nucleus */
-      Short_t Ap;
-      /** \brief Charge number of the projectile nucleus */
-      Short_t Zp;
-      /** \brief Projectile kinetic energy given as input */
-      Float_t Ep;
-
-      /** \brief Impact parameter [fm] */
-      Float_t impactParameter;
-      /** \brief Number of accepted two-body collisions */
-      Int_t nCollisions;
-      /** \brief Cascade stopping time [fm/c] */
-      Float_t stoppingTime;
-
-      /** \brief Energy-conservation balance [MeV] */
-      Float_t EBalance;
-      /** \brief Longitudinal momentum-conservation balance [MeV/c] */
-      Float_t pLongBalance;
-      /** \brief Transverse momentum-conservation balance [MeV/c] */
-      Float_t pTransBalance;
-
-      /** \brief Number of cascade particles */
-      Short_t nCascadeParticles;
-      /** \brief Number of remnants */
-      Int_t nRemnants;
-      /** \brief Total number of emitted particles */
-      Int_t nParticles;
-
-      /** \brief True if the event is transparent */
-      Bool_t transparent;
-      /** \brief True if the event is a forced CN */
-      Bool_t forcedCompoundNucleus;
-      /** \brief True if the event is absorption */
-      Bool_t nucleonAbsorption;
-      /** \brief True if the event is absorption */
-      Bool_t pionAbsorption;
-      /** \brief Number of accepted Delta decays */
-      Int_t nDecays;
-      /** \brief Number of two-body collisions blocked by Pauli or CDPP */
-      Int_t nBlockedCollisions;
-      /** \brief Number of decays blocked by Pauli or CDPP */
-      Int_t nBlockedDecays;
-      /** \brief Number of reflection avatars */
-      /** \brief Effective (Coulomb-distorted) impact parameter [fm] */
-      Float_t effectiveImpactParameter;
-
-      /// \brief Event involved deltas in the nucleus at the end of the cascade
-      Bool_t deltasInside;
-      /// \brief Event involved forced delta decays inside the nucleus
-      Bool_t forcedDeltasInside;
-      /// \brief Event involved forced delta decays outside the nucleus
-      Bool_t forcedDeltasOutside;
-      /// \brief Event involved cluster decay
-      Bool_t clusterDecay;
-
-      /** \brief Time of the first collision [fm/c] */
-      Float_t firstCollisionTime;
-      /** \brief Cross section of the first collision (mb) */
-      Float_t firstCollisionXSec;
-
-      Int_t nReflectionAvatars;
-      /** \brief Number of collision avatars */
-      Int_t nCollisionAvatars;
-      /** \brief Number of decay avatars */
-      Int_t nDecayAvatars;
-
-      /// \brief Number of dynamical spectators that were merged back into the projectile remnant
-      Int_t nUnmergedSpectators;
+      static G4ThreadLocal Int_t eventNumber;
 
       /** \brief Maximum array size for remnants */
       static const Short_t maxSizeRemnants = 10;
+
+      /** \brief Maximum array size for emitted particles */
+      static const Short_t maxSizeParticles = 1000;
+
+      /** \brief Number of particles in the final state */
+      Short_t nParticles;
+      /** \brief Particle mass number */
+      Short_t A[maxSizeParticles];
+      /** \brief Particle charge number */
+      Short_t Z[maxSizeParticles];
+      /** \brief Particle kinetic energy [MeV] */
+      Float_t EKin[maxSizeParticles];
+      /** \brief Particle momentum, x component [MeV/c] */
+      Float_t px[maxSizeParticles];
+      /** \brief Particle momentum, y component [MeV/c] */
+      Float_t py[maxSizeParticles];
+      /** \brief Particle momentum, z component [MeV/c] */
+      Float_t pz[maxSizeParticles];
+      /** \brief Particle momentum polar angle [radians] */
+      Float_t theta[maxSizeParticles];
+      /** \brief Particle momentum azimuthal angle [radians] */
+      Float_t phi[maxSizeParticles];
+      /** \brief Origin of the particle
+       *
+       * Should be -1 for cascade particles, or the number of the remnant for
+       * de-excitation particles. */
+      Short_t origin[maxSizeParticles];
+      /** \brief Emission time [fm/c] */
+      Float_t emissionTime[maxSizeParticles];
+      /** \brief History of the particle
+       *
+       * Condensed information about the de-excitation chain of a particle. For
+       * cascade particles, it is just an empty string. For particles arising
+       * from the de-excitation of a cascade remnant, it is a string of
+       * characters. Each character represents one or more identical steps in
+       * the de-excitation process. The currently defined possible character
+       * values and their meanings are the following:
+       *
+       * e: evaporation product
+       * E: evaporation residue
+       * m: multifragmentation
+       * a: light partner in asymmetric fission or IMF emission
+       * A: heavy partner in asymmetric fission or IMF emission
+       * f: light partner in fission
+       * F: heavy partner in fission
+       * s: saddle-to-scission emission
+       * n: non-statistical emission (decay) */
+      std::vector<std::string> history;
+      /** \brief Number of remnants */
+      Int_t nRemnants;
       /** \brief Remnant mass number */
       Short_t ARem[maxSizeRemnants];
       /** \brief Remnant charge number */
@@ -216,60 +211,82 @@ namespace G4INCL {
       Float_t thetaRem[maxSizeRemnants];
       /** \brief Remnant momentum azimuthal angle [radians] */
       Float_t phiRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, x component [hbar] */
+      /** \brief Remnant angular momentum, x component [\f$\hbar\f$] */
       Float_t jxRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, y component [hbar] */
+      /** \brief Remnant angular momentum, y component [\f$\hbar\f$] */
       Float_t jyRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, z component [hbar] */
+      /** \brief Remnant angular momentum, z component [\f$\hbar\f$] */
       Float_t jzRem[maxSizeRemnants];
-
-      /** \brief Maximum array size for emitted particles */
-      static const Short_t maxSizeParticles = 1000;
-      /** \brief Particle mass number */
-      Short_t A[maxSizeParticles];
-      /** \brief Particle charge number */
-      Short_t Z[maxSizeParticles];
-      /** \brief Emission time [fm/c] */
-      Float_t emissionTime[maxSizeParticles];
-      /** \brief Particle kinetic energy [MeV] */
-      Float_t EKin[maxSizeParticles];
-      /** \brief Particle momentum, x component [MeV/c] */
-      Float_t px[maxSizeParticles];
-      /** \brief Particle momentum, y component [MeV/c] */
-      Float_t py[maxSizeParticles];
-      /** \brief Particle momentum, z component [MeV/c] */
-      Float_t pz[maxSizeParticles];
-      /** \brief Particle momentum polar angle [radians] */
-      Float_t theta[maxSizeParticles];
-      /** \brief Particle momentum azimuthal angle [radians] */
-      Float_t phi[maxSizeParticles];
-      /** \brief Origin of the particle
-       *
-       * Should be -1 for cascade particles, or the number of the remnant for
-       * de-excitation particles.
-       *
-       */
-      Short_t origin[maxSizeParticles];
-      /** \brief History of the particle
-       *
-       * Condensed information about the de-excitation chain of a particle. For
-       * cascade particles, it is just an empty string. For particles arising
-       * from the de-excitation of a cascade remnant, it is a string of
-       * characters. Each character represents one or more identical steps in
-       * the de-excitation process. The currently defined possible character
-       * values and their meanings are the following:
-       *
-       * e: evaporation product
-       * E: evaporation residue
-       * m: multifragmentation
-       * a: light partner in asymmetric fission or IMF emission
-       * A: heavy partner in asymmetric fission or IMF emission
-       * f: light partner in fission
-       * F: heavy partner in fission
-       * s: saddle-to-scission emission
-       * n: non-statistical emission (decay)
-       */
-      std::vector<std::string> history;
+      /** \brief Projectile particle type */
+      Int_t projectileType;
+      /** \brief Mass number of the target nucleus */
+      Short_t At;
+      /** \brief Charge number of the target nucleus */
+      Short_t Zt;
+      /** \brief Mass number of the projectile nucleus */
+      Short_t Ap;
+      /** \brief Charge number of the projectile nucleus */
+      Short_t Zp;
+      /** \brief Projectile kinetic energy given as input */
+      Float_t Ep;
+      /** \brief Impact parameter [fm] */
+      Float_t impactParameter;
+      /** \brief Number of accepted two-body collisions */
+      Int_t nCollisions;
+      /** \brief Cascade stopping time [fm/c] */
+      Float_t stoppingTime;
+      /** \brief Energy-conservation balance [MeV] */
+      Float_t EBalance;
+      /** \brief Longitudinal momentum-conservation balance [MeV/c] */
+      Float_t pLongBalance;
+      /** \brief Transverse momentum-conservation balance [MeV/c] */
+      Float_t pTransBalance;
+      /** \brief Number of cascade particles */
+      Short_t nCascadeParticles;
+      /** \brief True if the event is transparent */
+      Bool_t transparent;
+      /** \brief True if the event is a forced CN */
+      Bool_t forcedCompoundNucleus;
+      /** \brief True if the event is a nucleon absorption */
+      Bool_t nucleonAbsorption;
+      /** \brief True if the event is a pion absorption */
+      Bool_t pionAbsorption;
+      /** \brief Number of accepted Delta decays */
+      Int_t nDecays;
+      /** \brief Number of two-body collisions blocked by Pauli or CDPP */
+      Int_t nBlockedCollisions;
+      /** \brief Number of decays blocked by Pauli or CDPP */
+      Int_t nBlockedDecays;
+      /** \brief Effective (Coulomb-distorted) impact parameter [fm] */
+      Float_t effectiveImpactParameter;
+      /** \brief Event involved deltas in the nucleus at the end of the cascade */
+      Bool_t deltasInside;
+      /** \brief Event involved forced delta decays inside the nucleus */
+      Bool_t forcedDeltasInside;
+      /** \brief Event involved forced delta decays outside the nucleus */
+      Bool_t forcedDeltasOutside;
+      /** \brief Event involved cluster decay */
+      Bool_t clusterDecay;
+      /** \brief Time of the first collision [fm/c] */
+      Float_t firstCollisionTime;
+      /** \brief Cross section of the first collision (mb) */
+      Float_t firstCollisionXSec;
+      /** \brief Position of the spectator on the first collision (fm) */
+      Float_t firstCollisionSpectatorPosition;
+      /** \brief Momentum of the spectator on the first collision (fm) */
+      Float_t firstCollisionSpectatorMomentum;
+      /** \brief True if the first collision was elastic */
+      Bool_t firstCollisionIsElastic;
+      /** \brief Number of reflection avatars */
+      Int_t nReflectionAvatars;
+      /** \brief Number of collision avatars */
+      Int_t nCollisionAvatars;
+      /** \brief Number of decay avatars */
+      Int_t nDecayAvatars;
+      /** \brief Number of dynamical spectators that were merged back into the projectile remnant */
+      Int_t nUnmergedSpectators;
+      /** \brief Number of attempted collisions/decays for which the energy-conservation algorithm failed to find a solution. */
+      Int_t nEnergyViolationInteraction;
 
 #ifdef INCL_INVERSE_KINEMATICS
       /** \brief Particle kinetic energy, in inverse kinematics [MeV] */
@@ -282,39 +299,57 @@ namespace G4INCL {
 
       /** \brief Reset the EventInfo members */
       void reset() {
-        Ap = 0;
-        Zp = 0;
+        nParticles = 0;
+        history.clear();
+        nRemnants = 0;
+        projectileType = 0;
         At = 0;
         Zt = 0;
-        impactParameter = 0.0;
-        effectiveImpactParameter = 0.0;
-        stoppingTime = 0.0;
-        EBalance = 0.0;
-        pLongBalance = 0.0;
-        pTransBalance = 0.0;
+        Ap = 0;
+        Zp = 0;
+        Ep = (Float_t)0.0;
+        impactParameter = (Float_t)0.0;
         nCollisions = 0;
-        nBlockedCollisions = 0;
-        nDecays = 0;
-        nBlockedDecays= 0;
-        nDecays = 0;
+        stoppingTime = (Float_t)0.0;
+        EBalance = (Float_t)0.0;
+        pLongBalance = (Float_t)0.0;
+        pTransBalance = (Float_t)0.0;
         nCascadeParticles = 0;
-        nRemnants = 0;
-        nParticles = 0;
-        transparent = true;
+        transparent = false;
         forcedCompoundNucleus = false;
-	nucleonAbsorption = false;
-	pionAbsorption = false;
+        nucleonAbsorption = false;
+        pionAbsorption = false;
+        nDecays = 0;
+        nBlockedCollisions = 0;
+        nBlockedDecays = 0;
+        effectiveImpactParameter = (Float_t)0.0;
+        deltasInside = false;
         forcedDeltasInside = false;
         forcedDeltasOutside = false;
-        deltasInside = false;
         clusterDecay = false;
+        firstCollisionTime = (Float_t)0.0;
+        firstCollisionXSec = (Float_t)0.0;
+        firstCollisionSpectatorPosition = (Float_t)0.0;
+        firstCollisionSpectatorMomentum = (Float_t)0.0;
+        firstCollisionIsElastic = false;
+        nReflectionAvatars = 0;
+        nCollisionAvatars = 0;
+        nDecayAvatars = 0;
         nUnmergedSpectators = 0;
+        nEnergyViolationInteraction = 0;
+#ifdef INCL_INVERSE_KINEMATICS
+
+#endif
       }
 
+      /// \brief Move a remnant to the particle array
+      void remnantToParticle(const G4int remnantIndex);
+
 #ifdef INCL_INVERSE_KINEMATICS
+      /// \brief Fill the variables describing the reaction in inverse kinematics
       void fillInverseKinematics(const Double_t gamma);
 #endif // INCL_INVERSE_KINEMATICS
     };
 }
 
-#endif /* G4INCLEVENTINFO_HH */
+#endif /* G4INCLEVENTINFO_HH_HH */

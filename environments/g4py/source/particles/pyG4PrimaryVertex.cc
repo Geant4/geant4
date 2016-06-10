@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4PrimaryVertex.cc,v 1.4 2006-06-29 15:34:43 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4PrimaryVertex.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4PrimaryVertex.cc
 //
@@ -40,9 +39,9 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4PrimaryVertex {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetPrimary, GetPrimary, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetPrimary, GetPrimary, 0, 1)
 
-};
+}
 
 using namespace pyG4PrimaryVertex;
 
@@ -60,7 +59,7 @@ void export_G4PrimaryVertex()
     .add_property("T0", &G4PrimaryVertex::GetT0)
     // ---
     .def("GetPosition", &G4PrimaryVertex::GetPosition,
-         return_value_policy<return_by_value>())	
+         return_value_policy<return_by_value>())
     .def("GetX0",       &G4PrimaryVertex::GetX0)
     .def("GetY0",       &G4PrimaryVertex::GetY0)
     .def("GetZ0",       &G4PrimaryVertex::GetZ0)

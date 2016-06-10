@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01PhysicsList.cc
 /// \brief Implementation of the RE01PhysicsList class
 //
-// $Id$
+// $Id: RE01PhysicsList.cc 68026 2013-03-13 13:45:22Z gcosmo $
 //
 #include "RE01PhysicsList.hh"
 #include "RE01UnknownDecayPhysics.hh"
@@ -35,12 +35,12 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01PhysicsList::RE01PhysicsList():  G4VModularPhysicsList()
@@ -68,10 +68,10 @@ RE01PhysicsList::RE01PhysicsList():  G4VModularPhysicsList()
   RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
   // Hadron Physics
-  RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BERT(ver));
 
   // Stopping Physics
-  RegisterPhysics( new G4QStoppingPhysics(ver) );
+  RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   RegisterPhysics( new G4IonPhysics(ver));

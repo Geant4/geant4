@@ -27,7 +27,7 @@
 /// \brief Main program of the medical/electronScattering example
 //
 //
-// $Id$
+// $Id: electronScattering.cc 69009 2013-04-15 09:33:05Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,6 @@
 #include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -72,8 +71,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
 
-  HistoManager* histo = new HistoManager();
-
   // set user action classes
   //
   //primaryGenerator
@@ -81,7 +78,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(primary);
 
   //runAction
-  RunAction* runaction = new RunAction(detector,primary,histo);
+  RunAction* runaction = new RunAction(detector,primary);
   runManager->SetUserAction(runaction);
 
   //eventAction
@@ -89,7 +86,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(eventaction);
 
   //trackAction
-  TrackingAction* trackingaction = new TrackingAction(detector,runaction,histo);
+  TrackingAction* trackingaction = new TrackingAction(detector,runaction);
   runManager->SetUserAction(trackingaction);
    
   // get the pointer to the User Interface manager 
@@ -122,7 +119,6 @@ int main(int argc,char** argv) {
     
   // job termination
   //  
-  delete histo;
   delete runManager;
 
   return 0;

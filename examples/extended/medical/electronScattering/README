@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2009-09-19 16:09:43 maire Exp $
+$Id: README 78107 2013-12-03 14:50:19Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -89,10 +89,10 @@ $Id: README,v 1.1 2009-09-19 16:09:43 maire Exp $
  7- List of the built-in histograms
  ----------------------------------
         
- The test contains 4 built-in 1D histograms, which are managed by the
- HistoManager class and its Messenger. The histos can be individually activated
+ The test contains 4 built-in 1D histograms, which are managed by
+ G4AnalysisManager class and its Messenger. The histos can be individually activated
  with the command :
- /testem/histo/setHisto id nbBins  valMin valMax unit 
+ /analysis/h1/set id nbBins  valMin valMax unit 
  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
  (see the macros xxxx.mac).
  
@@ -100,15 +100,17 @@ $Id: README,v 1.1 2009-09-19 16:09:43 maire Exp $
 	2	"(charged particles): dN/dS at Scoring plane"
 	3	"(charged particles): d(N/cost)/dS at Scoring plane"
 	4	"(charged particles): normalized d(N/cost)/dS at Scoring plane"
+        5       "(charged particles); scattering angle theta"
+        6       "(charged particles); measured scattering angle theta"
 
  The histograms can be viewed using ROOT or PAW.
  
  One can control the name and format of the histograms file with the command:
- /testem/histo/setFileName  name  (default nrccBenchmark)
- /testem/histo/setFileType  type  (choice: hbook, root(default), xml)  
-   
+ /analysis/setFileName  name  (default nrccBenchmark) 
+ It is possible to choose the format of the histogram file : root (default),
+ xml, csv, by using namespace in HistoManager.hh   
  It is also possible to print selected histograms on an ascii file:
- /testem/histo/printHisto id
+ /analysis/h1/setAscii id
  All selected histos will be written on a file name.ascii (default nrccBenchmark)
 
 	

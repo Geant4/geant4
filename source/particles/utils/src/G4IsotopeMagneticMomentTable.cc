@@ -33,7 +33,8 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // HISTORY
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////// IsomerLevel is added                         30 Apr. 2013  H.Kurashige
+
 //
 #include "G4IsotopeMagneticMomentTable.hh"
 
@@ -45,7 +46,7 @@
 #include <fstream>
 #include <sstream>
 
-const G4double G4IsotopeMagneticMomentTable::levelTolerance = 0.001;
+const G4double G4IsotopeMagneticMomentTable::levelTolerance = 2.0*keV;
 // 0.1% torelance for excitation energy
   
 const G4double G4IsotopeMagneticMomentTable::nuclearMagneton = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
@@ -96,13 +97,14 @@ G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
   while ( !DataFile.eof() ) {
     DataFile.getline(inputChars, 80);
     G4String inputLine = inputChars;
-    G4int ionA, ionZ, ionJ;
+    G4int ionA, ionZ, ionJ, isomer;
     G4double ionE, ionMu, ionLife;
     G4String ionName, ionLifeUnit;
  
     if (inputChars[0] != '#' && inputLine.length() != 0) {
       std::istringstream tmpstream(inputLine);
-      tmpstream >> ionZ >>  ionName >> ionA >>  ionE 
+      tmpstream >> ionZ >>  ionName >> ionA 
+		>> isomer >>  ionE 
 		>> ionLife >> ionLifeUnit
 		>> ionJ >> ionMu;
           
@@ -110,6 +112,7 @@ G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
       // Set Isotope Property
       fProperty->SetAtomicNumber(ionZ);
       fProperty->SetAtomicMass(ionA);
+      fProperty->SetIsomerLevel(isomer);
       fProperty->SetEnergy(ionE * MeV);
       fProperty->SetiSpin(ionJ);
       fProperty->SetMagneticMoment(ionMu*nuclearMagneton);
@@ -170,8 +173,14 @@ G4bool G4IsotopeMagneticMomentTable::FindIsotope(G4IsotopeProperty* pP)
       continue;
     }
     
+    //check isomerLevel
+    if (fP->GetIsomerLevel() != pP->GetIsomerLevel()) {
+      // next
+      continue;     
+    }
+
     //check E
-    if (std::fabs(fP->GetEnergy() - pP->GetEnergy()) <= fP->GetEnergy()*levelTolerance) {
+    if (std::fabs(fP->GetEnergy() - pP->GetEnergy()) < levelTolerance) {
       // Found
       return true;     
     }
@@ -181,7 +190,8 @@ G4bool G4IsotopeMagneticMomentTable::FindIsotope(G4IsotopeProperty* pP)
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4IsotopeProperty* G4IsotopeMagneticMomentTable::GetIsotope(G4int Z, G4int A, G4double E)
+G4IsotopeProperty* 
+ G4IsotopeMagneticMomentTable::GetIsotope(G4int Z, G4int A, G4double E)
 {
   G4IsotopeProperty* fProperty = 0;
   for (size_t i = 0 ; i< fIsotopeList.size(); ++i) {
@@ -204,10 +214,48 @@ G4IsotopeProperty* G4IsotopeMagneticMomentTable::GetIsotope(G4int Z, G4int A, G4
     }
     
     //check E
-    if (std::fabs(fP->GetEnergy() - E) <= fP->GetEnergy()*levelTolerance) {
+    if (std::fabs(fP->GetEnergy() - E) < levelTolerance) {
       // Found
       fProperty = fP;
-      fP->DumpInfo();
+      // fP->DumpInfo();
+      break;     
+    }
+    
+  }
+
+  return fProperty;
+  
+}
+
+///////////////////////////////////////////////////////////////////////
+G4IsotopeProperty* 
+ G4IsotopeMagneticMomentTable::GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl)
+{
+  G4IsotopeProperty* fProperty = 0;
+  for (size_t i = 0 ; i< fIsotopeList.size(); ++i) {
+    G4IsotopeProperty*  fP = fIsotopeList[i];
+ 
+     // check Z
+    if ( fP->GetAtomicNumber() > Z) {
+      // Not Found
+      break;
+    }
+    if ( fP->GetAtomicNumber() < Z) {
+      // next
+      continue;
+    }
+    // check A
+    if ( fP->GetAtomicMass() != A ) {
+      // next
+      continue;
+    }
+    
+    
+    //check isomerLevel
+    if (fP->GetIsomerLevel() == lvl) {
+      // Found
+      fProperty = fP;
+      //fP->DumpInfo();
       break;     
     }
     

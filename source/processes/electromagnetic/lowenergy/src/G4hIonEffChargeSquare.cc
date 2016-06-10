@@ -171,7 +171,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   if( (reducedEnergy > ionCharge * 10.0 * MeV) || 
       (ionCharge < 1.5) ) return ionCharge*ionCharge ;
 
-  static G4double vFermi[92] = {
+  static const G4double vFermi[92] = {
     1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,
     0.45259, 0.71074, 0.90519, 0.97411, 0.97184, 0.89852, 0.70827, 0.39816, 0.36552, 0.62712,
     0.81707, 0.9943,  1.1423,  1.2381,  1.1222,  0.92705, 1.0047,  1.2,     1.0661,  0.97411,
@@ -183,7 +183,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     0.66401, 0.84912, 0.88433, 0.80746, 0.43357, 0.41923, 0.43638, 0.51464, 0.73087, 0.81065,
     1.9578,  1.0257} ;
 
-  static G4double lFactor[92] = {
+  static const G4double lFactor[92] = {
     1.0,  1.0,  1.1,  1.06, 1.01, 1.03, 1.04, 0.99, 0.95, 0.9,
     0.82, 0.81, 0.83, 0.88, 1.0,  0.95, 0.97, 0.99, 0.98, 0.97,
     0.98, 0.97, 0.96, 0.93, 0.91, 0.9,  0.88, 0.9,  0.9,  0.9,
@@ -195,7 +195,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     1.17, 1.2,  1.18, 1.17, 1.17, 1.16, 1.16, 1.16, 1.16, 1.16,
     1.16, 1.16} ; 
 
-  static G4double c[6] = {0.2865,  0.1266, -0.001429,
+  static const G4double c[6] = {0.2865,  0.1266, -0.001429,
                           0.02402,-0.01135, 0.001475} ;
 
   // get elements in the actual material,

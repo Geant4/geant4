@@ -55,7 +55,7 @@ public:
 
   virtual void EvaluateRhsGivenB(const G4double y[], const G4double B[3],
 				 G4double dydx[]) const;
-  virtual void SetChargeMomentumMass(G4double particleCharge,
+  virtual void SetChargeMomentumMass(G4ChargeState particleCharge,
 				     G4double MomentumXc,
 				     G4double MassXc2);
   void SetMass(G4double aMass);
@@ -79,12 +79,6 @@ inline void G4KM_NucleonEqRhs::SetMass(G4double aMass)
 
 
 inline G4KM_NucleonEqRhs::~G4KM_NucleonEqRhs()
-{ }
-
-
-// Here by design, but it is unnecessary for nuclear fields
-inline void
-G4KM_NucleonEqRhs::SetChargeMomentumMass(G4double ,G4double ,G4double )
 { }
 
 #endif

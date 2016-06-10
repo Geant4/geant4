@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeGeneralPhysics.cc 72250 2013-07-12 08:59:26Z gcosmo $
+//
 /// \file optical/LXe/src/LXeGeneralPhysics.cc
 /// \brief Implementation of the LXeGeneralPhysics class
 //
@@ -48,15 +50,19 @@ LXeGeneralPhysics::~LXeGeneralPhysics() {
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-// Bosons
-#include "G4ChargedGeantino.hh"
+
 #include "G4Geantino.hh"
+#include "G4ChargedGeantino.hh"
+
+#include "G4GenericIon.hh"
 
 void LXeGeneralPhysics::ConstructParticle()
 {
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
+
+  G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,9 +72,9 @@ void LXeGeneralPhysics::ConstructProcess()
   fDecayProcess = new G4Decay();
 
   // Add Decay Process
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (fDecayProcess->IsApplicable(*particle)) {
       pmanager ->AddProcess(fDecayProcess);

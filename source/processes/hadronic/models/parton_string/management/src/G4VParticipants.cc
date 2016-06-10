@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VParticipants.cc 67999 2013-03-13 11:14:32Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -41,7 +41,8 @@
 #include "G4Fancy3DNucleus.hh"
 
 
-G4VParticipants::G4VParticipants() : theNucleus(NULL)
+G4VParticipants::G4VParticipants() : theNucleus(NULL), 
+                                     theProjectileNucleus(NULL) // Uzhi Nov. 2012
 {}
 
 
@@ -49,6 +50,7 @@ G4VParticipants::~G4VParticipants()
 {
 // G4cout << "G4VParticipants::~G4VParticipants()" << G4endl;
   if ( theNucleus != NULL ) delete theNucleus;
+  if ( theProjectileNucleus != NULL ) delete theProjectileNucleus;  // Uzhi Nov. 2012
 }
 
 
@@ -64,4 +66,18 @@ inline void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
 {
   if (theNucleus != NULL) delete theNucleus;
   theNucleus = aNucleus;
+}
+
+inline void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ) // Uzhi Nov. 2012
+{
+  if ( theProjectileNucleus == NULL ) theProjectileNucleus = new G4Fancy3DNucleus();
+  theProjectileNucleus->Init(theA, theZ);
+  theProjectileNucleus->SortNucleonsDecZ();
+}
+
+
+inline void G4VParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
+{
+  if (theProjectileNucleus != NULL) delete theProjectileNucleus;
+  theProjectileNucleus = aNucleus;
 }

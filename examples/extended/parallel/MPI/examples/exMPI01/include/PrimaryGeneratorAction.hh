@@ -22,12 +22,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: PrimaryGeneratorAction.hh 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file PrimaryGeneratrorAction.hh
 /// @brief Define primary generator action
 
 #ifndef PRIMARY_GENERATOR_ACTION_H
 #define PRIMARY_GENERATOR_ACTION_H
- 
+
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4ParticleGun;
@@ -40,7 +43,7 @@ public:
   virtual void GeneratePrimaries(G4Event* anEvent);
 
 private:
-  G4ParticleGun* particleGun;
+  G4ParticleGun* fparticleGun;
 };
 
 #endif

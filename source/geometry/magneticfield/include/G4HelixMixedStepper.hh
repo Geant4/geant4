@@ -60,7 +60,7 @@ class G4HelixMixedStepper: public G4MagHelicalStepper
 
   public:  
 
-  G4HelixMixedStepper(G4Mag_EqRhs *EqRhs,G4int fStepperNumber=0);
+  G4HelixMixedStepper(G4Mag_EqRhs *EqRhs,G4int fStepperNumber= -1, G4double Angle_threshold= -1.0);
   ~G4HelixMixedStepper();
 
    void Stepper( const G4double y[],
@@ -89,12 +89,15 @@ class G4HelixMixedStepper: public G4MagHelicalStepper
     void PrintCalls();
     G4MagIntegratorStepper* SetupStepper(G4Mag_EqRhs* EqRhs, G4int StepperName);
 
-
+    void     SetAngleThreshold( G4double val ){ fAngle_threshold= val;}
+    G4double GetAngleThreshold(){ return fAngle_threshold; }
+  
     G4int IntegratorOrder() const { return 4; }
   private:
       // Mixed Integration RK4 for 'small' steps
         G4MagIntegratorStepper* fRK4Stepper;
-  
+      // Threshold angle (in radians ) - above it Helical stepper is used
+        G4double                fAngle_threshold;
    private:
     // Used for statistic = how many calls to different steppers
        G4int fVerbose;

@@ -20,15 +20,6 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-find_package(AIDA QUIET)
-if(NOT AIDA_FOUND)
-  message(STATUS "G4 Examples: AIDA package not found. --> lArCalorimeter example disabled")  
-  return()
-else()
-  add_definitions(-DG4ANALYSIS_USE) 
-endif()
-
-#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
 #
@@ -36,13 +27,13 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 # Setup include directory for this project
-include_directories(${PROJECT_SOURCE_DIR}/include ${AIDA_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(lArCal lArCal.cc ${sources} ${headers})
-target_link_libraries(lArCal ${Geant4_LIBRARIES} ${AIDA_LIBRARIES})
+target_link_libraries(lArCal ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -52,7 +43,6 @@ target_link_libraries(lArCal ${Geant4_LIBRARIES} ${AIDA_LIBRARIES})
 set(EXAMPLELARCALORIMETER_SCRIPTS
   gui.mac
   run1.mac
-  run2.mac
   vis.mac
   icons.mac
   )
@@ -64,6 +54,19 @@ foreach(_script ${EXAMPLELARCALORIMETER_SCRIPTS})
     COPYONLY
     )
 endforeach()
+
+file( MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data-tracks)
+file(GLOB _datatracks ${PROJECT_SOURCE_DIR}/data-tracks/*.dat)
+foreach(_datatrackfile ${_datatracks})
+   configure_file( ${_datatrackfile} ${PROJECT_BINARY_DIR}/data-tracks)    
+endforeach()
+
+file( MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/geom_data)
+file(GLOB _geomdata ${PROJECT_SOURCE_DIR}/geom_data/*.dat)
+foreach(_geomdatafile ${_geomdata})
+   configure_file( ${_geomdatafile} ${PROJECT_BINARY_DIR}/geom_data)    
+endforeach()
+
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this

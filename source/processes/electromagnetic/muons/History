@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2010-11-04 12:40:29 vnivanch Exp $
+$Id: History 75168 2013-10-29 09:20:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,137 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 October 13: V.Ivanchenko (emmuons-V09-06-24)
+- G4EnergyLossForExtrapolator - substitute G4eBremsstrahlungModel 
+    by G4SeltzerBergerModel
+- G4MuBremsstrahlungModel - lowest energy is set to 1 GeV
+
+14 October 2013: V.Ivant (emmuons-V09-06-23)
+- G4MuPairProductionModel - fixed problem with the end of the spectra
+    by cleanup initialisation of sampling table
+
+02 October 2013: V.Ivant (emmuons-V09-06-22)
+- G4EnergyLossForExtrapolator - use G4Log
+
+19 September 2013: V.Ivant (emmuons-V09-06-21)
+- G4MuPairProductionModel - minor cleanup
+
+18 September 2013: V.Ivant (emmuons-V09-06-20)
+- G4MuPairProductionModel - fixed trivial Coverity report; merge 
+    SetElement() and MaxSecondaryEnergy() methods into one
+    MaxSecondaryEnergyForElement() - this is more performant
+    and more safe for reproducibility; use G4Log and G4Exp
+- G4MuBremsstrahlungModel and G4MuBetheBlochModel - use G4Log and 
+    G4Exp
+
+12 September 2013: V.Ivant (emmuons-V09-06-19)
+- G4MuPairProductionModel - fixed bug in sampling when cut value is 
+    high; perform common initialisation of internal variables for
+    all threads - fix of non-reproducibility
+
+29 August 2013: V.Ivant (emmuons-V09-06-18)
+- G4MuBremsstrahlungModel - do not repeat initialisation of elelment
+    selectors if model is shared between particle and anti-particle
+- G4MuPairProductionModel - fixed bug in energy sampling which couse 
+    FPE and other problems
+
+09 August 2013: V.Ivant (emmuons-V09-06-17)
+- G4MuPairProduction - improved initialisation printout
+- G4MuPairProductionModel - fixed bining to 1000 for internal 
+    sampling table
+
+09 August 2013: V.Ivant (emmuons-V09-06-16)
+- G4MuBremsstrahlungModel - minThreshold is reduced from 1 keV to 
+    0.9 keV in order to avoid extra warning printout
+- G4MuBremsstrahlung - removed unused headers;
+- G4MuPairProduction - removed unused headers; lowestEnergy limit
+    should not be lower than 8*mass because the model is not
+    applicable
+- G4MuPairProductionModel - sampling table is re-implemented as 
+    G4ElementData with 2D-tables per atomic number; sampling
+    algorithm is rewritten, data fully shared between threads
+
+09 July 2013: V.Ivant (emmuons-V09-06-15)
+- G4MuPairProductionModel - fixed non-reproducibity due to currentZ
+    member of the class definition; changed signature of the method
+    MinPrimaryEnergy(..) - added "G4double cut"; substitute
+    SetCurrentElement(G4double) by SetElement(G4int); use more G4Pow
+- G4MuBremsstrahlung - changed signature of the method 
+    MinPrimaryEnergy(..) - added "G4double cut"
+
+17 June 2013: V.Ivant (emmuons-V09-06-14)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel - added 
+    MinPrimaryEnergy method implementation (all cross section tables
+    will start from the reaction threshold)
+
+17 June 2013: V.Ivant (emmuons-V09-06-13)
+- G4MuPairProductionModel - added protection and warning message
+    if p1=p2 in the SampleSecodaries method
+
+04 June 2013: V.Ivant (emmuons-V09-06-12)
+- G4EnergyLossForExtrapolator - use cut DBL_MAX to avoid creation
+    of G4EmSelectors in lazy initialisation
+- G4MuPairProductionModel,G4MuBremsstrahlungModel - fixed usage of 
+    element selectors 
+
+31 May 2013: V.Ivant (emmuons-V09-06-11)
+- G4MuPairProductionModel - provides different 
+    initialisation for master and worker threads sharing element
+    selectors
+- G4MuBremsstrahlungModel - removed partialSubSigma data structure,
+    use instead G4ElementSelectors; provides different 
+    initialisation for master and worker threads sharing element
+    selectors
+
+29 May 2013: V.Ivant (emmuons-V09-06-10)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel - fixed rare bug
+    in cross section computation - division by zero (bug report #1471)
+
+22 May 2013: V.Ivant (emmuons-V09-06-09)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel - fixed rare bug
+    in dEdx computation - division by zero (bug report #1471)
+
+08 May 2013: V.Ivant (emmuons-V09-06-08)
+- G4MuPairProductionModel - A.Bogdanov provides improved algorithm
+    for sampling of final state
+
+22 March 2013: V.Ivant (emmuons-V09-06-07)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel - correctly use 
+    "static const G4double" for const parameters
+
+19 February 2013: V.Ivant (emmuons-V09-06-06)
+- G4MuPairProductionModel - number of bins for virtual gamma returned
+    to be 1000
+
+19 February 2013: V.Ivant (emmuons-V09-06-05)
+- G4MuMultipleScattering - G4UrbanMscModel become default
+- G4MuPairProductionModel - number of bins for virtual gamma returned
+    to be 2000
+
+19 February 2013: V.Ivant (emmuons-V09-06-04)
+- G4MuPairProductionModel - number of bins for virtual gamma reduced
+    from 2000 to 1600
+- G4MuBetheBlochModel - removed G4ThreadLocal declaration
+
+18 February 2013: V.Ivant (emmuons-V09-06-02)
+- G4MuPairProductionModel - add check on max energy to reduce number
+    of bins in muon energy; number of bins for virtual gamma reduced
+    from 4000 to 2000.
+
+02 February 2013: V.Ivant (emmuons-V09-06-01)
+- G4MuPairProductionModel - make main table of differential cross
+    section private and not static, because G4hPairProductionModel
+    inherit of this class and muons cannot share the same tables with 
+    hadrons; two new inline access methods are added GetSecondaryEnergy
+    and GetDifferentialCrossSection.
+
+
+01 February 2013: V.Ivant (emmuons-V09-06-00)
+- G4MuPairProductionModel - (A.Bogdanov) - extended grid of differential
+  cross section tables (from 8 to 40 points in muon energy, from 1000 to
+  4000 points in energy of e+e- pair); use more fast binary search of 
+  index in the table; make table static - common for all threads 
 
 06 November 2012: V.Ivant (emmuons-V09-05-06)
 - G4MuBremsstrahlungModel, G4MuPairProductionModel - reduce number of

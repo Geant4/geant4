@@ -31,6 +31,11 @@
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
+//  The definitions of these specializations have been moved to the
+//  to the header file to solve Windows linking problem
+
+#if 0
+
 template <> void G4AnyType::Ref<bool>::FromString(const std::string& val)  {
   fRef = G4UIcommand::ConvertToBool(val.c_str());
 }
@@ -43,3 +48,5 @@ template <> void G4AnyType::Ref<G4String>::FromString(const std::string& val)  {
 template <> void G4AnyType::Ref<G4ThreeVector>::FromString(const std::string& val)  {
   fRef = G4UIcommand::ConvertTo3Vector(val.c_str());
 }
+
+#endif

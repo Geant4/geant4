@@ -26,17 +26,17 @@
 /// \file field/field03/include/F03FieldMessenger.hh
 /// \brief Definition of the F03FieldMessenger class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F03FieldMessenger.hh 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F03FieldMessenger_h
 #define F03FieldMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
 
 class F03FieldSetup;
 class G4UIdirectory;
@@ -44,19 +44,22 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F03FieldMessenger: public G4UImessenger
 {
   public:
     F03FieldMessenger(F03FieldSetup* );
-    ~F03FieldMessenger();
-    
+    virtual ~F03FieldMessenger();
+ 
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+ 
   private:
 
     F03FieldSetup*             fEMfieldSetup;
+
     G4UIdirectory*             fFieldDir;
+
     G4UIcmdWithAnInteger*      fStepperCmd;
     G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
     G4UIcmdWithADoubleAndUnit* fMinStepCmd;
@@ -64,4 +67,3 @@ class F03FieldMessenger: public G4UImessenger
 };
 
 #endif
-

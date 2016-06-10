@@ -84,7 +84,7 @@ G4bool CML2ExpVoxels::loadData(void)
 	G4double expDose;
 
 	in.open(fullFileIn, std::ios::in);
-	if (in !=0)
+	if (in)
 	{
 		G4String appo;
 		char a[1000];

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VertexCode.hh 67999 2013-03-13 11:14:32Z gcosmo $
 //
 #ifndef G4VertexCode_h
 #define G4VertexCode_h 1

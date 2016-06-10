@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuMinusCapturePrecompound.cc 68700 2013-04-05 08:44:19Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -69,6 +69,7 @@ G4MuMinusCapturePrecompound::G4MuMinusCapturePrecompound(
   fProton = G4Proton::Proton();
   fNeutron = G4Neutron::Neutron();
   fThreshold = 10*MeV;
+  fTime = 0.0;
   fPreCompound = ptr;
   if(!ptr) { 
     G4HadronicInteraction* p =

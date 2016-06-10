@@ -36,6 +36,9 @@
 /// \file hadronic/Hadr02/include/G4GlaubAADataSetHandler.hh
 /// \brief Definition of the G4GlaubAADataSetHandler class
 //
+// $Id: G4GlaubAADataSetHandler.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4GlaubAADataSetHandler_h
 #define G4GlaubAADataSetHandler_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,6 +62,7 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+
 #include "G4ParticleDefinition.hh"
 #include "G4Isotope.hh"
 #include "globals.hh"
@@ -76,63 +80,73 @@ class G4DPMJET2_5Model;
 
 typedef std::map< G4int, G4ParamType1GlaubAADataSet *, std::less< G4int > >
   G4GlaubAADataSetIndex;
-////////////////////////////////////////////////////////////////////////////////
-//
-//class G4GlaubAADataSetHandler : public G4VGlauberDataSetHandler
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4GlaubAADataSetHandler
 {
   
-  protected:
-    G4GlaubAADataSetHandler ();
+protected:
+  G4GlaubAADataSetHandler ();
     
-  public:
-    virtual ~G4GlaubAADataSetHandler ();
-    static G4GlaubAADataSetHandler* getInstance ();
+public:
 
-    G4bool IsGlauberDataSetAvailable (const G4int AP, const G4int AT) const;
-    G4bool SetCurrentGlauberDataSet (const G4int AP, const G4int AT,
-      const G4double ppn = 0.0);
-    G4GlaubAADataSet *GetCurrentGlauberDataSet () const;
-    void   ResetCurrentGlauberDataSet ();
-    G4double GetValueN (const G4double v, const G4double ppn1 = 0.0);
-    G4double GetValueM (const G4double v, const G4double ppn1 = 0.0);
+  virtual ~G4GlaubAADataSetHandler ();
+  static G4GlaubAADataSetHandler* getInstance ();
 
-    void   SetMaxGlauberDataSets (const G4int n);
-    G4int  GetMaxGlauberDataSets () const;
+  G4bool IsGlauberDataSetAvailable (const G4int AP, const G4int AT) const;
+  G4bool SetCurrentGlauberDataSet (const G4int AP, const G4int AT,
+				   const G4double ppn = 0.0);
+  G4GlaubAADataSet *GetCurrentGlauberDataSet () const;
+  void   ResetCurrentGlauberDataSet ();
+  G4double GetValueN (const G4double v, const G4double ppn1 = 0.0);
+  G4double GetValueM (const G4double v, const G4double ppn1 = 0.0);
+
+  void   SetMaxGlauberDataSets (const G4int n);
+  G4int  GetMaxGlauberDataSets () const;
     
-    void SetVerboseLevel (const G4int i);
-    G4int GetVerboseLevel () const;
-    G4int UnloadAllGlauberData ();
+  inline void SetVerboseLevel (const G4int i);
+  inline G4int GetVerboseLevel () const;
+
+  G4int UnloadAllGlauberData ();
     
-  private:
-    G4VGlauberDataSet *LoadGlauberDataReturnPtr(const G4int AP, const G4int AT);
+private:
 
-    G4bool   CheckIfSpace () const;
-    G4int    GetIndexID (const G4int AP, const G4int AT) const;
-    G4String GetStringID (const G4int AP, const G4int AT) const;
-    G4String GetProjectileStringID (const G4int AP) const;
-    G4String GetTargetStringID (const G4int AT) const;
+  G4VGlauberDataSet *LoadGlauberDataReturnPtr(const G4int AP, const G4int AT);
+
+  G4bool   CheckIfSpace () const;
+  G4int    GetIndexID (const G4int AP, const G4int AT) const;
+  G4String GetStringID (const G4int AP, const G4int AT) const;
+  G4String GetProjectileStringID (const G4int AP) const;
+  G4String GetTargetStringID (const G4int AT) const;
     
-    static G4GlaubAADataSetHandler *instance;
+  static G4GlaubAADataSetHandler *instance;
 
-    G4GlaubAADataSetIndex          theIndex;
-    G4String                       glauberDataSetDir;
+  G4GlaubAADataSetIndex          theIndex;
+  G4String                       glauberDataSetDir;
 
-    G4int                          maxGlauberDataSets;
-    G4int                          cntGlauberDataSets;
+  G4int                          maxGlauberDataSets;
+  G4int                          cntGlauberDataSets;
 
-    G4GlaubAADataSet              *theCurrentGlauberDataSet;
-    G4double                       ppnCurrent;
-    G4bool                         usingLocalGlauberDataSet;
+  G4GlaubAADataSet              *theCurrentGlauberDataSet;
+  G4double                       ppnCurrent;
+  G4bool                         usingLocalGlauberDataSet;
 
-    G4int                          maxArray;
+  G4int                          maxArray;
     
-    G4int                          verboseLevel;
+  G4int                          verboseLevel;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline void G4GlaubAADataSetHandler::SetVerboseLevel (const G4int i)
-  {verboseLevel = i;}
+{verboseLevel = i;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 inline G4int G4GlaubAADataSetHandler::GetVerboseLevel () const
-  {return verboseLevel;}
+{return verboseLevel;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LogicalVolume.hh 78050 2013-12-03 08:17:33Z gcosmo $
 //
 // 
 // class G4LogicalVolume
@@ -96,6 +96,7 @@
 //    - Flags if the Logical Volume is an envelope for a FastSimulationManager.
 
 // History:
+// 15.01.13 G.Cosmo, A.Dotti: Modified for thread-safety for MT
 // 12.11.04 G.Cosmo: Added GetMass() method for computing mass of the tree
 // 24.09.02 G.Cosmo: Added flags and accessors for region cuts handling
 // 17.05.02 G.Cosmo: Added IsToOptimise() method and related flag
@@ -112,11 +113,12 @@
 #ifndef G4LOGICALVOLUME_HH
 #define G4LOGICALVOLUME_HH
 
+#include <vector>
+
 #include "G4Types.hh"
 #include "G4Region.hh"           // Required by inline methods
 #include "G4VPhysicalVolume.hh"  // Need operator == for vector fdaughters
-#include <vector>
-#include <assert.h>
+#include "G4GeomSplitter.hh"     // Needed for MT RW data splitting
 
 // Forward declarations
 //
@@ -130,12 +132,64 @@ class G4VisAttributes;
 class G4FastSimulationManager;
 class G4MaterialCutsCouple;
 
+class G4LVData
+{
+  // Encapsulates the fields associated to the class
+  // G4LogicalVolume that may not be read-only. 
+
+  public:
+    G4LVData();
+    void initialize() {
+     fSolid = 0;
+     fSensitiveDetector = 0;
+     fFieldManager = 0;
+     fMaterial = 0;
+     fMass = 0.0;
+     fCutsCouple = 0;
+    }
+
+  public:
+
+    G4VSolid* fSolid;
+      // Pointer to solid.
+    G4VSensitiveDetector* fSensitiveDetector;
+      // Pointer to sensitive detector.
+    G4FieldManager* fFieldManager;
+      // Pointer (possibly 0) to (magnetic or other) field manager object.
+    G4Material* fMaterial;
+      // Pointer to material at this node.
+    G4double fMass;
+      // Mass of the logical volume tree.
+    G4MaterialCutsCouple* fCutsCouple;
+      // Pointer (possibly 0) to associated production cuts.
+};
+
+// The type G4LVManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4LVData. When each thread
+// initializes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4LogicalVolume instance, there is
+// a corresponding G4LVData instance. All G4LVData instances are organized
+// by the class G4LVManager as an array.
+// The field "int instanceID" is added to the class G4LogicalVolume.
+// The value of this field in each G4LogicalVolume instance is the subscript
+// of the corresponding G4LVData instance.
+// In order to use the class G4LVManager, we add a static member in the class
+// G4LogicalVolume as follows: "static G4LVManager subInstanceManager".
+// For the master thread, the array for G4LVData instances grows dynamically
+// along with G4LogicalVolume instances are created. For each worker thread,
+// it copies the array of G4LVData instances from the master thread.
+// In addition, it invokes a method similiar to the constructor explicitly
+// to achieve the partial effect for each instance in the array.
+//
+typedef G4GeomSplitter<G4LVData>  G4LVManager;
+
 class G4LogicalVolume
 {
   typedef std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
 
   public:  // with description
-  
+    
     G4LogicalVolume(G4VSolid* pSolid,
                     G4Material* pMaterial,
               const G4String& name,
@@ -181,7 +235,8 @@ class G4LogicalVolume
     G4int TotalVolumeEntities() const;
       // Returns the total number of physical volumes (replicated or placed)
       // in the tree represented by the current logical volume.
-
+    inline EVolume CharacteriseDaughters() const;
+      // Characterise the daughters of this logical volume.
 
     inline G4VSolid* GetSolid() const;
     inline void SetSolid(G4VSolid *pSolid);
@@ -209,7 +264,11 @@ class G4LogicalVolume
       //       method returns the mass of the present logical volume only 
       //       (subtracted for the volume occupied by the daughter volumes).
       //       An optional argument to specify a material is also provided.
-
+    void   ResetMass(); 
+      // Ensure that cached value of Mass is invalidated - due to change in 
+      //  state, e.g. change of size of Solid, change of type of solid,
+      //              or the addition/deletion of a daughter volume. 
+ 
     inline G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.
     void SetFieldManager(G4FieldManager *pFieldMgr, G4bool forceToAllDaughters); 
@@ -285,8 +344,42 @@ class G4LogicalVolume
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    inline G4FieldManager* GetMasterFieldManager() const;
+      // Gets current FieldManager for the master thread.
+    inline G4VSensitiveDetector* GetMasterSensitiveDetector() const;
+      // Gets current SensitiveDetector for the master thread.
+    inline G4VSolid* GetMasterSolid() const;
+      // Gets current Solid for the master thread.
+  
+    inline G4int GetInstanceID() const;
+      // Returns the instance ID.
+    static const G4LVManager& GetSubInstanceManager();
+ 
+      // Sets the private data instance manager - in order to use a particular Workspace
+
+    // static const G4LVManager* GetSubInstanceManagerPtr(); 
+    // static const G4LVManager  SetSubInstanceManager(G4LVManager* subInstanceManager);
+      // Revised Implementation - to enable Workspaces which can used by different
+      //   threads at different times (only one thread or task can use a workspace at a time. ) 
+
     inline void Lock();
       // Set lock identifier for final deletion of entity.
+
+    void InitialiseWorker(G4LogicalVolume *ptrMasterObject,
+                          G4VSolid* pSolid, G4VSensitiveDetector* pSDetector);
+      // This method is similar to the constructor. It is used by each worker
+      // thread to achieve the partial effect as that of the master thread.
+
+    void TerminateWorker(G4LogicalVolume *ptrMasterObject);
+      // This method is similar to the destructor. It is used by each worker
+      // thread to achieve the partial effect as that of the master thread.
+
+    inline void AssignFieldManager( G4FieldManager *fldMgr);
+      // Set the FieldManager - only at this level (do not push down hierarchy)
+  
+    // Optimised Methods - passing thread instance of worker data
+    inline static G4VSolid* GetSolid(G4LVData &instLVdata) ; // const;
+    inline static void SetSolid(G4LVData &instLVdata, G4VSolid *pSolid);
 
   private:
 
@@ -300,16 +393,10 @@ class G4LogicalVolume
 
     G4PhysicalVolumeList fDaughters;
       // Vector of daughters. Given initial size of 0.
-    G4FieldManager* fFieldManager;
-      // Pointer (possibly 0) to (magnetic or other) field manager object.
-    G4Material* fMaterial;
-      // Pointer to material at this node.
     G4String fName;
       // Name of logical volume.
-    G4VSensitiveDetector* fSensitiveDetector;
       // Pointer (possibly 0) to `Hit' object.
-    G4VSolid* fSolid;
-      // Pointer to solid.
+
     G4UserLimits* fUserLimits;
       // Pointer (possibly 0) to user Step limit object for this node.
     G4SmartVoxelHeader* fVoxel;
@@ -323,16 +410,28 @@ class G4LogicalVolume
     G4double fSmartless;
       // Quality for optimisation, average number of voxels to be spent
       // per content.
-    G4double fMass;
-      // Mass of the logical volume tree.
     const G4VisAttributes* fVisAttributes;
       // Pointer (possibly 0) to visualization attributes.
     G4Region* fRegion;
       // Pointer to the cuts region (if any)
-    G4MaterialCutsCouple* fCutsCouple;
-      // Pointer (possibly 0) to associated production cuts.
     G4double fBiasWeight;
       // Weight used in the event biasing technique.
+  
+    G4bool fChangedState;
+      // Invalidates any estimations from previous state
+  
+    G4int instanceID;
+      // This new field is used as instance ID.
+    G4GEOM_DLL static G4LVManager subInstanceManager;
+      // This new field helps to use the class G4LVManager introduced above.    
+
+    // Shadow of master pointers.
+    // Each worker thread can access this field from the master thread
+    // through these pointers.
+    //
+    G4VSolid* fSolid;
+    G4VSensitiveDetector* fSensitiveDetector;
+    G4FieldManager* fFieldManager;
 };
 
 #include "G4LogicalVolume.icc"

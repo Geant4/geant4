@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: GammaRayTelHadronPhysics.cc 76280 2013-11-08 12:54:34Z gcosmo $
 //
 
 #include <iomanip>   
@@ -38,10 +38,7 @@
 
 GammaRayTelHadronPhysics::GammaRayTelHadronPhysics(const G4String& name)
                     :  G4VPhysicsConstructor(name)
-{
- 
-
-}
+{;}
 
 GammaRayTelHadronPhysics::~GammaRayTelHadronPhysics()
 {
@@ -66,33 +63,49 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   */
 
   // Elastic Process
-  theElasticModel = new G4LElastic();
+  theElasticModel = new G4HadronElastic();
   theElasticProcess.RegisterMe(theElasticModel);
 
-  // pi+ and pi-  
+  const G4double theBERTMin =   0.0*GeV;
+  const G4double theBERTMax =   5.0*GeV;
+  const G4double theFTFMin =    4.0*GeV;
+  const G4double theFTFMax =  100.0*TeV;
   
-  theCascade = new G4GeneratorPrecompoundInterface();
-  thePreEquilib = new G4PreCompoundModel(&theHandler);
-  theCascade -> SetDeExcitation(thePreEquilib);
-  
-  theStringModel = new G4QGSModel< G4QGSParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-  theStringModel -> SetFragmentationModel(theStringDecay);
- 
-  theModel = new G4TheoFSGenerator();
-  theModel -> SetTransport(theCascade);
-  theModel -> SetHighEnergyGenerator(theStringModel);
-  theModel -> SetMinEnergy(15*GeV);
-  theModel -> SetMaxEnergy(100*TeV);
+  theStringModel = new G4FTFModel;
+  theStringDecay = new G4ExcitedStringDecay( new G4LundStringFragmentation );
+  theStringModel->SetFragmentationModel( theStringDecay );
+  thePreEquilib = new G4PreCompoundModel( new G4ExcitationHandler );
+  theCascade = new G4GeneratorPrecompoundInterface( thePreEquilib );
+
+  theModel = new G4TheoFSGenerator( "FTFP" );
+  theModel->SetHighEnergyGenerator( theStringModel );
+  theModel->SetTransport( theCascade );
+  theModel->SetMinEnergy( theFTFMin );
+  theModel->SetMaxEnergy( theFTFMax );
+
+  G4TheoFSGenerator* theModelDownToZero =  new G4TheoFSGenerator( "FTFP" );
+  theModelDownToZero->SetHighEnergyGenerator( theStringModel );
+  theModelDownToZero->SetTransport( theCascade );
+  theModelDownToZero->SetMinEnergy(0*eV);
+  theModelDownToZero->SetMaxEnergy(theFTFMax );
+
+  G4CascadeInterface * theBERTModel = new G4CascadeInterface;
+  theBERTModel->SetMinEnergy( theBERTMin );
+  theBERTModel->SetMaxEnergy( theBERTMax );
+
+  // pi+ and pi-      
+
+  G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG( new G4PiNuclearCrossSection, 91*GeV );
+  G4VCrossSectionDataSet * theAntiNucleonData = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
+
 
   // PionPlus
   G4ParticleDefinition* pion = G4PionPlus::PionPlusDefinition();
   pManager = pion ->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEPionPlusModel = new G4LEPionPlusInelastic();
-  thePionPlusInelastic.RegisterMe(theLEPionPlusModel);
+  thePionPlusInelastic.AddDataSet(thePiData);
+  thePionPlusInelastic.RegisterMe(theBERTModel);
   thePionPlusInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&thePionPlusInelastic);
 
@@ -107,9 +120,8 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager = pionMinus -> GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEPionMinusModel = new G4LEPionMinusInelastic();
-  thePionMinusInelastic.RegisterMe(theLEPionMinusModel);
+  thePionMinusInelastic.AddDataSet(thePiData);
+  thePionMinusInelastic.RegisterMe(theBERTModel);
   thePionMinusInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&thePionMinusInelastic);
 
@@ -126,10 +138,9 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager = kaonPlus->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEKaonPlusModel = new G4LEKaonPlusInelastic();
-  theHEKaonPlusModel = new G4HEKaonPlusInelastic();
-  theKaonPlusInelastic.RegisterMe(theLEKaonPlusModel);
+  theKaonPlusInelastic.AddDataSet( G4CrossSectionDataSetRegistry::Instance()->
+				   GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
+  theKaonPlusInelastic.RegisterMe(theBERTModel);
   theKaonPlusInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theKaonPlusInelastic);
 
@@ -144,11 +155,10 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager = kaonMinus->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEKaonMinusModel = new G4LEKaonMinusInelastic();
-  theHEKaonMinusModel = new G4HEKaonMinusInelastic();
-  theKaonMinusInelastic.RegisterMe(theLEKaonMinusModel);
-  theKaonMinusInelastic.RegisterMe(theHEKaonMinusModel);
+  theKaonMinusInelastic.AddDataSet( G4CrossSectionDataSetRegistry::Instance()->
+				   GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
+  theKaonMinusInelastic.RegisterMe(theBERTModel);
+  theKaonMinusInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theKaonMinusInelastic);
 
   pManager->AddProcess(&theKaonMinusIonisation, ordInActive,2, 2);
@@ -163,32 +173,28 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager = G4KaonZeroLong::KaonZeroLong()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEKaonZeroLModel = new G4LEKaonZeroLInelastic();
-  theHEKaonZeroLModel = new G4HEKaonZeroInelastic();
-  theKaonZeroLInelastic.RegisterMe(theLEKaonZeroLModel);
-  theKaonZeroLInelastic.RegisterMe(theHEKaonZeroLModel);
+  theKaonZeroLInelastic.AddDataSet( G4CrossSectionDataSetRegistry::Instance()
+				    ->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
+  theKaonZeroLInelastic.RegisterMe(theBERTModel);
+  theKaonZeroLInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theKaonZeroLInelastic);
  
   // KaonZeroS
   pManager = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEKaonZeroSModel = new G4LEKaonZeroSInelastic();
-  theHEKaonZeroSModel = new G4HEKaonZeroInelastic();
-  theKaonZeroSInelastic.RegisterMe(theLEKaonZeroSModel);
-  theKaonZeroSInelastic.RegisterMe(theHEKaonZeroSModel);
+  theKaonZeroSInelastic.AddDataSet( G4CrossSectionDataSetRegistry::Instance()
+				    ->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
+  theKaonZeroSInelastic.RegisterMe(theBERTModel);
+  theKaonZeroSInelastic.RegisterMe(theModel); 
   pManager->AddDiscreteProcess(&theKaonZeroSInelastic);
 
   // Proton
   pManager = G4Proton::Proton()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEProtonModel = new G4LEProtonInelastic();
-  theHEProtonModel = new G4HEProtonInelastic();
-  theProtonInelastic.RegisterMe(theLEProtonModel);
+  theProtonInelastic.AddDataSet(new G4BGGNucleonInelasticXS( G4Proton::Proton() ) );
+  theProtonInelastic.RegisterMe(theBERTModel);
   theProtonInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theProtonInelastic);
 
@@ -202,11 +208,8 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager = G4AntiProton::AntiProton()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEAntiProtonModel = new G4LEAntiProtonInelastic();
-  theHEAntiProtonModel = new G4HEAntiProtonInelastic();
-  theAntiProtonInelastic.RegisterMe(theLEAntiProtonModel);
-  theAntiProtonInelastic.RegisterMe(theHEAntiProtonModel);
+  theAntiProtonInelastic.AddDataSet( theAntiNucleonData );
+  theAntiProtonInelastic.RegisterMe(theModelDownToZero);
   pManager->AddDiscreteProcess(&theAntiProtonInelastic);
 
   pManager->AddProcess(&theAntiProtonIonisation, ordInActive,2, 2);
@@ -221,10 +224,8 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   pManager = G4Neutron::Neutron()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLENeutronModel = new G4LENeutronInelastic();
-  theHENeutronModel = new G4HENeutronInelastic();
-  theNeutronInelastic.RegisterMe(theLENeutronModel);
+  theNeutronInelastic.AddDataSet( new G4BGGNucleonInelasticXS( G4Neutron::Neutron() ));
+  theNeutronInelastic.RegisterMe(theBERTModel);
   theNeutronInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theNeutronInelastic);
   
@@ -232,201 +233,16 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   theNeutronFission.RegisterMe(theNeutronFissionModel);
   pManager->AddDiscreteProcess(&theNeutronFission);
 
-  theNeutronCaptureModel = new G4LCapture();
-  theNeutronCapture.RegisterMe(theNeutronCaptureModel);
-  pManager->AddDiscreteProcess(&theNeutronCapture);
+  theNeutronCapture = new G4HadronCaptureProcess();
+  theNeutronCapture->AddDataSet(new G4NeutronCaptureXS()); 
+  pManager->AddDiscreteProcess(theNeutronCapture);
 
   // AntiNeutron
   pManager = G4AntiNeutron::AntiNeutron()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEAntiNeutronModel = new G4LEAntiNeutronInelastic();
-  theHEAntiNeutronModel = new G4HEAntiNeutronInelastic();
-  theAntiNeutronInelastic.RegisterMe(theLEAntiNeutronModel);
-  theAntiNeutronInelastic.RegisterMe(theHEAntiNeutronModel);
+  pManager->AddDiscreteProcess(&theElasticProcess);  
+  theAntiNeutronInelastic.AddDataSet( theAntiNucleonData );
+  theAntiNeutronInelastic.RegisterMe(theModelDownToZero);
   pManager->AddDiscreteProcess(&theAntiNeutronInelastic);
-    
-  pManager->AddRestProcess(&theAntiNeutronAnnihilation);
-
-  // Lambda
-  pManager = G4Lambda::Lambda()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLELambdaModel = new G4LELambdaInelastic();
-  theHELambdaModel = new G4HELambdaInelastic();
-  theLambdaInelastic.RegisterMe(theLELambdaModel);
-  theLambdaInelastic.RegisterMe(theHELambdaModel);
-  pManager->AddDiscreteProcess(&theLambdaInelastic);
-  
-  // AntiLambda
-  pManager = G4AntiLambda::AntiLambda()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEAntiLambdaModel = new G4LEAntiLambdaInelastic();
-  theHEAntiLambdaModel = new G4HEAntiLambdaInelastic();
-  theAntiLambdaInelastic.RegisterMe(theLEAntiLambdaModel);
-  theAntiLambdaInelastic.RegisterMe(theHEAntiLambdaModel);
-  pManager->AddDiscreteProcess(&theAntiLambdaInelastic);
-    
-  // SigmaMinus
-  pManager = G4SigmaMinus::SigmaMinus()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLESigmaMinusModel = new G4LESigmaMinusInelastic();
-  theHESigmaMinusModel = new G4HESigmaMinusInelastic();
-  theSigmaMinusInelastic.RegisterMe(theLESigmaMinusModel);
-  theSigmaMinusInelastic.RegisterMe(theHESigmaMinusModel);
-  pManager->AddDiscreteProcess(&theSigmaMinusInelastic);
-
-  pManager->AddProcess(&theSigmaMinusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&theSigmaMinusMult);
-  pManager->SetProcessOrdering(&theSigmaMinusMult, idxAlongStep, 1);
-  pManager->SetProcessOrdering(&theSigmaMinusMult, idxPostStep, 1);
-
-  // anti-SigmaMinus
-  pManager = G4AntiSigmaMinus::AntiSigmaMinus()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEAntiSigmaMinusModel = new G4LEAntiSigmaMinusInelastic();
-  theHEAntiSigmaMinusModel = new G4HEAntiSigmaMinusInelastic();
-  theAntiSigmaMinusInelastic.RegisterMe(theLEAntiSigmaMinusModel);
-  theAntiSigmaMinusInelastic.RegisterMe(theHEAntiSigmaMinusModel);
-  pManager->AddDiscreteProcess(&theAntiSigmaMinusInelastic);
-
-  pManager->AddProcess(&theAntiSigmaMinusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&theAntiSigmaMinusMult);
-  pManager->SetProcessOrdering(&theAntiSigmaMinusMult, idxAlongStep, 1);
-  pManager->SetProcessOrdering(&theAntiSigmaMinusMult, idxPostStep, 1);
-
-  // SigmaPlus
-  pManager = G4SigmaPlus::SigmaPlus()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLESigmaPlusModel = new G4LESigmaPlusInelastic();
-  theHESigmaPlusModel = new G4HESigmaPlusInelastic();
-  theSigmaPlusInelastic.RegisterMe(theLESigmaPlusModel);
-  theSigmaPlusInelastic.RegisterMe(theHESigmaPlusModel);
-  pManager->AddDiscreteProcess(&theSigmaPlusInelastic);
-
-  pManager->AddProcess(&theSigmaPlusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&theSigmaPlusMult);
-  pManager->SetProcessOrdering(&theSigmaPlusMult, idxAlongStep, 1);
-  pManager->SetProcessOrdering(&theSigmaPlusMult, idxPostStep, 1);
-
-  // anti-SigmaPlus
-  pManager = G4AntiSigmaPlus::AntiSigmaPlus()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEAntiSigmaPlusModel = new G4LEAntiSigmaPlusInelastic();
-  theHEAntiSigmaPlusModel = new G4HEAntiSigmaPlusInelastic();
-  theAntiSigmaPlusInelastic.RegisterMe(theLEAntiSigmaPlusModel);
-  theAntiSigmaPlusInelastic.RegisterMe(theHEAntiSigmaPlusModel);
-  pManager->AddDiscreteProcess(&theAntiSigmaPlusInelastic);
-
-  pManager->AddProcess(&theAntiSigmaPlusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&theAntiSigmaPlusMult);
-  pManager->SetProcessOrdering(&theAntiSigmaPlusMult, idxAlongStep, 1);
-  pManager->SetProcessOrdering(&theAntiSigmaPlusMult, idxPostStep, 1);
-
-  // XiMinus
-  pManager = G4XiMinus::XiMinus()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEXiMinusModel = new G4LEXiMinusInelastic();
-  theHEXiMinusModel = new G4HEXiMinusInelastic();
-  theXiMinusInelastic.RegisterMe(theLEXiMinusModel);
-  theXiMinusInelastic.RegisterMe(theHEXiMinusModel);
-  pManager->AddDiscreteProcess(&theXiMinusInelastic);
-
-  pManager->AddProcess(&theXiMinusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&theXiMinusMult);
-  pManager->SetProcessOrdering(&theXiMinusMult, idxAlongStep, 1);
-  pManager->SetProcessOrdering(&theXiMinusMult, idxPostStep, 1);
-
-  // anti-XiMinus
-  pManager = G4AntiXiMinus::AntiXiMinus()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEAntiXiMinusModel = new G4LEAntiXiMinusInelastic();
-  theHEAntiXiMinusModel = new G4HEAntiXiMinusInelastic();
-  theAntiXiMinusInelastic.RegisterMe(theLEAntiXiMinusModel);
-  theAntiXiMinusInelastic.RegisterMe(theHEAntiXiMinusModel);
-  pManager->AddDiscreteProcess(&theAntiXiMinusInelastic);
-
-  pManager->AddProcess(&theAntiXiMinusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&theAntiXiMinusMult);
-  pManager->SetProcessOrdering(&theAntiXiMinusMult, idxAlongStep, 1);
-  pManager->SetProcessOrdering(&theAntiXiMinusMult, idxPostStep, 1);
-
-  // XiZero
-  pManager = G4XiZero::XiZero()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEXiZeroModel = new G4LEXiZeroInelastic();
-  theHEXiZeroModel = new G4HEXiZeroInelastic();
-  theXiZeroInelastic.RegisterMe(theLEXiZeroModel);
-  theXiZeroInelastic.RegisterMe(theHEXiZeroModel);
-  pManager->AddDiscreteProcess(&theXiZeroInelastic);
-
-  // anti-XiZero
-  pManager = G4AntiXiZero::AntiXiZero()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEAntiXiZeroModel = new G4LEAntiXiZeroInelastic();
-  theHEAntiXiZeroModel = new G4HEAntiXiZeroInelastic();
-  theAntiXiZeroInelastic.RegisterMe(theLEAntiXiZeroModel);
-  theAntiXiZeroInelastic.RegisterMe(theHEAntiXiZeroModel);
-  pManager->AddDiscreteProcess(&theAntiXiZeroInelastic);
-
-  // OmegaMinus
-  pManager = G4OmegaMinus::OmegaMinus()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEOmegaMinusModel = new G4LEOmegaMinusInelastic();
-  theHEOmegaMinusModel = new G4HEOmegaMinusInelastic();
-  theOmegaMinusInelastic.RegisterMe(theLEOmegaMinusModel);
-  theOmegaMinusInelastic.RegisterMe(theHEOmegaMinusModel);
-  pManager->AddDiscreteProcess(&theOmegaMinusInelastic);
-
-  pManager->AddProcess(&theOmegaMinusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&theOmegaMinusMult);
-  pManager->SetProcessOrdering(&theOmegaMinusMult, idxAlongStep, 1);
-  pManager->SetProcessOrdering(&theOmegaMinusMult, idxPostStep, 1);
-
-  // anti-OmegaMinus
-  pManager = G4AntiOmegaMinus::AntiOmegaMinus()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-
-  theLEAntiOmegaMinusModel = new G4LEAntiOmegaMinusInelastic();
-  theHEAntiOmegaMinusModel = new G4HEAntiOmegaMinusInelastic();
-  theAntiOmegaMinusInelastic.RegisterMe(theLEAntiOmegaMinusModel);
-  theAntiOmegaMinusInelastic.RegisterMe(theHEAntiOmegaMinusModel);
-  pManager->AddDiscreteProcess(&theAntiOmegaMinusInelastic);
-
-  pManager->AddProcess(&theAntiOmegaMinusIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&theAntiOmegaMinusMult);
-  pManager->SetProcessOrdering(&theAntiOmegaMinusMult, idxAlongStep, 1);
-  pManager->SetProcessOrdering(&theAntiOmegaMinusMult, idxPostStep, 1);
 
 }

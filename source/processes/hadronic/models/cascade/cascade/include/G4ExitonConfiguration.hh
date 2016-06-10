@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ExitonConfiguration.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100909  Add function to reset values to zero
 // 20100924  Migrate to integer A and Z
@@ -31,12 +31,15 @@
 // 20110922  M. Kelsey -- Replace print() with stream operator<<(), put
 //		implementation into new .cc file.
 // 20121009  M. Kelsey -- Add empty() test for no excitons, fix constness
+// 20130622  M. Kelsey -- Add interface to copy data from G4Fragment
 
 #ifndef G4EXITON_CONFIGURATION_HH
 #define G4EXITON_CONFIGURATION_HH
 
 #include "globals.hh"
 #include <iosfwd>
+
+class G4Fragment;
 
 class G4ExitonConfiguration {
 public:
@@ -48,6 +51,11 @@ public:
     : protonQuasiParticles(qpp), neutronQuasiParticles(qnp), 
       protonHoles(qph), neutronHoles(qnh) {}
 
+  explicit G4ExitonConfiguration(const G4Fragment& frag)
+    : protonQuasiParticles(0), neutronQuasiParticles(0),
+      protonHoles(0), neutronHoles(0) { fill(frag); }
+
+
   void clear() {
     protonQuasiParticles = neutronQuasiParticles = 0;
     protonHoles = neutronHoles = 0;
@@ -57,6 +65,8 @@ public:
     return (protonQuasiParticles==0 && neutronQuasiParticles==0 &&
 	    protonHoles==0 && neutronHoles==0);
   }
+
+  void fill(const G4Fragment& frag);	// Initialize from G4Fragment data
 
   bool operator==(const G4ExitonConfiguration& right) const {
     return ( (&right == this) ||

@@ -1,6 +1,6 @@
 # - Configure options for Geant4 UI/Vis requiring Third Party Libraries
-# All core Interfaces not requiring third party support are built 
-# automatically with platform differences taken into account. 
+# All core Interfaces not requiring third party support are built
+# automatically with platform differences taken into account.
 # These are:
 #
 # UI Category : Always built on supported platforms
@@ -9,10 +9,11 @@
 #    + - G4UIcsh  : UNIX, WIN32
 #  G4UIWin32    : WIN32
 #
-# UI category : Built on supported platforms when Third Party 
+# UI category : Built on supported platforms when Third Party
 # library(libraries) available
 #  G4UIQt  : UNIX, WIN32 (Requires : Qt4)
-#  G4UIXm  : UNIX (Requires : Qt4)
+#  G4UIWt  : Web (Requires : Wt)
+#  G4UIXm  : UNIX
 #  G4UIXaw : DEPRECATED
 #
 # Vis Category: Always built on supported platforms
@@ -24,7 +25,7 @@
 #  Tree
 #  VRML
 #
-# Vis Category : Built on supported platforms when Third Party 
+# Vis Category : Built on supported platforms when Third Party
 # library(libraries) available
 #  OpenGL : UNIX, WIN32
 #  OpenInventor : UNIX WIN32
@@ -60,9 +61,7 @@ if(GEANT4_USE_INVENTOR)
     endif()
   endif()
 
-  GEANT4_ADD_FEATURE(
-    GEANT4_USE_INVENTOR "Build OpenInventor Driver"
-    )
+  GEANT4_ADD_FEATURE(GEANT4_USE_INVENTOR "Build OpenInventor Driver")
 endif()
 
 
@@ -74,22 +73,78 @@ option(GEANT4_USE_QT "Build Geant4 with Qt4 support" OFF)
 if(GEANT4_USE_QT)
   # Find and configure Qt and OpenGL - require 4
   # This is fine on Mac OS X because Qt will use Framework GL.
-  # On WIN32 only, set QT_USE_IMPORTED_TARGETS. The Qt4 module will 
-  # otherwise set QT_LIBRARIES using the 'optimized A; debug Ad' 
-  # technique. CMake will then complain because when building DLLs we reset 
+  # On WIN32 only, set QT_USE_IMPORTED_TARGETS. The Qt4 module will
+  # otherwise set QT_LIBRARIES using the 'optimized A; debug Ad'
+  # technique. CMake will then complain because when building DLLs we reset
   # LINK_INTERFACE_LIBRARIES and this cannot be passed a link of this form.
   # This means we have to recreate the imported targets later though...
   if(WIN32)
     set(QT_USE_IMPORTED_TARGETS ON)
   endif()
 
-  find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  find_package(Qt5Core QUIET)
+  find_package(Qt5Gui QUIET)
+  find_package(Qt5Widgets QUIET)
+  find_package(Qt5OpenGL QUIET)
+  find_package(Qt5PrintSupport QUIET)
+
+  if(Qt5Core_FOUND
+      AND Qt5Gui_FOUND
+      AND Qt5Widgets_FOUND
+      AND Qt5OpenGL_FOUND
+      AND Qt5PrintSupport_FOUND)
+    # Compatibility
+    macro(qt4_wrap_cpp)
+      qt5_wrap_cpp(${ARGN})
+    endmacro()
+    set(Qt5_USE_FILE_IN "${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4UseQt5.cmake.in")
+    set(QT_USE_FILE "${PROJECT_BINARY_DIR}/Geant4UseQt5.cmake")
+    configure_file("${Qt5_USE_FILE_IN}" "${QT_USE_FILE}" @ONLY)
+    get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
+    set(G4QTLIBLIST "-lQt5PrintSupport -lQt5Widgets -lQt5Gui -lQt5Core")
+    set(G4GLQTLIBLIST "-lQt5OpenGL ${G4QTLIBLIST}")
+  else()
+    unset(Qt5Core_DIR CACHE)
+    unset(Qt5Gui_DIR CACHE)
+    unset(Qt5Widgets_DIR CACHE)
+    unset(Qt5OpenGL_DIR CACHE)
+    unset(Qt5PrintSupport_DIR CACHE)
+    find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  endif()
+
   find_package(OpenGL REQUIRED)
+
+  # Variables for export
+  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PREFIX OUTPUT_VARIABLE G4QTHOME OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_LIBS OUTPUT_VARIABLE G4QTLIBPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   # OpenGL part of Qt is in OpenGL component so mark the need to
   # add OpenGL.
   set(GEANT4_USE_OPENGL ON)
   GEANT4_ADD_FEATURE(GEANT4_USE_QT "Build Geant4 with Qt support")
+endif()
+
+#-----------------------------------------------------------------------
+# Configure Wt Support
+#
+option(GEANT4_USE_WT "Build Geant4 with Wt4 support" OFF)
+mark_as_advanced(GEANT4_USE_WT)
+
+if(GEANT4_USE_WT)
+  # Find and configure Wt and OpenGL
+  find_package(Wt REQUIRED)
+  find_package(OpenGL REQUIRED)
+  find_package(Boost REQUIRED signals)
+
+  set(WT_DEFINITIONS "-DQT_NO_KEYWORDS")
+
+  # Link the library to the Wt library, plus its dependents.
+  list(APPEND Wt_LIBRARY "${Wt_HTTP_LIBRARY}" "${Boost_SIGNALS_LIBRARY}")
+
+  # WebGL part of Wt is in OpenGL component so mark the need to
+  # add OpenGL.
+  set(GEANT4_USE_OPENGL ON)
+  GEANT4_ADD_FEATURE(GEANT4_USE_WT "Build Geant4 with Wt support")
 endif()
 
 
@@ -98,7 +153,7 @@ endif()
 #-----------------------------------------------------------------------
 if(UNIX)
   # - Support for Client/Server DAWN driver
-  # mark as advanced because user should know what they're doing to use this
+  # mark as advanced because user should know what they're doing here
   option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support" OFF)
   #
   # Possible headers checks for needed network parts?
@@ -133,7 +188,7 @@ if(UNIX)
     find_package(X11 REQUIRED)
 
     # We also require Xmu, which isn't found by default
-    # Just the search in here, copying pattern from 
+    # Just the search in here, copying pattern from
     # FindX11. We don't add it to X11 libraries because it's only
     # needed in the OpenGL driver.
     #
@@ -142,11 +197,11 @@ if(UNIX)
 
     set(X11_INC_SEARCH_PATH
         /usr/pkg/xorg/include
-        /usr/X11R6/include 
-        /usr/X11R7/include 
+        /usr/X11R6/include
+        /usr/X11R7/include
         /usr/include/X11
-        /usr/openwin/include 
-        /usr/openwin/share/include 
+        /usr/openwin/include
+        /usr/openwin/share/include
         /opt/graphics/OpenGL/include
         )
 
@@ -154,12 +209,12 @@ if(UNIX)
         /usr/pkg/xorg/lib
         /usr/X11R6/lib
         /usr/X11R7/lib
-        /usr/openwin/lib 
+        /usr/openwin/lib
         )
 
     find_path(X11_Xmu_INCLUDE_PATH X11/Xmu/Xmu.h ${X11_INC_SEARCH_PATH})
     find_library(X11_Xmu_LIBRARY Xmu ${X11_SEARCH_PATH})
-    if(X11_Xmu_LIBRARY-NOTFOUND OR X11_Xmu_INCLUDE_PATH-NOTFOUND)
+    if(NOT X11_Xmu_LIBRARY OR NOT X11_Xmu_INCLUDE_PATH)
       message(FATAL_ERROR "could not find X11 Xmu library and/or headers")
     endif()
 
@@ -212,8 +267,8 @@ if(UNIX)
         )
 
       mark_as_advanced(
-        OPENGL_X11_INCLUDE_DIR 
-        OPENGL_X11_gl_LIBRARY 
+        OPENGL_X11_INCLUDE_DIR
+        OPENGL_X11_gl_LIBRARY
         OPENGL_X11_glu_LIBRARY
         )
 
@@ -231,7 +286,7 @@ if(UNIX)
 
       # Append the X11 GL libraries to the native paths
       set(OPENGL_INCLUDE_DIR ${OPENGL_INCLUDE_DIR} ${OPENGL_X11_INCLUDE_DIR})
-      set(OPENGL_LIBRARIES ${OPENGL_LIBRARIES} 
+      set(OPENGL_LIBRARIES ${OPENGL_LIBRARIES}
         ${OPENGL_X11_gl_LIBRARY}
         ${OPENGL_X11_glu_LIBRARY}
         )
@@ -253,7 +308,7 @@ if(UNIX)
   if(GEANT4_USE_XM)
     find_package(Motif REQUIRED)
     GEANT4_ADD_FEATURE(GEANT4_USE_XM "Build Geant4 with Xm Support")
-  endif()  
+  endif()
 endif()
 
 #-----------------------------------------------------------------------

@@ -36,6 +36,8 @@
 /// \file hadronic/Hadr02/src/G4FullGlaubAADataSet.cc
 /// \brief Implementation of the G4FullGlaubAADataSet class
 //
+// $Id: G4FullGlaubAADataSet.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4FullGlaubAADataSet.cc
@@ -56,6 +58,8 @@
 #include "G4FullGlaubAADataSet.hh"
 
 #include "G4DPMJET2_5Interface.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <iomanip>
 ///////////////////////////////////////////////////////////////////////////////
@@ -119,7 +123,8 @@ G4FullGlaubAADataSet::~G4FullGlaubAADataSet()
 {}
 ////////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4FullGlaubAADataSet::CreateGlauberData (const G4int AP1, const G4int AT1)
+G4bool 
+G4FullGlaubAADataSet::CreateGlauberData (const G4int AP1, const G4int AT1)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>0) {
@@ -237,7 +242,8 @@ G4double *G4FullGlaubAADataSet::GetArrayPointerM (const G4double ppn)
 // This appends the Glauber data from the arrays to the output file stream.
 // The format is intended to match the standard GLAUBER data file format.
 //
-std::ofstream & G4FullGlaubAADataSet::WriteDataToFile (std::ofstream &File) const
+std::ofstream & 
+G4FullGlaubAADataSet::WriteDataToFile (std::ofstream &File) const
 {
   File.unsetf(std::ios::fixed);
   File.setf(std::ios::scientific|std::ios::right|std::ios::adjustfield);

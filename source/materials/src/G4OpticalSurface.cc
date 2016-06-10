@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4OpticalSurface.cc 71488 2013-06-17 08:20:50Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,10 @@ G4OpticalSurface& G4OpticalSurface::operator=(const G4OpticalSurface& right)
       polish                     = right.polish;
       theMaterialPropertiesTable = right.theMaterialPropertiesTable;
       AngularDistribution        = right.AngularDistribution;
-      readFileHandle             = right.readFileHandle;
+      readLUTFileHandle          = right.readLUTFileHandle;
+      DichroicVector             = right.DichroicVector;
+
+      theSurfacePropertyTable    = right.theSurfacePropertyTable;
      } 
   return *this;
 }
@@ -94,6 +97,10 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
                 sigma_alpha = value;
                 polish = 0.0;
         }
+        else if ( model == dichroic ) {
+                sigma_alpha = value;
+                polish = 0.0;
+        }
 	else {
                 G4Exception("G4OpticalSurface::G4OpticalSurface()", "mat309",
                             FatalException,
@@ -101,26 +108,44 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 	}
 
         AngularDistribution = NULL;
+        DichroicVector      = NULL;
+
+        readLUTFileHandle   = NULL;
 
         if (type == dielectric_LUT) {
            AngularDistribution =
                        new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
-           ReadFile();
+           ReadLUTFile();
+        }
+
+        if (type == dielectric_dichroic) {
+           DichroicVector = new G4Physics2DVector();
+           ReadDichroicFile();
         }
 }
 
 G4OpticalSurface::~G4OpticalSurface()
 {
         if (AngularDistribution) delete AngularDistribution;
+        if (DichroicVector) delete DichroicVector;
+
+        if (readLUTFileHandle) delete readLUTFileHandle;
 }
 
 G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
   : G4SurfaceProperty(right.theName,right.theType)
 {
        *this = right;
+       this->theName = right.theName;
+       this->theType = right.theType;
+       this->theModel = right.theModel;
+       this->theFinish = right.theFinish;
+       this->sigma_alpha = right.sigma_alpha;
+       this->polish = right.polish;
        this->theMaterialPropertiesTable = right.theMaterialPropertiesTable;
        this->AngularDistribution = right.AngularDistribution;
-       this->readFileHandle = right.readFileHandle;
+       this->readLUTFileHandle = right.readLUTFileHandle;
+       this->DichroicVector = right.DichroicVector;
 }
 
 G4int G4OpticalSurface::operator==(const G4OpticalSurface &right) const
@@ -168,7 +193,11 @@ void G4OpticalSurface::SetType(const G4SurfaceType& type)
   if (type == dielectric_LUT) {
      if (!AngularDistribution) AngularDistribution =
                        new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
-     ReadFile();
+     ReadLUTFile();
+  }
+  if (type == dielectric_dichroic) {
+     if (!DichroicVector) DichroicVector = new G4Physics2DVector();
+     ReadDichroicFile();
   }
 }
 
@@ -178,116 +207,196 @@ void G4OpticalSurface::SetFinish(const G4OpticalSurfaceFinish finish)
   if (theType == dielectric_LUT) {
      if (!AngularDistribution) AngularDistribution =
                        new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
-     ReadFile();
+     ReadLUTFile();
+  }
+  if (theType == dielectric_dichroic) {
+     if (!DichroicVector) DichroicVector = new G4Physics2DVector();
+     ReadDichroicFile();
   }
 }
 
-void G4OpticalSurface::ReadFile()
+void G4OpticalSurface::ReadLUTFile()
 {
-  G4String readFileName = " ";
+  G4String readLUTFileName = " ";
 
   if (theFinish == polishedlumirrorglue) {
-     readFileName = "PolishedLumirrorGlue.dat";
+     readLUTFileName = "PolishedLumirrorGlue.dat";
   }
   else if (theFinish == polishedlumirrorair) {
-     readFileName = "PolishedLumirror.dat";
+     readLUTFileName = "PolishedLumirror.dat";
   }
   else if (theFinish == polishedteflonair) {
-     readFileName = "PolishedTeflon.dat";
+     readLUTFileName = "PolishedTeflon.dat";
   }
   else if (theFinish == polishedtioair) {
-     readFileName = "PolishedTiO.dat";
+     readLUTFileName = "PolishedTiO.dat";
   }
   else if (theFinish == polishedtyvekair) {
-     readFileName = "PolishedTyvek.dat";
+     readLUTFileName = "PolishedTyvek.dat";
   }
   else if (theFinish == polishedvm2000glue) {
-     readFileName = "PolishedVM2000Glue.dat";
+     readLUTFileName = "PolishedVM2000Glue.dat";
   }
   else if (theFinish == polishedvm2000air) {
-     readFileName = "PolishedVM2000.dat";
+     readLUTFileName = "PolishedVM2000.dat";
   }
   else if (theFinish == etchedlumirrorglue) {
-     readFileName = "EtchedLumirrorGlue.dat";
+     readLUTFileName = "EtchedLumirrorGlue.dat";
   }
   else if (theFinish == etchedlumirrorair) {
-     readFileName = "EtchedLumirror.dat";
+     readLUTFileName = "EtchedLumirror.dat";
   }
   else if (theFinish == etchedteflonair) {
-     readFileName = "EtchedTeflon.dat";
+     readLUTFileName = "EtchedTeflon.dat";
   }
   else if (theFinish == etchedtioair) {
-     readFileName = "EtchedTiO.dat";
+     readLUTFileName = "EtchedTiO.dat";
   }
   else if (theFinish == etchedtyvekair) {
-     readFileName = "EtchedTyvek.dat";
+     readLUTFileName = "EtchedTyvek.dat";
   }
   else if (theFinish == etchedvm2000glue) {
-     readFileName = "EtchedVM2000Glue.dat";
+     readLUTFileName = "EtchedVM2000Glue.dat";
   }
   else if (theFinish == etchedvm2000air) {
-     readFileName = "EtchedVM2000.dat";
+     readLUTFileName = "EtchedVM2000.dat";
   }
   else if (theFinish == groundlumirrorglue) {
-     readFileName = "GroundLumirrorGlue.dat";
+     readLUTFileName = "GroundLumirrorGlue.dat";
   }
   else if (theFinish == groundlumirrorair) {
-     readFileName = "GroundLumirror.dat";
+     readLUTFileName = "GroundLumirror.dat";
   }
   else if (theFinish == groundteflonair) {
-     readFileName = "GroundTeflon.dat";
+     readLUTFileName = "GroundTeflon.dat";
   }
   else if (theFinish == groundtioair) {
-     readFileName = "GroundTiO.dat";
+     readLUTFileName = "GroundTiO.dat";
   }
   else if (theFinish == groundtyvekair) {
-     readFileName = "GroundTyvek.dat";
+     readLUTFileName = "GroundTyvek.dat";
   }
   else if (theFinish == groundvm2000glue) {
-     readFileName = "GroundVM2000Glue.dat";
+     readLUTFileName = "GroundVM2000Glue.dat";
   }
   else if (theFinish == groundvm2000air) {
-     readFileName = "GroundVM2000.dat";
+     readLUTFileName = "GroundVM2000.dat";
   }
 
-  if (readFileName == " ") return;
+  if (readLUTFileName == " ") return;
 
   char* path = getenv("G4REALSURFACEDATA");
   if (!path) {
      G4String excep =
         "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
-     G4Exception("G4OpticalSurface::ReadFile()", "mat310",
+     G4Exception("G4OpticalSurface::ReadLUTFile()", "mat310",
                  FatalException, excep);
      return;
   }
   G4String pathString(path);
 
-  readFileName = pathString + "/" + readFileName;
+  readLUTFileName = pathString + "/" + readLUTFileName;
 
-  readFileHandle = fopen(readFileName,"r");
+  readLUTFileHandle = fopen(readLUTFileName,"r");
 
-  if (readFileHandle) {
+  if (readLUTFileHandle) {
      G4int ncols;
      G4int idxmax = incidentIndexMax*thetaIndexMax*phiIndexMax;
      for (G4int i = 0; i<idxmax; i++) {
-       ncols = fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
+       ncols = fscanf(readLUTFileHandle,"%6f", &AngularDistribution[i]);
        if (ncols < 0) break;
      }
      if (ncols >= 0) {
-        G4cout << "LUT - data file: " << readFileName << " read in! " << G4endl;
+        G4cout << "LUT - data file: " << readLUTFileName << " read in! " << G4endl;
      }
      else {
-        G4String excep = "LUT - data file: "+ readFileName +" not read propery";
-        G4Exception("G4OpticalSurface::ReadFile()", "mat312",
+        G4String excep = "LUT - data file: "+ readLUTFileName +" not read propery";
+        G4Exception("G4OpticalSurface::ReadLUTFile()", "mat312",
                     FatalException, excep);
         return;
      }
   }
   else {
-     G4String excep = "LUT - data file: " + readFileName + " not found";
-     G4Exception("G4OpticalSurface::ReadFile()", "mat311",
+     G4String excep = "LUT - data file: " + readLUTFileName + " not found";
+     G4Exception("G4OpticalSurface::ReadLUTFile()", "mat311",
                  FatalException, excep);
      return;
   }
-  fclose(readFileHandle);
+  fclose(readLUTFileHandle);
+}
+
+void G4OpticalSurface::ReadDichroicFile()
+{
+  const char* datadir = getenv("G4DICHROICDATA");
+
+  if(!datadir) {
+    G4Exception("G4OpticalSurface::ReadDichroicFile()","mat313",
+    FatalException,"Environment variable G4DICHROICDATA not defined");
+    return;
+  }
+
+  std::ostringstream ost;
+  ost << datadir;
+  std::ifstream fin(ost.str().c_str());
+  if( !fin.is_open()) {
+    G4ExceptionDescription ed;
+    ed << "Dichroic surface data file <" << ost.str().c_str()
+       << "> is not opened!" << G4endl;
+    G4Exception("G4OpticalSurface::ReadDichroicFile()","mat314",
+    FatalException,ed," ");
+    return;
+  }
+
+  if( !(DichroicVector->Retrieve(fin)) ) {
+    G4ExceptionDescription ed;
+    ed << "Dichroic surface data file <" << ost.str().c_str()
+       << "> is not opened!" << G4endl;
+    G4Exception("G4OpticalSurface::ReadDichroicFile()","mat315",
+    FatalException,ed," ");
+    return;
+  }
+
+//  DichroicVector->SetBicubicInterpolation(true);
+
+  G4cout << " *** Dichroic surface data file *** " << G4endl;
+
+  size_t numberOfXNodes = DichroicVector->GetLengthX();
+  size_t numberOfYNodes = DichroicVector->GetLengthY();
+
+  G4cout << "numberOfXNodes: " << numberOfXNodes << G4endl;
+  G4cout << "numberOfYNodes: " << numberOfYNodes << G4endl;
+
+  G4PV2DDataVector  xVector;
+  G4PV2DDataVector  yVector;
+
+  xVector.resize(numberOfXNodes,0.);
+  yVector.resize(numberOfYNodes,0.);
+
+  for(size_t i = 0; i<numberOfXNodes; ++i) {
+     G4cout << "i: " << DichroicVector->GetX(i) << G4endl;
+     xVector[i] = DichroicVector->GetX(i);
+  }
+  for(size_t j = 0; j<numberOfYNodes; ++j) {
+     G4cout << "j: " << DichroicVector->GetY(j) << G4endl;
+     yVector[j] = DichroicVector->GetY(j);
+  }
+
+  for(size_t j = 0; j<numberOfYNodes; ++j) {
+     for(size_t i = 0; i<numberOfXNodes; ++i) {
+        G4cout << " i: " << i << " j: " << j << " "
+               << DichroicVector->GetValue(i,j) << G4endl;
+     }
+  }
+
+//  size_t idx, idy;
+
+//  for(size_t j = 0; j<numberOfYNodes-1; ++j) {
+//     G4double y = (yVector[j] + yVector[j+1])/2.;
+//     for(size_t i = 0; i<numberOfXNodes-1; ++i) {
+//        G4double x = (xVector[i] + xVector[i+1])/2.;
+//        G4cout << " x: " << x << " y: " << y << " "
+//               << DichroicVector->Value(x,y,idx,idy) << G4endl;
+//     }
+//  }
+
 }

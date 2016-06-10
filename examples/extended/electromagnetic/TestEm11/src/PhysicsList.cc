@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc 74997 2013-10-25 10:52:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,17 +49,19 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList(),
+  fEmPhysicsList(0),    
+  fMessenger(0)
 {
   G4LossTableManager::Instance();
   defaultCutValue = 1.*mm;
   fCutForGamma     = defaultCutValue;
   fCutForElectron  = defaultCutValue;
   fCutForPositron  = defaultCutValue;
-
-  fStepMaxProcess  = 0;
 
   fMessenger = new PhysicsListMessenger(this);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PSMinKinEAtGeneration.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4PSMinKinEAtGeneration_h

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 physics class: G4PhotoNuclearCrossSection -- header file
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
@@ -37,49 +36,59 @@
 #include "G4Element.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4NistManager.hh"
 #include <vector>
 
 class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
 {
-  public:
-
-    G4PhotoNuclearCrossSection(const G4String& name = "PhotoNuclearXS");
+public:
+    
+    G4PhotoNuclearCrossSection();
     virtual ~G4PhotoNuclearCrossSection();
-
+    
+    static const char* Default_Name() {return "PhotoNuclearXS";}
+    
     virtual void CrossSectionDescription(std::ostream&) const;
-
+    
     virtual G4bool
-    IsIsoApplicable(const G4DynamicParticle* particle, G4int /*Z*/, G4int /*A*/,
-                    const G4Element*, const G4Material*);
-
+    IsElementApplicable(const G4DynamicParticle* particle, G4int Z,
+                        const G4Material*);
+    
     virtual G4double
-    GetIsoCrossSection(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/,
-                       const G4Isotope*, const G4Element*, const G4Material*);
-
-  private:
-
+    GetElementCrossSection(const G4DynamicParticle*, G4int Z,
+                           const G4Material*);
+    
+private:
+    
     G4int GetFunctions(G4double a, G4double* y, G4double* z);
     G4double EquLinearFit(G4double X, G4int N, const G4double X0,
                           const G4double XD, const G4double* Y);
     G4double ThresholdEnergy(G4int Z, G4int N);
-
-  // Body
-  private:
-
-    static G4int     lastN;   // The last N of calculated nucleus
-    static G4int     lastZ;   // The last Z of calculated nucleus
-    static G4double  lastSig; // Last value of the Cross Section
-    static G4double* lastGDR; // Pointer to the last array of GDR cross sections
-    static G4double* lastHEN; // Pointer to the last array of HEn cross sections
-    static G4double  lastE;   // Last used in the cross section Energy
-    static G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
-    static G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
-
+    
+    // Body
+private:
+    
+    G4int     lastZ;   // The last Z of calculated nucleus
+    G4double  lastSig; // Last value of the Cross Section
+    G4double* lastGDR; // Pointer to the last array of GDR cross sections
+    G4double* lastHEN; // Pointer to the last array of HEn cross sections
+    G4double  lastE;   // Last used in the cross section Energy
+    G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
+    G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
+    
     // Vector of pointers to the GDRPhotonuclearCrossSection
-    static std::vector <G4double*> GDR;
-
+    std::vector <G4double*> GDR;
+    
     // Vector of pointers to the HighEnPhotonuclearCrossSect
-    static std::vector <G4double*> HEN;
+    std::vector <G4double*> HEN;
+    
+    std::vector <G4double> spA;  // shadowing coefficients (A-dependent)
+    std::vector <G4double> eTH;    // energy threshold (A-dependent)
+    
+    G4NistManager* nistmngr;
+    
+    G4double mNeut;
+    G4double mProt;
 };
 
 #endif

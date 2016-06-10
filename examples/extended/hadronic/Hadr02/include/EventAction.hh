@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id$
+// $Id: EventAction.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -60,13 +60,13 @@ public: // Without description
   EventAction();
   virtual ~EventAction();
 
-  void BeginOfEventAction(const G4Event*);
-  void   EndOfEventAction(const G4Event*);
+  virtual void BeginOfEventAction(const G4Event*);
+  virtual void   EndOfEventAction(const G4Event*);
 
-  void SetPrintModulo(G4int val)   {printModulo = val;};
-  void SetDrawFlag(G4String val)   {drawFlag = val;};
-  void AddEventToDebug(G4int val)  {selectedEvents.push_back(val);
-                                    nSelected++;};
+  inline void SetPrintModulo(G4int val)   {printModulo = val;};
+  inline void SetDrawFlag(G4String val)   {drawFlag = val;};
+  inline void AddEventToDebug(G4int val)  {selectedEvents.push_back(val);
+                                           nSelected++;};
 
 private:
 

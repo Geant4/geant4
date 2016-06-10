@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VTwistedFaceted.hh 66356 2012-12-18 09:02:32Z gcosmo $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -110,7 +110,6 @@ class G4VTwistedFaceted: public G4VSolid
 
   virtual void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
   virtual G4Polyhedron   *CreatePolyhedron   () const ;
-  virtual G4NURBS        *CreateNURBS        () const;
   virtual G4Polyhedron   *GetPolyhedron      () const;
 
   virtual std::ostream &StreamInfo(std::ostream& os) const;

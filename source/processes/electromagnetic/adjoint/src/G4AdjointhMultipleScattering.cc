@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointhMultipleScattering.cc 73245 2013-08-22 13:13:20Z gcosmo $
 //
 
 //
@@ -42,7 +42,7 @@
 
 #include "G4AdjointhMultipleScattering.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4UrbanMscModel90.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +99,7 @@ void G4AdjointhMultipleScattering::InitialiseProcess(const G4ParticleDefinition*
 
   // initialisation of parameters
   G4String part_name = p->GetParticleName();
-  mscUrban = new G4UrbanMscModel90();
+  mscUrban = new G4UrbanMscModel();
 
   mscUrban->SetStepLimitType(StepLimitType());
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());

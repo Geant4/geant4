@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ePolarizedBremsstrahlungModel.hh 75601 2013-11-04 13:08:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,12 +50,12 @@
 #ifndef G4ePolarizedBremsstrahlungModel_h
 #define G4ePolarizedBremsstrahlungModel_h 1
 
-#include "G4eBremsstrahlungModel.hh"
+#include "G4SeltzerBergerModel.hh"
 
 
 class G4VPolarizedCrossSection;
 
-class G4ePolarizedBremsstrahlungModel : public G4eBremsstrahlungModel
+class G4ePolarizedBremsstrahlungModel : public G4SeltzerBergerModel
 {
 
 public:
@@ -74,6 +74,7 @@ public:
 				 G4double maxEnergy);
 
   inline const G4Element* SelectedAtom();
+
 protected:
 
   G4VPolarizedCrossSection*           crossSectionCalculator;

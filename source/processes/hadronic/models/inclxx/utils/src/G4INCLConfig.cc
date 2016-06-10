@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -40,20 +38,12 @@
 #include "G4INCLConfig.hh"
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLParticleTable.hh"
-
-#ifdef HAS_BOOST_PROGRAM_OPTIONS
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/variables_map.hpp>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cstdlib>
-#include "G4INCLCascade.hh"
-#include "G4INCLLogger.hh"
-#endif
+#include "G4INCLGlobals.hh"
 
 namespace G4INCL {
+
+  const G4int Config::randomSeedMin = 1;
+  const G4int Config::randomSeedMax = ((1<<30)-1)+(1<<30); // 2^31-1
 
   Config::Config()
   {
@@ -68,135 +58,205 @@ namespace G4INCL {
   }
 
   // NOT used in Geant4 mode
-#ifdef HAS_BOOST_PROGRAM_OPTIONS
-  Config::Config(G4int argc, char *argv[], G4bool isFullRun) : naturalTarget(false) {
-    const std::string suggestHelpMsg("You might want to run `INCLCascade -h' to get a help message.\n");
+#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
+  Config::Config(G4int argc, char *argv[], G4bool isFullRun) :
+    runOptDesc("Run options"),
+    hiddenOptDesc("Hidden options"),
+    genericOptDesc("Generic options"),
+    physicsOptDesc("Physics options"),
+    naturalTarget(false)
+  {
+    const std::string suggestHelpMsg("You might want to run `INCLCascade --help' to get a help message.\n");
+
+    // Define the names of the de-excitation models
+    const std::string theNoneName = "none";
+#ifdef INCL_DEEXCITATION_SMM
+    const std::string theSMMName = "SMM";
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    const std::string theGEMINIXXName = "GEMINIXX";
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+    const std::string theABLAv3pName = "ABLAv3p";
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+    const std::string theABLA07Name = "ABLA07";
+#endif
+
+    // Define the default de-excitation model, in decreasing order of priority
+    std::string defaultDeExcitationModel = theNoneName;
+#ifdef INCL_DEEXCITATION_SMM
+    defaultDeExcitationModel = theSMMName;
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    defaultDeExcitationModel = theGEMINIXXName;
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+    defaultDeExcitationModel = theABLAv3pName;
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+    defaultDeExcitationModel = theABLA07Name;
+#endif
+
+    const std::string listSeparator = "\n  \t";
+    deExcitationModelList =
+      listSeparator + theNoneName
+#ifdef INCL_DEEXCITATION_ABLA07
+      + listSeparator + theABLA07Name
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+      + listSeparator + theABLAv3pName
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+      + listSeparator + theGEMINIXXName
+#endif
+#ifdef INCL_DEEXCITATION_SMM
+      + listSeparator + theSMMName
+#endif
+      ;
+
+    // Append " (default)" to the name of the default model
+    size_t defaultModelIndex = deExcitationModelList.find(defaultDeExcitationModel);
+    if(defaultModelIndex!=std::string::npos) {
+      deExcitationModelList = deExcitationModelList.substr(0, defaultModelIndex+defaultDeExcitationModel.size())
+        + " (default)"
+        + deExcitationModelList.substr(defaultModelIndex+defaultDeExcitationModel.size(), std::string::npos);
+    }
+
+    // Spell out the G4bool values
+    std::cout << std::boolalpha;
 
     try {
 
       // Hidden options
-      boost::program_options::options_description hiddenOptDesc("Hidden options");
       hiddenOptDesc.add_options()
-        ("input-file", boost::program_options::value<std::string>(&inputFileName), "input file")
-        ("impact-parameter", boost::program_options::value<G4double>(&impactParameter)->default_value(-1.), "impact parameter")
+        ("input-file", po::value<std::string>(&inputFileName), "input file")
+        ("impact-parameter", po::value<G4double>(&impactParameter)->default_value(-1.), "impact parameter")
         ;
 
       // Generic options
       std::stringstream verbosityDescription;
       verbosityDescription << "set verbosity level:\n"
-        << "  0: \tquiet, suppress all output messages\n"
-        << "  " << InfoMsg << ": \tminimal logging\n"
-        << "  " << FatalMsg << ": \tlog fatal error messages as well\n"
-        << "  " << ErrorMsg << ": \tlog error messages as well\n"
-        << "  " << WarningMsg << ": \tlog warning messages as well\n"
-        << "  " << DebugMsg << ": \tlog debug messages as well\n"
-        << "  " << DataBlockMsg << ": \tlog data-block messages as well";
+        << " 0: \tquiet, suppress all output messages\n"
+        << " " << InfoMsg << ": \tminimal logging\n"
+        << " " << FatalMsg << ": \tlog fatal error messages as well\n"
+        << " " << ErrorMsg << ": \tlog error messages as well\n"
+        << " " << WarningMsg << ": \tlog warning messages as well\n"
+        << " " << DebugMsg << ": \tlog debug messages as well\n"
+        << " " << DataBlockMsg << ": \tlog data-block messages as well";
 
-      boost::program_options::options_description genericOptDesc("Generic options");
       genericOptDesc.add_options()
         ("help,h", "produce this help message")
         ("version", "print version string and exit")
         ;
 
       // Run-specific options
-      boost::program_options::options_description runOptDesc("Run options");
+      std::stringstream randomSeed1Description, randomSeed2Description;
+      randomSeed1Description << "first seed for the random-number generator (between "
+        << randomSeedMin << "and " << randomSeedMax << ")";
+      randomSeed2Description << "second seed for the random-number generator (between "
+        << randomSeedMin << "and " << randomSeedMax << ")";
+
       runOptDesc.add_options()
-        ("title", boost::program_options::value<std::string>(&title)->default_value("INCL default run title"), "run title")
-        ("output,o", boost::program_options::value<std::string>(&outputFileRoot), "root for generating output file names. Suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name, if given; otherwise, defaults to a string composed of the explicitly specified options")
-        ("logfile,l", boost::program_options::value<std::string>(&logFileName), "log file name. Defaults to `<output_root>.log'. Use `-' if you want to redirect logging to stdout")
-        ("number-shots,N", boost::program_options::value<G4int>(&nShots), "* number of shots")
-        ("target,t", boost::program_options::value<std::string>(&targetString), "* target nuclide. Can be specified as Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe or Fe. If the mass number is omitted, natural target composition is assumed.")
-        ("projectile,p", boost::program_options::value<std::string>(&projectileString), "* projectile name:\n"
+        ("title", po::value<std::string>(&title)->default_value("INCL default run title"), "run title")
+        ("output,o", po::value<std::string>(&outputFileRoot), "root for generating output file names. File-specific suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name, if given; otherwise, defaults to a string composed of the explicitly specified options and of a customisable suffix, if provided using the -s option")
+        ("suffix,s", po::value<std::string>(&fileSuffix), "suffix to be appended to generated output file names")
+        ("logfile,l", po::value<std::string>(&logFileName), "log file name. Defaults to `<output_root>.log'. Use `-' if you want to redirect logging to stdout")
+        ("number-shots,N", po::value<G4int>(&nShots), "* number of shots")
+        ("target,t", po::value<std::string>(&targetString), "* target nuclide. Can be specified as Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe or Fe. If the mass number is omitted, natural target composition is assumed.")
+        ("projectile,p", po::value<std::string>(&projectileString), "* projectile name:\n"
          "  \tproton, p\n"
          "  \tneutron, n\n"
          "  \tpi+, piplus, pion+, pionplus\n"
          "  \tpi0, pizero, pion0, pionzero\n"
          "  \tpi-, piminus, pion-, pionminus\n"
          "  \td, t, a, deuteron, triton, alpha\n"
-         "  \tHe-4, He4, 4He (and so on)\n")
-        ("energy,E", boost::program_options::value<G4float>(&projectileKineticEnergy), "* total kinetic energy of the projectile, in MeV")
-        ("verbose-event", boost::program_options::value<G4int>(&verboseEvent)->default_value(-1), "request verbose logging for the specified event only")
-        ("random-seed-1", boost::program_options::value<G4int>(&randomSeed1)->default_value(666), "first seed for the random-number generator")
-        ("random-seed-2", boost::program_options::value<G4int>(&randomSeed2)->default_value(777), "second seed for the random-number generator")
-        ("inclxx-datafile-path", boost::program_options::value<std::string>(&INCLXXDataFilePath)->default_value("./data/"))
-#ifdef INCL_DEEXCITATION_ABLAXX
-        ("ablav3p-cxx-datafile-path", boost::program_options::value<std::string>(&ablav3pCxxDataFilePath)->default_value("./de-excitation/ablaxx/data/G4ABLA3.0/"))
+         "  \tHe-4, He4, 4He (and so on)")
+        ("energy,E", po::value<G4double>(&projectileKineticEnergy), "* total kinetic energy of the projectile, in MeV")
+        ("verbose-event", po::value<G4int>(&verboseEvent)->default_value(-1), "request verbose logging for the specified event only")
+        ("random-seed-1", po::value<G4int>(&randomSeed1)->default_value(666), randomSeed1Description.str().c_str())
+        ("random-seed-2", po::value<G4int>(&randomSeed2)->default_value(777), randomSeed2Description.str().c_str())
+#ifdef INCL_ROOT_USE
+        ("root-selection", po::value<std::string>(&rootSelectionString)->default_value(""), "ROOT selection for abridged output ROOT tree. For example: \"A==1 && Z==0 && theta<3\" selects only events where a neutron is scattered in the forward direction.")
 #endif
+        ("inclxx-datafile-path", po::value<std::string>(&INCLXXDataFilePath)->default_value("../data/"),
+         "path to the INCL++ data files")
 #ifdef INCL_DEEXCITATION_ABLA07
-        ("abla07-datafile-path", boost::program_options::value<std::string>(&abla07DataFilePath)->default_value("./de-excitation/abla07/upstream/tables/"))
+        ("abla07-datafile-path", po::value<std::string>(&abla07DataFilePath)->default_value("../de-excitation/abla07/upstream/tables/"),
+         "path to the ABLA07 data files")
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+        ("ablav3p-cxx-datafile-path", po::value<std::string>(&ablav3pCxxDataFilePath)->default_value("../de-excitation/ablaxx/data/G4ABLA3.0/"),
+         "path to the ABLAv3p data files")
 #endif
 #ifdef INCL_DEEXCITATION_GEMINIXX
-        ("geminixx-datafile-path", boost::program_options::value<std::string>(&geminixxDataFilePath)->default_value("./de-excitation/geminixx/upstream/"))
+        ("geminixx-datafile-path", po::value<std::string>(&geminixxDataFilePath)->default_value("../de-excitation/geminixx/upstream/"),
+         "path to the GEMINI++ data files")
 #endif
-        ("verbosity,v", boost::program_options::value<G4int>(&verbosity)->default_value(4), verbosityDescription.str().c_str())
+        ("verbosity,v", po::value<G4int>(&verbosity)->default_value(4), verbosityDescription.str().c_str())
         ;
 
       // Physics options
-      boost::program_options::options_description physicsOptDesc("Physics options");
       physicsOptDesc.add_options()
-        ("pauli", boost::program_options::value<std::string>(&pauliString)->default_value("strict-statistical"), "Pauli-blocking algorithm:\n"
+        ("de-excitation,d", po::value<std::string>(&deExcitationString)->default_value(defaultDeExcitationModel.c_str()), ("which de-excitation model to use:" + deExcitationModelList).c_str())
+#ifdef INCL_DEEXCITATION_FERMI_BREAKUP
+        ("max-mass-fermi-breakup", po::value<G4int>(&maxMassFermiBreakUp)->default_value(18), "Maximum remnant mass for Fermi break-up. Default: 18.")
+#endif
+        ("pauli", po::value<std::string>(&pauliString)->default_value("strict-statistical"), "Pauli-blocking algorithm:\n"
          "  \tstrict-statistical (default)\n"
          "  \tstrict\n"
          "  \tstatistical\n"
          "  \tglobal\n"
          "  \tnone")
-        ("cdpp", boost::program_options::value<G4bool>(&CDPP)->default_value(true), "whether to apply CDPP after collisions:\n  \ttrue, 1 (default)\n  \tfalse, 0")
-        ("coulomb", boost::program_options::value<std::string>(&coulombString)->default_value("non-relativistic"), "Coulomb-distortion algorithm:\n  \tnon-relativistic (default)\n  \tnone")
-        ("potential", boost::program_options::value<std::string>(&potentialString)->default_value("isospin-energy"), "nucleon potential:\n  \tisospin-energy-smooth\n  \tisospin-energy (default)\n  \tisospin\n  \tconstant")
-        ("pion-potential", boost::program_options::value<G4bool>(&pionPotential)->default_value("true"), "whether to use a pion potential:\n  \ttrue, 1 (default)\n  \tfalse, 0")
-        ("local-energy-BB", boost::program_options::value<std::string>(&localEnergyBBString)->default_value("first-collision"), "local energy in baryon-baryon collisions:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
-        ("local-energy-pi", boost::program_options::value<std::string>(&localEnergyPiString)->default_value("first-collision"), "local energy in pi-N collisions and in delta decays:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
-        ("de-excitation", boost::program_options::value<std::string>(&deExcitationString)->default_value("none"), "which de-excitation model to use:"
-         "\n  \tnone (default)"
-#ifdef INCL_DEEXCITATION_ABLAXX
-         "\n  \tABLAv3p"
-#endif
-#ifdef INCL_DEEXCITATION_ABLA07
-         "\n  \tABLA07"
-#endif
-#ifdef INCL_DEEXCITATION_SMM
-         "\n  \tSMM"
-#endif
-#ifdef INCL_DEEXCITATION_GEMINIXX
-         "\n  \tGEMINIXX"
-#endif
-         )
-        ("cluster-algorithm", boost::program_options::value<std::string>(&clusterAlgorithmString)->default_value("intercomparison"), "clustering algorithm for production of composites:\n  \tintercomparison (default)\n  \tnone")
-        ("cluster-max-mass", boost::program_options::value<G4int>(&clusterMaxMass)->default_value(8), "maximum mass of produced composites:\n  \tminimum 2\n  \tmaximum 12")
-        ("back-to-spectator", boost::program_options::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
-        ("use-real-masses", boost::program_options::value<G4bool>(&useRealMasses)->default_value("true"), "whether to use real masses for the outgoing particle energies:\n  \ttrue, 1 (default)\n  \tfalse, 0")
-        ("separation-energies", boost::program_options::value<std::string>(&separationEnergyString)->default_value("INCL"), "how to assign the separation energies of the INCL nucleus:\n  \tINCL (default)\n  \treal\n  \treal-light")
+        ("cdpp", po::value<G4bool>(&CDPP)->default_value(true), "whether to apply CDPP after collisions:\n  \ttrue, 1 (default)\n  \tfalse, 0")
+        ("coulomb", po::value<std::string>(&coulombString)->default_value("non-relativistic"), "Coulomb-distortion algorithm:\n  \tnon-relativistic (default)\n  \tnone")
+        ("potential", po::value<std::string>(&potentialString)->default_value("isospin-energy"), "nucleon potential:\n  \tisospin-energy-smooth\n  \tisospin-energy (default)\n  \tisospin\n  \tconstant")
+        ("pion-potential", po::value<G4bool>(&pionPotential)->default_value("true"), "whether to use a pion potential:\n  \ttrue, 1 (default)\n  \tfalse, 0")
+        ("local-energy-BB", po::value<std::string>(&localEnergyBBString)->default_value("first-collision"), "local energy in baryon-baryon collisions:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
+        ("local-energy-pi", po::value<std::string>(&localEnergyPiString)->default_value("first-collision"), "local energy in pi-N collisions and in delta decays:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
+        ("cluster-algorithm", po::value<std::string>(&clusterAlgorithmString)->default_value("intercomparison"), "clustering algorithm for production of composites:\n  \tintercomparison (default)\n  \tnone")
+        ("cluster-max-mass", po::value<G4int>(&clusterMaxMass)->default_value(8), "maximum mass of produced composites:\n  \tminimum 2\n  \tmaximum 12")
+        ("back-to-spectator", po::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
+        ("use-real-masses", po::value<G4bool>(&useRealMasses)->default_value("true"), "whether to use real masses for the outgoing particle energies:\n  \ttrue, 1 (default)\n  \tfalse, 0")
+        ("separation-energies", po::value<std::string>(&separationEnergyString)->default_value("INCL"), "how to assign the separation energies of the INCL nucleus:\n  \tINCL (default)\n  \treal\n  \treal-light")
+        ("fermi-momentum", po::value<std::string>(&fermiMomentumString)->default_value("constant"), "how to assign the Fermi momentum of the INCL nucleus:\n  \tconstant (default)\n  \tconstant-light\n  \tmass-dependent")
+        ("cutNN", po::value<G4double>(&cutNN)->default_value(1910.), "minimum CM energy for nucleon-nucleon collisions, in MeV. Default: 1910.")
+        ("rp-correlation", po::value<G4double>(&rpCorrelationCoefficient)->default_value(1.), "correlation coefficient for the r-p correlation. Default: 1 (full correlation).")
+        ("rp-correlation-p", po::value<G4double>(&rpCorrelationCoefficientProton)->default_value(1.), "correlation coefficient for the proton r-p correlation. Overrides the value specified using the rp-correlation option. Default: 1 (full correlation).")
+        ("rp-correlation-n", po::value<G4double>(&rpCorrelationCoefficientNeutron)->default_value(1.), "correlation coefficient for the neutron r-p correlation. Overrides the value specified using the rp-correlation option. Default: 1 (full correlation).")
+        ("neutron-skin-thickness", po::value<G4double>(&neutronSkinThickness)->default_value(0.), "thickness of the neutron skin, in fm. Default: 0.")
+        ("neutron-skin-additional-diffuseness", po::value<G4double>(&neutronSkinAdditionalDiffuseness)->default_value(0.), "additional diffuseness of the neutron density distribution (with respect to the proton diffuseness), in fm. Default: 0.")
+        ("refraction", po::value<G4bool>(&refraction)->default_value(false), "whether to use refraction when particles are transmitted. Default: false.")
         ;
 
       // Select options allowed on the command line
-      boost::program_options::options_description cmdLineOptions;
+      po::options_description cmdLineOptions;
       cmdLineOptions.add(hiddenOptDesc).add(genericOptDesc).add(runOptDesc).add(physicsOptDesc);
 
       // Select options allowed in config files
-      boost::program_options::options_description configFileOptions;
+      po::options_description configFileOptions;
       configFileOptions.add(runOptDesc).add(physicsOptDesc);
 
       // Select visible options
-      boost::program_options::options_description visibleOptions;
+      po::options_description visibleOptions;
       visibleOptions.add(genericOptDesc).add(runOptDesc).add(physicsOptDesc);
 
       // Declare input-file as a positional option (if we just provide a file
       // name on the command line, it should be interpreted as an input-file
       // option).
-      boost::program_options::positional_options_description p;
+      po::positional_options_description p;
       p.add("input-file", 1);
 
       // Disable guessing of option names
       G4int cmdstyle =
-        boost::program_options::command_line_style::default_style &
-        ~boost::program_options::command_line_style::allow_guessing;
+        po::command_line_style::default_style &
+        ~po::command_line_style::allow_guessing;
 
       // Result of the option processing
-      boost::program_options::variables_map variablesMap;
-      boost::program_options::store(boost::program_options::command_line_parser(argc, argv).
+      po::store(po::command_line_parser(argc, argv).
           style(cmdstyle).
           options(cmdLineOptions).positional(p).run(), variablesMap);
-      boost::program_options::notify(variablesMap);
+      po::notify(variablesMap);
 
       // If an input file was specified, merge the options with the command-line
       // options.
@@ -207,20 +267,20 @@ namespace G4INCL {
           std::exit(EXIT_FAILURE);
         } else {
           // Merge options from the input file
-          boost::program_options::parsed_options parsedOptions = boost::program_options::parse_config_file(inputFileStream, configFileOptions, true);
+          po::parsed_options parsedOptions = po::parse_config_file(inputFileStream, configFileOptions, true);
 
           // Make sure that the unhandled options are all "*-datafile-path"
           std::vector<std::string> unhandledOptions =
-            boost::program_options::collect_unrecognized(parsedOptions.options, boost::program_options::exclude_positional);
+            po::collect_unrecognized(parsedOptions.options, po::exclude_positional);
           G4bool ignoreNext = false;
           const std::string match = "-datafile-path";
-          for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(); i!=unhandledOptions.end(); ++i) {
+          for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(), e=unhandledOptions.end(); i!=e; ++i) {
             if(ignoreNext) {
               ignoreNext=false;
               continue;
             }
             if(i->rfind(match) == i->length()-match.length()) {
-              std::cerr << "Ignoring unrecognized option " << *i << std::endl;
+              std::cout << "Ignoring unrecognized option " << *i << std::endl;
               ignoreNext = true;
             } else {
               std::cerr << "Error: unrecognized option " << *i << std::endl;
@@ -230,8 +290,8 @@ namespace G4INCL {
           }
 
           // Store the option values in the variablesMap
-          boost::program_options::store(parsedOptions, variablesMap);
-          boost::program_options::notify(variablesMap);
+          po::store(parsedOptions, variablesMap);
+          po::notify(variablesMap);
         }
         inputFileStream.close();
       }
@@ -256,26 +316,26 @@ namespace G4INCL {
       std::ifstream configFileStream(configFileName.c_str());
       std::cout << "Reading config file " << configFileName << std::endl;
       if(!configFileStream) {
-        std::cerr << "INCL++ config file " << configFileName
+        std::cout << "INCL++ config file " << configFileName
           << " not found. Continuing the run regardless."
           << std::endl;
       } else {
         // Merge options from the input file
-        boost::program_options::parsed_options parsedOptions = boost::program_options::parse_config_file(configFileStream, configFileOptions, true);
-        boost::program_options::store(parsedOptions, variablesMap);
+        po::parsed_options parsedOptions = po::parse_config_file(configFileStream, configFileOptions, true);
+        po::store(parsedOptions, variablesMap);
 
         // Make sure that the unhandled options are all "*-datafile-path"
         std::vector<std::string> unhandledOptions =
-          boost::program_options::collect_unrecognized(parsedOptions.options, boost::program_options::exclude_positional);
+          po::collect_unrecognized(parsedOptions.options, po::exclude_positional);
         G4bool ignoreNext = false;
         const std::string match = "-datafile-path";
-        for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(); i!=unhandledOptions.end(); ++i) {
+        for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(), e=unhandledOptions.end(); i!=e; ++i) {
           if(ignoreNext) {
             ignoreNext=false;
             continue;
           }
           if(i->rfind(match) == i->length()-match.length()) {
-            std::cerr << "Ignoring unrecognized option " << *i << std::endl;
+            std::cout << "Ignoring unrecognized option " << *i << std::endl;
             ignoreNext = true;
           } else {
             std::cerr << "Error: unrecognized option " << *i << std::endl;
@@ -285,8 +345,8 @@ namespace G4INCL {
         }
 
         // Store the option values in the variablesMap
-        boost::program_options::store(parsedOptions, variablesMap);
-        boost::program_options::notify(variablesMap);
+        po::store(parsedOptions, variablesMap);
+        po::notify(variablesMap);
       }
       configFileStream.close();
 
@@ -296,15 +356,16 @@ namespace G4INCL {
 
       // -h/--help: print the help message and exit successfully
       if(variablesMap.count("help")) {
-        std::cout << "Usage: INCLCascade [options] <input_file>" << std::endl;
-        std::cout << std::endl << "Options marked with a * are compulsory, i.e. they must be provided either on\nthe command line or in the input file." << std::endl;
-        std::cout << visibleOptions << std::endl;
+        std::cout
+          << "Usage: INCLCascade [options] <input_file>" << std::endl
+          << std::endl << "Options marked with a * are compulsory, i.e. they must be provided either on\nthe command line or in the input file." << std::endl
+          << visibleOptions << std::endl;
         std::exit(EXIT_SUCCESS);
       }
 
       // --version: print the version string and exit successfully
       if(variablesMap.count("version")) {
-        std::cout <<"INCL++ version " << getVersionID() << std::endl;
+        std::cout <<"INCL++ version " << getVersionString() << std::endl;
         std::exit(EXIT_SUCCESS);
       }
 
@@ -387,8 +448,7 @@ namespace G4INCL {
           coulombType = NoCoulomb;
         else {
           std::cerr << "Unrecognized Coulomb-distortion algorithm. Must be one of:" << std::endl
-            << "  non-relativistic-heavy-ion (default)" << std::endl
-            << "  non-relativistic" << std::endl
+            << "  non-relativistic (default)" << std::endl
             << "  none" << std::endl;
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
@@ -458,7 +518,7 @@ namespace G4INCL {
         }
       }
 
-      // --de-excitation
+      // -d/--de-excitation
       if(variablesMap.count("de-excitation")) {
         std::string deExcitationNorm = deExcitationString;
         std::transform(deExcitationNorm.begin(),
@@ -485,20 +545,7 @@ namespace G4INCL {
         else {
           std::cerr << "Unrecognized de-excitation model. "
             << "Must be one of:" << std::endl
-            << "  none (default)" << std::endl
-#ifdef INCL_DEEXCITATION_ABLAXX
-            << "  ABLAv3p" << std::endl
-#endif
-#ifdef INCL_DEEXCITATION_ABLA07
-            << "  ABLA07" << std::endl
-#endif
-#ifdef INCL_DEEXCITATION_SMM
-            << "  SMM" << std::endl
-#endif
-#ifdef INCL_DEEXCITATION_GEMINIXX
-            << "  GEMINIXX" << std::endl
-#endif
-            ;
+            << deExcitationModelList << std::endl;
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
         }
@@ -561,49 +608,97 @@ namespace G4INCL {
         separationEnergyType = INCLSeparationEnergy;
       }
 
+      // --fermi-momentum
+      if(variablesMap.count("fermi-momentum")) {
+        std::string fermiMomentumNorm = fermiMomentumString;
+        std::transform(fermiMomentumNorm.begin(),
+            fermiMomentumNorm.end(),
+            fermiMomentumNorm.begin(), ::tolower);
+        if(fermiMomentumNorm=="constant")
+          fermiMomentumType = ConstantFermiMomentum;
+        else if(fermiMomentumNorm=="constant-light")
+          fermiMomentumType = ConstantLightFermiMomentum;
+        else if(fermiMomentumNorm=="mass-dependent")
+          fermiMomentumType = MassDependentFermiMomentum;
+        else {
+          std::cerr << "Unrecognized fermi-momentum option. "
+            << "Must be one of:" << std::endl
+            << "  constant (default)" << std::endl
+            << "  constant-light" << std::endl
+            << "  mass-dependent" << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      } else {
+        fermiMomentumType = ConstantFermiMomentum;
+      }
+
+      // --rp-correlation / --rp-correlation-p / --rp-correlation-n
+      if(variablesMap.count("rp-correlation")) {
+        if(!variablesMap.count("rp-correlation-p") || variablesMap.find("rp-correlation-p")->second.defaulted())
+          rpCorrelationCoefficientProton = rpCorrelationCoefficient;
+        if(!variablesMap.count("rp-correlation-n") || variablesMap.find("rp-correlation-n")->second.defaulted())
+          rpCorrelationCoefficientNeutron = rpCorrelationCoefficient;
+      }
+
+      // -s/--suffix
+      if(!variablesMap.count("suffix")) {
+        // update the value in the variables_map
+        variablesMap.insert(std::make_pair("suffix", po::variable_value(boost::any(fileSuffix), false)));
+      }
+
       // --output: construct a reasonable output file root if not specified
       if(!variablesMap.count("output") && isFullRun) {
+        std::stringstream outputFileRootStream;
         // If an input file was specified, use its name as the output file root
         if(variablesMap.count("input-file"))
-          outputFileRoot = inputFileName;
+          outputFileRootStream << inputFileName << fileSuffix;
         else {
-          std::stringstream outputFileRootStream;
           outputFileRootStream.precision(0);
           outputFileRootStream.setf(std::ios::fixed, std::ios::floatfield);
           outputFileRootStream <<
             ParticleTable::getShortName(projectileSpecies) << "_" <<
             ParticleTable::getShortName(targetSpecies) << "_" <<
             projectileKineticEnergy;
+          outputFileRootStream.precision(2);
 
           // Append suffixes to the output file root for each explicitly specified CLI option
-          typedef boost::program_options::variables_map::const_iterator BPOVMIter;
-          for(BPOVMIter i=variablesMap.begin(); i!=variablesMap.end(); ++i) {
+          typedef po::variables_map::const_iterator BPOVMIter;
+          for(BPOVMIter i=variablesMap.begin(), e=variablesMap.end(); i!=e; ++i) {
             std::string const &name = i->first;
             // Only process CLI options
             if(name!="projectile"
-                && name!="target"
-                && name!="energy"
-                && name!="number-shots"
-                && name!="random-seed-1"
-                && name!="random-seed-2"
-                && name!="inclxx-datafile-path"
+               && name!="target"
+               && name!="energy"
+               && name!="number-shots"
+               && name!="random-seed-1"
+               && name!="random-seed-2"
+               && name!="verbosity"
+               && name!="verbose-event"
+               && name!="suffix"
+#ifdef INCL_ROOT_USE
+               && name!="root-selection"
+#endif
+               && name!="inclxx-datafile-path"
 #ifdef INCL_DEEXCITATION_ABLA07
-                && name!="abla07-datafile-path"
+               && name!="abla07-datafile-path"
 #endif
 #ifdef INCL_DEEXCITATION_ABLAXX
-                && name!="ablav3p-cxx-datafile-path"
+               && name!="ablav3p-cxx-datafile-path"
 #endif
 #ifdef INCL_DEEXCITATION_GEMINIXX
-                && name!="geminixx-datafile-path"
+               && name!="geminixx-datafile-path"
 #endif
-                ) {
-              boost::program_options::variable_value v = i->second;
+              ) {
+              po::variable_value v = i->second;
               if(!v.defaulted()) {
                 const std::type_info &type = v.value().type();
                 if(type==typeid(std::string))
                   outputFileRootStream << "_" << name << "=" << v.as<std::string>();
                 else if(type==typeid(G4float))
                   outputFileRootStream << "_" << name << "=" << v.as<G4float>();
+                else if(type==typeid(G4double))
+                  outputFileRootStream << "_" << name << "=" << v.as<G4double>();
                 else if(type==typeid(G4int))
                   outputFileRootStream << "_" << name << "=" << v.as<G4int>();
                 else if(type==typeid(G4bool))
@@ -612,13 +707,40 @@ namespace G4INCL {
             }
           }
 
-          outputFileRoot = outputFileRootStream.str();
+          outputFileRootStream << fileSuffix;
         }
+
+        // update the variable
+        outputFileRoot = outputFileRootStream.str();
+        // update the value in the variables_map
+        variablesMap.insert(std::make_pair("output", po::variable_value(boost::any(outputFileRoot), false)));
       }
 
       // -l/--logfile
-      if(!variablesMap.count("logfile"))
+      if(!variablesMap.count("logfile")) {
+        // update the variable
         logFileName = outputFileRoot + ".log";
+        // update the value in the variables_map
+        variablesMap.insert(std::make_pair("logfile", po::variable_value(boost::any(logFileName), false)));
+      }
+
+      // --random-seed-1 and 2
+      if(!variablesMap.count("random-seed-1")) {
+        if(randomSeed1<randomSeedMin || randomSeed1>randomSeedMax) {
+          std::cerr << "Invalid value for random-seed-1. "
+            << "Allowed range: [" << randomSeedMin << ", " << randomSeedMax << "]." << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      }
+      if(!variablesMap.count("random-seed-2")) {
+        if(randomSeed2<randomSeedMin || randomSeed2>randomSeedMax) {
+          std::cerr << "Invalid value for random-seed-2. "
+            << "Allowed range: [" << randomSeedMin << ", " << randomSeedMax << "]." << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      }
 
     }
     catch(std::exception& e)
@@ -673,11 +795,23 @@ namespace G4INCL {
       impactParameter = -1.;
       separationEnergyString = "INCL";
       separationEnergyType = INCLSeparationEnergy;
+      fermiMomentumString = "constant";
+      fermiMomentumType = ConstantFermiMomentum;
+      cutNN = 1910.;
+#ifdef INCL_DEEXCITATION_FERMI_BREAKUP
+      maxMassFermiBreakUp = 18;
+#endif
+      rpCorrelationCoefficient = 1.;
+      rpCorrelationCoefficientProton = 1.;
+      rpCorrelationCoefficientNeutron = 1.;
+      neutronSkinThickness = 0.;
+      neutronSkinAdditionalDiffuseness = 0.;
+      refraction=false;
   }
 
   std::string Config::summary() {
     std::stringstream message;
-    message << "INCL++ version " << getVersionID() << std::endl;
+    message << "INCL++ version " << getVersionString() << std::endl;
     if(projectileSpecies.theType != Composite)
       message << "Projectile: " << ParticleTable::getName(projectileSpecies) << std::endl;
     else
@@ -691,79 +825,64 @@ namespace G4INCL {
     return message.str();
   }
 
+#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
   std::string const Config::echo() const {
     std::stringstream ss;
-    ss << std::boolalpha;
-    ss << "###########################" << std::endl
-      << "### Start of input echo ###" << std::endl
-      << "###########################" << std::endl << std::endl
-      << " # You may re-use this snippet of the log file as an input file!" << std::endl
-      << " # Options marked with a * are compulsory." << std::endl
-      << std::endl
-      << "# Run options" << std::endl
-      << "title = " << title << "\t# run title" << std::endl
-      << "output = " << outputFileRoot << "\t# root for generating output file names. Suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name, if given; otherwise, defaults to a string composed of the explicitly specified options" << std::endl
-      << "logfile = " << logFileName << "\t# log file name. Defaults to `<output_root>.log'. Use `-' if you want to redirect logging to stdout" << std::endl
-      << "number-shots = " << nShots << "\t# * number of shots" << std::endl
-      << "inclxx-datafile-path = " << INCLXXDataFilePath << std::endl
-#ifdef INCL_DEEXCITATION_ABLAXX
-      << "ablav3p-cxx-datafile-path = " << ablav3pCxxDataFilePath << std::endl
-#endif
-#ifdef INCL_DEEXCITATION_ABLA07
-      << "abla07-datafile-path = " << abla07DataFilePath << std::endl
-#endif
-#ifdef INCL_DEEXCITATION_GEMINIXX
-      << "geminixx-datafile-path = " << geminixxDataFilePath << std::endl
-#endif
-      << std::endl << "# Projectile and target definitions" << std::endl
-      << "target = " << targetString << "\t# * target nuclide. Can be specified as Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe or Fe. If the mass number is omitted, natural target composition is assumed." << std::endl
-      << "         " << "# the target nuclide was parsed as Z=" << targetSpecies.theZ;
+    ss << "###########################\n"
+      << "### Start of input echo ###\n"
+      << "###########################\n\n"
+      << "# You may re-use this snippet of the log file as an input file!\n"
+      << "# Options marked with a * are compulsory.\n"
+      << "\n### Run options\n" << echoOptionsDescription(runOptDesc)
+      << "\n### Physics options\n" << echoOptionsDescription(physicsOptDesc)
+      << "\n# the projectile nuclide was parsed as Z=" << projectileSpecies.theZ
+      << ", A=" << projectileSpecies.theA
+      << "\n# the target nuclide was parsed as Z=" << targetSpecies.theZ;
     if(targetSpecies.theA>0)
       ss << ", A=" << targetSpecies.theA;
     else
       ss << ", natural target";
-    ss << std::endl
-      << "projectile = " << projectileString << "\t# * projectile name (proton, neutron, pi+, pi0, pi-, d, t, a, He-4...)" << std::endl
-      << "         " << "# the projectile nuclide was parsed as Z=" << projectileSpecies.theZ << ", A=" << projectileSpecies.theA << std::endl
-      << "energy = " << projectileKineticEnergy << "\t# * total kinetic energy of the projectile, in MeV" << std::endl
-      << std::endl << "# Physics options " << std::endl
-      << "pauli = " << pauliString << "\t# Pauli-blocking algorithm. Must be one of: strict-statistical (default), strict, statistical, global, none" << std::endl
-      << "cdpp = " << CDPP << "\t# whether to apply CDPP after collisions" << std::endl
-      << "coulomb = " << coulombString << "\t# Coulomb-distortion algorithm. Must be one of: non-relativistic (default), none" << std::endl
-      << "potential = " << potentialString << "\t# nucleon potential. Must be one of: isospin-energy-smooth, isospin-energy (default), isospin, constant" << std::endl
-      << "pion-potential = " << pionPotential << "\t# whether to use a pion potential" << std::endl
-      << "local-energy-BB = " << localEnergyBBString << "\t# local energy in baryon-baryon collisions. Must be one of: always, first-collision (default), never" << std::endl
-      << "local-energy-pi = " << localEnergyPiString << "\t# local energy in pi-N collisions and in delta decays. Must be one of: always, first-collision (default), never" << std::endl
-      << "de-excitation = " << deExcitationString << "\t # which de-excitation model to use. Must be one of:"
-      " none (default)"
-#ifdef INCL_DEEXCITATION_ABLAXX
-      ", ABLAv3p"
-#endif
-#ifdef INCL_DEEXCITATION_ABLA07
-      ", ABLA07"
-#endif
-#ifdef INCL_DEEXCITATION_SMM
-      ", SMM"
-#endif
-#ifdef INCL_DEEXCITATION_GEMINIXX
-      ", GEMINIXX"
-#endif
-      << std::endl
-      << "cluster-algorithm = " << clusterAlgorithmString << "\t# clustering algorithm for production of composites. Must be one of: intercomparison (default), none" << std::endl
-      << "cluster-max-mass = " << clusterMaxMass << "\t# maximum mass of produced composites. Must be between 2 and 12 (included)" << std::endl
-      << "back-to-spectator = " << backToSpectator << "\t# whether to use back-to-spectator" << std::endl
-      << "use-real-masses = " << useRealMasses << "\t# whether to use real masses for the outgoing particle energies" << std::endl
-      << "separation-energies = " << separationEnergyString << "\t# how to assign the separation energies of the INCL nucleus. Must be one of: INCL (default), real, real-light" << std::endl
-      << std::endl << "# Technical options " << std::endl
-      << "verbosity = " << verbosity << "\t# from 0 (quiet) to 10 (most verbose)" << std::endl
-      << "verbose-event = " << verboseEvent << "\t# request verbose logging for the specified event only" << std::endl
-      << "random-seed-1 = " << randomSeed1 << "\t# first seed for the random-number generator" << std::endl
-      << "random-seed-2 = " << randomSeed2 << "\t# second seed for the random-number generator" << std::endl
-      << std::endl << "#########################" << std::endl
-      << "### End of input echo ###" << std::endl
+    ss << "\n\n#########################\n"
+      << "### End of input echo ###\n"
       << "#########################" << std::endl;
 
     return ss.str();
   }
+
+  std::string Config::echoOptionsDescription(const po::options_description &aDesc) const {
+    typedef std::vector< boost::shared_ptr< po::option_description > > OptVector;
+    typedef std::vector< boost::shared_ptr< po::option_description > >::const_iterator OptIter;
+
+    std::stringstream ss;
+    ss << std::boolalpha;
+    OptVector const &anOptVect = aDesc.options();
+    for(OptIter opt=anOptVect.begin(), e=anOptVect.end(); opt!=e; ++opt) {
+      std::string description = (*opt)->description();
+      String::wrap(description);
+      String::replaceAll(description, "\n", "\n# ");
+      ss << "\n# " << description << std::endl;
+      const std::string &name = (*opt)->long_name();
+      ss << name << " = ";
+      po::variable_value const &value = variablesMap.find(name)->second;
+      std::type_info const &type = value.value().type();
+      if(type == typeid(std::string)) {
+        const std::string svalue = value.as<std::string>();
+        if(svalue.empty())
+          ss << "\"\"";
+        else
+          ss << svalue;
+      } else if(type == typeid(G4int))
+        ss << value.as<G4int>();
+      else if(type == typeid(G4float))
+        ss << value.as<G4float>();
+      else if(type == typeid(G4double))
+        ss << value.as<G4double>();
+      else if(type == typeid(G4bool))
+        ss << value.as<G4bool>();
+      ss << '\n';
+    }
+    return ss.str();
+  }
+#endif
 
 }

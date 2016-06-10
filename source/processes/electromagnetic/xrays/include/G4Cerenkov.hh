@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Cerenkov.hh 71106 2013-06-11 10:25:59Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -110,6 +110,9 @@ public:
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable', for all charged particles
         // except short-lived particles.
+
+        void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
+        // Build table at a right time
 
         G4double GetMeanFreePath(const G4Track& aTrack,
                                  G4double ,
@@ -209,15 +212,6 @@ private:
 ////////////////////
 // Inline methods
 ////////////////////
-
-inline 
-G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
-{
-   if (aParticleType.GetParticleName() == "chargedgeantino") return false;
-   if (aParticleType.IsShortLived()) return false;
-
-   return (aParticleType.GetPDGCharge() != 0);
-}
 
 inline 
 void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state) 

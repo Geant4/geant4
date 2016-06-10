@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2010-06-06 04:33:02 perl Exp $
+$Id: History 73034 2013-08-15 09:25:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-07-13 P.Gumplinger (testem10-V09-06-01)
+- remove or comment out unused class fields in Em10DetectorConstruction,
+  Em10PhysicsListMessenger, Em10PrimaryGeneratorAction and
+  Em10SteppingAction
+
+01-04-13 A.Dotti (testem10-V09-05-05,testem10-V09-05-06)
+- New G4VUserPhysicsList interface
+
+13-02-13 I.Hrivnacova 
+- Applied coding guidelines (virtual keyword, data members initialization)
 
 28-11-12 G.Cosmo (testem10-V09-05-04)
 - Fixed cases of variable shadowing.

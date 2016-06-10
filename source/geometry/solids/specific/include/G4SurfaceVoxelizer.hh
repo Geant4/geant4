@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:$
+// $Id: G4SurfaceVoxelizer.hh 72335 2013-07-16 09:01:49Z gcosmo $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -78,7 +78,7 @@ class G4SurfaceVoxelizer
 
     void DisplayVoxelLimits();
     void DisplayBoundaries();
-    void DisplayListNodes();
+    void DisplayListNodes() const;
 
     G4SurfaceVoxelizer();
    ~G4SurfaceVoxelizer();
@@ -185,11 +185,11 @@ class G4SurfaceVoxelizer
 
   private:
 
-    static int fDefaultVoxelsCount;
+    static G4ThreadLocal G4int fDefaultVoxelsCount;
 
     void BuildEmpty ();
 
-    G4String GetCandidatesAsString(const G4SurfBits &bits);
+    G4String GetCandidatesAsString(const G4SurfBits &bits) const;
 
     void CreateSortedBoundary(std::vector<G4double> &boundaryRaw, G4int axis);
 

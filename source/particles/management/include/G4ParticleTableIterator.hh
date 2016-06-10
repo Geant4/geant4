@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleTableIterator.hh 72999 2013-08-15 08:05:14Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -38,6 +38,7 @@
 #define G4ParticleTableIterator_h 1
 
 #include <map>
+#include "G4ParticleDefinition.hh"
 
 template < class K, class V > class G4ParticleTableIterator
 {
@@ -46,7 +47,8 @@ template < class K, class V > class G4ParticleTableIterator
   G4ParticleTableIterator( Map &adict):
     it(adict.begin()),
     mydict(&adict),
-    defined(false)
+    defined(false),
+    skipIons(true)
      {}
 
   G4bool operator++ ()
@@ -58,16 +60,28 @@ template < class K, class V > class G4ParticleTableIterator
       
   G4bool operator()()
     {
-      if(defined) {
-	    return operator++();
-      } else {
-	    defined=true;
-	    it=mydict->begin();
-	    return it!=mydict->end() ? true : false;
+      if(!defined) 
+      {
+        defined=true;
+        it=mydict->begin();
       }
+      else 
+      {
+        it++;
+      }
+      if(it==mydict->end()) return false;
+      if(skipIons)
+      {
+        while((static_cast<G4ParticleDefinition*>((*it).second))->IsGeneralIon())
+        {
+          it++;
+          if(it==mydict->end()) return false;
+        }
+      }
+      return true;
     }
 
-  void reset (){defined=false;}
+  void reset (G4bool ifSkipIon = true) {defined=false; skipIons = ifSkipIon; }
   K* key() const { return &((*it).first); }
   V  value() const { return (*it).second; }
 
@@ -75,6 +89,7 @@ template < class K, class V > class G4ParticleTableIterator
   typename Map::iterator it;  
   Map * mydict;
   G4bool defined;
+  G4bool skipIons;
 };
 
 #endif

@@ -26,45 +26,43 @@
 /// \file field/field02/include/F02FieldMessenger.hh
 /// \brief Definition of the F02FieldMessenger class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F02FieldMessenger.hh 76247 2013-11-08 11:18:52Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02FieldMessenger_h
 #define F02FieldMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
 
 class F02ElectricFieldSetup;
 class G4UIdirectory;
-class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
-class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02FieldMessenger: public G4UImessenger
 {
   public:
     F02FieldMessenger(F02ElectricFieldSetup* );
-    ~F02FieldMessenger();
-    
+    virtual ~F02FieldMessenger();
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+ 
   private:
 
     F02ElectricFieldSetup*     fElFieldSetup;
+
     G4UIdirectory*             fFieldDir;
     G4UIcmdWithAnInteger*      fStepperCmd;
     G4UIcmdWithADoubleAndUnit* fElFieldCmd;
     G4UIcmdWithADoubleAndUnit* fMinStepCmd;
     G4UIcmdWithoutParameter*   fUpdateCmd;
-
-
 };
 
 #endif
-

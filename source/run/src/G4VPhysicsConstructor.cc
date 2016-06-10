@@ -35,28 +35,52 @@
 
 #include "G4VPhysicsConstructor.hh"
 
+// This static member is thread local. For each thread, it holds the array
+// size of G4VPCData instances.
+//
+template <class G4VPCData> G4ThreadLocal
+G4int G4VUPLSplitter<G4VPCData>::slavetotalspace = 0;
+
+// This static member is thread local. For each thread, it points to the
+// array of G4VPCData instances.
+//
+template <class G4VPCData> G4ThreadLocal
+G4VPCData* G4VUPLSplitter<G4VPCData>::offset = 0;
+
+// This field helps to use the class G4VPCManager
+//
+G4VPCManager G4VPhysicsConstructor::subInstanceManager;
+
+void G4VPCData::initialize()
+{
+    _aParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
+}
+
+
 G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name)
    : verboseLevel(0), namePhysics(name), typePhysics(0)
 {
+  g4vpcInstanceID = subInstanceManager.CreateSubInstance();
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
-  theParticleIterator = theParticleTable->GetIterator();
+  //aParticleIterator = theParticleTable->GetIterator();
 
   // PhysicsListHelper
-  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  //aPLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
 }
 
 G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name, G4int type)
     : verboseLevel(0), namePhysics(name), typePhysics(type)
 {
+    g4vpcInstanceID = subInstanceManager.CreateSubInstance();
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
-  theParticleIterator = theParticleTable->GetIterator();
+  //aParticleIterator = theParticleTable->GetIterator();
 
   if (type<0) typePhysics = 0;
 
   // PhysicsListHelper
-  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  //aPLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
 }
 
 G4VPhysicsConstructor::~G4VPhysicsConstructor()

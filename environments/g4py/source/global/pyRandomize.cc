@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyRandomize.cc,v 1.4 2006-06-29 15:33:42 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyRandomize.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyRandomize.cc
 //
@@ -56,7 +55,7 @@ void f2_setTheSeed(long seed, int lux)
 
 // setTheSeeds
 void f1_setTheSeeds(const list& seedList)
-{  
+{
   // check size...
   int idx=0;
   while(1) {
@@ -65,8 +64,8 @@ void f1_setTheSeeds(const list& seedList)
     idx++;
   }
   int nsize= idx+1;
-  
-  long* seedArray= new long[nsize]; // should not be deleted!! 
+
+  long* seedArray= new long[nsize]; // should not be deleted!!
                                     // (this is a problem with CLHEP.)
   for (int i=0; i< nsize; i++) {
     seedArray[i]= extract<long>(seedList[i]);
@@ -168,7 +167,7 @@ double f_G4UniformRand()
   return G4UniformRand();
 }
 
-};
+}
 
 using namespace pyRandomize;
 
@@ -215,7 +214,7 @@ void export_Randomize()
     .def("createInstance",      &HepRandom::createInstance)
     .staticmethod("createInstance")
     ;
-  
+
   // ---
   class_<RandBit, boost::noncopyable>
     ("RandBit", "generate bit random number", no_init)
@@ -230,7 +229,7 @@ void export_Randomize()
     .def("shoot", f2_RandGaussQ_shoot)
     .staticmethod("shoot")
     ;
-    
+
   // ---
   def("G4UniformRand", f_G4UniformRand);
 

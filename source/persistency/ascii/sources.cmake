@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:50:05 bmorgan Exp $
+# $Id: sources.cmake 66363 2012-12-18 09:12:54Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -21,7 +21,6 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/divisions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/BREPS/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/Boolean/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
@@ -137,7 +136,6 @@ GEANT4_DEFINE_MODULE(NAME G4geomtext
         G4tgrVolumeDivision.cc
         G4tgrVolumeMgr.cc
     GRANULAR_DEPENDENCIES
-        G4brep
         G4csg
         G4geomBoolean
         G4geomdivision

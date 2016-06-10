@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrRotationMatrixFactory.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrRotationMatrixFactory
@@ -38,7 +38,7 @@
 #include "G4tgrUtils.hh"
 
 
-G4tgrRotationMatrixFactory * G4tgrRotationMatrixFactory::theInstance = 0;
+G4ThreadLocal G4tgrRotationMatrixFactory * G4tgrRotationMatrixFactory::theInstance = 0;
 
 
 // -------------------------------------------------------------------------

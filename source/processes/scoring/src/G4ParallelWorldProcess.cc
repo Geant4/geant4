@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParallelWorldProcess.cc 76935 2013-11-19 09:46:31Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
@@ -49,9 +49,9 @@
 #include "G4SDManager.hh"
 #include "G4VSensitiveDetector.hh"
 
-G4Step* G4ParallelWorldProcess::fpHyperStep = 0;
-G4int   G4ParallelWorldProcess::nParallelWorlds = 0;
-G4int   G4ParallelWorldProcess::fNavIDHyp = 0;
+G4ThreadLocal G4Step* G4ParallelWorldProcess::fpHyperStep = 0;
+G4ThreadLocal G4int   G4ParallelWorldProcess::nParallelWorlds = 0;
+G4ThreadLocal G4int   G4ParallelWorldProcess::fNavIDHyp = 0;
 const G4Step* G4ParallelWorldProcess::GetHyperStep()
 { return fpHyperStep; }
 G4int G4ParallelWorldProcess::GetHypNavigatorID()
@@ -72,6 +72,7 @@ G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
   fGhostPostStepPoint = fGhostStep->GetPostStepPoint();
 
   fTransportationManager = G4TransportationManager::GetTransportationManager();
+  fTransportationManager->GetNavigatorForTracking()->SetPushVerbosity(false);
   fPathFinder = G4PathFinder::GetInstance();
 
   if (verboseLevel>0)
@@ -97,6 +98,7 @@ SetParallelWorld(G4String parallelWorldName)
   fGhostWorldName = parallelWorldName;
   fGhostWorld = fTransportationManager->GetParallelWorld(fGhostWorldName);
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+  fGhostNavigator->SetPushVerbosity(false);
 }
 
 void G4ParallelWorldProcess::
@@ -105,6 +107,7 @@ SetParallelWorld(G4VPhysicalVolume* parallelWorld)
   fGhostWorldName = parallelWorld->GetName();
   fGhostWorld = parallelWorld;
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+  fGhostNavigator->SetPushVerbosity(false);
 }
 
 void G4ParallelWorldProcess::StartTracking(G4Track* trk)
@@ -130,10 +133,8 @@ void G4ParallelWorldProcess::StartTracking(G4Track* trk)
   fGhostPostStepPoint->SetStepStatus(fUndefined);
 
 //  G4VPhysicalVolume* thePhys = fNewGhostTouchable->GetVolume();
-//  G4cout << "======= G4ParallelWorldProcess::StartTracking() =======" << G4endl;
 //  if(thePhys)
 //  {
-//    G4cout << " --- Parallel world volume : " << thePhys->GetName() << G4endl;
 //    G4Material* ghostMaterial = thePhys->GetLogicalVolume()->GetMaterial();
 //    if(ghostMaterial)
 //    { G4cout << " --- Material : " << ghostMaterial->GetName() << G4endl; }
@@ -259,7 +260,7 @@ G4double G4ParallelWorldProcess::AlongStepGetPhysicalInteractionLength(
             const G4Track& track, G4double  previousStepSize, G4double  currentMinimumStep,
             G4double& proposedSafety, G4GPILSelection* selection)
 {
-  static G4FieldTrack endTrack('0');
+  static G4ThreadLocal G4FieldTrack *endTrack_G4MT_TLS_ = 0 ; if (!endTrack_G4MT_TLS_) endTrack_G4MT_TLS_ = new  G4FieldTrack ('0') ;  G4FieldTrack &endTrack = *endTrack_G4MT_TLS_;
   //static ELimited eLimited;
   ELimited eLimited;
   ELimited eLim = kUndefLimited;

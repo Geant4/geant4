@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuBremsstrahlung.cc 72942 2013-08-14 13:37:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,10 +66,7 @@
 #include "G4MuBremsstrahlung.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
 #include "G4MuBremsstrahlungModel.hh"
-#include "G4UniversalFluctuation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -77,8 +74,6 @@ using namespace std;
 
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
-    theBaseParticle(0),
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
 {
@@ -111,14 +106,12 @@ G4double G4MuBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
-				 const G4ParticleDefinition* part,
+				 const G4ParticleDefinition*,
 				 const G4ParticleDefinition*)
 {
   if(!isInitialised) {
 
     isInitialised = true;
-
-    theParticle = part;
 
     if (!EmModel()) { SetEmModel(new G4MuBremsstrahlungModel()); }
 

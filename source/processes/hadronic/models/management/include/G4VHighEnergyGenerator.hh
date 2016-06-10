@@ -24,7 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VHighEnergyGenerator.hh 69717 2013-05-13 09:47:57Z gcosmo $
+//      V. Uzhinsky Nov. 2012
+//          Added method GetProjectileNucleus for simulation of nucleus-nucleus inter. 
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1
@@ -56,6 +58,7 @@ class G4VHighEnergyGenerator
 
  public:
       virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
+      virtual G4V3DNucleus * GetProjectileNucleus() const;  // Uzhi Nov. 2012
       virtual G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, 
                                              const G4DynamicParticle &thePrimary) = 0;
       std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;

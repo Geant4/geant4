@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/HadronPhysicsUrQMD.hh
 /// \brief Definition of the HadronPhysicsUrQMD class
 //
-// $Id$
+// $Id: HadronPhysicsUrQMD.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,8 +44,6 @@
 #include "globals.hh"
 #include "G4ios.hh"
 
-#include "G4VPhysicsConstructor.hh"
-
 #include "G4PiKBuilder.hh"
 #include "UrQMDPiKBuilder.hh"
 
@@ -54,7 +52,6 @@
 
 #include "G4NeutronBuilder.hh"
 #include "UrQMDNeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
 
@@ -63,36 +60,33 @@
 
 class HadronPhysicsUrQMD : public G4VPhysicsConstructor
 {
-  public: 
+public: 
 
-    HadronPhysicsUrQMD(G4int verbose =1);
-    virtual ~HadronPhysicsUrQMD();
+  HadronPhysicsUrQMD(G4int verbose =1);
+  virtual ~HadronPhysicsUrQMD();
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
 
-  private:
+private:
 
-    void CreateModels();
-    G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
+  void CreateModels();
+  G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
     
-    G4NeutronBuilder * fNeutrons;
-    UrQMDNeutronBuilder * fUrQMDNeutron;
-    G4LEPNeutronBuilder * fLEPNeutron;        //needed for capture&fission
+  G4NeutronBuilder * fNeutrons;
+  UrQMDNeutronBuilder * fUrQMDNeutron;
  
-    G4PiKBuilder * fPiK;
-    UrQMDPiKBuilder * fUrQMDPiK;
+  G4PiKBuilder * fPiK;
+  UrQMDPiKBuilder * fUrQMDPiK;
     
-    G4ProtonBuilder * fPro;
-    UrQMDProtonBuilder * fUrQMDPro;    
+  G4ProtonBuilder * fPro;
+  UrQMDProtonBuilder * fUrQMDPro;    
     
-    G4HyperonFTFPBuilder * fHyperon;
+  G4HyperonFTFPBuilder * fHyperon;
     
-    G4AntiBarionBuilder * fAntiBaryon;
-    UrQMDAntiBarionBuilder * fUrQMDAntiBaryon;
+  G4AntiBarionBuilder * fAntiBaryon;
+  UrQMDAntiBarionBuilder * fUrQMDAntiBaryon;
 
-    G4VCrossSectionDataSet * fCHIPSInelastic;
 };
 
 #endif

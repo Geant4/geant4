@@ -27,7 +27,6 @@
 
 #include "G4HadSignalHandler.hh"
 
-
 namespace G4HadSignalHandler_local
 {
   extern "C" 
@@ -39,11 +38,11 @@ namespace G4HadSignalHandler_local
 
 using namespace std;
 
-std::vector<sighandler_t> G4HadSignalHandler::theCache;
-bool G4HadSignalHandler::registered = false;
+G4ThreadLocal std::vector<sighandler_t> *G4HadSignalHandler::theCache_G4MT_TLS_ = 0;
+G4ThreadLocal bool G4HadSignalHandler::registered = false;
 
 G4HadSignalHandler::G4HadSignalHandler(sighandler_t aNew)
-{
+{  ;;;   if (!theCache_G4MT_TLS_) theCache_G4MT_TLS_ = new std::vector<sighandler_t>  ; std::vector<sighandler_t> &theCache = *theCache_G4MT_TLS_;  ;;;  
     if(!registered) 
     { 
       G4HadSignalHandler_local::G4HadSignalHandler_initial = 
@@ -54,7 +53,7 @@ G4HadSignalHandler::G4HadSignalHandler(sighandler_t aNew)
 }
 
 G4HadSignalHandler::~G4HadSignalHandler()
-{
+{  ;;;   if (!theCache_G4MT_TLS_) theCache_G4MT_TLS_ = new std::vector<sighandler_t>  ; std::vector<sighandler_t> &theCache = *theCache_G4MT_TLS_;  ;;;  
   theCache.clear();
   signal (SIGSEGV, G4HadSignalHandler_local::G4HadSignalHandler_initial); 
   registered = false;
@@ -62,11 +61,13 @@ G4HadSignalHandler::~G4HadSignalHandler()
 
 void G4HadSignalHandler_local::HandleIt(int i)
 {
-  static int iii=G4HadSignalHandler::theCache.size()-1;
+  static G4ThreadLocal int *iii_G4MT_TLS_ = 0 ; if (!iii_G4MT_TLS_) {iii_G4MT_TLS_ = new  int  ; *iii_G4MT_TLS_=G4HadSignalHandler::theCache_G4MT_TLS_->size()-1 ; }  int &iii = *iii_G4MT_TLS_;
   for(int c=iii; c!=-1; c--)
   {
     iii--;
-    G4HadSignalHandler::theCache[c](i);
+    //Andrea Dotti (13Jan2013): change for G4MT
+    (G4HadSignalHandler::theCache_G4MT_TLS_->operator[](c))(i);
+    //G4HadSignalHandler::theCache[c](i);
   }
     std::cerr << "callback to user-defined or default signal handler"<<endl;
   signal (SIGSEGV, G4HadSignalHandler_local::G4HadSignalHandler_initial);

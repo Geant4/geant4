@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4digits_hits.cc,v 1.4 2006-06-29 15:30:29 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pymodG4digits_hits.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pymodG4digits_hits.cc [Geant4Py module]
 //

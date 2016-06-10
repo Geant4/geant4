@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleChangeForLoss.cc 68795 2013-04-05 13:24:46Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -47,7 +47,7 @@
 #include "G4Step.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
-#include "G4VelocityTable.hh"
+//#include "G4VelocityTable.hh"
 
 G4ParticleChangeForLoss::G4ParticleChangeForLoss()
   : G4VParticleChange(), currentTrack(0), proposedKinEnergy(0.),
@@ -210,23 +210,27 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
 G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
 {
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint();
+  G4Track* pTrack = pStep->GetTrack();
 
   // accumulate change of the kinetic energy
+  G4double preKinEnergy = pPreStepPoint->GetKineticEnergy();
   G4double kinEnergy = pPostStepPoint->GetKineticEnergy() +
-    (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
+    (proposedKinEnergy - preKinEnergy);
 
   // update kinetic energy and charge
   if (kinEnergy < lowEnergyLimit) {
     theLocalEnergyDeposit += kinEnergy;
     kinEnergy = 0.0;
+    pPostStepPoint->SetVelocity(0.0);
   } else {
     pPostStepPoint->SetCharge( currentCharge );
+    // calculate velocity
+    pTrack->SetKineticEnergy(kinEnergy); 
+    pPostStepPoint->SetVelocity(pTrack->CalculateVelocity());
+    pTrack->SetKineticEnergy(preKinEnergy); 
   }
   pPostStepPoint->SetKineticEnergy( kinEnergy );
-  // calculate velocity
-  pStep->GetTrack()->SetKineticEnergy(kinEnergy); 
-  pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
-  pStep->GetTrack()->SetKineticEnergy(pStep->GetPreStepPoint()->GetKineticEnergy()); 
 
   if (isParentWeightProposed ){
     pPostStepPoint->SetWeight( theParentWeight );
@@ -240,11 +244,17 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
 G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
 {
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  G4Track* pTrack = pStep->GetTrack();
+
   pPostStepPoint->SetCharge( currentCharge );
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
   pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
-  pStep->GetTrack()->SetKineticEnergy( proposedKinEnergy );
-  pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
+  pTrack->SetKineticEnergy( proposedKinEnergy );
+  if(proposedKinEnergy > 0.0) {
+    pPostStepPoint->SetVelocity(pTrack->CalculateVelocity());
+  } else {
+    pPostStepPoint->SetVelocity(0.0);
+  }
   pPostStepPoint->SetPolarization( proposedPolarization );
 
   if (isParentWeightProposed ){

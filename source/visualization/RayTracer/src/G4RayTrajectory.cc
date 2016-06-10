@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RayTrajectory.cc 71495 2013-06-17 09:13:30Z gcosmo $
 //
 //
 //
@@ -43,7 +43,7 @@
 #include "G4TransportationManager.hh"
 #include "G4ios.hh"
 
-G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
+G4ThreadLocal G4Allocator<G4RayTrajectory>* rayTrajectoryAllocator = 0;
 
 G4RayTrajectory :: G4RayTrajectory()
 {

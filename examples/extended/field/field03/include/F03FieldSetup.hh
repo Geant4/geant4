@@ -26,67 +26,67 @@
 /// \file field/field03/include/F03FieldSetup.hh
 /// \brief Definition of the F03FieldSetup class
 //
-// $Id$
 //
+// $Id: F03FieldSetup.hh 77294 2013-11-22 11:01:00Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef F03FieldSetup_H
-#define F03FieldSetup_H
+#ifndef F03FieldSetup_h
+#define F03FieldSetup_h 1
 
 #include "G4MagneticField.hh"
 #include "G4UniformMagField.hh"
 
-class F03FieldMessenger;
 class G4FieldManager;
 class G4ChordFinder;
 class G4Mag_UsualEqRhs;
 class G4MagIntegratorStepper;
+class F03FieldMessenger;
 
 ///  A class for setting up the Magnetic Field
 ///
 ///  It also creates the necessary classes to control accuracy of propagation.
 ///  In this example
 ///    - There is a global field for most of the setup;
-///    - A local  field overides it for some volume(s) and it assumed to be 
+///    - A local field overides it for some volume(s) and it assumed to be
 ///      uniform.
 
 class F03FieldSetup
 {
-
 public:
+  F03FieldSetup();           //  A zero field
+  virtual ~F03FieldSetup();
 
-  F03FieldSetup();               //  A zero field
-  F03FieldSetup(G4ThreeVector);  //  The value of the field
-  ~F03FieldSetup();
-      
-  void SetStepperType(G4int i) { fStepperType = i; }
+  void SetStepperType( G4int i ) { fStepperType = i; }
 
   void SetStepper();
 
   void SetMinStep(G4double s) { fMinStep = s; }
 
-  void UpdateField();
-
   void SetFieldValue(G4ThreeVector fieldVector);
   void SetFieldValue(G4double      fieldValue);
   G4ThreeVector GetConstantFieldValue();
-  G4FieldManager*  GetLocalFieldManager() { return fLocalFieldManager;}
+
+  void UpdateField();
+
+  G4FieldManager* GetLocalFieldManager() { return fLocalFieldManager;}
 
 protected:
 
-  G4FieldManager*         GetGlobalFieldManager();
-    // Returns the global Field Manager
+  // Find the global Field Manager
+
+  G4FieldManager*         GetGlobalFieldManager() ;
 
   G4FieldManager*         fFieldManager;
   G4FieldManager*         fLocalFieldManager;
-
   G4ChordFinder*          fChordFinder;
   G4ChordFinder*          fLocalChordFinder;
-
-  G4Mag_UsualEqRhs*       fEquation; 
-  G4Mag_UsualEqRhs*       fLocalEquation; 
-
-  G4MagneticField*        fMagneticField; 
-  G4MagneticField*        fLocalMagneticField; 
+  G4Mag_UsualEqRhs*       fEquation;
+  G4Mag_UsualEqRhs*       fLocalEquation;
+  G4MagneticField*        fMagneticField;
+  G4MagneticField*        fLocalMagneticField;
 
   G4MagIntegratorStepper* fStepper;
   G4MagIntegratorStepper* fLocalStepper;

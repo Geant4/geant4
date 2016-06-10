@@ -1,0 +1,39 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example B1Con History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+10/10/13 I. Hrivnacova (B1Con-V09-06-03)
+- Updated for changes in B1 example
+- README.B01 renamed to README.B1 and kept identical with B1/README
+  (to make future updates easier).
+
+10/03/13 KOI, Tatsumi (B1Con-V09-06-02)
+- Fix CMakeLists.txt
+  Update README and .README
+
+10/02/13 KOI, Tatsumi (B1Con-V09-06-01)
+- Added "name" for convergence tester in B1RunAction 
+  Added comments for FOM in README
+  Changed output example in README
+
+09/30/13 I. Hrivnacova (B1Con-V09-06-00)
+- Added .README and tagged 
+     
+09/27/13 KOI, Tatsumi
+- Incorporate comments from Ivana Hrivnacova
+
+09/26/13 KOI, Tatsumi
+- Created based on exampleB1-V09-06-03

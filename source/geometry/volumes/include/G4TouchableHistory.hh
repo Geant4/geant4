@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TouchableHistory.hh 67974 2013-03-13 10:17:37Z gcosmo $
 //
 // 
 // class G4TouchableHistory
@@ -47,6 +47,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
+
+#include "geomwdefs.hh"
 
 class G4TouchableHistory : public G4VTouchable
 {

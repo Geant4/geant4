@@ -23,22 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4CookShellCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4CookShellCorrections.hh"
-
+#include <CLHEP/Units/SystemOfUnits.h>
 
 // Data comes from:
 // J.L. Cook, H. Ferguson and A.R.de L. Musgrove, Aust. J. Phys., 20, 477(1967)
 
 
 // S(Z) 68 values from Z = 28 to Z = 95
-const G4double G4CookShellCorrections::ShellZTable
-[G4CookShellCorrections::ZTableSize] = {
+G4double G4CookShellCorrections::ShellZTable[] = {
   -18.60,    -18.70,    -18.01,    -17.87,    -17.08,    -16.60,    -16.75,    -16.50,    -16.35,    -16.22,
   -16.41,    -16.89,    -16.43,    -16.68,    -16.73,    -17.45,    -17.29,    -17.44,    -17.82,    -18.62,
   -18.27,    -19.39,    -19.91,    -19.14,    -18.26,    -17.40,    -16.42,    -15.77,    -14.37,    -13.91,
@@ -50,8 +51,7 @@ const G4double G4CookShellCorrections::ShellZTable
 
 
 // S(N) 118 values from N = 33 to N = 150
-const G4double G4CookShellCorrections::ShellNTable
-[G4CookShellCorrections::NTableSize] = {
+G4double G4CookShellCorrections::ShellNTable[] = {
   15.52,    16.38,    17.16,    17.55,    18.03,    17.59,    19.03,    18.71,    18.80,    18.99,
   18.46,    18.25,    17.76,    17.38,    16.72,    15.62,    14.38,    12.88,    13.23,    13.81,
   14.90,    14.86,    15.76,    16.20,    17.62,    17.73,    18.16,    18.67,    19.69,    19.51,
@@ -66,19 +66,12 @@ const G4double G4CookShellCorrections::ShellNTable
    5.09,     5.03,     4.93,     5.28,     5.49,     5.50,     5.37,     5.30
 };
 
-G4CookShellCorrections* G4CookShellCorrections::theInstance = 0;
-
 G4CookShellCorrections::G4CookShellCorrections()
-{;}
+{
+  for(size_t i=0; i<ZTableSize; ++i) { ShellZTable[i] *= CLHEP::MeV; }
+  for(size_t i=0; i<NTableSize; ++i) { ShellNTable[i] *= CLHEP::MeV; }
+}
 
 G4CookShellCorrections::~G4CookShellCorrections()
-{;}
+{}
 
-G4CookShellCorrections* G4CookShellCorrections::GetInstance()
-{
-  if (!theInstance) { 
-    static G4CookShellCorrections theCorrections;
-    theInstance = &theCorrections; 
-  }
-  return theInstance;
-}

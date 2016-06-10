@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPFissionBaseFS_h
 #define G4NeutronHPFissionBaseFS_h 1

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/include/MuCrossSections.hh
 /// \brief Definition of the MuCrossSections class
 //
-// $Id$
+// $Id: MuCrossSections.hh 66241 2012-12-13 18:34:42Z gunter $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

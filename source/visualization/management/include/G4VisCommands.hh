@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommands.hh 66373 2012-12-18 09:41:34Z gcosmo $
 
 // /vis/ top level commands - John Allison  5th February 2001
 

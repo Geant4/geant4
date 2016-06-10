@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01DetectorConstruction.cc
 /// \brief Implementation of the RE01DetectorConstruction class
 //
-// $Id$
+// $Id: RE01DetectorConstruction.cc 75598 2013-11-04 13:00:59Z gcosmo $
 //
 
 #include "RE01DetectorConstruction.hh"
@@ -163,38 +163,42 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   G4VSolid * trackerLayer_tubs
     = new G4Tubs("trackerLayer_tubs",fTrkTubs_rmin,fTrkTubs_rmax,fTrkTubs_dz,
                  fTrkTubs_sphi,fTrkTubs_dphi);
-  G4LogicalVolume * trackerLayer_log
+  fTrackerLayer_log
     = new G4LogicalVolume(trackerLayer_tubs,silicon,"trackerB_L",0,0,0);
   G4VPVParameterisation * trackerParam
     = new RE01TrackerParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume *trackerLayer_phys =
-      new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_log,
+      new G4PVParameterised("trackerLayer_phys",fTrackerLayer_log,tracker_log,
                            kXAxis, fNotrkLayers, trackerParam);
   G4VisAttributes* trackerLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.5,0.0,1.0));
   trackerLayer_logVisAtt->SetForceWireframe(true);
-  trackerLayer_log->SetVisAttributes(trackerLayer_logVisAtt);
+  fTrackerLayer_log->SetVisAttributes(trackerLayer_logVisAtt);
 
   //------------------------------ calorimeter
   G4VSolid * calorimeter_tubs
     = new G4Tubs("calorimeter_tubs",fCaloTubs_rmin,fCaloTubs_rmax,
                   fCaloTubs_dz,fCaloTubs_sphi,fCaloTubs_dphi);
-  G4LogicalVolume * calorimeter_log
+  fCalorimeter_log
     = new G4LogicalVolume(calorimeter_tubs,scinti,"caloT_L",0,0,0);
   // G4VPhysicalVolume * calorimeter_phys =
-      new G4PVPlacement(0,G4ThreeVector(),calorimeter_log,"caloM_P",
+      new G4PVPlacement(0,G4ThreeVector(),fCalorimeter_log,"caloM_P",
                         experimentalHall_log,false,0);
   G4VisAttributes* calorimeter_logVisATT
     = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   calorimeter_logVisATT->SetForceWireframe(true);
-  calorimeter_log->SetVisAttributes(calorimeter_logVisATT);
+  fCalorimeter_log->SetVisAttributes(calorimeter_logVisATT);
   G4Region* calorimeterRegion = new G4Region("CalorimeterRegion");
   RE01RegionInformation* calorimeterInfo = new RE01RegionInformation();
   calorimeterInfo->SetCalorimeter();
   calorimeterRegion->SetUserInformation(calorimeterInfo);
-  calorimeter_log->SetRegion(calorimeterRegion);
-  calorimeterRegion->AddRootLogicalVolume(calorimeter_log);
+  fCalorimeter_log->SetRegion(calorimeterRegion);
+  calorimeterRegion->AddRootLogicalVolume(fCalorimeter_log);
+
+  G4String ROgeometryName = "CalorimeterROGeom";
+  fCalorimeterRO = new RE01CalorimeterROGeometry(ROgeometryName);
+  fCalorimeterRO->BuildROGeometry();
 
   //------------------------------- Lead layers
   // As an example for Parameterised volume 
@@ -208,32 +212,35 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
     = new RE01CalorimeterParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume * caloLayer_phys =
-      new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_log,
+      new G4PVParameterised("caloLayer_phys",caloLayer_log,fCalorimeter_log,
                            kXAxis, fNocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));
   caloLayer_logVisAtt->SetForceWireframe(true);
   caloLayer_log->SetVisAttributes(caloLayer_logVisAtt);
 
+
+  return experimentalHall_phys;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void RE01DetectorConstruction::ConstructSDandField() {
+
   //------------------------------------------------------------------
   // Sensitive Detector
   //------------------------------------------------------------------
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-
+  //G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  
   G4String trackerSDname = "/mydet/tracker";
   RE01TrackerSD * trackerSD = new RE01TrackerSD(trackerSDname);
-  SDman->AddNewDetector(trackerSD);
-  trackerLayer_log->SetSensitiveDetector(trackerSD);
-
+  //SDman->AddNewDetector(trackerSD);
+  SetSensitiveDetector(fTrackerLayer_log, trackerSD);
+  
   G4String calorimeterSDname = "/mydet/calorimeter";
   RE01CalorimeterSD * calorimeterSD = new RE01CalorimeterSD(calorimeterSDname);
-  G4String ROgeometryName = "CalorimeterROGeom";
-  G4VReadOutGeometry* calRO = new RE01CalorimeterROGeometry(ROgeometryName);
-  calRO->BuildROGeometry();
-  calorimeterSD->SetROgeometry(calRO);
-  SDman->AddNewDetector(calorimeterSD);
-  calorimeter_log->SetSensitiveDetector(calorimeterSD);
+  calorimeterSD->SetROgeometry(fCalorimeterRO);
+  //SDman->AddNewDetector(calorimeterSD);
+  SetSensitiveDetector(fCalorimeter_log, calorimeterSD);
 
-  return experimentalHall_phys;
 }
 

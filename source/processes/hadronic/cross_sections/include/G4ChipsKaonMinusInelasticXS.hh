@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics class: G4ChipsKaonMinusInelasticXS -- header file
@@ -79,11 +78,8 @@ private:
 
 // Body
 private:
-  G4double  lastSig; // Last value of the Cross Section
   G4double* lastLEN; // Pointer to the last array of LowEnergy cross sections
   G4double* lastHEN; // Pointer to the last array of HighEnergy cross sections
-  G4double  lastE;   // Last used in the cross section Energy
-  G4int     lastPDG; // The last projectile PDG
   G4int     lastN;   // The last N of calculated nucleus
   G4int     lastZ;   // The last Z of calculated nucleus
   G4double  lastP;   // Last used in the cross section Momentum

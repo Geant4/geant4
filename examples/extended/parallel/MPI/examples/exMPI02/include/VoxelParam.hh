@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: VoxelParam.hh 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file VoxelParam.hh
 /// @brief Define voxel parameterization
 
@@ -40,7 +43,7 @@ public:
 
   virtual void ComputeDimensions(G4Box& box, const G4int id,
                                  const G4VPhysicalVolume* vol) const;
-  
+
   virtual void ComputeDimensions
   (G4Trd&,const G4int,const G4VPhysicalVolume*) const  {}
 
@@ -52,26 +55,28 @@ public:
 
   virtual void ComputeDimensions
   (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-  
+
   virtual void ComputeDimensions
   (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
 
   virtual void ComputeDimensions
-  (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
+  (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const {}
 
+  virtual void ComputeDimensions
+  (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
 
   virtual void ComputeDimensions
   (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
 
   virtual void ComputeDimensions
   (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
-  
+
   virtual void ComputeDimensions
   (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
-  
+
   virtual void ComputeDimensions
   (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-  
+
   virtual void ComputeDimensions
   (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
 

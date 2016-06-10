@@ -24,12 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VUserDetectorConstruction.cc 77002 2013-11-20 11:22:35Z gcosmo $
 //
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VUserParallelWorld.hh"
+#include "G4LogicalVolume.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4VSensitiveDetector.hh"
+#include "G4FieldManager.hh"
+#include "G4SDManager.hh"
+#include <assert.h>
 
 G4VUserDetectorConstruction::G4VUserDetectorConstruction()
 {;}
@@ -66,6 +72,13 @@ G4int G4VUserDetectorConstruction::ConstructParallelGeometries()
   return nP;
 }
 
+void G4VUserDetectorConstruction::ConstructParallelSD()
+{
+  std::vector<G4VUserParallelWorld*>::iterator pwItr;
+  for(pwItr=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
+  { (*pwItr)->ConstructSD(); }
+}
+
 G4int G4VUserDetectorConstruction::GetNumberOfParallelWorld() const
 { return parallelWorld.size(); }
 
@@ -75,3 +88,156 @@ G4VUserParallelWorld* G4VUserDetectorConstruction::GetParallelWorld(G4int i) con
   return parallelWorld[i];
 }
 
+#include "G4RunManager.hh"
+
+void G4VUserDetectorConstruction::ConstructSDandField()
+{
+//   G4RunManager::RMType rmtype = G4RunManager::GetRunManager()->GetRunManagerType();
+//   if(rmtype != G4RunManager::sequentialRM)
+//   {
+//    G4cout 
+//    << "User-derived detector construction class does not implement \n"
+//    << "ConstructSDandFiled method: i.e. workers will not have SD and fields!\n"
+//    << "The user can safely ignore this message if (s)he has no sensitive\n"
+//    << "detector or field in her/his application." << G4endl;
+//   }
+}
+
+#include <map>
+void G4VUserDetectorConstruction::CloneF()
+{
+    typedef std::map<G4FieldManager*,G4FieldManager*> FMtoFMmap;
+    typedef std::pair<G4FieldManager*,G4FieldManager*> FMpair;
+    FMtoFMmap masterToWorker;
+    G4LogicalVolumeStore* const logVolStore = G4LogicalVolumeStore::GetInstance();
+    assert( logVolStore != NULL );
+    for ( G4LogicalVolumeStore::const_iterator it = logVolStore->begin() ; it != logVolStore->end() ; ++it )
+    {
+        G4LogicalVolume *g4LogicalVolume = *it;
+        //Use shadow of master to get instance of FM
+        G4FieldManager* masterFM = 0;//g4LogicalVolume->fFieldManager;
+        G4FieldManager* clonedFM = 0;
+        if ( masterFM )
+        {
+            FMtoFMmap::iterator fmFound = masterToWorker.find(masterFM);
+            if ( fmFound == masterToWorker.end() )
+            {
+                //First time we see this SD, let's clone and remember...
+                try {
+                    std::pair<FMtoFMmap::iterator,bool> insertedEl = masterToWorker.insert( FMpair(masterFM, masterFM->Clone()) );
+                    clonedFM = (insertedEl.first)->second;
+                }
+                catch (...)
+                {
+                    G4ExceptionDescription msg;
+                    msg << "Cloning of G4FieldManager failed."
+                    << " But derived class does not implement cloning. Cannot continue.";
+                    G4Exception("G4VUserDetectorConstruction::CloneSD", "Run0053", FatalException,msg);
+
+                }
+            }
+            else
+            {
+                // We have already seen this SD attached to a fifferent LogicalVolume, let's re-use previous clone
+                clonedFM = (*fmFound).second;
+            }
+        }// masterFM != 0
+        //Note that we do not push FM to doughters (false argument), however, since we area looping on all
+        //logical volumes and we implemented the "trick" of the map master<->cloned the final
+        //effect is the same as using here the correct boolean flag: log-volumes that originally were sharing
+        //the same FM they will have cloned ones
+        g4LogicalVolume->SetFieldManager(clonedFM, false);
+    }
+}
+
+void G4VUserDetectorConstruction::CloneSD()
+{
+    //Loop on ALL logial volumes to search for attached SD
+    G4LogicalVolumeStore* const logVolStore = G4LogicalVolumeStore::GetInstance();
+    assert( logVolStore != NULL );
+    
+    typedef std::map<G4VSensitiveDetector*,G4VSensitiveDetector*> SDtoSDmap;
+    typedef std::pair<G4VSensitiveDetector*,G4VSensitiveDetector*> SDpair;
+    SDtoSDmap masterToWorker;
+
+    for ( G4LogicalVolumeStore::const_iterator it = logVolStore->begin() ; it != logVolStore->end() ; ++it )
+    {
+        G4LogicalVolume *g4LogicalVolume = *it;
+        //Use shadow of master to get the instance of SD
+        G4VSensitiveDetector* masterSD = 0;//g4LogicalVolume->fSensitiveDetector;
+        G4VSensitiveDetector* clonedSD = 0;
+        if ( masterSD )
+        {
+            SDtoSDmap::iterator sdFound = masterToWorker.find(masterSD);
+            if ( sdFound == masterToWorker.end() )
+            {
+                //First time we see this SD, let's clone and remember...
+                try {
+                    std::pair<SDtoSDmap::iterator,bool> insertedEl = masterToWorker.insert( SDpair(masterSD,masterSD->Clone()) );
+                    clonedSD = (insertedEl.first)->second;
+                    }
+                    catch (...)
+                    {
+                        G4ExceptionDescription msg;
+                        msg << "Cloning of G4VSensitiveDetector requested for:" << masterSD->GetName() << "\n"
+#ifndef WIN32
+						    << " (full path name: " << masterSD->GetFullPathName() << ").\n"
+#endif
+                            << " But derived class does not implement cloning. Cannot continue.";
+                        G4Exception("G4VUserDetectorConstruction::CloneSD", "Run0053", FatalException,msg);
+                    }
+
+            }
+            else
+            {
+                // We have already seen this SD attached to a fifferent LogicalVolume, let's re-use previous clone
+                clonedSD = (*sdFound).second;
+                
+            }
+        }// masterSD!=0
+        g4LogicalVolume->SetSensitiveDetector(clonedSD);
+
+    }
+}
+
+void G4VUserDetectorConstruction::SetSensitiveDetector
+(const G4String& logVolName, G4VSensitiveDetector* aSD, G4bool multi)
+{ 
+  G4bool found = false;
+  G4LogicalVolumeStore* store = G4LogicalVolumeStore::GetInstance();
+  for(G4LogicalVolumeStore::iterator pos=store->begin(); pos!=store->end(); pos++)
+  {
+    if((*pos)->GetName()==logVolName)
+    {
+      if(found && !multi)
+      {
+        G4String eM = "More than one logical volumes of the name <";
+        eM += (*pos)->GetName();
+        eM += "> are found and thus the sensitive detector <";
+        eM += aSD->GetName();
+        eM += "> cannot be uniquely assigned.";
+        G4Exception("G4VUserDetectorConstruction::SetSensitiveDetector",
+                    "Run0052",FatalErrorInArgument,eM);
+      }
+      found = true;
+      SetSensitiveDetector(*pos,aSD);
+    }
+  } 
+  if(!found)
+  {
+    G4String eM2 = "No logical volume of the name <";
+    eM2 += logVolName;
+    eM2 += "> is found. The specified sensitive detector <";
+    eM2 += aSD->GetName();
+    eM2 += "> couldn't be assigned to any volume.";
+    G4Exception("G4VUserDetectorConstruction::SetSensitiveDetector",
+                    "Run0053",FatalErrorInArgument,eM2);
+  }
+} 
+
+void G4VUserDetectorConstruction::SetSensitiveDetector
+(G4LogicalVolume* logVol, G4VSensitiveDetector* aSD)
+{ 
+  G4SDManager::GetSDMpointer()->AddNewDetector(aSD);
+  logVol->SetSensitiveDetector(aSD);
+}

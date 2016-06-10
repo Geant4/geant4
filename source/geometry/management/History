@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2010-10-19 15:20:33 gcosmo Exp $
+$Id: History 78050 2013-12-03 08:17:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,78 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 2, 2013 A.Dotti                   geommng-V09-06-17
+- Correctly initialize shadow pointers in G4PhysicalVolume.
+
+December 2, 2013 M.Asai                   geommng-V09-06-16
+- Correctly initialize shadow pointers in G4LogicalVolume.
+
+November 30, 2013 M.Asai                  geommng-V09-06-15
+- Explicitely initialize data members of G4LVData.
+
+November 27, 2013 J.Apostolakis           geommng-V09-06-14
+- Fix in G4GeomSplitter::FreeSlave(): use free() to delete memory 
+   which was allocated with malloc().
+
+October  18, 2013, A. Dotti		geommng-V09-06-13
+- Bug fixing in G4GeomSplitter::UseWorkspace method
+  check if offset pointer is assigned AND different from new value
+
+October   3, 2013 J.Apostolakis           geommng-V09-06-12
+- Cleanup of G4LogicalVolume, G4VPhysicalVolume
+     Moved long description of helper classes to end of headers.
+     Moved macros to icc file. 
+     Revised source code to use Get/Set methods in place of 'macros'
+      introduced with G4MT,  ie G4MT_rot etc
+- LogicalVolume: Added new methods, data member
+     * new methods AssignFieldManager, 
+     * Get/Set Solid( G4LVData, .) for potential performance improvement
+     * bool fChangedState.
+
+August 27, 2013 G.Cosmo                  geommng-V09-06-11
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+August 22, 2013 G.Cosmo                  geommng-V09-06-10
+- Added parameter to specify maximum number of overlap errors to report
+  in G4VPhysicalVolume::CheckOverlaps().
+
+August 21, 2013 G.Cosmo                    geommng-V09-06-09
+- Added methods G4VPhysicalVolume::VolumeType() and
+  G4LogicalVolume::CharacteriseDaughters() to be used by G4Navigator.
+
+July 29, 2013 T.Nikitina                   geommng-V09-06-08
+- Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified
+  accuracy. Addressing problem report #1493.
+
+June 20, 2013 A.Dotti			   geommng-V09-06-07
+- Bug fix for MT: set static TLS pointer G4GeomSplitter::offset to 0 after
+  delete in split-class mechanism G4GeomSplitter::FreeSlave
+
+March 12, 2013 G.Cosmo                     geommng-V09-06-06
+- Removed thread-locality in obsolete G4VPhysicalVolume::GetObjectRotation()
+  implementation.
+
+March 12, 2013 G.Cosmo                     geommng-V09-06-05
+- Added public accessors for MT data to G4LogicalVolume, G4VPhysicalVolume
+  and G4Region.
+
+March 11, 2013 G.Cosmo                     geommng-V09-06-04
+- Redefined G4DLL_API to G4GEOM_DLL to avoid cases of macro redefinition.
+
+March 08, 2013  G.Cosmo                    geommng-V09-06-03, geommng-V09-06-02
+- Renamed G4MT macros to safer ID.
+- Moved MT data to protected in G4VPhysicalVolume.
+
+March 07, 2013  G.Cosmo                    geommng-V09-06-01
+- Added splitter class G4GeomSplitter from original MT transitory class
+  introduced in "global" module.
+- Added geomwdef.hh header including definition of G4DLL_API flag for
+  import/export of symbols for Windows DLL build.
+- Cleanup of code from MT automatic changes.
+
+December 02, 2012  J.Allison               geommng-V09-06-00
+- Removed NURBS.
 
 November 28, 2012  G.Cosmo                 geommng-V09-05-04
 - Get rid of explicit inclusion of costants header from meshdefs.hh.

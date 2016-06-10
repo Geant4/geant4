@@ -2,6 +2,8 @@
 /testem/phys/addPhysics emstandard_opt0
 #
 # Initialize the run (must be after specify physics list)
+/run/numberOfThreads 8
+/control/cout/useBuffer
 /run/initialize
 #
 # Set range cut shared by electron, positron and gamma

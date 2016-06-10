@@ -9,6 +9,19 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 Novembeer 2013 K. Murakami (MPI-V09-06-00)
+[source]
+- new coding guide line
+- CMakeLists.txt, add BUILD_SHARED_LIBS flag for creating static lib
+                  add check IntelMPI, mpiicpc
+- MT migration : beamOn thread stacked to main for MT
+                 use /run/beamOn command, instead of direct call of RM.BeamOn()
+[examples]
+- change coding guideling to the example guide 
+- MT migration
+- PhysicsList is changed to FTFP_BERT
+- add run.mac
+
 20 November 2012, I. Hrivnacova (MPI-V09-05-06)
 - Fixed .README files
 

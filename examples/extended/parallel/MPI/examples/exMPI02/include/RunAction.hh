@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: RunAction.hh 71843 2013-06-25 16:58:09Z gcosmo $
+//
 /// @file RunAction.hh
 /// @brief Describe run actions
 

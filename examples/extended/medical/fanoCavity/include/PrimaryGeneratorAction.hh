@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.hh 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   public:  
     void SetBeamRadius(G4double val)  {fRBeam = val;}   
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
          
     G4ParticleGun* GetParticleGun() {return fParticleGun;}
     G4double GetBeamRadius()        {return fRBeam;}

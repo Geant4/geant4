@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/include/EventActionMessenger.hh
 /// \brief Definition of the EventActionMessenger class
 //
-// $Id$
+// $Id: EventActionMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

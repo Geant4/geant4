@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSGeometryConstruction.cc 68020 2013-03-13 13:34:15Z gcosmo $
+//
 /// \file eventgenerator/exgps/src/exGPSGeometryConstruction.cc
 /// \brief Implementation of the exGPSGeometryConstruction class
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-//
+
 #include "exGPSGeometryConstruction.hh"
 
 #include "G4Material.hh"
@@ -47,7 +47,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSGeometryConstruction::exGPSGeometryConstruction ()
-: fUniverse_phys(0),
+: G4VUserDetectorConstruction(),
+  fUniverse_phys(0),
   fAl_phys(0),
   fSphere_phys(0)
 {;}

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4RotationMatrix.cc,v 1.4 2006-06-29 15:33:15 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4RotationMatrix.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4RotationMatrix.cc
 //
@@ -45,7 +44,7 @@ namespace pyG4RotationMatrix {
 XXX&(XXX::*f1_rotate)(G4double, const G4ThreeVector&)= &XXX::rotate;
 XXX&(XXX::*f2_rotate)(G4double, const G4ThreeVector*)= &XXX::rotate;
 
-};
+}
 
 using namespace pyG4RotationMatrix;
 

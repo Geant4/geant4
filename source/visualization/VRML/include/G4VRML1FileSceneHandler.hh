@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VRML1FileSceneHandler.hh 66870 2013-01-14 23:38:59Z adotti $
 //
 // G4VRML1FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -83,7 +83,6 @@ public:
 
 	void AddPrimitive(const G4Polyline&);
 	void AddPrimitive(const G4Polyhedron&);
-	void AddPrimitive(const G4NURBS&); 
 	void AddPrimitive(const G4Text&); 
 	void AddPrimitive(const G4Circle&);
 	void AddPrimitive(const G4Square&);

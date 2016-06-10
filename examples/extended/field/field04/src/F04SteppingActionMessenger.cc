@@ -23,20 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04SteppingActionMessenger.cc 73014 2013-08-15 08:54:47Z gcosmo $
+//
 /// \file field/field04/src/F04SteppingActionMessenger.cc
 /// \brief Implementation of the F04SteppingActionMessenger class
 //
-//
+
 #include "G4UIdirectory.hh"
-#include "F04SteppingAction.hh"
 
 #include "F04SteppingActionMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04SteppingActionMessenger::
-                 F04SteppingActionMessenger(F04SteppingAction* steppingAction)
-  : fSteppingAction (steppingAction)
+                 F04SteppingActionMessenger()
 {
   fSteppingDir = new G4UIdirectory("/stepping/");
   fSteppingDir->SetGuidance("stepping control");

@@ -1,0 +1,16 @@
+# Macro file for example B2
+# 
+# Can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
+#
+# Default kinematics: 
+# proton 3 GeV in direction (0.,0.,1.)
+#
+#
+# set target and chamber material
+#
+/B2/det/setTargetMaterial G4_WATER
+/B2/det/setChamberMaterial G4_Ar
+/globalField/verbose 1
+/globalField/setValue 0.2 0 0 tesla
+/run/beamOn 10000

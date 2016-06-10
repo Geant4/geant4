@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04SteppingAction.cc 73014 2013-08-15 08:54:47Z gcosmo $
+//
 /// \file field/field04/src/F04SteppingAction.cc
 /// \brief Implementation of the F04SteppingAction class
 //
-//
+
 #include "G4Track.hh"
 
 #include "F04SteppingAction.hh"
@@ -46,7 +48,7 @@ F04SteppingAction::F04SteppingAction()
    fTargetVolume(0),
    fTestPlaneVolume(0)
 {
-  fSteppingMessenger = new F04SteppingActionMessenger(this);
+  fSteppingMessenger = new F04SteppingActionMessenger();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,10 +1,11 @@
-# $Id: TestEm2.in,v 1.26 2009-09-16 18:07:30 maire Exp $
+# $Id: TestEm2.in 75118 2013-10-28 09:40:24Z gcosmo $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
 #
 # PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 1
 /run/verbose 1
 #
@@ -17,10 +18,11 @@
 #
 /testem/phys/addPhysics  emstandard_opt0
 #
-/testem/phys/setCuts 1.0 mm
+/run/setCut 1.0 mm
 #
 /run/initialize
-/process/eLoss/verbose 1
+/process/em/verbose 1
+/process/em/workerVerbose 0
 #
 /gun/particle e-
 /gun/energy 5 GeV

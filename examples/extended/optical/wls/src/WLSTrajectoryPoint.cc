@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSTrajectoryPoint.cc 72065 2013-07-05 09:54:59Z gcosmo $
+//
 /// \file optical/wls/src/WLSTrajectoryPoint.cc
 /// \brief Implementation of the WLSTrajectoryPoint class
 //
 //
-//
-
 #include "WLSTrajectoryPoint.hh"
 
 #include "G4Step.hh"
@@ -47,11 +47,15 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<WLSTrajectoryPoint> WLSTrajPointAllocator;
+G4ThreadLocal G4Allocator<WLSTrajectoryPoint>* WLSTrajPointAllocator=0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSTrajectoryPoint::WLSTrajectoryPoint()
       : fTime(0.), fMomentum(0.,0.,0.),
         fStepStatus(fUndefined), fVolumeName("") { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Step* aStep)
     : G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition())
@@ -68,6 +72,8 @@ WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Step* aStep)
       }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Track* aTrack)
     : G4TrajectoryPoint(aTrack->GetPosition())
 {
@@ -76,6 +82,8 @@ WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Track* aTrack)
       fStepStatus = fUndefined;
       fVolumeName = aTrack->GetVolume()->GetName();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSTrajectoryPoint::WLSTrajectoryPoint(const WLSTrajectoryPoint &right)
     : G4TrajectoryPoint(right)
@@ -86,7 +94,11 @@ WLSTrajectoryPoint::WLSTrajectoryPoint(const WLSTrajectoryPoint &right)
       fVolumeName = right.fVolumeName;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSTrajectoryPoint::~WLSTrajectoryPoint() { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const std::map<G4String,G4AttDef>* WLSTrajectoryPoint::GetAttDefs() const
 {
@@ -117,6 +129,8 @@ const std::map<G4String,G4AttDef>* WLSTrajectoryPoint::GetAttDefs() const
   }
   return store;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 std::vector<G4AttValue>* WLSTrajectoryPoint::CreateAttValues() const
 {

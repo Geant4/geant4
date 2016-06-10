@@ -28,7 +28,7 @@
 // ------------------------------------------------------------
 // G4RDHadronIonisation
 //
-// $Id$
+// $Id: G4hImpactIonisation.cc 70904 2013-06-07 10:34:25Z gcosmo $
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
 //
@@ -1312,7 +1312,7 @@ G4double G4hImpactIonisation::BarkasTerm(const G4Material* material,
 //     Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397
 //
 {
-  static double FTable[47][2] = {
+  static G4ThreadLocal G4double FTable[47][2] = {
     { 0.02, 21.5},
     { 0.03, 20.0},
     { 0.04, 18.0},

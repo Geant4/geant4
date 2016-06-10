@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmPenelope class
 //
 //
-// $Id$
+// $Id: PhysListEmPenelope.cc 68585 2013-04-01 23:35:07Z adotti $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -75,6 +75,10 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 
+#include "G4EmProcessOptions.hh"
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
+
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,9 +98,9 @@ void PhysListEmPenelope::ConstructProcess()
 {
   // Add standard EM Processes
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
@@ -192,6 +196,14 @@ void PhysListEmPenelope::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,       -1,-1, 1);
     }
   }
+  
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetFluo(true);
+  de->SetAuger(false);  
+  de->SetPIXE(false);  
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

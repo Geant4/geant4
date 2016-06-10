@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PSTrackLength3D.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4PSTrackLength3D
 #include "G4PSTrackLength3D.hh"

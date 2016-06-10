@@ -27,14 +27,15 @@
 /// \brief Implementation of the RE01TrackInformation class
 //
 //
-// $Id$
+// $Id: RE01TrackInformation.cc 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #include "RE01TrackInformation.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"    
 
-G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
+G4ThreadLocal G4Allocator<RE01TrackInformation> * aTrackInformationAllocator = 0;
+//G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackInformation::RE01TrackInformation()

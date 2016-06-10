@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StringModel.hh 67999 2013-03-13 11:14:32Z gcosmo $
 //
 #ifndef G4StringModel_h
 #define G4StringModel_h 1

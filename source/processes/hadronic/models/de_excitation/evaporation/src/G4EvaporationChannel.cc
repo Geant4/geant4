@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EvaporationChannel.cc 74869 2013-10-23 09:26:17Z gcosmo $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -42,6 +42,8 @@
 #include "G4PairingCorrection.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -117,7 +119,8 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
   } else {
     ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
     G4double FragmentMass = fragment->GetGroundStateMass();
-    CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
+    CoulombBarrier = 
+      theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
     // Maximal Kinetic Energy
     MaximalKineticEnergy = CalcMaximalKineticEnergy(FragmentMass + ExEnergy);
     //MaximalKineticEnergy = ExEnergy + fragment.GetGroundStateMass() 
@@ -177,15 +180,18 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
   G4double Efinal = ResidualMomentum.e() + EvaporatedMomentum.e();
   G4ThreeVector Pfinal = ResidualMomentum.vect() + EvaporatedMomentum.vect();
   if (std::abs(Efinal-theNucleus.GetMomentum().e()) > 1.0*keV) {
-    G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4Evaporation Chanel: ENERGY @@@@@@@@@@@@@@@@" << G4endl;
+    G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4Evaporation Chanel: ENERGY @@@@@@@@@@@@@@@@" 
+	   << G4endl;
     G4cout << "Initial : " << theNucleus.GetMomentum().e()/MeV << " MeV    Final :" 
-           <<Efinal/MeV << " MeV    Delta: " <<  (Efinal-theNucleus.GetMomentum().e())/MeV 
+           <<Efinal/MeV << " MeV    Delta: " 
+	   <<  (Efinal-theNucleus.GetMomentum().e())/MeV 
            << " MeV" << G4endl;
   }
   if (std::abs(Pfinal.x()-theNucleus.GetMomentum().x()) > 1.0*keV ||
       std::abs(Pfinal.y()-theNucleus.GetMomentum().y()) > 1.0*keV ||
       std::abs(Pfinal.z()-theNucleus.GetMomentum().z()) > 1.0*keV ) {
-    G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4Evaporation Chanel: MOMENTUM @@@@@@@@@@@@@@@@" << G4endl;
+    G4cout << "@@@@@@@@@@@@@@@@@@@@@ G4Evaporation Chanel: MOMENTUM @@@@@@@@@@@@@@@@" 
+	   << G4endl;
     G4cout << "Initial : " << theNucleus.GetMomentum().vect() << " MeV    Final :" 
            <<Pfinal/MeV << " MeV    Delta: " <<  Pfinal-theNucleus.GetMomentum().vect()
            << " MeV" << G4endl;   
@@ -203,8 +209,8 @@ G4double G4EvaporationChannel::CalcMaximalKineticEnergy(G4double NucleusTotalE)
 {
   // This is the "true" assimptotic kinetic energy (from energy conservation)	
   G4double Tmax = 
-    ((NucleusTotalE-ResidualMass)*(NucleusTotalE+ResidualMass) + EvaporatedMass*EvaporatedMass)
-    /(2.0*NucleusTotalE) - EvaporatedMass;
+    ((NucleusTotalE-ResidualMass)*(NucleusTotalE+ResidualMass) 
+     + EvaporatedMass*EvaporatedMass)/(2.0*NucleusTotalE) - EvaporatedMass;
   
   //JMQ (13-09-08) bug fixed: in the original version the Tmax is calculated
   //at the Coulomb barrier
@@ -231,19 +237,19 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
     
     if (MaximalKineticEnergy < 0.0) {
       throw G4HadronicException(__FILE__, __LINE__, 
-                                "G4EvaporationChannel::CalcKineticEnergy: maximal kinetic at the Coulomb barrier is less than 0");
+            "G4EvaporationChannel::CalcKineticEnergy: maximal kinetic at the Coulomb barrier is less than 0");
     }
     G4double Rb = 4.0*theLevelDensityPtr->
       LevelDensityParameter(ResidualA+theA,ResidualZ+theZ,MaximalKineticEnergy)*
       MaximalKineticEnergy;
     G4double RbSqrt = std::sqrt(Rb);
     G4double PEX1 = 0.0;
-    if (RbSqrt < 160.0) PEX1 = std::exp(-RbSqrt);
+    if (RbSqrt < 160.0) PEX1 = G4Exp(-RbSqrt);
     G4double Rk = 0.0;
     G4double FRk = 0.0;
     do {
       G4double RandNumber = G4UniformRand();
-      Rk = 1.0 + (1./RbSqrt)*std::log(RandNumber + (1.0-RandNumber)*PEX1);
+      Rk = 1.0 + (1./RbSqrt)*G4Log(RandNumber + (1.0-RandNumber)*PEX1);
       G4double Q1 = 1.0;
       G4double Q2 = 1.0;
       if (theZ == 0) { // for emitted neutron

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSEventAction.hh 76468 2013-11-11 10:27:19Z gcosmo $
+//
 /// \file eventgenerator/exgps/include/exGPSEventAction.hh
 /// \brief Definition of the exGPSEventAction class
 //
@@ -34,16 +36,16 @@
 #include "globals.hh"
 
 class exGPSEventActionMessenger;
+class exGPSHistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class exGPSEventAction : public G4UserEventAction
 {
   public:
-    exGPSEventAction() ;
+    exGPSEventAction(exGPSHistoManager* histoManager) ;
     virtual ~exGPSEventAction();
 
-  public:
     virtual void   BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
@@ -54,6 +56,7 @@ class exGPSEventAction : public G4UserEventAction
     G4String                    fDrawFlag;
     G4int                       fPrintModulo;                         
     exGPSEventActionMessenger*  fEventMessenger;
+    exGPSHistoManager* fexGPSHistoManager;
 };
 
 #endif

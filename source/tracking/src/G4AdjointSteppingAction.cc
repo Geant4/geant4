@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointSteppingAction.cc 75570 2013-11-04 11:41:10Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction
@@ -40,10 +40,12 @@
 #include "G4AdjointCrossSurfChecker.hh"
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
+
 G4AdjointSteppingAction::G4AdjointSteppingAction()
   : ext_sourceEMax(0.), start_event(false),
     did_adj_part_reach_ext_source(false), last_ekin(0.), last_weight(0.),
-    prim_weight(0.), last_part_def(0), theUserAdjointSteppingAction(0)
+    prim_weight(0.), last_part_def(0), theUserAdjointSteppingAction(0),
+    theUserFwdSteppingAction(0)
 { 
   theG4AdjointCrossSurfChecker = G4AdjointCrossSurfChecker::GetInstance();
 }
@@ -56,11 +58,25 @@ G4AdjointSteppingAction::~G4AdjointSteppingAction()
 //
 void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+  G4Track* aTrack =aStep->GetTrack();
+  //forward tracking mode
+   if(!is_adjoint_tracking_mode){
+     //check if last adjoint did reach the external source
+     if (!did_adj_part_reach_ext_source) {
+        aTrack->SetTrackStatus(fStopAndKill);
+        return;
+     }
+     if(theUserFwdSteppingAction)
+       theUserFwdSteppingAction->UserSteppingAction(aStep);
+     return;
+   }
+
+
   //Apply first the user adjoint stepping action
   //---------------------------
   if (theUserAdjointSteppingAction) theUserAdjointSteppingAction->UserSteppingAction(aStep);
 
-  G4Track* aTrack =aStep->GetTrack();
+
   G4double nb_nuc=1.;
   G4ParticleDefinition* thePartDef = aTrack->GetDefinition();
  
@@ -76,7 +92,6 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
   }
 
   G4double weight_factor = aTrack->GetWeight()/prim_weight;
-
   if ( (weight_factor>0 && weight_factor<=0) || weight_factor<= 1e-290 || weight_factor>1.e200)
   {
 	//std::cout<<"Weight_factor problem! Value = "<<weight_factor<<std::endl;
@@ -96,7 +111,6 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
   if (theG4AdjointCrossSurfChecker->CrossingOneOfTheRegisteredSurface(aStep, surface_name, crossing_pos, cos_to_surface, GoingIn) ){
   	
 	//G4cout<<"Test_step11"<<std::endl;
-	//G4cout<<surface_name<<std::endl;
 	if (surface_name == "ExternalSource") {
 		//Registering still needed
 		did_adj_part_reach_ext_source=true;

@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2011-01-07 14:19:59 maire Exp $
+$Id: History 73712 2013-09-09 09:58:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,42 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-09-13 mma (testem14-V09-06-10)
+- PhysicsList: restore G4GammaConversionToMuons
+
+28-07-13 P.Gumplinger (testem14-V09-06-09)
+- fix clang32 compilation warning
+
+11-07-13 I.Hrivnacova (testem14-V09-06-08) 
+- Updated CMakeLists.txt and SharedFilesList.txt for added classes
+  in Hbook analysis code
+- In HistoManager: use new analysis manager method SetH1Activation()        
+
+20-06-13 mma (testem14-V09-06-07)
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep()
+
+14-06-13 mma (testem14-V09-06-06)
+- SteppingAction: use G4Step::GetSecondaryInCurrentStep()
+
+07-06-13 mma (testem14-V09-06-05)
+- Cosmetic in SteppingAction.
+
+15-04-13 I.Hrivnacova (testem14-V09-06-04)
+- Removed ExG4HbookAnalysisManager and related files and updated CMake/GNUmake
+  files to use it from extended/common
+     
+01-04-13 A.Dotti (testem14-V09-06-03)
+- New G4VUserPhysicsList interface      
+
+13-02-13 I.Hrivnacova (testem14-V09-06-02) 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+11-12-12 V.Ivant (testem14-V09-06-01)
+- PhysListEmStandard: use SetEmModel method
+
+02-12-12 mma (testem14-V09-06-00)
+- PhysListEmLivermore, PhysListEmPenelope: add activation of fluorescence 
      
 20-10-12 mma (testem14-V09-05-05)
 - histoManager: vmax=100

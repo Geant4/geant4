@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UImanager.cc 77651 2013-11-27 08:47:55Z gcosmo $
 //
 //
 // ---------------------------------------------------------------------
@@ -36,17 +36,24 @@
 #include "G4UIbatch.hh"
 #include "G4UIcontrolMessenger.hh"
 #include "G4UnitsMessenger.hh"
+#include "G4LocalThreadCoutMessenger.hh"
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
 #include "G4StateManager.hh"
 #include "G4UIaliasList.hh"
 #include "G4Tokenizer.hh"
+#include "G4MTcoutDestination.hh"
+#include "G4UIbridge.hh"
+#include "G4Threading.hh"
 
 #include <sstream>
 #include <fstream>
 
-G4UImanager * G4UImanager::fUImanager = 0;
-G4bool G4UImanager::fUImanagerHasBeenKilled = false;
+G4ThreadLocal G4UImanager * G4UImanager::fUImanager = 0;
+G4ThreadLocal G4bool G4UImanager::fUImanagerHasBeenKilled = false;
+G4UImanager * G4UImanager::fMasterUImanager = 0;
+
+G4int G4UImanager::igThreadID = -1;
 
 G4UImanager * G4UImanager::GetUIpointer()
 {
@@ -61,9 +68,15 @@ G4UImanager * G4UImanager::GetUIpointer()
   return fUImanager;
 }
 
+G4UImanager * G4UImanager::GetMasterUIpointer()
+{ return fMasterUImanager; }
+
 G4UImanager::G4UImanager()
   : G4VStateDependent(true),
-    UImessenger(0), UnitsMessenger(0)
+    UImessenger(0), UnitsMessenger(0), CoutMessenger(0),
+    isMaster(false),bridges(0),
+    ignoreCmdNotFound(false), stackCommandsForBroadcast(false),
+    threadID(-1), threadCout(0) 
 {
   savedCommand = 0;
   treeTop = new G4UIcommandTree("/");
@@ -79,25 +92,46 @@ G4UImanager::G4UImanager()
   pauseAtEndOfEvent = false;
   maxHistSize = 20;
   searchPath="";
+  commandStack = new std::vector<G4String>;
 }
 
 void G4UImanager::CreateMessenger()
 {
   UImessenger = new G4UIcontrolMessenger;
   UnitsMessenger = new G4UnitsMessenger;
+  CoutMessenger = new G4LocalThreadCoutMessenger;
 }
 
 G4UImanager::~G4UImanager()
 {
+  if(bridges)
+  {
+    std::vector<G4UIbridge*>::iterator itr = bridges->begin();
+    for(;itr!=bridges->end();itr++)
+    { delete *itr; }
+    delete bridges;
+  }
   SetCoutDestination(NULL);
   histVec.clear();
   if(saveHistory) historyFile.close();
-  delete UImessenger;
+  delete CoutMessenger;
   delete UnitsMessenger;
+  delete UImessenger;
   delete treeTop;
   delete aliasList;
   fUImanagerHasBeenKilled = true;
   fUImanager = NULL;
+  if(commandStack)
+  {
+    commandStack->clear();
+    delete commandStack;
+  }
+  if(threadID >= 0) 
+  {
+    if(threadCout) delete threadCout;
+    G4iosFinalization();
+    threadID = -1;
+  }
 }
 
 G4UImanager::G4UImanager(const G4UImanager& ui)
@@ -220,11 +254,25 @@ G4int parameterNumber, G4bool reGet)
 void G4UImanager::AddNewCommand(G4UIcommand * newCommand)
 {
   treeTop->AddNewCommand( newCommand );
+  if(fMasterUImanager!=0&&G4Threading::G4GetThreadId()==0)
+  { fMasterUImanager->AddWorkerCommand(newCommand); }
+}
+
+void G4UImanager::AddWorkerCommand(G4UIcommand * newCommand)
+{
+  treeTop->AddNewCommand( newCommand, true );
 }
 
 void G4UImanager::RemoveCommand(G4UIcommand * aCommand)
 {
   treeTop->RemoveCommand( aCommand );
+  if(fMasterUImanager!=0&&G4Threading::G4GetThreadId()==0)
+  { fMasterUImanager->RemoveWorkerCommand(aCommand); }
+}
+
+void G4UImanager::RemoveWorkerCommand(G4UIcommand * aCommand)
+{
+  treeTop->RemoveCommand( aCommand, true );
 }
 
 void G4UImanager::ExecuteMacroFile(const char * fileName)
@@ -366,6 +414,8 @@ G4int G4UImanager::ApplyCommand(const G4String& aCmd)
   return ApplyCommand(aCmd.data());
 }
 
+#include "G4Threading.hh"
+
 G4int G4UImanager::ApplyCommand(const char * aCmd)
 {
   G4String aCommand = SolveAlias(aCmd);
@@ -408,9 +458,32 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
     { ll++; }
   }
 
+  if(isMaster&&bridges)
+  {
+    std::vector<G4UIbridge*>::iterator itr = bridges->begin();
+    for(;itr!=bridges->end();itr++)
+    {
+      G4int leng = (*itr)->DirLength();
+      if(commandString(0,leng)==(*itr)->DirName())
+      { return (*itr)->LocalUI()->ApplyCommand(commandString+" "+commandParameter); }
+    }
+  }
+
   G4UIcommand * targetCommand = treeTop->FindPath( commandString );
   if( targetCommand == NULL )
-  { return fCommandNotFound; }
+  {
+    if(ignoreCmdNotFound)
+    {
+      if(stackCommandsForBroadcast)
+      { commandStack->push_back(commandString+" "+commandParameter); }
+      return fCommandSucceeded;
+    }
+    else
+    { return fCommandNotFound; }
+  }
+
+  if(stackCommandsForBroadcast && targetCommand->ToBeBroadcasted())
+  { commandStack->push_back(commandString+" "+commandParameter); }
 
   if(!(targetCommand->IsAvailable()))
   { return fIllegalApplicationState; }
@@ -419,6 +492,7 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   if( G4int(histVec.size()) >= maxHistSize )
   { histVec.erase(histVec.begin()); }
   histVec.push_back(aCommand);
+
   return targetCommand->DoIt( commandParameter );
 }
 
@@ -604,3 +678,85 @@ G4String G4UImanager::FindMacroPath(const G4String& fname) const
 
   return macrofile;
 }
+
+std::vector<G4String>* G4UImanager::GetCommandStack()
+{
+  std::vector<G4String>* returnValue = commandStack;
+  commandStack = new std::vector<G4String>;
+  return returnValue;
+}
+
+void G4UImanager::RegisterBridge(G4UIbridge* brg)
+{
+  if(brg->LocalUI()==this)
+  {
+    G4Exception("G4UImanager::RegisterBridge()","UI7002",FatalException,
+      "G4UIBridge cannot bridge between same object.");
+  }
+  else
+  { bridges->push_back(brg); }
+}
+
+void G4UImanager::SetUpForAThread(G4int tId)
+{
+  threadID = tId;
+  G4iosInitialization();
+  threadCout = new G4MTcoutDestination(threadID);
+  threadCout->SetIgnoreCout(igThreadID);
+}
+
+void G4UImanager::SetCoutFileName(const G4String& fileN, G4bool ifAppend)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) return;
+
+  if(fileN == "**Screen**")
+  { threadCout->SetCoutFileName(fileN,ifAppend); }
+  else
+  {
+    std::stringstream fn;
+    fn<<"G4W_"<<threadID<<"_"<<fileN;
+    threadCout->SetCoutFileName(fn.str(),ifAppend);
+  }
+}
+
+void G4UImanager::SetCerrFileName(const G4String& fileN, G4bool ifAppend)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) return;
+
+  if(fileN == "**Screen**")
+  { threadCout->SetCerrFileName(fileN,ifAppend); }
+  else
+  {
+    std::stringstream fn;
+    fn<<"G4W_"<<threadID<<"_"<<fileN;
+    threadCout->SetCerrFileName(fn.str(),ifAppend);
+  }
+}
+
+void G4UImanager::SetThreadPrefixString(const G4String& s)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) return;
+  threadCout->SetPrefixString(s);
+}
+
+void G4UImanager::SetThreadUseBuffer(G4bool flg)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) return;
+  threadCout->EnableBuffering(flg);
+}
+
+void G4UImanager::SetThreadIgnore(G4int tid)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0)
+  {
+    igThreadID = tid;
+    return;
+  }
+  threadCout->SetIgnoreCout(tid);
+}
+

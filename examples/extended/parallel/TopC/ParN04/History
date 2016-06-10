@@ -1,0 +1,103 @@
+$Id: History 73404 2013-08-27 10:05:02Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example ParN04 History file
+                    ---------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+August 27th, 2013 G.Cosmo - ParN04-V09-06-00
+-------------------------
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+August 30th, 2012 G.Cosmo - ParN04-V09-05-01
+-------------------------
+- Simplified GNUmake scripts.
+
+August 24th, 2012 I.Hrivnacova - ParN04-V09-05-00
+------------------------------
+- Migration to "new" G4Exception  
+- Fixing ParGNUmakefile to get the example compiled with standard 
+  Geant4 environment setting
+- Renaming documentation files to README, README.N02 (to be consistent
+  with all examples)
+- Adding .README files for Doxygen  
+
+April 13th, 2010 G.Cosmo - ParN04-V09-04-00
+------------------------
+- Synchronised with current version of novice example N04.
+
+November 7th, 2010 J.Allison - ParN04-V09-03-02
+----------------------------
+- Introduced G4UIExecutive.
+
+June 5th, 2010 J.Perl - ParN04-V09-03-01
+---------------------
+- Updated vis usage
+
+June 4th, 2010 V.Ivantchenko - ParN04-V09-03-00
+----------------------------
+- Substituted QGSP by QGSP_BERT
+
+Nov 17th, 2006 M.Asai - ParN04-V08-01-02
+---------------------
+- Fix a bug in ExN04CalorimeterSD.cc which was copied from original
+  novice/N04.
+
+Nov 16th, 2006 G.Folger - ParN04-V08-01-01
+-----------------------
+- Adapt Gnumakefile to moved physics lists,  hadronic_lists.gmk no longer
+   needed.
+   
+Jul 5th, 2006  G.Cosmo - ParN04-V08-01-00
+----------------------
+- Brought up to date with latest fixes introduced in exampleN04,
+  in order to make it run with release 8 series.
+
+Nov 28th, 2005  G.Cooperman - ParN04-V07-01-01
+---------------------------
+- Updated in sync with the last kernel code.
+
+Nov 15th, 2005  G.Cosmo - ParN04-V07-01-00
+-----------------------
+- Migration to <sstream> from deprecated <strstream>.
+
+May 3rd, 2005  J.Allison
+------------------------
+- Replaced vis manager with G4VisExecutive.
+
+Nov 22nd, 2004  G.Cooperman - ParN04-V07-00-00
+---------------------------
+- Added annotated files.
+
+Nov 22nd, 2004  G.Cooperman and V.H.Nguyen - ParN04-V06-02-00
+------------------------------------------
+- New version of marshaling/unmarshaling code, generated from
+  annotations using Marshalgen
+
+June 20th, 2004  G.Cooperman
+----------------------------
+- Fixed bug in ParRunManager class, showing up with Geant4 6.1.
+
+December 2nd, 2003  G.Cosmo
+---------------------------
+- Brought classes up-to-date with exampleN04.
+
+July 4th, 2003  G.Cosmo
+-----------------------
+- Cleared pedantic compilation warnings ...
+
+March 5th, 2002  G.Cosmo - ParN04-V04-00-00
+------------------------
+- Created from original version of Gene Cooperman.
+  Parallel version of example/novice/N04.
+

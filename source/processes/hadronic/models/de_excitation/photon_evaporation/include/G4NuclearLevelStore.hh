@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NuclearLevelStore.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // 04-10-2010  M. Kelsey -- Replace G4String keys with integers (ZZZAAA),
 //		            move string operation to GenerateFilename()
@@ -78,7 +78,7 @@ private:
   MapForHEP     managersForHEP;
   G4String      dirName;
 
-  static G4NuclearLevelStore* theInstance;
+  static G4ThreadLocal G4NuclearLevelStore* theInstance;
 
   G4bool userFiles;
   std::map<G4int, G4String> theUserDataFiles;

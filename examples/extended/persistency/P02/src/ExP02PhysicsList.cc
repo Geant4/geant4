@@ -26,8 +26,7 @@
 /// \file persistency/P02/src/ExP02PhysicsList.cc
 /// \brief Implementation of the ExP02PhysicsList class
 //
-//
-// $Id$
+// $Id: ExP02PhysicsList.cc 71727 2013-06-21 07:55:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +43,7 @@
 ExP02PhysicsList::ExP02PhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 1.0*cm;
-   SetVerboseLevel(1);
+  SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

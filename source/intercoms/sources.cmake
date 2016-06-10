@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:45:22 bmorgan Exp $
+# $Id: sources.cmake 75773 2013-11-06 09:14:23Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +31,7 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
     HEADERS
         G4UIaliasList.hh
         G4UIbatch.hh
+        G4UIbridge.hh
         G4UIcmdWith3Vector.hh
         G4UIcmdWith3VectorAndUnit.hh
         G4UIcmdWithABool.hh
@@ -53,11 +54,13 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
         G4VFlavoredParallelWorld.hh
         G4VGlobalFastSimulationManager.hh
         G4GenericMessenger.hh
+        G4LocalThreadCoutMessenger.hh
         G4AnyType.hh
         G4AnyMethod.hh
     SOURCES
         G4UIaliasList.cc
         G4UIbatch.cc
+        G4UIbridge.cc
         G4UIcmdWith3Vector.cc
         G4UIcmdWith3VectorAndUnit.cc
         G4UIcmdWithABool.cc
@@ -76,6 +79,7 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
         G4UIsession.cc
         G4UnitsMessenger.cc
         G4VGlobalFastSimulationManager.cc
+        G4LocalThreadCoutMessenger.cc
         G4GenericMessenger.cc
         G4AnyType.cc
     GRANULAR_DEPENDENCIES

@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04OpticalPhysics.hh 68021 2013-03-13 13:36:07Z gcosmo $
+//
 /// \file field/field04/include/F04OpticalPhysics.hh
 /// \brief Definition of the F04OpticalPhysics class
 //
-//
+
 #ifndef F04OpticalPhysics_h
 #define F04OpticalPhysics_h 1
 

@@ -117,6 +117,7 @@ private:
 
   // Kinematics for cluster evaluations
   G4LorentzVector getClusterMomentum(const ClusterCandidate& aCluster) const;
+  mutable G4LorentzVector pCluster;	// Reusable buffer to reduce churn
 
   G4double maxDeltaP(const ClusterCandidate& aCluster) const;
 

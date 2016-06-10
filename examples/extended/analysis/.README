@@ -7,11 +7,6 @@
 
  Examples in this directory demonstrate how to make histograms and ntuples
 
-\link ExampleA01 A01 \endlink
-
- Rather complete example dedicaced to AIDA and HepRep.\n
- (See also \link ExampleA01AIDA README.AIDA \endlink.)
- 
 \link ExampleAnaEx01 AnaEx01 \endlink
 
  Simple example showing use of g4tools.
@@ -24,10 +19,10 @@
 
  As AnaEx01, showing basic features common to all AIDA implementations.
 
-\link ExampleN03Con N03Con \endlink
+\link ExampleB1Con B1Con \endlink
 
- N03Con shows how to use the statistical tool G4ConvergenceTester. \n
- It does not make histograms.\n
- It has the same geometry as N03 and AnaEx01,2,3.\n
+ B1Con shows how to use the statistical tool G4ConvergenceTester.
+ It does not make histograms.
+ It has the same geometry as B1.
 
 */

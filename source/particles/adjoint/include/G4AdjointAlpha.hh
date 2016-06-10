@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointAlpha.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

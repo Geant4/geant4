@@ -26,42 +26,45 @@
 /// \file field/field03/include/F03EventAction.hh
 /// \brief Definition of the F03EventAction class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F03EventAction.hh 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F03EventAction_h
 #define F03EventAction_h 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4UserEventAction.hh"
 
 class F03RunAction;
 class F03EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F03EventAction : public G4UserEventAction
 {
   public:
-    F03EventAction(F03RunAction* action);
-    ~F03EventAction();
+    F03EventAction(F03RunAction* );
+    virtual ~F03EventAction();
 
   public:
     virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-    void  SetEventVerbose(G4int level);
-    void  SetPrintModulo(G4int val)  {fPrintModulo = val;};
-        
+    void SetEventVerbose(G4int level) {fVerboseLevel = level;}
+    void SetPrintModulo(G4int val)    {fPrintModulo = val;}
+
   private:
     G4int    fCalorimeterCollID;
+
     F03EventActionMessenger*  fEventMessenger;
     F03RunAction* fRunAction;
+
     G4int fVerboseLevel;
-    G4int  fPrintModulo;             
+    G4int fPrintModulo;
 };
 
 #endif

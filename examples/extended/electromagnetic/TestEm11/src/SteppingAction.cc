@@ -26,25 +26,25 @@
 /// \file electromagnetic/TestEm11/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 74997 2013-10-25 10:52:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
 #include "EventAction.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 
 #include "G4SteppingManager.hh"
+#include "G4RunManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
-                               EventAction* event)
-:fDetector(det), fRunAction(RuAct), fEventAction(event)
+SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* event)
+:G4UserSteppingAction(),fDetector(det), fEventAction(event)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  
  //total energy deposit in absorber
  //
- fEventAction->AddEdep(edep);
+ fEventAction->AddEdep(edep); 
  
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();     
  
@@ -79,12 +79,15 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
  //"normalized" histogram
  // 
+ Run* run
+   = static_cast<Run*>(
+       G4RunManager::GetRunManager()->GetNonConstCurrentRun());
  G4int iabs = prePoint->GetTouchableHandle()->GetCopyNumber(1);
- G4double csdaRange  = fRunAction->GetCsdaRange(iabs);
+ G4double csdaRange  = run->GetCsdaRange(iabs);
  if (csdaRange > 0.) { 
    G4double density = fDetector->GetAbsorMaterial(iabs)->GetDensity();
    G4double xfront  = fDetector->GetXfront(iabs);
-   G4double xfrontNorm = fRunAction->GetXfrontNorm(iabs);
+   G4double xfrontNorm = run->GetXfrontNorm(iabs);
    G4double xnorm = xfrontNorm + (x - xfront)/csdaRange;
    analysisManager->FillH1(8, xnorm, edep/(csdaRange*density));
  }

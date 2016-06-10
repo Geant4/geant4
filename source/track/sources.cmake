@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:10:58 bmorgan Exp $
+# $Id: sources.cmake 69005 2013-04-15 09:26:47Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -62,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4track
         G4VParticleChange.icc
         G4VelocityTable.hh
         G4VUserTrackInformation.hh
+        trkdefs.hh
     SOURCES
         G4FieldTrackUpdator.cc
         G4ParticleChange.cc

@@ -1,4 +1,4 @@
-# $Id: mumsc.mac,v 1.21 2010-05-19 09:35:37 maire Exp $
+# $Id: mumsc.mac 76464 2013-11-11 10:22:56Z gcosmo $
 #
 # macro file for TestEm5.cc
 #
@@ -30,5 +30,5 @@
 #
 /testem/stack/killSecondaries
 #
-/testem/event/printModulo 4000
+/run/printProgress 4000
 /run/beamOn 40000

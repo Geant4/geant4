@@ -1,4 +1,4 @@
-# $Id: TestEm6.in,v 1.8 2006-02-16 16:52:33 maire Exp $
+# $Id: TestEm6.in 73985 2013-09-18 15:55:18Z gcosmo $
 #
 # Macro file for "TestEm6.cc"
 # (can be run in batch, without graphic)
@@ -11,6 +11,8 @@
 /testem/det/setSize 500 m
 #
 /run/initialize
+#
+/testem/phys/SetGammaToMuPairFac 1000
 #
 /gun/particle gamma
 /gun/energy 100 TeV

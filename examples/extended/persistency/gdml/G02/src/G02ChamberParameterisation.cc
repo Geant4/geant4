@@ -27,7 +27,7 @@
 /// \brief Implementation of the G02ChamberParameterisation class
 //
 //
-// $Id$
+// $Id: G02ChamberParameterisation.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02ChamberParameterisation implementation
 //
@@ -48,6 +48,7 @@ G02ChamberParameterisation( G4int    NoChambers,
                          G4double widthChamber, 
                          G4double lengthInitial, 
                          G4double lengthFinal )
+ : G4VPVParameterisation()
 {
   fNoChambers =  NoChambers; 
   fStartZ     =  startZ; 

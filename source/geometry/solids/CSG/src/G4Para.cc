@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Para.cc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // class G4Para
 //
@@ -53,8 +53,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 
 using namespace CLHEP;
 
@@ -1391,10 +1389,4 @@ G4Polyhedron* G4Para::CreatePolyhedron () const
                             +fTthetaSphi*fTthetaSphi));
     
   return new G4PolyhedronPara(fDx, fDy, fDz, alpha, theta, phi);
-}
-
-G4NURBS* G4Para::CreateNURBS () const
-{
-  // return new G4NURBSbox (fDx, fDy, fDz);
-  return 0 ;
 }

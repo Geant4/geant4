@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmModelManager.hh 72944 2013-08-14 13:43:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -149,16 +149,17 @@ public:
 
   void Clear();
 
-  const G4DataVector* Initialise(const G4ParticleDefinition*,
-                                 const G4ParticleDefinition*,
-				       G4double,
-                                       G4int);
+  const G4DataVector* Initialise(const G4ParticleDefinition* part,
+                                 const G4ParticleDefinition* secPart,
+				 G4double minSubRange,
+				 G4int verb);
 
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
 		      G4EmTableType t = fRestricted);
 
   void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
-                        G4bool startFromNull = true, G4EmTableType t = fRestricted);
+                        G4bool startFromNull = true, 
+			G4EmTableType t = fRestricted);
 
   G4VEmModel* GetModel(G4int, G4bool ver = false);
 
@@ -195,8 +196,9 @@ private:
 
 private:
 
-  const G4DataVector*          theCuts;
-  G4DataVector*                theSubCuts;
+  const G4DataVector*    theCuts;
+  G4DataVector*          theCutsNew;
+  G4DataVector*          theSubCuts;
 
   std::vector<G4VEmModel*>                models;
   std::vector<G4VEmFluctuationModel*>     flucModels;

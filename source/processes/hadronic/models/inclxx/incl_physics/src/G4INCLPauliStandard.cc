@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -47,13 +45,13 @@ namespace G4INCL {
   PauliStandard::PauliStandard() :
     cellSize(std::pow(2.38*4.5*Math::pi,1./6.)*std::sqrt(PhysicalConstants::hc))
   {
-    DEBUG("Initialising PauliStandard. cellSize=" << cellSize << std::endl);
+    INCL_DEBUG("Initialising PauliStandard. cellSize=" << cellSize << std::endl);
   }
 
   PauliStandard::~PauliStandard() {}
 
-  G4bool PauliStandard::isBlocked(ParticleList const pL, Nucleus const * const n) const {
-    for(ParticleIter p = pL.begin(); p != pL.end(); ++p) {
+  G4bool PauliStandard::isBlocked(ParticleList const &pL, Nucleus const * const n) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
       if( !(*p)->isNucleon() ) continue;
       if(getBlockingProbability(*p, n) > Random::shoot()) return true;
     }
@@ -61,7 +59,7 @@ namespace G4INCL {
   }
 
   G4double PauliStandard::getBlockingProbability(Particle const * const particle, Nucleus const * const nucleus) const {
-    const G4double r0 = nucleus->getDensity()->getNuclearRadius();
+    const G4double r0 = ParticleTable::getNuclearRadius(particle->getType(), nucleus->getA(), nucleus->getZ());
     const G4double pFermi = nucleus->getPotential()->getFermiMomentum(particle);
 
     const G4double pbl = cellSize * std::sqrt(pFermi/r0);
@@ -84,10 +82,10 @@ namespace G4INCL {
 
     // Get the list of particles that are currently inside the
     // nucleus.
-    ParticleList particles = nucleus->getStore()->getParticles();
+    ParticleList const &particles = nucleus->getStore()->getParticles();
 
     G4int nl = 0;
-    for(ParticleIter it = particles.begin(); it != particles.end(); ++it) {
+    for(ParticleIter it=particles.begin(), e=particles.end(); it!=e; ++it) {
       // Skip comparing with the same particle
       if( (*it)->getID() == particle->getID() ) continue;
 

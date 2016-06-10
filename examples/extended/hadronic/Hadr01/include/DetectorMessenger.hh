@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.hh 77255 2013-11-22 10:09:14Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -64,7 +64,7 @@ public:
   DetectorMessenger(DetectorConstruction* );
   virtual ~DetectorMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
 
 private:
 
@@ -80,8 +80,6 @@ private:
   G4UIcmdWithAnInteger*      fNOfAbsCmd;
   G4UIcmdWithAnInteger*      fVerbCmd;
   G4UIcmdWithABool*          fBeamCmd;
-  G4UIcmdWithoutParameter*   fUpdateCmd;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

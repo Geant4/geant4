@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ChipsKaonMinusElasticXS.cc 76889 2013-11-18 13:01:55Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsKaonMinusElasticXS for pA elastic cross sections
@@ -45,14 +45,40 @@
 #include "G4Nucleus.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4IonTable.hh"
+#include "G4AutoLock.hh"
 
 // factory
 #include "G4CrossSectionFactory.hh"
 //
 G4_DECLARE_XS_FACTORY(G4ChipsKaonMinusElasticXS);
 
+
+namespace {
+    G4double mK;//= G4KaonMinus::KaonMinus()->GetPDGMass()*.001; // MeV to GeV//Cannot initialize here, needs particles
+    G4double mK2;//= mK*mK;
+    G4Mutex initM = G4MUTEX_INITIALIZER;
+    const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
+    const G4double third=1./3.;
+    const G4double fifth=1./5.;
+    const G4double sevth=1./7.;
+    const G4double pwd=2727;
+    const G4int n_kmpel=36;                // #of parameters for pp-elastic ( < nPoints=128)
+    //                        -0-   -1- -2-  -3- -4- -5-  -6- -7-   -8-   -9--10- -11--12-
+    const G4double kmp_el[n_kmpel]={5.2,.0557,3.5,2.23,.7,.075,.004,.39,.000156,.15,1.,.0156,5.,
+        74.,3.,3.4,.2,.17,.001,8.,.055,3.64,5.e-5,4000.,1500.,.46,
+        1.2e6,3.5e6,5.e-5,1.e10,8.5e8,1.e10,1.1,3.4e6,6.8e6,0.};
+    //                        -13-14--15-16--17--18--19- -20- -21- -22-  -23- -24- -25-
+    //                        -26-  -27-   -28-  -29-  -30- -31-  -32- -33- -34- -35-
+    const G4double HGeVSQ=gigaelectronvolt*gigaelectronvolt/2.;
+}
+
 G4ChipsKaonMinusElasticXS::G4ChipsKaonMinusElasticXS():G4VCrossSectionDataSet(Default_Name()), nPoints(128), nLast(nPoints-1)
 {
+  G4AutoLock l(&initM);
+  mK = G4KaonMinus::KaonMinus()->GetPDGMass()*.001;
+  mK2 = mK*mK;
+  l.unlock();
   lPMin=-8.;  //Min tabulatedLogarithmMomentum/D
   lPMax= 8.;  //Max tabulatedLogarithmMomentum/D
   dlnP=(lPMax-lPMin)/nLast;// LogStep inTable /D
@@ -153,11 +179,11 @@ G4double G4ChipsKaonMinusElasticXS::GetIsoCrossSection(const G4DynamicParticle* 
 
 G4double G4ChipsKaonMinusElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int)
 {
-  static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
-  static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
-  static std::vector <G4double> colP;  // Vector of last momenta for the reaction
-  static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
-  static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
+  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
+  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
+  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
   G4bool fCS = false;
@@ -231,7 +257,7 @@ G4double G4ChipsKaonMinusElasticXS::CalculateCrossSection(G4bool CS, G4int F,
                                     G4int I, G4int PDG, G4int tgZ, G4int tgN, G4double pIU)
 {
   // *** Begin of Associative Memory DB for acceleration of the cross section calculations
-  static std::vector <G4double>  PIN;   // Vector of max initialized log(P) in the table
+  static G4ThreadLocal std::vector <G4double>  *PIN_G4MT_TLS_ = 0 ; if (!PIN_G4MT_TLS_) PIN_G4MT_TLS_ = new  std::vector <G4double>   ;  std::vector <G4double>  &PIN = *PIN_G4MT_TLS_;   // Vector of max initialized log(P) in the table
   // *** End of Static Definitions (Associative Memory Data Base) ***
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
@@ -357,14 +383,6 @@ G4double G4ChipsKaonMinusElasticXS::GetPTables(G4double LP,G4double ILP, G4int P
                                                        G4int tgZ, G4int tgN)
 {
   // @@ At present all nA==pA ---------> Each neucleus can have not more than 51 parameters
-  static const G4double pwd=2727;
-  const G4int n_kmpel=36;                // #of parameters for pp-elastic ( < nPoints=128)
-  //                        -0-   -1- -2-  -3- -4- -5-  -6- -7-   -8-   -9--10- -11--12-
-  G4double kmp_el[n_kmpel]={5.2,.0557,3.5,2.23,.7,.075,.004,.39,.000156,.15,1.,.0156,5.,
-                            74.,3.,3.4,.2,.17,.001,8.,.055,3.64,5.e-5,4000.,1500.,.46,
-                            1.2e6,3.5e6,5.e-5,1.e10,8.5e8,1.e10,1.1,3.4e6,6.8e6,0.};
-  //                        -13-14--15-16--17--18--19- -20- -21- -22-  -23- -24- -25-
-  //                        -26-  -27-   -28-  -29-  -30- -31-  -32- -33- -34- -35-
   if(PDG == -321)
   {
     // -- Total pp elastic cross section cs & s1/b1 (main), s2/b2 (tail1), s3/b3 (tail2) --
@@ -600,10 +618,6 @@ G4double G4ChipsKaonMinusElasticXS::GetPTables(G4double LP,G4double ILP, G4int P
 // Returns Q2=-t in independent units (MeV^2) (all internal calculations are in GeV)
 G4double G4ChipsKaonMinusElasticXS::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 {
-  static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
-  static const G4double third=1./3.;
-  static const G4double fifth=1./5.;
-  static const G4double sevth=1./7.;
   if(PDG==310 || PDG==130) PDG=-321;
   if(PDG!=-321)G4cout<<"*Warning*G4ChipsKaonMinusElasticXS::GetET:PDG="<<PDG<<G4endl;
   if(onlyCS) G4cout<<"*Warning*G4ChipsKaonMinusElasticXS::GetExT: onlyCS=1"<<G4endl;
@@ -709,7 +723,6 @@ G4double G4ChipsKaonMinusElasticXS::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG
 // Returns B in independent units (MeV^-2) (all internal calculations are in GeV) see ExT
 G4double G4ChipsKaonMinusElasticXS::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
 {
-  static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
   if(onlyCS)G4cout<<"*Warning*G4ChipsKaonMinusElasticXS::GetSl:onlCS=true"<<G4endl;
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG != -321)
@@ -729,7 +742,6 @@ G4double G4ChipsKaonMinusElasticXS::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
 // Returns half max(Q2=-t) in independent units (MeV^2)
 G4double G4ChipsKaonMinusElasticXS::GetHMaxT()
 {
-  static const G4double HGeVSQ=gigaelectronvolt*gigaelectronvolt/2.;
   return lastTM*HGeVSQ;
 }
 
@@ -830,14 +842,10 @@ G4double G4ChipsKaonMinusElasticXS::GetTabValues(G4double lp, G4int PDG, G4int t
 G4double G4ChipsKaonMinusElasticXS::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
                                                     G4double pP)
 {
-  static const G4double mK= G4KaonMinus::KaonMinus()->GetPDGMass()*.001; // MeV to GeV
-
-  static const G4double mK2= mK*mK;
-
   G4double pP2=pP*pP;                                 // squared momentum of the projectile
   if(tgZ || tgN>-1)                                   // ---> pipA
   {
-    G4double mt=G4ParticleTable::GetParticleTable()->FindIon(tgZ,tgZ+tgN,0,tgZ)->GetPDGMass()*.001; // Target mass in GeV
+    G4double mt=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(tgZ,tgZ+tgN,0)->GetPDGMass()*.001; // Target mass in GeV
 
     G4double dmt=mt+mt;
     G4double mds=dmt*std::sqrt(pP2+mK2)+mK2+mt*mt;    // Mondelstam mds

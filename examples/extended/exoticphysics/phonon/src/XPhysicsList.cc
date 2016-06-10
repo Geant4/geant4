@@ -26,97 +26,74 @@
 /// \file exoticphysics/phonon/src/XPhysicsList.cc
 /// \brief Implementation of the XPhysicsList class
 //
-// $Id$
+// $Id: XPhysicsList.cc 76938 2013-11-19 09:51:36Z gcosmo $
 //
 
 #include "XPhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4ios.hh"              
-
-#include "XTPhononSlow.hh"
-#include "XTPhononFast.hh"
-#include "XLPhonon.hh"
-
-#include "XPhononScatteringProcess.hh"
-#include "XPhononReflectionProcess.hh"
-#include "XPhononDownconversionProcess.hh"
-
+#include "G4PhononDownconversion.hh"
+#include "G4PhononLong.hh"
+#include "G4PhononReflection.hh"
+#include "G4PhononScattering.hh"
+#include "G4PhononTransFast.hh"
+#include "G4PhononTransSlow.hh"
+#include "G4ProcessManager.hh"
 #include "G4SystemOfUnits.hh"
 
 
-XPhysicsList::XPhysicsList():  G4VUserPhysicsList()
-{
-  G4cout<<"\n\nXPhysicsList::constructor: running"<<endl;
-  defaultCutValue = 100*mm;
-  SetVerboseLevel(1);
-  G4cout<<"\n\nXPhysicsList::constructor: ran"<<endl;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+XPhysicsList::XPhysicsList(G4int verbose) : G4VUserPhysicsList() {
+  if (verbose) G4cout << "XPhysicsList::constructor" << G4endl;
+
+  SetVerboseLevel(verbose);
+  SetDefaultCutValue(100*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+XPhysicsList::~XPhysicsList() {;}
 
-XPhysicsList::~XPhysicsList()
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XPhysicsList::ConstructParticle()
-{
-
-  XLPhonon::PhononDefinition();
-  XTPhononFast::PhononDefinition();
-  XTPhononSlow::PhononDefinition();
-
+void XPhysicsList::ConstructParticle() {
+  G4PhononLong::PhononDefinition();
+  G4PhononTransFast::PhononDefinition();
+  G4PhononTransSlow::PhononDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
-void XPhysicsList::ConstructProcess()
-{
-
+void XPhysicsList::ConstructProcess() {
   AddTransportation();
+
+  // Only make processes once
+  G4VProcess* phScat = new G4PhononScattering;
+  G4VProcess* phRefl = new G4PhononReflection;
+  G4VProcess* phDown = new G4PhononDownconversion;
+
+  // Set process verbosity to match physics list, for diagnostics
+  phScat->SetVerboseLevel(verboseLevel);
+  phRefl->SetVerboseLevel(verboseLevel);
+  phDown->SetVerboseLevel(verboseLevel);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-    
-    if (particleName == "XTPhononSlow") {
-      G4cout<<"Registering Slow tansverse processes..."<<G4endl;     
-      pmanager->AddDiscreteProcess(new XPhononScatteringProcess());      
-      pmanager->AddDiscreteProcess(new XPhononDownconversionProcess());         
-      pmanager->AddDiscreteProcess(new XPhononReflectionProcess());
-    }
-    
-    if (particleName == "XTPhononFast") {
-      
-      G4cout<<"Registering fast transverse processes..."<<G4endl;
-      pmanager->AddDiscreteProcess(new XPhononScatteringProcess());      
-      pmanager->AddDiscreteProcess(new XPhononDownconversionProcess());         
-      pmanager->AddDiscreteProcess(new XPhononReflectionProcess());
-    }
-        
-    if (particleName == "XLPhonon") {      
-      G4cout<<"Registering longitudinal processes..."<<G4endl;
-      pmanager->AddDiscreteProcess(new XPhononScatteringProcess());
-      pmanager->AddDiscreteProcess(new XPhononDownconversionProcess());        
-      pmanager->AddDiscreteProcess(new XPhononReflectionProcess());      
-    } 
-    
+
+    // WARNING!  CHANGING ORDER OF REGISTRATION CAN CHANGE PHYSICS RESULTS
+    if (phScat->IsApplicable(*particle)) pmanager->AddDiscreteProcess(phScat);
+    if (phDown->IsApplicable(*particle)) pmanager->AddDiscreteProcess(phDown);
+    if (phRefl->IsApplicable(*particle)) pmanager->AddDiscreteProcess(phRefl);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-void XPhysicsList::SetCuts()
-{
+void XPhysicsList::SetCuts() {
   // These values are used as the default production thresholds
   // for the world volume.
   SetCutsWithDefault();

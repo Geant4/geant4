@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLQtViewer.cc 77557 2013-11-26 08:57:39Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -124,7 +124,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
   if ( fUiQt) {
     if (!fBatchMode) {
       if (!interactorManager->IsExternalApp()) {
-        isTabbedView = fUiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
+        isTabbedView = fUiQt->AddTabWidget((QWidget*)fWindow,name,getWinWidth(),getWinHeight());
         fUISceneTreeComponentsTBWidget = fUiQt->GetSceneTreeComponentsTBWidget();
         isTabbedView = true;
       }
@@ -145,7 +145,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
     if (myParent != NULL) {
       glWidget->setParent(myParent);  
     }
-    QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
+    QHBoxLayout *mainLayout = new QHBoxLayout();
     
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);   
@@ -164,7 +164,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
     if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
       YPos = offset;
     }
-    fGLWindow->resize(getWinWidth(), getWinHeight());
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::CreateMainWindow :: resizing to %d %d \n",getWinWidth(), getWinHeight());
 #endif
@@ -172,7 +171,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
     fGLWindow->show();
   } else {
     fGLWindow = fWindow;
-    fGLWindow->resize(getWinWidth(), getWinHeight());
   }
 
   if(!fWindow) return;
@@ -189,7 +187,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
 )
   :G4VViewer (scene, -1)
   ,G4OpenGLViewer (scene)
-  ,fWindow(0)
+  ,fWindow(NULL)
+  ,fGLWindow(NULL)
   ,fRecordFrameNumber(0)
   ,fContextMenu(0)
   ,fDeltaDepth(0.01)
@@ -249,6 +248,10 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   fLastEventTime = new QTime();
   signalMapperMouse = new QSignalMapper(this);
   signalMapperSurface = new QSignalMapper(this);
+
+  // Set default path and format
+  fFileSavePath = QDir::currentPath();
+  fDefaultSaveFileFormat = "png";
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
@@ -317,26 +320,12 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   // === Style Menu ===
   QMenu *mStyle = fContextMenu->addMenu("&Style");
 
-  QMenu *mRepresentation = mStyle->addMenu("&Representation");
   QMenu *mProjection = mStyle->addMenu("&Projection");
-  QAction *polyhedron = mRepresentation->addAction("Polyhedron");
-  QAction *nurbs = mRepresentation->addAction("NURBS");
 
   fProjectionOrtho = mProjection->addAction("Orthographic", signalMapperSurface, SLOT(map()));
   fProjectionPerspective = mProjection->addAction("Persepective", signalMapperSurface, SLOT(map()));
 
-  // INIT mRepresentation
-  G4ViewParameters::RepStyle style;
-  style = fVP.GetRepStyle();
-  if (style == G4ViewParameters::polyhedron) {
-    createRadioAction(polyhedron,nurbs,SLOT(toggleRepresentation(bool)),1);
-  } else if (style == G4ViewParameters::nurbs) {
-    createRadioAction(polyhedron,nurbs,SLOT(toggleRepresentation(bool)),2);
-  } else {
-    mRepresentation->clear();
-  }
-
-  // INIT mProjection
+ // INIT mProjection
   if (fVP.GetFieldHalfAngle() == 0) {
     createRadioAction(fProjectionOrtho, fProjectionPerspective,SLOT(toggleProjection(bool)),1);
   } else {
@@ -541,8 +530,8 @@ void G4OpenGLQtViewer::showShortcuts() {
     if (fUiQt->IsIconRotateSelected()) {  // rotate
       text += "Click and move mouse to rotate volume \n";
       text += "ALT + Click and move mouse to rotate volume (Toggle View/Theta-Phi Direction) \n";
-      text += "CTRL + Click and zoom mouse to zoom in/out \n";
-      text += "SHIFT + Click and zoommove camera point of view \n";
+      text += "CTRL + Click and move mouse to zoom in/out \n";
+      text += "SHIFT + Click and move mouse to change camera point of view \n";
     } else  if (fUiQt->IsIconMoveSelected()) { //move
       text += "Move camera point of view with mouse \n";
     } else  if (fUiQt->IsIconPickSelected()) { //pick
@@ -654,30 +643,6 @@ void G4OpenGLQtViewer::toggleSurfaceAction(int aAction) {
   updateQWidget();
 }
 
-
-/**
-   SLOT Activate by a click on the representation menu
-   Warning : When G4OpenGLStoredQtViewer::DrawView() method call,
-   KernelVisitDecision () will be call and will set the fNeedKernelVisit
-   to 1. See G4XXXStoredViewer::CompareForKernelVisit for explanations.
-   It will cause a redraw of the view
-   @param check : 1 polyhedron, 0 nurbs
-   @see G4OpenGLStoredQtViewer::DrawView
-   @see G4XXXStoredViewer::CompareForKernelVisit
-*/
-void G4OpenGLQtViewer::toggleRepresentation(bool check) {
-
-  G4ViewParameters::RepStyle style;
-  if (check == 1) {
-    style = G4ViewParameters::polyhedron;
-  } else {
-    style = G4ViewParameters::nurbs;
-  }
-  fVP.SetRepStyle (style);
-
-  updateToolbarAndMouseContextMenu();
-  updateQWidget();
-}
 
 /**
    SLOT Activate by a click on the projection menu
@@ -829,19 +794,33 @@ void G4OpenGLQtViewer::actionSaveImage() {
   filters += "eps;;";
   filters += "ps;;";
   filters += "pdf";
-  QString* selectedFormat = new QString();
-  std::string name;
-  name =  QFileDialog::getSaveFileName ( fGLWindow,
+
+  QString* selectedFormat = new QString(fDefaultSaveFileFormat);
+  QString qFilename;
+  qFilename =  QFileDialog::getSaveFileName ( fGLWindow,
                                          tr("Save as ..."),
                                          ".",
                                          filters,
-                                         selectedFormat ).toStdString().c_str(); 
+                                         selectedFormat );
+
+  
+  std::string name = qFilename.toStdString().c_str();
+
   // bmp jpg jpeg png ppm xbm xpm
   if (name.empty()) {
     return;
   }
-  name += "." + selectedFormat->toStdString();
+
+  fFileSavePath = QFileInfo(qFilename).path();
+  if (! qFilename.endsWith(QString(selectedFormat->toStdString().c_str()),Qt::CaseInsensitive)) {
+    name += "." + selectedFormat->toStdString();
+  }
+  
   QString format = selectedFormat->toLower();
+  
+  // set the default format to current
+  fDefaultSaveFileFormat = format;
+  
   setPrintFilename(name.c_str(),0);
   G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(fGLWindow,format,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
@@ -1046,7 +1025,10 @@ void G4OpenGLQtViewer::FinishView()
 */
 void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
 {
-  if ((evnt->buttons() & Qt::LeftButton) && (! (evnt->modifiers() & Qt::ControlModifier ))){
+  if (evnt->button() == Qt::RightButton) {
+    return;
+  }
+  if ((evnt->button() & Qt::LeftButton) && (! (evnt->modifiers() & Qt::ControlModifier ))){
     fWindow->setMouseTracking(true);
     fAutoMove = false; // stop automove
     fLastPos1 = evnt->pos();
@@ -1361,7 +1343,13 @@ bool G4OpenGLQtViewer::printPDF (
 
   if (aFilename.substr(aFilename.size()-3) == ".ps") {
 #if QT_VERSION > 0x040200
+  #if QT_VERSION < 0x050000
     printer.setOutputFormat(QPrinter::PostScriptFormat);
+  #else
+    G4cout << "Output in postscript not implemented in this Qt version" << G4endl;
+  #endif
+#else
+    G4cout << "Output in postscript not implemented in this Qt version" << G4endl;
 #endif
   } else {
 #if QT_VERSION > 0x040100
@@ -2248,13 +2236,16 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 void G4OpenGLQtViewer::initSceneTreeComponent(){
 
   fSceneTreeWidget = new QWidget();
-  fSceneTreeWidget->setLayout (new QVBoxLayout());
+  QVBoxLayout* layoutSceneTreeComponentsTBWidget = new QVBoxLayout();
+  fSceneTreeWidget->setLayout (layoutSceneTreeComponentsTBWidget);
 
   if (fUISceneTreeComponentsTBWidget != NULL) {
     fUISceneTreeComponentsTBWidget->addTab(fSceneTreeWidget,QString(GetName().data()));
   }
 
-  QLayout* layoutSceneTreeComponentsTBWidget = fSceneTreeWidget->layout();
+
+  // reduce margins
+  layoutSceneTreeComponentsTBWidget->setContentsMargins(5,5,5,5);
 
 
   fSceneTreeComponentTreeWidget = new QTreeWidget();
@@ -2280,16 +2271,22 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
 
   QWidget* depthWidget = new QWidget();
   QGroupBox *groupBox = new QGroupBox(tr("Touchables slider"),depthWidget);
-  QHBoxLayout *groupBoxLayout = new QHBoxLayout(groupBox);
+  QHBoxLayout *groupBoxLayout = new QHBoxLayout();
+
+  // reduce margins
+  groupBoxLayout->setContentsMargins(5,5,5,5);
 
   QLabel *zero = new QLabel();
   zero->setText("Show all");          
   QLabel *one = new QLabel();
   one->setText("Hide all");
-  fSceneTreeDepthSlider = new QSlider ( Qt::Horizontal, groupBox);
+  fSceneTreeDepthSlider = new QSlider ( Qt::Horizontal);
   fSceneTreeDepthSlider->setMaximum (1000);
   fSceneTreeDepthSlider->setMinimum (0);
   fSceneTreeDepthSlider->setTickPosition(QSlider::TicksAbove);
+  // set a minimum size
+  fSceneTreeDepthSlider->setMinimumWidth (40);
+
   groupBoxLayout->addWidget(zero);
   groupBoxLayout->addWidget(fSceneTreeDepthSlider);
   groupBoxLayout->addWidget(one);
@@ -2304,10 +2301,22 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   QHBoxLayout *helpLayout = new QHBoxLayout();
   QPushButton* select = new QPushButton("select item(s)");
   fHelpLine = new QLineEdit();
-  helpLayout->addWidget(new QLabel("Search :",helpWidget));
   helpLayout->addWidget(fHelpLine);
   helpLayout->addWidget(select);
   helpWidget->setLayout(helpLayout);
+  helpLayout->setContentsMargins(0,0,0,0);
+
+  // set a minimum size
+  fHelpLine->setMinimumWidth (20);
+
+  QSizePolicy policy = fHelpLine->sizePolicy();
+  policy.setHorizontalStretch(10);
+  fHelpLine->setSizePolicy(policy);
+
+  policy = select->sizePolicy();
+  policy.setHorizontalStretch(1);
+  select->setSizePolicy(policy);
+
   layoutSceneTreeComponentsTBWidget->addWidget(helpWidget);
 
   connect( fHelpLine, SIGNAL( returnPressed () ), this, SLOT(changeSearchSelection()));
@@ -2362,6 +2371,8 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
     const G4String& textString = g4text.GetText();
     const char* textCString = textString.c_str();
   
+    glRasterPos3d(position.x(),position.y(),position.z());
+
     // Calculate move for centre and right adjustment
     QFontMetrics* f = new QFontMetrics (font);
     G4double span = f->width(textCString);
@@ -2466,9 +2477,11 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
   }
   QTreeWidgetItem * newItem = NULL;
   if (parentTreeNode == NULL) {
-    newItem = new QTreeWidgetItem(fSceneTreeComponentTreeWidget);
+    newItem = new QTreeWidgetItem();
+    fSceneTreeComponentTreeWidget->addTopLevelItem(newItem);
   } else {
     newItem = new QTreeWidgetItem(parentTreeNode);
+    fSceneTreeComponentTreeWidget->addTopLevelItem(parentTreeNode);
   }
 
 
@@ -2499,6 +2512,9 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
                          "/vis/geometry/set/visibility " + logicalName + " 0 true\n"+
                          "and rebuild the view with /vis/viewer/rebuild.\n"+
                          "Click here will only show/hide all child components");
+  } else {
+    // Set a tootip
+    newItem->setToolTip (0,QString("double-click to change the color"));
   }
 
   // special case: if alpha=0, it is a totally transparent objet,
@@ -2970,8 +2986,10 @@ bool G4OpenGLQtViewer::isTouchableVisible(int POindex){
   }
   
   // should be the next one
-  fLastSceneTreeWidgetAskFor++;
-
+  // Prevent to get out the std::map
+  if (fLastSceneTreeWidgetAskForIterator != fLastSceneTreeWidgetAskForIteratorEnd) {
+    fLastSceneTreeWidgetAskForIterator++;
+  }
   QTreeWidgetItem* item = getTreeWidgetItem(POindex);
   
   if (item != NULL) {
@@ -3001,6 +3019,68 @@ bool G4OpenGLQtViewer::parseAndCheckVisibility(QTreeWidgetItem * treeNode,int PO
 }
 
 
+std::string G4OpenGLQtViewer::parseSceneTreeAndSaveState(){
+  std::string commandLine = "";
+  for (int b=0;b<fSceneTreeComponentTreeWidget->topLevelItemCount();b++) {
+    commandLine += parseSceneTreeElementAndSaveState(fSceneTreeComponentTreeWidget->topLevelItem(b),1)+"\n";
+  }
+  if (commandLine != "") {
+    commandLine = std::string("# Disable auto refresh and quieten vis messages whilst scene and\n") +
+    "# trajectories are established:\n" +
+    "/vis/viewer/set/autoRefresh false\n" +
+    "/vis/verbose errors" +
+    commandLine +
+    "# Re-establish auto refreshing and verbosity:\n" +
+    "/vis/viewer/set/autoRefresh true\n" +
+    "/vis/verbose confirmations\n";
+  }
+  return commandLine;
+}
+
+
+std::string G4OpenGLQtViewer::parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level){
+  // parse current item
+  std::string str( level, ' ' );
+  std::string commandLine = "\n#"+ str + "PV Name: " + item->text(0).toStdString();
+
+  if (item->text(3) != "") {
+    commandLine += " LV Name: "+item->text(3).toStdString()+"\n";
+    // save check state
+    commandLine += "/vis/geometry/set/visibility " + item->text(3).toStdString() + " ! "; // let default value for depth
+    if (item->checkState(0) == Qt::Checked) {
+      commandLine += "1";
+    }
+    if (item->checkState(0) == Qt::Unchecked) {
+      commandLine += "0";
+    }
+    commandLine +="\n";
+    
+    // save color
+    const QColor& c = item->data(2,Qt::UserRole).value<QColor>();
+    std::stringstream red;
+    red << ((double)c.red())/255;
+    std::stringstream green;
+    green << (double)c.green()/255;
+    std::stringstream blue;
+    blue << ((double)c.blue())/255;
+    std::stringstream alpha;
+    alpha << ((double)c.alpha())/255;
+    
+    commandLine += "/vis/geometry/set/colour " + item->text(3).toStdString() + " ! " + red.str() + " " + green.str() + " " + blue.str() + " " + alpha.str()+"\n";
+
+  } else {
+    commandLine += "\n";
+  }
+
+  // parse childs
+  for (int b=0;b< item->childCount();b++) {
+    commandLine += parseSceneTreeElementAndSaveState(item->child(b),level+1);
+  }
+  
+  return commandLine;
+}
+
+
 void G4OpenGLQtViewer::sceneTreeComponentItemChanged(QTreeWidgetItem* item, int) {
 
   if (fCheckSceneTreeComponentSignalLock == false) {
@@ -3011,30 +3091,6 @@ void G4OpenGLQtViewer::sceneTreeComponentItemChanged(QTreeWidgetItem* item, int)
     }
     setCheckComponent(item,checked);
     updateQWidget();
-
-    // change vis attributes to set new visibility
-    G4int iPO = item->data(0,Qt::UserRole).toInt();
-    if (iPO >= 0 && fTreeItemModels.find(iPO) != fTreeItemModels.end()) {
-      const PVPath& fullPath = fTreeItemModels[iPO];
-      // If a physical volume
-      if (fullPath.size()) {
-
-        // Instantiate a working copy of a G4VisAttributes object...
-        G4VisAttributes workingVisAtts;
-        // and set the visibility.
-        workingVisAtts.SetVisibility(checked);
-
-        // Add a vis atts modifier to the view parameters...
-        fVP.AddVisAttributesModifier
-        (G4ModelingParameters::VisAttributesModifier
-         (workingVisAtts,
-          G4ModelingParameters::VASVisibility,
-          fullPath));
-        // G4ModelingParameters::VASVisibility tells G4PhysicalVolumeModel that
-        // it is the visibility that should be picked out and merged with the
-        // touchable's normal vis attributes.
-      }
-    }
 
     fCheckSceneTreeComponentSignalLock = false;
   }
@@ -3164,6 +3220,68 @@ G4Colour G4OpenGLQtViewer::getColorForPoIndex(int poIndex) {
     return g4c;
   }
   return G4Colour();
+}
+
+
+const std::vector<G4ModelingParameters::VisAttributesModifier>*
+G4OpenGLQtViewer::GetPrivateVisAttributesModifiers() const
+{
+  static std::vector<G4ModelingParameters::VisAttributesModifier>
+  privateVisAttributesModifiers;
+
+  privateVisAttributesModifiers.clear();
+
+//  // For each modified touchable...
+//  std::map<int,PVPath>::const_iterator i;
+//  for (i = fTreeItemModels.begin();
+//       i != fTreeItemModels.end();
+//       ++i) {
+//
+//    // How do I know if it's been modified or not?
+//
+//    int iPO = i->first;
+//    const PVPath& fullPath = i->second;
+//
+//    // If a physical volume
+//    if (fullPath.size()) {
+//
+//      //    const G4bool& visibilityChanged = ???
+//      //    const G4bool& visibility = ???
+//      //    const G4bool& colourChanged = ???
+//      //    const QColor& colour = ???
+//      //    G4Colour g4colour(((G4double)colour.red())/255,
+//      //                      ((G4double)colour.green())/255,
+//      //                      ((G4double)colour.blue())/255,
+//      //                      ((G4double)colour.alpha())/255);
+//      // Next 4 lines are for testing, to be replaced by the above...
+//      G4bool visibilityChanged = true;
+//      G4bool visibility = true;
+//      G4bool colourChanged = true;
+//      G4Colour g4colour(G4Colour::Red());
+//
+//      // Instantiate a working copy of a G4VisAttributes object...
+//      G4VisAttributes workingVisAtts;
+//      // ...and use it to create vis attribute modifiers...
+//      if (visibilityChanged) {
+//        workingVisAtts.SetVisibility(visibility);
+//        privateVisAttributesModifiers.push_back
+//        (G4ModelingParameters::VisAttributesModifier
+//         (workingVisAtts,
+//          G4ModelingParameters::VASVisibility,
+//          fullPath));
+//      }
+//      if (colourChanged) {
+//        workingVisAtts.SetColour(g4colour);
+//        privateVisAttributesModifiers.push_back
+//        (G4ModelingParameters::VisAttributesModifier
+//         (workingVisAtts,
+//          G4ModelingParameters::VASColour,
+//          fullPath));
+//      }
+//    }
+//  }
+
+  return &privateVisAttributesModifiers;
 }
 
 
@@ -3339,7 +3457,8 @@ void G4OpenGLQtViewer::clearTreeWidget(){
       fPositivePoIndexSceneTreeWidgetQuickMap.clear();
 
       // put correct value in paramaters
-      fOldLastSceneTreeWidgetAskFor = fOldPositivePoIndexSceneTreeWidgetQuickMap.begin();
+      fOldLastSceneTreeWidgetAskForIterator = fOldPositivePoIndexSceneTreeWidgetQuickMap.begin();
+      fOldLastSceneTreeWidgetAskForIteratorEnd = fOldPositivePoIndexSceneTreeWidgetQuickMap.end();
       fSceneTreeDepth = 1;
       fModelShortNameItem = NULL;
       fMaxPOindexInserted = -1;
@@ -3412,7 +3531,8 @@ void G4OpenGLQtViewer::cloneSceneTree(
 
    if (i == fPositivePoIndexSceneTreeWidgetQuickMap.end()) {
      fPositivePoIndexSceneTreeWidgetQuickMap.insert(std::pair <int, QTreeWidgetItem*> (POindex,item) );
-     fLastSceneTreeWidgetAskFor = fPositivePoIndexSceneTreeWidgetQuickMap.end();
+     fLastSceneTreeWidgetAskForIterator = fPositivePoIndexSceneTreeWidgetQuickMap.end();
+     fLastSceneTreeWidgetAskForIteratorEnd = fPositivePoIndexSceneTreeWidgetQuickMap.end();
    } else {
      i->second = item;
    }
@@ -3456,17 +3576,20 @@ QTreeWidgetItem* G4OpenGLQtViewer::getTreeWidgetItem(int POindex){
     return NULL;
   }
 
-  if (POindex == fLastSceneTreeWidgetAskFor->first) {
-    if (fLastSceneTreeWidgetAskFor->second != NULL) {
-      return fLastSceneTreeWidgetAskFor->second;
+  if (fLastSceneTreeWidgetAskForIterator != fLastSceneTreeWidgetAskForIteratorEnd) {
+    if (POindex == fLastSceneTreeWidgetAskForIterator->first) {
+      if (fLastSceneTreeWidgetAskForIterator->second != NULL) {
+        return fLastSceneTreeWidgetAskForIterator->second;
+      }
     }
   }
   
   // if not, use the "find" algorithm
-  fLastSceneTreeWidgetAskFor = fPositivePoIndexSceneTreeWidgetQuickMap.find(POindex);
+  fLastSceneTreeWidgetAskForIterator = fPositivePoIndexSceneTreeWidgetQuickMap.find(POindex);
+  fLastSceneTreeWidgetAskForIteratorEnd = fPositivePoIndexSceneTreeWidgetQuickMap.end();
   
-  if (fLastSceneTreeWidgetAskFor != fPositivePoIndexSceneTreeWidgetQuickMap.end()) {
-    return fLastSceneTreeWidgetAskFor->second;
+  if (fLastSceneTreeWidgetAskForIterator != fPositivePoIndexSceneTreeWidgetQuickMap.end()) {
+    return fLastSceneTreeWidgetAskForIterator->second;
   }
   return NULL;
 }
@@ -3488,21 +3611,25 @@ QTreeWidgetItem* G4OpenGLQtViewer::getOldTreeWidgetItem(int POindex){
   }
 
   // Should be call only once by item addition
-  fOldLastSceneTreeWidgetAskFor++;
-
-  if (POindex == fOldLastSceneTreeWidgetAskFor->first) {
-    if (fOldLastSceneTreeWidgetAskFor->second != NULL) {
-      if (fOldLastSceneTreeWidgetAskFor != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
-        return fOldLastSceneTreeWidgetAskFor->second;
+  // Prevent to get out the std::map
+  if (fOldLastSceneTreeWidgetAskForIterator != fOldLastSceneTreeWidgetAskForIteratorEnd) {
+    fOldLastSceneTreeWidgetAskForIterator++;
+  }
+  
+  if (fOldLastSceneTreeWidgetAskForIterator != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
+    if (POindex == fOldLastSceneTreeWidgetAskForIterator->first) {
+      if (fOldLastSceneTreeWidgetAskForIterator->second != NULL) {
+        return fOldLastSceneTreeWidgetAskForIterator->second;
       }
     }
   }
   
   // if not, use the "find" algorithm
-  fOldLastSceneTreeWidgetAskFor = fOldPositivePoIndexSceneTreeWidgetQuickMap.find(POindex);
+  fOldLastSceneTreeWidgetAskForIterator = fOldPositivePoIndexSceneTreeWidgetQuickMap.find(POindex);
+  fOldLastSceneTreeWidgetAskForIteratorEnd = fOldPositivePoIndexSceneTreeWidgetQuickMap.end();
   
-  if (fOldLastSceneTreeWidgetAskFor != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
-    return fOldLastSceneTreeWidgetAskFor->second;
+  if (fOldLastSceneTreeWidgetAskForIterator != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
+    return fOldLastSceneTreeWidgetAskForIterator->second;
   }
   return NULL;
 }

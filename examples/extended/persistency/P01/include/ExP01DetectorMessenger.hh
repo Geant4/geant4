@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01DetectorMessenger class
 //
 //
-// $Id$
+// $Id: ExP01DetectorMessenger.hh 71791 2013-06-24 14:08:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,16 +53,16 @@ class ExP01DetectorMessenger: public G4UImessenger
     ExP01DetectorMessenger(ExP01DetectorConstruction*);
    ~ExP01DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    ExP01DetectorConstruction* myDetector;
+    ExP01DetectorConstruction* fDetector;
     
-    G4UIdirectory*             N02Dir;
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        TargMatCmd;
-    G4UIcmdWithAString*        ChamMatCmd;    
-    G4UIcmdWithADoubleAndUnit* FieldCmd;
+    G4UIdirectory*             fN02Dir;
+    G4UIdirectory*             fDetDir;
+    G4UIcmdWithAString*        fTargMatCmd;
+    G4UIcmdWithAString*        fChamMatCmd;    
+    G4UIcmdWithADoubleAndUnit* fFieldCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

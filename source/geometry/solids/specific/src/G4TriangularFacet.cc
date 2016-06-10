@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4TriangularFacet.cc 66819 2013-01-12 16:20:10Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -106,12 +106,12 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector &vt0,
                              || eMag3 <= kCarTolerance)
   {
     ostringstream message;
-    message << "Length of sides of facet are too small." << endl
-      << "fVertices[0] = " << GetVertex(0) << endl
-      << "fVertices[1] = " << GetVertex(1) << endl
-      << "fVertices[2] = " << GetVertex(2) << endl
-      << "Side lengths = fVertices[0]->fVertices[1]" << eMag1 << endl
-      << "Side lengths = fVertices[0]->fVertices[2]" << eMag2 << endl
+    message << "Length of sides of facet are too small." << G4endl
+      << "fVertices[0] = " << GetVertex(0) << G4endl
+      << "fVertices[1] = " << GetVertex(1) << G4endl
+      << "fVertices[2] = " << GetVertex(2) << G4endl
+      << "Side lengths = fVertices[0]->fVertices[1]" << eMag1 << G4endl
+      << "Side lengths = fVertices[0]->fVertices[2]" << eMag2 << G4endl
       << "Side lengths = fVertices[1]->fVertices[2]" << eMag3;
     G4Exception("G4TriangularFacet::G4TriangularFacet()",
                 "GeomSolids1001", JustWarning, message);

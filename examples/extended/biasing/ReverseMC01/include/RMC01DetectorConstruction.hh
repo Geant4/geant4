@@ -26,14 +26,14 @@
 /// \file biasing/ReverseMC01/include/RMC01DetectorConstruction.hh
 /// \brief Definition of the RMC01DetectorConstruction class
 //
-// $Id$
+// $Id: RMC01DetectorConstruction.hh 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01DetectorConstruction
+//  Class Name:           RMC01DetectorConstruction
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -62,7 +62,6 @@ class RMC01DetectorConstruction : public G4VUserDetectorConstruction
     RMC01DetectorConstruction();       
     virtual ~RMC01DetectorConstruction();
 
-  public:
     virtual G4VPhysicalVolume* Construct();
     void UpdateGeometry();
     
@@ -77,15 +76,12 @@ class RMC01DetectorConstruction : public G4VUserDetectorConstruction
     
     //Geometrical parameters
     //---------------------- 
-     G4double fShield_Thickness;
-     G4double fSensitive_cylinder_H;
-     G4double fSensitive_cylinder_Rout;
+    G4double fShield_Thickness;
+    G4double fSensitive_cylinder_H;
+    G4double fSensitive_cylinder_Rout;
       
-private:
-
-     void DefineMaterials();
-     G4VPhysicalVolume* ConstructSimpleGeometry(); 
-     
+    void DefineMaterials();
+    G4VPhysicalVolume* ConstructSimpleGeometry(); 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

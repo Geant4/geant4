@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VDecayChannel.hh 73762 2013-09-10 12:53:56Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -38,91 +38,169 @@
 #ifndef G4VDecayChannel_h
 #define G4VDecayChannel_h 1
 
+#include <cmath>
+
 #include "G4ios.hh"
 #include "globals.hh"
-#include <cmath>
+/////@@#include "G4PDefSplitter.hh"
 
 class    G4ParticleDefinition;
 class    G4DecayProducts;
 class    G4ParticleTable;
 
+/////@@class G4DecayChannelData
+/////@@{
+/////@@  // Encapsulates the fields associated to the class G4VDecayChannel that
+/////@@  // may not be read-only.
+/////@@
+/////@@  public:
+/////@@
+/////@@    void initialize()
+/////@@    {
+/////@@      parent = 0;
+/////@@      daughters = 0;
+/////@@      parent_mass = 0.0;
+/////@@      daughters_mass = 0;
+/////@@    }
+/////@@
+/////@@    G4ParticleDefinition*  parent;
+/////@@    G4ParticleDefinition** daughters;
+/////@@    G4double               parent_mass;
+/////@@    G4double*              daughters_mass;
+/////@@};
+/////@@
+/////@@// The type G4DecayChannelManager is introduced to encapsulate the methods used
+/////@@// by both the master thread and worker threads to allocate memory space for
+/////@@// the fields encapsulated by the class G4DecayChannelData. When each thread
+/////@@// initializes the value for these fields, it refers to them using a macro
+/////@@// definition defined below. For every G4DecayChannel instance, there is
+/////@@// a corresponding G4DecayChannelData instance. All G4DecayChannelData
+/////@@// instances are organized by the class G4DecayChannelManager as an array.
+/////@@// The field "int instanceID" is added to the class G4DecayChannel.
+/////@@// The value of this field in each G4DecayChannel instance is the subscript
+/////@@// of the corresponding G4DecayChannelData instance.
+/////@@// In order to use the class G4DecayChannelManager, we add a static member in
+/////@@// G4DecayChannel as follows: "static G4DecayChannelManager subInstanceManager".
+/////@@// For the master thread, the array for G4DecayChannelData instances grows
+/////@@// dynamically along with G4DecayChannel instances are created.
+/////@@// For each worker thread, it copies the array of  G4DecayChannelData instances
+/////@@// from the master thread.
+/////@@// In addition, it invokes a method similiar to the constructor explicitly
+/////@@// to achieve the partial effect for each instance in the array.
+/////@@//
+/////@@typedef G4PDefSplitter<G4DecayChannelData> G4DecayChannelManager;
+/////@@
+/////@@// These macros change the references to fields that are now encapsulated
+/////@@// in the class G4DecayChannelData.
+/////@@//
+/////@@#define G4MT_parent ((G4VDecayChannel::subInstanceManager.offset[instanceID]).parent)
+/////@@#define G4MT_daughters ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters)
+/////@@#define G4MT_parent_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).parent_mass)
+/////@@#define G4MT_daughters_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters_mass)
+/////@@
 class G4VDecayChannel
 {
- // Class Description
- // This class is a abstract class to describe decay kinematics
- //
+  // Class Description:
+  //
+  // Abstract class to describe decay kinematics
 
-  public:
-    //Constructors 
-      G4VDecayChannel(const G4String &aName, G4int Verbose = 1);
-      G4VDecayChannel(const G4String  &aName, 
-		     const G4String& theParentName,
-		     G4double        theBR,
-		     G4int           theNumberOfDaughters,
-		     const G4String& theDaughterName1,
-		     const G4String& theDaughterName2 = "",
-		     const G4String& theDaughterName3 = "",
-		     const G4String& theDaughterName4 = "" );
+  public:  // with description
 
-    //  Destructor
-      virtual ~G4VDecayChannel();
+    // Constructors 
+    G4VDecayChannel(const G4String &aName, G4int Verbose = 1);
+    G4VDecayChannel(const G4String  &aName, 
+		    const G4String& theParentName,
+		    G4double        theBR,
+		    G4int           theNumberOfDaughters,
+		    const G4String& theDaughterName1,
+		    const G4String& theDaughterName2 = "",
+		    const G4String& theDaughterName3 = "",
+		    const G4String& theDaughterName4 = "" );
 
-  protected:
-    //  default constructor
-     G4VDecayChannel();
-    //  copy constructor and assignment operatotr
-     G4VDecayChannel(const G4VDecayChannel &);
-     G4VDecayChannel & operator=(const G4VDecayChannel &);
+    // Destructor
+    virtual ~G4VDecayChannel();
 
-  public:
     // equality operators
-    G4int operator==(const G4VDecayChannel &right) const {return (this == &right);};
-    G4int operator!=(const G4VDecayChannel &right) const {return (this != &right);};
+    G4int operator==(const G4VDecayChannel &right) const {return (this == &right);}
+    G4int operator!=(const G4VDecayChannel &right) const {return (this != &right);}
 
     // less-than operator is defined for G4DecayTable
     G4int operator<(const G4VDecayChannel &right) const;
 
-  public: // With Description
-   virtual G4DecayProducts* DecayIt(G4double parentMass = -1.0) = 0;
+    virtual G4DecayProducts* DecayIt(G4double parentMass = -1.0) = 0;
 
-  public: // With Description
-     //get kinematics name
-     const G4String&  GetKinematicsName() const;
-     //get branching ratio
-     G4double   GetBR() const;
-     //get number of daughter particles
-     G4int      GetNumberOfDaughters() const;     
+    // get kinematics name
+    const G4String&  GetKinematicsName() const;
+    // get branching ratio
+    G4double   GetBR() const;
+    // get number of daughter particles
+    G4int      GetNumberOfDaughters() const;     
 
-     //get the pointer to the parent particle
-     G4ParticleDefinition * GetParent();
-     //get the pointer to a daughter particle 
-     G4ParticleDefinition * GetDaughter(G4int anIndex);
+    // get the pointer to the parent particle
+    G4ParticleDefinition * GetParent();
+    // get the pointer to a daughter particle 
+    G4ParticleDefinition * GetDaughter(G4int anIndex);
 
-     //get the angular momentum of the decay
-     G4int GetAngularMomentum();
-     //get the name of the parent particle
-     const G4String& GetParentName() const;
-     //get the name of a daughter particle
-     const G4String& GetDaughterName(G4int anIndex) const;
+    // get the angular momentum of the decay
+    G4int GetAngularMomentum();
+    // get the name of the parent particle
+    const G4String& GetParentName() const;
+    //get the name of a daughter particle
+    const G4String& GetDaughterName(G4int anIndex) const;
 
-     // get mass of parent
-     G4double GetParentMass() const; 
-     G4double GetDaughterMass(G4int anIndex) const; 
+    // get mass of parent
+    G4double GetParentMass() const; 
+    G4double GetDaughterMass(G4int anIndex) const; 
 
-     //set the parent particle (by name or by pointer) 
-     void SetParent(const G4ParticleDefinition * particle_type);
-     void SetParent(const G4String &particle_name);
-     //set branching ratio
-     void SetBR(G4double value); 
-     //set number of daughter particles
-     void SetNumberOfDaughters(G4int value);     
-     //set a daughter particle (by name or by pointer) 
-     void SetDaughter(G4int anIndex, 
-		      const G4ParticleDefinition * particle_type);
-     void SetDaughter(G4int anIndex, 
-		      const G4String &particle_name);
+    // set the parent particle (by name or by pointer) 
+    void SetParent(const G4ParticleDefinition * particle_type);
+    void SetParent(const G4String &particle_name);
+    // set branching ratio
+    void SetBR(G4double value); 
+    // set number of daughter particles
+    void SetNumberOfDaughters(G4int value);     
+    // set a daughter particle (by name or by pointer) 
+    void SetDaughter(G4int anIndex, 
+                     const G4ParticleDefinition * particle_type);
+    void SetDaughter(G4int anIndex, 
+                     const G4String &particle_name);
 
-  protected: 
+    void  SetVerboseLevel(G4int value);
+    G4int GetVerboseLevel()  const;
+    void  DumpInfo();
+
+/////@@  public:  // without description
+/////@@
+/////@@    // returns the instance ID.
+/////@@    inline G4int GetInstanceID() const;
+/////@@    // returns the private data instance manager.
+/////@@    static const G4DecayChannelManager& GetSubInstanceManager();
+
+  protected: // with description
+
+    // clear daughters array
+    void ClearDaughtersName();
+
+    // fill daughters array
+    void FillDaughters();
+    // fill parent
+    void FillParent();
+
+  protected: // without description
+
+    // default constructor
+    G4VDecayChannel();
+
+    // copy constructor and assignment operator
+    G4VDecayChannel(const G4VDecayChannel &);
+    G4VDecayChannel & operator=(const G4VDecayChannel &);
+
+  private:
+
+    const G4String& GetNoName() const;
+
+  protected:
+
     // kinematics name
     G4String   kinematics_name;
     // branching ratio  [0.0 - 1.0]
@@ -131,48 +209,33 @@ class G4VDecayChannel
     G4int      numberOfDaughters;
     // parent particle
     G4String*  parent_name;
-    //daughter particles
+    // daughter particles
     G4String** daughters_name;
 
-  protected: // With Description
-    // celar daughters array
-    void ClearDaughtersName();
-
-  protected:
     // pointer to particle table
     G4ParticleTable*       particletable;
 
-    // temporary buffers of pointers to G4ParticleDefinition
-    G4ParticleDefinition*  parent;
-    G4ParticleDefinition** daughters;
-
-    // parent mass
-    G4double               parent_mass;
-    G4double*              daughters_mass;
-    
-
-    // fill daughters array
-    void FillDaughters();
-    // fill parent
-    void FillParent();
-
-  public:  // With Description
-    void  SetVerboseLevel(G4int value);
-    G4int GetVerboseLevel()  const;
-    void  DumpInfo();
-
-  private:
-    const G4String& GetNoName() const;
-
-  protected:  
-    // controle flag for output message
+    // control flag for output message
     G4int verboseLevel;
     //  0: Silent
     //  1: Warning message
     //  2: More
 
-    static const G4String   noName;
+    static const G4String noName;
+
+/////@@    // This field is used as instance ID.
+/////@@    G4int instanceID;
+/////@@    // This field helps to use the class G4DecayChannelManager introduced above.
+/////@@    G4PART_DLL static G4DecayChannelManager subInstanceManager;
+    G4ParticleDefinition*  G4MT_parent;
+    G4ParticleDefinition** G4MT_daughters;
+    G4double               G4MT_parent_mass;
+    G4double*              G4MT_daughters_mass;
 };
+
+// ------------------------------------------------------------
+// Inline methods
+// ------------------------------------------------------------
 
 inline
  G4int G4VDecayChannel::operator<(const G4VDecayChannel &right) const
@@ -183,12 +246,12 @@ inline
 inline 
   G4ParticleDefinition* G4VDecayChannel::GetDaughter(G4int anIndex)
  { 
-  //pointers to daughter particles are filled, if they are not set yet 
-  if (daughters == 0) FillDaughters();
+  // pointers to daughter particles are filled, if they are not set yet 
+  if (G4MT_daughters == 0) FillDaughters();
 
-  //get the pointer to a daughter particle
+  // get the pointer to a daughter particle
   if ( (anIndex>=0) && (anIndex<numberOfDaughters) ) {
-    return daughters[anIndex];
+    return G4MT_daughters[anIndex];
   } else {
     if (verboseLevel>0)
       G4cout << "G4VDecayChannel::GetDaughter  index out of range "<<anIndex<<G4endl;
@@ -214,7 +277,7 @@ inline
  G4double G4VDecayChannel::GetDaughterMass(G4int anIndex) const
 {
   if ( (anIndex>=0) && (anIndex<numberOfDaughters) ) {
-    return daughters_mass[anIndex];
+    return G4MT_daughters_mass[anIndex];
   } else {
     if (verboseLevel>0){
       G4cout << "G4VDecayChannel::GetDaughterMass ";
@@ -227,10 +290,10 @@ inline
 inline 
   G4ParticleDefinition* G4VDecayChannel::GetParent()
 { 
-  //the pointer to the parent particle is filled, if it is not set yet 
-   if (parent == 0) FillParent();
-  //get the pointer to the parent particle
-  return parent;
+  // the pointer to the parent particle is filled, if it is not set yet 
+  if (G4MT_parent == 0) FillParent();
+  // get the pointer to the parent particle
+  return G4MT_parent;
 }
 
 inline
@@ -242,16 +305,15 @@ inline
 inline
  G4double G4VDecayChannel::GetParentMass() const
 {
-  return parent_mass;
+  return G4MT_parent_mass;
 }
-
 
 inline
   void G4VDecayChannel::SetParent(const G4String &particle_name)
 {
   if (parent_name != 0) delete parent_name;
   parent_name = new G4String(particle_name);
-  parent = 0;
+  G4MT_parent = 0;
 }
 
 inline
@@ -275,12 +337,7 @@ inline
 inline
  G4int G4VDecayChannel::GetVerboseLevel() const { return verboseLevel; }
 
-
+/////@@inline
+/////@@ G4int G4VDecayChannel::GetInstanceID() const { return instanceID; }
 
 #endif
-
-
-
-
-
-

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Pow.cc 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,50 +38,75 @@
 //
 // Modifications:
 // 08.01.2011 V.Ivanchenko extended maxZ from 256 to 512
+// 02.05.2013 V.Ivanchenko added expA and logX methods, 
+//            revised A13, logA, powZ, powA to improved accuracy
 //
 // -------------------------------------------------------------------
 
 #include "G4Pow.hh"
+#include "G4Threading.hh"
 
-G4Pow* G4Pow::fInstance = 0;
+G4Pow* G4Pow::fpInstance = 0;
 
 // -------------------------------------------------------------------
 
 G4Pow* G4Pow::GetInstance()
 {
-  if (fInstance == 0)
+  if (fpInstance == 0)
   {
-    static G4Pow manager;
-    fInstance = &manager;
+    fpInstance = new G4Pow;
   }
-  return fInstance;
+  return fpInstance;
 }
 
 // -------------------------------------------------------------------
 
 G4Pow::G4Pow()
+  : onethird(1.0/3.0), max2(5)
 {
+  if(G4Threading::IsWorkerThread() == true) { 
+    G4Exception ("G4Pow::G4Pow()", "glob090", FatalException, 
+                 "Attempt to instantiate G4Pow in worker thread");
+  }
+
   const G4int maxZ = 512; 
   const G4int maxZfact = 170; 
 
+  maxA    = -0.6 + maxZ;
+  maxA2   = 1.25 + max2*0.2;
+  maxAexp = -0.76+ maxZfact*0.5;
+
+  ener.resize(max2+1,1.0);
+  logen.resize(max2+1,0.0);
+  lz2.resize(max2+1,0.0);
   pz13.resize(maxZ,0.0);
   lz.resize(maxZ,0.0);
+  fexp.resize(maxZfact,0.0);
   fact.resize(maxZfact,0.0);
   logfact.resize(maxZ,0.0);
 
-  onethird = 1.0/3.0;
   G4double f = 1.0;
   G4double logf = 0.0;
   fact[0] = 1.0;
+  fexp[0] = 1.0;
+
+  for(G4int i=1; i<=max2; ++i)
+  {
+    ener[i] = powN(500.,i); 
+    logen[i]= G4Log(ener[i]); 
+    lz2[i]  = G4Log(1.0 + i*0.2);
+  }
 
   for(G4int i=1; i<maxZ; ++i)
   {
     G4double x  = G4double(i);
     pz13[i] = std::pow(x,onethird);
-    lz[i]   = std::log(x);
-    if(i < maxZfact) { 
+    lz[i]   = G4Log(x);
+    if(i < maxZfact)
+    { 
       f *= x; 
       fact[i] = f;
+      fexp[i] = G4Exp(0.5*i);
     }
     logf += lz[i];
     logfact[i] = logf;
@@ -91,11 +116,13 @@ G4Pow::G4Pow()
 // -------------------------------------------------------------------
 
 G4Pow::~G4Pow()
-{}
+{
+  delete fpInstance; fpInstance = 0;
+}
 
 // -------------------------------------------------------------------
 
-G4double G4Pow::powN(G4double x, G4int n)
+G4double G4Pow::powN(G4double x, G4int n) const
 {
   if(std::abs(n) > 8) { return std::pow(x, G4double(n)); }
   G4double res = 1.0;

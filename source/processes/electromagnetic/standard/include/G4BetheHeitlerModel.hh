@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BetheHeitlerModel.hh 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -52,8 +52,10 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
+#include "G4Log.hh"
 
 class G4ParticleChangeForGamma;
+class G4Pow;
 
 class G4BetheHeitlerModel : public G4VEmModel
 {
@@ -66,6 +68,9 @@ public:
   virtual ~G4BetheHeitlerModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel);
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -91,6 +96,7 @@ private:
   G4BetheHeitlerModel & operator=(const G4BetheHeitlerModel &right);
   G4BetheHeitlerModel(const  G4BetheHeitlerModel&);
 
+  G4Pow*                    g4pow;
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
   G4ParticleDefinition*     thePositron;
@@ -107,7 +113,7 @@ inline G4double G4BetheHeitlerModel::ScreenFunction1(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*G4Log(ScreenVariable+0.952);
    else
      screenVal = 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
 
@@ -124,7 +130,7 @@ inline G4double G4BetheHeitlerModel::ScreenFunction2(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*G4Log(ScreenVariable+0.952);
    else
      screenVal = 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
 

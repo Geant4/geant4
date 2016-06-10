@@ -22,51 +22,52 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: MedicalBeam.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file MedicalBeam.cc
 /// @brief Define beam profile as primary generator
 
-#include "MedicalBeam.hh"
-#include "Randomize.hh"
+#include <cmath>
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "G4PrimaryVertex.hh"
+#include "Randomize.hh"
+#include "MedicalBeam.hh"
 
 using namespace CLHEP;
 
-#include <cmath>
-
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 MedicalBeam::MedicalBeam()
-  : particle(0), kineticE(1.*MeV), sourcePosition(G4ThreeVector()),
-    SSD(1.*m), fieldShape(MedicalBeam::SQUARE), fieldR(10.*cm)
+  : fparticle(0), fkineticE(1.*MeV), fsourcePosition(G4ThreeVector()),
+    fSSD(1.*m), ffieldShape(MedicalBeam::kSQUARE), ffieldR(10.*cm)
 {
-
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  particle = particleTable-> FindParticle("proton");
+  fparticle = particleTable-> FindParticle("proton");
 
-  kineticE = 200.*MeV;
-  sourcePosition = G4ThreeVector(0.,0.,-125.*cm);
-  SSD = 100.*cm;
-  fieldXY[0] = fieldXY[1] = 5.*cm;
+  fkineticE = 200.*MeV;
+  fsourcePosition = G4ThreeVector(0.,0.,-125.*cm);
+  fSSD = 100.*cm;
+  ffieldXY[0] = ffieldXY[1] = 5.*cm;
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 MedicalBeam::~MedicalBeam()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4ThreeVector MedicalBeam::GenerateBeamDirection() const
 {
   // uniform distribution in a limitted solid angle
   G4double dr;
-  if ( fieldShape == MedicalBeam::SQUARE ) {
-    dr = std::sqrt(sqr(fieldXY[0]/2.) + sqr(fieldXY[1]/2.));
+  if ( ffieldShape == MedicalBeam::kSQUARE ) {
+    dr = std::sqrt(sqr(ffieldXY[0]/2.) + sqr(ffieldXY[1]/2.));
   } else {
-    dr = fieldR;
+    dr = ffieldR;
   }
 
-  G4double sin0 = dr/SSD;
+  G4double sin0 = dr/fSSD;
   G4double cos0 = std::sqrt(1.-sqr(sin0));
 
   G4double dcos = 0.;
@@ -76,9 +77,9 @@ G4ThreeVector MedicalBeam::GenerateBeamDirection() const
   G4double y = DBL_MAX;
 
   G4double xmax, ymax;
-  if ( fieldShape == MedicalBeam::SQUARE ) {
-    xmax = fieldXY[0]/2./SSD;
-    ymax = fieldXY[1]/2./SSD;
+  if ( ffieldShape == MedicalBeam::kSQUARE ) {
+    xmax = ffieldXY[0]/2./fSSD;
+    ymax = ffieldXY[1]/2./fSSD;
   } else {
     xmax = ymax = DBL_MAX-1.;
   }
@@ -96,20 +97,20 @@ G4ThreeVector MedicalBeam::GenerateBeamDirection() const
   return G4ThreeVector(x,y,z);
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void MedicalBeam::GeneratePrimaries(G4Event* anEvent)
 {
-  if ( particle == 0 ) return;
+  if ( fparticle == NULL ) return;
 
   // create a new vertex
-  G4PrimaryVertex* vertex = new G4PrimaryVertex(sourcePosition, 0.*ns);
+  G4PrimaryVertex* vertex = new G4PrimaryVertex(fsourcePosition, 0.*ns);
 
   // momentum
-  G4double mass = particle-> GetPDGMass();
-  G4double p = std::sqrt(sqr(mass+kineticE)-sqr(mass));
+  G4double mass = fparticle-> GetPDGMass();
+  G4double p = std::sqrt(sqr(mass+fkineticE)-sqr(mass));
   G4ThreeVector pmon = p*GenerateBeamDirection();
-  G4PrimaryParticle* primary = 
-    new G4PrimaryParticle(particle, pmon.x(), pmon.y(), pmon.z());
+  G4PrimaryParticle* primary =
+    new G4PrimaryParticle(fparticle, pmon.x(), pmon.y(), pmon.z());
 
   // set primary to vertex
   vertex-> SetPrimary(primary);

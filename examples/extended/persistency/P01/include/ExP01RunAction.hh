@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01RunAction class
 //
 //
-// $Id$
+// $Id: ExP01RunAction.hh 71111 2013-06-11 10:51:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,8 +51,8 @@ class ExP01RunAction : public G4UserRunAction
    ~ExP01RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

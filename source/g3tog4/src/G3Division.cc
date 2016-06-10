@@ -24,9 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G3Division.cc 67982 2013-03-13 10:36:03Z gcosmo $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
+
+#include <assert.h>
 
 #include "G3Division.hh"
 #include "G3VolTableEntry.hh"

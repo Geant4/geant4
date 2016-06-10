@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2010-11-11 14:39:42 ldesorgh Exp $
+$Id: History 77912 2013-11-29 10:58:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,35 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-November, 2013  L.Hrivnacova  
+- Updated .README
+
+11-November, 2013  L.Desorgher     (ReverseMC01-V09-06-05)
+- Change in RMC01AnalysisManager to avoid compilation error on some platforms.
+  The histogramming was modified following the histrogramming used in the 
+  example AnaEx01.
+
+07-November, 2013  L.Desorgher     (ReverseMC01-V09-06-04)
+- Migration to the use of G4histos
+- Remove old histogram classes 
+- Slight modifications into the main in order to migrate to the new RMC tracking schema
+  where reverse tracking and forward tracking of adjoint and forward 
+  equivalent particles are processed  in the same events.This for preparing for 
+  the migration to the G4MT mode of the ReverseMC
+
+29-July, 2013  P.Gumplinger    (ReverseMC01-V09-06-03)
+- fix clang32 compilation warnings
+
+12-June, 2013  I.Hrivnacova    (ReverseMC01-V09-06-02)
+- Applied coding guidelines (virtual keyword, data members initialization)
+- Code clean-up: indention, redundant public/protected/private keywords
+
+07-June, 2013  L.Desorgher     (ReverseMC01-V09-06-01)
+- Finish modification for coding guide lines.
+
+24-January, 2013 V.Ivanchenko (ReverseMC01-V09-06-00)
+- G4AdjointPhysicsList - removed unused obsolete headers
 
 28-November, 2012 G.Cosmo (ReverseMC01-V09-05-06)
 - Fixed cases of variable shadowing.

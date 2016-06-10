@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TwistTrapParallelSide.hh 67973 2013-03-13 10:16:25Z gcosmo $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -149,9 +149,6 @@ class G4TwistTrapParallelSide : public G4VTwistSurface
     G4double fDy2minus1; // fDy2 - fDy1          -
     G4double fa1md1;     // 2 fDx2 - 2 fDx1  == a1 - d1
     G4double fa2md2;     // 2 fDx4 - 2 fDx3 
-
-    G4double fDy ; // temporary
-
 };   
 
 //========================================================

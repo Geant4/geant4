@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NuclearLevelStore.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // 06-10-2010 M. Kelsey -- Drop static data members.
 // 17-11-2010 V. Ivanchenko - make as a classical singleton. 
@@ -36,12 +36,12 @@
 #include <sstream>
 #include <fstream>
 
-G4NuclearLevelStore* G4NuclearLevelStore::theInstance = 0;
+G4ThreadLocal G4NuclearLevelStore* G4NuclearLevelStore::theInstance = 0;
 
 G4NuclearLevelStore* G4NuclearLevelStore::GetInstance()
 {
   if(!theInstance) {
-    static G4NuclearLevelStore store;
+    static G4ThreadLocal G4NuclearLevelStore *store_G4MT_TLS_ = 0 ; if (!store_G4MT_TLS_) store_G4MT_TLS_ = new  G4NuclearLevelStore  ;  G4NuclearLevelStore &store = *store_G4MT_TLS_;
     theInstance = &store;
   }
   return theInstance;

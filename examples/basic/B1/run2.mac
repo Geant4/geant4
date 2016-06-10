@@ -12,6 +12,7 @@
 /gun/particle gamma
 /gun/energy 6 MeV
 #
+/run/printProgress 100
 /run/beamOn 1000
 # 
 # proton 210 MeV to the direction (0.,0.,1.)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4SmartVoxelStat.hh 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

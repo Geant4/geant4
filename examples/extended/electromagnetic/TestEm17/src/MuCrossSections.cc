@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/src/MuCrossSections.cc
 /// \brief Implementation of the MuCrossSections class
 //
-// $Id$
+// $Id: MuCrossSections.cc 67148 2013-02-01 18:16:32Z vnivanch $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,7 +84,8 @@ G4double MuCrossSections::CR_PerAtom(const G4String& process, G4Element* element
  else if (process == "muIoni")
    sigma = CRK_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
- else if (process == "muNucl")
+ //else if (process == "muNucl")
+ else if (process == "muonNuclear")
    sigma = CRN_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
  else if (process == "muPairProd")

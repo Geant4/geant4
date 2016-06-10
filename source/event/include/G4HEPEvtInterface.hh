@@ -24,29 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4HEPEvtInterface.hh 70215 2013-05-27 07:27:49Z gcosmo $
 //
-
-#ifndef G4HEPEvtInterface_h
-#define G4HEPEvtInterface_h 1
-
-#include <fstream>
-#include <vector>
-#include "globals.hh"
-#include "G4VPrimaryGenerator.hh"
-#include "G4HEPEvtParticle.hh"
-
-class G4PrimaryVertex;
-class G4Event;
-
+//
 // class description:
 //
-//  This is a concrete class of G4VPrimaryGenerator.
-//  This class object reads an ASCII file which contains particles generated
+// This is a concrete class of G4VPrimaryGenerator.
+// This class object reads an ASCII file which contains particles generated
 // by a physics generator which supports /HEPEVT/ common block.
 // 
-//  The format of ASCII file must be equivalent to the follwing sample fortran
-// code.
+// The format of ASCII file must be equivalent to the following sample
+// Fortran code:
+//
 //***********************************************************
 //      SUBROUTINE HEP2G4
 //*
@@ -63,21 +52,34 @@ class G4Event;
 //       WRITE(6,10) 
 //     >  ISTHEP(IHEP),IDHEP(IHEP),JDAHEP(1,IHEP),JDAHEP(2,IHEP),
 //     >  PHEP(1,IHEP),PHEP(2,IHEP),PHEP(3,IHEP),PHEP(5,IHEP)
-//10    FORMAT(4I5,4(1X,D15.8))
+//10    FORMAT(I4,I10,I5,I5,4(1X,D15.8))
 //      ENDDO
 //*
 //      RETURN
 //      END
 //
-//  The position and time of the primary interaction must be set by the corresponding
-// set methods of G4VPrimaryGenerator base class, otherwise zero will be set.
-//
+// The position and time of the primary interaction must be set by the
+// corresponding set methods of G4VPrimaryGenerator base class, otherwise
+// zero will be set.
+
+#ifndef G4HEPEvtInterface_h
+#define G4HEPEvtInterface_h 1
+
+#include <fstream>
+#include <vector>
+
+#include "globals.hh"
+#include "G4VPrimaryGenerator.hh"
+#include "G4HEPEvtParticle.hh"
+
+class G4PrimaryVertex;
+class G4Event;
 
 class G4HEPEvtInterface:public G4VPrimaryGenerator
 {
   public: // with description
-    G4HEPEvtInterface(char* evfile);
-    G4HEPEvtInterface(G4String evfile);
+    G4HEPEvtInterface(const char* evfile, G4int vl=0);
+//    G4HEPEvtInterface(G4String evfile);
     // Constructors, "evfile" is the file name (with directory path).
   
   public:
@@ -86,10 +88,10 @@ class G4HEPEvtInterface:public G4VPrimaryGenerator
     void GeneratePrimaryVertex(G4Event* evt);
 
   private:
+    G4int vLevel;
     G4String fileName;
     std::ifstream inputFile;
     std::vector<G4HEPEvtParticle*> HPlist;
 };
 
 #endif
-

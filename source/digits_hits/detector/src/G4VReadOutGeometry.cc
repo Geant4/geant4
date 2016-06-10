@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VReadOutGeometry.cc 74048 2013-09-20 09:34:57Z gcosmo $
 //
 
 #include "G4VReadOutGeometry.hh"
@@ -37,6 +37,14 @@ G4VReadOutGeometry::G4VReadOutGeometry()
 {
   name = "unknown";
   ROnavigator = new G4Navigator();
+  G4ExceptionDescription ed;
+  ed<<"The concept and the functionality of Readout Geometry has been merged\n"
+    <<"into Parallel World. This G4VReadOutGeometry is kept for the sake of\n"
+    <<"not breaking the commonly-used interface in the sensitive detector class.\n"
+    <<"But this functionality of G4VReadOutGeometry class is no longer tested\n"
+    <<"and thus may not be working well. We strongly recommend our customers to\n"
+    <<"migrate to Parallel World scheme.";
+  G4Exception("G4VReadOutGeometry","DIGIHIT1001",JustWarning,ed);
 }
 
 G4VReadOutGeometry::G4VReadOutGeometry(const G4VReadOutGeometry &right)

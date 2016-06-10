@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4KleinNishinaCompton.hh 73607 2013-09-02 10:04:03Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,6 +66,9 @@ public:
   virtual ~G4KleinNishinaCompton();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel);
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,

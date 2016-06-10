@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSPhysicsList.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSPhysicsList.hh
 /// \brief Definition of the WLSPhysicsList class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -67,8 +66,8 @@ class WLSPhysicsList: public G4VModularPhysicsList
     /// Make sure that the physics list is empty.
     void ClearPhysics();
 
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
     // Turn on or off the absorption process
     void SetAbsorption(G4bool);
@@ -83,14 +82,15 @@ private:
     G4double fCutForElectron;
     G4double fCutForPositron;
 
-    G4double MaxChargedStep;
-    WLSStepMax* stepMaxProcess;
+    WLSStepMax* fStepMaxProcess;
 
-    WLSOpticalPhysics* opticalPhysics;
+    WLSOpticalPhysics* fOpticalPhysics;
 
     WLSPhysicsListMessenger* fMessenger;
 
-    G4bool AbsorptionOn;
+    G4bool fAbsorptionOn;
+    
+    G4VMPLData::G4PhysConstVectorData* fPhysicsVector;
 
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EllipticalTube.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -63,6 +63,8 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
                                           G4double theDz )
   : G4VSolid( name ), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
+  halfTol = 0.5*kCarTolerance;
+
   dx = theDx;
   dy = theDy;
   dz = theDz;
@@ -74,7 +76,7 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
 //                            for usage restricted to object persistency.
 //
 G4EllipticalTube::G4EllipticalTube( __void__& a )
-  : G4VSolid(a), dx(0.), dy(0.), dz(0.),
+  : G4VSolid(a), dx(0.), dy(0.), dz(0.), halfTol(0.),
     fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
@@ -93,7 +95,7 @@ G4EllipticalTube::~G4EllipticalTube()
 // Copy constructor
 //
 G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
-  : G4VSolid(rhs), dx(rhs.dx), dy(rhs.dy), dz(rhs.dz),
+  : G4VSolid(rhs), dx(rhs.dx), dy(rhs.dy), dz(rhs.dz), halfTol(rhs.halfTol),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     fpPolyhedron(0)
 {
@@ -116,6 +118,7 @@ G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
    // Copy data
    //
    dx = rhs.dx; dy = rhs.dy; dz = rhs.dz;
+   halfTol = rhs.halfTol;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
    fpPolyhedron = 0;
 
@@ -249,8 +252,6 @@ G4EllipticalTube::CalculateExtent( const EAxis axis,
 //
 EInside G4EllipticalTube::Inside( const G4ThreeVector& p ) const
 {
-  static const G4double halfTol = 0.5*kCarTolerance;
-  
   //
   // Check z extents: are we outside?
   //
@@ -286,7 +287,6 @@ G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
   //
   // SurfaceNormal for the point On the Surface, sum the normals on the Corners
   //
-  static const G4double halfTol = 0.5*kCarTolerance;
 
   G4int noSurfaces=0;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
@@ -367,8 +367,6 @@ G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
                                          const G4ThreeVector& v ) const
 {
-  static const G4double halfTol = 0.5*kCarTolerance;
-    
   //
   // Check z = -dz planer surface
   //
@@ -523,9 +521,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
 // as the distance to this line.
 //
 G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p ) const
-{
-  static const G4double halfTol = 0.5*kCarTolerance;
-  
+{  
   if (CheckXY( p.x(), p.y(), +halfTol ) < 1.0)
   {
     //
@@ -591,8 +587,6 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
                                                 G4bool *validNorm,
                                                 G4ThreeVector *norm ) const
 {
-  static const G4double halfTol = 0.5*kCarTolerance;
-  
   //
   // Our normal is always valid
   //
@@ -728,8 +722,6 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
 //
 G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 {
-  static const G4double halfTol = 0.5*kCarTolerance;
-  
   //
   // We need to calculate the distances to all surfaces,
   // and then return the smallest

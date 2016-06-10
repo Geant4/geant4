@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleTransportation.icc
 /// \brief Implementation of the G4MonopoleTransportation class inline functions
 //
-// $Id$
+// $Id: G4MonopoleTransportation.icc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,16 +60,6 @@ inline G4bool G4MonopoleTransportation::DoesGlobalFieldExist()
   // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist();
   // return fFieldExists;
   return transportMgr->GetFieldManager()->DoesFieldExist();
-}
-
-inline void G4MonopoleTransportation::SetVerboseLevel( G4int verboseLev )
-{
-  fVerboseLevel= verboseLev;
-}
-
-inline G4int G4MonopoleTransportation::GetVerboseLevel( ) const
-{
-  return fVerboseLevel;
 }
 
 inline G4double G4MonopoleTransportation::GetThresholdWarningEnergy() const

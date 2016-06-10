@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLImmediateSceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -59,7 +59,6 @@ public:
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Scale& scale);
   void AddPrimitive (const G4Polyhedron&);
-  void AddPrimitive (const G4NURBS&);
 
 protected:
 

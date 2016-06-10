@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSOpticalPhysics.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSOpticalPhysics.hh
 /// \brief Definition of the WLSOpticalPhysics class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -59,27 +58,27 @@ class WLSOpticalPhysics : public G4VPhysicsConstructor
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
-    G4OpWLS* GetWLSProcess() {return theWLSProcess;}
-    G4Cerenkov* GetCerenkovProcess() {return theCerenkovProcess;}
-    G4Scintillation* GetScintillationProcess() {return theScintProcess;}
-    G4OpAbsorption* GetAbsorptionProcess() {return theAbsorptionProcess;}
-    G4OpRayleigh* GetRayleighScatteringProcess() {return theRayleighScattering;}
-    G4OpMieHG* GetMieHGScatteringProcess() {return theMieHGScatteringProcess;}
-    G4OpBoundaryProcess* GetBoundaryProcess() { return theBoundaryProcess;}
+    G4OpWLS* GetWLSProcess() {return fWLSProcess;}
+    G4Cerenkov* GetCerenkovProcess() {return fCerenkovProcess;}
+    G4Scintillation* GetScintillationProcess() {return fScintProcess;}
+    G4OpAbsorption* GetAbsorptionProcess() {return fAbsorptionProcess;}
+    G4OpRayleigh* GetRayleighScatteringProcess() {return fRayleighScattering;}
+    G4OpMieHG* GetMieHGScatteringProcess() {return fMieHGScatteringProcess;}
+    G4OpBoundaryProcess* GetBoundaryProcess() { return fBoundaryProcess;}
 
     void SetNbOfPhotonsCerenkov(G4int);
 
 private:
 
-    G4OpWLS*             theWLSProcess;
-    G4Cerenkov*          theCerenkovProcess;
-    G4Scintillation*     theScintProcess;
-    G4OpAbsorption*      theAbsorptionProcess;
-    G4OpRayleigh*        theRayleighScattering;
-    G4OpMieHG*           theMieHGScatteringProcess;
-    G4OpBoundaryProcess* theBoundaryProcess;
+    G4OpWLS*             fWLSProcess;
+    G4Cerenkov*          fCerenkovProcess;
+    G4Scintillation*     fScintProcess;
+    G4OpAbsorption*      fAbsorptionProcess;
+    G4OpRayleigh*        fRayleighScattering;
+    G4OpMieHG*           fMieHGScatteringProcess;
+    G4OpBoundaryProcess* fBoundaryProcess;
  
-    G4bool AbsorptionOn;
+    G4bool fAbsorptionOn;
 
 };
 #endif

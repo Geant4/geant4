@@ -24,28 +24,29 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Event.hh 69010 2013-04-15 09:34:16Z gcosmo $
 //
+//
+// class description:
+//
+// This is the class which represents an event. A G4Event is constructed and
+// deleted by G4RunManager (or its derived class). When a G4Event object is
+// passed to G4EventManager, G4Event must have one or more primary verteces
+// and primary particle(s) associated to the vertex(es) as an input of
+// simulating an event.
+// G4Event has trajectories, hits collections, and/or digi collections. 
 
 #ifndef G4Event_h
 #define G4Event_h 1
 
 #include "globals.hh"
+#include "evtdefs.hh"
 #include "G4Allocator.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4DCofThisEvent.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4VUserEventInformation.hh"
-
-// class description:
-//
-//  This is the class which represents an event. This class is constructed and
-// deleted by G4RunManager (or its derived class). When G4Event object is passed
-// to G4EventManager, G4Event must have one or more primary vertexes and primary 
-// particle(s) associated to the vertex(es) as an input of simulating an event.
-// As the consequences of simulating an event, G4Event has trajectories, hits
-// collections, and/or digi collections. 
 
 class G4VHitsCollection;
 class G4Event 
@@ -70,7 +71,7 @@ class G4Event
       // implemented. Otherwise nothing will be drawn.
 
   private:
-      // These copy constructor and = operator must not be used.
+      // Copy constructor and = operator must not be used.
       G4Event(const G4Event &) {;}
       G4Event& operator=(const G4Event &) { return *this; }
 
@@ -205,23 +206,17 @@ class G4Event
       }
 };
 
-#if defined G4EVENT_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4Event> anEventAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4Event> anEventAllocator;
-#endif
+extern G4EVENT_DLL G4ThreadLocal G4Allocator<G4Event> *anEventAllocator;
 
 inline void* G4Event::operator new(size_t)
-{
-  void* anEvent;
-  anEvent = (void*)anEventAllocator.MallocSingle();
-  return anEvent;
+{ 
+  if (!anEventAllocator) anEventAllocator = new G4Allocator<G4Event>;
+  return (void*)anEventAllocator->MallocSingle();
 }
 
 inline void G4Event::operator delete(void* anEvent)
 {
-  anEventAllocator.FreeSingle((G4Event*)anEvent);
+  anEventAllocator->FreeSingle((G4Event*)anEvent);
 }
 
 #endif
-

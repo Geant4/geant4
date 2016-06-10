@@ -26,57 +26,56 @@
 /// \file field/field03/src/F03EventActionMessenger.cc
 /// \brief Implementation of the F03EventActionMessenger class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F03EventActionMessenger.cc 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F03EventActionMessenger.hh"
+
 #include "F03EventAction.hh"
-
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F03EventActionMessenger::F03EventActionMessenger(F03EventAction* action)
+F03EventActionMessenger::F03EventActionMessenger(F03EventAction* evAct)
  : G4UImessenger(),
-   fEventAction(action),
+   fEventAction(evAct),
    fSetVerboseCmd(0),
    fPrintCmd(0)
-{ 
+{
   fSetVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
-  fSetVerboseCmd->SetGuidance("Set verbose level ." );
+  fSetVerboseCmd->SetGuidance("Set verbose level .");
   fSetVerboseCmd->SetParameterName("level",true);
   fSetVerboseCmd->SetDefaultValue(0);
-  
+
   fPrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
   fPrintCmd->SetGuidance("Print events modulo n");
   fPrintCmd->SetParameterName("EventNb",false);
   fPrintCmd->SetRange("EventNb>0");
-  fPrintCmd->AvailableForStates(G4State_Idle);     
+  fPrintCmd->AvailableForStates(G4State_Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03EventActionMessenger::~F03EventActionMessenger()
 {
   delete fSetVerboseCmd;
-  delete fPrintCmd;    
+  delete fPrintCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F03EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
-  if (command == fSetVerboseCmd)
+void F03EventActionMessenger::SetNewValue(G4UIcommand * command,
+                                          G4String newValue)
+{
+  if(command == fSetVerboseCmd)
     {fEventAction->SetEventVerbose(fSetVerboseCmd->GetNewIntValue(newValue));}
-    
-  if (command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}               
+ 
+  if(command == fPrintCmd)
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

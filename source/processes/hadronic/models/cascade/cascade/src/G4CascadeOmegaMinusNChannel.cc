@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
+// $Id: G4CascadeOmegaMinusNChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // Author:  D.H. Wright (SLAC)
 // Date:    1 October 2012
@@ -1267,7 +1267,7 @@ namespace {
 
 }
 
-G4CascadeOmegaMinusNChannelData::data_t
+const G4CascadeOmegaMinusNChannelData::data_t
 G4CascadeOmegaMinusNChannelData::data(omn2bfs, omn3bfs, omn4bfs,
                                       omn5bfs, omn6bfs, omn7bfs,
                                       omnCrossSections, om*neu, "OmegaMinusN");

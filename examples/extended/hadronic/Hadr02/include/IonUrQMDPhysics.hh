@@ -27,7 +27,7 @@
 /// \brief Definition of the IonUrQMDPhysics class
 //
 // $Id: G4IonUrQMDPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
-// GRAS tag $Name: $
+// GRAS tag Name:
 //
 //---------------------------------------------------------------------------
 //
@@ -62,7 +62,7 @@ public:
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type
-  void ConstructProcess();
+  virtual void ConstructProcess();
 
 private:
 

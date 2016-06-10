@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/XGeBox.cc
 /// \brief Main program of the exoticphysics/phonon example
 //
-// $Id$
+// $Id: XGeBox.cc 76246 2013-11-08 11:17:29Z gcosmo $
 //
  
 #include "G4RunManager.hh"

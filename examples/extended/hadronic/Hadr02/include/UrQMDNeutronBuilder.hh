@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/UrQMDNeutronBuilder.hh
 /// \brief Definition of the UrQMDNeutronBuilder class
 //
-// $Id$
+// $Id: UrQMDNeutronBuilder.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 #define UrQMDNeutronBuilder_h 1
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronFissionProcess.hh"
@@ -50,6 +51,9 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4UrQMD1_3Model.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4LFission.hh"
+
 
 class UrQMDNeutronBuilder : public G4VNeutronBuilder
 {
@@ -63,14 +67,17 @@ public:
   virtual void Build(G4HadronCaptureProcess * aP);
   virtual void Build(G4NeutronInelasticProcess * aP);
     
-  void SetMinEnergy(G4double aM) {fMin = aM;}
-  void SetMaxEnergy(G4double aM) {fMax = aM;}
+  inline void SetMinEnergy(G4double aM) {fMin = aM;}
+  inline void SetMaxEnergy(G4double aM) {fMax = aM;}
 
 private:
-  G4UrQMD1_3Model * fModel;    
+
   G4double fMin;
   G4double fMax;
 
+  G4UrQMD1_3Model* fModel;    
+  G4NeutronRadCapture* captureModel;
+  G4LFission* fissionModel;
 };
 
 

@@ -5,6 +5,13 @@
 This directory includes examples demonstrating the use of optical processes
 in the simulation.
 
+OpNovice
+--------
+Simulation of optical photons generation and transport.
+Defines optical surfaces and exercises optical physics processes
+(Cerenkov, Scintillation, Absorption, Rayleigh, ...). Uses stacking
+mechanism to count the secondary particles generated.
+
 LXe
 ----
 Multi-purpose detector setup implementing:

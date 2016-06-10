@@ -36,6 +36,9 @@
 /// \file hadronic/Hadr02/include/G4DPMJET2_5Model.hh
 /// \brief Definition of the G4DPMJET2_5Model class
 //
+// $Id: G4DPMJET2_5Model.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4DPMJET2_5Model_h
 #define G4DPMJET2_5Model_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,224 +84,181 @@
 class G4GlaubAADataSetHandler;
 enum G4DPMJET2_5InitialisationType { DEFAULT=1, DPM2_5=2, DPM3=3, CORSIKA=4 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4DPMJET2_5Model : public G4HadronicInteraction
 {
-  public:
+public:
 //
 //
 // Standard constructor, destructor, copy etc declarations.
 //
-    G4DPMJET2_5Model ();
-    G4DPMJET2_5Model (const G4DPMJET2_5InitialisationType);
-    G4DPMJET2_5Model (G4ExcitationHandler *,
-      const G4DPMJET2_5InitialisationType initType = DEFAULT);
-    G4DPMJET2_5Model (G4VPreCompoundModel *,
-      const G4DPMJET2_5InitialisationType initType = DEFAULT);
-    ~G4DPMJET2_5Model ();
+  G4DPMJET2_5Model ();
+  G4DPMJET2_5Model (const G4DPMJET2_5InitialisationType);
+  G4DPMJET2_5Model (G4ExcitationHandler *,
+		    const G4DPMJET2_5InitialisationType initType = DEFAULT);
+  G4DPMJET2_5Model (G4VPreCompoundModel *,
+		    const G4DPMJET2_5InitialisationType initType = DEFAULT);
+  virtual ~G4DPMJET2_5Model ();
 
-    G4DPMJET2_5Model(const G4DPMJET2_5Model &right);
+  G4DPMJET2_5Model(const G4DPMJET2_5Model &right);
 
-    const G4DPMJET2_5Model& operator=(G4DPMJET2_5Model &right);
+  const G4DPMJET2_5Model& operator=(G4DPMJET2_5Model &right);
+    
+  virtual G4bool IsApplicable(const G4HadProjectile &theTrack, 
+			      G4Nucleus &theTarget);
+    
+  virtual G4HadFinalState *ApplyYourself(const G4HadProjectile &, 
+					 G4Nucleus &);
 
-    G4GlaubAADataSetHandler *GetGlauberDataSetHandler ();
+  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
     
-    G4bool IsApplicable (const G4HadProjectile &theTrack, G4Nucleus &theTarget);
-    
-    virtual G4HadFinalState *ApplyYourself
-      (const G4HadProjectile &, G4Nucleus &);
-    
-    void SetVerboseLevel (G4int);
-    
-    void SetExcitationHandler (G4ExcitationHandler *);
-    void SetNoDeexcitation ();
-    void SetDefaultDeexcitation ();
-    G4ExcitationHandler *GetExcitationHandler () const;
-    
-    void SetPreCompoundModel(G4VPreCompoundModel* value);
-    void SetNoPreCompoundModel ();
-    void SetDefaultPreCompoundModel ();    
-    G4VPreCompoundModel* GetPreCompoundModel() const;
-    
-    void SetDPMInitialRandomSeeds (const G4int seed1, const G4int seed2);
-    G4int GetDPMInitialRandomSeeds (const G4int i) const;
+  inline G4GlaubAADataSetHandler *GetGlauberDataSetHandler ();
 
-    G4double GetMinEnergy( const G4Material *aMaterial,
-                                  const G4Element *anElement ) const;
-    G4double GetMaxEnergy( const G4Material *aMaterial,
-                                  const G4Element *anElement ) const;
-
-    G4bool SetVerboseFortranOutput (const G4String filename);
-    G4String GetVerboseFortranOutput () const;
+  inline void SetVerboseLevel (G4int);
     
-    void SetDPMVariablesTAUFOR   (const G4double TAUFOR_P,
-                                  const G4int    KTAUGE_P,
-                                  const G4int    ITAUVE_P);
-/*    void SetDPMVariablesXCUTS    (const G4double CVQ_P,
-                                  const G4double CDQ_P,
-                                  const G4double CSEA_P,
-                                  const G4double SSMIMA_P);
-    void SetDPMVariablesCRONINPT (const G4int    MKCRON_P,
-                                  const G4double CRONCO_P);
-    void SetDPMVariablesSEADISTR (const G4double 
-                                  const G4double UNON_P,
-                                  const G4double UNOM_P,
-                                  const G4double UNOSEA_P);*/
+  void SetNoDeexcitation ();
+  void SetDefaultDeexcitation ();
+  inline void SetExcitationHandler (G4ExcitationHandler *);
+  inline G4ExcitationHandler *GetExcitationHandler () const;
+    
+  void SetNoPreCompoundModel ();
+  void SetDefaultPreCompoundModel ();    
+  inline void SetPreCompoundModel(G4VPreCompoundModel* value);
+  inline G4VPreCompoundModel* GetPreCompoundModel() const;
+    
+  inline void SetDPMInitialRandomSeeds (const G4int seed1, const G4int seed2);
+  inline G4int GetDPMInitialRandomSeeds (const G4int i) const;
+
+  inline G4double GetMinEnergy( const G4Material *aMaterial,
+				const G4Element *anElement ) const;
+  inline G4double GetMaxEnergy( const G4Material *aMaterial,
+				const G4Element *anElement ) const;
+
+  inline G4bool SetVerboseFortranOutput (const G4String filename);
+  G4String GetVerboseFortranOutput () const;
+    
+  inline void SetDPMVariablesTAUFOR   (const G4double TAUFOR_P,
+				       const G4int    KTAUGE_P,
+				       const G4int    ITAUVE_P);
                                   
-  private:
-    void DumpVerboseInformation1 (const G4int n) const;
-    void DumpVerboseInformation2 (const G4String particleName,
-      const G4ThreeVector p, const G4double E, const G4double T,
-      const G4ThreeVector pinit) const;
-    void DumpVerboseInformation3 (const G4int i, const G4int A, const G4int Z,
-      const G4ThreeVector p, const G4double E, const G4double T,
-      const G4ThreeVector pinit) const;
-    void DumpVerboseInformation4 (const G4int i, const G4String particleName,
-      const G4ThreeVector p, const G4double E, const G4double T,
-      const G4ThreeVector pinit) const;
-    void PrintWelcomeMessage () const;
-    void Initialise ();
+private:
+
+  void DumpVerboseInformation1 (const G4int n) const;
+  void DumpVerboseInformation2 (const G4String particleName,
+				const G4ThreeVector p, 
+				const G4double E, 
+				const G4double T,
+				const G4ThreeVector pinit) const;
+  void DumpVerboseInformation3 (const G4int i, const G4int A, 
+				const G4int Z,
+				const G4ThreeVector p, 
+				const G4double E, 
+				const G4double T,
+				const G4ThreeVector pinit) const;
+  void DumpVerboseInformation4 (const G4int i, 
+				const G4String particleName,
+				const G4ThreeVector p, 
+				const G4double E, 
+				const G4double T,
+				const G4ThreeVector pinit) const;
+  void PrintWelcomeMessage () const;
+  void Initialise ();
     
-  private:
-    G4DPMJET2_5InitialisationType
-                             theInitType;
+  G4DPMJET2_5InitialisationType theInitType;
                              
-    G4GlaubAADataSetHandler *theGlauberDataSetHandler;
+  G4GlaubAADataSetHandler *theGlauberDataSetHandler;
     
-    G4ParticleTable         *theParticleTable;
-    G4IonTable              *theIonTable;
+  G4ParticleTable         *theParticleTable;
+  G4IonTable              *theIonTable;
 
-    G4bool                   debug;
-    G4int                    debug_level;
-    G4int                    lunber;
-    G4double                 dpmver;
-    G4String                 defaultDirName;
+  G4bool                   debug;
+  G4int                    debug_level;
+  G4int                    lunber;
+  G4double                 dpmver;
+  G4String                 defaultDirName;
     
-    G4ExcitationHandler     *theExcitationHandler;
-    G4VPreCompoundModel     *thePreComp;
+  G4ExcitationHandler     *theExcitationHandler;
+  G4VPreCompoundModel     *thePreComp;
     
-    G4double                 TAUFOR;
-    G4int                    KTAUGE;
-    G4int                    ITAUVE;
-    G4double                 UNON;
-    G4double                 UNOM;
-    G4double                 UNOSEA;
-    G4double                 CVQ;
-    G4double                 CDQ;
-    G4double                 CSEA;
-    G4double                 SSMIMA;
-    G4double                 VVMTHR;
-    G4double                 SEASQ;
-    G4int                    MKCRON;
-    G4double                 CRONCO;
-    G4int                    ISINGD;
-    G4int                    ISINGX;
-    G4int                    IDUBLD;
-    G4double                 SDFRAC;
+  G4double                 TAUFOR;
+  G4int                    KTAUGE;
+  G4int                    ITAUVE;
+  G4double                 UNON;
+  G4double                 UNOM;
+  G4double                 UNOSEA;
+  G4double                 CVQ;
+  G4double                 CDQ;
+  G4double                 CSEA;
+  G4double                 SSMIMA;
+  G4double                 VVMTHR;
+  G4double                 SEASQ;
+  G4int                    MKCRON;
+  G4double                 CRONCO;
+  G4int                    ISINGD;
+  G4int                    ISINGX;
+  G4int                    IDUBLD;
+  G4double                 SDFRAC;  
     
-    
-    ftnlogical LTRUE;
-    ftnlogical LFALSE;
+  ftnlogical LTRUE;
+  ftnlogical LFALSE;
 
-    G4String                 verboseFortranFile;
+  G4String                 verboseFortranFile;
 };
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4GlaubAADataSetHandler *G4DPMJET2_5Model::GetGlauberDataSetHandler ()
   {return theGlauberDataSetHandler;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline void G4DPMJET2_5Model::SetExcitationHandler
   (G4ExcitationHandler *aExcitationHandler)
   {theExcitationHandler = aExcitationHandler;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4ExcitationHandler *G4DPMJET2_5Model::GetExcitationHandler () const
   {return theExcitationHandler;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline void G4DPMJET2_5Model::SetPreCompoundModel
   (G4VPreCompoundModel *aPreCompoundModel)
   {thePreComp = aPreCompoundModel;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4VPreCompoundModel *G4DPMJET2_5Model::GetPreCompoundModel () const
   {return thePreComp;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline void G4DPMJET2_5Model::SetVerboseLevel (G4int verboseLevel1)
   {verboseLevel = verboseLevel1;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4DPMJET2_5Model::GetMinEnergy( const G4Material *,
   const G4Element * ) const
   {return theMinEnergy;}
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4DPMJET2_5Model::GetMaxEnergy( const G4Material *,
   const G4Element * ) const
   {return theMaxEnergy;}
-////////////////////////////////////////////////////////////////////////////////
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // SetVerboseFortranOutput
 //
 inline G4String G4DPMJET2_5Model::GetVerboseFortranOutput () const
   {return verboseFortranFile;}
-////////////////////////////////////////////////////////////////////////////////
-//
-inline void G4DPMJET2_5Model::DumpVerboseInformation2
-  (const G4String particleName, const G4ThreeVector p,
-  const G4double E, const G4double T, const G4ThreeVector pinit) const
-{
-  G4cout <<"Name = " <<particleName <<G4endl;
-  G4cout <<"            Momentum          = " <<p/MeV <<" MeV/c" <<G4endl;
-  G4cout <<"            T. Energy         = " <<E/MeV <<" MeV"   <<G4endl;
-  G4cout <<"            K. Energy         = " <<T/MeV <<" MeV"   <<G4endl;
-  if (verboseLevel >= 3)
-  {
-    G4ThreeVector axis = pinit.unit();
-    G4double pz = p.dot(axis);
-    G4cout <<"            Transverse mass   = " <<std::sqrt(E*E-pz*pz)/MeV <<" MeV"
-           <<G4endl;
-    G4cout <<"            Rapidity          = "
-           <<0.5*std::log((E+pz)/(E-pz)) <<G4endl;
-  }
-}
-////////////////////////////////////////////////////////////////////////////////
-//
-inline void G4DPMJET2_5Model::DumpVerboseInformation3 (const G4int i,
-  const G4int A, const G4int Z, const G4ThreeVector p,
-  const G4double E, const G4double T, const G4ThreeVector pinit) const
-{
-  G4cout <<"----------------------------------------" 
-         <<"----------------------------------------" <<G4endl;
-  G4cout <<"The nuclear fragment #" <<i <<" before" <<G4endl;
-  G4cout <<"----------------------------------------"
-         <<"----------------------------------------" <<G4endl;
 
-  std::ostringstream tmpStream;
-  tmpStream <<"(A = " <<A <<", Z = " <<Z <<")";
-  G4String AZ = tmpStream.str();
-  
-  DumpVerboseInformation2(AZ, p, E, T, pinit);
-}
-////////////////////////////////////////////////////////////////////////////////
-//
-inline void G4DPMJET2_5Model::DumpVerboseInformation4 (const G4int i,
-  const G4String particleName, const G4ThreeVector p,
-  const G4double E, const G4double T, const G4ThreeVector pinit) const
-{
-  G4cout <<"----------------------------------------" 
-         <<"----------------------------------------" <<G4endl;
-  G4cout <<"The nuclear fragment #" <<i <<" after" <<G4endl;
-  G4cout <<"----------------------------------------" 
-         <<"----------------------------------------" <<G4endl;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  DumpVerboseInformation2(particleName, p, E, T, pinit);
-}
-////////////////////////////////////////////////////////////////////////////////
-//
 inline void G4DPMJET2_5Model::SetDPMInitialRandomSeeds (const G4int seed1,
   const G4int seed2)
 {
@@ -306,8 +266,9 @@ inline void G4DPMJET2_5Model::SetDPMInitialRandomSeeds (const G4int seed1,
   G4int s2 = seed2;
   rd2in_ (&s1, &s2);
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4int G4DPMJET2_5Model::GetDPMInitialRandomSeeds (const G4int i)
   const
 {
@@ -317,8 +278,9 @@ inline G4int G4DPMJET2_5Model::GetDPMInitialRandomSeeds (const G4int i)
   else if (i == 2) return seed2;
   else             return 0;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline void G4DPMJET2_5Model::SetDPMVariablesTAUFOR (const G4double TAUFOR_P,
   const G4int KTAUGE_P, const G4int ITAUVE_P)
 {
@@ -329,6 +291,7 @@ inline void G4DPMJET2_5Model::SetDPMVariablesTAUFOR (const G4double TAUFOR_P,
   taufo_.ktauge = KTAUGE;
   taufo_.itauve = ITAUVE;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif

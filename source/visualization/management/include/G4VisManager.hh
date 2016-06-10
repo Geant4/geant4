@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisManager.hh 77246 2013-11-22 10:01:21Z gcosmo $
 //
 // 
 
@@ -95,6 +95,8 @@
 #include <iostream>
 #include <vector>
 #include <map>
+
+#include "G4Threading.hh"
 
 class G4Scene;
 class G4UIcommand;
@@ -239,9 +241,6 @@ public: // With description
   void Draw (const G4Circle&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation = G4Transform3D());
-
   void Draw (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
@@ -261,9 +260,6 @@ public: // With description
     const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw2D (const G4Circle&,
-    const G4Transform3D& objectTransformation = G4Transform3D());
-
-  void Draw2D (const G4NURBS&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw2D (const G4Polyhedron&,
@@ -289,14 +285,11 @@ public: // With description
   // itself - thus you can, for example, change the colour of a
   // physical volume.
 
+  void Draw (const G4VTrajectory&);
+
   void Draw (const G4VHit&);
 
   void Draw (const G4VDigi&);
-
-  void Draw (const G4VTrajectory&, G4int i_mode);
-  // i_mode is a parameter that can be used to control the drawing of
-  // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
-  // i_mode defaults to 0 by inheritance from G4VVisManager.
 
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D());
@@ -336,7 +329,6 @@ public: // With description
   // any, and redraw all views.
 
   void DispatchToModel(const G4VTrajectory&);
-  void DispatchToModel(const G4VTrajectory&, G4int i_mode);
   // Draw the trajectory.
 
   G4bool FilterTrajectory(const G4VTrajectory&);
@@ -346,10 +338,10 @@ public: // With description
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
 
-  void CreateSceneHandler (G4String name = "");
+  void CreateSceneHandler (const G4String& name = "");
   // Creates scene handler for the current system.
 
-  void CreateViewer  (G4String name = "",G4String XGeometry = "");
+  void CreateViewer (const G4String& name = "", const G4String& XGeometry = "");
   // Creates viewer for the current scene handler.
 
 private:
@@ -506,6 +498,7 @@ private:
   G4bool                fEventRefreshing;
   G4bool                fTransientsDrawnThisRun;
   G4bool                fTransientsDrawnThisEvent;
+  G4int                 fNKeepRequests;
   G4bool                fEventKeepingSuspended;
   G4bool                fKeptLastEvent;
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
@@ -526,6 +519,15 @@ private:
   // Digi filter model manager
   G4VisFilterManager<G4VDigi>* fpDigiFilterMgr;
 
+#ifdef G4MULTITHREADED
+public:
+  virtual void SetUpForAThread();
+#endif
+
+  virtual void IgnoreStateChanges(G4bool);
+
+protected:
+  G4bool fIgnoreStateChanges;
 };
 
 #include "G4VisManager.icc"

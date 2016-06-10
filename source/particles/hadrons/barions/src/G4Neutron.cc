@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Neutron.cc 69557 2013-05-08 12:01:40Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -78,8 +78,8 @@ G4Neutron* G4Neutron::Definition()
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,
 		false,    885.7*second,          NULL,
-		false,       "nucleon",             0,
-                  0.0 
+		false,       "nucleon",         -2112,
+		 0.0,                0 
               );
     // Magnetic Moment
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);

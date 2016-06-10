@@ -23,30 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSUserTrackInformation.cc 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/src/WLSUserTrackInformation.cc
 /// \brief Implementation of the WLSUserTrackInformation class
 //
 //
-//
-
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
 
 #include "WLSUserTrackInformation.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSUserTrackInformation::WLSUserTrackInformation ()
 {
-   status = undefined;
-   exitPosition = G4ThreeVector(0.,0.,0.);
+   fStatus = undefined;
+   fExitPosition = G4ThreeVector(0.,0.,0.);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSUserTrackInformation::~WLSUserTrackInformation () { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
 // Try adding a status flag and return if it is successful or not
 // Cannot Add Undefine or a flag that conflicts with another flag
 // Return true if the addition of flag is successful, false otherwise
-
-G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
 {
    switch (s) {
 
@@ -55,7 +60,7 @@ G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
 
         // Allow the user to set left or right
         // only if the track is undefined
-        if (status == undefined) return status |= s;
+        if (fStatus == undefined) return fStatus |= s;
 
         return false;
  
@@ -65,24 +70,24 @@ G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
         // Allow the user to set escaped flag
         // only if the photon hasn't exited the fiber yet
 
-        if ((status == undefined) || (status & OutsideOfFiber)) return false;
+        if ((fStatus == undefined) || (fStatus & OutsideOfFiber)) return false;
 
-        return status |= s;
+        return fStatus |= s;
  
       case ReflectedAtMirror:
       case ReflectedAtReadOut:
       case murderee:
 
-        return status |= s;
+        return fStatus |= s;
 
       case InsideOfFiber:
  
-        return ( status =
-         (status & ~(EscapedFromSide + EscapedFromReadOut + OutsideOfFiber)) | s);
+        return ( fStatus =
+         (fStatus & ~(EscapedFromSide + EscapedFromReadOut + OutsideOfFiber)) | s);
 
       case OutsideOfFiber:
 
-        return ( status = (status & ~InsideOfFiber) | s );
+        return ( fStatus = (fStatus & ~InsideOfFiber) | s );
  
       default:
  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VScoringMesh.cc 68735 2013-04-05 09:49:13Z gcosmo $
 //
 // ---------------------------------------------------------------------
 // Modifications                                                        
@@ -47,7 +47,7 @@ G4VScoringMesh::G4VScoringMesh(const G4String& wName)
   : fWorldName(wName),fCurrentPS(0),fConstructed(false),fActive(true),
     fRotationMatrix(0), fMFD(new G4MultiFunctionalDetector(wName)),
     verboseLevel(0),sizeIsSet(false),nMeshIsSet(false),
-    fDrawUnit(""), fDrawUnitValue(1.)
+    fDrawUnit(""), fDrawUnitValue(1.), fMeshElementLogical(0)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
@@ -308,6 +308,54 @@ void G4VScoringMesh::DrawMesh(const G4String& psName,G4int idxPlane,G4int iColum
     DrawColumn(fMapItr->second->GetMap(),colorMap,idxPlane,iColumn);
   } else {
     G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl;
+  }
+}
+
+void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
+{
+  G4String psName = map->GetName();
+  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  *(fMapItr->second) += *map;
+
+  if(verboseLevel > 9) {
+    G4cout << G4endl;
+    G4cout << "G4VScoringMesh::Accumulate()" << G4endl;
+    G4cout << "  PS name : " << psName << G4endl;
+    if(fMapItr == fMap.end()) {
+      G4cout << "  "
+             << psName << " was not found." << G4endl;
+    } else {
+      G4cout << "  map size : " << map->GetSize() << G4endl;
+      map->PrintAllHits();
+    }
+    G4cout << G4endl;
+  }
+}
+
+void G4VScoringMesh::WorkerConstruct(G4VPhysicalVolume* fWorldPhys)
+{
+  if(fConstructed) {
+
+    if(verboseLevel > 0)
+      G4cout << fWorldPhys->GetName() << " --- All quantities are reset." << G4endl;
+    ResetScore();
+
+  } else {
+    fConstructed = true;
+    fMeshElementLogical->SetSensitiveDetector(fMFD);
+  }
+}
+
+void G4VScoringMesh::Merge(const G4VScoringMesh * scMesh)
+{
+  const MeshScoreMap scMap = scMesh->GetScoreMap();
+
+  MeshScoreMap::const_iterator fMapItr = fMap.begin();
+  MeshScoreMap::const_iterator mapItr = scMap.begin();
+  for(; fMapItr != fMap.end(); fMapItr++) {
+    if(verboseLevel > 9) G4cout << "G4VScoringMesh::Merge()" << fMapItr->first << G4endl;
+    *(fMapItr->second) += *(mapItr->second);
+    mapItr++;
   }
 }
 

@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -88,7 +86,7 @@ namespace G4INCL {
     G4double maxImpactParameter(ParticleSpecies const &p, const G4double /*kinE*/, Nucleus const *
         const n) const {
       if(p.theType == Composite)
-        return 2.*ParticleTable::getNuclearRadius(p.theA, p.theZ)
+        return 2.*ParticleTable::getLargestNuclearRadius(p.theA, p.theZ)
           + n->getUniverseRadius();
       else
         return n->getUniverseRadius();

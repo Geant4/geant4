@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 // 080428 Add bool onFlightDB by T. Koi
@@ -81,6 +80,9 @@ class G4NeutronHPElasticData : public G4VCrossSectionDataSet
 
       void IgnoreOnFlightDopplerBroadening(){ onFlightDB = false; };
       void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
+
+      void SetVerboseLevel( G4int );
+      G4int GetVerboseLevel() const;
    
    private:
    

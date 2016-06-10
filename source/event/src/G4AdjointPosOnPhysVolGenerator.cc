@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointPosOnPhysVolGenerator.cc 70930 2013-06-07 13:20:41Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -42,15 +42,15 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 
-G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::theInstance = 0;
+G4ThreadLocal G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::theInstance = 0;
 
 ////////////////////////////////////////////////////
 //
 G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::GetInstance()
 {
-  if(theInstance == 0) {
-    static G4AdjointPosOnPhysVolGenerator manager;
-    theInstance = &manager;
+  if(!theInstance)
+  {
+    theInstance = new  G4AdjointPosOnPhysVolGenerator;
   }
   return theInstance;
 }
@@ -64,9 +64,8 @@ G4AdjointPosOnPhysVolGenerator::~G4AdjointPosOnPhysVolGenerator()
 ////////////////////////////////////////////////////
 //
 G4AdjointPosOnPhysVolGenerator::G4AdjointPosOnPhysVolGenerator()
-   : theSolid(0), thePhysicalVolume(0), NStat(1000000), epsilon(0.001),
+   : theSolid(0), thePhysicalVolume(0),
      UseSphere(true), ModelOfSurfaceSource("OnSolid"),
-     ExtSourceRadius(0.), ExtSourceDx(0.), ExtSourceDy(0.), ExtSourceDz(0.),
      AreaOfExtSurfaceOfThePhysicalVolume(0.), CosThDirComparedToNormal(0.)
 { 
 }
@@ -219,10 +218,7 @@ void G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary(G4VSolid*
     G4double dist_to_in = aSolid->DistanceToIn(p,direction);
     if (dist_to_in<kInfinity/2.) {
       find_pos =true;
-      G4ThreeVector p1=p+ 0.99999*direction*dist_to_in;
-      G4ThreeVector norm =aSolid->SurfaceNormal(p1);
       p+= 0.999999*direction*dist_to_in;
-      CosThDirComparedToNormal=direction.dot(-norm);
     }
   }
 }

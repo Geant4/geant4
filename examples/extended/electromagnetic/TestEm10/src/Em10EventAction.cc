@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10EventAction class
 //
 //
-// $Id$
+// $Id: Em10EventAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 
@@ -54,7 +54,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em10EventAction::Em10EventAction(Em10RunAction* Em10RA)
-:calorimeterCollID(-1),eventMessenger(0),
+:G4UserEventAction(),calorimeterCollID(-1),eventMessenger(0),
  runaction(Em10RA),verboselevel(0),drawFlag("all"),printModulo(10000)
 {
   eventMessenger = new Em10EventActionMessenger(this);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GDMLWriteMaterials.cc 70764 2013-06-05 12:54:37Z gcosmo $
 //
 // class G4GDMLWriteMaterials Implementation
 //
@@ -74,7 +74,7 @@ PWrite(xercesc::DOMElement* element,const G4double& P)
 {
    xercesc::DOMElement* PElement = NewElement("P");
    PElement->setAttributeNode(NewAttribute("unit","pascal"));
-   PElement->setAttributeNode(NewAttribute("value",P/pascal));
+   PElement->setAttributeNode(NewAttribute("value",P/hep_pascal));
    element->appendChild(PElement);
 }
 

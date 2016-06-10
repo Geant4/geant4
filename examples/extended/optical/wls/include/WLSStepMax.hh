@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSStepMax.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSStepMax.hh
 /// \brief Definition of the WLSStepMax class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -49,19 +48,19 @@ class WLSStepMax : public G4VDiscreteProcess
     WLSStepMax(const G4String& processName = "UserStepMax");
     WLSStepMax(WLSStepMax &);
 
-    ~WLSStepMax();
+    virtual ~WLSStepMax();
 
-    G4bool IsApplicable(const G4ParticleDefinition&);
+    virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
     void SetStepMax(G4double);
 
-    G4double GetStepMax() {return MaxChargedStep;};
+    G4double GetStepMax() {return fMaxChargedStep;};
 
-    G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+    virtual G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
                                                   G4double previousStepSize,
                                                   G4ForceCondition* condition);
 
-    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+    virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   protected:
 
@@ -75,7 +74,7 @@ class WLSStepMax : public G4VDiscreteProcess
 
   private:
 
-    G4double MaxChargedStep;
+    G4double fMaxChargedStep;
 
 };
 

@@ -27,17 +27,15 @@
 /// \brief Definition of the F01PhysicsListMessenger class
 //
 //
-// $Id$
+// $Id: F01PhysicsListMessenger.hh 76248 2013-11-08 11:19:52Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01PhysicsListMessenger_h
 #define F01PhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
 
 class F01PhysicsList;
@@ -45,27 +43,23 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01PhysicsListMessenger: public G4UImessenger
 {
   public:
     F01PhysicsListMessenger(F01PhysicsList*);
-   ~F01PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    F01PhysicsList*          F01List;
-
-    G4UIcmdWithADoubleAndUnit* setMaxStepCmd;
-
-    G4UIcmdWithADoubleAndUnit* cutGCmd;
-    G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* cutPCmd;
-    G4UIcmdWithADoubleAndUnit* rCmd;
-    G4UIcmdWithADoubleAndUnit* eCmd;
+    virtual ~F01PhysicsListMessenger();
  
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
+  private:
+    F01PhysicsList*          fF01List;
+
+    G4UIcmdWithADoubleAndUnit* fSetMaxStepCmd;
+
+    G4UIcmdWithADoubleAndUnit* fCutGCmd;
+    G4UIcmdWithADoubleAndUnit* fCutECmd;
 };
 
 #endif

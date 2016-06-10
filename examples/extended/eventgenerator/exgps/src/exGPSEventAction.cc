@@ -23,17 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSEventAction.cc 76468 2013-11-11 10:27:19Z gcosmo $
+//
 /// \file eventgenerator/exgps/src/exGPSEventAction.cc
 /// \brief Implementation of the exGPSEventAction class
 //
 
 #include "exGPSEventAction.hh"
-
-#ifdef G4ANALYSIS_USE
-#include "exGPSAnalysisManager.hh"
-#endif
-
 #include "exGPSEventActionMessenger.hh"
+
+#include "exGPSHistoManager.hh"
+
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -43,10 +43,12 @@
 #include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-exGPSEventAction::exGPSEventAction()
-:fDrawFlag("all"), fPrintModulo(1000), fEventMessenger(NULL) 
+exGPSEventAction::exGPSEventAction(exGPSHistoManager* histoManager)
+:G4UserEventAction(),
+ fDrawFlag("all"), fPrintModulo(1000), fEventMessenger(NULL),
+ fexGPSHistoManager(histoManager)
 {
-  fEventMessenger = new exGPSEventActionMessenger(this);
+ fEventMessenger = new exGPSEventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -71,15 +73,11 @@ void exGPSEventAction::BeginOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#ifdef G4ANALYSIS_USE 
+
 void exGPSEventAction::EndOfEventAction(const G4Event* evt)
-#else
-void exGPSEventAction::EndOfEventAction(const G4Event*)
-#endif
 {
   //  G4int evtNb = evt->GetEventID();
 
-#ifdef G4ANALYSIS_USE 
   G4int nVertex = evt->GetNumberOfPrimaryVertex();
   for ( G4int j = 0; j < nVertex; j++) { 
     G4int nPart =  evt->GetPrimaryVertex(j)->GetNumberOfParticle(); 
@@ -93,8 +91,8 @@ void exGPSEventAction::EndOfEventAction(const G4Event*)
                                  ->GetPDGMass();
       E=std::sqrt(P*P+E0*E0);   
       E -= E0;
-      G4double pid = G4double(evt->GetPrimaryVertex(j)->GetPrimary(i)
-                                 ->GetPDGcode());
+      G4int pid = evt->GetPrimaryVertex(j)->GetPrimary(i)
+                                 ->GetPDGcode();
       //
       direction=direction*(1./direction.mag());                
       direction = -direction;  // reverse the direction
@@ -106,11 +104,9 @@ void exGPSEventAction::EndOfEventAction(const G4Event*)
       y=position.y();
       z=position.z();
       w = evt->GetPrimaryVertex(j)->GetPrimary(i)->GetWeight();
-//      exGPSAnalysisManager::getInstance()->Fill(pname,E,x,y,z,Theta,Phi,w);
-     exGPSAnalysisManager::GetInstance()->Fill(pid,E,x,y,z,Theta,Phi,w);
+      fexGPSHistoManager->Fill(pid,E,x,y,z,Theta,Phi,w);
     }
   }   
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

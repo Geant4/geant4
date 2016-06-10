@@ -39,12 +39,12 @@
 #include <fstream>
 #include "G4VDataSetAlgorithm.hh"
 
-XrayFluoDataSet::XrayFluoDataSet(G4int Z,
+XrayFluoDataSet::XrayFluoDataSet(G4int /*Z*/,
 			 G4DataVector* points, 
 			 G4DataVector* values,
 			 const G4VDataSetAlgorithm* interpolation,
 			 G4double unitE, G4double unitData)
-  :z(Z), energies(points), data(values), algorithm(interpolation)
+  :energies(points), data(values), algorithm(interpolation)
 {
   numberOfBins = energies->size();
   unit1 = unitE;
@@ -53,11 +53,11 @@ XrayFluoDataSet::XrayFluoDataSet(G4int Z,
   G4cout << "XrayFluo FluoDataSet created" << G4endl;
 }
 
-XrayFluoDataSet:: XrayFluoDataSet(G4int Z, 
+XrayFluoDataSet:: XrayFluoDataSet(G4int /*Z*/, 
 			  const G4String& dataFile,
 			  const G4VDataSetAlgorithm* interpolation,
 			  G4double unitE, G4double unitData)
-  :z(Z), algorithm(interpolation)
+  : algorithm(interpolation)
 {
   energies = new G4DataVector;
   data = new G4DataVector;

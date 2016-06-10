@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointSimManager.hh 76245 2013-11-08 11:14:32Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSimManager.hh
@@ -129,31 +129,34 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include <vector>
-
+#include "G4UserRunAction.hh"
 
 class G4UserEventAction;
 class G4VUserPrimaryGeneratorAction;
 class G4UserTrackingAction;
 class G4UserSteppingAction;
 class G4UserStackingAction;
-class G4UserRunAction;
 class G4AdjointRunAction;
 class G4AdjointPrimaryGeneratorAction;
 class G4AdjointSteppingAction;
 class G4AdjointEventAction;
 class G4AdjointStackingAction;
+class G4AdjointTrackingAction;
 class G4ParticleDefinition;
 class G4AdjointSimMessenger;
 class G4PhysicsLogVector;
+class G4Run;
 
-class G4AdjointSimManager  
+class G4AdjointSimManager: public G4UserRunAction
 {
   public:
     
     static G4AdjointSimManager* GetInstance();
 
-  public: //publich methods
+  public: //public methods
     
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
     void RunAdjointSimulation(G4int nb_evt);
     
     inline G4int GetNbEvtOfLastRun(){return nb_evt_of_last_run;}
@@ -165,19 +168,20 @@ class G4AdjointSimManager
     G4bool GetDidAdjParticleReachTheExtSource();
     void RegisterAtEndOfAdjointTrack();
     void RegisterAdjointPrimaryWeight(G4double aWeight);
-
-    inline G4int GetIDOfLastAdjParticleReachingExtSource(){return ID_of_last_particle_that_reach_the_ext_source;}; 				     
-    inline G4ThreeVector GetPositionAtEndOfLastAdjointTrack(){ return last_pos;}
-    inline G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(){ return last_direction;}
-    inline G4double GetEkinAtEndOfLastAdjointTrack(){ return last_ekin;} 
-    inline G4double GetEkinNucAtEndOfLastAdjointTrack(){ return last_ekin_nuc;}
-    inline G4double GetWeightAtEndOfLastAdjointTrack(){return last_weight;}
-    inline G4double GetCosthAtEndOfLastAdjointTrack(){return last_cos_th;}
-    inline const G4String& GetFwdParticleNameAtEndOfLastAdjointTrack(){return last_fwd_part_name;}
-    inline G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(){return last_fwd_part_PDGEncoding;}
+    //to continue here
+    inline G4int GetIDOfLastAdjParticleReachingExtSource(){return ID_of_last_particle_that_reach_the_ext_source;};
+    G4ThreeVector GetPositionAtEndOfLastAdjointTrack();
+    G4ThreeVector GetDirectionAtEndOfLastAdjointTrack();
+    G4double GetEkinAtEndOfLastAdjointTrack();
+    G4double GetEkinNucAtEndOfLastAdjointTrack();
+    G4double GetWeightAtEndOfLastAdjointTrack();
+    G4double GetCosthAtEndOfLastAdjointTrack();
+    const G4String& GetFwdParticleNameAtEndOfLastAdjointTrack();
+    G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack();
     inline G4int GetFwdParticleIndexAtEndOfLastAdjointTrack(){return last_fwd_part_index;}
     
     std::vector<G4ParticleDefinition*> GetListOfPrimaryFwdParticles();
+    size_t GetNbOfPrimaryFwdParticles();
      
     G4bool DefineSphericalExtSource(G4double radius, G4ThreeVector pos);
     G4bool DefineSphericalExtSourceWithCentreAtTheCentreOfAVolume(G4double radius, const G4String& volume_name);
@@ -207,7 +211,6 @@ class G4AdjointSimManager
     void SetAdjointEventAction(G4UserEventAction* anAction);
     void SetAdjointSteppingAction(G4UserSteppingAction* anAction);
     void SetAdjointStackingAction(G4UserStackingAction* anAction);
-    void SetAdjointTrackingAction(G4UserTrackingAction* anAction);
     void SetAdjointRunAction(G4UserRunAction* anAction); 
     
     //Set methods for user run actions
@@ -225,15 +228,21 @@ class G4AdjointSimManager
 
   private: 
   
-    static G4AdjointSimManager* instance;
+    static G4ThreadLocal G4AdjointSimManager* instance;
   
+
   private: // methods
     
     void SetRestOfAdjointActions(); 
     void SetAdjointPrimaryRunAndStackingActions();
+    void SetAdjointActions();
     void ResetRestOfUserActions(); 
     void ResetUserPrimaryRunAndStackingActions(); 
+    void ResetUserActions();
     void DefineUserActions();
+  public:
+    void SwitchToAdjointSimulationMode();
+    void BackToFwdSimulationMode();
 
   private: //constructor and destructor
   
@@ -262,7 +271,7 @@ class G4AdjointSimManager
     G4UserRunAction*		theAdjointRunAction;
     G4UserEventAction*		theAdjointEventAction;
     G4AdjointPrimaryGeneratorAction* theAdjointPrimaryGeneratorAction;
-    G4UserTrackingAction*	theAdjointTrackingAction;
+    G4AdjointTrackingAction*	theAdjointTrackingAction;
     G4AdjointSteppingAction*	theAdjointSteppingAction;
     G4AdjointStackingAction*    theAdjointStackingAction;
       
@@ -294,9 +303,9 @@ class G4AdjointSimManager
 
     //Weight Analysis
     //----------
-    G4PhysicsLogVector* electron_last_weight_vector;
+    /*G4PhysicsLogVector* electron_last_weight_vector;
     G4PhysicsLogVector* proton_last_weight_vector;
-    G4PhysicsLogVector* gamma_last_weight_vector;
+    G4PhysicsLogVector* gamma_last_weight_vector;*/
     
     G4bool welcome_message;
     

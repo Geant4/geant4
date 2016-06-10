@@ -6,12 +6,12 @@ from array import array
 def plot_1_file (file):
     gROOT.Reset()
     input_file_1=TFile(file+'.root','READ')
-    h1 = input_file_1.Get("Source Energy Spectrum")
-    h2 = input_file_1.Get("Source X-Y distribution")
-    h3 = input_file_1.Get("Source X-Z distribution")
-    h4 = input_file_1.Get("Source Y-Z distribution")
-    h5 = input_file_1.Get("Source phi-std::cos(theta) distribution")
-    h6 = input_file_1.Get("Source phi-theta distribution")
+    h1 = input_file_1.Get("histo/1")
+    h2 = input_file_1.Get("histo/2")
+    h3 = input_file_1.Get("histo/3")
+    h4 = input_file_1.Get("histo/4")
+    h5 = input_file_1.Get("histo/5")
+    h6 = input_file_1.Get("histo/6")
 
     c1 = TCanvas('c1', file, 200, 10, 700, 900)
     c1.Divide(2,3)
@@ -63,17 +63,18 @@ def plot_2_files (file):
 #
     input_file_1.cd()
 # get the tuple t1
-    t1 = gROOT.FindObject('MyTuple')
+    t1 = input_file_1.Get('ntuple/MyTuple')
+    print t1
     for i in range(t1.GetEntries()):
         t1.GetEntry(i)
-        h_1.Fill(t1.Energy,t1.Weight)
+        h_1.Fill(t1.Ekin,t1.weight)
             
     input_file_2.cd()
 # get the tuple t1
-    t2 = gROOT.FindObject("MyTuple")
+    t2 =  input_file_2.Get('ntuple/MyTuple')
     for i in range(t2.GetEntries()):
         t2.GetEntry(i)
-        h_2.Fill(t2.Energy,t2.Weight)
+        h_2.Fill(t2.Ekin,t2.weight)
                 
     h_2.SetLineStyle(kDashed);
     h_2.SetLineColor(kBlue);

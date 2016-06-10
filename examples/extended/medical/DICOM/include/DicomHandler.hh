@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomHandler.hh 73076 2013-08-16 07:45:30Z gcosmo $
+//
 /// \file medical/DICOM/include/DicomHandler.hh
 /// \brief Definition of the DicomHandler class
 //
@@ -63,41 +65,50 @@
 ///        Dragan Tubic <tdragan@gel.ulaval.ca>
 //*******************************************************
 
+class DicomPhantomZSliceHeader;
+class DicomPhantomZSliceMerged;
+
 class DicomHandler
 {
 public:
-
-  DicomHandler();
-
+    
+    DicomHandler();
+    
     ~DicomHandler();
-
-  G4int ReadFile(FILE *,char *);
-  G4int ReadData(FILE *,char *); // note: always use readHeader 
-                                    // before readData
-
-  // use ImageMagick to display the image
-  //G4int displayImage(char[500]);
-
+    
+    // static accessor
+    static DicomHandler* Instance();
+    
+    G4int ReadFile(FILE *,char *);
+    G4int ReadData(FILE *,char *); // note: always use readHeader
+    // before readData
+    
+    // use ImageMagick to display the image
+    //G4int displayImage(char[500]);
+    
     void CheckFileFormat();
-
+    
 private:
     template <class Type> void GetValue(char *, Type &);
-
+    
 private:
-
+    static DicomHandler* fgInstance;
+ 
     const int DATABUFFSIZE;
     const int LINEBUFFSIZE;
     const int FILENAMESIZE;
-
+    
+    void ReadCalibration();
     void GetInformation(G4int &, char *);
     G4float Pixel2density(G4int pixel);
     void ReadMaterialIndices( std::ifstream& finData);
     unsigned int GetMaterialIndex( G4float density );
     void StoreData(std::ofstream& foutG4DCM);
+    void StoreData(DicomPhantomZSliceHeader* dcmPZSH);
     G4int read_defined_nested(FILE *, G4int);
     void read_undefined_nested(FILE *);
     void read_undefined_item(FILE *);
-
+    
     short fCompression;
     G4int fNFiles;
     short fRows;
@@ -113,9 +124,19 @@ private:
     
     G4bool fLittleEndian, fImplicitEndian;
     short fPixelRepresentation;
-
+    
     G4int** fTab;
     std::map<G4float,G4String> fMaterialIndices;
+    
+    G4int nbrequali;
+    G4double* valuedensity;
+    G4double* valueCT;
+    bool readCalibration;
+    DicomPhantomZSliceMerged* mergedSlices;
+
+    G4String driverFile;
+    G4String ct2densityFile;
+
 };
 #endif
 

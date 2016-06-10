@@ -24,21 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4CookPairingCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4CookPairingCorrections.hh"
-
+#include <CLHEP/Units/SystemOfUnits.h>
 
 // Data comes from:
 // J.L. Cook, H. Ferguson and A.R.de L. Musgrove, Aust. J. Phys., 20, 477(1967)
 
 
 // P(Z) 68 values from Z = 28 to Z = 95
-const G4double G4CookPairingCorrections::PairingZTable
-[G4CookPairingCorrections::ZTableSize] = {
+G4double G4CookPairingCorrections::PairingZTable[] = {
   1.28,    0.26,    0.88,    0.19,    1.35,    -0.05,    1.52,    -0.09,    1.17,    0.04,
   1.24,    0.29,    1.09,    0.26,    1.17,     0.23,    1.15,    -0.08,    1.35,    0.34,
   1.05,    0.28,    1.27,    0.00,    1.05,     0.00,    1.00,     0.09,    1.20,    0.20,
@@ -50,8 +52,7 @@ const G4double G4CookPairingCorrections::PairingZTable
 
 
 // P(N) 118 values from N = 33 to N = 150
-const G4double G4CookPairingCorrections::PairingNTable
-[G4CookPairingCorrections::NTableSize] = {
+G4double G4CookPairingCorrections::PairingNTable[] = {
   0.08,    1.41,   -0.08,    1.50,   -0.05,    2.24,   -0.47,    1.43,    -0.15,    1.44,
   0.06,    1.56,    0.25,    1.57,   -0.16,    1.46,    0.00,    0.93,     0.01,    0.62,
  -0.50,    1.42,    0.13,    1.52,   -0.65,    0.80,   -0.08,    1.29,    -0.47,    1.25,
@@ -66,19 +67,13 @@ const G4double G4CookPairingCorrections::PairingNTable
  -0.06,    0.45,    0.05,    0.26,   -0.22,    0.39,    0.00,    0.39    
 };
 
-G4CookPairingCorrections* G4CookPairingCorrections::theInstance = 0;
 
 G4CookPairingCorrections::G4CookPairingCorrections()
-{;}
+{
+  for(size_t i=0; i<ZTableSize; ++i) { PairingZTable[i] *= CLHEP::MeV; }
+  for(size_t i=0; i<NTableSize; ++i) { PairingNTable[i] *= CLHEP::MeV; }
+}
 
 G4CookPairingCorrections::~G4CookPairingCorrections()
-{;}
+{}
 
-G4CookPairingCorrections* G4CookPairingCorrections::GetInstance()
-{
-  if (!theInstance)  { 
-    static G4CookPairingCorrections theCorrections;
-    theInstance = &theCorrections; 
-  }
-  return theInstance;
-}

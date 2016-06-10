@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DELPHIMagField.cc 68055 2013-03-13 14:43:28Z gcosmo $
 // -------------------------------------------------------------------
 
 #include "G4DELPHIMagField.hh"
@@ -35,6 +35,10 @@ G4DELPHIMagField::G4DELPHIMagField()
 {
 }
 
+G4DELPHIMagField* G4DELPHIMagField::Clone() const
+{
+    return new G4DELPHIMagField;
+}
 ////////////////////////////////////////////////////////////////////////
 
 G4DELPHIMagField::~G4DELPHIMagField()
@@ -56,7 +60,7 @@ void G4DELPHIMagField::GetFieldValue( const G4double yTrack[7],
    G4double rz = z*std::sqrt(r2), r = std::sqrt(r2+a*a) ;
    G4double Br ;
    G4double P[8], Q[8] ; 
-   static G4double c[8] = {
+   static G4ThreadLocal G4double c[8] = {
                             -9.26e-5, -3.51e-5, 2.94e-6, -1.10e-6, 
                              6.25e-8, -1.77e-8, -6.88e-10, -7.52e-11 
                           } ;

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.hh 67268 2013-02-13 11:38:40Z ihrivnac $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
     G4ParticleGun* GetParticleGun() {return fParticleGun;};
 
   private:

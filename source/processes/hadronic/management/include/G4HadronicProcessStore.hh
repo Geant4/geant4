@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronicProcessStore.hh 67989 2013-03-13 10:54:03Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,8 @@ public:
     const G4ParticleDefinition* particle,
     G4double kineticEnergy,
     const G4VProcess* process,
-    const G4Element*  element);
+    const G4Element*  element,
+    const G4Material* material=0);
       
   G4double GetCrossSectionPerVolume(
     const G4ParticleDefinition* particle,
@@ -210,7 +211,7 @@ private:
   // print process info
   void Print(G4int idxProcess, G4int idxParticle);
 
-  static G4HadronicProcessStore* theInstance;
+  static G4ThreadLocal G4HadronicProcessStore* theInstance;
 
   typedef const G4ParticleDefinition* PD;
   typedef G4HadronicProcess* HP;

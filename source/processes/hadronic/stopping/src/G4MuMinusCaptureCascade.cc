@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuMinusCaptureCascade.cc 68700 2013-04-05 08:44:19Z gcosmo $
 //
 //   G4MuonMinusCaptureAtRest physics process
 //                   
@@ -73,11 +73,11 @@ G4double G4MuMinusCaptureCascade::GetKShellEnergy(G4double Z)
   // the Energy of Hydrogen Atom taken into account finite size of the
   // nucleus (V.Ivanchenko)
   const G4int ListK = 28;
-  static G4double ListZK[ListK] = {
+  const G4double ListZK[ListK] = {
       1., 2.,  4.,  6.,  8., 11., 14., 17., 18., 21., 24.,
      26., 29., 32., 38., 40., 41., 44., 49., 53., 55.,
      60., 65., 70., 75., 81., 85., 92.};
-  static G4double ListKEnergy[ListK] = {
+  const G4double ListKEnergy[ListK] = {
      0.00275, 0.011, 0.043, 0.098, 0.173, 0.326,
      0.524, 0.765, 0.853, 1.146, 1.472,
      1.708, 2.081, 2.475, 3.323, 3.627, 

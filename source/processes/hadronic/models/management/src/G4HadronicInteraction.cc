@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronicInteraction.cc 70714 2013-06-05 07:39:59Z gcosmo $
 //
 // Hadronic Interaction  base class
 // original by H.P. Wellisch
@@ -232,7 +232,7 @@ G4bool G4HadronicInteraction::IsBlocked(const G4Element* anElement) const
 const std::pair<G4double, G4double> G4HadronicInteraction::GetFatalEnergyCheckLevels() const
 {
 	// default level of Check
-	return std::pair<G4double, G4double>(10.*perCent, 5 * GeV);
+	return std::pair<G4double, G4double>(2.*perCent, 1. * GeV);
 }
 
 std::pair<G4double, G4double>

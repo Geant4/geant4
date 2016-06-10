@@ -238,10 +238,10 @@ G4RPGNucleonInelastic::GetFSPartTypesForT1(G4int mult, G4double KE,
 ///////////////////////////////////////////////////////////////////////////////
 
 // Total p p cross section as a function of kinetic energy
-G4double G4RPGNucleonInelastic::pPtot[30];
+G4ThreadLocal G4double G4RPGNucleonInelastic::pPtot[30];
 
 // p p multiplicities as a function of kinetic energy
-G4double G4RPGNucleonInelastic::t1_dSigma_dMult[8][30];
+G4ThreadLocal G4double G4RPGNucleonInelastic::t1_dSigma_dMult[8][30];
 
 const G4int G4RPGNucleonInelastic::pPindex[8][2] =
  {{0, 0}, {1, 6}, {7,24}, {25,56}, {57,63}, {64,71}, {72,81}, {82,92}};  
@@ -857,10 +857,10 @@ const G4float G4RPGNucleonInelastic::pPCrossSections[93][30] = {
 ///////////////////////////////////////////////////////////////////////////////
 
 // Total p n cross section as a function of kinetic energy
-G4double G4RPGNucleonInelastic::pNtot[30];
+G4ThreadLocal G4double G4RPGNucleonInelastic::pNtot[30];
 
 // p n multiplicities as a function of kinetic energy
-G4double G4RPGNucleonInelastic::t0_dSigma_dMult[8][30];
+G4ThreadLocal G4double G4RPGNucleonInelastic::t0_dSigma_dMult[8][30];
 
 const G4int G4RPGNucleonInelastic::pNindex[8][2] =
  {{0, 0}, {1,9}, {10,31}, {32,69}, {70,76}, {77,85}, {86,95}, {96,107}};  

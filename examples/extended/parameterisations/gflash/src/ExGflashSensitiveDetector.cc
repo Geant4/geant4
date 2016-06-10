@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ExGflashSensitiveDetector.cc 72372 2013-07-16 14:30:39Z gcosmo $
+//
 /// \file parameterisations/gflash/src/ExGflashSensitiveDetector.cc
 /// \brief Implementation of the ExGflashSensitiveDetector class
 //
@@ -37,11 +39,13 @@
 #include "G4SDManager.hh"
 #include <iostream>
 using namespace std;
+
 //WARNING :  You have to use also  G4VGFlashSensitiveDetector() as base class
-ExGflashSensitiveDetector::ExGflashSensitiveDetector(G4String name, ExGflashDetectorConstruction* det):
-G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), Detector(det)
+
+ExGflashSensitiveDetector::ExGflashSensitiveDetector(G4String name,
+                                                     ExGflashDetectorConstruction* det):
+  G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), fDetector(det), HCID(-1)
 {
-  //@@@@ xN08SensitiveDetector:: evtl name im constructor des G4VGFlashSensitiveDetector ?
   G4String caloname="ExGflashCollection";
   collectionName.insert(caloname);
 }
@@ -50,12 +54,10 @@ ExGflashSensitiveDetector::~ExGflashSensitiveDetector() {}
 
 void ExGflashSensitiveDetector::Initialize(G4HCofThisEvent*HCE)
 {
-  G4cout<<"::Initializing the sensitive detector"<<G4endl;
-  static G4int HCID = -1;
   if(HCID<0){ HCID = GetCollectionID(0); }
-  caloHitsCollection=new 
+  fCaloHitsCollection=new 
   ExGflashHitsCollection(SensitiveDetectorName,collectionName[0]); // first collection
-  HCE->AddHitsCollection( HCID, caloHitsCollection );
+  HCE->AddHitsCollection( HCID, fCaloHitsCollection );
 }
 
 void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)
@@ -66,27 +68,28 @@ void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)
 }
 
 G4bool ExGflashSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
-{  //cout<<"This is ProcessHits"<<endl;
+{
   G4double e=aStep->GetTotalEnergyDeposit();
   if(e<=0.)return false;
   
   G4TouchableHistory* theTouchable
-  = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-
+    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  
   // enrgy deposited -> make Hit
   //const G4VPhysicalVolume* physVol= aStep->GetPreStepPoint()->GetPhysicalVolume();
-  //G4TouchableHistory* theTouchable = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  //G4TouchableHistory* theTouchable =
+  // (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
   ExGflashHit* caloHit=new ExGflashHit();
   caloHit->SetEdep(e);
   caloHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-  caloHitsCollection->insert(caloHit);
+  fCaloHitsCollection->insert(caloHit);
   if (ROhist){;} 
   G4VPhysicalVolume* physVol = theTouchable->GetVolume();
   G4int crystalnum=0;
   for(int i=0;i<100;i++) //@@@@@@@ ExGflashSensitiveDetector:vorsichty
-  {
-    if(physVol == Detector->GetCristal(i))   crystalnum= i;
-  }
+    {
+      if(physVol == fDetector->GetCristal(i))   crystalnum= i;
+    }
   caloHit->SetCrystalNum(crystalnum);
   
   return true;
@@ -103,14 +106,14 @@ G4bool ExGflashSensitiveDetector::ProcessHits(G4GFlashSpot*aSpot ,G4TouchableHis
   ExGflashHit* caloHit=new ExGflashHit();
   caloHit->SetEdep(e);
   caloHit->SetPos(aSpot->GetEnergySpot()->GetPosition());
-  caloHitsCollection->insert(caloHit);
+  fCaloHitsCollection->insert(caloHit);
   if (ROhist){;} 
   //cout <<pCurrentVolume->GetName()   << endl;
   G4int crystalnum=0;
   for(int i=0;i<100;i++) //@@@@@@@ ExGflashSensitiveDetector:vorsichty
-  {
-    if(pCurrentVolume  == Detector->GetCristal(i))   crystalnum= i;
-  }
+    {
+      if(pCurrentVolume  == fDetector->GetCristal(i))   crystalnum= i;
+    }
   caloHit->SetCrystalNum(crystalnum);
   
   return true;

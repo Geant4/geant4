@@ -1,0 +1,54 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UPolyPhiFace.icc
+//
+// 19.10.12 Marek Gayer
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
+
+inline
+UVCSGface* UPolyPhiFace::Clone()
+{
+  return new UPolyPhiFace(*this);
+}
+
+// ExactZOrder
+//
+// Decide precisely whether a trajectory passes to the left, right, or exactly
+// passes through the z position of a vertex point in our face.
+//
+// Result is only determined within an arbitrary (positive) factor.
+//      > 0 to the right
+//      < 0 to the left
+//      = 0 exactly on top of
+// In 99.9999% of the cases, a trivial calculation is used. In difficult
+// cases, a precise, compliant calculation is relied on.
+//
+inline
+double UPolyPhiFace::ExactZOrder(double z,
+                                 double qx, double qy, double qz,
+                                 const UVector3& v,
+                                 double normSign,
+                                 const UPolyPhiFaceVertex* vert) const
+{
+  double answer = vert->z - z;
+  if (std::fabs(answer) < VUSolid::Tolerance())
+  {
+    UVector3 qa(qx - vert->x + radial.x,
+                qy - vert->y + radial.y, qz - vert->z),
+                   qb(qx - vert->x, qy - vert->y, qz - vert->z);
+    UVector3 qacb = qa.Cross(qb);
+
+    answer = normSign * qacb.Dot(v) * (normal.y * radial.x - normal.x * radial.y);
+  }
+
+  return answer;
+}

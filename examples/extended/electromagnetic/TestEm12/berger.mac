@@ -1,4 +1,4 @@
-# $Id: berger.mac,v 1.10 2010-12-06 12:24:10 maire Exp $
+# $Id: berger.mac 69108 2013-04-18 13:10:10Z gcosmo $
 #
 # macro for TestEm12 : Dose Point Kernel
 # Seltzer, Appl. Radiat. Isot. 42(1991) page 917
@@ -23,8 +23,8 @@
 /gun/particle e-
 /gun/energy 100 keV
 #
-/testem/histo/setFileName berger/100keV.local
-/testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
+/analysis/setFileName berger/100keV_local
+/analysis/h1/set 8 120  0.  1.2 none	#normalized edep profile
 #
 /testem/event/printModulo 10000
 #

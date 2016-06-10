@@ -26,33 +26,34 @@
 /// \file field/field03/include/F03EventActionMessenger.hh
 /// \brief Definition of the F03EventActionMessenger class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F03EventActionMessenger.hh 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F03EventActionMessenger_h
 #define F03EventActionMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
 
 class F03EventAction;
 class G4UIcmdWithAnInteger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F03EventActionMessenger: public G4UImessenger
 {
   public:
     F03EventActionMessenger(F03EventAction*);
-    ~F03EventActionMessenger();
-    
+    virtual ~F03EventActionMessenger();
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-    F03EventAction* fEventAction;   
+    F03EventAction* fEventAction;
+
     G4UIcmdWithAnInteger* fSetVerboseCmd;
     G4UIcmdWithAnInteger* fPrintCmd;
 };

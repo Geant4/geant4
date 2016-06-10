@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLWtViewer.hh 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // G4OpenGLWtViewer : Class to provide WindowsNT specific
@@ -42,6 +42,8 @@
 #include <Wt/WObject>
 #include <Wt/WPoint>
 #include <Wt/WTime>
+#include <Wt/WContainerWidget>
+#include <Wt/WMatrix4x4>
 
 class G4OpenGLSceneHandler;
 class G4UImanager;
@@ -56,17 +58,20 @@ class WImage;
 class WWheelEvent;
 #endif
 class WProcess;
+class G4UIWt;
 
 class G4OpenGLSceneHandler;
 class G4OpenGLWtMovieDialog;
 
-class G4OpenGLWtViewer: public Wt::WObject, virtual public G4OpenGLViewer {
+class G4OpenGLWtViewer:  virtual public G4OpenGLViewer {
 
 public:
   G4OpenGLWtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLWtViewer ();
-  void SetView ();
   virtual void updateWWidget()=0;
+
+  Wt::WMatrix4x4 mMatrix;
+
 #ifdef _A_FINIR_FIXME
   Wt::WString setEncoderPath(Wt::WString path);
   Wt::WString getEncoderPath();
@@ -97,7 +102,6 @@ public:
   void displayRecordingStatus();
 #endif
   void drawText(const char * ,int x,int y,int z, int size);
-
 protected:
   void CreateGLWtContext ();
   virtual void CreateMainWindow (Wt::WGLWidget*,Wt::WString);
@@ -108,24 +112,26 @@ protected:
   void G4MouseReleaseEvent();
   void G4MouseDoubleClickEvent();
   void G4MouseMoveEvent(Wt::WMouseEvent *event);
-#ifdef _A_FINIR_FIXME
-  void G4wheelEvent (Wt::WWheelEvent * event); 
-#endif
+//  void G4wheelEvent (Wt::WWheelEvent * event);
   void G4keyPressEvent (Wt::WKeyEvent * event); 
   void rotateWtScene(float, float);
-  void rotateWtCamera(float, float);
-  void rotateWtSceneInViewDirection(float, float);
-  void rotateWtCameraInViewDirection(float, float);
+  void rotateWtSceneToggle(float, float);
   void moveScene(float, float, float,bool);
-  void FinishView();
 #ifdef _A_FINIR_FIXME
   void updateKeyModifierState(Wt::KeyboardModifiers);
 #endif
+  
+  inline Wt::WGLWidget* getGLWindow() {
+    return fWindow;
+  }
+  
 
 protected:
   Wt::WGLWidget* fWindow;
   Wt::WWidget* fGLWindow;
   bool hasPendingEvents();
+  void resizeGL(int width, int height);
+  
 #ifdef _A_FINIR_FIXME
   void savePPMToTemp();
 #endif
@@ -202,6 +208,7 @@ private:
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
+  Wt::WTabWidget* fUISceneTreeComponentsTBWidget;
 
   G4double fXRot;
   G4double fYRot;
@@ -209,6 +216,8 @@ private:
   bool fAltKeyPress;
   bool fControlKeyPress;
   bool fShiftKeyPress;
+  bool fBatchMode;
+  G4UIWt* fUiWt;
 
 #ifdef _A_FINIR_FIXME
  void rotateTheta(int);
@@ -254,6 +263,8 @@ private :
   void processEncodeStdout();
   // Only use for Wt>4.0
   //  void dialogClosed();
+
+
 };
 
 #endif

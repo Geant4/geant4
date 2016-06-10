@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParameterisationPara.hh 73433 2013-08-27 11:05:39Z gcosmo $
 // 
 // classes G4ParameterisationParaX,
 //         G4ParameterisationParaY,
@@ -54,6 +54,7 @@ class G4Cons;
 class G4Cons;
 class G4Sphere;
 class G4Orb;
+class G4Ellipsoid;
 class G4Torus;
 class G4Trd;
 class G4Hype;
@@ -99,6 +100,8 @@ class G4ParameterisationParaX : public G4VParameterisationPara
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,
                             const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,
+                            const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Trd&,const G4int,
@@ -143,6 +146,8 @@ class G4ParameterisationParaY : public G4VParameterisationPara
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,
                             const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,
+                            const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Trd&,const G4int,
@@ -186,6 +191,8 @@ class G4ParameterisationParaZ : public G4VParameterisationPara
     void ComputeDimensions (G4Sphere&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,
                             const G4VPhysicalVolume*) const {}

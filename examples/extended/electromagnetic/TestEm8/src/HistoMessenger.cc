@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoMessenger class
 //
 //
-// $Id$
+// $Id: HistoMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::HistoMessenger(Histo* hist)
-  :fHisto(hist)
+  :G4UImessenger(),fHisto(hist),
+   fHistoDir(0),   
+   fFactoryCmd(0),
+   fFileCmd(0),
+   fHistoCmd(0)
 {
   fHistoDir = new G4UIdirectory("/testem/histo/");
   fHistoDir->SetGuidance("histograms control");

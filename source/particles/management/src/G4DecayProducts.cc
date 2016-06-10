@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DecayProducts.cc 69015 2013-04-15 09:46:48Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -249,7 +249,7 @@ G4bool G4DecayProducts::IsChecked() const
   // check momentum dirction is a unit vector
   if ( (parent_momentum.mag() >0.0) && (std::fabs(direction.mag()-1.0) >1.0e-6 ) ) {
 #ifdef G4VERBOSE
-    G4cerr << "G4DecayProducts::IsChecked()::  "
+    G4cout << "G4DecayProducts::IsChecked()::  "
            << " Momentum Direction Vector of Parent is not normalized "
            << "  (=" << direction.mag() << ")" << G4endl;
 #endif
@@ -272,7 +272,7 @@ G4bool G4DecayProducts::IsChecked() const
     // check momentum dirction is a unit vector
     if ( (momentum.mag()>0.0) && (std::fabs(direction.mag()-1.0) > 1.0e-6)) {
 #ifdef G4VERBOSE
-      G4cerr <<  "G4DecayProducts::IsChecked()::  "
+      G4cout <<  "G4DecayProducts::IsChecked()::  "
              << " Momentum Direction Vector of Daughter [" << index
              << "]  is not normalized (=" << direction.mag() << ")" << G4endl;
 #endif
@@ -282,7 +282,7 @@ G4bool G4DecayProducts::IsChecked() const
     // whether daughter stops or not
     if (energy - mass < DBL_MIN ) {
 #ifdef G4VERBOSE
-      G4cerr <<  "G4DecayProducts::IsChecked()::  "
+      G4cout <<  "G4DecayProducts::IsChecked()::  "
              << "  Daughter [" << index << "] has no kinetic energy "<< G4endl;
 #endif
       returnValue = false;
@@ -293,11 +293,11 @@ G4bool G4DecayProducts::IsChecked() const
   // check energy/momentum conservation
   if ( (std::fabs(total_energy) >1.0e-9*MeV) || (total_momentum.mag() >1.0e-9*MeV ) ){ 
 #ifdef G4VERBOSE
-    G4cerr <<  "G4DecayProducts::IsChecked()::  "
+    G4cout <<  "G4DecayProducts::IsChecked()::  "
            << " Energy/Momentum is not conserved   "<< G4endl;
-    G4cerr << " difference between parent energy and sum of dughters' energy : " 
+    G4cout << " difference between parent energy and sum of dughters' energy : " 
 	   << total_energy /MeV << "[MeV]  " << G4endl; 
-    G4cerr << " difference between parent momentum and sum of dughters' momentum : " 
+    G4cout << " difference between parent momentum and sum of dughters' momentum : " 
 	   << " x:" << total_momentum.getX()/MeV 
 	   << " y:" << total_momentum.getY()/MeV  
 	   << " z:" << total_momentum.getZ()/MeV  

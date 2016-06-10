@@ -42,7 +42,7 @@ class G4LambdaInelasticProcess : public G4HadronInelasticProcess
 {
   public:
     
-    G4LambdaInelasticProcess(const G4String& processName = "LambdaInelastic");
+    G4LambdaInelasticProcess(const G4String& processName = "lambdaInelastic");
     
     ~G4LambdaInelasticProcess() {}
 

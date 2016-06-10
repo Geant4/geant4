@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2011-01-03 14:32:22 lgarnier Exp $
+# $Id: GNUmakefile 66373 2012-12-18 09:41:34Z gcosmo $
 
 name := G4FR
 

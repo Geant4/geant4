@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPDeExGammas_h
 #define G4NeutronHPDeExGammas_h 1
@@ -58,7 +57,7 @@ class G4NeutronHPDeExGammas
     if(theLevels!=0) delete [] theLevels;
   }
   
-  void Init(std::ifstream & aDataFile);
+  void Init(std::istream & aDataFile);
 
   inline G4ReactionProductVector * GetDecayGammas(G4int aLevel)
   {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -54,13 +54,14 @@ G4MIRDTrunk::~G4MIRDTrunk()
 
 }
 
+
 G4VPhysicalVolume* G4MIRDTrunk::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
-					      const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
+					  const G4String& colourName, G4bool wireFrame,G4bool )
 {
 
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "Construct " << volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
    
   G4Material* soft = material -> GetMaterial("soft_tissue");
  
@@ -77,24 +78,20 @@ G4VPhysicalVolume* G4MIRDTrunk::Construct(const G4String& volumeName, G4VPhysica
   G4LogicalVolume* logicTrunk = new G4LogicalVolume(trunk, soft, 
 	 					    "logical" + volumeName,
 						    0, 0, 0);
-  G4RotationMatrix* rm = new G4RotationMatrix();
-  rm -> rotateX(90.* degree);
-
   // Define rotation and position here!
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm->rotateX(180.*degree); 
+  rm->rotateY(180.*degree); 
   G4VPhysicalVolume* physTrunk = new G4PVPlacement(rm,
-				 G4ThreeVector(0.* cm, 35.0 *cm, 0.*cm),
-      			       "physicalTrunk",
-  			       logicTrunk,
-			       mother,
-			       false,
-			       0, true);
+						   //G4ThreeVector(0.* cm, 0. *cm, 28.*cm), //FA
+						   G4ThreeVector(0.* cm, 0. *cm, 35.*cm),
+						   "physicalTrunk",
+						   logicTrunk,
+						   mother,
+						   false,
+						   0, true);
 
-  // Sensitive Body Part
-  if (sensitivity == true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicTrunk->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
+
 
   // Visualization Attributes
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();

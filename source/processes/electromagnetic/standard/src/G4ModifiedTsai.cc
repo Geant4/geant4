@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ModifiedTsai.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,7 @@
 #include "G4ModifiedTsai.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
+#include "G4Log.hh"
 
 G4ModifiedTsai::G4ModifiedTsai(const G4String&)
   : G4VEmAngularDistribution("AngularGenUrban")
@@ -77,13 +78,13 @@ G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
 
   G4double uMax = 2*(1. + dp->GetKineticEnergy()/electron_mass_c2);   
 
-  const G4double a1     = 0.625;
-  const G4double a2     = 1.875;
-  const G4double border = 0.25;
+  static const G4double a1     = 0.625;
+  static const G4double a2     = 1.875;
+  static const G4double border = 0.25;
   G4double u;
 
   do {
-    u = - std::log(G4UniformRand()*G4UniformRand());
+    u = - G4Log(G4UniformRand()*G4UniformRand());
 
     if ( border > G4UniformRand() ) { u /= a1; }
     else                            { u /= a2; }

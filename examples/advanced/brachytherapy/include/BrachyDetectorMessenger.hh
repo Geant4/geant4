@@ -30,7 +30,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id$
+// $Id: BrachyDetectorMessenger.hh 69765 2013-05-14 10:11:22Z gcosmo $
 //
 // 
 #ifndef BrachyDetectorMessenger_h

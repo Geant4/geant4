@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
 #include "DetectorConstruction.hh"
 #include "G4SystemOfUnits.hh"
@@ -35,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::DetectorConstruction()
-:physiWorld(NULL), logicWorld(NULL), solidWorld(NULL)
+:fPhysiWorld(NULL), fLogicWorld(NULL), fSolidWorld(NULL)
 {}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -62,7 +65,7 @@ void DetectorConstruction::DefineMaterials()
   G4Material * H2O = man->FindOrBuildMaterial("G4_WATER");
 
   // Default materials in setup.
-  waterMaterial = H2O;
+  fWaterMaterial = H2O;
   
 }
 
@@ -74,48 +77,48 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
   // WORLD VOLUME
   
-  WorldSizeX  = 1*mm; 
-  WorldSizeY  = 1*mm; 
-  WorldSizeZ  = 1*mm;
+  fWorldSizeX  = 1*mm; 
+  fWorldSizeY  = 1*mm; 
+  fWorldSizeZ  = 1*mm;
 
-  solidWorld = new G4Box("World",				     //its name
-			   WorldSizeX/2,WorldSizeY/2,WorldSizeZ/2);  //its size
+  fSolidWorld = new G4Box("World",				        //its name
+			   fWorldSizeX/2,fWorldSizeY/2,fWorldSizeZ/2);  //its size
   
 
-  logicWorld = new G4LogicalVolume(solidWorld,	        //its solid
-				   waterMaterial,	//its material
-				   "World");		//its name
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,	//its solid
+				    fWaterMaterial,	//its material
+				    "World");		//its name
   
-  physiWorld = new G4PVPlacement(0,			//no rotation
+  fPhysiWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
                                  "World",		//its name
-                                 logicWorld,		//its logical volume
+                                 fLogicWorld,		//its logical volume
                                  0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
 
-  G4double TargetSizeZ =  WorldSizeZ*0.05; 
+  G4double TargetSizeZ =  fWorldSizeZ*0.05; 
 
-  G4Box* targetSolid = new G4Box("Target",				     //its name
-				 WorldSizeX/2,WorldSizeY/2,TargetSizeZ/2);   //its size
+  G4Box* targetSolid = new G4Box("Target",				       //its name
+				 fWorldSizeX/2,fWorldSizeY/2,TargetSizeZ/2);   //its size
   
 
   G4LogicalVolume* logicTarget = new G4LogicalVolume(targetSolid,       //its solid
-						     waterMaterial,	//its material
+						     fWaterMaterial,	//its material
 						     "Target");		//its name
   
   new G4PVPlacement(0,			                               //no rotation
 		    G4ThreeVector(),	                               //at (0,0,0)
-		    "Target",		//its name
-		    logicTarget,		//its logical volume
-		    physiWorld,			//its mother  volume
-		    false,			//no boolean operation
-		    0);			//copy number
+		    "Target",					       //its name
+		    logicTarget,				       //its logical volume
+		    fPhysiWorld,			               //its mother  volume
+		    false,			                       //no boolean operation
+		    0);			                               //copy number
 
   // Visualization attributes
   G4VisAttributes* worldVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0)); //White
   worldVisAtt->SetVisibility(true);
-  logicWorld->SetVisAttributes(worldVisAtt);
+  fLogicWorld->SetVisAttributes(worldVisAtt);
 
   G4VisAttributes* worldVisAtt1 = new G4VisAttributes(G4Colour(1.0,0.0,0.0)); 
   worldVisAtt1->SetVisibility(true);
@@ -136,5 +139,5 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   fRegion->SetProductionCuts(cuts);
   fRegion->AddRootLogicalVolume(logicTarget); 
 
-  return physiWorld;
+  return fPhysiWorld;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RTSteppingAction.hh 74050 2013-09-20 09:38:19Z gcosmo $
 //
 //
 
@@ -58,13 +58,11 @@ class G4RTSteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
 
   private:
-    G4bool ignoreTransparency;
+    static G4bool ignoreTransparency;
 
   public:
-    inline void SetIgnoreTransparency(G4bool val)
-    { ignoreTransparency = val; }
-    inline G4bool GetIgnoreTransparency() const
-    { return ignoreTransparency; }
+    static void SetIgnoreTransparency(G4bool val);
+    static G4bool GetIgnoreTransparency();
 };
 
 #endif

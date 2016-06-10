@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01DetectorMessenger class
 //
 //
-// $Id$
+// $Id: ExP01DetectorMessenger.cc 71791 2013-06-24 14:08:28Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,55 +43,61 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP01DetectorMessenger::ExP01DetectorMessenger(ExP01DetectorConstruction* myDet)
-:myDetector(myDet)
+: G4UImessenger(),
+  fDetector(myDet),
+  fN02Dir(0),
+  fDetDir(0),
+  fTargMatCmd(0),
+  fChamMatCmd(0),    
+  fFieldCmd(0)
 { 
-  N02Dir = new G4UIdirectory("/P01/");
-  N02Dir->SetGuidance("UI commands specific to this example.");
+  fN02Dir = new G4UIdirectory("/P01/");
+  fN02Dir->SetGuidance("UI commands specific to this example.");
   
-  detDir = new G4UIdirectory("/P01/det/");
-  detDir->SetGuidance("detector control.");
+  fDetDir = new G4UIdirectory("/P01/det/");
+  fDetDir->SetGuidance("detector control.");
   
-  TargMatCmd = new G4UIcmdWithAString("/P01/det/setTargetMate",this);
-  TargMatCmd->SetGuidance("Select Material of the Target.");
-  TargMatCmd->SetParameterName("choice",false);
-  TargMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTargMatCmd = new G4UIcmdWithAString("/P01/det/setTargetMate",this);
+  fTargMatCmd->SetGuidance("Select Material of the Target.");
+  fTargMatCmd->SetParameterName("choice",false);
+  fTargMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  ChamMatCmd = new G4UIcmdWithAString("/P01/det/setChamberMate",this);
-  ChamMatCmd->SetGuidance("Select Material of the Target.");
-  ChamMatCmd->SetParameterName("choice",false);
-  ChamMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fChamMatCmd = new G4UIcmdWithAString("/P01/det/setChamberMate",this);
+  fChamMatCmd->SetGuidance("Select Material of the Target.");
+  fChamMatCmd->SetParameterName("choice",false);
+  fChamMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
   
-  FieldCmd = new G4UIcmdWithADoubleAndUnit("/P01/det/setField",this);  
-  FieldCmd->SetGuidance("Define magnetic field.");
-  FieldCmd->SetGuidance("Magnetic field will be in X direction.");
-  FieldCmd->SetParameterName("Bx",false);
-  FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fFieldCmd = new G4UIcmdWithADoubleAndUnit("/P01/det/setField",this);  
+  fFieldCmd->SetGuidance("Define magnetic field.");
+  fFieldCmd->SetGuidance("Magnetic field will be in X direction.");
+  fFieldCmd->SetParameterName("Bx",false);
+  fFieldCmd->SetUnitCategory("Magnetic flux density");
+  fFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP01DetectorMessenger::~ExP01DetectorMessenger()
 {
-  delete TargMatCmd;
-  delete ChamMatCmd;
-  delete FieldCmd;
-  delete detDir;
-  delete N02Dir;
+  delete fTargMatCmd;
+  delete fChamMatCmd;
+  delete fFieldCmd;
+  delete fDetDir;
+  delete fN02Dir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExP01DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == TargMatCmd )
-   { myDetector->setTargetMaterial(newValue);}
+  if( command == fTargMatCmd )
+   { fDetector->setTargetMaterial(newValue);}
    
-  if( command == ChamMatCmd )
-   { myDetector->setChamberMaterial(newValue);}  
+  if( command == fChamMatCmd )
+   { fDetector->setChamberMaterial(newValue);}  
   
-  if( command == FieldCmd )
-   { myDetector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fFieldCmd )
+   { fDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

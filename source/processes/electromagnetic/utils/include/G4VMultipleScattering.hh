@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VMultipleScattering.hh 74657 2013-10-18 08:13:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -117,7 +117,7 @@ public:
 
   // Initialise for build of tables
   void PreparePhysicsTable(const G4ParticleDefinition&);
-  
+
   // Build physics table during initialisation
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
@@ -184,17 +184,11 @@ public:
   // model will be selected for a given energy interval  
   void AddEmModel(G4int order, G4VEmModel*, const G4Region* region = 0);
 
-  // Assign a model to a process - obsolete method will be removed
-  void SetModel(G4VMscModel*, G4int index = 1);
-  
-  // return the assigned model - obsolete method will be removed
-  G4VMscModel* Model(G4int index = 1);
-
   // Assign a model to a process
   void SetEmModel(G4VMscModel*, G4int index = 1);
   
   // return the assigned model
-  G4VMscModel* EmModel(G4int index = 1);
+  G4VMscModel* EmModel(G4int index = 1) const;
 
   // Access to models by index
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
@@ -222,6 +216,9 @@ public:
 
   inline G4MscStepLimitType StepLimitType() const;
   inline void SetStepLimitType(G4MscStepLimitType val);
+
+  inline G4double LowestKinEnergy() const;
+  inline void SetLowestKinEnergy(G4double val);
 
   inline const G4ParticleDefinition* FirstParticle() const;
 
@@ -395,6 +392,20 @@ inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val)
 {
   stepLimit = val;
   if(val == fMinimal) { facrange = 0.2; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VMultipleScattering::LowestKinEnergy() const
+{
+  return lowestKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VMultipleScattering::SetLowestKinEnergy(G4double val)
+{
+  lowestKinEnergy = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

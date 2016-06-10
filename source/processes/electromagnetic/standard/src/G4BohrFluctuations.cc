@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BohrFluctuations.cc 72048 2013-07-04 12:39:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 #include "Randomize.hh"
 #include "G4Poisson.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4MaterialCutsCouple.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,13 +92,15 @@ void G4BohrFluctuations::InitialiseMe(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
-                                                const G4DynamicParticle* dp,
-                                                      G4double& tmax,
-                                                      G4double& length,
-                                                      G4double& meanLoss)
+G4double 
+G4BohrFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
+				       const G4DynamicParticle* dp,
+				       G4double tmax,
+				       G4double length,
+				       G4double meanLoss)
 {
   if(meanLoss <= minLoss) { return meanLoss; }
+  const G4Material* material = couple->GetMaterial();
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
 
@@ -144,8 +147,8 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
 
 G4double G4BohrFluctuations::Dispersion(const G4Material* material,
 					const G4DynamicParticle* dp,
-					G4double& tmax,
-					G4double& length)
+					G4double tmax,
+					G4double length)
 {
   if(!particle) { InitialiseMe(dp->GetDefinition()); }
 

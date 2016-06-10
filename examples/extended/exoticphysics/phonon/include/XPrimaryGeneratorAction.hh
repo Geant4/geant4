@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/include/XPrimaryGeneratorAction.hh
 /// \brief Definition of the XPrimaryGeneratorAction class
 //
-// $Id$
+// $Id: XPrimaryGeneratorAction.hh 76246 2013-11-08 11:17:29Z gcosmo $
 //
 
 #ifndef XPrimaryGeneratorAction_h
@@ -49,7 +49,7 @@ public:
     virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*                particleGun;
+    G4ParticleGun*                fParticleGun;
 
 };
 

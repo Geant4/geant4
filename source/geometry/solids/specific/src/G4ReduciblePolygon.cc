@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ReduciblePolygon.cc 72091 2013-07-09 09:55:52Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -410,6 +410,36 @@ void G4ReduciblePolygon::ReverseOrder()
   // Our new head
   //
   vertexHead = curr;
+}
+
+
+// StartWithZMin
+//
+// Starting alway with Zmin=bMin
+// This method is used for GenericPolycone 
+//
+void G4ReduciblePolygon::StartWithZMin()
+{ 
+  ABVertex *curr = vertexHead;
+  G4double bcurr = curr->b;
+  ABVertex *prev = curr;
+  while( curr )
+  { 
+    if(curr->b < bcurr)
+    { 
+      bcurr = curr->b;
+      ABVertex *curr1 = curr;   
+      while( curr1 )
+      {
+        if(curr1->next == 0) { curr1->next = vertexHead; break; }
+        curr1 = curr1->next;
+      }
+      vertexHead = curr;         
+      prev->next = 0;
+    }
+    prev = curr;
+    curr = curr->next;
+  }
 }
 
 

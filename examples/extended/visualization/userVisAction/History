@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2010-11-09 10:18:58 allison Exp $
+$Id: History 75677 2013-11-05 09:07:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th November 2013 Dennis Wright (exam-ext-vis-UVA-V09-06-02)
+- generated new userVisAction.out to reflect removal of LEP models;
+  no code was changed.
+
+27th March 2013  John Allison  (exam-ext-vis-UVA-V09-06-01)
+- Added separators between functions.
+
+14th December 2012  Alberto Ribon  (exam-ext-vis-UVA-V09-06-00)
+- Replaced physics list QGSP_BIC_EMY with FTFP_BERT.
 
 11th June 2012  John Allison  (exam-ext-vis-UVA-V09-05-04)
 - Improved README.

@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSPrimaryGeneratorAction.cc 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/src/WLSPrimaryGeneratorAction.cc
 /// \brief Implementation of the WLSPrimaryGeneratorAction class
 //
 //
-//
-
 #include "G4ios.hh"
 #include "G4Event.hh"
 
@@ -51,51 +51,59 @@
 
 #include "G4SystemOfUnits.hh"
 
-G4bool WLSPrimaryGeneratorAction::first = false;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool WLSPrimaryGeneratorAction::fFirst = false;
 
 WLSPrimaryGeneratorAction::
-                         WLSPrimaryGeneratorAction(WLSDetectorConstruction* DC)
+                         WLSPrimaryGeneratorAction(WLSDetectorConstruction* dc)
 {
-  detector = DC;
-  theIntegralTable = NULL;
+  fDetector = dc;
+  fIntegralTable = NULL;
 
-  particleGun = new G4GeneralParticleSource();
+  fParticleGun = new G4GeneralParticleSource();
  
-  gunMessenger = new WLSPrimaryGeneratorMessenger(this);
+  fGunMessenger = new WLSPrimaryGeneratorMessenger(this);
 
   // G4String particleName;
   // G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 
-  timeConstant = 0.;
+  fTimeConstant = 0.;
 
-//  particleGun->SetParticleDefinition(particleTable->
+//  fParticleGun->SetParticleDefinition(particleTable->
 //                               FindParticle(particleName="opticalphoton"));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSPrimaryGeneratorAction::~WLSPrimaryGeneratorAction()
 {
-  delete particleGun;
-  delete gunMessenger;
-  if (theIntegralTable) {
-     theIntegralTable->clearAndDestroy();
-     delete theIntegralTable;
+  delete fParticleGun;
+  delete fGunMessenger;
+  if (fIntegralTable) {
+     fIntegralTable->clearAndDestroy();
+     delete fIntegralTable;
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPrimaryGeneratorAction::SetDecayTimeConstant(G4double time)
 {
-  timeConstant = time;
+  fTimeConstant = time;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPrimaryGeneratorAction::BuildEmissionSpectrum()
 {
-   if (theIntegralTable) return;
+   if (fIntegralTable) return;
 
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
    G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
-   if(!theIntegralTable)theIntegralTable = new G4PhysicsTable(numOfMaterials);
+   if(!fIntegralTable)fIntegralTable = new G4PhysicsTable(numOfMaterials);
 
    for (G4int i=0 ; i < numOfMaterials; i++) {
 
@@ -139,14 +147,16 @@ void WLSPrimaryGeneratorAction::BuildEmissionSpectrum()
              }
           }
        }
-       theIntegralTable->insertAt(i,aPhysicsOrderedFreeVector);
+       fIntegralTable->insertAt(i,aPhysicsOrderedFreeVector);
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if (!first) {
-     first = true;
+  if (!fFirst) {
+     fFirst = true;
      BuildEmissionSpectrum();
   }
 
@@ -167,7 +177,7 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
          if (WLSIntensity) {
             G4int MaterialIndex = fMaterial->GetIndex();
             G4PhysicsOrderedFreeVector* WLSIntegral =
-              (G4PhysicsOrderedFreeVector*)((*theIntegralTable)(MaterialIndex));
+              (G4PhysicsOrderedFreeVector*)((*fIntegralTable)(MaterialIndex));
 
             G4double CIImax = WLSIntegral->GetMaxValue();
             G4double CIIvalue = G4UniformRand()*CIImax;
@@ -177,16 +187,18 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       }
   }
 
-  //particleGun->SetParticleEnergy(sampledEnergy);
+  //fParticleGun->SetParticleEnergy(sampledEnergy);
 #endif
 
-  if(particleGun->GetParticleDefinition()->GetParticleName()=="opticalphoton"){
+  if(fParticleGun->GetParticleDefinition()->GetParticleName()=="opticalphoton"){
     SetOptPhotonPolar();
     SetOptPhotonTime();
   }
 
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPrimaryGeneratorAction::SetOptPhotonPolar()
 {
@@ -194,17 +206,19 @@ void WLSPrimaryGeneratorAction::SetOptPhotonPolar()
   SetOptPhotonPolar(angle);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPrimaryGeneratorAction::SetOptPhotonPolar(G4double angle)
 {
-  if (particleGun->GetParticleDefinition()->GetParticleName()!="opticalphoton")
+  if (fParticleGun->GetParticleDefinition()->GetParticleName()!="opticalphoton")
   {
      G4cout << "-> warning from WLSPrimaryGeneratorAction::SetOptPhotonPolar()"
-            << ":  the particleGun is not an opticalphoton" << G4endl;
+            << ":  the ParticleGun is not an opticalphoton" << G4endl;
      return;
   }
 
   G4ThreeVector normal (1., 0., 0.);
-  G4ThreeVector kphoton = particleGun->GetParticleMomentumDirection();
+  G4ThreeVector kphoton = fParticleGun->GetParticleMomentumDirection();
   G4ThreeVector product = normal.cross(kphoton);
   G4double modul2       = product*product;
 
@@ -213,12 +227,14 @@ void WLSPrimaryGeneratorAction::SetOptPhotonPolar(G4double angle)
   G4ThreeVector e_paralle    = e_perpend.cross(kphoton);
 
   G4ThreeVector polar = std::cos(angle)*e_paralle + std::sin(angle)*e_perpend;
-  particleGun->SetParticlePolarization(polar);
+  fParticleGun->SetParticlePolarization(polar);
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPrimaryGeneratorAction::SetOptPhotonTime()
 {
-   G4double time = -std::log(G4UniformRand())*timeConstant;
-   particleGun->SetParticleTime(time);
+   G4double time = -std::log(G4UniformRand())*fTimeConstant;
+   fParticleGun->SetParticleTime(time);
 }

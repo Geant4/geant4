@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PhotoNuclearProcess.hh 69176 2013-04-22 06:51:19Z gcosmo $
 //
 // Class Description
 // Process for photon nuclear inelastic scattering; 
@@ -45,7 +45,7 @@ class G4PhotoNuclearProcess : public G4HadronInelasticProcess
 {
   public:
     
-    G4PhotoNuclearProcess(const G4String& processName = "PhotonInelastic")
+    G4PhotoNuclearProcess(const G4String& processName = "photonNuclear")
       : G4HadronInelasticProcess(processName, G4Gamma::Gamma() )
     {
       G4CrossSectionDataStore* theStore = GetCrossSectionDataStore();

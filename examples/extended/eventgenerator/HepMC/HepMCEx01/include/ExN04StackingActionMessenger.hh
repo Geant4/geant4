@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04StackingActionMessenger.hh
 /// \brief Definition of the ExN04StackingActionMessenger class
 //
+// $Id: ExN04StackingActionMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #ifndef ExN04StackingActionMessenger_h
 #define ExN04StackingActionMessenger_h 1
@@ -37,27 +39,22 @@ class G4UIcmdWithADoubleAndUnit;
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class ExN04StackingActionMessenger: public G4UImessenger
-{
-  public:
-    ExN04StackingActionMessenger(ExN04StackingAction* msa);
-    ~ExN04StackingActionMessenger();
-    
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+class ExN04StackingActionMessenger: public G4UImessenger {
+public:
+  ExN04StackingActionMessenger(ExN04StackingAction* msa);
+  ~ExN04StackingActionMessenger();
 
-  private:
-    ExN04StackingAction * myAction;
-    
-  private: //commands
-    G4UIcmdWithAnInteger * muonCmd;
-    G4UIcmdWithAnInteger * isomuonCmd;
-    G4UIcmdWithAnInteger * isoCmd;
-    G4UIcmdWithADoubleAndUnit * roiCmd;
-    
+  void SetNewValue(G4UIcommand * command,G4String newValues);
+  G4String GetCurrentValue(G4UIcommand * command);
+
+private:
+  ExN04StackingAction * myAction;
+
+  G4UIcmdWithAnInteger * muonCmd;
+  G4UIcmdWithAnInteger * isomuonCmd;
+  G4UIcmdWithAnInteger * isoCmd;
+  G4UIcmdWithADoubleAndUnit * roiCmd;
+
 };
 
 #endif
-
-

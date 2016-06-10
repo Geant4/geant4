@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2010-03-24 21:04:23 gcosmo Exp $
+$Id: History 77475 2013-11-25 09:38:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,65 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 22nd, 2013 A. Howard - B01-V09-06-12
+- Removed non-english variable names
+
+Nov 22nd, 2013 A. Howard - B01-V09-06-11
+- changed main() to standard number of threads
+- co-working with 
+  	     	  geombias-V09-06-05
+  	     	  phys-ctor-limiters-V09-06-012
+  	     	  procbiasing-V09-06-09
+
+Nov 22nd, 2013 A. Howard - B01-V09-06-10
+- updated History file for the co-working tags
+- co-working with 
+  	     	  geombias-V09-06-05
+  	     	  phys-ctor-limiters-V09-06-012
+  	     	  procbiasing-V09-06-09
+
+Nov 22nd, 2013 A. Howard - B01-V09-06-09
+- updated History file for the co-working tags
+- co-working with 
+  	     	  geombias-V09-06-05
+  	     	  phys-ctor-limiters-V09-06-012
+  	     	  procbiasing-V09-06-09
+
+Nov 22nd, 2013 A. Howard - B01-V09-06-08
+- fixed erroneous pointer reference and cleaned code a little
+- co-working with 
+  	     	  geombias-V09-06-05
+  	     	  phys-ctor-limiters-V09-06-012
+  	     	  procbiasing-V09-06-09
+
+Nov 22nd, 2013 A. Howard - B01-V09-06-07
+- migrated to MT (new modular physicslist based implementation)
+- co-working with 
+  	     	  geombias-V09-06-05
+  	     	  phys-ctor-limiters-V09-06-012
+  	     	  procbiasing-V09-06-09
+
+Aug 5th, 2013 A. Howard - B01-V09-06-06
+- removed fFieldName in B01RunAction as it's redundant
+
+July 24th, 2013 P. Gumplinger - B01-V09-06-05
+- actually use private field fFieldName in B01RunAction.cc
+
+22 July 2013   Dennis Wright  B01-V09-06-04
+- replaced B01PhysicsList with FTFP_BERT as part of LHEP removal
+
+May 27th, 2013 I.hrivnacova - B01-V09-06-03
+- Applied coding guidelines (virtual keyword, base class initialization)
+
+May 22nd, 2013 A.Howard - B01-V09-06-02
+- Applied coding guidelines for extended examples more correctly
+
+May 22nd, 2013 A.Howard - B01-V09-06-01
+- Applied coding guidelines for extended examples 
+
+Dec 17th, 2012 A.Howard - B01-V09-06-00
+- Removed reference to obsolete G4CellScorer classes
 
 Nov 28th, 2012 G.Cosmo - B01-V09-05-01
 - Fixed cases of variable shadowing.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicalVolumeStore.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // class G4PhysicalVolume
 //
@@ -90,8 +90,8 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
   private:
 
     static G4PhysicalVolumeStore* fgInstance;
-    static G4VStoreNotifier* fgNotifier;
-    static G4bool locked;
+    static G4ThreadLocal G4VStoreNotifier* fgNotifier;
+    static G4ThreadLocal G4bool locked;
 };
 
 #endif

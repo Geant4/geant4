@@ -12,6 +12,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3/12/2013  I.Hrivnacova (exgps-V09-06-05)
+- Fixed file descriptions (for Doxygen)
+
+3/12/2013  I.Hrivnacova (exgps-V09-06-04)
+- Updated README for removing AIDA
+
+9/11/2013  L.Desorgher (exgps-V09-06-03)
+- Migration to g4tools
+- Migration to G4MT
+
+12/06/2013  I.Hrivnacova (exgps-V09-06-02)
+- Code clean-up: indention, redundant public/protected/private keywords
+
+06/06/2013  L.Desorgher (exgps-V09-06-01)
+- Applied coding guidelines (tabs and long lines)
+
+13/02/2013  I.Hrivnacova (exgps-V09-06-00)
+- Applied coding guidelines (data member initialization)
+
 20/11/2012  Ivana Hrivnacova  (exgps-V09-05-05)
 - Fixed the list of scripts in CMakeLists.txt
 

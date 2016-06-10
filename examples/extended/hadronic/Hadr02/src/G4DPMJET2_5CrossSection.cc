@@ -36,6 +36,8 @@
 /// \file hadronic/Hadr02/src/G4DPMJET2_5CrossSection.cc
 /// \brief Implementation of the G4DPMJET2_5CrossSection class
 //
+// $Id: G4DPMJET2_5CrossSection.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET2_5CrossSection.cc
@@ -54,13 +56,11 @@
 
 
 #include "G4DPMJET2_5CrossSection.hh"
-#include "G4ParticleTable.hh"
 #include "G4DynamicParticle.hh"
-#include "G4IonTable.hh"
-
+#include "G4NucleiProperties.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
-#include "G4StableIsotopes.hh"
-#include "G4HadTmpUtil.hh"
 
 #include "globals.hh"
 
@@ -79,24 +79,24 @@ G4DPMJET2_5CrossSection::G4DPMJET2_5CrossSection ():
 {
   theCrossSectionIndex.clear();
   Initialise();
-//
-//
-// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-// This next bit is provisional, stating that this cross-section estimator
-// is applicable to hydrogen targets.  However, the cross-section will be
-// set to zero.
-//
+  //
+  //
+  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+  // This next bit is provisional, stating that this cross-section estimator
+  // is applicable to hydrogen targets.  However, the cross-section will be
+  // set to zero.
+  //
   ATmin = 1;
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  //
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4DPMJET2_5CrossSection::~G4DPMJET2_5CrossSection ()
 {
-//
-// Go through the list of cross-section fit parameters and delete the arrays.
-//
+  //
+  // Go through the list of cross-section fit parameters and delete the arrays.
+  //
   G4cout << "G4DPMJET2_5CrossSection::~G4DPMJET2_5CrossSection" << G4endl;
   G4cout << "Size: " << theCrossSectionIndex.size() << G4endl;
   /*  
@@ -114,88 +114,41 @@ G4DPMJET2_5CrossSection::~G4DPMJET2_5CrossSection ()
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4DPMJET2_5CrossSection::IsApplicable
-  (const G4DynamicParticle* theProjectile, const G4Element* theTarget)
+G4bool 
+G4DPMJET2_5CrossSection::IsIsoApplicable(const G4DynamicParticle* theProjectile, 
+					 G4int, G4int AT,
+					 const G4Element*, const G4Material*)
 {
-  static G4StableIsotopes theDefaultIsotopes;  // natural abundances and 
-                                               // stable isotopes
-//
-//
-// Determine first if the user has defined her own isotopic composition for the
-// element.
-//
-  G4int nIso = theTarget->GetNumberOfIsotopes();
-  G4bool result = true;
-     
-  if (nIso) {
-//
-//
-// Determine whether we have the necessary data loaded for the user-defined
-// cross-section.
-//
-    G4IsotopeVector* isoVector = theTarget->GetIsotopeVector();
-    G4double ZZ = 0.0;
-    G4double AA = 0.0;
-    G4int i     = 0;
-     
-    do {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
-      result = IsZAApplicable(theProjectile, ZZ, AA);
-    } while (result && ++i < nIso);
-  } else {
-//
-//
-// Determine whether we have the necessary data loaded for the natural
-// abundance composition of the element.
-//
-    G4int ZZ    = G4lrint(theTarget->GetZ());
-    nIso        = theDefaultIsotopes.GetNumberOfIsotopes(ZZ);
-    G4int index = theDefaultIsotopes.GetFirstIsotope(ZZ);
-    G4double AA = 0.0;
-    G4int i     = 0;
-    do {
-      AA     = G4double( theDefaultIsotopes.GetIsotopeNucleonCount(index+i) );
-      result = IsZAApplicable(theProjectile, G4double(ZZ), AA);
-    } while (result && ++i < nIso);
+  G4bool result = false;
+  G4int AP = theProjectile->GetDefinition()->GetBaryonNumber();
+  if(AP >= 1) {
+    G4double EPN = theProjectile->GetKineticEnergy()/G4double(AP);
+    result = (EPN >= lowerLimit && EPN <= upperLimit &&
+	      AT  >= ATmin      && AT  <= ATmax &&
+	      AP  >= APmin      && AP  <= APmax);
   }
-  G4cout << "G4DPMJET2_5CrossSection::IsApplicable E(GeV)= "
-         << theProjectile->GetKineticEnergy()/GeV << " off "
-         << theTarget->GetName() << " - " << result << G4endl;
   return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4DPMJET2_5CrossSection::IsZAApplicable
-  (const G4DynamicParticle* theProjectile, G4double , G4double AA)
+G4double 
+G4DPMJET2_5CrossSection::GetIsoCrossSection(
+    const G4DynamicParticle* theProjectile, 
+    G4int ZZ, G4int AT, const G4Isotope*,
+    const G4Element*, const G4Material*)
 {
-  const G4int AT = G4lrint(AA);
-  const G4int AP = G4lrint(theProjectile->GetDefinition()->GetBaryonNumber());
-  G4double EPN   = theProjectile->GetKineticEnergy()/
-    theProjectile->GetDefinition()->GetBaryonNumber();
-  G4bool result  = EPN >= lowerLimit && EPN <= upperLimit &&
-                   AT  >= ATmin      && AT  <= ATmax &&
-                   AP  >= APmin      && AP  <= APmax;
-  return result;
-}
-///////////////////////////////////////////////////////////////////////////////
-//
-G4double G4DPMJET2_5CrossSection::GetIsoZACrossSection
-  (const G4DynamicParticle* theProjectile, G4double ZZ, G4double AA,
-   G4double /*theTemperature*/)
-{
-//
-// Initialise the result.
+  //
+  // Initialise the result.
   G4double result = 0.0;
-//
-//
-// Get details of the projectile and target (nucleon number, atomic number,
-// kinetic enery and energy/nucleon.
-//
-  const G4int AT    = G4lrint(AA);
-  G4int AP          = G4lrint(theProjectile->GetDefinition()->GetBaryonNumber());
-  const G4double TP = theProjectile->GetKineticEnergy();
-  G4double EPN      = TP / AP;
+  //
+  //
+  // Get details of the projectile and target (nucleon number, atomic number,
+  // kinetic enery and energy/nucleon.
+  //
+  G4int AP     = theProjectile->GetDefinition()->GetBaryonNumber();
+  G4double TP  = theProjectile->GetKineticEnergy();
+  G4double EPN = TP /G4double(AP);
 
   if (AT < ATmin || AT > ATmax || AP < APmin || AP > APmax ||
       EPN < lowerLimit || EPN > upperLimit)
@@ -216,26 +169,24 @@ G4double G4DPMJET2_5CrossSection::GetIsoZACrossSection
     G4cout <<G4endl;
     return result;
   }
-//
-//
-// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-// This next bit is provisional, stating that this cross-section hydrogen
-// targets is zero.
-//
+  //
+  //
+  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+  // This next bit is provisional, stating that this cross-section hydrogen
+  // targets is zero.
+  //
   if ( AT == 1 ) return 0.0;
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//
-//
-//
-// Results are parameterised as a function of the natural logarithm of the
-// centre of mass energy of the projectile and target system.
-//
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  //
+  //
+  //
+  // Results are parameterised as a function of the natural logarithm of the
+  // centre of mass energy of the projectile and target system.
+  //
   G4double sigma = 0.0;
-  G4double mT    = G4ParticleTable::GetParticleTable()
-                ->GetIonTable()
-                ->GetIonMass(static_cast<G4int>(ZZ), static_cast<G4int>(AT));
+  G4double mT    = G4NucleiProperties::GetNuclearMass(AT, ZZ);
   G4double EP    = theProjectile->GetTotalEnergy();
-  G4double mP    = EP - TP;
+  G4double mP    = theProjectile->GetDefinition()->GetPDGMass();
   G4double lnECM = std::log(std::sqrt(mP*mP + mT*mT + 2.0*mT*EP));
   G4DPMJET2_5CrossSectionIndex::iterator it = theCrossSectionIndex.find(AT);
   if (it != theCrossSectionIndex.end())
@@ -249,10 +200,10 @@ G4double G4DPMJET2_5CrossSection::GetIsoZACrossSection
     if (verboseLevel >= 2) {
       G4cout <<"***************************************************************"
              <<G4endl;
-      G4cout <<"G4DPMJET2_5CrossSection::GetIsoZACrossSection" <<G4endl;
+      G4cout <<"G4DPMJET2_5CrossSection::GetIsoCrossSection" <<G4endl;
       G4cout <<"PROJECTILE    = "
              <<theProjectile->GetDefinition()->GetParticleName() <<G4endl;
-      G4cout <<"TARGET (A,Z)  = (" <<AA <<"," <<ZZ <<")" <<G4endl;
+      G4cout <<"TARGET (A,Z)  = (" <<AT <<"," <<ZZ <<")" <<G4endl;
       G4cout <<"K. ENERGY/NUC = " <<EPN/MeV <<" MeV/n" <<G4endl;
       G4cout <<"CROSS SECTION = " <<sigma/millibarn <<" MILLIBARNS" <<G4endl;
       G4cout <<"***************************************************************"
@@ -262,7 +213,7 @@ G4double G4DPMJET2_5CrossSection::GetIsoZACrossSection
   else
   {
     G4cout <<G4endl;
-    G4cout <<"ERROR IN G4DPMJET2_5CrossSection::GetIsoZACrossSection" <<G4endl;
+    G4cout <<"ERROR IN G4DPMJET2_5CrossSection::GetIsoCrossSection" <<G4endl;
     G4cout <<"NO CROSS-SECTION FIT DATA LOADED FOR AT = " <<AT        <<G4endl;
     G4cout <<G4endl;
   }
@@ -271,89 +222,14 @@ G4double G4DPMJET2_5CrossSection::GetIsoZACrossSection
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4DPMJET2_5CrossSection::GetCrossSection
-  (const G4DynamicParticle* theProjectile, const G4Element* theTarget,
-  G4double theTemperature)
-{
-//  DumpPhysicsTable(*(theProjectile->GetDefinition()));
-  static G4StableIsotopes theDefaultIsotopes;  // natural abundances and 
-                                               // stable isotopes
-//
-//
-// Determine first if the user has defined her own isotopic composition for the
-// element.
-//
-  G4int nIso = theTarget->GetNumberOfIsotopes();
-  G4double xsection = 0;
-     
-  if (nIso) {
-//
-//
-// User-defined cross-section.
-//
-    G4double sig = 0.0;
-    G4IsotopeVector* isoVector = theTarget->GetIsotopeVector();
-    G4double* abundVector = theTarget->GetRelativeAbundanceVector();
-    G4double ZZ = 0.0;
-    G4double AA = 0.0;
-     
-    for (G4int i = 0; i < nIso; i++) {
-      ZZ  = G4double( (*isoVector)[i]->GetZ() );
-      AA  = G4double( (*isoVector)[i]->GetN() );
-      sig = GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
-      xsection += sig*abundVector[i];
-    }
-   
-  } else {
-//
-//
-// Calculation of cross-section for natural abundance.
-//
-    G4double sig = 0.0;
-    G4int ZZ     = G4lrint(theTarget->GetZ());
-    nIso         = theDefaultIsotopes.GetNumberOfIsotopes(ZZ);
-    G4int index  = theDefaultIsotopes.GetFirstIsotope(ZZ);
-    G4double AA  = 0.0;
-    G4double ab  = 0.0;
-    for (G4int i = 0; i < nIso; i++) {
-      AA  = G4double( theDefaultIsotopes.GetIsotopeNucleonCount(index+i) );
-      ab  = theDefaultIsotopes.GetAbundance(index+i)/100.0;
-      sig = GetIsoZACrossSection(theProjectile, G4double(ZZ), AA,
-            theTemperature);
-      xsection += sig*ab;
-    }
-  }
-    
-  if (verboseLevel >= -2) {
-    G4int AP          = G4lrint(theProjectile->GetDefinition()->GetBaryonNumber());
-    const G4double TP = theProjectile->GetKineticEnergy();
-    G4double EPN      = TP / AP;
-    G4cout <<"***************************************************************"
-           <<G4endl;
-    G4cout <<"G4DPMJET2_5CrossSection::GetCrossSection" <<G4endl;
-    G4cout <<"PROJECTILE    = "
-           <<theProjectile->GetDefinition()->GetParticleName() <<G4endl;
-    G4cout <<"TARGET        = " <<theTarget->GetName() <<G4endl;
-    G4cout <<"K. ENERGY/NUC = " <<EPN/MeV <<" MeV/n" <<G4endl;
-    G4cout <<"CROSS SECTION = " <<xsection/millibarn <<" MILLIBARNS" <<G4endl;
-    G4cout <<"***************************************************************"
-           <<G4endl;
-  }
-
-  return xsection;
-}
-///////////////////////////////////////////////////////////////////////////////
-//
 void G4DPMJET2_5CrossSection::Initialise ()
 {
-  static G4StableIsotopes theDefaultIsotopes;  // natural abundances and 
-                                               // stable isotopes
   //verboseLevel = 2;
-//
-//
-// Determine first if the environment variable G4DPMJET2_5DATA is set.  If not
-// then ask for it to be set and call exception.
-//
+  //
+  //
+  // Determine first if the environment variable G4DPMJET2_5DATA is set.  If not
+  // then ask for it to be set and call exception.
+  //
   if ( !getenv("G4DPMJET2_5DATA") )
   {
     G4cout <<"ENVIRONMENT VARIABLE G4DPMJET2_5DATA NOT SET " <<G4endl;
@@ -366,102 +242,78 @@ void G4DPMJET2_5CrossSection::Initialise ()
 
   std::ifstream glauberXSFile(filename);
   if (glauberXSFile) {
-//
-//
-// Glaubercross-section file does exist, so read in maximum and minimum A
-// for target and projectile.
-//
+    //
+    //
+    // Glaubercross-section file does exist, so read in maximum and minimum A
+    // for target and projectile.
+    //
     glauberXSFile >>APmin >>APmax >>ATmin >>ATmax;
-//
-//
-// Determine the list of targets based on the G4ElementList.  The list of
-// target nucleon numbers is stored as a ket to the map theCrossSectionIndex.
-// G4double[240][3] array objects are created to allow storage of the 
-// cross-section fit parameters.
-//
+    //
+    //
+    // Determine the list of targets based on the G4ElementList.  The list of
+    // target nucleon numbers is stored as a ket to the map theCrossSectionIndex.
+    // G4double[240][3] array objects are created to allow storage of the 
+    // cross-section fit parameters.
+    //
     const G4ElementTable *theElementTable = G4Element::GetElementTable();
     G4ElementTable::const_iterator it;
     for (it=theElementTable->begin(); it!=theElementTable->end(); it++)
-    {
-      G4int nIso = (*it)->GetNumberOfIsotopes();
-      if (nIso) {
-//
-//
-// The user has defined her own isotopes associated with this element.  Read
-// the nucleon numbers.
-//
-        G4IsotopeVector* isoVector = (*it)->GetIsotopeVector();
-        for (G4int i = 0; i < nIso; i++)
-        {
-          G4int AA = (*isoVector)[i]->GetN();
-          if (theCrossSectionIndex.count(AA) == 0 && AA >= ATmin && AA <= ATmax)
-          {
+      {
+	G4int nIso = (*it)->GetNumberOfIsotopes();
+	G4IsotopeVector* isoVector = (*it)->GetIsotopeVector();
+	for (G4int i = 0; i < nIso; i++)
+	  {
+	    G4int AA = (*isoVector)[i]->GetN();
+	    if (theCrossSectionIndex.count(AA) == 0 && 
+		AA >= ATmin && AA <= ATmax)
+	      {
 //
 //
 // Whilst the use of std::map should eliminate duplication of keys, we need to
 // know whether isotope's with the same nucleon number have been declared before
 // creating the large arrays, hence the use of the "count" member function.
 //
-            G4DPMJET2_5CrossSectionParamSet *a =
-              new G4DPMJET2_5CrossSectionParamSet[maxA];
-            theCrossSectionIndex.insert(
-              G4DPMJET2_5CrossSectionIndex::value_type(AA,a));
-          }
-        }
-      } else {
-//
-//
-// Determine the natural isotopic abundances for this element.
-//
-        G4int ZZ    = G4lrint((*it)->GetZ());
-        nIso        = theDefaultIsotopes.GetNumberOfIsotopes(ZZ);
-        G4int index = theDefaultIsotopes.GetFirstIsotope(ZZ);
-        G4int AA    = 0;
-        for (G4int i = 0; i < nIso; i++) {
-          AA = theDefaultIsotopes.GetIsotopeNucleonCount(index+i);
-          if (theCrossSectionIndex.count(AA) == 0 && AA >= ATmin && AA <= ATmax)
-          {
-            G4DPMJET2_5CrossSectionParamSet *a =
-              new G4DPMJET2_5CrossSectionParamSet[maxA];
-            theCrossSectionIndex.insert(
-              G4DPMJET2_5CrossSectionIndex::value_type(AA,a));
-          }
-        }
+		G4DPMJET2_5CrossSectionParamSet *a =
+		  new G4DPMJET2_5CrossSectionParamSet[maxA];
+		theCrossSectionIndex.insert(
+                  G4DPMJET2_5CrossSectionIndex::value_type(AA,a));
+	      }
+	  }
       }
-    }
-//
-//
-// Now proceed to read in the remainder of the GlauberCrossSection.dat file,
-// loading into theCrossSectionIndex any relevant fitting parameters to the
-// target nuclei.
-//
+    
+    //
+    //
+    // Now proceed to read in the remainder of the GlauberCrossSection.dat file,
+    // loading into theCrossSectionIndex any relevant fitting parameters to the
+    // target nuclei.
+    //
     char inputChars[80]={' '};
     G4String inputLine;
     while (-glauberXSFile.getline(inputChars, 80).eof() != EOF)
-    {
-      inputLine = inputChars;
-      if (inputLine.length() != 0)
       {
-        std::istringstream tmpStream(inputLine);
-        G4int AP, AT;
-        G4double cc0, cc1, cc2;
-        tmpStream >>AP >>AT >>cc0 >>cc1 >>cc2;
-        G4DPMJET2_5CrossSectionIndex::iterator it = theCrossSectionIndex.find(AT);
-        if (it != theCrossSectionIndex.end())
-        {
-          G4DPMJET2_5CrossSectionParamSet *ptr = (it->second) + AP;
-          *ptr = G4DPMJET2_5CrossSectionParamSet(cc0,cc1,cc2);
-        }
+	inputLine = inputChars;
+	if (inputLine.length() != 0)
+	  {
+	    std::istringstream tmpStream(inputLine);
+	    G4int AP, AT;
+	    G4double cc0, cc1, cc2;
+	    tmpStream >>AP >>AT >>cc0 >>cc1 >>cc2;
+	    G4DPMJET2_5CrossSectionIndex::iterator IT = 
+	      theCrossSectionIndex.find(AT);
+	    if (IT != theCrossSectionIndex.end())
+	      {
+		G4DPMJET2_5CrossSectionParamSet *ptr = (IT->second) + AP;
+		*ptr = G4DPMJET2_5CrossSectionParamSet(cc0,cc1,cc2);
+	      }
+	  }
       }
-    }
 
     glauberXSFile.close();
     G4cout << "G4DPMJET2_5CrossSection::Initialise () done!" << G4endl;
-  }
-  else {
+  } else {
     G4cout <<"GlauberCrossSections.dat DOES NOT EXIST" <<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, 
-      "GlauberCrossSections.dat should be located in $G4DPMJET2_5DATA directory.");
+  "GlauberCrossSections.dat should be located in $G4DPMJET2_5DATA directory.");
   }
 }
 ///////////////////////////////////////////////////////////////////////////////

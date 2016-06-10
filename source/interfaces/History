@@ -1,4 +1,4 @@
-$Id: History,v 1.158 2010-12-23 14:09:53 lgarnier Exp $
+$Id: History 78056 2013-12-03 08:29:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,155 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd December 2013  Laurent Garnier (interfaces-V09-06-17)
+- G4UIQt : Fix a bad bug fixed 29th November 2013. The menu name was displayed
+  instead of the label.
+
+29th November 2013  Laurent Garnier (interfaces-V09-06-16)
+- G4UIQt : Fix a bug introduce the 13th November 2013. Menu name was blank, I had 
+  remove the name parameter by mistake.
+
+14th November 2013  Laurent Garnier (interfaces-V09-06-15)
+- G4UIQt : Fix a bug introduce the 13th November 2013 : JIRA DEV-101
+
+13th November 2013  Laurent Garnier (interfaces-V09-06-14)
+- G4UIQt :
+ o Add a fix for JIRA DEV-98. Qt5 driver is broken with Qt5.0.1 version, the only fix we could
+   do, is to warn users that there will not be any Store/Immediate viewer support for Qt5.0. We
+   advice them to update to Qt5.1. Few users will have this configuration since we are already
+   in Qt5.2
+
+13th November 2013  Laurent Garnier
+- G4UIQt :
+ o Remove QWidget unuseful argument for G4QtTabWidget
+ o Better layouts management (does not fix anything)
+
+9th November 2013  Laurent Garnie (interfaces-V09-06-13)
+- G4UIQt : Fix a shadowing variable
+
+8th November 2013  Laurent Garnier (interfaces-V09-06-12)
+- G4UIQt :
+ o Fix JIRA issue DEV-10 : "When adding a button with "/vis/viewer/set/style",
+   the parameters are not proposed."
+
+8th November 2013  Laurent Garnier (interfaces-V09-06-11)
+- G4UIQt :
+ o Fix JIRA issue DEV-67 : remove warning when adding a new command button
+ o Fix a possible problem on widgets parent.
+
+7th November 2013  Laurent Garnier
+- G4UIQt : Fix JIRA issue DEV-94 : Crash when closing the last tab
+
+6th November 2013  Laurent Garnier (interfaces-V09-06-10)
+- G4UIQt : Fix compilation error on X11.
+
+5th November 2013  Laurent Garnier (interfaces-V09-06-09)
+- G4UIQt : Fix some resizing problems.
+- G4UIWt : Fix some warnings
+
+5th November 2013  Laurent Garnier
+- G4UIQt :
+  o Fix a problem on Linux reported by Ivana : Impossible to change
+    the size of the OpenGL viewer
+  o Fix the size of the OpenGL viewer to be the same as send in parameters
+    (for ex: 600x600)
+
+31th October 2013  Laurent Garnier
+- G4UIQt : Fix JIRA issue DEV-93 about "Directory descriptions does not 
+  appear at the place they should be."
+
+24th October 2013  Laurent Garnier
+- G4UIQt : Fix coverity
+  o 23063 Uninitialized pointer field
+  o 47057 Logically dead code 
+  o 53243 Uninitialized scalar field 
+
+23th October 2013  Laurent Garnier (interfaces-V09-06-08 need cmake-V09-06-29)
+- sources.cmake : Remove Qt5 configuration, it is now include in cmake.
+
+14th October 2013  Laurent Garnier (interfaces-V09-06-07)
+- G4UIWt : 
+  o Fix a warning about "/*" within comment
+
+10th October 2013  Laurent Garnier (interfaces-V09-06-06)
+                      forgot to tag interfaces-V09-06-05)
+- G4UIQt :
+  o Fix SecondaryLoop for Qt. It was doing nothing at all, now processing
+    events until exitPause = true
+  o Remove debug statements
+
+23th August 2013  Laurent Garnier
+- Add first draft classes for Wt (web based interfaces) common/src/G4Wt.cc common/include/G4Wt.hh basic/include/G4UIWt.hh basic/src/G4UIWt.cc
+- G4UIQt : Remove unused parameter
+- G4UIExecutive : Add BUILD_WT case (not yet done for cmake)
+
+12th August 2013  Laurent Garnier
+- G4UIQt : 
+   o Add a field to memorise the last open directory on Icon->Open
+   o Fix some warning messages
+- G4UIQt, G4Qt : Change some G4cout messages to be displayed only when
+  verbosity >= 2
+
+8th August 2013  Laurent Garnier
+- G4VBasicShell::ExecuteCommand : Add information when command not found
+- G4UIQt.cc : in ReceveiveG4Cerr, change behavious :
+   o before on each G4err it was displaying an alert box, now it display an alert
+     box only if it will Abort or Quit the programm
+   o All G4err messages are now in red. Previously there were sometimes changing 
+     color to black. 
+   o When entering a command, if this command is multiple line it will now take 
+     it in account as multiples commands.
+
+7th August 2013  Laurent Garnier
+- G4UIQt.cc :
+  o Change the name of the fileselector on the open/save Icon
+  o Fix a potential problem on the ToolBar
+  o Add a public method to get the MainWindow
+ 
+1st August 2013  Laurent Garnier
+- G4Qt.cc : Fiw a non UTF8 caracter (bug #1487)
+ 
+2nd July 2013  Laurent Garnier
+- G4UIQt.cc : Fix coverity defect 48022
+ 
+27th June 2013  Laurent Garnier
+- G4UIQt.cc : Improve OGL window resizing by opening to a bigger size, changing
+  strech factors and others little effects.
+ 
+18th June 2013  Laurent Garnier
+- G4UIQt.cc: Add some minors improvements to Qt interface
+  o Minimize border size
+  o OpenGL windows size changing when app size change
+  o Changing some functions signature
+
+3nd June 2013  Laurent Garnier (interfaces-V09-06-02 interfaces-V09-06-03 interfaces-V09-06-04)
+- G4UIQt.cc: Coverity fix:
+  o Initialize class members
+  o Try to fix a Dereference after null check coverity warning.
+
+- G4Qt.hh: Coverity fix:
+  o Made copy constructor and assignment operator private.
+
+2nd June 2013  John Allison (interfaces-V09-06-01)
+- G4Xt.hh: Coverity fix:
+  o Made copy constructor and assignment operator private.
+
+13th May 2013 - Laurent Garnier
+- G4UIQt :
+  o Add some tooltips
+
+1st May 2013 - Laurent Garnier
+- Improvments about Wt driver configuration
+
+25th April 2013  Laurent Garnier
+- Add cmake configuration for Wt and Qt5 in "common" and "basic",
+  check in the code : "!!! ONLY QT4 to be comment with QT5"
+
+7th December 2012  Laurent Garnier
+- Set fix size font in output.
+
+7th December 2012  John Allison (interfaces-V09-06-00)
+- Removed G4UIXaw.
 
 15th November 2012 Laurent Garnier (interfaces-V09-05-36)
 - G4UIQt:

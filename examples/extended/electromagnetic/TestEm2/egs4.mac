@@ -1,4 +1,4 @@
-# $Id: egs4.mac,v 1.7 2010-02-22 15:41:29 maire Exp $
+# $Id: egs4.mac 75118 2013-10-28 09:40:24Z gcosmo $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -7,6 +7,7 @@
 #
 # EGS4 simulation: Particle Data Group - Phys.Rev.D 50-3 - August94
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -14,9 +15,11 @@
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
 #
-/testem/phys/addPhysics  emstandard_opt0
+/testem/phys/addPhysics  emstandard_opt3
 #
-/testem/phys/setCuts 0.7 mm
+/run/setCut 0.7 mm
+/process/em/verbose 1
+/process/em/workerVerbose 0
 #
 # histogram file
 /testem/histo/setFileName egs4/93ref0

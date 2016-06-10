@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyExN03geom.cc,v 1.4 2006-06-29 15:29:21 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyExN03geom.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyExN03geom.cc
 //
@@ -54,7 +53,7 @@ void Construct()
   runMgr-> SetUserInitialization(new ExN03DetectorConstruction);
 }
 
-};
+}
 
 using namespace pyExN03geom;
 
@@ -84,7 +83,7 @@ BOOST_PYTHON_MODULE(ExN03geom) {
 	 return_value_policy<reference_existing_object>())
     .def("GetAbsorberThickness",  &XXX::GetAbsorberThickness)
     .def("GetGapMaterial",        &XXX::GetGapMaterial,
-	 return_value_policy<reference_existing_object>())    
+	 return_value_policy<reference_existing_object>())
     .def("GetGapThickness",       &XXX::GetGapThickness)
     .def("GetphysiWorld",         &XXX::GetphysiWorld,
 	 return_value_policy<reference_existing_object>())

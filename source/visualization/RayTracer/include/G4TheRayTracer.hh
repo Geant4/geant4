@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TheRayTracer.hh 77479 2013-11-25 10:01:22Z gcosmo $
 //
 //
 
@@ -84,28 +84,29 @@ class G4TheRayTracer
     // G4RTSimpleScanner will be used.
 
   public:
-    ~G4TheRayTracer();
+    virtual ~G4TheRayTracer();
 
   public: // with description
-    void Trace(G4String fileName);
+    virtual void Trace(const G4String& fileName);
     // The main entry point which triggers ray tracing. "fileName" is output
     // file name, and it must contain extention (e.g. myFigure.jpg). This
     // method is available only if Geant4 is at Idle state.
 
   protected:
-    G4bool CreateBitMap();
+    virtual G4bool CreateBitMap();
     // Event loop
-    void CreateFigureFile(G4String fileName);
+    void CreateFigureFile(const G4String& fileName);
     // Create figure file after an event loop
     G4bool GenerateColour(G4Event* anEvent);
     // Calcurate RGB for one trajectory
-    void StoreUserActions();
-    void RestoreUserActions();
+    virtual void StoreUserActions();
+    virtual void RestoreUserActions();
     // Store and restore user action classes if defined
 
     G4Colour GetSurfaceColour(G4RayTrajectoryPoint* point);
-    G4Colour GetMixedColour(G4Colour surfCol,G4Colour transCol,G4double weight=0.5);
-    G4Colour Attenuate(G4RayTrajectoryPoint* point, G4Colour sourceCol);
+    G4Colour GetMixedColour
+    (const G4Colour& surfCol,const G4Colour& transCol,G4double weight=0.5);
+    G4Colour Attenuate(G4RayTrajectoryPoint* point,const G4Colour& sourceCol);
     G4bool ValidColour(const G4VisAttributes* visAtt);
 
   public: // with description
@@ -181,7 +182,7 @@ class G4TheRayTracer
     inline G4double GetAttenuationLength() const { return attenuationLength; }
     inline void SetDistortion(G4bool val) { distortionOn = val; }
     inline G4bool GetDistortion() const { return distortionOn; }
-    inline void SetBackgroundColour(G4Colour val) { backgroundColour = val; }
+    inline void SetBackgroundColour(const G4Colour& val) { backgroundColour = val; }
     inline G4Colour GetBackgroundColour() const { return backgroundColour; }
 };
 

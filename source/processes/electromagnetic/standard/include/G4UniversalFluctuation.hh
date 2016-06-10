@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UniversalFluctuation.hh 73339 2013-08-26 06:54:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,8 @@
 #include "G4VEmFluctuationModel.hh"
 #include "G4ParticleDefinition.hh"
 
+class G4Pow;
+
 class G4UniversalFluctuation : public G4VEmFluctuationModel
 {
 
@@ -68,16 +70,16 @@ public:
 
   virtual ~G4UniversalFluctuation();
 
-  virtual G4double SampleFluctuations(const G4Material*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
 				      const G4DynamicParticle*,
-				      G4double&,
-				      G4double&,
-				      G4double&);
+				      G4double,
+				      G4double,
+				      G4double);
 
   virtual G4double Dispersion(    const G4Material*,
 				  const G4DynamicParticle*,
-				  G4double&,
-				  G4double&);
+				  G4double,
+				  G4double);
 
   virtual void InitialiseMe(const G4ParticleDefinition*);
 
@@ -89,6 +91,8 @@ private:
   // hide assignment operator
   G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right);
   G4UniversalFluctuation(const  G4UniversalFluctuation&);
+
+  G4Pow*   g4pow; 
 
   const G4ParticleDefinition* particle;
   const G4Material* lastMaterial;

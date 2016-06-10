@@ -23,17 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
 #include "RunAction.hh"
 #include "G4Run.hh"
+//#include "G4UnitsTable.hh"
+//#include "G4SystemOfUnits.hh"
+#include "Analysis.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det, HistoManager* his)
-:Detector(det),Histo(his)
+RunAction::RunAction(DetectorConstruction*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -45,14 +50,59 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {  
-  // Histograms
-  Histo->book();
+  // Book histograms, ntuple
+  
+  // Create analysis manager
+  // The choice of analysis technology is done via selection of a namespace
+  // in Analysis.hh
+
+  G4cout << "##### Create analysis manager " << "  " << this << G4endl;
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
+  G4cout << "Using " << analysisManager->GetType() << " analysis manager" << G4endl;
+
+  // Create directories 
+  
+  //analysisManager->SetHistoDirectoryName("histograms");
+  //analysisManager->SetNtupleDirectoryName("ntuple");
+  analysisManager->SetVerboseLevel(1);
+  
+  // Open an output file
+  
+  G4String fileName = "dna";
+  analysisManager->OpenFile(fileName);
+
+  // Creating ntuple
+  
+  analysisManager->CreateNtuple("dna", "dnaphysics");
+  analysisManager->CreateNtupleDColumn("flagParticle");
+  analysisManager->CreateNtupleDColumn("flagProcess");
+  analysisManager->CreateNtupleDColumn("x");
+  analysisManager->CreateNtupleDColumn("y");
+  analysisManager->CreateNtupleDColumn("z");
+  analysisManager->CreateNtupleDColumn("totalEnergyDeposit");
+  analysisManager->CreateNtupleDColumn("stepLength");
+  analysisManager->CreateNtupleDColumn("kineticEnergyDifference");
+  analysisManager->FinishNtuple();
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void RunAction::EndOfRunAction(const G4Run*)
+void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  //save histograms      
-  Histo->save();
+  G4int nofEvents = aRun->GetNumberOfEvent();
+  if ( nofEvents == 0 ) return;
+  
+  // print histogram statistics
+  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
+  // save histograms 
+  
+  analysisManager->Write();
+  analysisManager->CloseFile();
+  
+  // complete cleanup
+  
+  delete G4AnalysisManager::Instance();  
 }

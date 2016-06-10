@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPEnAngCorrelation_h
 #define G4NeutronHPEnAngCorrelation_h 1
@@ -52,7 +51,7 @@ class G4NeutronHPEnAngCorrelation
     if(theProducts!=0) delete [] theProducts;
   }
   
-  inline void Init(std::ifstream & aDataFile)
+  inline void Init(std::istream & aDataFile)
   {
     inCharge = true;
     aDataFile>>targetMass>>frameFlag>>nProducts;

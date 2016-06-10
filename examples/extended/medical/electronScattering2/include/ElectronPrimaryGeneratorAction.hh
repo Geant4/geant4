@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ElectronPrimaryGeneratorAction.hh 70325 2013-05-29 08:06:02Z gcosmo $
+//
 /// \file medical/electronScattering2/include/ElectronPrimaryGeneratorAction.hh
 /// \brief Definition of the ElectronPrimaryGeneratorAction class
-//
 
 #ifndef ElectronPrimaryGeneratorAction_h
 #define ElectronPrimaryGeneratorAction_h 1
@@ -35,17 +36,20 @@
 class G4GeneralParticleSource;
 class G4Event;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class ElectronPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    ElectronPrimaryGeneratorAction();    
+public:
+    ElectronPrimaryGeneratorAction();
     virtual ~ElectronPrimaryGeneratorAction();
 
-	virtual void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
-  private:
-	G4GeneralParticleSource* fParticleGun;
+private:
+    G4GeneralParticleSource* fParticleGun;
 };
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif

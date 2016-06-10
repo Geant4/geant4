@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoringMessenger.hh 78057 2013-12-03 08:31:15Z gcosmo $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.
@@ -124,7 +124,7 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithoutParameter * listColorMapCmd;
     G4UIcmdWithAString *      floatMinMaxCmd;
     G4UIcommand *             colorMapMinMaxCmd;
-    G4UIcommand *             chartCmd;
+    //G4UIcommand *             chartCmd;
     //
     // Dump scoring result to file
     G4UIcommand * dumpQtyToFileCmd;

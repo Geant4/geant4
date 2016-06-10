@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: MedicalBeam.hh 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file MedicalBeam.hh
 /// @brief Define beam profile as primary generator
 
@@ -36,7 +39,7 @@ class G4ParticleDefinition;
 
 class MedicalBeam : public G4VUserPrimaryGeneratorAction {
 public:
-  enum FieldShape{ SQUARE=0, CIRCLE };
+  enum FieldShape{ kSQUARE=0, kCIRCLE };
 
   MedicalBeam();
   ~MedicalBeam();
@@ -60,72 +63,103 @@ public:
   void SetFieldXY(G4double fx, G4double fy);
   G4double GetFieldX() const;
   G4double GetFieldY() const;
-  
+
   void SetFieldR(G4double r);
   G4double GetFieldR() const;
 
   // methods...
   virtual void GeneratePrimaries(G4Event* anEvent);
 
-protected:
-  G4ParticleDefinition* particle;
-  G4double kineticE;
-  G4ThreeVector sourcePosition;
-  
-  G4double SSD; // (SSD= Source Skin Depth)
-  FieldShape fieldShape;
-  G4double fieldXY[2];
-  G4double fieldR;
-
+private:
   // local methods...
   G4ThreeVector GenerateBeamDirection() const;
+
+  G4ParticleDefinition* fparticle;
+  G4double fkineticE;
+  G4ThreeVector fsourcePosition;
+
+  G4double fSSD; // (SSD= Source Skin Depth)
+  FieldShape ffieldShape;
+  G4double ffieldXY[2];
+  G4double ffieldR;
+
 };
 
-// ====================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 inline void MedicalBeam::SetParticleDefinition(G4ParticleDefinition* pd)
-{ particle= pd; }
+{
+  fparticle = pd;
+}
 
 inline const G4ParticleDefinition* MedicalBeam::GetParticleDefinition() const
-{ return particle; }
+{
+  return fparticle;
+}
 
 inline void MedicalBeam::SetKineticE(G4double e)
-{ kineticE= e; }
+{
+  fkineticE = e;
+}
 
 inline G4double MedicalBeam::GetKineticE() const
-{ return kineticE; }
+{
+  return fkineticE;
+}
 
 inline void MedicalBeam::SetSourcePosition(const G4ThreeVector& pos)
-{ sourcePosition= pos; }
+{
+  fsourcePosition = pos;
+}
 
 inline G4ThreeVector MedicalBeam::GetSourcePosition() const
-{ return sourcePosition; }
+{
+ return fsourcePosition;
+}
 
 inline void MedicalBeam::SetFieldShape(MedicalBeam::FieldShape shape)
-{ fieldShape= shape; }
+{
+  ffieldShape = shape;
+}
 
 inline MedicalBeam::FieldShape MedicalBeam::GetFieldShape() const
-{ return fieldShape; }
+{
+ return ffieldShape;
+}
 
 inline void MedicalBeam::SetSSD(G4double ssd)
-{ SSD= ssd; }
+{
+  fSSD = ssd;
+}
 
 inline G4double MedicalBeam::GetSSD() const
-{ return SSD; }
+{
+  return fSSD;
+}
 
 inline void MedicalBeam::SetFieldXY(G4double fx, G4double fy)
-{ fieldXY[0]= fx; fieldXY[1]= fy; }
+{
+  ffieldXY[0] = fx;
+  ffieldXY[1] = fy;
+}
 
 inline G4double MedicalBeam::GetFieldX() const
-{ return fieldXY[0]; }
+{
+  return ffieldXY[0];
+}
 
 inline G4double MedicalBeam::GetFieldY() const
-{ return fieldXY[1]; }
+{
+  return ffieldXY[1];
+}
 
 inline void MedicalBeam::SetFieldR(G4double r)
-{ fieldR= r; }
+{
+  ffieldR = r;
+}
 
 inline G4double MedicalBeam::GetFieldR() const
-{ return fieldR; }
+{
+  return ffieldR;
+}
 
 #endif
-

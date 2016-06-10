@@ -26,6 +26,8 @@
 /// \file persistency/P02/src/ExP02PrimaryGeneratorAction.cc
 /// \brief Implementation of the ExP02PrimaryGeneratorAction class
 //
+// $Id: ExP02PrimaryGeneratorAction.cc 71727 2013-06-21 07:55:45Z gcosmo $
+//
 #include "ExP02PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
@@ -38,6 +40,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP02PrimaryGeneratorAction::ExP02PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0)
+   
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);

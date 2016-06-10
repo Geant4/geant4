@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermoreGammaConversionModelRC.cc 74822 2013-10-22 14:42:13Z gcosmo $
 //
 // Author: Francesco Longo & Gerardo Depaola
 //         on base of G4LivermoreGammaConversionModel
@@ -52,7 +52,7 @@ G4LivermoreGammaConversionModelRC::G4LivermoreGammaConversionModelRC(const G4Par
   :G4VEmModel(nam),fParticleChange(0),smallEnergy(2.*MeV),isInitialised(false),
    crossSectionHandler(0),meanFreePathTable(0)
 {
-  lowEnergyLimit = 2.0*electron_mass_c2;
+  lowEnergyLimit = 4.0*electron_mass_c2;
   highEnergyLimit = 100 * GeV;
   SetHighEnergyLimit(highEnergyLimit);
   	 
@@ -168,6 +168,8 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
+  G4double HardPhotonEnergy = 0.0;
+
 
   // Do it fast if photon energy < 2. MeV
   if (photonEnergy < smallEnergy )
@@ -239,6 +241,32 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
                             gLocal/pow(logepsMin,3.) + h*pow(logepsMin,4.) + i/pow(logepsMin,4.) + j*pow(logepsMin,5.) +
                             k/pow(logepsMin,5.);
  
+
+      G4double HardPhotonThreshold = 0.08; 
+      G4double r1, r2, r3, beta=0, gbeta, sigt = 582.068, sigh, rejet;
+      // , Pi = 2.*acos(0.);
+      G4double cg = (11./2.)/(exp(-11.*HardPhotonThreshold/2.)-exp(-11./2.));
+      
+      
+      r1 = G4UniformRand();
+      sigh = 1028.58*exp(-HardPhotonThreshold/0.09033) + 136.63; // sigma hard 
+      if (r1 > 1.- sigh/sigt) {
+        r2 = G4UniformRand();
+        rejet = 0.;
+        while (r2 > rejet) {
+          r3 = G4UniformRand();
+          beta = (-2./11.)*log(exp(-0.08*11./2.)-r3*11./(2.*cg));
+          gbeta = exp(-11.*beta/2.);
+          rejet = fbeta(beta)/(8000.*gbeta);
+        }
+        HardPhotonEnergy = beta * photonEnergy;
+      }
+      else{
+        HardPhotonEnergy = 0.;
+      }
+      
+      photonEnergy -= HardPhotonEnergy;
+      
       do {
          do {
 	   if (normF1 / (normF1 + normF2) > G4UniformRand() )
@@ -322,8 +350,8 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
   electronDirection.rotateUz(photonDirection);
       
   G4DynamicParticle* particle1 = new G4DynamicParticle (G4Electron::Electron(),
-							    electronDirection,
-							    electronKineEnergy);
+							electronDirection,
+							electronKineEnergy);
 
   // The e+ is always created (even with kinetic energy = 0) for further annihilation
   G4double positronKineEnergy = std::max(0.,positronTotEnergy - electron_mass_c2) ;
@@ -335,11 +363,29 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
   
   // Create G4DynamicParticle object for the particle2 
   G4DynamicParticle* particle2 = new G4DynamicParticle(G4Positron::Positron(),
-						       positronDirection, positronKineEnergy);
+						       positronDirection, 
+						       positronKineEnergy);
   // Fill output vector
 //  G4cout  << "Cree el e+ " <<  epsilon << G4endl;
   fvect->push_back(particle1);
   fvect->push_back(particle2);
+
+  if (HardPhotonEnergy > 0.)
+    {
+      G4double thetaHardPhoton = u*electron_mass_c2/HardPhotonEnergy;
+      phi  = twopi * G4UniformRand();
+      G4double dxHardP= std::sin(thetaHardPhoton)*std::cos(phi);
+      G4double dyHardP= std::sin(thetaHardPhoton)*std::sin(phi);
+      G4double dzHardP =std::cos(thetaHardPhoton);
+
+      G4ThreeVector hardPhotonDirection (dxHardP, dyHardP, dzHardP);
+      hardPhotonDirection.rotateUz(photonDirection);
+      G4DynamicParticle* particle3 = new G4DynamicParticle (G4Gamma::Gamma(),
+                                                            hardPhotonDirection,
+                                                            HardPhotonEnergy);
+      fvect->push_back(particle3);
+    }
+
 
   // kill incident photon
   fParticleChange->SetProposedKineticEnergy(0.);
@@ -379,3 +425,48 @@ G4double G4LivermoreGammaConversionModelRC::ScreenFunction2(G4double screenVaria
   return value;
 } 
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4LivermoreGammaConversionModelRC::fbeta(G4double x)
+{
+  // compute the probabililty distribution for hard photon 
+  G4double Pi, gamma, eta, d, p1, p2, p3, p4, p5, p6, p7, ffbeta;
+  gamma = (1.-x)*(1.-x)/x;
+  eta = (1.-x)/(1.+x);
+  d = Dilog(1./x)-Dilog(x);
+  Pi = 2.*acos(0.);
+  p1 = -1.*(25528.*pow(gamma,2) + 116044.* gamma +151556.)/105.;
+  p2 = 256.* pow(gamma,3) + 1092.* pow(gamma,2) +1260.*gamma + 420.;
+  p3 = (676.*pow(gamma,3) + 9877.*pow(gamma,2) + 58415.*gamma + 62160.)/105.;
+  p4 = 64.*pow(gamma,3) + 305.*pow(gamma,2) + 475.*gamma + 269. - 276./gamma;
+  p5 = (676.*pow(gamma,3) + 38109.*pow(gamma,2) + 211637.*gamma + 266660. - 53632./gamma)/105.;
+  p6 = 32.*pow(gamma,2) + 416.*gamma + 1310. +1184./gamma;
+  p7 = 128.*pow(gamma,3) + 802.*pow(gamma,2) + 1028.*gamma - 470. - 1184./gamma;
+  ffbeta = (1.-x) * (p1 + p2*Pi*Pi/6. + p3*log(gamma) +
+                     p4*pow(log(x),2) + (p5 + p6*log(gamma))*eta*log(x) + p7*d*eta);
+
+  return ffbeta;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4LivermoreGammaConversionModelRC::Dilog(G4double y)
+{
+  G4double fdilog = 0.0;
+  G4double Pi = 2.*acos(0.); // serve? 
+  if (y <= 0.5) {
+    fdilog = pow(Pi,2)/6. + (1.-y)*(log(1-y)-1.)+pow((1.-y),2)*((1./2.)*log(1.-y)-1./4.)
+      +pow((1.-y),3)*((1./3.)*log(1.-y)-1./9.)+pow((1.-y),4)*((1./4.)*log(1.-y)-1./16.);
+  }
+  if (0.5 < y && y < 2.) {
+    fdilog = 1.-y+pow((1.-y),2)/4.+pow((1.-y),3)/9.+pow((1.-y),4)/16.+
+      pow((1.-y),5)/25.+pow((1.-y),6)/36.+pow((1.-y),7)/49.;
+  }
+  if (y >= 2.) {
+    fdilog = -pow(log(y),2)/2. - pow(Pi,2)/6. + (log(y)+1.)/y + 
+      (log(y)/2.+1./4.)/pow(y,2) + (log(y)/3.+1./9.)/pow(y,3);
+  }
+  return fdilog;
+  
+}

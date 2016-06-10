@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeScintSD.cc 68752 2013-04-05 10:23:47Z gcosmo $
+//
 /// \file optical/LXe/src/LXeScintSD.cc
 /// \brief Implementation of the LXeScintSD class
 //

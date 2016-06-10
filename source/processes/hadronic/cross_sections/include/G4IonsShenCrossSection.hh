@@ -74,7 +74,7 @@ public:
 
 private:
   const G4double upperLimit;
-  const G4double lowerLimit; 
+//  const G4double lowerLimit; 
   const G4double r0;
 
   G4double calEcmValue(const G4double, const G4double, const G4double); 

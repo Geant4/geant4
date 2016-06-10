@@ -46,6 +46,7 @@
 
 #include "G4ElectroNuclearCrossSection.hh"
 #include "G4PhotoNuclearCrossSection.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4CascadeInterface.hh"
 #include "G4TheoFSGenerator.hh"
@@ -63,32 +64,32 @@ G4ElectroVDNuclearModel::G4ElectroVDNuclearModel()
  : G4HadronicInteraction("G4ElectroVDNuclearModel"),
    leptonKE(0.0), photonEnergy(0.0), photonQ2(0.0)
 {
-  SetMinEnergy(0.0);
-  SetMaxEnergy(1*PeV);
-
-  electroXS = new G4ElectroNuclearCrossSection();
-  gammaXS = new G4PhotoNuclearCrossSection();      
-  ftfp = new G4TheoFSGenerator();
-  precoInterface = new G4GeneratorPrecompoundInterface();
-  theHandler = new G4ExcitationHandler();
-  preEquilib = new G4PreCompoundModel(theHandler);
-  precoInterface->SetDeExcitation(preEquilib);
-  ftfp->SetTransport(precoInterface);
-  theFragmentation = new G4LundStringFragmentation();
-  theStringDecay = new G4ExcitedStringDecay(theFragmentation);
-  theStringModel = new G4FTFModel();
-  theStringModel->SetFragmentationModel(theStringDecay);
-  ftfp->SetHighEnergyGenerator(theStringModel);
-
-  // Build Bertini model
-  bert = new G4CascadeInterface();
+    SetMinEnergy(0.0);
+    SetMaxEnergy(1*PeV);
+    
+    electroXS = (G4ElectroNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
+    GetCrossSectionDataSet(G4ElectroNuclearCrossSection::Default_Name());
+    gammaXS = (G4PhotoNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
+    GetCrossSectionDataSet(G4PhotoNuclearCrossSection::Default_Name());
+    ftfp = new G4TheoFSGenerator();
+    precoInterface = new G4GeneratorPrecompoundInterface();
+    theHandler = new G4ExcitationHandler();
+    preEquilib = new G4PreCompoundModel(theHandler);
+    precoInterface->SetDeExcitation(preEquilib);
+    ftfp->SetTransport(precoInterface);
+    theFragmentation = new G4LundStringFragmentation();
+    theStringDecay = new G4ExcitedStringDecay(theFragmentation);
+    theStringModel = new G4FTFModel();
+    theStringModel->SetFragmentationModel(theStringDecay);
+    ftfp->SetHighEnergyGenerator(theStringModel);
+    
+    // Build Bertini model
+    bert = new G4CascadeInterface();
 }
 
 
 G4ElectroVDNuclearModel::~G4ElectroVDNuclearModel()
 {
-  delete electroXS;
-  delete gammaXS;
   delete ftfp;
   delete preEquilib;
   delete theFragmentation;
@@ -114,42 +115,38 @@ void G4ElectroVDNuclearModel::ModelDescription(std::ostream& outFile) const
 
 
 G4HadFinalState*
-G4ElectroVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack, 
+G4ElectroVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
                                        G4Nucleus& targetNucleus)
 {
-  // Set up default particle change (just returns initial state)
-  theParticleChange.Clear();
-  theParticleChange.SetStatusChange(isAlive);
-  leptonKE = aTrack.GetKineticEnergy();
-  theParticleChange.SetEnergyChange(leptonKE);
-  theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit() );
- 
-  // Set up sanity checks for real photon production 
-  G4DynamicParticle lepton(aTrack.GetDefinition(), aTrack.Get4Momentum() );
-  G4int targZ = targetNucleus.GetZ_asInt();
-  G4int targA = targetNucleus.GetA_asInt();
-  G4Isotope* iso = 0;
-  G4Element* ele = 0;
-  G4Material* mat = 0; 
-  G4double eXS = electroXS->GetIsoCrossSection(&lepton, targZ, targA, iso, ele, mat);
-
-  // If electronuclear cross section is negative, return initial track
-  if (eXS > 0.0) {
+    // Set up default particle change (just returns initial state)
+    theParticleChange.Clear();
+    theParticleChange.SetStatusChange(isAlive);
+    leptonKE = aTrack.GetKineticEnergy();
+    theParticleChange.SetEnergyChange(leptonKE);
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit() );
+    
+    // Set up sanity checks for real photon production
+    G4DynamicParticle lepton(aTrack.GetDefinition(), aTrack.Get4Momentum() );
+    
+    // Need to call GetElementCrossSection before calling GetEquivalentPhotonEnergy.
+    G4Material* mat = 0;
+    G4int targZ = targetNucleus.GetZ_asInt();
+    electroXS->GetElementCrossSection(&lepton, targZ, mat);
+    
     photonEnergy = electroXS->GetEquivalentPhotonEnergy();
     // Photon energy cannot exceed lepton energy
     if (photonEnergy < leptonKE) {
-      photonQ2 = electroXS->GetEquivalentPhotonQ2(photonEnergy);
-      G4double dM = G4Proton::Proton()->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass();
-      // Photon
-      if (photonEnergy > photonQ2/dM) {
-        // Produce recoil lepton and transferred photon
-        G4DynamicParticle* transferredPhoton = CalculateEMVertex(aTrack, targetNucleus);
-        // Interact gamma with nucleus
-        if (transferredPhoton) CalculateHadronicVertex(transferredPhoton, targetNucleus);
-      }
+        photonQ2 = electroXS->GetEquivalentPhotonQ2(photonEnergy);
+        G4double dM = G4Proton::Proton()->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass();
+        // Photon
+        if (photonEnergy > photonQ2/dM) {
+            // Produce recoil lepton and transferred photon
+            G4DynamicParticle* transferredPhoton = CalculateEMVertex(aTrack, targetNucleus);
+            // Interact gamma with nucleus
+            if (transferredPhoton) CalculateHadronicVertex(transferredPhoton, targetNucleus);
+        }
     }
-  }
-  return &theParticleChange;
+    return &theParticleChange;
 }
 
 
@@ -162,18 +159,15 @@ G4ElectroVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
 
   // Get gamma cross section at Q**2 = 0 (real gamma)
   G4int targZ = targetNucleus.GetZ_asInt();
-  G4int targA = targetNucleus.GetA_asInt();
-  G4Isotope* iso = 0;
-  G4Element* ele = 0;
   G4Material* mat = 0;
   G4double sigNu =
-    gammaXS->GetIsoCrossSection(&photon, targZ, targA, iso, ele, mat);
+    gammaXS->GetElementCrossSection(&photon, targZ, mat);
 
   // Change real gamma energy to equivalent energy and get cross section at that energy 
   G4double dM = G4Proton::Proton()->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass();
   photon.SetKineticEnergy(photonEnergy - photonQ2/dM);      
   G4double sigK =
-    gammaXS->GetIsoCrossSection(&photon, targZ, targA, iso, ele, mat);
+    gammaXS->GetElementCrossSection(&photon, targZ, mat);
   G4double rndFraction = electroXS->GetVirtualFactor(photonEnergy, photonQ2);
 
   // No gamma produced, return null ptr

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrVolumeMgr.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrVolumeMgr
@@ -43,7 +43,7 @@
 #include "G4tgrSolidBoolean.hh"
 
 
-G4tgrVolumeMgr* G4tgrVolumeMgr::theInstance = 0;
+G4ThreadLocal G4tgrVolumeMgr* G4tgrVolumeMgr::theInstance = 0;
 
 
 //-------------------------------------------------------------

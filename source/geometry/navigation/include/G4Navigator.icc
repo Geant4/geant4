@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Navigator.icc 73164 2013-08-21 08:55:28Z gcosmo $
 //
 // 
 // class G4Navigator Inline implementation
@@ -138,21 +138,7 @@ void G4Navigator::ResetStackAndState()
 inline
 EVolume G4Navigator::VolumeType(const G4VPhysicalVolume *pVol) const
 {
-  EVolume type;
-  EAxis axis;
-  G4int nReplicas;
-  G4double width,offset;
-  G4bool consuming;
-  if ( pVol->IsReplicated() )
-  {
-    pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
-    type = (consuming) ? kReplica : kParameterised;
-  }
-  else
-  {
-    type = kNormal;
-  }
-  return type;
+  return pVol->VolumeType();
 }
 
 // ********************************************************************
@@ -162,31 +148,7 @@ EVolume G4Navigator::VolumeType(const G4VPhysicalVolume *pVol) const
 inline
 EVolume G4Navigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
 {
-  EVolume type;
-  EAxis axis;
-  G4int nReplicas;
-  G4double width,offset;
-  G4bool consuming;
-  G4VPhysicalVolume *pVol;
-
-  if ( pLog->GetNoDaughters()==1 )
-  {
-    pVol = pLog->GetDaughter(0);
-    if (pVol->IsReplicated())
-    {
-      pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
-      type = (consuming) ? kReplica : kParameterised;
-    }
-    else
-    {
-      type = kNormal;
-    }
-  }
-  else
-  {
-    type = kNormal;
-  }
-  return type;
+  return pLog->CharacteriseDaughters();
 }
 
 // ********************************************************************

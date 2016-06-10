@@ -25,71 +25,83 @@
 /// @file G4MPIstatus.cc
 /// @brief status of MPI application
 
-#include "G4MPIstatus.hh"
 #include "G4ApplicationState.hh"
+#include "G4MPIstatus.hh"
 
 // --------------------------------------------------------------------------
 G4MPIstatus::G4MPIstatus()
-  : rank(0), runID(0), nEventToBeProcessed(0), eventID(0),
-    cputime(0.), g4state(G4State_Quit)
+  : rank_(0), run_id_(0), nevent_to_be_processed_(0), event_id_(0),
+    cputime_(0.), g4state_(G4State_Quit)
 {
-  timer = new G4Timer;
+  timer_ = new G4Timer;
 }
 
 // --------------------------------------------------------------------------
 G4MPIstatus::~G4MPIstatus()
 {
-  delete timer;
+  delete timer_;
+}
+
+// --------------------------------------------------------------------------
+void G4MPIstatus::StartTimer()
+{
+  timer_-> Start();
+}
+
+// --------------------------------------------------------------------------
+void G4MPIstatus::StopTimer()
+{
+  timer_-> Stop();
 }
 
 // --------------------------------------------------------------------------
 void G4MPIstatus::SetStatus(G4int arank, G4int runid, G4int noe, G4int evtid,
                             G4ApplicationState state)
 {
-  rank = arank;
-  runID = runid;
-  nEventToBeProcessed = noe;
-  eventID = evtid;
-  g4state = state;
-  if (timer-> IsValid()) cputime = timer-> GetUserElapsed();
-  else cputime = 0.;
+  rank_ = arank;
+  run_id_ = runid;
+  nevent_to_be_processed_ = noe;
+  event_id_ = evtid;
+  g4state_ = state;
+  if ( timer_-> IsValid() ) cputime_= timer_-> GetUserElapsed();
+  else cputime_ = 0.;
 }
 
 // --------------------------------------------------------------------------
 void G4MPIstatus::Pack(G4int* data) const
 {
-  data[0] = rank;
-  data[1] = runID;
-  data[2] = nEventToBeProcessed;
-  data[3] = eventID;
-  data[4] = g4state;
+  data[0] = rank_;
+  data[1] = run_id_;
+  data[2] = nevent_to_be_processed_;
+  data[3] = event_id_;
+  data[4] = g4state_;
 
   G4double* ddata = (G4double*)(data+5);
-  ddata[0] = cputime;
+  ddata[0] = cputime_;
 }
 
 // --------------------------------------------------------------------------
 void G4MPIstatus::UnPack(G4int* data)
 {
-  rank = data[0];
-  runID = data[1];
-  nEventToBeProcessed = data[2];
-  eventID = data[3];
-  g4state = (G4ApplicationState)data[4];
+  rank_ = data[0];
+  run_id_ = data[1];
+  nevent_to_be_processed_ = data[2];
+  event_id_ = data[3];
+  g4state_ = (G4ApplicationState)data[4];
 
   G4double* ddata = (G4double*)(data+5);
-  cputime = ddata[0];
+  cputime_ = ddata[0];
 }
 
 // --------------------------------------------------------------------------
 void G4MPIstatus::Print() const
 {
   // * rank= 001 run= 10002 event= 00001 / 100000 state= Idle"
-  G4cout << "* rank= " << rank
-         << " run= " << runID
-         << " event= " << eventID << " / " << nEventToBeProcessed
-         << " state= " << GetStateString(g4state)
-         << " time= " << cputime << "s"
+  G4cout << "* rank= " << rank_
+         << " run= " << run_id_
+         << " event= " << event_id_ << " / " << nevent_to_be_processed_
+         << " state= " << GetStateString(g4state_)
+         << " time= " << cputime_ << "s"
          << G4endl;
 }
 

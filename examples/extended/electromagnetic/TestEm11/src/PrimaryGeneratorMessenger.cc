@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the PrimaryGeneratorMessenger class
 //
-// $Id$
+// $Id: PrimaryGeneratorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                                    PrimaryGeneratorAction* Gun)
-:fAction(Gun)
+:G4UImessenger(),fAction(Gun),fGunDir(0),fRndmCmd(0)
 { 
   fGunDir = new G4UIdirectory("/testem/gun/");
   fGunDir->SetGuidance("gun control");

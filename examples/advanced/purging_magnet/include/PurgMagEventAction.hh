@@ -32,7 +32,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id$
+// $Id: PurgMagEventAction.hh 72967 2013-08-14 14:57:48Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,15 +43,13 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class PurgMagRunAction;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class PurgMagEventAction : public G4UserEventAction
 {
   public:
   
-    PurgMagEventAction(PurgMagRunAction*);
+    PurgMagEventAction();
    ~PurgMagEventAction();
 
     void BeginOfEventAction(const G4Event*);
@@ -61,8 +59,6 @@ class PurgMagEventAction : public G4UserEventAction
     void SetPrintModulo(G4int    val)  {printModulo = val;};
         
   private:
-  
-    PurgMagRunAction*        PurgMagRun;
     G4String                 drawFlag;
     G4int                    printModulo;         
 };

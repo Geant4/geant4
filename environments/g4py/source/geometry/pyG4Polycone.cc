@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Polycone.cc,v 1.1 2007-07-11 05:39:50 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4Polycone.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4Polycone.cc
 //
@@ -61,11 +60,11 @@ G4Polycone* f1_CreatePolycone(const G4String& name, G4double phiStart,
   return new G4Polycone(name, phiStart, phiTotal, numZPlanes,
                         zlist, r0list, r1list);
 }
-  
+
 
 G4Polycone* f2_CreatePolycone(const G4String& name, G4double phiStart,
                               G4double phiTotal, G4int numRZ,
-                              const std::vector<G4double>& r, 
+                              const std::vector<G4double>& r,
                               const std::vector<G4double>& z)
 {
   G4double zlist[numRZ];

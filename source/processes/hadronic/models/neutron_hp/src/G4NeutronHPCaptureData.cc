@@ -35,11 +35,13 @@
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 #include "G4NeutronHPCaptureData.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
+#include "G4NeutronHPManager.hh"
 
 G4NeutronHPCaptureData::G4NeutronHPCaptureData()
 :G4VCrossSectionDataSet("NeutronHPCaptureXS")
@@ -55,7 +57,7 @@ G4NeutronHPCaptureData::G4NeutronHPCaptureData()
    theCrossSections = 0;
    onFlightDB = true;
 
-   BuildPhysicsTable(*G4Neutron::Neutron());
+   //BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4NeutronHPCaptureData::~G4NeutronHPCaptureData()
@@ -128,7 +130,7 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 
   // make a PhysicsVector for each element
 
-  static const G4ElementTable *theElementTable = G4Element::GetElementTable();
+  static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
   for( size_t i=0; i<numberOfElements; ++i )
   {
      if(getenv("CaptureDataIndexDebug"))
@@ -164,7 +166,7 @@ void G4NeutronHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition& aP)
    G4cout << G4endl;
 
    size_t numberOfElements = G4Element::GetNumberOfElements();
-   static const G4ElementTable *theElementTable = G4Element::GetElementTable();
+   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
 
    for ( size_t i = 0 ; i < numberOfElements ; ++i )
    {
@@ -266,4 +268,13 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
          << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) /result << G4endl;
 */
   return result;
+}
+
+G4int G4NeutronHPCaptureData::GetVerboseLevel() const 
+{
+   return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+}
+void G4NeutronHPCaptureData::SetVerboseLevel( G4int newValue ) 
+{
+   G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
 }

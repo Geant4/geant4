@@ -23,16 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomNestedPhantomParameterisation.hh 74857 2013-10-23 07:55:55Z gcosmo $
+//
 /// \file medical/DICOM/include/DicomNestedPhantomParameterisation.hh
 /// \brief Definition of the DicomNestedPhantomParameterisation class
-//
-// $Id$
 //
 
 #ifndef DICOMNESTEDPARAMETERISATION_HH
 #define DICOMNESTEDPARAMETERISATION_HH
 
 #include <vector>
+#include <map>
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
@@ -42,6 +43,7 @@ class G4VPhysicalVolume;
 class G4VTouchable; 
 class G4VSolid;
 class G4Material;
+class G4VisAttributes;
 
 // CSG Entities which may be parameterised/replicated
 //
@@ -51,6 +53,7 @@ class G4Trd;
 class G4Trap;
 class G4Cons;
 class G4Sphere;
+class G4Ellipsoid;
 class G4Orb;
 class G4Torus;
 class G4Para;
@@ -65,8 +68,9 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
   public:
 
     DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
-                                       std::vector<G4Material*>& mat);
-    virtual ~DicomNestedPhantomParameterisation(); 
+                                       std::vector<G4Material*>& mat,
+                                       G4int fnZ_ = 0, G4int fnY_ = 0, G4int fnX_ = 0);
+   ~DicomNestedPhantomParameterisation(); 
 
     G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
                                 const G4int repNo, 
@@ -94,7 +98,6 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
     void ComputeDimensions(G4Box &, const G4int,
                                     const G4VPhysicalVolume *) const;
 
-    using G4VNestedParameterisation::ComputeMaterial;
 
   private:  // Dummy declarations to get rid of warnings ...
 
@@ -105,6 +108,8 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
     void ComputeDimensions (G4Cons&, const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Sphere&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&, const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&, const G4int,
                             const G4VPhysicalVolume*) const {}
@@ -121,12 +126,17 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
     void ComputeDimensions (G4Polyhedra&, const G4int,
                             const G4VPhysicalVolume*) const {}
 
+    void ReadColourData();
+
+    using G4VNestedParameterisation::ComputeMaterial;
+    
   private:
 
     G4double fdX,fdY,fdZ;
     G4int fnX,fnY,fnZ;
     std::vector<G4Material*> fMaterials;
     size_t* fMaterialIndices; // Index in materials corresponding to each voxel
-//    unsigned int* fMaterialIndices; // Index in materials corresponding to each voxel
+    std::map<G4String,G4VisAttributes*> fColours;
+    std::vector<G4double> fpZ;
 };
 #endif

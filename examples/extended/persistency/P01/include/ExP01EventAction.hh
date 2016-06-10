@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01EventAction class
 //
 //
-// $Id$
+// $Id: ExP01EventAction.hh 71111 2013-06-11 10:51:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,8 +50,8 @@ class ExP01EventAction : public G4UserEventAction
    ~ExP01EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

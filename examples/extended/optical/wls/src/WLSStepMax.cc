@@ -23,35 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSStepMax.cc 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/src/WLSStepMax.cc
 /// \brief Implementation of the WLSStepMax class
 //
 //
-//
-
 #include "G4Track.hh"
 #include "G4VParticleChange.hh"
 
 #include "WLSStepMax.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSStepMax::WLSStepMax(const G4String& aName)
-  : G4VDiscreteProcess(aName), MaxChargedStep(DBL_MAX)
+  : G4VDiscreteProcess(aName), fMaxChargedStep(DBL_MAX)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSStepMax::~WLSStepMax() { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSStepMax::WLSStepMax(WLSStepMax& right) : G4VDiscreteProcess(right) { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool WLSStepMax::IsApplicable(const G4ParticleDefinition& particle)
 {
   return (particle.GetPDGCharge() != 0.);
 }
 
-void WLSStepMax::SetStepMax(G4double step) { MaxChargedStep = step ; }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void WLSStepMax::SetStepMax(G4double step) { fMaxChargedStep = step ; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double WLSStepMax::PostStepGetPhysicalInteractionLength(
                                               const G4Track&,
@@ -63,10 +75,12 @@ G4double WLSStepMax::PostStepGetPhysicalInteractionLength(
 
   G4double ProposedStep = DBL_MAX;
 
-  if ( MaxChargedStep > 0.) ProposedStep = MaxChargedStep;
+  if ( fMaxChargedStep > 0.) ProposedStep = fMaxChargedStep;
 
    return ProposedStep;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* WLSStepMax::PostStepDoIt(const G4Track& aTrack,
                                          const G4Step&         )
@@ -75,6 +89,8 @@ G4VParticleChange* WLSStepMax::PostStepDoIt(const G4Track& aTrack,
    aParticleChange.Initialize(aTrack);
    return &aParticleChange;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double WLSStepMax::GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
 {

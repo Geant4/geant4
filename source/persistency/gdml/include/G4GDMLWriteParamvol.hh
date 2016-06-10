@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GDMLWriteParamvol.hh 77528 2013-11-25 13:06:36Z gcosmo $
 //
 //
 // class G4GDMLWriteParamvol
@@ -50,8 +50,11 @@ class G4Cons;
 class G4Sphere;
 class G4Orb;
 class G4Torus;
+class G4Ellipsoid;
 class G4Para;
 class G4Hype;
+class G4Polycone;
+class G4Polyhedra;
 class G4VPhysicalVolume;
 
 class G4GDMLWriteParamvol : public G4GDMLWriteSetup
@@ -77,8 +80,11 @@ class G4GDMLWriteParamvol : public G4GDMLWriteSetup
    void Sphere_dimensionsWrite(xercesc::DOMElement*, const G4Sphere* const);
    void Orb_dimensionsWrite(xercesc::DOMElement*, const G4Orb* const);
    void Torus_dimensionsWrite(xercesc::DOMElement*, const G4Torus* const);
+   void Ellipsoid_dimensionsWrite(xercesc::DOMElement*, const G4Ellipsoid* const);
    void Para_dimensionsWrite(xercesc::DOMElement*, const G4Para* const);
    void Hype_dimensionsWrite(xercesc::DOMElement*, const G4Hype* const);
+   void Polycone_dimensionsWrite(xercesc::DOMElement*, const G4Polycone* const);
+   void Polyhedra_dimensionsWrite(xercesc::DOMElement*, const G4Polyhedra* const);
    void ParametersWrite(xercesc::DOMElement*,
                         const G4VPhysicalVolume* const, const G4int&);
 

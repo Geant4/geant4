@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrMessenger.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrMessenger
@@ -38,7 +38,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
 
-G4int G4tgrMessenger::theVerboseLevel = 0;
+G4ThreadLocal G4int G4tgrMessenger::theVerboseLevel = 0;
 
 
 // --------------------------------------------------------------------

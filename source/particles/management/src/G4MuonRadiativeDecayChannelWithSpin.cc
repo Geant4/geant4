@@ -137,11 +137,11 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
                  G4cout << "G4MuonRadiativeDecayChannelWithSpin::DecayIt ";
 #endif
 
-  if (parent == 0) FillParent();  
-  if (daughters == 0) FillDaughters();
+  if (G4MT_parent == 0) FillParent();  
+  if (G4MT_daughters == 0) FillDaughters();
 
   // parent mass
-  G4double parentmass = parent->GetPDGMass();
+  G4double parentmass = G4MT_parent->GetPDGMass();
 
   G4double EMMU = parentmass;
 
@@ -149,7 +149,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
   G4double daughtermass[4]; 
   G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<4; index++){
-    daughtermass[index] = daughters[index]->GetPDGMass();
+    daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
 
@@ -158,7 +158,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = 
-                               new G4DynamicParticle( parent, dummy, 0.0);
+                               new G4DynamicParticle( G4MT_parent, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
@@ -345,7 +345,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
   direction0.rotateUz(parent_polarization);
 
   G4DynamicParticle * daughterparticle0 
-    = new G4DynamicParticle( daughters[0], daughtermomentum[0]*direction0);
+    = new G4DynamicParticle( G4MT_daughters[0], daughtermomentum[0]*direction0);
 
   products->PushProducts(daughterparticle0);
 
@@ -366,7 +366,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
   direction1.rotateUz(parent_polarization);
 
   G4DynamicParticle * daughterparticle1
-    = new G4DynamicParticle( daughters[1], daughtermomentum[1]*direction1);
+    = new G4DynamicParticle( G4MT_daughters[1], daughtermomentum[1]*direction1);
 
   products->PushProducts(daughterparticle1);
 
@@ -391,9 +391,9 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
   G4ThreeVector direction2(sinthetan*cosphin,sinthetan*sinphin,costhetan);
 
   G4DynamicParticle * daughterparticle2
-    = new G4DynamicParticle( daughters[2], direction2*(vmass/2.));
+    = new G4DynamicParticle( G4MT_daughters[2], direction2*(vmass/2.));
   G4DynamicParticle * daughterparticle3
-    = new G4DynamicParticle( daughters[3], direction2*(-1.0*vmass/2.));
+    = new G4DynamicParticle( G4MT_daughters[3], direction2*(-1.0*vmass/2.));
 
   // boost to the muon rest frame
 

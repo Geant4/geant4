@@ -5,14 +5,7 @@
 
 /*! \page Examples_geometry Category "geometry"
 
-This directory includes tools and examples for the geometry setup.
-
-\link ExampleOLAP OLAP \endlink
-
-Debugging tool for overlapping geometries.
-See notes included in the package for details on how to use it, known
-limitations and defined commands.
-
+This directory includes examples for the geometry setup.
 
 \link Exampletransforms Transforms \endlink
 

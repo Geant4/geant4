@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2009-11-17 11:33:18 gcosmo Exp $
+# $Id: GNUmakefile 66373 2012-12-18 09:41:34Z gcosmo $
 
 name := G4OpenInventor
 

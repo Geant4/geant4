@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LundStringFragmentation.cc 76744 2013-11-14 15:50:20Z gcosmo $
 // GEANT4 tag $Name:  $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -206,7 +206,7 @@ G4LundStringFragmentation::G4LundStringFragmentation()
    BaryonWeight[0][1][2][0]=(1.-pspin_barion)*0.5;
 
          Baryon[0][1][2][1]=3212;         // Sigma0
-   BaryonWeight[0][1][2][2]=(1.-pspin_barion)*0.5;
+   BaryonWeight[0][1][2][1]=(1.-pspin_barion)*0.5;
 
          Baryon[0][1][2][2]=3214;         // Sigma*0
    BaryonWeight[0][1][2][2]=pspin_barion;
@@ -349,7 +349,7 @@ G4LundStringFragmentation::G4LundStringFragmentation()
    BaryonWeight[2][1][2][0]=1.-pspin_barion;
 
          Baryon[2][1][2][1]=3324;         // Theta*0
-   BaryonWeight[2][1][2][2]=pspin_barion;
+   BaryonWeight[2][1][2][1]=pspin_barion;
 
 //---------------------------------------
          Baryon[2][2][0][0]=3312;         // Theta-

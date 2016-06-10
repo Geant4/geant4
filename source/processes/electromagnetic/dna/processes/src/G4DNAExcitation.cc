@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DNAExcitation.cc 70171 2013-05-24 13:34:18Z gcosmo $
 
 #include "G4DNAExcitation.hh"
 #include "G4SystemOfUnits.hh"

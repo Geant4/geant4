@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: BrachyFactoryIr.hh 69765 2013-05-14 10:11:22Z gcosmo $
 //
 //    **********************************
 //    *                                *
@@ -37,16 +37,13 @@
 #ifndef BrachyFactoryIr_h
 #define BrachyFactoryIr_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "BrachyFactory.hh"
 #include "G4RunManager.hh"
 
 class G4ParticleGun;
 class G4Run;
 class G4Event;
-class BrachyAnalysisManager;
 class BrachyFactory;
-class BrachyPrimaryGeneratorActionIr;
 class BrachyDetectorConstructionIr;
 
 // This class manages the creation of iridum source used in endocavitary
@@ -56,13 +53,10 @@ class BrachyFactoryIr : public BrachyFactory
 public:
   BrachyFactoryIr();
   ~BrachyFactoryIr();
-
-  void CreatePrimaryGeneratorAction(G4Event*);
   void CreateSource(G4VPhysicalVolume*);
   void CleanSource();
 
 private:
   BrachyDetectorConstructionIr* iridiumSource;
-  BrachyPrimaryGeneratorActionIr*  iridiumPrimaryParticle;
 };
 #endif

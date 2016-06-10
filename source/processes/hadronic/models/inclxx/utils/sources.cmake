@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:57:01 bmorgan Exp $
+# $Id: sources.cmake 75128 2013-10-28 10:02:29Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -35,6 +35,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -55,7 +57,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLHashing.hh
         G4INCLLogger.hh
         G4INCLGlobalInfo.hh
+        G4INCLNuclearMassTable.hh
         G4INCLGlobals.hh
+        G4INCLRandomSeedVector.hh
         G4INCLParticleType.hh
         G4INCLBook.hh
         G4INCLIRandomGenerator.hh
@@ -66,7 +70,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLRandom.hh
         G4INCLEventInfo.hh
         G4INCLRootFinder.hh
-        G4INCLDeExcitation.hh
         G4INCLVersion.hh
         G4INCLGeant4Compat.hh
         G4INCLParticleSpecies.hh
@@ -80,14 +83,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLParticleTable.cc
         G4INCLIAvatar.cc
         G4INCLIFunction1D.cc
+        G4INCLNuclearMassTable.cc
         G4INCLEventInfo.cc
         G4INCLGlobals.cc
         G4INCLConfigVersion.cc
         G4INCLParticle.cc
-        G4INCLIntersection.cc
         G4INCLConfig.cc
         G4INCLRootFinder.cc
         G4INCLRanecu.cc
+        G4INCLRandomSeedVector.cc
         G4INCLInverseInterpolationTable.cc
         G4INCLRandom.cc
         G4INCLFinalState.cc
@@ -100,9 +104,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4bosons
         G4geometrymng
         G4globman
-        G4hadronic_mgt
-        G4hadronic_util
-        G4hadronic_xsect
         G4ions
         G4leptons
         G4materials
@@ -112,6 +113,18 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4track
         G4volumes
         G4intercoms
+        G4had_mod_man
+        G4had_preequ_exciton
+        G4hadronic_mgt
+        G4hadronic_util
+        G4hadronic_xsect
+        G4hadronic_deex_evaporation
+        G4hadronic_deex_fermi_breakup
+        G4hadronic_deex_handler
+        G4hadronic_deex_management
+        G4hadronic_deex_multifragmentation
+        G4hadronic_deex_photon_evaporation
+        G4hadronic_deex_util
 
     GLOBAL_DEPENDENCIES
         G4geometry

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VSteppingVerbose.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //---------------------------------------------------------------
 //
@@ -46,9 +46,9 @@
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 
-G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
-G4int G4VSteppingVerbose::Silent = 0;
-G4int G4VSteppingVerbose::SilentStepInfo = 0;
+G4ThreadLocal G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
+G4ThreadLocal G4int G4VSteppingVerbose::Silent = 0;
+G4ThreadLocal G4int G4VSteppingVerbose::SilentStepInfo = 0;
 
 G4VSteppingVerbose::G4VSteppingVerbose()
   : fManager(0), fUserSteppingAction(0), 

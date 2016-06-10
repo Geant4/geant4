@@ -47,6 +47,33 @@
 
 /** @} */
 
+/** @defgroup extended_biasing_GB01 GB01
+ *  Biasing example GB01
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB01ActionInitialization {};
+  class GB01BOptrChangeCrossSection {};
+  class GB01BOptrMultiParticleChangeCrossSection {};
+  class GB01DetectorConstruction {};
+  class GB01PrimaryGeneratorAction {};
+
+/** @} */
+
+/** @defgroup extended_biasing_GB02 GB02
+ *  Biasing example GB02
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB02ActionInitialization {};
+  class GB02BOptrMultiParticleForceCollision {};
+  class GB02DetectorConstruction {};
+  class GB02PrimaryGeneratorAction {};
+
+/** @} */
+
 /** @defgroup extended_biasing_ReverseMC01 ReverseMC01
  *  Biasing example ReverseMC01
  *  @ingroup extended_biasing

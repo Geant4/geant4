@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NavigationLevelRep.cc 67974 2013-03-13 10:17:37Z gcosmo $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
@@ -32,7 +32,7 @@
 
 #include "G4NavigationLevelRep.hh"
 
-G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
+G4ThreadLocal G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator = 0;
 
 // Constructors
 //--------------
@@ -100,7 +100,7 @@ G4NavigationLevelRep::~G4NavigationLevelRep()
 
 G4NavigationLevelRep& 
 G4NavigationLevelRep::operator=( const G4NavigationLevelRep &right )
-{ 
+{
   if ( &right != this )
   {
     sTransform =  right.sTransform;  

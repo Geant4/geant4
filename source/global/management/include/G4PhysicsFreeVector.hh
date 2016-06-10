@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsFreeVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -49,6 +49,7 @@
 //                            user introduced
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
+//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method
 //
 //--------------------------------------------------------------------
 
@@ -85,10 +86,6 @@ class G4PhysicsFreeVector : public G4PhysicsVector
          // note that you have to fill all bin values and data 
          // values before you the PhysicsFreeVector.
 
-  protected:
-
-    virtual size_t FindBinLocation(G4double theEnergy) const;
-         // Find bin# in which theEnergy belongs - virtual function
 };
 
 

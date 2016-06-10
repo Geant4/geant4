@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10PhysicsListMessenger class
 //
 //
-// $Id$
+// $Id: Em10PhysicsListMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 //
@@ -49,7 +49,7 @@
 //
 
 Em10PhysicsListMessenger::Em10PhysicsListMessenger(Em10PhysicsList* List)
-:Em10List(List)
+:G4UImessenger(),Em10List(List)
 {
   cutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");

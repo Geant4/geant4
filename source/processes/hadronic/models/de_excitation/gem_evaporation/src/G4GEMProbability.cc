@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GEMProbability.cc 74869 2013-10-23 09:26:17Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -53,6 +53,8 @@
 #include "G4PairingCorrection.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
   theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0), 
@@ -136,8 +138,8 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double Ex = Ux + delta0;
   G4double T  = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
   //JMQ fixed bug in units
-  G4double E0 = Ex - T*(std::log(T/MeV) - std::log(a*MeV)/4.0 
-	- 1.25*std::log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
+  G4double E0 = Ex - T*(G4Log(T/MeV) - G4Log(a*MeV)/4.0 
+	- 1.25*G4Log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
   //                      ***end RESIDUAL ***
   
   //                       ***PARENT***
@@ -155,22 +157,22 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double t = MaximalKineticEnergy/T;
   if ( MaximalKineticEnergy < Ex ) {
     //JMQ 190709 bug in I1 fixed (T was  missing)
-    Width = (I1(t,t)*T + (Beta+V)*I0(t))/std::exp(E0/T);
+    Width = (I1(t,t)*T + (Beta+V)*I0(t))/G4Exp(E0/T);
     //JMQ 160909 fix:  InitialLevelDensity has been taken away 
     //(different conditions for initial CN..) 
   } else {
 
     //VI minor speedup
-    G4double expE0T = std::exp(E0/T);
-    const G4double sqrt2 = std::sqrt(2.0);
+    G4double expE0T = G4Exp(E0/T);
+    static const G4double sqrt2 = std::sqrt(2.0);
 
     G4double tx = Ex/T;
     G4double s0 = 2.0*std::sqrt(a*(MaximalKineticEnergy-delta0));
     G4double sx = 2.0*std::sqrt(a*(Ex-delta0));
-    Width = I1(t,tx)*T/expE0T + I3(s0,sx)*std::exp(s0)/(sqrt2*a);
+    Width = I1(t,tx)*T/expE0T + I3(s0,sx)*G4Exp(s0)/(sqrt2*a);
     // For charged particles (Beta+V) = 0 beacuse Beta = -V
     if (theZ == 0) {
-      Width += (Beta+V)*(I0(tx)/expE0T + 2.0*sqrt2*I2(s0,sx)*std::exp(s0));
+      Width += (Beta+V)*(I0(tx)/expE0T + 2.0*sqrt2*I2(s0,sx)*G4Exp(s0));
     }
   }
   
@@ -212,17 +214,17 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     {
       //JMQ fixed bug in units
       //VI moved the computation here
-      G4double E0CN = ExCN - TCN*(std::log(TCN/MeV) - std::log(aCN*MeV)/4.0 
-				  - 1.25*std::log(UxCN/MeV) 
+      G4double E0CN = ExCN - TCN*(G4Log(TCN/MeV) - G4Log(aCN*MeV)/4.0 
+				  - 1.25*G4Log(UxCN/MeV) 
 				  + 2.0*std::sqrt(aCN*UxCN));
-      InitialLevelDensity = (pi/12.0)*std::exp((U-E0CN)/TCN)/TCN;
+      InitialLevelDensity = (pi/12.0)*G4Exp((U-E0CN)/TCN)/TCN;
     } 
   else 
     {
       //VI speedup
       G4double x  = U-deltaCN;
       G4double x1 = std::sqrt(aCN*x);
-      InitialLevelDensity = (pi/12.0)*std::exp(2*x1)/(x*std::sqrt(x1));
+      InitialLevelDensity = (pi/12.0)*G4Exp(2*x1)/(x*std::sqrt(x1));
     }
 
   //JMQ 190709 BUG : pi instead of sqrt(pi) must be here according 
@@ -249,7 +251,7 @@ G4double G4GEMProbability::I3(G4double s0, G4double sx)
 											      (12.875*s2+0.625*sx2) + Sx2 *(
 															    (59.0625*s2+0.9375*sx2) + Sx2 *(324.8*s2+3.28*sx2))))));
   
-  p2 *= std::exp(sx-s0);
+  p2 *= G4Exp(sx-s0);
   
   return p1-p2; 
 }

@@ -26,7 +26,7 @@
 /// \file analysis/AnaEx03/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.hh 74272 2013-10-02 14:48:50Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,11 +68,12 @@ class HistoManager
         
   private:
   
-    AIDA::IAnalysisFactory*  af;        
-    AIDA::ITree*             tree;
+    AIDA::IAnalysisFactory*  fAF;        
+    AIDA::ITree*             fTree;
     
-    AIDA::IHistogram1D*      histo[MaxHisto];            
-    AIDA::ITuple*            ntupl;    
+    AIDA::IHistogram1D*      fHisto[MaxHisto];            
+    AIDA::ITuple*            fNtuple1;    
+    AIDA::ITuple*            fNtuple2;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2011-03-01 11:43:02 antoni Exp $
+# $Id: GNUmakefile 77519 2013-11-25 10:54:57Z gcosmo $
 # GEANT4 tag $Name: 
 # --------------------------------------------------------------
 # GNUmakefile for examples module with DPMJET interface
@@ -10,6 +10,7 @@ G4EXLIB := true
 
 DPMJDIR = dpmjet2_5
 URQMDDIR= urqmd1_3
+HIJINGDIR= hijing1_383
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
@@ -18,7 +19,7 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: all
-all: dpm urqmd lib bin
+all: dpm urqmd hijing lib bin
 
 dpm:
 ifdef G4_USE_DPMJET
@@ -48,6 +49,19 @@ ifdef G4_USE_URQMD
 
   EXTRALIBS = -lgfortran -lgmp -lmpfr \
               -L${CERNLIB}/lib -lmathlib -lkernlib -lpacklib 
+endif
+
+hijing:
+ifdef G4_USE_HIJING
+	(cd ${HIJINGDIR} && ${MAKE});
+	(mv ${HIJINGDIR}/obj_Linux/*.o ${G4TMPDIR});
+endif
+
+ifdef G4_USE_HIJING
+  CPPFLAGS += -DG4_USE_HIJING
+  EXTRALIBS = -lgfortran 
+#-lgmp -lmpfr \
+#		-L${CERNROOT}/cernlib -lmathlib -lkernlib -lpacklib -lpawlib
 endif
 
 

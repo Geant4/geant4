@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ElectronOccupancy.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -56,6 +56,8 @@
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4ios.hh"
+
+#include "pwdefs.hh"
 
 class G4ElectronOccupancy 
 {
@@ -100,11 +102,7 @@ class G4ElectronOccupancy
 
 };
 
-#if defined G4PARTICLES_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
-#endif
+extern G4PART_DLL G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator;
 
 // ------------------------
 // Inlined operators
@@ -112,14 +110,16 @@ class G4ElectronOccupancy
 
 inline void * G4ElectronOccupancy::operator new(size_t)
 {
-  void * aElectronOccupancy;
-  aElectronOccupancy = (void *) aElectronOccupancyAllocator.MallocSingle();
-  return aElectronOccupancy;
+  if (!aElectronOccupancyAllocator)
+  {
+    aElectronOccupancyAllocator = new G4Allocator<G4ElectronOccupancy>;
+  }
+  return (void *) aElectronOccupancyAllocator->MallocSingle();
 }
 
 inline void G4ElectronOccupancy::operator delete(void * aElectronOccupancy)
 {
-  aElectronOccupancyAllocator.FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
+  aElectronOccupancyAllocator->FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
 }
 
 inline
@@ -169,9 +169,3 @@ inline
   return value;
 }
 #endif
-
-
-
-
-
-

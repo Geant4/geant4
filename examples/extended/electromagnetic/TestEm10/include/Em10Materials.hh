@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Em10Materials.hh 66587 2012-12-21 11:06:44Z ihrivnac $
+//
 /// \file electromagnetic/TestEm10/include/Em10Materials.hh
 /// \brief Definition of the Em10Materials class
 //

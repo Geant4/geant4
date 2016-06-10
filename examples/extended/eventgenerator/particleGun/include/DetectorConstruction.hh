@@ -27,7 +27,7 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id$
+// $Id: DetectorConstruction.hh 68024 2013-03-13 13:42:01Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -47,7 +47,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     DetectorConstruction();
    ~DetectorConstruction();
      
-    G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
                         
     G4double GetWorldSizeXY()     {return fWorldSizeXY;}; 
     G4double GetWorldSizeZ()      {return fWorldSizeZ;};

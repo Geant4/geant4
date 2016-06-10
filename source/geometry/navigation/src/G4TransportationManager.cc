@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TransportationManager.cc 68709 2013-04-05 09:03:07Z gcosmo $
 //
 //
 // G4TransportationManager 
@@ -47,7 +47,8 @@
 
 // Initialise the static instance of the singleton
 //
-G4TransportationManager* G4TransportationManager::fTransportationManager=0;
+G4ThreadLocal G4TransportationManager*
+G4TransportationManager::fTransportationManager=0;
 
 // ----------------------------------------------------------------------------
 // Constructor
@@ -85,6 +86,10 @@ G4TransportationManager::~G4TransportationManager()
   ClearNavigators(); 
   delete fGeomMessenger;
   delete fSafetyHelper;
+  if (fTransportationManager)
+  {
+    delete fTransportationManager; fTransportationManager=0;
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -94,10 +99,10 @@ G4TransportationManager::~G4TransportationManager()
 //
 G4TransportationManager* G4TransportationManager::GetTransportationManager()
 {
-   static G4TransportationManager theInstance;
    if (!fTransportationManager)
-     fTransportationManager = &theInstance;
-   
+   {
+     fTransportationManager = new G4TransportationManager;
+   }   
    return fTransportationManager;
 }
 

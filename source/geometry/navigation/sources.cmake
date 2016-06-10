@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-11-10 11:24:46 gcosmo Exp $
+# $Id: sources.cmake 73633 2013-09-03 09:56:54Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -40,16 +40,9 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4BrentLocator.hh
         G4DrawVoxels.hh
         G4ErrorPropagationNavigator.hh
-        G4GeomTestErrorList.hh
-        G4GeomTestLogger.hh
-        G4GeomTestOverlapList.hh
-        G4GeomTestOvershootList.hh
-        G4GeomTestPoint.hh
-        G4GeomTestSegment.hh
-        G4GeomTestStreamLogger.hh
-        G4GeomTestVolPoint.hh
         G4GeomTestVolume.hh
         G4GeometryMessenger.hh
+        G4GlobalMagFieldMessenger.hh
         G4MultiLevelLocator.hh
         G4MultiNavigator.hh
         G4NavigationLogger.hh
@@ -83,15 +76,9 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4BrentLocator.cc
         G4DrawVoxels.cc
         G4ErrorPropagationNavigator.cc
-        G4GeomTestErrorList.cc
-        G4GeomTestOverlapList.cc
-        G4GeomTestOvershootList.cc
-        G4GeomTestPoint.cc
-        G4GeomTestSegment.cc
-        G4GeomTestStreamLogger.cc
-        G4GeomTestVolPoint.cc
         G4GeomTestVolume.cc
         G4GeometryMessenger.cc
+        G4GlobalMagFieldMessenger.cc
         G4MultiLevelLocator.cc
         G4MultiNavigator.cc
         G4NavigationLogger.cc

@@ -65,10 +65,8 @@ G4VPhysicalVolume* ExG4DetectorConstruction01::Construct()
   //
   G4NistManager* nistManager = G4NistManager::Instance();
 
-  G4bool fromIsotopes = false;
-
   G4Material* material
-    = nistManager->FindOrBuildMaterial(fMaterialName, fromIsotopes);
+    = nistManager->FindOrBuildMaterial(fMaterialName);
  
   // World
   //
@@ -102,10 +100,9 @@ G4VPhysicalVolume* ExG4DetectorConstruction01::Construct()
 void ExG4DetectorConstruction01::SetMaterial(const G4String& materialName)
 {
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
 
   G4Material* newMaterial
-    = nistManager->FindOrBuildMaterial(materialName, fromIsotopes);
+    = nistManager->FindOrBuildMaterial(materialName);
 
   if ( ! newMaterial ) {
     G4cerr << "Material " << materialName << " not found." << G4endl;

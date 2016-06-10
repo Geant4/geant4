@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B3DetectorConstruction.hh 71323 2013-06-13 16:54:23Z gcosmo $
 //
 /// \file B3DetectorConstruction.hh
 /// \brief Definition of the B3DetectorConstruction class
@@ -50,14 +50,11 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
-           
+    virtual void ConstructSDandField();
+               
   private:
     void DefineMaterials();
-    void CreateScorers();
 
-    G4LogicalVolume*  fLogicCryst;
-    G4LogicalVolume*  fLogicPatient;       
-    
     G4bool  fCheckOverlaps;
 };
 

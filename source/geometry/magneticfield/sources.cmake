@@ -11,7 +11,7 @@
 #
 # Generated on : 29/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010-09-29 20:43:15 bmorgan Exp $
+# $Id: sources.cmake 75774 2013-11-06 09:16:47Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +31,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
     HEADERS
         G4CachedMagneticField.hh
         G4CashKarpRKF45.hh
+        G4ChargeState.hh
         G4ChordFinder.hh
         G4ChordFinder.icc
         G4ChordFinderSaf.hh
@@ -78,6 +79,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4MagneticField.hh
         G4NystromRK4.hh
         G4QuadrupoleMagField.hh
+        G4RepleteEofM.hh
         G4RKG3_Stepper.hh
         G4SimpleHeum.hh
         G4SimpleRunge.hh
@@ -89,6 +91,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
     SOURCES
         G4CachedMagneticField.cc
         G4CashKarpRKF45.cc
+        G4ChargeState.cc
         G4ChordFinder.cc
         G4ChordFinderSaf.cc
         G4ClassicalRK4.cc
@@ -128,6 +131,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4MonopoleEq.cc
         G4NystromRK4.cc
         G4QuadrupoleMagField.cc
+        G4RepleteEofM.cc
         G4RKG3_Stepper.cc
         G4SimpleHeum.cc
         G4SimpleRunge.cc

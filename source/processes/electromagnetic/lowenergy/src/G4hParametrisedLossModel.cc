@@ -60,10 +60,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-#include "G4hZiegler1977p.hh"
-#include "G4hZiegler1977He.hh"
 #include "G4hZiegler1985p.hh"
-#include "G4hSRIM2000p.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
 #include "G4DynamicParticle.hh"
@@ -89,30 +86,11 @@ void G4hParametrisedLossModel::InitializeMe()
 
   // Registration of parametrisation models
   G4String blank  = G4String(" ") ;
-  G4String zi77p  = G4String("Ziegler1977p") ;
-  G4String zi77He = G4String("Ziegler1977He") ;
   G4String ir49p  = G4String("ICRU_R49p") ;
   G4String ir49He = G4String("ICRU_R49He") ;
   G4String zi85p  = G4String("Ziegler1985p") ;
-  G4String zi00p  = G4String("SRIM2000p") ;
-  G4String qao    = G4String("QAO") ;
-  if(zi77p == modelName) {
-      eStopingPowerTable = new G4hZiegler1977p();
-      highEnergyLimit = 100.0*MeV;
-      lowEnergyLimit  = 1.0*keV;
-
-  } else if(zi77He == modelName) {
-      eStopingPowerTable = new G4hZiegler1977He();
-      highEnergyLimit = 10.0*MeV/4.0;
-      lowEnergyLimit  = 1.0*keV/4.0;
-
-  } else if(zi85p == modelName) {
+  if(zi85p == modelName) {
       eStopingPowerTable = new G4hZiegler1985p();
-      highEnergyLimit = 100.0*MeV;
-      lowEnergyLimit  = 1.0*keV;
-
-  } else if(zi00p == modelName ) {
-      eStopingPowerTable = new G4hSRIM2000p();
       highEnergyLimit = 100.0*MeV;
       lowEnergyLimit  = 1.0*keV;
 
@@ -125,12 +103,7 @@ void G4hParametrisedLossModel::InitializeMe()
       eStopingPowerTable = new G4hICRU49He();
       highEnergyLimit = 10.0*MeV/4.0;
       lowEnergyLimit  = 1.0*keV/4.0;
-      /*
-  } else if(qao == modelName) {
-      eStopingPowerTable = new G4hQAOModel();
-      highEnergyLimit = 2.0*MeV;
-      lowEnergyLimit  = 5.0*keV;
-      */
+
   } else {
       eStopingPowerTable = new G4hICRU49p();
       highEnergyLimit = 2.0*MeV;
@@ -337,10 +310,10 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   const size_t numberOfMolecula = 53 ;
 
   // The coffecient from Table.4 of Ziegler & Manoyan
-  const G4double HeEff = 2.8735 ;    
+  static const G4double HeEff = 2.8735 ;    
   
-  static G4String name[numberOfMolecula] = {
-    "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
+  static const G4String name[numberOfMolecula] = {
+    "H_2O",     "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
     "C_6H_6",    "C_4H_10",    "C_4H_6",   "C_4H_8O",            "CCl_4",
     "CF_4",      "C_6H_8",     "C_6H_12",  "C_6H_10O",           "C_6H_10",
@@ -348,12 +321,12 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     "C_2H_2F_2", "C_4H_8O_2",  "C_2H_6",   "C_2F_6",             "C_2H_6O",
     "C_3H_6O",   "C_4H_10O",   "C_2H_4",   "C_2H_4O",            "C_2H_4S",
     "SH_2",      "CH_4",       "CCLF_3",   "CCl_2F_2",           "CHCl_2F",
-    "(CH_3)_2S", "N_2O",       "C_5H_10O", "C_8H_6",             "(CH_2)_N",
+    "(CH_3)_2S", "N_2O",       "C_5H_10O" "C_8H_6",          "(CH_2)_N",
     "(C_3H_6)_N","(C_8H_8)_N", "C_3H_8",   "C_3H_6-Propylene",   "C_3H_6O",
     "C_3H_6S",   "C_4H_4S",    "C_7H_8"
-  } ;
+  };
     
-  static G4double expStopping[numberOfMolecula] = {
+  static const G4double expStopping[numberOfMolecula] = {
      66.1,  190.4, 258.7,  42.2, 141.5, 
     210.9,  279.6, 198.8,  31.0, 267.5,
     122.8,  311.4, 260.3, 328.9, 391.3,
@@ -367,7 +340,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     306.8,  324.4, 420.0
   } ;
 
-  static G4double expCharge[numberOfMolecula] = {
+  static const G4double expCharge[numberOfMolecula] = {
     HeEff, HeEff, HeEff,   1.0, HeEff, 
     HeEff, HeEff, HeEff,   1.0,   1.0,
       1.0, HeEff, HeEff, HeEff, HeEff,
@@ -381,7 +354,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     HeEff, HeEff, HeEff
   } ;
 
-  static G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
+  static const G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
     3.0,  7.0, 10.0,  4.0,  6.0,  
     9.0, 12.0,  7.0,  4.0, 24.0,
     12.0, 14.0, 10.0, 13.0,  5.0,

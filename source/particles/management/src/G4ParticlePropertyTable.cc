@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ParticlePropertyTable.cc 72955 2013-08-14 14:23:14Z gcosmo $
 //
 // class G4ParticlePropertyTable
 //
@@ -40,14 +40,14 @@
 #include "G4ParticlePropertyTable.hh"
 
 // Static class variable: ptr to single instance of class
-G4ParticlePropertyTable* G4ParticlePropertyTable::fgParticlePropertyTable =0;
+G4ThreadLocal G4ParticlePropertyTable* G4ParticlePropertyTable::fgParticlePropertyTable =0;
 
 ////////////////////
 G4ParticlePropertyTable* G4ParticlePropertyTable::GetParticlePropertyTable()
 {
-  static G4ParticlePropertyTable theParticlePropertyTable;
-  if (!fgParticlePropertyTable){
-    fgParticlePropertyTable =  &theParticlePropertyTable;
+  if (!fgParticlePropertyTable)
+  {
+    fgParticlePropertyTable = new  G4ParticlePropertyTable;
   }
   return fgParticlePropertyTable;
 }
@@ -221,7 +221,7 @@ G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData
   if (pData.fPDGLifeTimeModified) {
     aParticle->thePDGLifeTime = pData.thePDGLifeTime; 
   }
-  for (size_t flv=0; flv<<G4ParticlePropertyData::NumberOfQuarkFlavor; ++flv) {
+  for (size_t flv=0; flv<G4ParticlePropertyData::NumberOfQuarkFlavor; ++flv) {
     if (pData.fQuarkContentModified){
       aParticle->theQuarkContent[flv] = pData.theQuarkContent[flv];
     }
@@ -232,9 +232,3 @@ G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData
   
   return true;
 }
-
-
-
-
-
-

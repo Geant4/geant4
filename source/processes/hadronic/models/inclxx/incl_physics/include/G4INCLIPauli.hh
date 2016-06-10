@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -48,7 +46,7 @@ namespace G4INCL {
     IPauli() {};
     virtual ~IPauli() {};
 
-    virtual G4bool isBlocked(ParticleList const, Nucleus const * const) const = 0;
+    virtual G4bool isBlocked(ParticleList const &, Nucleus const * const) = 0;
 
   protected:
   };

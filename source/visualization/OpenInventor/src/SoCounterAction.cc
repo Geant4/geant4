@@ -51,7 +51,7 @@ void SoCounterAction::initClass(void){
   SO_ACTION_ADD_METHOD(SoNode,SoCounterAction::actionMethod);
 }
 SoCounterAction::SoCounterAction()
-:fCount(0),fLookFor(NODE),fCheckDerived(TRUE){
+:fCount(0),fLookFor(NODE),fType(),fCheckDerived(TRUE) {
   SO_ACTION_CONSTRUCTOR(SoCounterAction);
 }
 SoCounterAction::~SoCounterAction(){}

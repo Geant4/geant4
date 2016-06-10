@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorSurfaceTrajState.cc 69014 2013-04-15 09:42:51Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -42,7 +42,6 @@
 #include "G4ErrorMatrix.hh"
 
 #include <iomanip>
-
 
 //------------------------------------------------------------------------
 G4ErrorSurfaceTrajState::
@@ -84,24 +83,24 @@ G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Plane3D& plane )
   //----- Get the error matrix in SC coordinates
   BuildErrorMatrix( tpSC, GetVectorV(), GetVectorW() );
 }
-
+ 
 
 //------------------------------------------------------------------------
 G4ErrorSurfaceTrajState::
 G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecU,
-                         const G4Vector3D& vecV )
+                         const G4Vector3D& vecV , G4ErrorMatrix &transfM)
   : G4ErrorTrajState( tpSC.GetParticleType(), tpSC.GetPosition(),
                       tpSC.GetMomentum() )
 {
+  Init(); // needed to define charge sign 
   fTrajParam = G4ErrorSurfaceTrajParam( fPosition, fMomentum, vecU, vecV );
-  theTSType = G4eTS_OS;
   //----- Get the error matrix in SC coordinates
-  BuildErrorMatrix( tpSC, vecU, vecV );
+  transfM= BuildErrorMatrix( tpSC, vecU, vecV );
 }
 
 
 //------------------------------------------------------------------------
-void G4ErrorSurfaceTrajState::
+G4ErrorMatrix  G4ErrorSurfaceTrajState::
 BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
                   const G4Vector3D& )
 {
@@ -139,11 +138,12 @@ BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
   const G4Field* field = G4TransportationManager::GetTransportationManager()->GetFieldManager()->GetDetectorField();
 
   G4Vector3D vectorU = GetVectorV().cross( GetVectorW() );
+  G4double T1R = 1. / ( vTN * vectorU );
 
 #ifdef G4EVERBOSE
-  if( iverbose >= 4) G4cout << "vectors " << vectorU << " " <<  GetVectorV() << " " << GetVectorW() << G4endl;
+  if( iverbose >= 4) G4cout << "surf vectors:U,V,W " << vectorU << " " <<  GetVectorV() << " " << GetVectorW() << "  T1R:"<<T1R<<G4endl;
 #endif
-  G4double T1R = 1. / ( vTN * vectorU );
+
 
   if( fCharge != 0 && field ) {
     G4double pos[3]; pos[0] = fPosition.x()*cm; pos[1] = fPosition.y()*cm; pos[2] = fPosition.z()*cm;
@@ -202,6 +202,7 @@ BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
   if( iverbose >= 4) G4cout << "G4ErrorSurfaceTrajState from SC " << *this << G4endl;
 #endif
 
+  return transfM; // want to use trasnfM for the reverse transform
 }
 
 

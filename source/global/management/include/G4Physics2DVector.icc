@@ -25,7 +25,6 @@
 //
 //
 // $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -35,10 +34,12 @@
 
 //---------------------------------------------------------------
 
-inline G4double G4Physics2DVector::Value(G4double x, G4double y)
+inline
+ G4double G4Physics2DVector::Value(G4double x, G4double y) const
 {
-  if(x != cache->lastX || y != cache->lastY) { ComputeValue(x, y); }
-  return cache->lastValue;
+  size_t idx = 0;
+  size_t idy = 0;
+  return Value(x, y, idx, idy);
 }
 
 inline void G4Physics2DVector::PutX(size_t idx, G4double val)
@@ -73,6 +74,13 @@ inline
   return (*(value[idy]))[idx];
 }
 
+inline 
+ G4double G4Physics2DVector::FindLinearX(G4double rand, G4double y) const
+{
+  size_t idy = 0;
+  return FindLinearX(rand, y, idy);
+}
+
 inline size_t G4Physics2DVector::GetLengthX() const
 {
   return numberOfXNodes;
@@ -93,45 +101,32 @@ inline void G4Physics2DVector::SetBicubicInterpolation(G4bool val)
   useBicubic = val;
 }
 
-inline G4double G4Physics2DVector::GetLastX() const
+inline size_t G4Physics2DVector::FindBin(G4double z, 
+                                         const G4PV2DDataVector& v, 
+                                         size_t idx,
+                                         size_t idxmax) const
 {
-  return cache->lastX;
+  size_t id = idx;
+  if(z < v[1]) { 
+    id = 0; 
+  } else if(z >= v[idxmax-2]) { 
+    id = idxmax - 2; 
+  } else if(z < v[idx] || z >= v[idx+1]) { 
+    id = FindBinLocation(z, v); 
+  }
+  return id;
 }
 
-inline G4double G4Physics2DVector::GetLastY() const
+inline size_t 
+G4Physics2DVector::FindBinLocationX(G4double x, size_t lastidx) const
 {
-  return cache->lastY;
+  return FindBin(x, xVector, lastidx, numberOfXNodes);
 }
 
-inline G4double G4Physics2DVector::GetLastValue() const
+inline size_t 
+G4Physics2DVector::FindBinLocationY(G4double y, size_t lastidy) const
 {
-  return cache->lastValue;
-}
-
-inline size_t G4Physics2DVector::GetLastBinX() const
-{
-   return cache->lastBinX;
-}
-
-inline size_t G4Physics2DVector::GetLastBinY() const
-{
-   return cache->lastBinY;
-}
- 
-inline void 
-G4Physics2DVector::FindBin(G4double z, const G4PV2DDataVector& v, size_t& idz)
-{
-  if(z < v[idz] || z >=  v[idz]) { idz = FindBinLocation(z, v); }
-}
-
-inline void G4Physics2DVector::FindBinLocationX(G4double x)
-{
-  FindBin(x, xVector, cache->lastBinX);
-}
-
-inline void G4Physics2DVector::FindBinLocationY(G4double y)
-{
-  FindBin(y, yVector, cache->lastBinY);
+  return FindBin(y, yVector, lastidy, numberOfYNodes);
 }
 
 inline void G4Physics2DVector::SetVerboseLevel(G4int val)
@@ -145,7 +140,7 @@ inline G4int G4Physics2DVector::GetVerboseLevel() const
 }
 
 inline G4double 
-G4Physics2DVector::DerivativeX(size_t idx, size_t idy, G4double fac)
+G4Physics2DVector::DerivativeX(size_t idx, size_t idy, G4double fac) const
 {
   size_t i1 = idx;
   if(i1 > 0) { --i1; }
@@ -155,7 +150,7 @@ G4Physics2DVector::DerivativeX(size_t idx, size_t idy, G4double fac)
 }
 
 inline G4double 
-G4Physics2DVector::DerivativeY(size_t idx, size_t idy, G4double fac)
+G4Physics2DVector::DerivativeY(size_t idx, size_t idy, G4double fac) const
 {
   size_t i1 = idy;
   if(i1 > 0) { --i1; }
@@ -165,7 +160,7 @@ G4Physics2DVector::DerivativeY(size_t idx, size_t idy, G4double fac)
 }
 
 inline G4double 
-G4Physics2DVector::DerivativeXY(size_t idx, size_t idy, G4double fac)
+G4Physics2DVector::DerivativeXY(size_t idx, size_t idy, G4double fac) const
 {
   size_t i1 = idx;
   if(i1 > 0) { --i1; }

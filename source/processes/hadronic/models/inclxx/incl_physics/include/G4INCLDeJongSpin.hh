@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -49,29 +47,10 @@
 #ifndef G4INCLDEJONGSPIN_HH_
 #define G4INCLDEJONGSPIN_HH_
 
-#include "G4INCLGlobals.hh"
-#include "G4INCLRandom.hh"
-
 namespace G4INCL {
-  class DeJongSpin {
-    public:
-      static ThreeVector shoot(const G4int Ap, const G4int Af) {
-        return Random::gaussVector(getSpinCutoffParameter(Ap, Af));
-      }
-
-    private:
-      static G4double getSpinCutoffParameter(const G4int Ap, const G4int Af) {
-        const G4double jz2 = jzFactor * Math::pow23((G4double) Ap); // No deformation assumed
-        const G4double sigma = jz2 * Af*(Ap-Af)/((G4double)(Ap-1));
-        return std::sqrt(sigma);
-      }
-
-      const static G4double jzFactor;
-
-      DeJongSpin() {}
-      ~DeJongSpin() {}
-
-  };
+  namespace DeJongSpin {
+    ThreeVector shoot(const G4int Ap, const G4int Af);
+  }
 }
 
 #endif // G4INCLDEJONGSPIN_HH_

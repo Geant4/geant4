@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VTwistedFaceted.cc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -53,10 +53,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
-#include "G4NURBS.hh"
-#include "G4NURBStube.hh"
-#include "G4NURBScylinder.hh"
-#include "G4NURBStubesector.hh"
 
 #include "Randomize.hh"
 
@@ -1122,18 +1118,6 @@ G4VisExtent G4VTwistedFaceted::GetExtent() const
   return G4VisExtent(-maxRad, maxRad ,
                      -maxRad, maxRad ,
                      -fDz, fDz );
-}
-
-
-//=====================================================================
-//* CreateNUBS --------------------------------------------------------
-
-G4NURBS* G4VTwistedFaceted::CreateNURBS () const 
-{
-  G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
-
-  return new G4NURBStube(maxRad, maxRad, fDz); 
-   // Tube for now!!!
 }
 
 

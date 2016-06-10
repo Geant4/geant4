@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportationManager.hh 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4ITTransportationManager.hh 66872 2013-01-15 01:25:57Z japost $
 //
 /// \brief {Duplicated version of G4TransportationManager.
 ///         This class just contains the pointer to the navigator object of the
@@ -49,7 +49,7 @@ public:
 private:
     G4ITTransportationManager();
     ~G4ITTransportationManager();
-    static G4ITTransportationManager* fpInstance;
+    static G4ThreadLocal G4ITTransportationManager* fpInstance;
     void Initialize();
     G4ITNavigator* fpNavigator;
 };

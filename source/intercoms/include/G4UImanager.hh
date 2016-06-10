@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UImanager.hh 77651 2013-11-27 08:47:55Z gcosmo $
 //
 
 #ifndef G4UImanager_h
@@ -41,7 +41,10 @@ class G4UIcommand;
 class G4UIsession;
 class G4UIcontrolMessenger;
 class G4UnitsMessenger;
+class G4LocalThreadCoutMessenger;
 class G4UIaliasList;
+class G4MTcoutDestination;
+class G4UIbridge;
 
 // class description:
 //
@@ -54,6 +57,7 @@ class G4UImanager : public G4VStateDependent
 {
   public: // with description
       static G4UImanager * GetUIpointer();
+      static G4UImanager * GetMasterUIpointer();
       //  A static method to get the pointer to the only existing object
       // of this class.
 
@@ -118,6 +122,9 @@ class G4UImanager : public G4VStateDependent
       void CreateHTML(const char* dir = "/");
       //  Generate HTML files for defined UI commands
 
+  private:
+      void AddWorkerCommand(G4UIcommand * newCommand);
+      void RemoveWorkerCommand(G4UIcommand * aCommand);
 
   public:
       void LoopS(const char* valueList);
@@ -138,13 +145,15 @@ class G4UImanager : public G4VStateDependent
   //    void Interact(const char * promptCharacters);
 
   private:
-      static G4UImanager * fUImanager;
-      static G4bool fUImanagerHasBeenKilled;
+      static G4ThreadLocal G4UImanager * fUImanager;
+      static G4ThreadLocal G4bool fUImanagerHasBeenKilled;
+      static G4UImanager * fMasterUImanager;
       G4UIcommandTree * treeTop;
       G4UIsession * session;
       G4UIsession * g4UIWindow;
       G4UIcontrolMessenger * UImessenger;
       G4UnitsMessenger * UnitsMessenger;
+      G4LocalThreadCoutMessenger * CoutMessenger;
       G4String savedParameters;
       G4UIcommand * savedCommand;
       G4int verboseLevel;
@@ -238,14 +247,45 @@ class G4UImanager : public G4VStateDependent
       void ParseMacroSearchPath();
       G4String FindMacroPath(const G4String& fname) const;
 
-  // Old methods kept for backward compatibility
-  //    inline G4UIcommandTree * GetTree() const
-  //    { return treeTop; };
-  //    inline G4UIsession * GetSession() const
-  //    { return session; };
-  //    inline void SetSession(G4UIsession *const  value)
-  //    { session = value; };
+  private:
+      G4bool isMaster;
+      std::vector<G4UIbridge*>* bridges; 
+      G4bool ignoreCmdNotFound;
+      G4bool stackCommandsForBroadcast;
+      std::vector<G4String>* commandStack;
 
+  public:
+      inline void SetMasterUIManager(G4bool val)
+      {
+        isMaster = val;
+        //ignoreCmdNotFound = val;
+        stackCommandsForBroadcast = val;
+        if(val&&!bridges)
+        {
+           bridges = new std::vector<G4UIbridge*>;
+           fMasterUImanager = this;
+        }
+      }
+      inline void SetIgnoreCmdNotFound(G4bool val)
+      { ignoreCmdNotFound = val; }
+
+      std::vector<G4String>* GetCommandStack();
+      void RegisterBridge(G4UIbridge* brg);
+
+  public: 
+      void SetUpForAThread(G4int tId);
+
+  private:
+      G4int threadID;
+      G4MTcoutDestination* threadCout;
+      static G4int igThreadID;
+
+  public:
+      void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
+      void SetCerrFileName(const G4String& fileN = "G4cerr.txt", G4bool ifAppend = true);
+      void SetThreadPrefixString(const G4String& s = "W");
+      void SetThreadUseBuffer(G4bool flg = true);
+      void SetThreadIgnore(G4int tid = 0);
 };
 
 #endif

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/EmAcceptance.hh
 /// \brief Definition of the EmAcceptance class
 //
-// $Id$
+// $Id: EmAcceptance.hh 74994 2013-10-25 10:47:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,21 +40,19 @@
 
 class EmAcceptance
 {
+public:
+  EmAcceptance();
+  ~EmAcceptance();
 
-  public:
-    EmAcceptance();
-   ~EmAcceptance();
+  void BeginOfAcceptance(const G4String& title, G4int stat);
+  void EndOfAcceptance();
 
-    void BeginOfAcceptance(const G4String& title, G4int stat);
-    void EndOfAcceptance();
+  void EmAcceptanceGauss(const G4String& title, G4int stat, 
+                         G4double avr, G4double avr0, 
+                         G4double rms, G4double limit);
 
-    void EmAcceptanceGauss(const G4String& title, G4int stat, 
-                                 G4double avr, G4double avr0, 
-                                 G4double rms, G4double limit);
-
-  private:
-    G4bool fIsAccepted;
-
+private:
+  G4bool fIsAccepted;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

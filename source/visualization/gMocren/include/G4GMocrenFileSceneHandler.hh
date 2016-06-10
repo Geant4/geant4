@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GMocrenFileSceneHandler.hh 75179 2013-10-29 10:09:31Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -66,7 +66,6 @@ public:
 	//----- overriding base class methods
   void AddPrimitive (const G4Polyline& line);
   void AddPrimitive (const G4Polyhedron& p);
-  void AddPrimitive (const G4NURBS& nurb);
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
@@ -178,10 +177,14 @@ private:
     ~Index3D(){;}
     G4bool operator < (const Index3D & _right) const;
     G4bool operator == (const Index3D & _right) const;
+  private:
+    // Private assigment operator -
+    // assignment not allowed.  Keeps Coverity happy.
+    // Index3D& operator = (const Index3D&);
   };
 
   std::map<Index3D, float> kNestedModality;
-  std::map<Index3D, G4double> * fTempNestedHits;
+  //std::map<Index3D, G4double> * fTempNestedHits;
   std::map<G4String, std::map<Index3D, G4double> > kNestedHitsList;
   //std::map<G4String, G4String> kNestedHitsUnit;
 
@@ -200,7 +203,7 @@ private:
   G4int kFlagParameterization; // 0: G4VNestedParameterisation based geometry
                                // 1: G4PhantomParameterisation
                                // 2: interactive scorer
-  G4bool kFLagProcessedInteractiveScorer;
+  G4bool kFlagProcessedInteractiveScorer;
 
   char kGddDestDir[256]; 
   char kGddFileName[256];

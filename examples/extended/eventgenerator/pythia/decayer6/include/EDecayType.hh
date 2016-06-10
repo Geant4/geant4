@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: EDecayType.hh 72244 2013-07-12 08:49:56Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/include/EDecayType.hh
 /// \brief Definition of the EDecayType enumeration

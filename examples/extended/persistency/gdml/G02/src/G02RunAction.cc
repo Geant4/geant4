@@ -27,7 +27,7 @@
 /// \brief Implementation of the G02RunAction class
 //
 //
-// $Id$
+// $Id: G02RunAction.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02RunAction implementation
 //
@@ -48,6 +48,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G02RunAction::G02RunAction()
+ : G4UserRunAction()
 { 
 }
 

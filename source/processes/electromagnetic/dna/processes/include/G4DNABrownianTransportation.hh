@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABrownianTransportation.hh 64374 2012-10-31 16:37:23Z gcosmo $
+// $Id: G4DNABrownianTransportation.hh 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -43,8 +43,9 @@
 
 class G4SafetyHelper;
 
-/// \brief { The transportation method implemented is the one from
-///         Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978)}
+/* \brief { The transportation method implemented is the one from
+ *         Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978)}
+ */
 
 class G4DNABrownianTransportation : public G4ITTransportation
 {

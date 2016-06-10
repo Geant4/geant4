@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.12 2010-10-07 14:03:11 sincerti Exp $
+$Id: README 70524 2013-05-31 16:36:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,6 @@ S. Incerti (a, *) et al.
 a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
-
-Last modified by S. Incerti, 07/10/2010
 
 ---->0. INTRODUCTION.                                                    
                                                                        
@@ -71,8 +69,12 @@ measurements performed on the AIFIRA facility. Incident particle used for
 cellular irradiation are 3 MeV alpha particles.
 
 More details on the experimental setup and its simulation with Geant4 can 
-be found in the following papers, which may be found on the SLAC-SPIRES
-online database (http://www.slac.stanford.edu/spires/) :
+be found in the following papers:
+
+- IN SILICO NANODOSIMETRY: NEW INSIGHTS INTO NON-TARGETED BIOLOGICAL RESPONSES TO 
+RADIATION
+By Z. Kuncic, H. L. Byrne, A. L. McNamara, S. Guatelli, W. Domanova, S. Incerti
+Publsihed in Comp. Math. Meth. Med. (2012) 147252 
 
 - MONTE CARLO MICRODOSIMETRY FOR TARGETED IRRADIATION OF INDIVIDUAL CELLS USING 
 A MICROBEAM FACILITY 
@@ -123,30 +125,31 @@ Published in Nucl.Instrum.Meth.B210:92-97, 2003
 
 The user can visualize the targeted cell by uncommenting the following line in
 microbeam.mac:
+
 #/control/execute vis.mac
 
 ---->4. HOW TO RUN THE EXAMPLE                                         
-
-The variable G4ANALYSIS_USE must be set to 1.
-
-In order to generate histograms, at least one of the AIDA implementations should be 
- available.
   
-The code should be compiled with gmake and run with :
+The code should be compiled with cmake.
 
-> $G4WORDIR/bin/$G4SYSTEM/microbeam
+Put the 'phantom.dat' file into your build directory.
 
-The macro file microbeam.mac is read by default.
+Run the example from your build directory with:
+./microbeam
 
+The macro file microbeam.mac is read by default. 
+
+
+The works in MT mode.
 
 ---->5. PHYSICS
 
-Livermore physics list is used by default, see microbeam.mac
+Livermore physics list is used by default.
 
 ---->6. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
-The output results consist in several a microbeam.root file, containing several
-ntuples:
+The output results consist in a microbeam.root file per thread, 
+containing several ntuples:
 
 * total deposited dose in the cell nucleus and in the cell 
 cytoplasm by each incident alpha particle;
@@ -160,13 +163,14 @@ alpha particle within the irradiated medium (cell or culture medium)
 * stopping power dE/dx of the incident 
 alpha particle just before penetrating into the targeted cell;
 
-* beam transverse position distribution(X and Y) 
+* beam transverse position distribution (X and Y) 
 just before penetrating into the targeted cell;
 
 These results can be easily analyzed using for example the provided ROOT macro 
 file plot.C; to do so :
 * be sure to have ROOT installed on your machine
-* be sure to be in the microbeam directory
+* be sure to be in the directory where the output ROOT files have been created
+* copy plot.C into this directory
 * launch ROOT by typing root
 * under your ROOT session, type in : .X plot.C to execute the macro file
 

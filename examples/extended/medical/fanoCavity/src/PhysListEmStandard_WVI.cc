@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_WVI.cc
 /// \brief Implementation of the PhysListEmStandard_WVI class
 //
-// $Id$
+// $Id: PhysListEmStandard_WVI.cc 68525 2013-04-01 21:16:50Z adotti $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -79,9 +79,9 @@ void PhysListEmStandard_WVI::ConstructProcess()
   // Add standard EM Processes
   //
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -91,7 +91,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
       G4ComptonScattering* compton = new G4ComptonScattering();
       MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
-      compton->SetModel(comptonModel );
+      compton->SetEmModel(comptonModel );
             
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(compton);

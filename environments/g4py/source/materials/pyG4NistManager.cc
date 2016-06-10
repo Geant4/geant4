@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4NistManager.cc,v 1.6 2007-11-07 08:49:31 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4NistManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4NistManager.cc
 //
@@ -49,8 +48,8 @@ G4Element*(G4NistManager::*f1_FindOrBuildElement)(G4int, G4bool)
 G4Element*(G4NistManager::*f2_FindOrBuildElement)(const G4String&, G4bool)
   = &G4NistManager::FindOrBuildElement;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_FindOrBuildElement, 
-				       FindOrBuildElement, 1, 2);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_FindOrBuildElement,
+				       FindOrBuildElement, 1, 2)
 
 // PrintElement
 void(G4NistManager::*f1_PrintElement)(const G4String&)
@@ -59,48 +58,29 @@ void(G4NistManager::*f2_PrintElement)(G4int)
   = &G4NistManager::PrintElement;
 
 // FindOrBuildMaterial
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_FindOrBuildMaterial, 
-				       FindOrBuildMaterial, 1, 2);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_FindOrBuildMaterial,
+				       FindOrBuildMaterial, 1, 2)
 
 // ConstructNewMaterial
-#if G4VERSION_NUMBER >= 910
 G4Material*(G4NistManager::*f1_ConstructNewMaterial)
-  (const G4String&, const std::vector<G4String>&, 
+  (const G4String&, const std::vector<G4String>&,
    const std::vector<G4int>&, G4double, G4bool,
    G4State, G4double, G4double)
   = &G4NistManager::ConstructNewMaterial;
 
 G4Material*(G4NistManager::*f2_ConstructNewMaterial)
-  (const G4String&, const std::vector<G4String>&, 
+  (const G4String&, const std::vector<G4String>&,
    const std::vector<G4double>&, G4double, G4bool,
    G4State, G4double, G4double)
   = &G4NistManager::ConstructNewMaterial;
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ConstructNewMaterial,
-				       ConstructNewMaterial, 4, 8);
+				       ConstructNewMaterial, 4, 8)
 
-#else
-G4Material*(G4NistManager::*f1_ConstructNewMaterial)
-  (const G4String&, const std::vector<G4String>&, 
-   const std::vector<G4int>&, G4double, G4bool)
-  = &G4NistManager::ConstructNewMaterial;
-
-G4Material*(G4NistManager::*f2_ConstructNewMaterial)
-  (const G4String&, const std::vector<G4String>&, 
-   const std::vector<G4double>&, G4double, G4bool)
-  = &G4NistManager::ConstructNewMaterial;
-
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ConstructNewMaterial,
-				       ConstructNewMaterial, 4, 5);
-
-#endif
-
-#if G4VERSION_NUMBER >= 910
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ConstructNewGasMaterial,
-				       ConstructNewGasMaterial, 4, 5);
-#endif
+				       ConstructNewGasMaterial, 4, 5)
 
-};
+}
 
 using namespace pyG4NistManager;
 

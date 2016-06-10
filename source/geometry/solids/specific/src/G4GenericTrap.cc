@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GenericTrap.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -56,8 +56,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4PolyhedronArbitrary.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 const G4int    G4GenericTrap::fgkNofVertices = 8;
@@ -87,7 +85,9 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
   G4String errorDescription = "InvalidSetup in \" ";
   errorDescription += name;
   errorDescription += "\""; 
-  
+
+  halfCarTolerance = kCarTolerance*0.5;
+
   // Check vertices size
 
   if ( G4int(vertices.size()) != fgkNofVertices )
@@ -159,6 +159,7 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
 G4GenericTrap::G4GenericTrap( __void__& a )
   : G4VSolid(a),
     fpPolyhedron(0),
+    halfCarTolerance(0.),
     fDz(0.),
     fVertices(),
     fIsTwisted(false),
@@ -187,7 +188,8 @@ G4GenericTrap::~G4GenericTrap()
 
 G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
   : G4VSolid(rhs),
-    fpPolyhedron(0), fDz(rhs.fDz), fVertices(rhs.fVertices),
+    fpPolyhedron(0), halfCarTolerance(rhs.halfCarTolerance),
+    fDz(rhs.fDz), fVertices(rhs.fVertices),
     fIsTwisted(rhs.fIsTwisted), fTessellatedSolid(0),
     fMinBBoxVector(rhs.fMinBBoxVector), fMaxBBoxVector(rhs.fMaxBBoxVector),
     fVisSubdivisions(rhs.fVisSubdivisions),
@@ -214,7 +216,8 @@ G4GenericTrap& G4GenericTrap::operator = (const G4GenericTrap& rhs)
 
    // Copy data
    //
-   fpPolyhedron = 0; fDz = rhs.fDz; fVertices = rhs.fVertices;
+   fpPolyhedron = 0; halfCarTolerance = rhs.halfCarTolerance;
+   fDz = rhs.fDz; fVertices = rhs.fVertices;
    fIsTwisted = rhs.fIsTwisted; fTessellatedSolid = 0;
    fMinBBoxVector = rhs.fMinBBoxVector; fMaxBBoxVector = rhs.fMaxBBoxVector;
    fVisSubdivisions = rhs.fVisSubdivisions;
@@ -235,7 +238,6 @@ EInside
 G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
                               const std::vector<G4TwoVector>& poly) const 
 {
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
   EInside  in = kInside;
   G4double cross, len2;
   G4int count=0;
@@ -312,7 +314,6 @@ EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
    }
 #endif  
 
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
   EInside innew=kOutside;
   std::vector<G4TwoVector> xy;
  
@@ -349,8 +350,6 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
     return fTessellatedSolid->SurfaceNormal(p);
   }  
 #endif   
-
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
  
   G4ThreeVector lnorm, sumnorm(0.,0.,0.), apprnorm(0.,0.,1.),
                 p0, p1, p2, r1, r2, r3, r4;
@@ -485,7 +484,6 @@ G4ThreeVector G4GenericTrap::NormalToPlane( const G4ThreeVector& p,
   }  
 #endif   
 
-  static const G4double halfCarTolerance=kCarTolerance*0.5; 
   G4ThreeVector lnorm, norm(0.,0.,0.), p0,p1,p2;
  
   G4double  distz = fDz-p.z();
@@ -567,7 +565,6 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
   // ipl=2 : points 2,6,3,7
   // ipl=3 : points 3,7,0,4
 
-  static const G4double halfCarTolerance=0.5*kCarTolerance;
   G4double xa,xb,xc,xd,ya,yb,yc,yd;
   
   G4int j = (ipl+1)%4;
@@ -726,8 +723,6 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
   }  
 #endif
     
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
-
   G4double dist[5];
   G4ThreeVector n;
 
@@ -838,8 +833,6 @@ G4double
 G4GenericTrap::DistToTriangle(const G4ThreeVector& p,
                               const G4ThreeVector& v, const G4int ipl) const
 {
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
-
   G4double xa=fVertices[ipl].x();
   G4double ya=fVertices[ipl].y();
   G4double xb=fVertices[ipl+4].x();
@@ -904,8 +897,6 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
     return fTessellatedSolid->DistanceToOut(p, v, calcNorm, validNorm, n);
   }
 #endif
-
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
 
   G4double distmin;
   G4bool lateral_cross = false;
@@ -2213,27 +2204,5 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
 
   return (G4Polyhedron*) polyhedron;
 }
-
-// --------------------------------------------------------------------
-
-G4NURBS*  G4GenericTrap::CreateNURBS() const
-{
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->CreateNURBS();
-  }
-#endif
-
-  // Computes bounding vectors for the shape
-  //
-  G4double Dx,Dy;
-  G4ThreeVector minVec = GetMinimumBBox();
-  G4ThreeVector maxVec = GetMaximumBBox();
-  Dx = 0.5*(maxVec.x()- minVec.y());
-  Dy = 0.5*(maxVec.y()- minVec.y());
-
-  return new G4NURBSbox (Dx, Dy, fDz);
-}    
 
 // --------------------------------------------------------------------

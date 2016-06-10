@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id$
+// $Id: TrackingAction.cc 69009 2013-04-15 09:33:05Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,9 +44,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA,
-                               HistoManager* HM)
-:fDetector(DET), fRunAction(RA), fHistoManager(HM)
+TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA)
+:fDetector(DET), fRunAction(RA)
 {
  fZend = 0.5*(fDetector->GetThicknessWorld()); 
 }
@@ -60,6 +59,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track*)
 
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
   G4double charge = track->GetDefinition()->GetPDGCharge();
   G4ThreeVector position = track->GetPosition();
   G4ThreeVector direction = track->GetMomentumDirection();    
@@ -74,38 +75,60 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //projected angle at exit
   //
   G4double ux = direction.x(), uy = direction.y(), uz = direction.z();
-  if (fHistoManager->HistoExist(ih)) {
-    G4double thetax = std::atan(ux/uz);
-    G4double thetay = std::atan(uy/uz);
-    fHistoManager->FillHisto(ih, thetax);
-    fHistoManager->FillHisto(ih, thetay);
-  }
+  G4double thetax = std::atan(ux/uz);
+  G4double thetay = std::atan(uy/uz);
+  analysisManager->FillH1(ih, thetax);
+  analysisManager->FillH1(ih, thetay);
       
   //dN/dS at exit
   //
   G4double x = position.x(), y = position.y();
   G4double r = std::sqrt(x*x + y*y);
   ih = 2;
-  if (fHistoManager->HistoExist(ih)) {
-    dr = fHistoManager->GetBinWidth(ih);
-    rmin = ((int)(r/dr))*dr;
-    ds = twopi*(rmin + 0.5*dr)*dr;        
-    fHistoManager->FillHisto(ih, r, 1/ds);  
-  }
+  dr = analysisManager->GetH1Width(ih);
+  rmin = ((int)(r/dr))*dr;
+  ds = twopi*(rmin + 0.5*dr)*dr;        
+  analysisManager->FillH1(ih, r, 1/ds);  
       
   //d(N/cost)/dS at exit
   //
   ih = 3;
-  if (fHistoManager->HistoExist(ih)) {
-    dr = fHistoManager->GetBinWidth(ih);
-    rmin = ((int)(r/dr))*dr;
-    ds = twopi*(rmin + 0.5*dr)*dr;        
-    fHistoManager->FillHisto(ih, r, 1/(uz*ds));
-  }
+  dr = analysisManager->GetH1Width(ih);
+  rmin = ((int)(r/dr))*dr;
+  ds = twopi*(rmin + 0.5*dr)*dr;        
+  analysisManager->FillH1(ih, r, 1/(uz*ds));
   
   //vector of d(N/cost)/dS at exit
   //
   fRunAction->SumFluence(r, 1/uz);
+  
+  //space angle at exit : dN/dOmega
+  //
+  ih = 5;
+  G4double theta = std::acos(uz);
+  if (theta > 0.) {
+     G4double dtheta = analysisManager->GetH1Width(ih);
+     G4double unit   = analysisManager->GetH1Unit(ih);
+     if (dtheta > 0.) {
+        G4double weight = unit*unit/(twopi*std::sin(theta)*dtheta);
+        analysisManager->FillH1(ih, theta, weight);
+     }
+  }
+  
+  //measured space angle at exit : dN/dOmega_meas
+  //
+  ih = 6;  
+  const G4double dist = fDetector->GetThicknessFrame();
+  G4double thetam = std::atan(r/dist);
+  if (thetam > 0.) {
+     G4double dtheta = analysisManager->GetH1Width(ih);
+     G4double unit   = analysisManager->GetH1Unit(ih);
+     if (dtheta > 0.) {
+        G4double weight = unit*unit/(twopi*std::sin(thetam)*dtheta);
+        analysisManager->FillH1(ih, thetam, weight);
+     }
+  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

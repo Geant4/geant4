@@ -13,6 +13,79 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 October 2013 Tatsumi Koi (hadr-qmd-V09-06-10)
+-Change G4ParticleTable::GetParticleTable()->GetIon(,,) 
+     to G4IonTable::GetIonTable()->GetIon(,,);
+	src/G4QMDReaction.cc
+
+26 August 2013 Tatsumi Koi (hadr-qmd-V09-06-09)
+- Fix double deletion problem on G4QMDCollision
+	include/G4QMDCollision.hh
+	src/G4QMDCollision.cc
+
+4 June 2013 Tatsumi Koi (hadr-qmd-V09-06-08)
+- Fix COPY_WITHOUT_ASSIGN
+	include/G4QMDCollision.hh
+	src/G4QMDCollision.cc
+
+2 May 2013 Tatsumi Koi (hadr-qmd-V09-06-07)
+- Fix for compilation problem on WIN32-VC
+	src/G4QMDMeanField.cc
+
+1 May 2013 Tatsumi Koi (hadr-qmd-V09-06-06)
+- Use cmath error function
+	src/G4QMDMeanField.cc
+
+30 April 2013 Tatsumi Koi (hadr-qmd-V09-06-05)
+- Delete unused private member 
+	include/G4QMDGroundStateNucleus.hh  
+- Fix UNINIT_CTOR
+	src/G4QMDGroundStateNucleus.cc
+- Fix MISSING_COPY
+	src/G4QMDCollision.cc
+- Add Get, Set method of model parameter
+	include/G4QMDCollision.hh
+- Fix MISSING_COPY
+	include/G4QMDReaction.hh
+- Fix VIRTUAL_DTOR
+	include/G4QMDSystem.hh
+	include/G4QMDNucleus.hh
+	src/G4QMDNucleus.cc
+- Restore to use CLHEP::HepStat::erf for avoiding compilation error in MT
+	src/G4QMDMeanField.cc
+
+29 April 2013 Tatsumi Koi (hadr-qmd-V09-06-04)
+- Fix STREAM_FORMAT_STATE
+	src/G4QMDSystem.cc
+- Replace CLHEP::HepStat to G4RandStat
+	src/G4QMDMeanField.cc
+- Replace std::cout to G4cout
+	src/G4QMDGroundStateNucleus.cc
+
+25 April 2013 Tatsumi Koi (hadr-qmd-V09-06-03)
+- Fix MISSING_ASSIGN "genspaXS"
+      UNINIT_CTOR
+	include/G4QMDReaction.hh
+- Fix MISSING_ASSIGN "theMeanField" and "theSystem"
+      UNINIT_CTOR
+	src/G4QMDCollision.cc
+- Fix UNINIT_CTOR "hit"
+	src/G4QMDParticipant.cc  
+- Fix UNINIT_CTOR "bindingEnergy", "excitationEnergy", "jj", "kineticEnergyPerNucleon" and "potentialEnergy" 
+	include/G4QMDNucleus.hh  
+	src/G4QMDNucleus.cc  
+- Fix UNINIT_CTOR "system", "c3w" and "icoul" 
+	include/G4QMDMeanField.hh
+	src/G4QMDMeanField.cc
+
+12 March 2013 Dennis Wright (hadr-qmd-V09-06-02)
+- fix MacOS Clang compiler warnings for G4QMDCollision.hh, .cc :
+  remove unused private variables sig0 and sig1   
+
+11-January-2013  Gabriele Cosmo (hadr-qmd-V09-06-01)
+- Fix for logic error in G4QMDGroundStateNucleus::packNucleons().
+  Addressing problem report #1418.
+
 27-September-2012  Gabriele Cosmo (hadr-qmd-V09-05-03)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

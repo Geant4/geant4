@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLXmViewer.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -264,7 +264,6 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
 
   //*********Create style pulldown menu on menubar*********
-  rep_str = XmStringCreateLocalized ((char*)"Representation");
   draw_str = XmStringCreateLocalized ((char*)"Drawing");
   bgnd_str = XmStringCreateLocalized ((char*)"Background color");
 
@@ -273,7 +272,6 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"style",
      0,
      NULL,
-     XmVaCASCADEBUTTON, rep_str, 'R',
      XmVaCASCADEBUTTON, draw_str, 'D',
      XmVaCASCADEBUTTON, bgnd_str, 'B',
      XtNvisual, vi -> visual, 
@@ -283,58 +281,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      XtNbackground, bgnd,
      NULL);
   
-  XmStringFree (rep_str);
   XmStringFree (draw_str);
   XmStringFree (bgnd_str);
 
   //  G4cout << "Created Style pulldown menu" << G4endl;
-
-  //Add Representation pullright menu to style cascade...
-  polyhedron_str = XmStringCreateLocalized ((char*)"Polyhedron");
-  nurbs_str = XmStringCreateLocalized ((char*)"NURBS");
-
-  rep_style_pullright = XmVaCreateSimplePulldownMenu 
-    (style_cascade,
-     (char*)"rep_style",
-     0,
-     rep_style_callback,
-     XmVaRADIOBUTTON, polyhedron_str, 'P', NULL, NULL,
-     XmVaRADIOBUTTON, nurbs_str, 'N', NULL, NULL,
-     XmNradioBehavior, True, 
-     XmNradioAlwaysOne, True, 
-     XmNuserData, this, 
-     XtNvisual, vi -> visual, 
-     XtNdepth, vi -> depth, 
-     XtNcolormap, cmap, 
-     XtNborderColor, borcol,
-     XtNbackground, bgnd,
-     NULL);
-  
-  Widget special_widget;
-
-  G4ViewParameters::RepStyle style;
-  style = fVP.GetRepStyle();
-  
-  if (style == G4ViewParameters::polyhedron) {
-    special_widget = XtNameToWidget(rep_style_pullright, "button_0");
-    if(special_widget) {
-      XtVaSetValues (special_widget, XmNset, True, NULL);
-    }
-  } else if (style == G4ViewParameters::nurbs) {
-    special_widget = XtNameToWidget(rep_style_pullright, "button_1");
-    if(special_widget) {
-      XtVaSetValues (special_widget, XmNset, True, NULL);
-    }
-  } else {
-    G4Exception
-      ("G4OpenGLXmViewer::CreateMainWindow",
-       "opengl2014", FatalException,
-       "Invalid Representation style");
-  }
-  XmStringFree (polyhedron_str);
-  XmStringFree (nurbs_str);
-  
-  //  G4cout << "Created Representation pulldown menu" << G4endl;
 
   //Add Drawing pullright menu to style cascade...
   wireframe_str = XmStringCreateLocalized ((char*)"Wireframe");
@@ -361,6 +311,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      XtNbackground, bgnd,
      NULL);
   
+  Widget special_widget;
+
   G4ViewParameters::DrawingStyle d_style;
   d_style = fVP.GetDrawingStyle();
   
@@ -712,25 +664,111 @@ G4OpenGLXmViewer::G4OpenGLXmViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
 G4OpenGLXViewer (scene),
+toplevel (0),
+shell (0),
+main_win (0),
+menubar (0),
+style_cascade (0),
+actions_cascade (0),
+misc_cascade (0),
+spec_cascade (0),
+drawing_style_pullright (0),
+background_color_pullright (0),
+transparency_pullright (0),
+antialias_pullright (0),
+haloing_pullright (0),
+aux_edge_pullright (0),
+frame (0),
+glxarea (0),
+style_str (0),
+actions_str (0),
+misc_str (0),
+spec_str (0),
+draw_str (0),
+polyhedron_str (0),
+wireframe_str (0),
+hlr_str (0),
+hsr_str (0),
+hlhsr_str (0),
+set_str (0),
+rot_str (0),
+pan_str (0),
+exit_str (0),
+quit_str (0),
+print_str (0),
+white_str (0),
+black_str (0),
+anti_str (0),
+trans_str (0),
+halo_str (0),
+aux_edge_str (0),
+bgnd_str (0),
+off_str (0),
+on_str (0),
+zoom_high (0.0),
+zoom_low (0.0),
+pan_low (0.0),
+pan_high (0.0),
+dolly_low (0.0),
+dolly_high (0.0),
 fov (0.0),
+rot_sens_limit (0.0),
+pan_sens_limit (0.0),
+wob_high (0.0),
+wob_low (0.0),
+wob_sens (0.0),
+pan_right (false),
+rotate_right (false),
+pan_up (false),
+rotate_up (false),
 original_vp(fVP.GetViewpointDirection()),
 frameNo (0),
 fprotation_top (0),
+fprotation_button_box (0),
+fprotation_button1 (0),
+fprotation_button2 (0),
+fprotation_slider_box (0),
 fprotation_slider (0),
+fprotation_arrow_box (0),
+fprotation_arrow (0),
 fppanning_top (0),
+fppanning_box (0),
+fppanning_arrows (0),
 fppanning_slider (0),
+fpzoom_box (0),
 fpzoom_slider (0),
+fpdolly_box (0),
 fpdolly_slider (0),
 fpsetting_top (0),
+fpsetting_box (0),
 fppan_set (0),
 fprot_set (0),
 fpzoom_upper (0),
 fpzoom_lower (0),
 fpdolly_upper (0),
 fpdolly_lower (0),
+fpok_button (0),
 fpmiscellany_top (0),
+fpwobble_box (0),
+fpwobble_button (0),
 fpwobble_slider (0),
-fpprint_top (0)
+fpreset_box (0),
+fpreset_button (0),
+fpproj_style_box (0),
+fporthogonal_button (0),
+fpperspective_button (0),
+fpfov_text (0),
+fpprint_top (0),
+fpprint_box (0),
+fpprint_col_box (0),
+fpprint_style_box (0),
+fpprint_text (0),
+fpprint_button (0),
+fpprint_line (0),
+fpprint_col_radio1 (0),
+fpprint_col_radio2 (0),
+fpprint_style_radio1 (0),
+fpprint_style_radio2 (0)
 {
   GetXmConnection ();
   ResetView();

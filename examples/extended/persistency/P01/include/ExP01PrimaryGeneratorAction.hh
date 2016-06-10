@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: ExP01PrimaryGeneratorAction.hh 71397 2013-06-14 15:05:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,11 +52,11 @@ class ExP01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~ExP01PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun* particleGun;
-    ExP01DetectorConstruction* myDetector;
+    G4ParticleGun* fParticleGun;
+    ExP01DetectorConstruction* fMyDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

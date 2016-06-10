@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RunMessenger.cc 77650 2013-11-27 08:40:42Z gcosmo $
 //
 
 #include "G4RunMessenger.hh"
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
@@ -68,6 +69,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   beamOnCmd->SetGuidance("macro file will be executed only for the first");
   beamOnCmd->SetGuidance("nSelect events.");
   beamOnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  beamOnCmd->SetToBeBroadcasted(false);
   G4UIparameter* p1 = new G4UIparameter("numberOfEvent",'i',true);
   p1->SetDefaultValue(1);
   p1->SetParameterRange("numberOfEvent >= 0");
@@ -79,6 +81,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   p3->SetDefaultValue(-1);
   p3->SetParameterRange("nSelect>=-1");
   beamOnCmd->SetParameter(p3);
+  //beamOnCmd->SetToBeBroadcasted(false);
 
   verboseCmd = new G4UIcmdWithAnInteger("/run/verbose",this);
   verboseCmd->SetGuidance("Set the Verbose level of G4RunManager.");
@@ -88,6 +91,41 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   verboseCmd->SetParameterName("level",true);
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=2");
+
+  printProgCmd = new G4UIcmdWithAnInteger("/run/printProgress",this);
+  printProgCmd->SetGuidance("Display begin_of_event information at given frequency.");
+  printProgCmd->SetGuidance("If it is set to zero, only the begin_of_run is shown.");
+  printProgCmd->SetGuidance("If it is set to -1, no print-out is shown.");
+  printProgCmd->SetParameterName("mod",true);
+  printProgCmd->SetDefaultValue(-1);
+  printProgCmd->SetRange("mod>=-1");
+
+  nThreadsCmd = new G4UIcmdWithAnInteger("/run/numberOfThreads",this);
+  nThreadsCmd->SetGuidance("Set the number of threads to be used.");
+  nThreadsCmd->SetGuidance("This command is valid only for multi-threaded mode.");
+  nThreadsCmd->SetGuidance("This command works only in PreInit state.");
+  nThreadsCmd->SetGuidance("The command is ignored if it is issued in sequential mode.");
+  nThreadsCmd->SetParameterName("nThreads",true);
+  nThreadsCmd->SetDefaultValue(2);
+  nThreadsCmd->SetRange("nThreads >0");
+  nThreadsCmd->SetToBeBroadcasted(false);
+  nThreadsCmd->AvailableForStates(G4State_PreInit);
+
+  evModCmd = new G4UIcmdWithAnInteger("/run/eventModulo",this);
+  evModCmd->SetGuidance("Set the event modulo for dispatching events to worker threads"); 
+  evModCmd->SetGuidance("i.e. each worker thread is ordered to simulate N events and then");
+  evModCmd->SetGuidance("comes back to G4MTRunManager for next set.");
+  evModCmd->SetGuidance("If it is set to zero (default value), N is roughly given by this.");
+  evModCmd->SetGuidance("   N = int( sqrt( number_of_events / number_of_threads ) )");
+  evModCmd->SetGuidance("The value N may affect on the computing performance in particular");
+  evModCmd->SetGuidance("if N is too small compared to the total number of events.");
+  evModCmd->SetGuidance("This command is valid only for multi-threaded mode.");
+  evModCmd->SetGuidance("This command is ignored if it is issued in sequential mode.");
+  evModCmd->SetParameterName("nev",true);
+  evModCmd->SetDefaultValue(0);
+  evModCmd->SetRange("nev>=0");
+  evModCmd->SetToBeBroadcasted(false);
+  evModCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   dumpRegCmd = new G4UIcmdWithAString("/run/dumpRegion",this);
   dumpRegCmd->SetGuidance("Dump region information.");
@@ -134,11 +172,19 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   abortEventCmd->AvailableForStates(G4State_EventProc);
 
   geomCmd = new G4UIcmdWithoutParameter("/run/geometryModified",this);
-  geomCmd->SetGuidance("Force geometry to be closed again.");
-  geomCmd->SetGuidance("This command must be applied");
-  geomCmd->SetGuidance(" if geometry has been modified after the");
-  geomCmd->SetGuidance(" first initialization (or BeamOn).");
+  geomCmd->SetGuidance("Force geometry to be closed (re-voxellized) again.");
+  geomCmd->SetGuidance("This command must be applied if geometry has been modified");
+  geomCmd->SetGuidance(" after the first initialization (or BeamOn).");
   geomCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  geomRebCmd = new G4UIcmdWithABool("/run/reinitializeGeometry",this);
+  geomRebCmd->SetGuidance("Force geometry to be rebuilt once again.");
+  geomRebCmd->SetGuidance("This command must be applied if the user needs his/her");
+  geomRebCmd->SetGuidance(" detector construction to be reinvoked.");
+  geomRebCmd->SetGuidance("/run/geometryModified is automatically issued with this command.");
+  geomRebCmd->SetParameterName("destroyFirst",true);
+  geomRebCmd->SetDefaultValue(false);
+  geomRebCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   physCmd = new G4UIcmdWithoutParameter("/run/physicsModified",this);
   physCmd->SetGuidance("Force all physics tables recalculated again.");
@@ -146,10 +192,6 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   physCmd->SetGuidance(" if physics process has been modified after the");
   physCmd->SetGuidance(" first initialization (or BeamOn).");
   physCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  cutCmd = new G4UIcmdWithoutParameter("/run/cutoffModified",this);
-  cutCmd->SetGuidance("/run/cutoffModified becomes obsolete.");
-  cutCmd->SetGuidance("It is safe to remove invoking this command.");
 
   constScoreCmd = new G4UIcmdWithoutParameter("/run/constructScoringWorlds",this);
   constScoreCmd->SetGuidance("Constrct scoring parallel world(s) if defined.");
@@ -200,6 +242,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandCmd->SetParameterName("fileName",true);
   restoreRandCmd->SetDefaultValue("currentRun.rndm");
   restoreRandCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
+  restoreRandCmd->SetToBeBroadcasted(false);
+    
+  saveEachEventCmd = new G4UIcmdWithABool("/random/saveEachEventFlag",this);
+  saveEachEventCmd->SetGuidance("Save random number status at beginning of each event.");
+  saveEachEventCmd->SetGuidance("File name contains run and event numbers: runXXXevtYYY.rndm");
+  saveEachEventCmd->SetParameterName("flag",true);
+  saveEachEventCmd->SetDefaultValue(true);
   
   randEvtCmd = new G4UIcmdWithAnInteger("/run/storeRndmStatToEvent",this);
   randEvtCmd->SetGuidance("Flag to store rndm status to G4Event object.");
@@ -213,35 +262,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   randEvtCmd->SetDefaultValue(0);
   randEvtCmd->SetRange("flag>=0 && flag<3");
   randEvtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  //old commands for the rndm engine status handling
-  //
-  randDirOld = new G4UIcmdWithAString("/run/randomNumberStatusDirectory",this);
-  randDirOld->SetGuidance("Define the directory name of the rndm status files.");
-  randDirOld->SetGuidance("Directory must be creates before storing the files.");
-  randDirOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
-  randDirOld->SetParameterName("fileName",true);
-  randDirOld->SetDefaultValue("./");
-  randDirOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
-  
-  storeRandOld = new G4UIcmdWithAnInteger("/run/storeRandomNumberStatus",this);
-  storeRandOld->SetGuidance("The randomNumberStatus will be saved at :");
-  storeRandOld->SetGuidance("begining of run (currentRun.rndm) and "
-                            "begining of event (currentEvent.rndm) ");  
-  storeRandOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
-  storeRandOld->SetParameterName("flag",true);
-  storeRandOld->SetDefaultValue(1);
-          
-  restoreRandOld = new G4UIcmdWithAString("/run/restoreRandomNumberStatus",this);
-  restoreRandOld->SetGuidance("Reset the status of the rndm engine from a file.");
-  restoreRandOld->SetGuidance("See CLHEP manual for detail.");
-  restoreRandOld->SetGuidance("The engine status must be stored beforehand.");
-  restoreRandOld->SetGuidance("Directory of the status file should be set by"
-                              " /random/setDirectoryName.");
-  restoreRandOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
-  restoreRandOld->SetParameterName("fileName",true);
-  restoreRandOld->SetDefaultValue("currentRun.rndm");
-  restoreRandOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);  
+    
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -249,6 +270,9 @@ G4RunMessenger::~G4RunMessenger()
   delete materialScanner;
   delete beamOnCmd;
   delete verboseCmd;
+  delete printProgCmd;
+  delete nThreadsCmd;
+  delete evModCmd;
   delete optCmd;
   delete dumpRegCmd;
   delete dumpCoupleCmd;
@@ -258,20 +282,21 @@ G4RunMessenger::~G4RunMessenger()
   delete abortEventCmd;
   delete initCmd;
   delete geomCmd;
+  delete geomRebCmd;
   delete physCmd;
-  delete cutCmd;
   delete randEvtCmd;
-  delete randDirOld; delete storeRandOld; delete restoreRandOld; 
   delete constScoreCmd;
-  delete runDirectory;
   
-  delete randDirCmd;
   delete seedCmd;
   delete savingFlagCmd;
   delete saveThisRunCmd;
   delete saveThisEventCmd;
   delete restoreRandCmd;
   delete randomDirectory;
+  delete saveEachEventCmd;
+    
+  delete randDirCmd;
+  delete runDirectory;
 }
 
 void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
@@ -290,6 +315,45 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
   else if( command==verboseCmd )
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
+  else if( command == printProgCmd )
+  { runManager->SetPrintProgress(printProgCmd->GetNewIntValue(newValue)); }
+  else if( command==nThreadsCmd )
+  {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      static_cast<G4MTRunManager*>(runManager)->SetNumberOfThreads(
+       nThreadsCmd->GetNewIntValue(newValue));
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    {
+      G4cout<<"*** /run/numberOfThreads command is issued in sequential mode."
+            <<"\nCommand is ignored."<<G4endl;
+    }
+    else
+    {
+      G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
+      "/run/numberOfThreads command is issued to local thread.");
+    }
+  }
+  else if( command==evModCmd)
+  {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      static_cast<G4MTRunManager*>(runManager)->SetEventModulo(evModCmd->GetNewIntValue(newValue));
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    {
+      G4cout<<"*** /run/eventModulo command is issued in sequential mode."
+            <<"\nCommand is ignored."<<G4endl;
+    }
+    else
+    {
+      G4Exception("G4RunMessenger::ApplyNewCommand","Run0902",FatalException,
+      "/run/eventModulo command is issued to local thread.");
+    }
+  }
   else if( command==dumpRegCmd )
   { 
     if(newValue=="**ALL**")
@@ -314,12 +378,11 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==initCmd )
   { runManager->Initialize(); }
   else if( command==geomCmd )
-  { runManager->GeometryHasBeenModified(); }
+  { runManager->GeometryHasBeenModified(false); }
+  else if( command==geomRebCmd )
+  { runManager->ReinitializeGeometry(geomRebCmd->GetNewBoolValue(newValue),false); }
   else if( command==physCmd )
   { runManager->PhysicsHasBeenModified(); }
-  else if( command==cutCmd )
-  { runManager->CutOffHasBeenModified(); }
- 
   else if( command==seedCmd )
   {
     G4Tokenizer next(newValue);
@@ -348,25 +411,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->RestoreRandomNumberStatus(newValue); }
   else if( command==randEvtCmd )
   { runManager->StoreRandomNumberStatusToG4Event(randEvtCmd->GetNewIntValue(newValue)); }
-  
-  else if( command==randDirOld )
-  {G4cout << "warning: deprecated command. Use /random/setDirectoryName"
-          << G4endl; 
-  // runManager->SetRandomNumberStoreDir(newValue);
-  }
-  else if( command==storeRandOld )
-  {G4cout << "warning: deprecated command. Use /random/setSavingFlag"
-          << G4endl;
-   // G4int frequency = storeRandOld->GetNewIntValue(newValue);
-   // G4bool flag = false;
-   // if(frequency != 0) flag = true;	     
-   // runManager->SetRandomNumberStore(flag);
-  }    
-  else if( command==restoreRandOld )
-  {G4cout << "warning: deprecated command. Use /random/resetEngineFrom"
-           << G4endl;  
-   // runManager->RestoreRandomNumberStatus(newValue);
-  }  
+  else if( command==saveEachEventCmd)
+  { runManager->SetRandomNumberStorePerEvent(saveEachEventCmd->GetNewBoolValue(newValue)); }
   else if( command==constScoreCmd )
   { runManager->ConstructScoringWorlds(); }
 
@@ -378,10 +424,25 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
   
   if( command==verboseCmd )
   { cv = verboseCmd->ConvertToString(runManager->GetVerboseLevel()); }
+  else if( command == printProgCmd )
+  { cv = printProgCmd->ConvertToString(runManager->GetPrintProgress()); }
   else if( command==randDirCmd )
   { cv = runManager->GetRandomNumberStoreDir(); }
   else if( command==randEvtCmd )
   { cv = randEvtCmd->ConvertToString(runManager->GetFlagRandomNumberStatusToG4Event()); }
+  else if( command==nThreadsCmd )
+  {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      cv = nThreadsCmd->ConvertToString(
+       static_cast<G4MTRunManager*>(runManager)->GetNumberOfThreads());
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    {
+      cv = "0";
+    }
+  }
   
   return cv;
 }

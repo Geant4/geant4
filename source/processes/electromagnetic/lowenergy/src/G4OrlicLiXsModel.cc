@@ -111,7 +111,7 @@ G4double G4OrlicLiXsModel::CalculateL1CrossSection(G4int zTarget, G4double energ
   if ( (zTarget>=41 &&  zTarget<=50) && (normalizedEnergy>=0.013 && normalizedEnergy<=1) )
     { 	  
       
-      G4cout << "Energy1 (keV) = " << normalizedEnergy * lamda*l1BindingEnergy << G4endl; //debug
+      //G4cout << "Energy1 (keV) = " << normalizedEnergy * lamda*l1BindingEnergy << G4endl; //debug
       
       a0=11.274881;
       a1=-0.187401;

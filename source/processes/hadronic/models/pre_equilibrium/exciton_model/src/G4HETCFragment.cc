@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HETCFragment.cc 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // by V. Lara
 //
@@ -84,7 +84,7 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
   G4int Pb = P - GetA();
   G4int Nb = Pb + H;
   if (Nb <= 0.0) { return 0.0; }
-  G4double ga = (6.0/pi2)*aFragment.GetA()*theParameters->GetLevelDensity();
+  G4double ga = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
   G4double gb = (6.0/pi2)*GetRestA()*theParameters->GetLevelDensity();
 
   G4double A  = G4double(P*P+H*H+P-3*H)/(4.0*ga);

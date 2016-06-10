@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.hh 77897 2013-11-29 09:23:56Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,7 @@ class DetectorMessenger: public G4UImessenger
 {
 public:
   DetectorMessenger(DetectorConstruction* );
- ~DetectorMessenger();
+  virtual ~DetectorMessenger();
 
   virtual void SetNewValue(G4UIcommand*, G4String);
 
@@ -62,8 +62,6 @@ private:
   G4UIcmdWithAString*        fMaterCmd;
   G4UIcmdWith3Vector*        fLBinCmd;
   G4UIcmdWith3Vector*        fRBinCmd;
-  G4UIcmdWithADoubleAndUnit* fFieldCmd;
-  G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

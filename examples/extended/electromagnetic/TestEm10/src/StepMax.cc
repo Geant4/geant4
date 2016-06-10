@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm10/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id$
+// $Id: StepMax.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 ///////////////////////////////////////////////////////////////////////////
 

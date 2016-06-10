@@ -16,6 +16,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07/11/2013 I. Hrivnacova (excommon-analysis-V09-06-04)
+- Implemented functions for user defined/logarithmic binning for H1 
+  and H2; in case of H2 an exception is (not available in HBOOK) 
+
+11/07/2013 I. Hrivnacova (excommon-analysis-V09-06-03)
+- Refactoring ExG4Hnook manager class following changes
+  in analysis (analysis-V09-06-11)
+
+20/06/2013 I. Hrivnacova (excommon-analysis-V09-06-02)
+- Fixed a typo in ExG4HbookAnalysisManager.hh which caused compilation
+  error
+
+03/06/2013 I. Hrivnacova (excommon-analysis-V09-06-01)
+- Implemented ExG4HbookAnalysisManager::Create() required with
+  update for MT migration; returns an exception in case of MT mode
+  (as Hbook is not supported with MT)    
+  
+29/03/2013 I. Hrivnacova (excommon-analysis-V09-06-00)
+- Updated to analysis-V09-06-05
+- Extended the manager class for handling more than one ntuple  
+
 19/11/2012 I. Hrivnacova (excommon-analysis-V09-05-04)
 - Updated to analysis-V09-05-15
 - Adding functions for accessing h1, h2 by name

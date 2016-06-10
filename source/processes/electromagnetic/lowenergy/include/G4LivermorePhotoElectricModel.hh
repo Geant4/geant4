@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermorePhotoElectricModel.hh 72941 2013-08-14 13:32:37Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -72,8 +72,10 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  inline void SetLimitNumberOfShells(G4int);
 
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+
+  inline void SetLimitNumberOfShells(G4int);
 
 protected:
 
@@ -83,8 +85,8 @@ private:
 
   void ReadData(G4int Z, const char* path = 0);
 
-  G4LivermorePhotoElectricModel & operator=(const  G4LivermorePhotoElectricModel &right);
-  G4LivermorePhotoElectricModel(const  G4LivermorePhotoElectricModel&);
+  G4LivermorePhotoElectricModel & operator=(const G4LivermorePhotoElectricModel &right);
+  G4LivermorePhotoElectricModel(const G4LivermorePhotoElectricModel&);
 
   G4ParticleDefinition*   theGamma;
   G4ParticleDefinition*   theElectron;
@@ -95,12 +97,12 @@ private:
   G4bool                  fDeexcitationActive;
   G4bool                  isInitialised;
 
-  G4LPhysicsFreeVector*   fCrossSection[99];
-  G4LPhysicsFreeVector*   fCrossSectionLE[99];
-  std::vector<G4double>   fParam[99];
-  G4int                   fNShells[99];
-  G4int                   fNShellsUsed[99];
-  G4ElementData           fShellCrossSection;
+  static G4LPhysicsFreeVector*   fCrossSection[99];
+  static G4LPhysicsFreeVector*   fCrossSectionLE[99];
+  static std::vector<G4double>*  fParam[99];
+  static G4int                   fNShells[99];
+  static G4int                   fNShellsUsed[99];
+  static G4ElementData*          fShellCrossSection;
 
   G4VAtomDeexcitation*    fAtomDeexcitation;
 

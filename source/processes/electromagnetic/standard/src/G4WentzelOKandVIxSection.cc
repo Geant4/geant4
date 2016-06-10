@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WentzelOKandVIxSection.cc 74309 2013-10-03 06:42:30Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,11 +54,14 @@
 #include "G4Positron.hh"
 #include "G4Proton.hh"
 #include "G4LossTableManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelOKandVIxSection::ScreenRSquare[] = {0.0};
-G4double G4WentzelOKandVIxSection::FormFactor[]    = {0.0};
+G4double G4WentzelOKandVIxSection::ScreenRSquareElec[] = {0.0};
+G4double G4WentzelOKandVIxSection::ScreenRSquare[]     = {0.0};
+G4double G4WentzelOKandVIxSection::FormFactor[]        = {0.0};
 
 using namespace std;
 
@@ -86,13 +89,13 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
     G4double constn = 6.937e-6/(MeV*MeV);
 
     ScreenRSquare[0] = alpha2*a0*a0;
+    ScreenRSquareElec[0] = ScreenRSquare[0];
     for(G4int j=1; j<100; ++j) {
       G4double x = a0*fG4pow->Z13(j);
       if(1 == j) { ScreenRSquare[j] = 0.5*alpha2*a0*a0; }
       else {
-	ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
-	//ScreenRSquare[j] = (0.5 + 0.5/G4double(j))*alpha2*x*x;
-	//ScreenRSquare[j] = 0.5*alpha2*x*x;
+	ScreenRSquare[j] = 0.5*(1 + G4Exp(-j*j*0.001))*alpha2*x*x;
+	ScreenRSquareElec[j] = 0.5*alpha2*x*x;
       }
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
@@ -104,8 +107,12 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
 
   factB1= 0.5*CLHEP::pi*fine_structure_const;
 
-  Initialise(theElectron, 1.0);
+  tkin = mom2 = momCM2 = factorA2 = mass = spin = chargeSquare = charge3 = 0.0;
+  ecut = etag = DBL_MAX;
+  targetZ = 0;
+  cosThetaMax = 1.0;
   targetMass = proton_mass_c2;
+  particle = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,10 +130,14 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
   ecut = etag = DBL_MAX;
   targetZ = 0;
   cosThetaMax = CosThetaLim;
-  G4double a = 
-    G4LossTableManager::Instance()->FactorForAngleLimit()*CLHEP::hbarc/CLHEP::fermi;
+  G4double a = G4LossTableManager::Instance()->FactorForAngleLimit()
+    *CLHEP::hbarc/CLHEP::fermi;
   factorA2 = 0.5*a*a;
   currentMaterial = 0;
+  
+  //G4cout << "G4WentzelOKandVIxSection::Initialise  mass= " << mass
+  //	 << "  " << p->GetParticleName() << G4endl; 
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -165,15 +176,16 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
 
     kinFactor = coeff*Z*chargeSquare*invbeta2/mom2;
 
-    screenZ = ScreenRSquare[targetZ]/mom2;
-    if(Z > 1) {
-      if(mass > MeV) {
-	screenZ *= std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare);
-      } else {
-	G4double tau = tkin/mass;
-	screenZ *= std::min(Z*1.13,(1.13 +3.76*Z*Z
-	  *invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(targetZ)))));
-      }
+    if(1 == Z) {
+      screenZ = ScreenRSquare[targetZ]/mom2;
+    } else if(mass > MeV) {
+      screenZ = std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare)*
+	ScreenRSquare[targetZ]/mom2;
+    } else {
+      G4double tau = tkin/mass;
+      screenZ = std::min(Z*1.13,(1.13 +3.76*Z*Z
+	  *invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(targetZ)))))*
+	ScreenRSquareElec[targetZ]/mom2;
     }
     if(targetZ == 1 && cosTetMaxNuc2 < 0.0 && particle == theProton) {
       cosTetMaxNuc2 = 0.0;
@@ -213,7 +225,7 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
       if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
       x1= x/(1 + x);
-      xlog = log(1.0 + x);  
+      xlog = G4Log(1.0 + x);  
       y = xlog - x1; 
       if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }
@@ -251,7 +263,7 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
       if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
       x1= x/(1 + x);
-      xlog = log(1.0 + x);  
+      xlog = G4Log(1.0 + x);  
       y = xlog - x1; 
       if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }

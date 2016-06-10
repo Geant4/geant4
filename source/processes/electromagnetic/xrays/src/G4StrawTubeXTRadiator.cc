@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StrawTubeXTRadiator.cc 68037 2013-03-13 14:15:08Z gcosmo $
 //
 
 #include "G4StrawTubeXTRadiator.hh"
@@ -201,7 +201,7 @@ G4double G4StrawTubeXTRadiator::GetMediumLinearPhotoAbs(G4double omega)
   omega3 = omega2*omega;
   omega4 = omega2*omega2;
 
-  G4double* SandiaCof = fMediumPhotoAbsCof->GetSandiaCofForMaterial(omega);
+  const G4double* SandiaCof = fMediumPhotoAbsCof->GetSandiaCofForMaterial(omega);
 
   G4double cross = SandiaCof[0]/omega  + SandiaCof[1]/omega2 +
                    SandiaCof[2]/omega3 + SandiaCof[3]/omega4;

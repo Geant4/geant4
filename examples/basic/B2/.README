@@ -1,4 +1,4 @@
-//$Id$
+//$Id: .README 78001 2013-12-02 08:24:53Z gcosmo $
 
 ///\file "B2/.README"
 ///\brief Example B2 README page
@@ -17,11 +17,12 @@ This example simulates a simplified fixed target experiment.
    (in B2bDetectorConstruction), see also B2bChamberParameterisation class.
 
    In addition, a global, uniform, and transverse magnetic field can be 
-   applied (see B2MagneticField and B2aDetectorMessenger, 
-   B2bDetectorMessenger classes) and set via interactive commands. 
+   applied using G4GlobalMagFieldMessenger, instantiated in 
+   B2aDetectorConstruction::ConstructSDandField with a non zero field value, 
+   or via interactive commands.
    For example:
 \verbatim
-/B2/det/setField 0.2 tesla
+/globalField/setValue 0.2 0 0 tesla
 \endverbatim
    An instance of the B2TrackerSD class is created and associated with each 
    logical chamber volume (in B2a) and with the one G4LogicalVolume associated 
@@ -52,7 +53,23 @@ This example simulates a simplified fixed target experiment.
 \endverbatim
    allows the user to activate/inactivate the processes one by one.
 
-\section B2_s3 PRIMARY GENERATOR
+\section B2_s3 ACTION INITALIZATION
+
+   A newly introduced class, B2ActionInitialization,
+   instantiates and registers to Geant4 kernel all user action classes.
+   
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+     B2ActionInitialization::Build()
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+   A run action class is instantiated both thread-local 
+   and global that's why its instance is created also in the method
+      B2ActionInitialization::BuildForMaster()
+   which is invoked only in multi-threading mode.
+
+\section B2_s4 PRIMARY GENERATOR
 
    The primary generator action class employs the G4ParticleGun. 
    The primary kinematics consists of a single particle which hits the target 
@@ -60,7 +77,7 @@ This example simulates a simplified fixed target experiment.
    and its energy can be changed via the G4 built-in commands of 
    the G4ParticleGun class. 
   
-\section B2_s4 RUNS and EVENTS
+\section B2_s5 RUNS and EVENTS
  
    A run is a set of events.
  
@@ -81,7 +98,7 @@ This example simulates a simplified fixed target experiment.
    G4RunManager is also informed how to SetRandomNumberStore for storing 
    initial random number seeds per run or per event.         
 
- \section B2_s5 USER LIMITS
+ \section B2_s6 USER LIMITS
  
    This example also illustrates how to introduce tracking constraints
    like maximum step length, minimum kinetic energy etc. via the G4UserLimits
@@ -96,7 +113,7 @@ This example simulates a simplified fixed target experiment.
 /B2/det/stepMax 1.0 mm
 \endverbatim
 
-\section B2_s6 DETECTOR RESPONSE
+\section B2_s7 DETECTOR RESPONSE
  
    A HIT is a step per step record of all the information needed to
    simulate and analyse the detector response.
@@ -182,7 +199,7 @@ This example simulates a simplified fixed target experiment.
    in the main () function in exampleB2a.cc 
    The selection of the user command interface is then done automatically 
    according to the Geant4 configuration or it can be done explicitly via 
-   the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
+   the third argument of the G4UIExecutive constructor (see exampleB2a.cc). 
  
 \section B2_C HOW TO RUN
  

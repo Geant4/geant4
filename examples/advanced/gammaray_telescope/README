@@ -1,4 +1,4 @@
-$Id: README,v 1.21 2005-06-03 13:22:25 flongo Exp $
+$Id: README 68794 2013-04-05 13:23:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,13 +22,11 @@ subdivided in ladders and strips, a CsI calorimeter and an
 anticoincidence system. In this version, the three detectors are made
 sensitive but only the hits on the tracker strips are registered and relevant 
 information (energy deposition, position etc) are dumped to an external
-ASCII file for subsequent analysis. If the user has set up the 
-AIDA (version 3.0 or compatible) environment or Anaphe/Lizard is available, 
-then some histograms with relevant hits information are displayed 
-and saved as PostScript files, and histograms and ntuples with
-relevant information are stored on a HBOOK file.
+ASCII file for subsequent analysis. 
 
-The main features of this example are
+Relevant information from the simulation is processed in the GammarayTelAnalysis
+class and saved, through the G4AnalysisManager interface, to Histograms and 
+Tuples. 
 
   a) Macros for the visualization of geometry and tracks with 
      OpenGL, VRML and DAWN drivers 
@@ -41,9 +39,7 @@ The main features of this example are
      subdivisions of the planes of the tracker (strips) without
      affecting in a relevant way the simulation performances
 
-  d) Histograming facilities are presently provided for the Linux 
-     environment either by using the AIDA interfaces, or through 
-     the Anaphe/Lizard system. 
+  d) Histogramming facilities are presently provided through the G4AnalysisManager class.
 
   e) User interfaces via Xmotif or normal terminal provided
 
@@ -77,16 +73,12 @@ The main features of this example are
   
    setenv G4UI_USE_XM  1    
 
- - Set up for analysis using AIDA3.2.1 and PI1.3.3
+ - Set up for analysis 
 
   To compile the GammaRayTel example with the analysis tools activated, 
   set the following variables 
 
   setenv G4ANALYSIS_USE               1 # Use the analysis tools
-
-  Users can download the analysis tools from:  
-  > http://aida.freehep.org/
-  > http://www.cern.ch/PI   
 
 2. Sample run
 -------------
@@ -189,27 +181,24 @@ The main features of this example are
 
 8. Analysis
 ----------------
+ 
+Relevant information from the simulation is processed in the GammarayTelAnalysis
+class and saved, through the G4AnalysisManager interface, to Histograms and 
+Tuples. The output file is written in ROOT format, but one can easily switch to 
+XML (or Hbook) by changing the appropriate #include in GammarayTelAnalysis.hh
+No external software is required (apart from the hbook case, in which the CERNLIB 
+must be installed and a FORTRAN compiler must be present)
 
- The analysis part of GammaRayTel is based on the AIDA interfaces and their
- implementation in Anaphe; please look at their documentation for more details.
  Keep in mind that the actual implementation of the analysis tools in GammaRayTel
  is of a pedagogical nature, so we kept it as simple as possible. 
 
  The actual analysis produces some histograms (see next section) and an ntuple. 
  Both the histograms and the ntuple are saved at the end of the run in the file 
- "gammaraytel.hbook". You can than analyze offline the contents of such a file; 
- the GammaRayTel contains also a very simple python script that can be used with 
- Lizard to plot the histograms  See the Lizard documentation on how to access 
- the ntuple.
- Please note that in a multiple run session, the last run always override the 
- hbook file.
+ "gammaraytel.root". Please note that in a multiple run session, 
+the last run always override the root file.
 
 9. Histogramming
 ----------------
-
- Some hits information can be visualized runtime using the Anaphe Plotter 
- (if it is available on the user platform); two 1D histograms can be 
- visualized during the simulation run. 
 
  The 1D histograms contain the energy deposition in the last X plane of 
  the TKR and the hits distribution along the X planes of the TKR 
@@ -222,10 +211,6 @@ The main features of this example are
 
  Throught a messenger it is possible to set some options with
  the UI subtree "/analysis/" (use the UI help for more info); 
- If you feel that the simulation is too slow with the
- histograms updated every event, you can disable the drawing and retain 
- the saving. Please note that the updating of the histograms is triggered
- only when there is some hit in an event.
 
  In this example we only show the use of very basic feature of this new 
  simulation/analysis framework.
@@ -284,7 +269,7 @@ The main features of this example are
 	modification via the User Interface
 	
   GammaRayTelAnalysis
-	Analysis manager class with Lizard tool (experimental)
+	Analysis manager class (experimental)
 
   GammaRayTelAnalysisMessenger
 	Messenger for interactive analysis options modification

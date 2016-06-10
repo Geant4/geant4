@@ -1,5 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2006-07-12 08:45:14 kmura Exp $
-# $Name: not supported by cvs2svn $
+# $Id: GNUmakefile 76884 2013-11-18 12:54:03Z gcosmo $
 # ===========================================================
 #   Makefile for building Geant4Py site-modules
 # ===========================================================

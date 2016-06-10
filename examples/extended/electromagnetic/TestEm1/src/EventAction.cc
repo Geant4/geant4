@@ -26,17 +26,14 @@
 /// \file electromagnetic/TestEm1/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
+// $Id: EventAction.cc 76293 2013-11-08 13:11:23Z gcosmo $
 //
-// $Id$
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
 
-#include "EventActionMessenger.hh"
 #include "HistoManager.hh"
 
 #include "G4Event.hh"
@@ -45,30 +42,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(0)
-{
-  fEventMessenger = new EventActionMessenger(this);
-}
+:G4UserEventAction()
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+void EventAction::BeginOfEventAction(const G4Event*)
 {
- G4int evtNb = evt->GetEventID();
- 
- //printing survey
- if (evtNb%fPrintModulo == 0) {
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-}
- 
- //additional initializations            
  fTotalEnergyDeposit = 0.;
 }
 
@@ -79,9 +64,9 @@ void EventAction::EndOfEventAction(const G4Event*)
 
   G4AnalysisManager::Instance()->FillH1(4,fTotalEnergyDeposit);
   
-  ////if (fDrawFlag != "none") G4cout << " Energy deposit: "
-  ////                               << G4BestUnit(fTotalEnergyDeposit,"Energy")
-  ////                               << G4endl;
+  ////G4cout << " Energy deposit: "
+  ////       << G4BestUnit(fTotalEnergyDeposit,"Energy")
+  ////       << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

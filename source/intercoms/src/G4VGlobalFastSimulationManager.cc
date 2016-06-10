@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VGlobalFastSimulationManager.cc 67965 2013-03-13 09:35:29Z gcosmo $
 //
 // 
 // Abstract interface for GEANT4 Global Fast Simulation Manager.
@@ -32,7 +32,7 @@
 
 #include "G4VGlobalFastSimulationManager.hh"
 
-G4VGlobalFastSimulationManager* 
+G4ThreadLocal G4VGlobalFastSimulationManager* 
 G4VGlobalFastSimulationManager::fpConcreteInstance = 0;
 
 G4VGlobalFastSimulationManager* 

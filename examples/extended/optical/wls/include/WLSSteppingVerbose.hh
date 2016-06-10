@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSSteppingVerbose.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSSteppingVerbose.hh
 /// \brief Definition of the WLSSteppingVerbose class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,10 +42,10 @@ class WLSSteppingVerbose : public G4SteppingVerbose
   public:
 
     WLSSteppingVerbose();
-    ~WLSSteppingVerbose();
+    virtual ~WLSSteppingVerbose();
 
-    void StepInfo();
-    void TrackingStarted();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
 };
 
 #endif

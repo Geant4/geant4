@@ -23,16 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file geometry/transforms/include/SteppingVerbose.hh
+/// \file radioactivedecay/rdecay01/include/SteppingVerbose.hh
 /// \brief Definition of the SteppingVerbose class
 //
 //
-// $Id$
-//
-//   This class manages the verbose outputs in G4SteppingManager. 
-//   It inherits from G4SteppingVerbose.
-//   It shows how to extract informations during the tracking of a particle.
-//
+// $Id: SteppingVerbose.hh 71036 2013-06-10 09:19:10Z gcosmo $
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,10 +45,9 @@ public:
 
   SteppingVerbose();
  ~SteppingVerbose();
-
-  void StepInfo();
-  void TrackingStarted();
-
+ 
+  virtual void TrackingStarted();
+  virtual void StepInfo();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

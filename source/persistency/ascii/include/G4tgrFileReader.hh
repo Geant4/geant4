@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrFileReader.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrFileReader
@@ -69,7 +69,7 @@ class G4tgrFileReader
 
   private:
 
-    static G4tgrFileReader* theInstance;  
+    static G4ThreadLocal G4tgrFileReader* theInstance;  
 
     std::vector<G4String> theTextFiles;
     G4tgrLineProcessor* theLineProcessor;

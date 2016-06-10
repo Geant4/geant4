@@ -25,7 +25,7 @@
 //
 
 //
-// $Id$
+// $Id: G4ProcessTable.hh 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -171,7 +171,7 @@ class G4ProcessTable
 
 
  private:
-  static G4ProcessTable*    fProcessTable;
+  static G4ThreadLocal G4ProcessTable*    fProcessTable;
   G4ProcessTableMessenger*   fProcTblMessenger;
 
  private:

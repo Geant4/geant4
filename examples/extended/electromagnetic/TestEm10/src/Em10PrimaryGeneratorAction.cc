@@ -27,12 +27,12 @@
 /// \brief Implementation of the Em10PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: Em10PrimaryGeneratorAction.cc 73033 2013-08-15 09:24:45Z gcosmo $
 //
-// 
+//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em10PrimaryGeneratorAction.hh"
 
@@ -48,20 +48,21 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
- G4String Em10PrimaryGeneratorAction::thePrimaryParticleName="proton" ; 
+ G4String Em10PrimaryGeneratorAction::thePrimaryParticleName="proton";
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em10PrimaryGeneratorAction::Em10PrimaryGeneratorAction(
-                                            Em10DetectorConstruction* Em10DC)
-:Em10Detector(Em10DC),rndmFlag("off"),xvertex(0.),yvertex(0.),zvertex(0.),
+                                            Em10DetectorConstruction*)
+//                                            Em10DetectorConstruction* Em10DC)
+:G4VUserPrimaryGeneratorAction(),
+// Em10Detector(Em10DC),
+ rndmFlag("off"),xvertex(0.),yvertex(0.),zvertex(0.),
  vertexdefined(false)
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
-  
+
   //create a messenger for this class
   gunMessenger = new Em10PrimaryGeneratorMessenger(this);
 
@@ -72,8 +73,8 @@ Em10PrimaryGeneratorAction::Em10PrimaryGeneratorAction(
   G4ParticleDefinition* particle
                     = particleTable->FindParticle(particleName="proton");
   particleGun->SetParticleDefinition(particle);
-  
-  thePrimaryParticleName = particle->GetParticleName() ;
+
+  thePrimaryParticleName = particle->GetParticleName();
 
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   particleGun->SetParticleEnergy(100.*GeV);
@@ -83,7 +84,7 @@ Em10PrimaryGeneratorAction::Em10PrimaryGeneratorAction(
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em10PrimaryGeneratorAction::~Em10PrimaryGeneratorAction()
 {
@@ -91,70 +92,75 @@ Em10PrimaryGeneratorAction::~Em10PrimaryGeneratorAction()
   delete gunMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
-  // 
+  //
   thePrimaryParticleName = particleGun->GetParticleDefinition()->
-                                                GetParticleName() ;
+                                                GetParticleName();
   /* ****************************************************
-  G4double x0,y0,z0 ;
+  G4double x0,y0,z0;
   if(vertexdefined)
   {
-    x0 = xvertex ;
-    y0 = yvertex ;
-    z0 = zvertex ;
+    x0 = xvertex;
+    y0 = yvertex;
+    z0 = zvertex;
   }
   else
   {
-    x0 = 0. ;
-    y0 = 0. ;
-    z0 = 0. ; // -0.5*(Em10Detector->GetWorldSizeZ()) ;
+    x0 = 0.;
+    y0 = 0.;
+    z0 = 0.; // -0.5*(Em10Detector->GetWorldSizeZ()) ;
   }
-  G4double r0,phi0 ;
+  G4double r0,phi0;
   if (rndmFlag == "on")
   {
-      r0 = (Em10Detector->GetAbsorberRadius())*std::sqrt(G4UniformRand());
+      r0 = Em10Detector->GetAbsorberRadius())*std::sqrt(G4UniformRand();
       phi0 = twopi*G4UniformRand();
       x0 = r0*std::cos(phi0);
       y0 = r0*std::sin(phi0);
-  } 
+  }
   ********************************************* */
   //  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String Em10PrimaryGeneratorAction::GetPrimaryName()
 {
-   return thePrimaryParticleName ;
+   return thePrimaryParticleName;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PrimaryGeneratorAction::Setzvertex(G4double z)
 {
-  vertexdefined = true ;
-  zvertex = z ;
+  vertexdefined = true;
+  zvertex = z;
   G4cout << " Z coordinate of the primary vertex = " << zvertex/mm <<
             " mm." << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Em10PrimaryGeneratorAction::Setxvertex(G4double x)
 {
-  vertexdefined = true ;
-  xvertex = x ;
+  vertexdefined = true;
+  xvertex = x;
   G4cout << " X coordinate of the primary vertex = " << xvertex/mm <<
             " mm." << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Em10PrimaryGeneratorAction::Setyvertex(G4double y)
 {
-  vertexdefined = true ;
-  yvertex = y ;
+  vertexdefined = true;
+  yvertex = y;
   G4cout << " Y coordinate of the primary vertex = " << yvertex/mm <<
             " mm." << G4endl;
 }

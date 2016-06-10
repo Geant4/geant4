@@ -23,18 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4CameronShellPlusPairingCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4CameronShellPlusPairingCorrections.hh"
-
+#include <CLHEP/Units/SystemOfUnits.h>
 
 // S(Z)+P(Z) from Tab. 1 from A.G.W. Cameron, Canad. J. Phys., 35(1957)1021
-const G4double G4CameronShellPlusPairingCorrections::SPZTable
-[G4CameronShellPlusPairingCorrections::TableSize] = {
+G4double G4CameronShellPlusPairingCorrections::SPZTable[] = {
   20.80, 15.80, 21.00, 16.80, 19.80, 16.50, 18.80, 16.50, 18.50, 17.20, //   1 - 10
   18.26, 15.05, 16.01, 12.04, 13.27, 11.09, 12.17, 10.26, 11.04,  8.41, //  11 - 20 
    9.79,  7.36,  8.15,  5.63,  5.88,  3.17,  3.32,   .82,  1.83,   .97, //  21 - 30
@@ -59,8 +60,7 @@ const G4double G4CameronShellPlusPairingCorrections::SPZTable
 };
 
 // S(N)+P(N) from Tab. 1 from A.G.W. Cameron, Canad. J. Phys., 35(1957)1021
-const G4double G4CameronShellPlusPairingCorrections::SPNTable
-[G4CameronShellPlusPairingCorrections::TableSize] = {
+G4double G4CameronShellPlusPairingCorrections::SPNTable[] = {
   -8.40,-12.90, -8.00, 11.90, -9.20,-12.50,-10.80,-13.60,-11.20,-12.20, //   1 - 10
  -12.81,-15.40,-13.07,-15.80,-13.81,-14.98,-12.63,-13.76,-11.37,-12.38, //  11 - 20
   -9.23, -9.65, -7.64, -9.17, -8.05, -9.72, -8.87,-10.76, -8.64, -8.89, //  21 - 30
@@ -83,21 +83,12 @@ const G4double G4CameronShellPlusPairingCorrections::SPNTable
    7.29,  7.35,  7.95,  7.67,  8.16,  7.83,  8.31,  8.01,  8.53,  8.27  // 191 - 200
 };
 
-
-
-G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::theInstance = 0;
-
 G4CameronShellPlusPairingCorrections::G4CameronShellPlusPairingCorrections()
-{;}
+{
+  for(size_t i=0; i<TableSize; ++i) { SPZTable[i] *= CLHEP::MeV; }
+  for(size_t i=0; i<TableSize; ++i) { SPNTable[i] *= CLHEP::MeV; }
+}
 
 G4CameronShellPlusPairingCorrections::~G4CameronShellPlusPairingCorrections()
-{;}
+{}
 
-G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::GetInstance()
-{
-  if (!theInstance)  { 
-    static G4CameronShellPlusPairingCorrections theCorrections;
-    theInstance = &theCorrections; 
-  }
-  return theInstance;
-}

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeScintHit.cc 72250 2013-07-12 08:59:26Z gcosmo $
+//
 /// \file optical/LXe/src/LXeScintHit.cc
 /// \brief Implementation of the LXeScintHit class
 //
@@ -35,7 +37,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4Allocator<LXeScintHit> LXeScintHitAllocator;
+G4ThreadLocal G4Allocator<LXeScintHit>* LXeScintHitAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

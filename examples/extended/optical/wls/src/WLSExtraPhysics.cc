@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSExtraPhysics.cc 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/src/WLSExtraPhysics.cc
 /// \brief Implementation of the WLSExtraPhysics class
 //
 //
-//
-
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -39,22 +39,30 @@
 
 #include "WLSExtraPhysics.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSExtraPhysics::WLSExtraPhysics()
     : G4VPhysicsConstructor("Extra") { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSExtraPhysics::~WLSExtraPhysics() { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSExtraPhysics::ConstructParticle() { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSExtraPhysics::ConstructProcess()
 {
     G4cout << "WLSExtraPhysics:: Add Extra Physics Processes"
               << G4endl;
 
-    theParticleIterator->reset();
+    aParticleIterator->reset();
 
-    while ((*theParticleIterator)()) {
-        G4ParticleDefinition* particle = theParticleIterator->value();
+    while ((*aParticleIterator)()) {
+        G4ParticleDefinition* particle = aParticleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
         G4double charge = particle->GetPDGCharge();

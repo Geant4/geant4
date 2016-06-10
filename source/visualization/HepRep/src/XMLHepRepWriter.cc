@@ -14,13 +14,14 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: XMLHepRepWriter.cc,v 1.15 2005-06-02 21:28:45 duns Exp $
+ * @version $Id: XMLHepRepWriter.cc 68043 2013-03-13 14:27:49Z gcosmo $
  */
 namespace cheprep {
 
 XMLHepRepWriter::XMLHepRepWriter(ostream* os, bool randomAccess, bool useCompression) 
         : out(os),
-          compress(useCompression) {
+          compress(useCompression),
+          xml(0) {
             
     this->nameSpace = NAMESPACE;
 

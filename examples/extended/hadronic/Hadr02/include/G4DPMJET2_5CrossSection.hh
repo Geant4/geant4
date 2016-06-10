@@ -36,6 +36,9 @@
 /// \file hadronic/Hadr02/include/G4DPMJET2_5CrossSection.hh
 /// \brief Definition of the G4DPMJET2_5CrossSection class
 //
+// $Id: G4DPMJET2_5CrossSection.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4DPMJET2_5CrossSection_h
 #define G4DPMJET2_5CrossSection_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,50 +69,56 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DPMJET2_5CrossSectionParamSet.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 #include <map>
 
-typedef std::map< G4int, G4DPMJET2_5CrossSectionParamSet *, std::less< G4int > >
+typedef std::map< G4int, G4DPMJET2_5CrossSectionParamSet*, std::less< G4int > >
   G4DPMJET2_5CrossSectionIndex;
-///////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4DPMJET2_5CrossSection : public G4VCrossSectionDataSet
 {
-  public:
-    G4DPMJET2_5CrossSection();
-    ~G4DPMJET2_5CrossSection();
-    virtual G4bool IsApplicable(const G4DynamicParticle* theProjectile,
-      const G4Element* theTarget);
+public:
 
-    virtual G4bool IsZAApplicable(const G4DynamicParticle* theProjectile,
-      G4double ZZ, G4double AA);
+  G4DPMJET2_5CrossSection();
 
-    virtual G4double GetCrossSection(const G4DynamicParticle* theProjectile,
-      const G4Element* theTarget, G4double theTemperature);
+  virtual ~G4DPMJET2_5CrossSection();
 
-    virtual 
-    G4double GetIsoZACrossSection(const G4DynamicParticle* theProjectile,
-                                  G4double ZZ, G4double AA, 
-                                  G4double theTemperature);
+  virtual G4bool IsIsoApplicable(const G4DynamicParticle* theProjectile,
+				 G4int ZZ, G4int AA,
+				 const G4Element* elm = 0,
+				 const G4Material* mat = 0);
 
-    virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual 
+  G4double GetIsoCrossSection(const G4DynamicParticle* theProjectile,
+			      G4int ZZ, G4int AA,
+			      const G4Isotope*,
+			      const G4Element* elm = 0,
+			      const G4Material* mat = 0);
+ 
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
-    virtual void DumpPhysicsTable(const G4ParticleDefinition&);
+  virtual void DumpPhysicsTable(const G4ParticleDefinition&);
     
-  private:
-    void Initialise ();
+private:
 
-    G4int APmin;
-    G4int APmax;
-    G4int ATmin;
-    G4int ATmax;
+  void Initialise ();
 
-    G4DPMJET2_5CrossSectionIndex theCrossSectionIndex;
+  G4int APmin;
+  G4int APmax;
+  G4int ATmin;
+  G4int ATmax;
+
+  G4DPMJET2_5CrossSectionIndex theCrossSectionIndex;
     
-    const G4double upperLimit;
-    const G4double lowerLimit;
-    const G4int    maxA;
+  const G4double upperLimit;
+  const G4double lowerLimit;
+  const G4int    maxA;
 };
-///////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif

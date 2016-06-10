@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.37 2010-11-18 19:46:38 allison Exp $
+$Id: History 72399 2013-07-17 15:47:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,14 @@ $Id: History,v 1.37 2010-11-18 19:46:38 allison Exp $
 
                       Example History file
                       ---------------------
+
+17.07.2013 - A.Dotti Tag (ccal-V09-06-01)
+- Fixed correct search of AIDA
+
+23.05.2013 - G.Cosmo Tag (ccal-V09-06-00)
+- Fixed compilation error in main() for missing inclusion of of G4UImanager
+  header. Fixed compilation warnings for variables/parameters shadowing.
+
 02.11.2012 - L.Garnier Tag (ccal-V09-05-05)
 - Fix CMakeFile.txt, gui.mac and icons.mac. Now ok for cmake
 

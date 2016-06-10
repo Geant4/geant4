@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02Run class
 //
 //
-// $Id$
+// $Id: RE02Run.cc 76292 2013-11-08 13:10:20Z gcosmo $
 //
 
 //=====================================================================
@@ -95,7 +95,8 @@ RE02Run::RE02Run(const std::vector<G4String> mfdName) : G4Run()
         G4int    collectionID = pSDman->GetCollectionID(fullCollectionName);
         //
         if ( collectionID >= 0 ){
-          G4cout << "++ "<<fullCollectionName<< " id " << collectionID << G4endl;
+          G4cout << "++ "<<fullCollectionName<< " id " << collectionID
+                 << G4endl;
           // Store obtained HitsCollection information into data members.
           // And, creates new G4THitsMap for accumulating quantities during RUN.
           fCollName.push_back(fullCollectionName);
@@ -158,6 +159,24 @@ void RE02Run::RecordEvent(const G4Event* aEvent)
       //======================================================
     }
   }
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void RE02Run::Merge(const G4Run * aRun) {
+  const RE02Run * localRun = static_cast<const RE02Run *>(aRun);
+  
+  //=======================================================
+  // Merge HitsMap of working threads
+  //=======================================================
+  G4int nCol = localRun->fCollID.size();
+  for ( G4int i = 0; i < nCol ; i++ ){  // Loop over HitsCollection
+    if ( localRun->fCollID[i] >= 0 ){
+      *fRunMap[i] += *localRun->fRunMap[i];
+    }
+  }
+  
+  G4Run::Merge(aRun);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

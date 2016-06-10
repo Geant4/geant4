@@ -39,7 +39,7 @@ G4CollisionMesonBaryonElastic::G4CollisionMesonBaryonElastic()
 }
 
 G4CollisionMesonBaryonElastic::~G4CollisionMesonBaryonElastic()
-{ 
+{
   delete angularDistribution;
   delete crossSectionSource;
 }
@@ -47,21 +47,17 @@ G4CollisionMesonBaryonElastic::~G4CollisionMesonBaryonElastic()
 G4bool G4CollisionMesonBaryonElastic::
  IsInCharge(const G4KineticTrack& trk1, const G4KineticTrack& trk2) const
  {
-   G4bool result = false;
-   G4ParticleDefinition * p1 = trk1.GetDefinition();
-   G4ParticleDefinition * p2 = trk2.GetDefinition();
-   if(   (GetNumberOfPartons(p1) != 2 || GetNumberOfPartons(p2) != 3)
-       ||(GetNumberOfPartons(p1) != 3 || GetNumberOfPartons(p2) != 2) ) 
-   {
-     result = false;
-   }
+   G4int partons1 = GetNumberOfPartons(trk1.GetDefinition());
+   G4int partons2 = GetNumberOfPartons(trk2.GetDefinition());
+   G4bool result = (partons1 == 2 && partons2 ==3) ||
+                   (partons2 == 2 && partons1 ==3);
    return result;
  }
 
 G4String G4CollisionMesonBaryonElastic::
- GetName() const 
- { 
-   return "Meson Baryon Elastic Collision"; 
+ GetName() const
+ {
+   return "Meson Baryon Elastic Collision";
  }
 
 const std::vector<G4String>& G4CollisionMesonBaryonElastic::
@@ -69,4 +65,4 @@ const std::vector<G4String>& G4CollisionMesonBaryonElastic::
  {
    throw G4HadronicException(__FILE__, __LINE__, "Called G4CollisionMesonBaryonElastic::GetListOfColliders");
    return dummy;
- }  
+ }

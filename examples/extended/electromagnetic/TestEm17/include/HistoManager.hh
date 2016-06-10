@@ -27,7 +27,7 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// $Id$
+// $Id: HistoManager.hh 67531 2013-02-23 19:25:07Z vnivanch $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -36,63 +36,62 @@
 #define HistoManager_h 1
 
 #include "globals.hh"
-
 #include "g4root.hh"
-////#include "g4xml.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoMessenger;
 
-const G4int MaxHisto = 10;
+const G4int MaxHisto = 15;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
-  public:
+public:
 
-    HistoManager();
-   ~HistoManager();
+  HistoManager();
+  ~HistoManager();
 
-    void SetFileName   (const G4String& name) { fileName[0] = name;};
-    void book();
-    void save();
-    void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
-    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
-    void PrintHisto  (G4int);
+  void book();
+  void save();
+  void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
+  void FillHisto(G4int id, G4double e, G4double weight = 1.0);
+  void Normalize(G4int id, G4double fac);    
+  void PrintHisto(G4int);
     
-    G4bool    HistoExist  (G4int id) {return fExist[id];}
-    G4String  GetTitle    (G4int id) {return fTitle[id];}
-    G4int     GetNbins    (G4int id) {return fNbins[id];}
-    G4double  GetVmin     (G4int id) {return fVmin[id];}
-    G4double  GetVmax     (G4int id) {return fVmax[id];}    
-    G4double  GetHistoUnit(G4int id) {return fUnit[id];}
-    G4double  GetBinWidth (G4int id) {return fWidth[id];}
+  inline void      SetFileName (const G4String& name) { fileName[0] = name;};
+  inline G4bool    HistoExist  (G4int id) {return fExist[id];}
+  inline G4String  GetTitle    (G4int id) {return fTitle[id];}
+  inline G4int     GetNbins    (G4int id) {return fNbins[id];}
+  inline G4double  GetVmin     (G4int id) {return fVmin[id];}
+  inline G4double  GetVmax     (G4int id) {return fVmax[id];}    
+  inline G4double  GetHistoUnit(G4int id) {return fUnit[id];}
+  inline G4double  GetBinWidth (G4int id) {return fWidth[id];}
+  inline G4int     GetHistoID  (G4int id) {return fHistId[id];}
 
-  private:
+private:
 
-    G4String         fileName[2];
-    G4bool           factoryOn;
+  void saveAscii();            
 
-    G4int            fNbHist;
-    G4int            fHistId[MaxHisto];
-    G4AnaH1*         fHistPt[MaxHisto];
-    G4bool           fExist[MaxHisto];
-    G4String         fLabel[MaxHisto];
-    G4String         fTitle[MaxHisto];
-    G4int            fNbins[MaxHisto];
-    G4double         fVmin [MaxHisto];
-    G4double         fVmax [MaxHisto];
-    G4double         fUnit [MaxHisto];
-    G4double         fWidth[MaxHisto];
-    G4bool           fAscii[MaxHisto];
+  G4String         fileName[2];
+  G4bool           factoryOn;
+
+  G4int            fNbHist;
+  G4int            fHistId[MaxHisto];
+  G4AnaH1*         fHistPt[MaxHisto];
+  G4bool           fExist[MaxHisto];
+  G4String         fLabel[MaxHisto];
+  G4String         fTitle[MaxHisto];
+  G4int            fNbins[MaxHisto];
+  G4double         fVmin [MaxHisto];
+  G4double         fVmax [MaxHisto];
+  G4double         fUnit [MaxHisto];
+  G4double         fWidth[MaxHisto];
+  G4bool           fAscii[MaxHisto];
         
-    HistoMessenger*  fHistoMessenger;
+  HistoMessenger*  fHistoMessenger;
     
-  private:
-    void saveAscii();            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

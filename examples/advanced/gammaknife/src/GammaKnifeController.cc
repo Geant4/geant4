@@ -26,8 +26,9 @@
 
 
 #include "GammaKnifeController.hh"
-
+#include "G4UImanager.hh"
 #include "G4RunManager.hh"
+#include <fstream>
 
 #include "G4SystemOfUnits.hh"
 
@@ -49,11 +50,11 @@ void GammaKnifeController::BeamOn( G4int n_event )
     for (G4int i = 0; i < GAMMAKNIFE_SOURCES; i++)
     {
         RotateForward(i);
-        G4RunManager::GetRunManager()->BeamOn(n_event);
-        if (i != (GAMMAKNIFE_SOURCES - 1))
-        {
-            StoreHits();
-        }
+	G4RunManager::GetRunManager()->BeamOn(n_event);
+
+        if (i != (GAMMAKNIFE_SOURCES - 1))        
+	  StoreHits();
+        
         RotateBack(i);
     }
     AccumulateAllHits();
@@ -156,27 +157,29 @@ void GammaKnifeController::AccumulateAllHits()
 
 void GammaKnifeController::ReadFile( std::string fileName )
 {
-    const int SZ = 100;
-    char buf[SZ];
-
-    phiAngles.clear();    // If called for the second time
-    thetaAngles.clear();  // we won't have 402 positions...
-
-    std::ifstream ifs;
-    ifs.open( fileName.c_str() );
-
-    for (G4int i = 0; i < GAMMAKNIFE_SOURCES; i++)
+  //G4cout << "Enter ReadFile()...";
+  const int SZ = 100;
+  char buf[SZ];
+  
+  phiAngles.clear();    // If called for the second time
+  thetaAngles.clear();  // we won't have 402 positions...
+  
+  std::ifstream ifs;
+  ifs.open( fileName.c_str() );
+  
+  for (G4int i = 0; i < GAMMAKNIFE_SOURCES; i++)
     {
-        G4double phi, theta;
-
-        /* Skip the "Axx" at the beginning of the line */
-        for (G4int c = 0; c < 4; c++) ifs.get();
-
-        ifs >> phi >> theta;
-        ifs.getline(buf, SZ); // Next line
-
-        phiAngles.push_back( phi * degree );
-        thetaAngles.push_back( theta * degree );
+      G4double phi, theta;
+      
+      /* Skip the "Axx" at the beginning of the line */
+      for (G4int c = 0; c < 4; c++) ifs.get();
+      
+      ifs >> phi >> theta;
+      ifs.getline(buf, SZ); // Next line
+      
+      phiAngles.push_back( phi * degree );
+      thetaAngles.push_back( theta * degree );
     }
-    ifs.close();
+  ifs.close();
+  //G4cout << "... done " << G4endl;
 }

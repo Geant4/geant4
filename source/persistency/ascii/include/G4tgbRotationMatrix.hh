@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbRotationMatrix.hh 68052 2013-03-13 14:38:53Z gcosmo $
 //
 //
 // class G4tgbRotationMatrix
@@ -71,7 +71,6 @@ class G4tgbRotationMatrix
   private:
 
     G4tgrRotationMatrix* theTgrRM;
-    G4RotationMatrix* theG4RM;
 };
 
 #endif

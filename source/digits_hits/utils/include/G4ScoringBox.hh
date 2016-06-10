@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoringBox.hh 68735 2013-04-05 09:49:13Z gcosmo $
 //
 
 #ifndef G4ScoringBox_h
@@ -47,7 +47,8 @@ public:
   ~G4ScoringBox();
 
 public:
-  void Construct(G4VPhysicalVolume* fWorldPhys);
+  virtual void Construct(G4VPhysicalVolume* fWorldPhys);
+
   void List() const;
   void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
   void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
@@ -68,7 +69,6 @@ private:
 
 private:
   G4int fSegmentDirection; // =1: x, =2: y, =3: z
-  G4LogicalVolume * fMeshElementLogical;
   
 };
 

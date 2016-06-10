@@ -40,7 +40,7 @@ target_link_libraries(microdosimetry ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(microdosimetry_SCRIPTS
-    microdosimetry.in microdosimetry.mac microdosimetry.out vis.mac
+    microdosimetry.in microdosimetry.mac microdosimetry.out vis.mac plot.C
   )
 
 foreach(_script ${microdosimetry_SCRIPTS})

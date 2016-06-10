@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GlobalFastSimulationManager.hh 68056 2013-03-13 14:44:48Z gcosmo $
 //
 //  
 //---------------------------------------------------------------
@@ -157,7 +157,7 @@ private:
   void DisplayRegion(G4Region* motherRegion, G4int depth, std::vector<G4ParticleDefinition*>& particles) const;
 
   // The single instance.
-  static G4GlobalFastSimulationManager*           fGlobalFastSimulationManager;
+  static G4ThreadLocal G4GlobalFastSimulationManager*           fGlobalFastSimulationManager;
   G4FastSimulationMessenger*                       fTheFastSimulationMessenger;
   G4FastSimulationVector <G4FastSimulationManager>             ManagedManagers;
   G4FastSimulationVector <G4FastSimulationManagerProcess>          fFSMPVector;

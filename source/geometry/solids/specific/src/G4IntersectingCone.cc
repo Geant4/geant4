@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4IntersectingCone.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,7 +46,7 @@
 G4IntersectingCone::G4IntersectingCone( const G4double r[2],
                                         const G4double z[2] )
 { 
-  static const G4double halfCarTolerance
+  const G4double halfCarTolerance
     = 0.5 * G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   //

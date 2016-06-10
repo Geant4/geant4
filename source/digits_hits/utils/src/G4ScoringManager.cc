@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoringManager.cc 78004 2013-12-02 08:28:23Z gcosmo $
 //
 
 #include "G4ScoringManager.hh"
@@ -36,9 +36,9 @@
 #include "G4DefaultLinearColorMap.hh"
 #include "G4ScoreLogColorMap.hh"
 
-G4ScoringManager* G4ScoringManager::fSManager = 0;
+G4ThreadLocal G4ScoringManager* G4ScoringManager::fSManager = 0;
 
-G4int G4ScoringManager::replicaLevel = 3;
+G4ThreadLocal G4int G4ScoringManager::replicaLevel = 3;
 
 G4ScoringManager* G4ScoringManager::GetScoringManager()
 {
@@ -72,7 +72,7 @@ G4ScoringManager::~G4ScoringManager()
   delete fColorMapDict;
   delete fQuantityMessenger;
   delete fMessenger;
-  delete fSManager;
+  fSManager = 0;
 }
 
 void G4ScoringManager::SetReplicaLevel(G4int lvl)
@@ -219,6 +219,16 @@ void G4ScoringManager::ListScoreColorMaps()
   for(;mItr!=fColorMapDict->end();mItr++)
   { G4cout << "   " << mItr->first; }
   G4cout << G4endl;
+}
+
+void G4ScoringManager::Merge(const G4ScoringManager * mgr)
+{  
+  for(size_t i = 0; i< GetNumberOfMesh() ; i++)
+  {
+    G4VScoringMesh* fMesh = GetMesh(i);
+    G4VScoringMesh* scMesh = mgr->GetMesh(i);
+    fMesh->Merge(scMesh);
+  }
 }
 
 

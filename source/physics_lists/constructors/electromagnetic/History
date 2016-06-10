@@ -1,0 +1,95 @@
+$Id: History 75585 2013-11-04 12:24:44Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+              Hadronic physics-list/constructors/factory History
+              --------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+01-Nov-2013, M.K (phys-ctor-em-V09-06-21)
+- Update sources.cmake
+
+01-Nov-2013, M.K (phys-ctor-em-V09-06-20)
+- Remove temporarly G4EmDNAPhysicsChemistry to avoid conflicts with dna dev
+
+01-Nov-2013, M.K (phys-ctor-em-V09-06-19)
+- Modified G4EmDNAPhysicsChemistry
+- Update sources.cmake
+
+28-Oct-2013, V.Ivanchenko (phys-ctor-em-V09-06-18)
+- G4EmStandardPhysics - disable ApplyCuts option
+- G4EmStandardPhysics_option2 - removed unused header
+
+10-Oct-2013, M.K (phys-ctor-em-V09-06-17)
+- Same as before
+
+06-Oct-2013, M.K (phys-ctor-em-V09-06-16)
+- Same as before
+
+04-Oct-2013, M.K (phys-ctor-em-V09-06-15)
+- Remove unused variable
+
+03-Oct-2013, M.K (phys-ctor-em-V09-06-14)
+- DNA chemistry physics list updated
+
+16-Sep-2013, V.Ivanchenko (phys-ctor-em-V09-06-13)
+- G4EmStandardPhysics - enable ApplyCuts option
+- G4EmStandardPhysics_option2 - disable ApplyCuts option
+    both changings are needed to check an effect of these options
+    to optimise EM for the release 
+
+14-Sep-2013, M.Asai (phys-ctor-em-V09-06-12)
+- Further fix G4OpticalPhysics for MT. 
+
+12-Sep-2013, M.Asai (phys-ctor-em-V09-06-11)
+- Fix G4OpticalPhysics for MT. 
+
+21-Aug-2013, V.Ivanchenko (phys-ctor-em-V09-06-10)
+-  Removed G4UrbanMscModel95 from EmDNA constructor
+
+19-Aug-2013, V.Ivanchenko (phys-ctor-em-V09-06-09)
+-  in all constructors use G4UrbanMscModel instead of Urban93 or Urban95
+
+17-Jun-2013, Alberto Ribon		(phys-ctor-em-V09-06-08)
+- Fixed compilation warning in G4EmDNAPhysicsChemistry.
+
+29-Mar-2013, Andrea Dotti		(phys-ctor-em-V09-06-07)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
+
+21-Mar-2013, A. Dotti (phys-ctor-em-V09-06-06)
+- Use Get/Set methods to access master process manager pointer for G4ParticleDefinition 
+in EmDNA constructor (co-working tag with particles-V09-06-08)
+
+27-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-05)
+-  in all constructors improved verbose oputput and fixed warning from
+      the clang compiler on MacOS
+
+19-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-04)
+-  in all constructors G4UrbanMscModel95 substituted by G4UrbanMscModel
+-  G4EmStandardPhysics_option4 - low limit increased from 10 eV to 100 eV
+
+13-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-03)
+-  G4EmLivermorePhysics - set low-limit 100 eV and number of bins
+     for tables 220 to avoid problems in Livermore ionisation for
+     electron stopping powers and ranges 
+
+01-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-02)
+-  G4EmExtraPhysics and G4EmMessenger are moved to gamma_lepto_nuclear
+   subdirectory
+-  removed unused dependences from GNUmakefile and source.cmake
+
+30-Jan-2013, Mathieu Karamitros, G.Folger (phys-ctor-em-V09-06-01)
+-  First and simple approach to solve process manager initialization after 
+    migratioon to G4MT.
+    
+10-Jan-2013, Gunter Folger              (phys-ctor-em-V09-06-00)
+- new directory structure introduced. 
+   constructors/electromagnetic classes

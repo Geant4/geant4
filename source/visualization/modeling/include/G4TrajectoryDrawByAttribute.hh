@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4TrajectoryDrawByAttribute.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay September 2006
 //
@@ -50,8 +50,6 @@ public:
   virtual ~G4TrajectoryDrawByAttribute();
 
   // Draw the trajectory
-  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0,
-		    const G4bool& visible = true) const;
   virtual void Draw(const G4VTrajectory& trajectory, 
 		    const G4bool& visible = true) const;
 

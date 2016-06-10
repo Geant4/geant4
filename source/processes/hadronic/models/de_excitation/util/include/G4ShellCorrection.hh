@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4ShellCorrection.hh 69585 2013-05-08 14:17:58Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #ifndef G4ShellCorrection_h
 #define G4ShellCorrection_h 1
@@ -35,41 +37,55 @@
 #include "globals.hh"
 #include "G4CookShellCorrections.hh"
 #include "G4CameronGilbertShellCorrections.hh"
-//#include "G4CameronTruranHilfShellCorrections.hh"
-
+#include "G4CameronTruranHilfShellCorrections.hh"
+#include "G4CameronShellPlusPairingCorrections.hh"
 
 class G4ShellCorrection
 {
 private:
   
-  // Dummy constructor
   G4ShellCorrection();
   
   static G4ShellCorrection* theInstance;
   
 public:
+
   static G4ShellCorrection* GetInstance();
+
   ~G4ShellCorrection();
 
-  G4double GetShellCorrection(const G4int A, const G4int Z) const 
+  inline G4CameronTruranHilfShellCorrections* 
+  GetCameronTruranHilfShellCorrections()
+  {
+    return &theCameronTruranHilfShellCorrections;
+  }
+
+  inline G4CameronShellPlusPairingCorrections*
+  GetCameronShellPlusPairingCorrections()
+  {
+    return &theCameronShellPlusPairingCorrections;
+  }
+
+  inline 
+  G4double GetShellCorrection(G4int A, G4int Z) const 
   {
     G4double SCorrection = 0.0;
-    if (theCookShellCorrections->IsInTableThisN(A-Z) || 
-	theCookShellCorrections->IsInTableThisZ(Z)) 
-      SCorrection = theCookShellCorrections->GetShellCorrection(A,Z);
-    else if (theCameronGilbertShellCorrections->IsInTableThisN(A-Z) || 
-	     theCameronGilbertShellCorrections->IsInTableThisZ(Z))
-      SCorrection = theCameronGilbertShellCorrections->GetShellCorrection(A,Z);
-    
+    if (theCookShellCorrections.IsInTableThisN(A-Z) || 
+	theCookShellCorrections.IsInTableThisZ(Z)) {
+      SCorrection = theCookShellCorrections.GetShellCorrection(A,Z);
+    } else if (theCameronGilbertShellCorrections.IsInTableThisN(A-Z) || 
+	       theCameronGilbertShellCorrections.IsInTableThisZ(Z)) {
+      SCorrection = theCameronGilbertShellCorrections.GetShellCorrection(A,Z);
+    }    
     return SCorrection;
   }
 
 private:
 
-  G4CookShellCorrections* theCookShellCorrections;
-  G4CameronGilbertShellCorrections* theCameronGilbertShellCorrections;
-//  G4CameronTruranHilfShellCorrections* theCameronTruranHilfShellCorrections;
-
+  G4CookShellCorrections theCookShellCorrections;
+  G4CameronGilbertShellCorrections theCameronGilbertShellCorrections;
+  G4CameronTruranHilfShellCorrections theCameronTruranHilfShellCorrections;
+  G4CameronShellPlusPairingCorrections theCameronShellPlusPairingCorrections;
 
 };
 #endif

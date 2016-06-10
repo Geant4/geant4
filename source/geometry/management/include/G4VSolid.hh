@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // 
 // class G4VSolid
@@ -75,7 +75,6 @@ class G4VPhysicalVolume;
 
 class G4VGraphicsScene;
 class G4Polyhedron;
-class G4NURBS;
 class G4VisExtent;
 class G4DisplacedSolid;
 
@@ -210,8 +209,7 @@ class G4VSolid
     virtual G4VisExtent   GetExtent        () const;
       // Provide extent (bounding box) as possible hint to the graphics view.
     virtual G4Polyhedron* CreatePolyhedron () const;
-    virtual G4NURBS*      CreateNURBS      () const;
-      // Create a G4Polyhedron/G4NURBS/...  (It is the caller's responsibility
+      // Create a G4Polyhedron.  (It is the caller's responsibility
       // to delete it).  A null pointer means "not created".
     virtual G4Polyhedron* GetPolyhedron () const;
       // Smart access function - creates on request and stores for future

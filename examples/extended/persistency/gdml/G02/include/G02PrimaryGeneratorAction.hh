@@ -27,7 +27,7 @@
 /// \brief Definition of the G02PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: G02PrimaryGeneratorAction.hh 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02PrimaryGeneratorAction
 //
@@ -59,7 +59,7 @@ class G02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     // Used by Geant4 to generate the primary particles of the event
     //
-    void GeneratePrimaries(G4Event* anEvent);
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
 

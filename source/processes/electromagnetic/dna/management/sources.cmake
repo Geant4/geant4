@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-11-15 08:24:43 gcosmo Exp $
+# $Id: sources.cmake 75583 2013-11-04 12:16:46Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -62,13 +62,14 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTransportation.icc
         G4ITTransportationManager.hh
         G4ITType.hh
+        G4KDMap.hh
         G4KDNode.hh
         G4KDTree.hh
         G4KDTreeResult.hh
         G4ReferenceCast.hh
         G4TrackingInformation.hh
         G4TrackList.hh
-        G4UserReactionAction.hh
+        G4UserTimeStepAction.hh
         G4VITModel.hh
         G4VITProcess.hh
         G4VITReactionProcess.hh
@@ -97,12 +98,13 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTransportation.cc
         G4ITTransportationManager.cc
         G4ITType.cc
+        G4KDMap.cc
         G4KDNode.cc
         G4KDTree.cc
         G4KDTreeResult.cc
         G4TrackingInformation.cc
         G4TrackList.cc
-        G4UserReactionAction.cc
+        G4UserTimeStepAction.cc
         G4VITModel.cc
         G4VITProcess.cc
         G4VITReactionProcess.cc

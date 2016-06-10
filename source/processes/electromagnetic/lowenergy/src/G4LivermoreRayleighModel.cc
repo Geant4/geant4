@@ -37,14 +37,15 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4int G4LivermoreRayleighModel::maxZ = 100;
+G4LPhysicsFreeVector* G4LivermoreRayleighModel::dataCS[] = {0};
+
 G4LivermoreRayleighModel::G4LivermoreRayleighModel()
-  :G4VEmModel("LivermoreRayleigh"),isInitialised(false),maxZ(100)
+  :G4VEmModel("LivermoreRayleigh"),isInitialised(false)
 {
   fParticleChange = 0;
   lowEnergyLimit  = 10 * eV; 
   
-  dataCS.resize(maxZ+1,0); 
-
   SetAngularDistribution(new G4RayleighAngularGenerator());
   
   verboseLevel= 0;
@@ -63,9 +64,7 @@ G4LivermoreRayleighModel::G4LivermoreRayleighModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreRayleighModel::~G4LivermoreRayleighModel()
-{  
-  for(G4int i=0; i<=maxZ; ++i) { delete dataCS[i]; }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -81,40 +80,47 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
 	   << G4endl;
   }
 
-  // Initialise element selector
-  InitialiseElementSelectors(particle, cuts);
+  if(IsMaster()) {
 
-  // Access to elements
+    // Initialise element selector
+    InitialiseElementSelectors(particle, cuts);
+
+    // Access to elements
+    char* path = getenv("G4LEDATA");
+    G4ProductionCutsTable* theCoupleTable =
+      G4ProductionCutsTable::GetProductionCutsTable();
+    G4int numOfCouples = theCoupleTable->GetTableSize();
   
-  char* path = getenv("G4LEDATA");
-  G4ProductionCutsTable* theCoupleTable =
-    G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-  for(G4int i=0; i<numOfCouples; ++i) 
-  {
-    const G4MaterialCutsCouple* couple = 
-      theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = couple->GetMaterial();
-    const G4ElementVector* theElementVector = material->GetElementVector();
-    G4int nelm = material->GetNumberOfElements();
+    for(G4int i=0; i<numOfCouples; ++i) 
+      {
+	const G4MaterialCutsCouple* couple = 
+	  theCoupleTable->GetMaterialCutsCouple(i);
+	const G4Material* material = couple->GetMaterial();
+	const G4ElementVector* theElementVector = material->GetElementVector();
+	G4int nelm = material->GetNumberOfElements();
     
-    for (G4int j=0; j<nelm; ++j) 
-    {
-      G4int Z = G4lrint((*theElementVector)[j]->GetZ());
-      if(Z < 1)          { Z = 1; }
-      else if(Z > maxZ)  { Z = maxZ; }
-      if( (!dataCS[Z]) ) { ReadData(Z, path); }
-    }
+	for (G4int j=0; j<nelm; ++j) 
+	  {
+	    G4int Z = G4lrint((*theElementVector)[j]->GetZ());
+	    if(Z < 1)          { Z = 1; }
+	    else if(Z > maxZ)  { Z = maxZ; }
+	    if( (!dataCS[Z]) ) { ReadData(Z, path); }
+	  }
+      }
   }
-  //
-  
-  //fGenerator->PrintGeneratorInformation();
-  
+
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LivermoreRayleighModel::InitialiseLocal(const G4ParticleDefinition*,
+					       G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -183,7 +189,7 @@ G4double G4LivermoreRayleighModel::ComputeCrossSectionPerAtom(
 {
   if (verboseLevel > 1) 
   {
-    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreRayleighModel" 
+    G4cout << "G4LivermoreRayleighModel::ComputeCrossSectionPerAtom()" 
 	   << G4endl;
   }
 
@@ -197,11 +203,10 @@ G4double G4LivermoreRayleighModel::ComputeCrossSectionPerAtom(
 
   G4LPhysicsFreeVector* pv = dataCS[intZ];
 
-  // element was not initialised
-  if(!pv) 
-  {
-    char* path = getenv("G4LEDATA");
-    ReadData(intZ, path);
+  // if element was not initialised
+  // do initialisation safely for MT mode
+  if(!pv) { 
+    InitialiseForElement(0, intZ);
     pv = dataCS[intZ];
     if(!pv) { return xs; }
   }
@@ -216,11 +221,15 @@ G4double G4LivermoreRayleighModel::ComputeCrossSectionPerAtom(
 
   if(verboseLevel > 0)
   {
-    G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" << e << G4endl;
+    G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" 
+	    << e << G4endl;
     G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;
-    G4cout  <<  "    -> first E*E*cs value in CS data file (iu) =" << (*pv)[0] << G4endl;
-    G4cout  <<  "    -> last  E*E*cs value in CS data file (iu) =" << (*pv)[n] << G4endl;
-    G4cout  <<  "*********************************************************" << G4endl;
+    G4cout  <<  "    -> first E*E*cs value in CS data file (iu) =" << (*pv)[0] 
+	    << G4endl;
+    G4cout  <<  "    -> last  E*E*cs value in CS data file (iu) =" << (*pv)[n] 
+	    << G4endl;
+    G4cout  <<  "*********************************************************" 
+	    << G4endl;
   }
   return xs;
 }
@@ -257,8 +266,25 @@ void G4LivermoreRayleighModel::SampleSecondaries(
   
   G4ThreeVector photonDirection = 
     GetAngularDistribution()->SampleDirection(aDynamicGamma, 
-					      photonEnergy0, Z, couple->GetMaterial());
+					      photonEnergy0, 
+					      Z, couple->GetMaterial());
   fParticleChange->ProposeMomentumDirection(photonDirection);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex LivermoreRayleighModelMutex = G4MUTEX_INITIALIZER; }
+
+void 
+G4LivermoreRayleighModel::InitialiseForElement(const G4ParticleDefinition*, 
+					       G4int Z)
+{
+  G4AutoLock l(&LivermoreRayleighModelMutex);
+  //  G4cout << "G4LivermoreRayleighModel::InitialiseForElement Z= " 
+  //   << Z << G4endl;
+  if(!dataCS[Z]) { ReadData(Z); }
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

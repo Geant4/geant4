@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VRangeToEnergyConverter.hh 70745 2013-06-05 10:54:00Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -106,6 +106,7 @@ class G4VRangeToEnergyConverter
   virtual void Reset();
     
  protected:
+
     static G4double               LowestEnergy, HighestEnergy;
     static G4double               MaxEnergyCut; 
     G4double                      fMaxEnergyCut;
@@ -123,7 +124,7 @@ class G4VRangeToEnergyConverter
 
     virtual G4double ComputeLoss(G4double AtomicNumber,
                                  G4double KineticEnergy
-			       ) const = 0;
+			       ) =0;
 
   //-------------- Range Table ------------------------------------------
   protected:

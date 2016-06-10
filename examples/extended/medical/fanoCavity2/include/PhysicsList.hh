@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.hh 72961 2013-08-14 14:35:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,6 @@
 
 class G4VPhysicsConstructor;
 
-class DetectorConstruction;
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,20 +46,19 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
 public:
-  PhysicsList(DetectorConstruction*);
-  virtual ~PhysicsList();
+  PhysicsList();
+ ~PhysicsList();
 
-  void ConstructParticle();
+  virtual void ConstructParticle();
         
   void AddPhysicsList(const G4String& name);    
-  void ConstructProcess();    
+  virtual void ConstructProcess();    
   void AddStepMax(); 
   
-  void SetCuts();      
+  virtual void SetCuts();      
     
 private:
 
-  DetectorConstruction*  fDetector;
   PhysicsListMessenger*  fMessenger; 
 
   G4String               fEmName;

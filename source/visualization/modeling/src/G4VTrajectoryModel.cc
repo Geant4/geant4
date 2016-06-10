@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VTrajectoryModel.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay May 2006
 //

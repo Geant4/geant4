@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DiffuseElastic.cc 70682 2013-06-04 07:57:01Z gcosmo $
 //
 //
 // Physics model class G4DiffuseElastic 
@@ -191,7 +191,7 @@ G4DiffuseElastic::GetInvElasticXsc( const G4ParticleDefinition* particle,
   else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
   else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
   else if (iZ == 2 && iA == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+  else theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(iZ,iA,0);
  
   G4double tmass = theDef->GetPDGMass();
 
@@ -278,7 +278,7 @@ G4DiffuseElastic::GetInvElasticSumXsc( const G4ParticleDefinition* particle,
   else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
   else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
   else if (iZ == 2 && iA == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+  else theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(iZ,iA,0);
  
   G4double tmass = theDef->GetPDGMass();
 
@@ -328,7 +328,7 @@ G4DiffuseElastic::GetInvCoulombElasticXsc( const G4ParticleDefinition* particle,
   else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
   else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
   else if (iZ == 2 && iA == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+  else theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(iZ,iA,0);
  
   G4double tmass = theDef->GetPDGMass();
 

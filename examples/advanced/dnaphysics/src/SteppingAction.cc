@@ -23,27 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "Analysis.hh"
 
 #include "SteppingAction.hh"
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
-#include "G4VTouchable.hh"
-#include "G4VPhysicalVolume.hh"
+
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4Gamma.hh"
+#include "G4Alpha.hh"
+#include "G4DNAGenericIonsManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri, HistoManager* his)
-:Run(run),Detector(det),Primary(pri),Histo(his)
+SteppingAction::SteppingAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,9 +60,41 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 { 
- G4double flagParticle=0.;
- G4double flagProcess=0.;
+ G4double flagParticle=-1.;
+ G4double flagProcess=-1.;
  G4double x,y,z,xp,yp,zp;
+ 
+ // Process sub-types are listed in G4PhysicsListHelper.cc
+ 
+/*
+ // The following method avoids the usage of string comparison 
+
+ if (step->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Electron::ElectronDefinition())       
+    flagParticle = 1; 
+ 
+ if (step->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())       
+    flagParticle = 2; 
+ 
+ if (step->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition())       
+    flagParticle = 4; 
+
+    G4DNAGenericIonsManager *instance;
+    instance = G4DNAGenericIonsManager::Instance();
+    G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
+    G4ParticleDefinition* hydrogenDef = instance->GetIon("hydrogen");
+    G4ParticleDefinition* alphaPlusPlusDef = instance->GetIon("alpha++");
+    G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
+    G4ParticleDefinition* heliumDef = instance->GetIon("helium");
+ 
+ if (step->GetTrack()->GetDynamicParticle()->GetDefinition() == instance->GetIon("hydrogen"))       
+    flagParticle = 3; 
+
+ if (step->GetTrack()->GetDynamicParticle()->GetDefinition() == instance->GetIon("alpha+"))       
+    flagParticle = 5; 
+
+ if (step->GetTrack()->GetDynamicParticle()->GetDefinition() == instance->GetIon("helium"))       
+    flagParticle = 6; 
+*/
  
  if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "e-")       flagParticle = 1;    
  if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "proton")   flagParticle = 2;
@@ -66,12 +103,12 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha+")   flagParticle = 5;
  if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "helium")   flagParticle = 6;
 
+ 
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAElastic")		flagProcess =11;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAExcitation")		flagProcess =12;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAIonisation")		flagProcess =13;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAAttachment")		flagProcess =14;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAVibExcitation")	flagProcess =15;
- if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNACapture")		flagProcess =16;
 
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="proton_G4DNAExcitation")	flagProcess =17;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="proton_G4DNAIonisation")	flagProcess =18;
@@ -94,9 +131,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="helium_G4DNAIonisation")	flagProcess =31;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="helium_G4DNAChargeIncrease")	flagProcess =32;
 
- if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="hIoni")			flagProcess =33;
- if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="eIoni")			flagProcess =34;
-
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="Transportation")
  {  
    x=step->GetPreStepPoint()->GetPosition().x()/nanometer;
@@ -106,17 +140,18 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    yp=step->GetPostStepPoint()->GetPosition().y()/nanometer;
    zp=step->GetPostStepPoint()->GetPosition().z()/nanometer;
    
-   
-   Histo->FillNtupleDColumn(0, flagParticle);
-   Histo->FillNtupleDColumn(1, flagProcess);
-   Histo->FillNtupleDColumn(2, x);
-   Histo->FillNtupleDColumn(3, y);
-   Histo->FillNtupleDColumn(4, z);
-   Histo->FillNtupleDColumn(5, step->GetTotalEnergyDeposit()/eV);
-   Histo->FillNtupleDColumn(6, std::sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp))/nm);
-   Histo->FillNtupleDColumn(7, (step->GetPreStepPoint()->GetKineticEnergy() - step->GetPostStepPoint()->GetKineticEnergy())/eV );
-   
-   Histo->AddNtupleRow();
-         
+   // get analysis manager
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+  // fill ntuple
+  analysisManager->FillNtupleDColumn(0, flagParticle);
+  analysisManager->FillNtupleDColumn(1, flagProcess);
+  analysisManager->FillNtupleDColumn(2, x);
+  analysisManager->FillNtupleDColumn(3, y);
+  analysisManager->FillNtupleDColumn(4, z);
+  analysisManager->FillNtupleDColumn(5, step->GetTotalEnergyDeposit()/eV);
+  analysisManager->FillNtupleDColumn(6, std::sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp))/nm);
+  analysisManager->FillNtupleDColumn(7, (step->GetPreStepPoint()->GetKineticEnergy() - step->GetPostStepPoint()->GetKineticEnergy())/eV );
+  analysisManager->AddNtupleRow();  
  }
 }    

@@ -27,7 +27,7 @@
 /// \brief Definition of the B01DetectorConstruction class
 //
 //
-// $Id$
+// $Id: B01DetectorConstruction.hh 77475 2013-11-25 09:38:51Z gcosmo $
 //
 
 #ifndef B01DetectorConstruction_hh
@@ -47,7 +47,7 @@ public:
   B01DetectorConstruction();
   ~B01DetectorConstruction();
   
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
   G4VIStore* CreateImportanceStore();
     // create an importance store, caller is responsible for deleting it
@@ -62,11 +62,13 @@ public:
 
   void SetSensitive();
 
-private:
-  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+  virtual void ConstructSDandField();
 
-  G4VPhysicalVolume* pWorldVolume;
+private:
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+
+  G4VPhysicalVolume* fWorldVolume;
 
 };
 

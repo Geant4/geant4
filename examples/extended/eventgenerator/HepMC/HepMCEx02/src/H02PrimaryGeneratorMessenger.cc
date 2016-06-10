@@ -26,28 +26,22 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the H02PrimaryGeneratorMessenger class
 //
-// ====================================================================
+//   $Id: H02PrimaryGeneratorMessenger.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   H02PrimaryGeneratorMessenger.cc
-//   $Id$
-//
-// ====================================================================
-#include "G4UIcommand.hh"
-#include "G4UIparameter.hh"
-#include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
-
+#include "G4UIparameter.hh"
 #include "H02PrimaryGeneratorMessenger.hh"
 #include "H02PrimaryGeneratorAction.hh"
 
-/////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02PrimaryGeneratorMessenger::H02PrimaryGeneratorMessenger
                             (H02PrimaryGeneratorAction* genaction)
   : primaryAction(genaction)
-/////////////////////////////////////////////////////////////////
 {
   dir= new G4UIdirectory("/generator/");
   dir-> SetGuidance("Control commands for primary generator");
@@ -65,39 +59,34 @@ H02PrimaryGeneratorMessenger::H02PrimaryGeneratorMessenger
   select-> SetDefaultValue("particleGun");
 }
 
-///////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02PrimaryGeneratorMessenger::~H02PrimaryGeneratorMessenger()
-///////////////////////////////////////////////////////////
 {
   //delete verbose;
   delete select;
 
   delete dir;
-}  
+}
 
-///////////////////////////////////////////////////////////////////
-void H02PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void H02PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                               G4String newValues)
-///////////////////////////////////////////////////////////////////
 {
   if ( command==select) {
     primaryAction-> SetGenerator(newValues);
-    G4cout << "current generator type: " 
+    G4cout << "current generator type: "
             << primaryAction-> GetGeneratorName() << G4endl;
   } else {
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4String H02PrimaryGeneratorMessenger::GetCurrentValue(G4UIcommand* command)
-///////////////////////////////////////////////////////////////////////////
 {
   G4String cv, st;
   if (command == select) {
     cv= primaryAction-> GetGeneratorName();
-  } 
+  }
 
  return cv;
 }
-

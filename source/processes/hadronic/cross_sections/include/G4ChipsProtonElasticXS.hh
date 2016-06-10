@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics class: G4ChipsProtonElasticXS -- header file

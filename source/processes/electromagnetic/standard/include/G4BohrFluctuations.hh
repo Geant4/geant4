@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BohrFluctuations.hh 72048 2013-07-04 12:39:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,16 +64,16 @@ public:
 
   virtual ~G4BohrFluctuations();
 
-  G4double SampleFluctuations(const G4Material*,
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
                               const G4DynamicParticle*,
- 				    G4double&,
-                                    G4double&,
-                                    G4double&);
+ 				    G4double,
+                                    G4double,
+                                    G4double);
 
   G4double Dispersion(    const G4Material*,
                           const G4DynamicParticle*,
- 				G4double&,
-                                G4double&);
+ 				G4double,
+                                G4double);
 
   void InitialiseMe(const G4ParticleDefinition*);
 

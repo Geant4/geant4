@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4HadronicInteraction.hh 69717 2013-05-13 09:47:57Z gcosmo $
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.
@@ -110,10 +110,10 @@ public: // With description
   inline const G4HadronicInteraction* GetMyPointer() const
   { return this; }
 
-  inline G4int GetVerboseLevel() const
+  virtual G4int GetVerboseLevel() const
   { return verboseLevel; }
 
-  inline void SetVerboseLevel( G4int value )
+  virtual void SetVerboseLevel( G4int value )
   { verboseLevel = value; }
 
   inline const G4String& GetModelName() const

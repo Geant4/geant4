@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10PhysicsList class
 //
 //
-// $Id$
+// $Id: Em10PhysicsList.cc 68585 2013-04-01 23:35:07Z adotti $
 //
 
 #include "Em10PhysicsList.hh"

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
-//
-// Code review: MGP, 5 November 2006 (still to be completed)
+/*
+Author: Susanna Guatelli
+*/
 //
 //    **********************************
 //    *                                *
@@ -35,174 +33,91 @@
 //    *                                *
 //    **********************************
 //
-// $Id$
-//
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4DecayPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "BrachyPhysicsList.hh"
-
-#include "G4SystemOfUnits.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
-#include "G4UnitsTable.hh"
-#include "G4ios.hh"              
-// gamma
-#include "G4PhotoElectricEffect.hh"
-#include "G4LivermorePhotoElectricModel.hh"
+#include "G4ios.hh"
+#include "G4StepLimiter.hh"
+#include "G4ParticleDefinition.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
-#include "G4ComptonScattering.hh"
-#include "G4LivermoreComptonModel.hh"
-
-#include "G4GammaConversion.hh"
-#include "G4LivermoreGammaConversionModel.hh"
-
-#include "G4RayleighScattering.hh" 
-#include "G4LivermoreRayleighModel.hh"
-
-// e-
-#include "G4eMultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4LivermoreIonisationModel.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4LivermoreBremsstrahlungModel.hh"
-
-// e+
-#include "G4eIonisation.hh" 
-#include "G4eBremsstrahlung.hh" 
-#include "G4eplusAnnihilation.hh"
-
-BrachyPhysicsList::BrachyPhysicsList():  G4VUserPhysicsList()
+BrachyPhysicsList::BrachyPhysicsList():  G4VModularPhysicsList()
 {
-  SetVerboseLevel(1);
+SetVerboseLevel(1); 
+ 
+// EM physics: 3 alternatives
+
+emPhysicsList = new G4EmStandardPhysics_option4(1);
+
+// Alternatively you can substitute this physics list
+// with the LowEnergy Livermore or LowEnergy Penelope: 
+// emPhysicsList = new G4EmLivermorePhysics();
+// Low Energy based on Livermore Evaluated Data Libraries
+//
+// Penelope physics
+//emPhysicsList = new G4EmPenelopePhysics();
+
+// Add Decay
+decPhysicsList = new G4DecayPhysics();
+radDecayPhysicsList = new G4RadioactiveDecayPhysics();
+
 }
 
 BrachyPhysicsList::~BrachyPhysicsList()
-{
+{  
+delete decPhysicsList;
+delete radDecayPhysicsList;
+delete emPhysicsList;
 }
 
 void BrachyPhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
-
-  ConstructBosons();
-  ConstructLeptons();
-
-}
-
-void BrachyPhysicsList::ConstructBosons()
-{ 
-  // photons
-  G4Gamma::GammaDefinition();
-}
-
-void BrachyPhysicsList::ConstructLeptons()
-{
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
+decPhysicsList -> ConstructParticle();
 }
 
 void BrachyPhysicsList::ConstructProcess()
 {
-  AddTransportation();
-  ConstructEM();
-}
+AddTransportation();
+emPhysicsList -> ConstructProcess();
 
-void BrachyPhysicsList::ConstructEM()
-{
-  theParticleIterator->reset();
-
-  while( (*theParticleIterator)() ){
-
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-    
-    // Processes
-    
-    if (particleName == "gamma") {
-      
-      // Photon     
-      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      theRayleigh->SetModel(new G4LivermoreRayleighModel());  //not strictly necessary
-      pmanager->AddDiscreteProcess(theRayleigh);
-
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      thePhotoElectricEffect->SetModel(new G4LivermorePhotoElectricModel());
-      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
-	
-      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      theComptonScattering->SetModel(new G4LivermoreComptonModel());
-      pmanager->AddDiscreteProcess(theComptonScattering);
-	
-      G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      theGammaConversion->SetModel(new G4LivermoreGammaConversionModel());
-      pmanager->AddDiscreteProcess(theGammaConversion);
-      
-    } else if (particleName == "e-") {
-      // Electron
-      
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      pmanager->AddProcess(msc,-1, 1, 1);
-
-      // Ionisation
-      G4eIonisation* eIonisation = new G4eIonisation();
-      eIonisation->SetEmModel(new G4LivermoreIonisationModel());
-      eIonisation->SetStepFunction(0.2, 100*um); //improved precision in tracking  
-      pmanager->AddProcess(eIonisation,-1, 2, 2);
-	
-      // Bremsstrahlung
-      G4eBremsstrahlung* eBremsstrahlung = new G4eBremsstrahlung();
-      eBremsstrahlung->SetEmModel(new G4LivermoreBremsstrahlungModel());
-      pmanager->AddProcess(eBremsstrahlung, -1,-3, 3);
-      
-    } else if (particleName == "e+") {
-      // Positron      
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      pmanager->AddProcess(msc,-1, 1, 1);
-	
-      // Ionisation
-      G4eIonisation* eIonisation = new G4eIonisation();
-      eIonisation->SetStepFunction(0.2, 100*um); //     
-      pmanager->AddProcess(eIonisation,                 -1, 2, 2);
-
-      //Bremsstrahlung (use default, no low-energy available)
-      pmanager->AddProcess(new G4eBremsstrahlung(), -1,-1, 3);
-
-      //Annihilation
-      pmanager->AddProcess(new G4eplusAnnihilation(),0,-1, 4);     
-      
-    }
-  }  
+// decay physics list
+decPhysicsList -> ConstructProcess();
+radDecayPhysicsList -> ConstructProcess();
 }
 
 void BrachyPhysicsList::SetCuts()
 {
-  // The production threshold is fixed to 0.1 mm for all the particles
-  // Secondary particles with a range bigger than 0.1 mm 
-  // are generated; otherwise their energy is considered deposited locally
-
-  defaultCutValue = 0.1 * mm;
-
-  const G4double cutForGamma = defaultCutValue;
-  const G4double cutForElectron = defaultCutValue;
-  const G4double cutForPositron = defaultCutValue;
-
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-
-  // Set the secondary production cut lower than 990. eV
-  // Very important for high precision of lowenergy processes at low energies
- 
-  G4double lowLimit = 250. * eV;
-  G4double highLimit = 100. * GeV;
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit, highLimit);
+// Definition of  threshold of production 
+// of secondary particles
+// This is defined in range.
+defaultCutValue = 0.1 * mm;
+SetCutValue(defaultCutValue, "gamma");
+SetCutValue(defaultCutValue, "e-");
+SetCutValue(defaultCutValue, "e+");
   
-  if (verboseLevel>0) DumpCutValuesTable();
+// By default the low energy limit to produce 
+// secondary particles is 990 eV.
+// This value is correct when using the EM Standard Physics.
+// When using the Low Energy Livermore this value can be 
+// changed to 250 eV corresponding to the limit
+// of validity of the physics models.
+// Comment out following three lines if the 
+// Standard electromagnetic Package is adopted.
+G4double lowLimit = 250. * eV;
+G4double highLimit = 100. * GeV;
+
+G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit,
+                                                                highLimit);
+
+// Print the cuts 
+if (verboseLevel>0) DumpCutValuesTable();
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RayTracerViewer.cc 74050 2013-09-20 09:38:19Z gcosmo $
 
 #include "G4RayTracerViewer.hh"
 
@@ -37,6 +37,10 @@
 #include "G4TheRayTracer.hh"
 #include "G4UImanager.hh"
 
+#ifdef G4MULTITHREADED
+#include "G4TheMTRayTracer.hh"
+#endif
+
 G4RayTracerViewer::G4RayTracerViewer
 (G4VSceneHandler& sceneHandler,
  const G4String& name,
@@ -45,7 +49,12 @@ G4RayTracerViewer::G4RayTracerViewer
   fFileCount(0)
 {
   theTracer = aTracer;
+#ifdef G4MULTITHREADED
+  if (!aTracer) theTracer = G4TheMTRayTracer::theInstance;
+  if (!theTracer) theTracer = new G4TheMTRayTracer;
+#else
   if (!aTracer) theTracer = new G4TheRayTracer;
+#endif
   theTracer->SetNColumn(fVP.GetWindowSizeHintX());
   theTracer->SetNRow(fVP.GetWindowSizeHintY());
 }

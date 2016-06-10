@@ -27,10 +27,10 @@
 /// \brief Definition of the SteppingVerbose class
 //
 //
-// $Id$
+// $Id: SteppingVerbose.hh 70216 2013-05-27 07:31:34Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingVerbose_h
 #define SteppingVerbose_h 1
@@ -45,10 +45,9 @@ public:
 
   SteppingVerbose();
  ~SteppingVerbose();
-
-  virtual void StepInfo();
+ 
   virtual void TrackingStarted();
-
+  virtual void StepInfo();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

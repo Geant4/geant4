@@ -14,6 +14,135 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+24 November 2013  Dennis Wright radioactive_decay-V09-06-21
+-----------------------------------------------------------
+- G4RadioactiveDecay::GetMeanFreePath: currently GetPDGStable() returns stable
+    for isomers.  This prevented isomers from decaying in flight.  Fix by
+    replacing GetPDGStable() with lifetime == -1 as test for nuclide stability.
+    Also clean up calculation of pathlength.
+
+- G4NuclearDecayChannel: clean out unused print-outs
+
+13 November 2013  Dennis Wright radioactive_decay-V09-06-20
+-----------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable: fix endpoint energy loaded into decay
+    channel for beta+ decay - subtract 2 electron masses
+
+11 November 2013  Dennis Wright radioactive_decay-V09-06-19
+-----------------------------------------------------------
+- fixed bugs causing decay chains to stop prematurely
+- G4NuclearDecayChannel::DecayIt:
+    in the case of IT, get excitation energy from parent nucleus, not daughter 
+            (const G4Ions*)(G4MT_parent))->GetExcitationEnergy()
+    remove subtraction of gamma energy from variable daughterExcitation
+
+- G4RadioactiveDecay::GetDecayTable: search internal library of decay tables
+    using name of ion, not integer key - this fixes the "level 9" problem
+ 
+7 November 2013  Dennis Wright radioactive_decay-V09-06-18
+----------------------------------------------------------
+- G4NuclearDecayChannel::DecayIt: allow explicit decay of IT channels
+  and send residual nucleus to final state for tracking
+- G4RadioactiveDecay: clean up
+
+21 October 2013  Dennis Wright radioactive_decay-V09-06-17
+----------------------------------------------------------
+- G4NuclearDecayChannel::DecayIt: in loop to search for isomer levels, add
+  Andrea Dotti's protections and fatal exception for zero pointers when daughter
+  ions are not found
+
+14 October 2013  Dennis Wright radioactive_decay-V09-06-16
+----------------------------------------------------------
+- G4NuclearDecayChannel::DecayIt: add an electron mass to the parent nucleus
+  in case of electron capture.  This fixes the G4GeneralPhaseSpaceDecay::Pmx()
+  mass deficit warning. 
+
+4 October 2013  Dennis Wright radioactive_decay-V09-06-15
+---------------------------------------------------------
+- G4NuclearDecayChannel: change class member daughterExcitation
+  from TLS back to plain G4double - fixes infinite loop in decay chain
+ 
+1 October 2013  Makoto Asai  radioactive_decay-V09-06-14
+--------------------------------------------------------
+- G4NuclearDecayChannel : Fixed thread-safety and reproducability issues.
+
+9 September 2013  Makoto Asai  radioactive_decay-V09-06-13
+---------------------------------------------------------- 
+- G4RadioactiveDecay::LoadDecayTable() : modify to read data file only once
+  for multi-threaded mode.
+
+5 September 2013  Dennis Wright  radioactive_decay-V09-06-12
+------------------------------------------------------------ 
+- G4NuclearDecayChannel::DecayIt() : remove unused variable and argument
+  (theParentMass)
+
+16 August 2013  Dennis Wright  radioactive_decay-V09-06-11
+----------------------------------------------------------
+- cleanup and retag
+
+12 August 2013  Dennis Wright  radioactive_decay-V09-06-10
+----------------------------------------------------------
+- G4RadioactiveDecay:
+    move registry of isotope table from BuildPhysicsTable to ctor.
+    This fixes problem of missing secondaries and is probably OK for MT.
+
+- G4NuclearDecayChannel: use integer metastable state levels instead of
+    energy values.  Where only energy is known search for nearest integer
+    level. 
+
+12 July 2013  Dennis Wright  radioactive_decay-V09-06-09
+--------------------------------------------------------
+- G4RadioactiveDecay:
+    to accommodate multi-threading remove the setting of nuclear decay tables
+    to G4ParticleDefinition and replace with local decay table map
+    
+    remove IsLoaded() method and data member LoadedNuclei which are now
+    redundant due to above changes
+ 
+20 June 2013  Andrea Dotti   radioactive_decay-V09-06-08
+--------------------------------------------------------
+- G4RIsotopeTable.cc : fix bug in checking if DB files have 
+  been loaded (accessing map without protection)
+
+20 June 2013  Dennis Wright  radioactive_decay-V09-06-07
+--------------------------------------------------------
+- G4RadioactiveDecay.cc : fix memory leak by adding  
+  delete theIsotopeTable;
+  to dtor
+
+18 June 2013 V. Ivanchenko  radioactive_decay-V09-06-06
+--------------------------------------------------------
+- G4RadioactiveDecay, G4NuclearDecayChannel, 
+  G4BetaMinusDecayChannel, G4BetaPlusDecayChannel - use
+    typedefs from Randomize.hh instead of CLHEP
+
+18 June 2013 V. Ivanchenko  radioactive_decay-V09-06-05
+--------------------------------------------------------
+- G4RadioactiveDecay - initialise Isotope table only for master
+
+18 June 2013 V. Ivanchenko  radioactive_decay-V09-06-04
+--------------------------------------------------------
+- G4RadioactiveDecay - moved initialisation of Isotope table from
+    the constructor to BuildPhysicsTable method
+
+6 June 2013  Gabriele Cosmo  radioactive_decay-V09-06-03
+--------------------------------------------------------
+- Replaced keyword 'ERROR' with 'RDM_ERROR' to avoid clashes with
+  specific macros defined in Windows system.
+
+8 March 2013  Gabriele Cosmo  radioactive_decay-V09-06-02
+---------------------------------------------------------
+- Fixed use of internal MT data in G4NuclearDecayChannel.
+
+1 January 2013  Laurent Desorgher  radioactive_decay-V09-06-01
+------------------------------------------------------------
+- G4RadioactiveDecay: fix partly bug 1359
+	-Force the boost of the decay products in line 1598
+	-The parent energy considered in the boost is the total energy of the fully stripped parent ion  rather than 
+	 the total energy of dynamic ion where the energy of shell electrons is taken into account
+	-Some difference in momentum and energy balance is still observed but much less than before  
+		     
+
 13 November 2012  Dennis Wright  radioactive_decay-V09-05-12
 ------------------------------------------------------------
 - G4NuclearDecayChannel: fix Coverity bugs 15098, 15099, 37711 uninitialized

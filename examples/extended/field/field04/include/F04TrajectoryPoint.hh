@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04TrajectoryPoint.hh 76690 2013-11-14 08:45:07Z gcosmo $
+//
 /// \file field/field04/include/F04TrajectoryPoint.hh
 /// \brief Definition of the F04TrajectoryPoint class
 //
-//
+
 #ifndef F04TrajectoryPoint_h
 #define F04TrajectoryPoint_h 1
 
@@ -88,17 +90,18 @@ class F04TrajectoryPoint : public G4TrajectoryPoint {
 
 };
 
-extern G4DLLEXPORT G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
+extern G4ThreadLocal G4Allocator<F04TrajectoryPoint>* F04TrajPointAllocator;
 
 inline void* F04TrajectoryPoint::operator new(size_t)
 {
-    void *aTrajectoryPoint = (void *) aTrajPointAllocator.MallocSingle();
-    return aTrajectoryPoint;
+    if(!F04TrajPointAllocator)
+      F04TrajPointAllocator = new G4Allocator<F04TrajectoryPoint>;
+    return (void *) F04TrajPointAllocator->MallocSingle();
 }
 
 inline void F04TrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-    aTrajPointAllocator.FreeSingle(
+    F04TrajPointAllocator->FreeSingle(
         (F04TrajectoryPoint *) aTrajectoryPoint);
 }
 

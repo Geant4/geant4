@@ -48,15 +48,20 @@ class G4NeutronHPManager
       G4NeutronHPManager();
       G4NeutronHPManager( const G4NeutronHPManager& ){};
       ~G4NeutronHPManager();
-      static G4NeutronHPManager* instance;
+      static G4ThreadLocal G4NeutronHPManager* instance;
 
    public:
       G4NeutronHPReactionWhiteBoard* GetReactionWhiteBoard();
       void OpenReactionWhiteBoard();
       void CloseReactionWhiteBoard(){delete RWB; RWB=NULL;};
 
+      void GetDataStream( G4String , std::istringstream& iss );
+      void SetVerboseLevel( G4int i ); 
+      G4int GetVerboseLevel() {return verboseLevel; }; 
+
    private:
       G4NeutronHPReactionWhiteBoard* RWB;
-};
 
+      G4int verboseLevel;
+};
 #endif

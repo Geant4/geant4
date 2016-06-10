@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ViewParameters.cc 71534 2013-06-17 16:07:53Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -42,7 +42,6 @@
 G4ViewParameters::G4ViewParameters ():
   fDrawingStyle (wireframe),
   fAuxEdgeVisible (false),
-  fRepStyle (polyhedron),
   fCulling (true),
   fCullInvisible (true),
   fDensityCulling (false),
@@ -481,14 +480,18 @@ G4String G4ViewParameters::TouchableCommands() const
   for (iModifier = vams.begin();
        iModifier != vams.end();
        ++iModifier) {
-    oss << "\n/vis/set/touchable";
+    static G4ModelingParameters::PVNameCopyNoPath lastPath;
     const G4ModelingParameters::PVNameCopyNoPath& vamPath =
       iModifier->GetPVNameCopyNoPath();
-    G4ModelingParameters::PVNameCopyNoPathConstIterator iVAM;
-    for (iVAM = vamPath.begin();
-         iVAM != vamPath.end();
-         ++iVAM) {
-      oss << ' ' << iVAM->GetName() << ' ' << iVAM->GetCopyNo();
+    if (vamPath != lastPath) {
+      lastPath = vamPath;
+      oss << "\n/vis/set/touchable";
+      G4ModelingParameters::PVNameCopyNoPathConstIterator iVAM;
+      for (iVAM = vamPath.begin();
+           iVAM != vamPath.end();
+           ++iVAM) {
+        oss << ' ' << iVAM->GetName() << ' ' << iVAM->GetCopyNo();
+      }
     }
     const G4VisAttributes& vamVisAtts = iModifier->GetVisAttributes();
     const G4Colour& c = vamVisAtts.GetColour();
@@ -583,7 +586,6 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       // No particular order from here on.
       (fDrawingStyle         != v.fDrawingStyle)         ||
       (fAuxEdgeVisible       != v.fAuxEdgeVisible)       ||
-      (fRepStyle             != v.fRepStyle)             ||
       (fCulling              != v.fCulling)              ||
       (fCullInvisible        != v.fCullInvisible)        ||
       (fDensityCulling       != v.fDensityCulling)       ||
@@ -676,15 +678,6 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Auxiliary edges: ";
   if (!v.fAuxEdgeVisible) os << "in";
   os << "visible";
-
-  os << "\n  Representation style: ";
-  switch (v.fRepStyle) {
-  case G4ViewParameters::polyhedron:
-    os << "polyhedron"; break;
-  case G4ViewParameters::nurbs:
-    os << "nurbs"; break;
-  default: os << "unrecognised"; break;
-  }
 
   os << "\n  Culling: ";
   if (v.fCulling) os << "on";
@@ -829,7 +822,6 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       // No particular order from here on.
       (fDrawingStyle         != v.fDrawingStyle)         ||
       (fAuxEdgeVisible       != v.fAuxEdgeVisible)       ||
-      (fRepStyle             != v.fRepStyle)             ||
       (fCulling              != v.fCulling)              ||
       (fCullInvisible        != v.fCullInvisible)        ||
       (fDensityCulling       != v.fDensityCulling)       ||
@@ -883,17 +875,14 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       ((fExplodeFactor != v.fExplodeFactor) ||
        (fExplodeCentre != v.fExplodeCentre))) return true;
 
-  if (G4ModelingParameters::VAMSNotEqual
-      (fVisAttributesModifiers, v.fVisAttributesModifiers))
-    return true;
+  if (fVisAttributesModifiers != v.fVisAttributesModifiers) return true;
 
   return false;
 }
 
 
-void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg) {
-
-
+void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg)
+{
   G4int x,y = 0;
   unsigned int w,h = 0;
   G4String geomString = geomStringArg;

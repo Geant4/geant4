@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B3RunAction.cc 71323 2013-06-13 16:54:23Z gcosmo $
 //
 /// \file B3RunAction.cc
 /// \brief Implementation of the B3RunAction class
 
 #include "B3RunAction.hh"
 #include "B3PrimaryGeneratorAction.hh"
+#include "B3Run.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -39,9 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3RunAction::B3RunAction()
- : G4UserRunAction(),
-   fGoodEvents(0),
-   fSumDose(0.)  
+ : G4UserRunAction()
 {  
   //add new units for dose
   // 
@@ -59,16 +58,18 @@ B3RunAction::B3RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3RunAction::~B3RunAction()
-{}
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Run* B3RunAction::GenerateRun()
+{ return new B3Run; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B3RunAction::BeginOfRunAction(const G4Run* run)
 { 
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-  
-  fGoodEvents = 0;
-  fSumDose = 0.;
   
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
@@ -78,25 +79,46 @@ void B3RunAction::BeginOfRunAction(const G4Run* run)
 
 void B3RunAction::EndOfRunAction(const G4Run* run)
 {
-  G4int NbOfEvents = run->GetNumberOfEvent();
-  if (NbOfEvents == 0) return;
+  G4int nofEvents = run->GetNumberOfEvent();
+  if (nofEvents == 0) return;
   
-  //run conditions
-  //
-  const B3PrimaryGeneratorAction* kinematic 
+  // Run conditions
+  //  note: There is no primary generator action object for "master"
+  //        run manager for multi-threaded mode.
+  const B3PrimaryGeneratorAction* generatorAction
     = static_cast<const B3PrimaryGeneratorAction*>(
         G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
-  G4ParticleDefinition* particle 
-    = kinematic->GetParticleGun()->GetParticleDefinition();
-  G4String partName = particle->GetParticleName();                       
+  G4String partName;
+  if (generatorAction) 
+  {
+    G4ParticleDefinition* particle 
+      = generatorAction->GetParticleGun()->GetParticleDefinition();
+    partName = particle->GetParticleName();
+  }  
+  
+  //results
+  //
+  const B3Run* b3Run = static_cast<const B3Run*>(run);
+  G4int nbGoodEvents = b3Run->GetNbGoodEvents();
+  G4double sumDose   = b3Run->GetSumDose();                           
         
   //print
-  //  
+  //
+  if (IsMaster())
+  {
+    G4cout
+     << "\n--------------------End of Global Run-----------------------"
+     << " \n The run was " << nofEvents << " events ";
+  }
+  else
+  {
+    G4cout
+     << "\n--------------------End of Local Run------------------------"
+     << " \n The run was " << nofEvents << " "<< partName;
+  }      
   G4cout
-     << "\n--------------------End of Run------------------------------\n"
-     << " The run was " << NbOfEvents << " "<< partName
-     << "; Nb of 'good' e+ annihilations: " << fGoodEvents
-     << "\n Total dose in patient : " << G4BestUnit(fSumDose,"Dose")   
+     << "; Nb of 'good' e+ annihilations: " << nbGoodEvents
+     << "\n Total dose in patient : " << G4BestUnit(sumDose,"Dose")   
      << "\n------------------------------------------------------------\n"
      << G4endl;
 }

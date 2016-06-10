@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2010-04-03 00:22:35 dennis Exp $
+# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------

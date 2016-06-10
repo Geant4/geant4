@@ -27,7 +27,7 @@
 /// \brief Definition of the B01RunAction class
 //
 //
-// $Id$
+// $Id: B01RunAction.hh 72954 2013-08-14 14:17:32Z gcosmo $
 // 
 
 #ifndef B01RunAction_h
@@ -61,14 +61,15 @@ public:
 
 public:
   void PrintHeader(std::ostream *out);
-  std::string FillString(const std::string &name, char c, G4int n, G4bool back=true);
+  std::string FillString(const std::string &name, char c, G4int n
+                        , G4bool back=true);
 
 private:
   // Data member 
-  // - vector of MultiFunctionalDetecor names.
-  std::vector<G4String> theSDName;  
-  G4int FieldName;
-  G4int FieldValue;
+  // - vector of MultiFunctionalDetector names.
+  std::vector<G4String> fSDName;  
+  //  G4int fFieldName;
+  G4int fFieldValue;
 
 
 };

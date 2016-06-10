@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VisManager.cc,v 1.7 2008-03-13 07:32:18 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VisManager.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4VisManager.cc
 //

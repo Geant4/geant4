@@ -23,23 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4CameronTruranHilfPairingCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4CameronTruranHilfPairingCorrections.hh"
-
-
+#include <CLHEP/Units/SystemOfUnits.h>
 
 // Data comes from:
 // J.W. Truran, A.G.W. Cameron, and E. Hilf, 
 // Proc. Int. Conf. on the Properties of Nuclei Far From the Beta-Stability,
 // Leysin, Switzerland, August 31 - September 4, 1970, Vol.1, p. 275
 // S(Z)
-const G4double G4CameronTruranHilfPairingCorrections::PairingZTable
-[G4CameronTruranHilfPairingCorrections::ZTableSize] = { // 93 from Z = 10 to Z = 42
+G4double G4CameronTruranHilfPairingCorrections::PairingZTable[] = 
+{ // 93 from Z = 10 to Z = 42
 -2.200, 0.   ,-2.120, 0.   ,-1.981, 0.   ,-1.491, 0.   ,-1.450, 0.,
 -1.701, 0.   ,-1.344, 0.   ,-1.349, 0.   ,-1.397, 0.   ,-1.311, 0.,
 -1.161, 0.   ,-1.201, 0.   ,-1.449, 0.   ,-1.331, 0.   ,-1.272, 0.,
@@ -52,8 +53,8 @@ const G4double G4CameronTruranHilfPairingCorrections::PairingZTable
 -0.501, 0.   ,-0.491
 };
 // S(N)
-const G4double G4CameronTruranHilfPairingCorrections::PairingNTable
-[G4CameronTruranHilfPairingCorrections::NTableSize] = { // 145 from N = 10 to N = 154
+G4double G4CameronTruranHilfPairingCorrections::PairingNTable[] = 
+{ // 145 from N = 10 to N = 154
 -2.400, 0.   ,-2.358, 0.   ,-2.057, 0.   ,-1.462, 0.   ,-1.592, 0.,
 -1.528, 0.   ,-1.470, 0.   ,-1.310, 0.   ,-1.316, 0.   ,-1.265, 0.,
 -1.279, 0.   ,-1.256, 0.   ,-1.285, 0.   ,-1.440, 0.   ,-1.517, 0.,
@@ -71,20 +72,12 @@ const G4double G4CameronTruranHilfPairingCorrections::PairingNTable
 -0.611, 0.   ,-0.654, 0.   ,-0.557
 };
 
-
-G4CameronTruranHilfPairingCorrections* G4CameronTruranHilfPairingCorrections::theInstance = 0;
-
 G4CameronTruranHilfPairingCorrections::G4CameronTruranHilfPairingCorrections()
-{;}
+{
+  for(size_t i=0; i<ZTableSize; ++i) { PairingZTable[i] *= CLHEP::MeV; }
+  for(size_t i=0; i<NTableSize; ++i) { PairingNTable[i] *= CLHEP::MeV; }
+}
 
 G4CameronTruranHilfPairingCorrections::~G4CameronTruranHilfPairingCorrections()
-{;}
+{}
 
-G4CameronTruranHilfPairingCorrections* G4CameronTruranHilfPairingCorrections::GetInstance()
-{
-  if (!theInstance)  { 
-    static G4CameronTruranHilfPairingCorrections theCorrections;
-    theInstance = &theCorrections; 
-  }
-  return theInstance;
-}

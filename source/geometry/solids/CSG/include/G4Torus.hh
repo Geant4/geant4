@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Torus.hh 72938 2013-08-14 13:24:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -154,7 +154,6 @@ class G4Torus : public G4CSGSolid
 
     void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron*       CreatePolyhedron   () const;
-    G4NURBS*            CreateNURBS        () const;
 
   public:  // without description
 
@@ -202,6 +201,10 @@ class G4Torus : public G4CSGSolid
     
     G4double fRminTolerance, fRmaxTolerance, kRadTolerance, kAngTolerance;
       // Radial and angular tolerances
+
+    G4double halfCarTolerance, halfAngTolerance;
+      // Cached half tolerance values
+
 };
 
 #include "G4Torus.icc"

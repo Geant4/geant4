@@ -27,12 +27,11 @@
 /// \brief Implementation of the F01PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: F01PrimaryGeneratorAction.cc 77881 2013-11-29 08:37:53Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F01PrimaryGeneratorAction.hh"
 
@@ -43,31 +42,32 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+
 #include "Randomize.hh"
-#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
- G4String F01PrimaryGeneratorAction::fgPrimaryParticleName = "e-" ; 
+ G4ParticleDefinition* F01PrimaryGeneratorAction::fgPrimaryParticle = 0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01PrimaryGeneratorAction::F01PrimaryGeneratorAction(
                                             F01DetectorConstruction* det)
-  : fParticleGun(0),
-    fDetector(det), 
+  : G4VUserPrimaryGeneratorAction(),
+    fParticleGun(0),
+    fDetector(det),
     fGunMessenger(0),
     fRndmFlag("off"),
-    fXVertex(0.), 
-    fYVertex(0.), 
+    fXVertex(0.),
+    fYVertex(0.),
     fZVertex(0.),
     fVertexDefined(false)
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);
-  
+
   // create a messenger for this class
   fGunMessenger = new F01PrimaryGeneratorMessenger(this);
 
@@ -78,18 +78,19 @@ F01PrimaryGeneratorAction::F01PrimaryGeneratorAction(
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="e-");
   fParticleGun->SetParticleDefinition(particle);
-  
-  fgPrimaryParticleName = particle->GetParticleName() ;
+
+  fgPrimaryParticle = particle;
 
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
   fParticleGun->SetParticleEnergy(0.5*GeV);
 
-  fZVertex = fDetector->GetAbsorberZpos() -0.5*(fDetector->GetAbsorberThickness());
+  fZVertex = fDetector->GetAbsorberZpos() -
+                                      0.5*(fDetector->GetAbsorberThickness());
   fParticleGun->SetParticlePosition(G4ThreeVector(fXVertex,fYVertex,fZVertex));
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01PrimaryGeneratorAction::~F01PrimaryGeneratorAction()
 {
@@ -97,76 +98,76 @@ F01PrimaryGeneratorAction::~F01PrimaryGeneratorAction()
   delete fGunMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   // this function is called at the begining of event
-  // 
-  fgPrimaryParticleName 
-    = fParticleGun->GetParticleDefinition()->GetParticleName() ;
-  G4double x0,y0,z0 ;
+  //
+  fgPrimaryParticle = fParticleGun->GetParticleDefinition();
+
+  G4double x0,y0,z0;
   if (fVertexDefined)
   {
-    x0 = fXVertex ;
-    y0 = fYVertex ;
-    z0 = fZVertex ;
+    x0 = fXVertex;
+    y0 = fYVertex;
+    z0 = fZVertex;
   }
   else
   {
-    x0 = 0. ;
-    y0 = 0. ;
+    x0 = 0.;
+    y0 = 0.;
     z0 = fDetector->GetAbsorberZpos()-0.5*(fDetector->GetAbsorberThickness());
   }
-  G4double r0,phi0 ;
 
+  G4double r0,phi0;
   if (fRndmFlag == "on")
   {
     r0 = (fDetector->GetAbsorberRadius())*std::sqrt(G4UniformRand());
     phi0 = twopi*G4UniformRand();
     x0 = r0*std::cos(phi0);
     y0 = r0*std::sin(phi0);
-  } 
+  }
 
   fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String F01PrimaryGeneratorAction::GetPrimaryName()
 {
-   return fgPrimaryParticleName ;
+   return fgPrimaryParticle->GetParticleName();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01PrimaryGeneratorAction::SetZVertex(G4double z)
 {
-  fVertexDefined = true ;
-  fZVertex = z ;
+  fVertexDefined = true;
+  fZVertex = z;
   G4cout << " Z coordinate of the primary vertex = " << fZVertex/mm <<
             " mm." << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01PrimaryGeneratorAction::SetXVertex(G4double x)
 {
-  fVertexDefined = true ;
-  fXVertex = x ;
+  fVertexDefined = true;
+  fXVertex = x;
   G4cout << " X coordinate of the primary vertex = " << fXVertex/mm <<
             " mm." << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01PrimaryGeneratorAction::SetYVertex(G4double y)
 {
-  fVertexDefined = true ;
-  fYVertex = y ;
+  fVertexDefined = true;
+  fYVertex = y;
   G4cout << " Y coordinate of the primary vertex = " << fYVertex/mm <<
             " mm." << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

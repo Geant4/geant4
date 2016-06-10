@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InuclElementaryParticle.hh 72074 2013-07-06 06:28:53Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
@@ -43,6 +43,7 @@
 //		reuse of objects as buffers; c.f. G4InuclNuclei.
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20130702  M. Kelsey -- Use static type classifiers in G4InuclParticleNames
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -102,18 +103,17 @@ public:
 
   static G4int type(const G4ParticleDefinition* pd);
 
-  G4bool isPhoton() const { return (type() == G4InuclParticleNames::photon); }
+  // Ensure that type code refers to a known particle
+  inline static G4bool valid(G4int ityp) { return ityp!=0; }
+  G4bool valid() const { return valid(type()); }
 
-  G4bool pion() const { return (type()==G4InuclParticleNames::pionPlus ||
-				type()==G4InuclParticleNames::pionMinus ||
-				type()==G4InuclParticleNames::pionZero); }
-
-  G4bool nucleon() const { return (type()==G4InuclParticleNames::proton ||
-				   type()==G4InuclParticleNames::neutron); }
-
-  G4bool antinucleon() const {
-    return (type()==G4InuclParticleNames::antiProton ||
-	    type()==G4InuclParticleNames::antiNeutron); }
+  G4bool isPhoton() const { return G4InuclParticleNames::isPhoton(type()); }
+  G4bool isMuon() const { return G4InuclParticleNames::isMuon(type()); }
+  G4bool isElectron() const { return G4InuclParticleNames::isElectron(type()); }
+  G4bool isNeutrino() const { return G4InuclParticleNames::isNeutrino(type()); }
+  G4bool pion() const { return G4InuclParticleNames::pion(type()); }
+  G4bool nucleon() const { return G4InuclParticleNames::nucleon(type()); }
+  G4bool antinucleon() const { return G4InuclParticleNames::antinucleon(type()); }
 
   G4int baryon() const { 		// Can use as a bool (!=0 ==> true)
     return getDefinition()->GetBaryonNumber();
@@ -123,11 +123,11 @@ public:
 
   G4bool hyperon() const { return (baryon() && getStrangeness()); }
 
-  G4bool quasi_deutron() const { return (type() > 100); }
+  G4bool quasi_deutron() const {
+    return G4InuclParticleNames::quasi_deutron(type());
+  }
 
   G4int getStrangeness() const { return getStrangeness(type()); }
-
-  G4bool valid() const { return type()>0; }
 
   virtual void print(std::ostream& os) const;
 

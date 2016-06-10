@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Paraboloid.cc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // class G4Paraboloid
 //
@@ -46,8 +46,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 using namespace CLHEP;
@@ -1144,13 +1142,6 @@ G4Paraboloid::CreateRotatedVertices(const G4AffineTransform& pTransform,
 void G4Paraboloid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddSolid(*this);
-}
-
-G4NURBS* G4Paraboloid::CreateNURBS () const
-{
-  // Box for now!!!
-  //
-  return new G4NURBSbox(r1, r1, dz);
 }
 
 G4Polyhedron* G4Paraboloid::CreatePolyhedron () const

@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSStackingAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSStackingAction.hh
 /// \brief Definition of the WLSStackingAction class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,17 +43,17 @@ class WLSStackingAction : public G4UserStackingAction
   public:
 
     WLSStackingAction();
-    ~WLSStackingAction();
+    virtual ~WLSStackingAction();
 
   public:
 
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
     virtual void NewStage();
     virtual void PrepareNewEvent();
 
   private:
 
-    G4int photonCounter;
+    G4int fPhotonCounter;
 
 };
 

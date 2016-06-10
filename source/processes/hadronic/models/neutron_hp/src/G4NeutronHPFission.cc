@@ -119,8 +119,8 @@
       }
       delete [] xSec;
     }
-    //return theFission[index].ApplyYourself(aTrack);
-    G4HadFinalState* result = (*theFission[index]).ApplyYourself(aTrack);
+    //return theFission[index].ApplyYourself(aTrack);                 //-2:Marker for Fission
+    G4HadFinalState* result = (*theFission[index]).ApplyYourself(aTrack,-2);
     aNucleus.SetParameters(G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
     G4NeutronHPManager::GetInstance()->CloseReactionWhiteBoard();
     return result; 
@@ -148,4 +148,13 @@ void G4NeutronHPFission::addChannelForNewElement()
       }
    }
    numEle = (G4int)G4Element::GetNumberOfElements();
+}
+
+G4int G4NeutronHPFission::GetVerboseLevel() const
+{
+   return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+}
+void G4NeutronHPFission::SetVerboseLevel( G4int newValue ) 
+{
+   G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
 }

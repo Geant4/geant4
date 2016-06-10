@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NavigationLevel.hh 67974 2013-03-13 10:17:37Z gcosmo $
 //
 // class G4NavigationLevel
 //
@@ -48,6 +48,8 @@
 
 #include "G4NavigationLevelRep.hh"
 #include "G4Allocator.hh"
+
+#include "geomwdefs.hh"
 
 class G4NavigationLevel
 {

@@ -37,21 +37,77 @@
 #include "Randomize.hh"
 
 G4QMDCollision::G4QMDCollision()
-: deltar ( 4 )
-, bcmax0 ( 1.323142 ) // NN maximum impact parameter
-, bcmax1 ( 2.523 )    // others maximum impact parameter
-, sig0 ( 55 )   // NN cross section
+: fdeltar ( 4.0 )
+, fbcmax0 ( 1.323142 ) // NN maximum impact parameter
+, fbcmax1 ( 2.523 )    // others maximum impact parameter
+// , sig0 ( 55 )   // NN cross section
 //110617 fix for gcc 4.6 compilation warnings 
 //, sig1 ( 200 )  // others cross section
-, epse ( 0.0001 )
+, fepse ( 0.0001 )
 {
+   //These two pointers will be set through SetMeanField method
+   theSystem=NULL;
+   theMeanField=NULL;
    theScatterer = new G4Scatterer();
 }
 
+/*
+G4QMDCollision::G4QMDCollision( const G4QMDCollision& obj )
+: fdeltar ( obj.fdeltar )
+, fbcmax0 ( obj.fbcmax0 ) // NN maximum impact parameter
+, fbcmax1 ( obj.fbcmax1 )    // others maximum impact parameter
+, fepse ( obj.fepse )
+{
+   
+   if ( obj.theSystem != NULL ) {
+      theSystem = new G4QMDSystem;
+      *theSystem = *obj.theSystem;
+   } else {
+      theSystem = NULL;
+   }
+   if ( obj.theMeanField != NULL ) {
+      theMeanField = new G4QMDMeanField;
+      *theMeanField = *obj.theMeanField;
+   } else {
+      theMeanField = NULL;
+   }
+   theScatterer = new G4Scatterer();
+   *theScatterer = *obj.theScatterer;
+}
+
+G4QMDCollision & G4QMDCollision::operator= ( const G4QMDCollision& obj)
+{
+   fdeltar = obj.fdeltar;
+   fbcmax0 = obj.fbcmax1;
+   fepse = obj.fepse;
+
+   if ( obj.theSystem != NULL ) {
+      delete theSystem;
+      theSystem = new G4QMDSystem;
+      *theSystem = *obj.theSystem;
+   } else {
+      theSystem = NULL;
+   }
+   if ( obj.theMeanField != NULL ) {
+      delete theMeanField;
+      theMeanField = new G4QMDMeanField;
+      *theMeanField = *obj.theMeanField;
+   } else {
+      theMeanField = NULL;
+   }
+   delete theScatterer;
+   theScatterer = new G4Scatterer();
+   *theScatterer = *obj.theScatterer;
+
+   return *this;
+}
+*/
 
 
 G4QMDCollision::~G4QMDCollision()
 {
+   //if ( theSystem != NULL ) delete theSystem;
+   //if ( theMeanField != NULL ) delete theMeanField;
    delete theScatterer;
 }
 
@@ -155,10 +211,10 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 //          EnergyCheck  
 
             G4double efin = theMeanField->GetTotalPotential() + et; 
-            //std::cout <<  std::abs ( eini - efin ) - epse << std::endl; 
-//            std::cout <<  std::abs ( eini - efin ) - epse*10 << std::endl; 
+            //std::cout <<  std::abs ( eini - efin ) - fepse << std::endl; 
+//            std::cout <<  std::abs ( eini - efin ) - fepse*10 << std::endl; 
 //                                           *10 TK  
-            if ( std::abs ( eini - efin ) < epse*10 ) 
+            if ( std::abs ( eini - efin ) < fepse*10 ) 
             {
                // Energy OK 
                isThisEnergyOK = true;
@@ -272,10 +328,10 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 
 
 /*
-         std::cout << "Collision " << i << " " << theSystem->GetParticipant( i )->IsThisProjectile() << std::endl;
-         std::cout << "Collision " << j << " " << theSystem->GetParticipant( j )->IsThisProjectile() << std::endl;
-         std::cout << "Collision " << i << " " << theSystem->GetParticipant( i )->IsThisTarget() << std::endl;
-         std::cout << "Collision " << j << " " << theSystem->GetParticipant( j )->IsThisTarget() << std::endl;
+         G4cout << "Collision " << i << " " << theSystem->GetParticipant( i )->IsThisProjectile() << G4endl;
+         G4cout << "Collision " << j << " " << theSystem->GetParticipant( j )->IsThisProjectile() << G4endl;
+         G4cout << "Collision " << i << " " << theSystem->GetParticipant( i )->IsThisTarget() << G4endl;
+         G4cout << "Collision " << j << " " << theSystem->GetParticipant( j )->IsThisTarget() << G4endl;
 */
 
          // Only 1 Collision allowed for each particle in a time step. 
@@ -306,7 +362,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
          G4double rr2 = theMeanField->GetRR2( i , j );
 
 //       Here we assume elab (beam momentum less than 5 GeV/n )
-         if ( rr2 > deltar*deltar ) continue;
+         if ( rr2 > fdeltar*fdeltar ) continue;
 
          //G4double s = (p4i+p4j)*(p4i+p4j);
          //G4double srt = std::sqrt ( s );
@@ -314,7 +370,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
          G4double srt = std::sqrt( (p4i+p4j)*(p4i+p4j) );
 
          G4double cutoff = 0.0;
-         G4double bcmax = 0.0;
+         G4double fbcmax = 0.0;
          //110617 fix for gcc 4.6 compilation warnings 
          //G4double sig = 0.0;
 
@@ -322,14 +378,14 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
          {
 //          nucleon or pion case
             cutoff = rmi + rmj + 0.02; 
-            bcmax = bcmax0;
+            fbcmax = fbcmax0;
             //110617 fix for gcc 4.6 compilation warnings 
             //sig = sig0;
          }
          else
          {
             cutoff = rmi + rmj; 
-            bcmax = bcmax1;
+            fbcmax = fbcmax1;
             //110617 fix for gcc compilation warnings 
             //sig = sig1;
          }
@@ -349,7 +405,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
          G4double cij = rsq + ( pidr / rmi ) * ( pidr / rmi );
          G4double brel = std::sqrt ( std::abs ( cij - bij*bij/aij ) );
  
-         if ( brel > bcmax ) continue;
+         if ( brel > fbcmax ) continue;
          //std::cout << "collisions3 " << std::endl;
      
          G4double bji = -pjdr/rmj + pidr * rmj /pij;
@@ -359,18 +415,18 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 
 
 /*
-         std::cout << "collisions4  p4i " << p4i << std::endl;
-         std::cout << "collisions4  ri " << ri << std::endl;
-         std::cout << "collisions4  p4j " << p4j << std::endl;
-         std::cout << "collisions4  rj " << rj << std::endl;
-         std::cout << "collisions4  dr " << dr << std::endl;
-         std::cout << "collisions4  pij " << pij << std::endl;
-         std::cout << "collisions4  aij " << aij << std::endl;
-         std::cout << "collisions4  bij bji " << bij << " " << bji << std::endl;
-         std::cout << "collisions4  pidr pjdr " << pidr << " " << pjdr << std::endl;
-         std::cout << "collisions4  p4i.e() p4j.e() " << p4i.e() << " " << p4j.e() << std::endl;
-         std::cout << "collisions4  rmi rmj " << rmi << " " << rmj << std::endl;
-         std::cout << "collisions4 " << ti << " " << tj << std::endl;
+         G4cout << "collisions4  p4i " << p4i << G4endl;
+         G4cout << "collisions4  ri " << ri << G4endl;
+         G4cout << "collisions4  p4j " << p4j << G4endl;
+         G4cout << "collisions4  rj " << rj << G4endl;
+         G4cout << "collisions4  dr " << dr << G4endl;
+         G4cout << "collisions4  pij " << pij << G4endl;
+         G4cout << "collisions4  aij " << aij << G4endl;
+         G4cout << "collisions4  bij bji " << bij << " " << bji << G4endl;
+         G4cout << "collisions4  pidr pjdr " << pidr << " " << pjdr << G4endl;
+         G4cout << "collisions4  p4i.e() p4j.e() " << p4i.e() << " " << p4j.e() << G4endl;
+         G4cout << "collisions4  rmi rmj " << rmi << " " << rmj << G4endl;
+         G4cout << "collisions4 " << ti << " " << tj << G4endl;
 */
          if ( std::abs ( ti + tj ) > deltaT ) continue;
          //std::cout << "collisions4 " << std::endl;
@@ -408,9 +464,9 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 */
 
 /*
-            std::cout << "G4QMDRESULT Collsion initial p4 i and j " 
+            G4cout << "G4QMDRESULT Collsion initial p4 i and j " 
                       << p4i << " " << p4j
-                      << std::endl;
+                      << G4endl;
 */
 //       081118
          //if ( energetically_forbidden == true || pauli_blocked == true )
@@ -458,28 +514,28 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
             theSystem->IncrementCollisionCounter();
 
 /*
-            std::cout << "G4QMDRESULT Collsion Really Happened between " 
+            G4cout << "G4QMDRESULT Collsion Really Happened between " 
                       << i << " and " << j 
-                      << std::endl;
-            std::cout << "G4QMDRESULT Collsion initial p4 i and j " 
+                      << G4endl;
+            G4cout << "G4QMDRESULT Collsion initial p4 i and j " 
                       << p4i << " " << p4j
-                      << std::endl;
-            std::cout << "G4QMDRESULT Collsion after p4 i and j " 
+                      << G4endl;
+            G4cout << "G4QMDRESULT Collsion after p4 i and j " 
                       << theSystem->GetParticipant( i )->Get4Momentum()
                       << " " 
                       << theSystem->GetParticipant( j )->Get4Momentum()
-                      << std::endl;
-            std::cout << "G4QMDRESULT Collsion Diff " 
+                      << G4endl;
+            G4cout << "G4QMDRESULT Collsion Diff " 
                       << p4i + p4j - theSystem->GetParticipant( i )->Get4Momentum() - theSystem->GetParticipant( j )->Get4Momentum()
-                      << std::endl;
-            std::cout << "G4QMDRESULT Collsion initial r i and j " 
+                      << G4endl;
+            G4cout << "G4QMDRESULT Collsion initial r i and j " 
                       << ri << " " << rj
-                      << std::endl;
-            std::cout << "G4QMDRESULT Collsion after r i and j " 
+                      << G4endl;
+            G4cout << "G4QMDRESULT Collsion after r i and j " 
                       << theSystem->GetParticipant( i )->GetPosition()
                       << " " 
                       << theSystem->GetParticipant( j )->GetPosition()
-                      << std::endl;
+                      << G4endl;
 */
              
 
@@ -620,16 +676,16 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
 
       G4double efin = epot + p4ix_new.e() + p4jx_new.e(); 
 
-      //std::cout << "Collision NEW epot " << i << " " << j << " " << epot << " " << std::abs ( eini - efin ) - epse << std::endl;
+      //std::cout << "Collision NEW epot " << i << " " << j << " " << epot << " " << std::abs ( eini - efin ) - fepse << std::endl;
 
 /*
-      std::cout << "Collision efin " << i << " " << j << " " << efin << std::endl;
-      std::cout << "Collision " << i << " " << j << " " << std::abs ( eini - efin ) << " " << epse << std::endl;
-      std::cout << "Collision " << std::abs ( eini - efin ) << " " << epse << std::endl;
+      G4cout << "Collision efin " << i << " " << j << " " << efin << G4endl;
+      G4cout << "Collision " << i << " " << j << " " << std::abs ( eini - efin ) << " " << fepse << G4endl;
+      G4cout << "Collision " << std::abs ( eini - efin ) << " " << fepse << G4endl;
 */
 
 //071031
-      if ( std::abs ( eini - efin ) < epse ) 
+      if ( std::abs ( eini - efin ) < fepse ) 
       {
          // Collison OK 
          //std::cout << "collisions6" << std::endl;
@@ -788,12 +844,12 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollisionJQMD( G4double sig , G4d
    if( std::abs(c1) > 1.0 ) c1 = 2.0 * x - 1.0;
 
 /*
-   std::cout << "Collision as " << i << " " << j << " " << as << std::endl;
-   std::cout << "Collision a " << i << " " << j << " " << a << std::endl;
-   std::cout << "Collision ta " << i << " " << j << " " << ta << std::endl;
-   std::cout << "Collision x " << i << " " << j << " " << x << std::endl;
-   std::cout << "Collision t1 " << i << " " << j << " " << t1 << std::endl;
-   std::cout << "Collision c1 " << i << " " << j << " " << c1 << std::endl;
+   G4cout << "Collision as " << i << " " << j << " " << as << G4endl;
+   G4cout << "Collision a " << i << " " << j << " " << a << G4endl;
+   G4cout << "Collision ta " << i << " " << j << " " << ta << G4endl;
+   G4cout << "Collision x " << i << " " << j << " " << x << G4endl;
+   G4cout << "Collision t1 " << i << " " << j << " " << t1 << G4endl;
+   G4cout << "Collision c1 " << i << " " << j << " " << c1 << G4endl;
 */
    t1 = 2.0*pi*G4UniformRand(); 
 //   std::cout << "Collision t1 " << i << " " << j << " " << t1 << std::endl;
@@ -831,9 +887,9 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollisionJQMD( G4double sig , G4d
    G4double etwo = p4i.e() + p4j.e();
 
 /*
-   std::cout << "Collision epot " << i << " " << j << " " << epot << std::endl;
-   std::cout << "Collision eini " << i << " " << j << " " << eini << std::endl;
-   std::cout << "Collision etwo " << i << " " << j << " " << etwo << std::endl;
+   G4cout << "Collision epot " << i << " " << j << " " << epot << G4endl;
+   G4cout << "Collision eini " << i << " " << j << " " << eini << G4endl;
+   G4cout << "Collision etwo " << i << " " << j << " " << etwo << G4endl;
 */
 
 
@@ -873,15 +929,15 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollisionJQMD( G4double sig , G4d
 
       G4double efin = epot + pi_new_e + pj_new_e ; 
 
-      //std::cout << "Collision NEW epot " << i << " " << j << " " << epot << " " << std::abs ( eini - efin ) - epse << std::endl;
+      //std::cout << "Collision NEW epot " << i << " " << j << " " << epot << " " << std::abs ( eini - efin ) - fepse << std::endl;
 /*
-      std::cout << "Collision efin " << i << " " << j << " " << efin << std::endl;
-      std::cout << "Collision " << i << " " << j << " " << std::abs ( eini - efin ) << " " << epse << std::endl;
-      std::cout << "Collision " << std::abs ( eini - efin ) << " " << epse << std::endl;
+      G4cout << "Collision efin " << i << " " << j << " " << efin << G4endl;
+      G4cout << "Collision " << i << " " << j << " " << std::abs ( eini - efin ) << " " << fepse << G4endl;
+      G4cout << "Collision " << std::abs ( eini - efin ) << " " << fepse << G4endl;
 */
 
 //071031
-      if ( std::abs ( eini - efin ) < epse ) 
+      if ( std::abs ( eini - efin ) < fepse ) 
       {
 	 // Collison OK 
          //std::cout << "collisions6" << std::endl;
@@ -893,7 +949,7 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollisionJQMD( G4double sig , G4d
       }
 //071031
 
-         if ( std::abs ( eini - efin ) < epse ) return result;  // Collison OK 
+         if ( std::abs ( eini - efin ) < fepse ) return result;  // Collison OK 
       
          G4double cona = ( eini - efin + etwo ) / gamma;
          G4double fac2 = 1.0 / ( 4.0 * cona*cona * pr*pr ) *

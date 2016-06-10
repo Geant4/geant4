@@ -33,7 +33,7 @@
 // Addtional Include:
 #include "G4VHCIOentry.hh"
 
-G4HCIOcatalog* G4HCIOcatalog::f_thePointer = 0;
+G4ThreadLocal G4HCIOcatalog* G4HCIOcatalog::f_thePointer = 0;
 
 // Implementation of Constructor #1
 G4HCIOcatalog::G4HCIOcatalog()

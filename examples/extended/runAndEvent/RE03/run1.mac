@@ -21,7 +21,14 @@
 #
 ########################################
 #
-/run/beamOn 100
+/vis/disable
+/control/verbose 2
+/run/verbose 1
+#######/event/verbose 1
+#######/tracking/verbose 1
+/gun/particle e-
+/run/beamOn 2000
+/vis/enable
 #
 ########################################
 #

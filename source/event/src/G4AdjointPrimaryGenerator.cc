@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointPrimaryGenerator.cc 76257 2013-11-08 11:31:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -45,6 +45,8 @@
 G4AdjointPrimaryGenerator::G4AdjointPrimaryGenerator()
   : radius_spherical_source(0.)
 {
+  center_spherical_source = G4ThreeVector(0.,0.,0.);
+  type_of_adjoint_source="Spherical";
   theSingleParticleSource  = new G4SingleParticleSource();
  
   theSingleParticleSource->GetEneDist()->SetEnergyDisType("Pow");
@@ -69,8 +71,9 @@ void G4AdjointPrimaryGenerator::GenerateAdjointPrimaryVertex(G4Event* anEvent,G4
 	//Generate position and direction relative to the external surface of sensitive volume
   	//-------------------------------------------------------------
 
-  	G4double costh_to_normal;
-	G4ThreeVector pos,direction;
+	G4double costh_to_normal=1.;
+	G4ThreeVector pos =G4ThreeVector(0.,0.,0.);
+	G4ThreeVector direction = G4ThreeVector(0.,0.,1.);
   	theG4AdjointPosOnPhysVolGenerator->GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(pos, direction,costh_to_normal);
   	if (costh_to_normal <1.e-4) costh_to_normal =1.e-4;
   	theSingleParticleSource->GetAngDist()->SetParticleMomentumDirection(-direction);
@@ -81,6 +84,30 @@ void G4AdjointPrimaryGenerator::GenerateAdjointPrimaryVertex(G4Event* anEvent,G4
    theSingleParticleSource->GetEneDist()->SetEmax(E2); 	
 	
    theSingleParticleSource->SetParticleDefinition(adj_part);
+   theSingleParticleSource->GeneratePrimaryVertex(anEvent);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+void G4AdjointPrimaryGenerator::GenerateFwdPrimaryVertex(G4Event* anEvent,G4ParticleDefinition* fwd_part,G4double E1,G4double E2)
+{
+   if (type_of_adjoint_source == "ExternalSurfaceOfAVolume") {
+
+	//Generate position and direction relative to the external surface of sensitive volume
+  	//-------------------------------------------------------------
+
+  	G4double costh_to_normal=1.;
+	G4ThreeVector pos =G4ThreeVector(0.,0.,0.);
+	G4ThreeVector direction = G4ThreeVector(0.,0.,1.);
+  	theG4AdjointPosOnPhysVolGenerator->GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(pos, direction,costh_to_normal);
+  	if (costh_to_normal <1.e-4) costh_to_normal =1.e-4;
+  	theSingleParticleSource->GetAngDist()->SetParticleMomentumDirection(direction);
+  	theSingleParticleSource->GetPosDist()->SetCentreCoords(pos);
+   }
+
+   theSingleParticleSource->GetEneDist()->SetEmin(E1);
+   theSingleParticleSource->GetEneDist()->SetEmax(E2);
+
+   theSingleParticleSource->SetParticleDefinition(fwd_part);
    theSingleParticleSource->GeneratePrimaryVertex(anEvent);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

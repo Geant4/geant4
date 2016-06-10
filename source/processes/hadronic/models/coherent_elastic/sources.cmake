@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-09-29 20:26:23 bmorgan Exp $
+# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -48,8 +48,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
     HEADERS
         G4AntiNuclElastic.hh
         G4ChipsElasticModel.hh
-        G4CHIPSElastic.hh
-        G4CHIPSElasticXS.hh
         G4ChargeExchange.hh
         G4ChargeExchangeProcess.hh
         G4DiffuseElastic.hh
@@ -63,8 +61,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
     SOURCES
         G4AntiNuclElastic.cc
         G4ChipsElasticModel.cc
-        G4CHIPSElastic.cc
-        G4CHIPSElasticXS.cc
         G4ChargeExchange.cc
         G4ChargeExchangeProcess.cc
         G4DiffuseElastic.cc
@@ -80,8 +76,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4globman
         G4had_mod_man
         G4had_neu_hp
-        G4hadronic_body_ci
-        G4hadronic_crosec_ci
         G4hadronic_mgt
         G4hadronic_util
         G4hadronic_xsect

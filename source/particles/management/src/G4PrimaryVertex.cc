@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PrimaryVertex.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 
 #include "G4PrimaryVertex.hh"
@@ -32,18 +32,20 @@
 #include "G4VUserPrimaryVertexInformation.hh"
 #include "G4ios.hh"
 
-G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
+G4ThreadLocal G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator = 0;
 
 G4PrimaryVertex::G4PrimaryVertex()
 :X0(0.),Y0(0.),Z0(0.),T0(0.),theParticle(0),theTail(0),
  nextVertex(0),tailVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
-{;}
+{
+}
 
 G4PrimaryVertex::G4PrimaryVertex(
           G4double x0,G4double y0,G4double z0,G4double t0)
 :X0(x0),Y0(y0),Z0(z0),T0(t0),theParticle(0),theTail(0),
  nextVertex(0),tailVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
-{;}
+{
+}
 
 G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0,G4double t0)
 :T0(t0),theParticle(0),theTail(0),
@@ -79,7 +81,7 @@ G4PrimaryVertex::~G4PrimaryVertex()
 }
 
 G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
-{ 
+{  
   if (this != &right) {
     X0       = right.X0;
     Y0       = right.Y0;
@@ -129,7 +131,7 @@ G4int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
 { return (this!=&right); }
 
 G4PrimaryParticle* G4PrimaryVertex::GetPrimary(G4int i) const
-{ 
+{  
   if( i >= 0 && i < numberOfParticle ) {
     G4PrimaryParticle* particle = theParticle;
     for( G4int j=0; j<i; j++ ){ 
@@ -142,7 +144,7 @@ G4PrimaryParticle* G4PrimaryVertex::GetPrimary(G4int i) const
 }
 
 void G4PrimaryVertex::Print() const
-{
+{ 
   G4cout << "Vertex  ( "
 	 << X0/mm  << "[mm], " 
 	 << Y0/mm << "[mm], " 

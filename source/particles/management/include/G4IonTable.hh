@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4IonTable.hh 75166 2013-10-29 09:06:54Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -42,7 +42,9 @@
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 //      Add GetNucleusEncoding according PDG 2006 9 Oct. 2006 H.Kurashige
 //      Use STL map                              30 Jul. 2009 H.Kurashige
-
+//      Add G4IsomerTable                        5 May. 2013  H.Kurashige
+//      Add GetIsomerMass                       25 July 2013  H.Kurashige
+//
 #ifndef G4IonTable_h
 #define G4IonTable_h 1
 
@@ -59,6 +61,8 @@
 class G4ParticleTable;
 class G4VIsotopeTable; 
 class G4IsotopeProperty;
+class G4IsomerTable; 
+class G4NuclideTable; 
 
 class G4IonTable
 {
@@ -73,8 +77,17 @@ class G4IonTable
    typedef  std::multimap<G4int, const G4ParticleDefinition*>::iterator G4IonListIterator;
 
  public:
+   static G4IonTable* GetIonTable()
+   { return G4ParticleTable::GetParticleTable()->GetIonTable(); }
+
+ public:
   // constructor
    G4IonTable();
+
+   void SlaveG4IonTable();
+   void WorkerG4IonTable();
+   // Method is used by each worker thread to copy the content from the master
+   // thread.
 
  protected:
    // hide copy construictor as protected 
@@ -105,35 +118,47 @@ class G4IonTable
    // !! electric charge of nucleus (i.e. fully ionized ions)  !!
    // -----------------------------
 
-   // Find/Get "ground state" 
-   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int J=0);
-   // The ion is assumed to be ground state (i.e Excited energy = 0) 
-   //   Z: Atomic Number
-   //   A: Atomic Mass
-   //   J: Total Angular momentum (in unit of 1/2)
-   G4ParticleDefinition* GetIon(G4int encoding);
-   // The ion can be get by using PDG encoding 
-   // !! Only ground state can be obtained .i.e. Isomer = 0
-   
    void CreateAllIon();
    // All ground state ions will be created
+   //   stabele ground states are defined in G4NuclearProperty 
+ 
+   void CreateAllIsomer();
+   // All excited ions with long life time (>1.0*ns) will be created
+   //  isomers are defined in G4VIsotopeTable
+   
+   void PreloadNuclide();
+   // All nuclide with a life time longer than certain value will be created
+   // prior to the event loop.
 
-   // Find/Get "excited state" 
-   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E, G4int J=0);
+   // Find/Get "ground state" and "excited state" 
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int lvl=0);
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4int lvl);
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, G4int J=0);
-   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L,
-				 G4double E, G4int J=0);
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L,
 				G4double E, G4int J=0);
    //   Z: Atomic Number
    //   A: Atomic Mass (nn + np +nlambda)
    //   L: Number of Lmabda
-   //   J: Total Angular momentum (in unit of 1/2)
    //   E: Excitaion energy
+   //   lvl:  Isomer Level 0: ground state)
+   //   J: Total Angular momentum (in unit of 1/2) : not used
 
-   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int J, G4int Q);
-   // This method is provided for compatibilties 
-   // The third and last arguments gives no effect
+   G4ParticleDefinition* GetIon(G4int encoding);
+   // The ion can be get by using PDG encoding 
+   // !! Only ground state can be obtained .i.e. Isomer = 0
+   
+   // Find/Get "excited state" 
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int lvl=0);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4int lvl);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E, G4int J=0);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L,
+				 G4double E, G4int J=0);
+   //   Z: Atomic Number
+   //   A: Atomic Mass (nn + np +nlambda)
+   //   L: Number of Lmabda
+   //   E: Excitaion energy
+   //   lvl:  Isomer Level 0: ground state)
+   //   J: Total Angular momentum (in unit of 1/2) : not used
 
    static G4bool        IsIon(const G4ParticleDefinition*);
    // return true if the particle is ion
@@ -142,23 +167,23 @@ class G4IonTable
    // return true if the particle is anti_ion
 
 
+   const G4String&  GetIonName(G4int Z, G4int A, G4int lvl=0) const;
    const G4String&  GetIonName(G4int Z, G4int A, G4double E) const;
    const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4double E) const;
+   const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4int  lvl) const;
    // get ion name
   
    static G4int GetNucleusEncoding(G4int Z,        G4int A, 
-				   G4double E=0.0, G4int J=0);
+				   G4double E=0.0, G4int lvl=0);
   //  get PDG code for Ions 
   // Nuclear codes are given as 10-digit numbers +-100ZZZAAAI.
   //For a nucleus consisting of np protons and nn neutrons
   // A = np + nn and Z = np.
   // I gives the isomer level, with I = 0 corresponding 
   // to the ground state and I >0 to excitations
-  //
-  //!!! I = 1 is assigned fo all excitation states in Geant4   
   
-   static G4int GetNucleusEncoding(G4int Z,        G4int A,  G4int L,        
-				   G4double E=0.0, G4int J=0);
+   static G4int GetNucleusEncoding(G4int Z,   G4int A,  G4int L,        
+				   G4double E=0.0, G4int lvl=0);
   //  get PDG code for Hyper-Nucleus Ions 
   // Nuclear codes are given as 10-digit numbers +-10LZZZAAAI.
   //For a nucleus consisting of np protons and nn neutrons
@@ -166,25 +191,23 @@ class G4IonTable
   // L = nlambda
   // I gives the isomer level, with I = 0 corresponding 
   // to the ground state and I >0 to excitations
-  //
-  //!!! I = 1 is assigned fo all excitation states in Geant4   
 
    static G4bool GetNucleusByEncoding(G4int encoding,
 				     G4int &Z,      G4int &A, 
-				     G4double &E,   G4int &J);
+				     G4double &E,   G4int &lvl);
    static G4bool GetNucleusByEncoding(G4int encoding,
 				      G4int &Z,      G4int &A,  G4int &L,    
-				      G4double &E,   G4int &J);
-    //!!! Only ground states are supported now  
+	 			      G4double &E,   G4int &lvl);
+   // Energy will not be given even for excited state!!  
  
- 
-   G4double             GetIonMass(G4int Z, G4int A, G4int L=0) const;
-   G4double             GetNucleusMass(G4int Z, G4int A, G4int L=0) const;
-   // These two methods returns Nucleus (i.e. full ionized atom) mass 
+   G4double   GetIonMass(G4int Z, G4int A, G4int L=0, G4int lvl=0) const;
+   G4double   GetNucleusMass(G4int Z, G4int A, G4int L=0, G4int lvl=0) const;
+   G4double   GetIsomerMass(G4int Z, G4int A, G4int lvl=0) const;
+    // These methods returns Nucleus (i.e. full ionized atom) mass 
    // ,where Z is Atomic Number (number of protons) and
    //  A is Atomic Number (number of nucleons and hyperons)
    //  L is number of lambda (A= nn + np + nlambda)
-
+   //  lvl is isomer level
  
    
    G4int                 Entries() const;
@@ -211,12 +234,33 @@ class G4IonTable
 
 
  protected:
-   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E, G4int J);
-   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, 
-				   G4double E, G4int J);
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int lvl=0);
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int L, G4int lvl);
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4double E, G4int J=0);
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int L,
+				 G4double E, G4int J=0);
+
+   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E);
+   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4double E);
+   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int lvl=0);
+   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4int lvl);
+
+   void                  InsertWorker(const G4ParticleDefinition* particle);
+
+   // Obsolete
+   // G4ParticleDefinition* SlaveCreateIon(G4ParticleDefinition* ion, G4int Z, G4int A, G4double E);
+   // All threads share the particle table and particles including ions. This method
+   // is invoked by any work thread for ions that have been created by other threads
+   // to achieve the partial effect when ions are created by other threads.
+   // G4ParticleDefinition* SlaveCreateIon(G4ParticleDefinition* ion, G4int Z, G4int A, G4int L, G4double E);
+   // All threads share the particle table and particles including ions. This method
+   // is invoked by any work thread for ions that have been created by other threads
+   // to achieve the partial effect when ions are created by other threads.
+
    // Create Ion 
    
-   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E, G4int J);
+   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E) const;
+   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4int  lvl) const; 
    // Ask properties of isotopes to this G4VIsotopeTable 
    
    G4ParticleDefinition* GetLightIon(G4int Z, G4int A) const;
@@ -226,21 +270,44 @@ class G4IonTable
    G4bool                IsLightAntiIon(const G4ParticleDefinition*) const;
    // return true if the particle is pre-defined ion
  
-   void                  AddProcessManager(const G4String& ionName);
+   void                  AddProcessManager(G4ParticleDefinition*);
    // Add process manager to ions with name of 'ionName'
 
    G4int                GetVerboseLevel() const;
    // get Verbose Level defined in G4ParticleTable
 
  private:
-   G4IonList*                  fIonList; 
-
-   std::vector<G4VIsotopeTable*> *fIsotopeTableList;
-
+   G4IsomerTable* pIsomerTable;
+   G4NuclideTable* pNuclideTable;
+   G4bool         isIsomerCreated;
+   // Isomer table and flag of creation    
+ 
+ public:
+   static G4ThreadLocal G4IonList* fIonList; 
+   static G4ThreadLocal std::vector<G4VIsotopeTable*> *fIsotopeTableList;
+   static G4IonList* fIonListShadow; 
+   static std::vector<G4VIsotopeTable*> *fIsotopeTableListShadow;
+   // It is very important for multithreaded Geant4 to keep only one copy of the
+   // particle table pointer and the ion table pointer. However, we try to let 
+   // each worker thread hold its own copy of the particle dictionary and the 
+   // ion list. This implementation is equivalent to make the ion table thread
+   // private. The two shadow ponters are used by each worker thread to copy the
+   // content from the master thread.
+   static const G4double tolerance;
  
    enum { numberOfElements = 118};
    static const G4String       elementName[numberOfElements];
+    
+   //needed for MT
+   void InitializeLightIons();
 
+ private:
+   G4int n_error;
+
+#ifdef G4MULTITHREADED
+ public:
+   static G4Mutex ionTableMutex;
+#endif
 };
 
 inline G4int  G4IonTable::GetNumberOfElements() const
@@ -248,46 +315,4 @@ inline G4int  G4IonTable::GetNumberOfElements() const
   return numberOfElements;
 }
 
-inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
-{
-  if (!IsIon(particle)) return false;
-
-  G4int Z = particle->GetAtomicNumber();
-  G4int A = particle->GetAtomicMass();  
-  G4int L = particle->GetQuarkContent(3);  //strangeness 
-  G4int encoding=GetNucleusEncoding(Z, A, L);
-  G4bool found = false;
-  if (encoding !=0 ) {
-    G4IonList::iterator i = fIonList->find(encoding);
-    for( ;i != fIonList->end() ; i++) {
-      if (particle == i->second ) {
-	found  = true;
-	break;
-      }
-    }
-  }
-  return found;
-}
-
-inline G4int G4IonTable::Entries() const
-{
-  return fIonList->size();
-}
-
-inline G4int G4IonTable::size() const
-{
-  return fIonList->size();
-}
-
-
 #endif
-
-
-
-
-
-
-
-
-
-

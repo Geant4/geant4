@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4InteractionContent.hh 67999 2013-03-13 11:14:32Z gcosmo $
 //
 
 #ifndef G4InteractionContent_h
@@ -39,6 +39,10 @@
 // ------------------------------------------------------------
 
 #include "globals.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4VSplitableHadron.hh"
 #include "G4Nucleon.hh"                // Uzhi 16.07.09
 
@@ -62,6 +66,9 @@ class G4InteractionContent
       
       G4VSplitableHadron * GetProjectile() const ;
       G4VSplitableHadron * GetTarget() const;
+
+      void                 SetProjectileNucleon(G4Nucleon * aNucleon); // Uzhi Nov. 2012
+      G4Nucleon          * GetProjectileNucleon() const;
 
       void                 SetTargetNucleon(G4Nucleon * aNucleon);
       G4Nucleon          * GetTargetNucleon() const;
@@ -99,6 +106,8 @@ private:
 
       G4VSplitableHadron * theTarget;
       G4VSplitableHadron * theProjectile;
+
+      G4Nucleon          * theProjectileNucleon;
       G4Nucleon          * theTargetNucleon;
       
       G4int theNumberOfHard;
@@ -125,6 +134,16 @@ inline G4VSplitableHadron * G4InteractionContent::GetTarget() const
 inline void G4InteractionContent::SetTarget(G4VSplitableHadron *aTarget)
 {
 	theTarget = aTarget;
+}
+
+inline void G4InteractionContent::SetProjectileNucleon(G4Nucleon * aNucleon)// Uzhi Nov. 2012
+{
+        theProjectileNucleon = aNucleon;
+}
+
+inline G4Nucleon * G4InteractionContent::GetProjectileNucleon() const
+{
+       return theProjectileNucleon;
 }
 
 inline void G4InteractionContent::SetTargetNucleon(G4Nucleon * aNucleon)

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleTable.cc,v 1.5 2007-11-07 09:12:53 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4ParticleTable.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4ParticleTable.cc
 //
@@ -42,10 +41,10 @@ using namespace boost::python;
 namespace pyG4ParticleTable {
 
 // contains...
-G4bool(G4ParticleTable::*f1_contains)(const G4ParticleDefinition*)
+G4bool(G4ParticleTable::*f1_contains)(const G4ParticleDefinition*) const
   = &G4ParticleTable::contains;
 
-G4bool(G4ParticleTable::*f2_contains)(const G4String&)
+G4bool(G4ParticleTable::*f2_contains)(const G4String&) const
   = &G4ParticleTable::contains;
 
 // FindParticle...
@@ -90,7 +89,7 @@ G4ParticleDefinition*(G4ParticleTable::*f2_GetIon)
 #endif
 
 // DumpTable
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpTable, DumpTable, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpTable, DumpTable, 0, 1)
 
 
 // --------------------------------------------------------------------
@@ -99,18 +98,18 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpTable, DumpTable, 0, 1);
 list GetParticleList(G4ParticleTable* particleTable)
 {
   list particleList;
-  G4ParticleTable::G4PTblDicIterator* 
+  G4ParticleTable::G4PTblDicIterator*
     theParticleIterator= particleTable-> GetIterator();
   theParticleIterator-> reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle= theParticleIterator-> value();
     particleList.append(&particle);
   }
-  
+
   return particleList;
 }
 
-};
+}
 
 using namespace pyG4ParticleTable;
 
@@ -172,7 +171,7 @@ void export_G4ParticleTable()
     .def("GetVerboseLevel",   &G4ParticleTable::GetVerboseLevel)
     .def("SetReadiness",      &G4ParticleTable::SetReadiness)
     .def("GetReadiness",      &G4ParticleTable::GetReadiness)
-    // --- 
+    // ---
     // additionals
     .def("GetParticleList",   GetParticleList)
     ;

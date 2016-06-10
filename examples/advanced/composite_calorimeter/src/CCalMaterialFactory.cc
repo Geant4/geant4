@@ -384,13 +384,13 @@ void CCalMaterialFactory::readMaterials(std::ifstream& is){
     //It should be a material definition
     matname=name;
     G4int nElem;
-    G4double density;
-    is >> nElem >> density >> jump;
+    G4double dens;
+    is >> nElem >> dens >> jump;
 
 #ifdef debug
     G4cout <<"       " << matname
 	   << " made of " << nElem 
-	   << " elements. Density=" << density 
+	   << " elements. Density=" << dens
 	   << G4endl;
 #endif
 
@@ -414,7 +414,7 @@ void CCalMaterialFactory::readMaterials(std::ifstream& is){
     else
       md = byVolume;
 
-    addCCalMaterial(matname, density, absnelem, mats, weights, md);
+    addCCalMaterial(matname, dens, absnelem, mats, weights, md);
     delete[] mats;
     delete[] weights;
     

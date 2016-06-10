@@ -11,8 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.5 2010-12-01 16:57:53 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: sources.cmake 75567 2013-11-04 11:35:11Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -41,10 +40,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
 include(Geant4MacroDefineModule)
 
 #
-# Define the core sources, includes and libraries which all Geant4 
+# Define the core sources, includes and libraries which all Geant4
 # OpenGL implementations use
 #
-set(G4VIS_MODULE_OPENGL_HEADERS 
+set(G4VIS_MODULE_OPENGL_HEADERS
     G4OpenGL.hh
     G4OpenGLImmediateViewer.hh
     G4OpenGLImmediateSceneHandler.hh
@@ -58,7 +57,7 @@ set(G4VIS_MODULE_OPENGL_HEADERS
     G4OpenGLTransform3D.hh
 )
 
-set(G4VIS_MODULE_OPENGL_SOURCES 
+set(G4VIS_MODULE_OPENGL_SOURCES
     G4OpenGLImmediateViewer.cc
     G4OpenGLImmediateSceneHandler.cc
     G4OpenGLViewer.cc
@@ -181,7 +180,7 @@ if(GEANT4_USE_XM)
 
     # Add the includes for X11, Xmu and Motif
     include_directories(
-        ${X11_INCLUDE_DIR} 
+        ${X11_INCLUDE_DIR}
         ${X11_Xmu_INCLUDE_PATH}
         ${MOTIF_INCLUDE_DIR}
     )
@@ -191,10 +190,10 @@ if(GEANT4_USE_XM)
     add_definitions(-DG4VIS_BUILD_OPENGLXM_DRIVER -DG4INTY_BUILD_XT -DG4UI_BUILD_XM_SESSION)
 
     # Add in Xm, X11 libraries, plus Xmu library
-    set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${MOTIF_LIBRARIES} ${X11_LIBRARIES} ${X11_Xmu_LIBRARY} ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES})    
-    #list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES 
+    set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${MOTIF_LIBRARIES} ${X11_LIBRARIES} ${X11_Xmu_LIBRARY} ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES})
+    #list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES
     #       ${MOTIF_LIBRARIES}
-    #       ${X11_LIBRARIES} 
+    #       ${X11_LIBRARIES}
     #       ${X11_Xmu_LIBRARY}
     #)
 endif()
@@ -253,6 +252,42 @@ endif()
 
 
 #----------------------------------------------------------------------------
+# Add Wt OpenGL support if requested
+#
+if(GEANT4_USE_WT)
+    #
+    # Add in the extra Wt GL sources
+    #
+    list(APPEND G4VIS_MODULE_OPENGL_HEADERS
+        G4OpenGLImmediateWt.hh
+        G4OpenGLImmediateWtViewer.hh
+        G4OpenGLWtDrawer.hh
+        G4OpenGLWtViewer.hh)
+
+    list(APPEND G4VIS_MODULE_OPENGL_SOURCES
+        G4OpenGLImmediateWt.cc
+        G4OpenGLImmediateWtViewer.cc
+        G4OpenGLWtDrawer.cc
+        G4OpenGLWtViewer.cc)
+
+    # Must have Wt includes...
+    include_directories(${Wt_INCLUDE_DIR})
+    include_directories(${Boost_INCLUDE_DIRS})
+
+    # Add the definitions - these will also be used to compile the moc sources
+    # Argh.. Have to remember about INTY and UI because of their use...
+    # Use the compile definitions to avoid "signal/slot" keyword
+    # mixed with Qt and boost
+    add_definitions(${WT_DEFINITIONS})
+    add_definitions(-DG4VIS_BUILD_OPENGLWT_DRIVER -DG4INTY_BUILD_WT
+        -DG4UI_BUILD_WT_SESSION)
+
+    # Add in Wt libraries
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${Wt_LIBRARY})
+endif()
+
+
+#----------------------------------------------------------------------------
 # Add WIN32 support, if requested
 #
 if(GEANT4_USE_OPENGL_WIN32)
@@ -281,7 +316,7 @@ if(GEANT4_USE_OPENGL_WIN32)
     # That should be it for Win32...
 endif()
 
-    
+
 
 #----------------------------------------------------------------------------
 # Define the Geant4 Module.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PhysListFactory.cc 68750 2013-04-05 10:19:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -37,25 +37,22 @@
 //
 
 #include "G4PhysListFactory.hh"
-#include "CHIPS.hh"
 #include "FTFP_BERT.hh"
-#include "FTFP_BERT_TRV.hh"
 #include "FTFP_BERT_HP.hh"
-//#include "FTFP_BERT_DE.hh"
+#include "FTFP_BERT_TRV.hh"
+#include "FTFP_INCLXX.hh"
+#include "FTFP_INCLXX_HP.hh"
 #include "FTF_BIC.hh"
 #include "LBE.hh"
-#include "LHEP.hh"
 #include "QBBC.hh"
-#include "QGSC_BERT.hh"
 #include "QGSP_BERT.hh"
-#include "QGSP_BERT_CHIPS.hh"
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BIC.hh"
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_FTFP_BERT.hh"
 #include "QGS_BIC.hh"
 #include "QGSP_INCLXX.hh"
-//#include "QGSP_INCL_ABLA.hh"
+#include "QGSP_INCLXX_HP.hh"
 #include "Shielding.hh"
 
 #include "G4EmStandardPhysics.hh"
@@ -69,15 +66,13 @@
 G4PhysListFactory::G4PhysListFactory() 
   : defName("FTFP_BERT"),verbose(1)
 {
-  nlists_hadr = 19;
-  G4String ss[19] = {
-    "CHIPS",
-    "FTFP_BERT","FTFP_BERT_TRV","FTFP_BERT_HP","FTF_BIC", 
-    "LBE","LHEP","QBBC",
-    "QGSC_BERT","QGSP","QGSP_BERT","QGSP_BERT_CHIPS","QGSP_BERT_HP",
-    "QGSP_BIC","QGSP_BIC_HP",
-    "QGSP_FTFP_BERT","QGS_BIC","QGSP_INCLXX",
-    "Shielding"};
+  nlists_hadr = 18;
+  G4String ss[18] = {
+    "FTFP_BERT","FTFP_BERT_TRV","FTFP_BERT_HP","FTFP_INCLXX",
+    "FTFP_INCLXX_HP","FTF_BIC", "LBE","QBBC",
+    "QGSP_BERT","QGSP_BERT_HP","QGSP_BIC","QGSP_BIC_HP",
+    "QGSP_FTFP_BERT","QGSP_INCLXX","QGSP_INCLXX_HP","QGS_BIC",
+    "Shielding","ShieldingLEND"};
   for(size_t i=0; i<nlists_hadr; ++i) {
     listnames_hadr.push_back(ss[i]);
   }
@@ -143,24 +138,22 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
 	   << em_name << ">  EMoption= " << em_opt << G4endl;
   }
   G4VModularPhysicsList* p = 0;
-  if(had_name == "CHIPS")               {p = new CHIPS(verbose);}
-  else if(had_name == "FTFP_BERT")      {p = new FTFP_BERT(verbose);}
-  else if(had_name == "FTFP_BERT_TRV")  {p = new FTFP_BERT_TRV(verbose);}
+  if(had_name == "FTFP_BERT")           {p = new FTFP_BERT(verbose);}
   else if(had_name == "FTFP_BERT_HP")   {p = new FTFP_BERT_HP(verbose);}
-  //  else if(had_name == "FTFP_BERT_DE")   {p = new FTFP_BERT_DE(verbose);}
+  else if(had_name == "FTFP_BERT_TRV")  {p = new FTFP_BERT_TRV(verbose);}
+  else if(had_name == "FTFP_INCLXX")    {p = new FTFP_INCLXX(verbose);}
+  else if(had_name == "FTFP_INCLXX_HP") {p = new FTFP_INCLXX_HP(verbose);}
   else if(had_name == "FTF_BIC")        {p = new FTF_BIC(verbose);}
   else if(had_name == "LBE")            {p = new LBE();}
-  else if(had_name == "LHEP")           {p = new LHEP(verbose);}
   else if(had_name == "QBBC")           {p = new QBBC(verbose);}
-  else if(had_name == "QGSC_BERT")      {p = new QGSC_BERT(verbose);}
   else if(had_name == "QGSP_BERT")      {p = new QGSP_BERT(verbose);}
-  else if(had_name == "QGSP_BERT_CHIPS"){p = new QGSP_BERT_CHIPS(verbose);}
   else if(had_name == "QGSP_BERT_HP")   {p = new QGSP_BERT_HP(verbose);}
   else if(had_name == "QGSP_BIC")       {p = new QGSP_BIC(verbose);}
   else if(had_name == "QGSP_BIC_HP")    {p = new QGSP_BIC_HP(verbose);}
   else if(had_name == "QGSP_FTFP_BERT") {p = new QGSP_FTFP_BERT(verbose);}
-  else if(had_name == "QGS_BIC")        {p = new QGS_BIC(verbose);}
   else if(had_name == "QGSP_INCLXX")    {p = new QGSP_INCLXX(verbose);}
+  else if(had_name == "QGSP_INCLXX_HP") {p = new QGSP_INCLXX_HP(verbose);}
+  else if(had_name == "QGS_BIC")        {p = new QGS_BIC(verbose);}
   else if(had_name == "Shielding")      {p = new Shielding(verbose);}
   else if(had_name == "ShieldingLEND")  {p = new Shielding(verbose,"LEND");}
   else {

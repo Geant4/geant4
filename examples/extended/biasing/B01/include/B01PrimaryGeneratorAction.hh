@@ -43,10 +43,10 @@ class B01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     ~B01PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event* anEvent);
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
-    G4ParticleGun* particleGun;
+    G4ParticleGun* fParticleGun;
 };
 
 #endif

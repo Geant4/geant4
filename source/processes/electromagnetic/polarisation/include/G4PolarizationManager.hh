@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PolarizationManager.hh 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class header file
 //
@@ -89,7 +89,7 @@ private:
   G4int verboseLevel;
   G4bool activated;
 
-  static G4PolarizationManager* instance;
+  static G4ThreadLocal G4PolarizationManager* instance;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

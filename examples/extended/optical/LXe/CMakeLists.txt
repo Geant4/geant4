@@ -40,8 +40,18 @@ target_link_libraries(LXe ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(LXe_SCRIPTS
-    cerenkov.mac defaults.mac LXe.in LXe.out photon.mac reviewEvent.mac vis.mac wls.mac
-  )
+    LXe.out
+    LXe.in
+    defaults.mac
+    cerenkov.mac
+    wls.mac
+    photon.mac
+    reviewEvent.mac
+    gui.mac
+    icons.mac
+    run.png
+    vis.mac
+   )
 
 foreach(_script ${LXe_SCRIPTS})
   configure_file(

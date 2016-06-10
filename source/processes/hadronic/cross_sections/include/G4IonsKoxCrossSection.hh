@@ -66,7 +66,7 @@ private:
   G4double calEcm ( G4double , G4double , G4double ); 
   G4double calCeValue ( G4double ); 
 
-  G4double lowerLimit; 
+//  G4double lowerLimit; 
   G4double r0;
   G4double rc;
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VBasicShell.cc 74547 2013-10-14 12:51:17Z gcosmo $
 //
 
 #include "G4VBasicShell.hh"
@@ -211,16 +211,16 @@ void G4VBasicShell::ExecuteCommand(const G4String& aCommand)
   case fCommandSucceeded:
     break;
   case fCommandNotFound:
-    G4cerr << "command not found" << G4endl;
+    G4cerr << "command not found: " << "\"" << aCommand << "\"" << G4endl;
     break;
   case fIllegalApplicationState:
-    G4cerr << "illegal application state -- command refused" << G4endl;
+    G4cerr << "illegal application state -- command refused:" << "\"" << aCommand << "\"" << G4endl;
     break;
   case fParameterOutOfRange:
   case fParameterUnreadable:
   case fParameterOutOfCandidates:
   default:
-    G4cerr << "command refused (" << commandStatus << ")" << G4endl;
+    G4cerr << "command refused (" << commandStatus << "):" << "\"" << aCommand << "\"" << G4endl;
   }
 }
 /***************************************************************************/

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -58,26 +58,27 @@ G4MIRDPelvis::~G4MIRDPelvis()
 
 }
 
+
 G4VPhysicalVolume* G4MIRDPelvis::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
-						const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
+					   const G4String& colourName, G4bool wireFrame,G4bool)
 {
-   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-   G4cout << "Construct " << volumeName <<G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
  
   delete material;
   /*
-  G4double dx= 10.35 * cm;//12. *cm; // a2 
+    G4double dx= 10.35 * cm;//12. *cm; // a2 
     G4double dy= 11.76 * cm;//12. * cm; // b2
-  G4double dz= 9.915 * cm; // z2/2
+    G4double dz= 9.915 * cm; // z2/2
 
-  G4VSolid* outPelvis = new G4EllipticalTube("OutPelvis",dx, dy, dz);
+    G4VSolid* outPelvis = new G4EllipticalTube("OutPelvis",dx, dy, dz);
 
-  G4double dx_in = 9.75 * cm;//11.3 * cm; // a1
-  G4double dy_in = 11.07 *cm; //11.3* cm; //b1
-  G4double dz_in = 10. * cm;//11.0 *cm; // z2/2
+    G4double dx_in = 9.75 * cm;//11.3 * cm; // a1
+    G4double dy_in = 11.07 *cm; //11.3* cm; //b1
+    G4double dz_in = 10. * cm;//11.0 *cm; // z2/2
 
   */
   G4double dx= 12. *cm; // a2
@@ -110,7 +111,7 @@ G4VPhysicalVolume* G4MIRDPelvis::Construct(const G4String& volumeName,G4VPhysica
 							    subPelvis, 0, 
 							    G4ThreeVector(0.0,
 									  -14. * cm, 0.*cm));
-                                                              // half of the y size of the box
+  // half of the y size of the box
  
   
   G4SubtractionSolid* pelvis = new G4SubtractionSolid("Pelvis", secondPelvis, subPelvis,
@@ -125,18 +126,13 @@ G4VPhysicalVolume* G4MIRDPelvis::Construct(const G4String& volumeName,G4VPhysica
  
   G4VPhysicalVolume* physPelvis = new G4PVPlacement(0,G4ThreeVector(0.0, -3. * cm,-24. * cm),// 0, y02, z position
 						    // with respect to the trunk 
-      			       "physicalPelvis",
-  			       logicPelvis,
-			       mother,
-			       false,
-			       0, true);
+						    "physicalPelvis",
+						    logicPelvis,
+						    mother,
+						    false,
+						    0, true);
 
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicPelvis->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
+ 
 
   // Visualization Attributes
   //  G4VisAttributes* PelvisVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpWLS.cc 71487 2013-06-17 08:19:40Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -66,7 +66,7 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
 {
   SetProcessSubType(fOpWLS);
 
-  theIntegralTable = 0;
+  theIntegralTable = NULL;
  
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created " << G4endl;
@@ -75,7 +75,6 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   WLSTimeGeneratorProfile = 
        new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
 
-  BuildThePhysicsTable();
 }
 
 ////////////////
@@ -94,6 +93,11 @@ G4OpWLS::~G4OpWLS()
 ////////////
 // Methods
 ////////////
+
+void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+    if (!theIntegralTable) BuildThePhysicsTable();
+}
 
 // PostStepDoIt
 // -------------
@@ -147,6 +151,8 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
   aParticleChange.SetNumberOfSecondaries(NumPhotons);
 
+  G4double primaryEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
+
   G4int materialIndex = aMaterial->GetIndex();
 
   // Retrieve the WLS Integral for this material
@@ -163,20 +169,47 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   // Max WLS Integral
   
   G4double CIImax = WLSIntegral->GetMaxValue();
-  
+ 
+  G4int NumberOfPhotons = NumPhotons;
+ 
   for (G4int i = 0; i < NumPhotons; i++) {
+
+    G4double sampledEnergy;
     
-    // Determine photon energy
-    
-    G4double CIIvalue = G4UniformRand()*CIImax;
-    G4double sampledEnergy = 
-      WLSIntegral->GetEnergy(CIIvalue);
-    
-    if (verboseLevel>1) {
-      G4cout << "sampledEnergy = " << sampledEnergy << G4endl;
-      G4cout << "CIIvalue =        " << CIIvalue << G4endl;
+    // Make sure the energy of the secondary is less than that of the primary
+
+    for (G4int j = 1; j <= 100; j++) {
+
+        // Determine photon energy
+
+        G4double CIIvalue = G4UniformRand()*CIImax;
+        sampledEnergy = WLSIntegral->GetEnergy(CIIvalue);
+
+        if (verboseLevel>1) {
+           G4cout << "sampledEnergy = " << sampledEnergy << G4endl;
+           G4cout << "CIIvalue =      " << CIIvalue << G4endl;
+        }
+
+        if (sampledEnergy <= primaryEnergy) break;
     }
-    
+
+    // If no such energy can be sampled, return one less secondary, or none
+
+    if (sampledEnergy > primaryEnergy) {
+       if (verboseLevel>1)
+       G4cout << " *** One less WLS photon will be returned ***" << G4endl;
+       NumberOfPhotons--;
+       aParticleChange.SetNumberOfSecondaries(NumberOfPhotons);
+       if (NumberOfPhotons == 0) {
+          if (verboseLevel>1)
+          G4cout << " *** No WLS photon can be sampled for this primary ***"
+                 << G4endl;
+          // return unchanged particle and no secondaries
+          return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+       }
+       continue;
+    }
+
     // Generate random photon direction
     
     G4double cost = 1. - 2.*G4UniformRand();

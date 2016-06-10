@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4DNAMolecularMaterial.hh 70171 2013-05-24 13:34:18Z gcosmo $
 //
 #ifndef G4DNAMolecularMaterial_HH
 #define G4DNAMolecularMaterial_HH
@@ -64,6 +64,7 @@ public:
 
 protected :
     static G4DNAMolecularMaterial* fInstance;
+//    static G4ThreadLocal G4DNAMolecularMaterial* fInstance;
     G4DNAMolecularMaterial();
     G4DNAMolecularMaterial(const G4DNAMolecularMaterial& right);
     G4DNAMolecularMaterial& operator=(const G4DNAMolecularMaterial&);

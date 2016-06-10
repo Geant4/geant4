@@ -23,19 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$ 
-// Translation of INCL4.2/ABLA V3 
+// ABLAXX statistical de-excitation model
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
-// Alain Boudard, CEA (contact person INCL/ABLA)
+// Davide Mancusi, CEA (contact person INCL/ABLA)
 // Aatos Heikkinen, HIP (project coordination)
+//
+#define ABLAXX_IN_GEANT4_MODE 1
+
+#include "globals.hh"
 
 #include "G4AblaVirtualData.hh"
 
-G4AblaVirtualData::G4AblaVirtualData()
-{
-	
-}
+#ifdef ABLAXX_IN_GEANT4_MODE
+G4AblaVirtualData::G4AblaVirtualData() {}
+#else
+G4AblaVirtualData::G4AblaVirtualData(G4INCL::Config *) {}
+#endif
+G4AblaVirtualData::~G4AblaVirtualData() {}
 
 bool G4AblaVirtualData::setAlpha(int A, int Z, double value)
 {

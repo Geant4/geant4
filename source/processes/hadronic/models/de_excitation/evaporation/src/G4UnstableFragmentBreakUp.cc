@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UnstableFragmentBreakUp.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -50,22 +50,16 @@
 #include "G4NucleiProperties.hh"
 #include "G4NistManager.hh"
 
-G4int G4UnstableFragmentBreakUp::Zfr[6] = {0};
-G4int G4UnstableFragmentBreakUp::Afr[6] = {0};
-G4double G4UnstableFragmentBreakUp::masses[6] = {0.0};
-
 G4UnstableFragmentBreakUp::G4UnstableFragmentBreakUp()
   :verbose(0)
 { 
   fNistManager = G4NistManager::Instance();
-  if(0 == Afr[0]) {
-    G4int z[6] = {0, 1, 1, 1, 2, 2};
-    G4int a[6] = {1, 1, 2, 3, 3, 4};
-    for(G4int i=0; i<6; ++i) {
-      Zfr[i] = z[i];
-      Afr[i] = a[i];
-      masses[i] = G4NucleiProperties::GetNuclearMass(a[i], z[i]);
-    }
+  const G4int z[6] = {0, 1, 1, 1, 2, 2};
+  const G4int a[6] = {1, 1, 2, 3, 3, 4};
+  for(G4int i=0; i<6; ++i) {
+    Zfr[i] = z[i];
+    Afr[i] = a[i];
+    masses[i] = G4NucleiProperties::GetNuclearMass(a[i], z[i]);
   }
 }
 

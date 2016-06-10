@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: P6DPhysicsList.hh 78019 2013-12-02 15:52:19Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/include/P6DPhysicsList.hh
 /// \brief Definition of the P6DPhysicsList class
@@ -32,7 +32,6 @@
 #define P6DPhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
-#include "globals.hh"
 
 /// The physics list class with Pythia6 decayer
 

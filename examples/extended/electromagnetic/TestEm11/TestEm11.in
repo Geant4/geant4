@@ -1,4 +1,4 @@
-# $Id: TestEm11.in,v 1.8 2009-09-22 14:20:31 maire Exp $
+# $Id: TestEm11.in 74997 2013-10-25 10:52:13Z gcosmo $
 #
 # limit the step size from histo 1
 #
@@ -23,6 +23,6 @@
 ###/analysis/h1/set 4 100 0.  200. um	#step length
 ###/analysis/h1/set 5 100 0.    1. mm	#proj range
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 20000

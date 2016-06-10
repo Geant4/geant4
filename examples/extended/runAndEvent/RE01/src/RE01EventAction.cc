@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01EventAction.cc
 /// \brief Implementation of the RE01EventAction class
 //
-// $Id$
+// $Id: RE01EventAction.cc 66379 2012-12-18 09:46:33Z gcosmo $
 //
 
 #include "RE01EventAction.hh"

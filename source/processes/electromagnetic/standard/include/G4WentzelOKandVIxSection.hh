@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WentzelOKandVIxSection.hh 69548 2013-05-08 10:03:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -101,9 +101,6 @@ public:
   
   inline void SetTargetMass(G4double value);
 
-  //obsolete method
-  inline void SetRelativisticMass(G4double value);
-
   inline G4double GetMomentumSquare() const;
 
   inline G4double GetCosThetaNuc() const;
@@ -169,6 +166,7 @@ private:
   G4double gam0pcmp;
   G4double pcmp2;
 
+  static G4double ScreenRSquareElec[100];
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];
 };
@@ -196,13 +194,6 @@ inline void G4WentzelOKandVIxSection::SetTargetMass(G4double value)
 {
   targetMass = value;
   factD = std::sqrt(mom2)/value;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4WentzelOKandVIxSection::SetRelativisticMass(G4double value)
-{
-  mass = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

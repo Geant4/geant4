@@ -38,45 +38,13 @@
 
   6. ANALYSIS:
 
-     This example implements an AIDA-compliant analysis manager which creates histograms and ntuples. 
-     If user has an AIDA-compliant tool such as AIDAJNI, ANAPHE, OpenScientist or PI installed on his/her system. Some URLs :
-       http://aida.freehep.org/
-       http://java.freehep.org/aidajni
-       http://www.cern.ch/PI   
-       http://OpenScientist.lal.in2p3.fr
- 
-     The analysis part of this example can be activated by doing a "source 
-     aida-setup" of the AIDA compliant tool (to activate the aida-config
-     program) and by raising some environment variabless so that the 
-     G4 GNUmakefile system can take into account the AIDA tool.
-     This can be done, for example on a UNIX under a csh like shell, with : 
-        csh> source <path_where_the_AIDA_tool_is_installed>/aida-setup.csh
-        csh> aida-config # to check that this program is up and running
-     G4 related part :
-	csh> setenv G4ANALYSIS_USE 1
-	csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --include`
-        csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --lib`
+     This example implements an analysis manager which creates histograms and ntuples
+     using Geant4 analysis tools.
 
-     (It may be usefull to note that in the G4 GNUmakefile system,
-     the upper variables are used in the file config/analysis.gmk).
-
-     This needs to be done before building the executable.  
-
-     At the end of an excution, an xml file "exgps.aida" is created by default which contains 
-     histograms and ntuples. User can change the name and format of this output file with the commands
-	
-	/analysis/filetype new-type
-	/analysis/fileName new-filename
-
-	e.g.
-
-	/analysis/filetype root
-	/analysis/filename myfile.root 
-
-     these change the output file format to ROOT and output file name to "myfile.root". There are three file 
-     formats to choose from: xml, root or hbook.
-
-     The output file conatins 6 histograms and one ntuple:
+     At the end of an excution, an xml file "exGPS.root" is created by default which contains 
+     histograms and ntuples. 
+     
+     The output file contains 6 histograms and one ntuple:
 
 	histogram 1: The energy spectrum of the primary particles.
 	histogram 2: 2d histogram of primary particle incident position distribution in the X-Y plane.
@@ -97,42 +65,17 @@
 
   7. GETTING STARTED:
 
-     i) If you have an AIDA-compliant analysis package installed, then you should switch on the analysis 
-     part of the example by: 
+     Run the executable: 
 
-	setenv G4ANALYSIS_USE 1
-     
-     otherwise do  
-  
-	unsetenv G4ANALYSIS_USE
+     while in the exgps build directory do 
 
-     to remove the generation of an output file.
- 
-     ii) Build the exgps executable:
-
-         cd to exgps
-         gmake clean
-         gmake
-
-     gmake will create tmp and bin directories in your $G4TMP and $G4BIN directories. 
-     The executable, named exgps, will be created in the $G4BIN/$G4SYSTEM/ directory.
-
-     iii) Run the executable: 
-
-     while in the exgps directory do 
-
-         $G4BIN/$G4SYSTEM/exgps exrgps.in
-
-     If G4ANALYSIS_USE is defined, and dpends on the particular AIDA system used, e.g. JAIDA, one could see 
-     a display window of the six histograms. It may be neccessary to close the plotter window in order to 
-     terminate the execution. After the termination one will find the "exgps.aida", as well as a vrml file 
-     "g4_00.wrl" in the directory.
+         exgps exrgps.in
 
  8. FURTHER EXAMPLES of MACRO FILES:
 
     There are a number of g4mac files in the ./macros subdirectory, to show the various features of GPS. 
-    Most of them will lead to the creation of an aida file in the same name as the macro file. 
-    These aida files can be examed and analysed with an analysis tool such as JAS3.
+    Most of them will lead to the creation of a Root file in the same name as the macro file. 
+    These files can be then examined and analysed with ROOT.
 
 	Please see the README file there for further information.
 

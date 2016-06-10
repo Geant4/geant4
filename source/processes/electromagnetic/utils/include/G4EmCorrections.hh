@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmCorrections.hh 70371 2013-05-29 15:18:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -267,7 +267,7 @@ private:
   G4ionEffectiveCharge  effCharge;
 
   G4NistManager*        nist;
-  const G4IonTable*     ionTable;
+  G4IonTable*           ionTable;
   G4VEmModel*           ionLEModel;
   G4VEmModel*           ionHEModel;
 

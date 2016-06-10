@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.hh 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4IT.hh 71125 2013-06-11 15:39:09Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -61,9 +61,9 @@ G4IT* GetIT(const G4Track* track) ;
 G4IT* GetIT(const G4Track& track) ;
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4Allocator<G4IT> aITAllocator;
+extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
 #else
-extern G4DLLIMPORT G4Allocator<G4IT> aITAllocator;
+extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
 #endif
 
 class G4TrackListNode;
@@ -89,7 +89,7 @@ public :
     inline void *operator new(size_t);
     inline void operator delete(void *aIT);
 
-    virtual void Print() const {}
+    virtual void Print() const {;}
     virtual const G4String& GetName() const = 0 ;
 
     ///
@@ -134,7 +134,7 @@ public :
     inline G4TrackingInformation* GetTrackingInfo(){return &fTrackingInformation;}
 
     inline G4TrackListNode* GetTrackListNode(){return fpTrackNode;}
-    inline void SetTrackListNode(G4TrackListNode* node){ fpTrackNode = node;}
+    inline void SetTrackListNode(G4TrackListNode* node){fpTrackNode = node;}
 
     virtual const G4ITType GetITType() const = 0 ;
 
@@ -161,13 +161,14 @@ private :
 ///
 inline void* G4IT::operator new(size_t)
 {
-    void *aIT;
-    aIT = (void *) aITAllocator.MallocSingle();
-    return aIT;
+    if (!aITAllocator) aITAllocator = new G4Allocator<G4IT>;
+    return (void *) aITAllocator->MallocSingle();
 }
 
 inline void G4IT::operator delete(void *aIT)
-{ aITAllocator.FreeSingle((G4IT *) aIT);}
+{
+    aITAllocator->FreeSingle((G4IT *) aIT);
+}
 
 inline const G4ITBox* G4IT::GetITBox() const
 {
@@ -261,6 +262,3 @@ inline G4KDNode* G4IT::GetNode() const
     return fpKDNode ;
 }
 #endif
-
-
-

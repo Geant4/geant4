@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackHolder.cc 64374 2012-10-31 16:37:23Z gcosmo $
+// $Id: G4ITTrackHolder.cc 66881 2013-01-16 02:55:54Z adotti $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -37,8 +37,9 @@
 
 #include "G4ITTrackHolder.hh"
 #include "G4Track.hh"
+#include "G4Types.hh"
 
-G4ITTrackHolder* G4ITTrackHolder::fInstance(0);
+G4ThreadLocal G4ITTrackHolder* G4ITTrackHolder::fInstance(0);
 
 G4ITTrackHolder::G4ITTrackHolder()
 {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UnitsTable.cc 67970 2013-03-13 10:10:06Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -52,7 +52,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-G4UnitsTable G4UnitDefinition::theUnitsTable;
+G4ThreadLocal G4UnitsTable *G4UnitDefinition::pUnitsTable = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -61,29 +61,32 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name,
                                    const G4String& category, G4double value)
   : Name(name),SymbolName(symbol),Value(value)   
 {
+    if (!pUnitsTable)  { pUnitsTable = new G4UnitsTable; }
+
     // Does the Category objet already exist ?
     //
-    size_t nbCat = theUnitsTable.size();
+    size_t nbCat = pUnitsTable->size();
     size_t i = 0;
-    while ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category))  { i++; }
+    while ((i<nbCat)&&((*pUnitsTable)[i]->GetName()!=category))  { i++; }
     if (i == nbCat)
-      { theUnitsTable.push_back( new G4UnitsCategory(category)); }
+      { pUnitsTable->push_back( new G4UnitsCategory(category)); }
     CategoryIndex = i;
 
     // Insert this Unit in the Units table
     //
-    (theUnitsTable[CategoryIndex]->GetUnitsList()).push_back(this);
+    ((*pUnitsTable)[CategoryIndex]->GetUnitsList()).push_back(this);
     
     // Update string max length for name and symbol
     //
-    theUnitsTable[i]->UpdateNameMxLen((G4int)name.length());
-    theUnitsTable[i]->UpdateSymbMxLen((G4int)symbol.length());
+    (*pUnitsTable)[i]->UpdateNameMxLen((G4int)name.length());
+    (*pUnitsTable)[i]->UpdateSymbMxLen((G4int)symbol.length());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::~G4UnitDefinition()
 {
+    if (!pUnitsTable) { delete pUnitsTable; pUnitsTable = 0; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,8 +128,9 @@ G4int G4UnitDefinition::operator!=(const G4UnitDefinition &right) const
  
 G4UnitsTable& G4UnitDefinition::GetUnitsTable()
 {
-  if(theUnitsTable.size()==0)  { BuildUnitsTable(); }
-  return theUnitsTable;
+  if (!pUnitsTable)  { pUnitsTable = new G4UnitsTable; }
+  if(pUnitsTable->size()==0)  { BuildUnitsTable(); }
+  return *pUnitsTable;
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,7 +140,7 @@ G4double G4UnitDefinition::GetValueOf(const G4String& str)
   G4String name,symbol;
   for (size_t i=0;i<(GetUnitsTable()).size();i++)
      {
-       G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
+       G4UnitsContainer& units = (*pUnitsTable)[i]->GetUnitsList();
        for (size_t j=0;j<units.size();j++)
           {
             name=units[j]->GetName(); symbol=units[j]->GetSymbol();
@@ -158,12 +162,12 @@ G4String G4UnitDefinition::GetCategory(const G4String& str)
   G4String name,symbol;
   for (size_t i=0;i<(GetUnitsTable()).size();i++)
      {
-       G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
+       G4UnitsContainer& units = (*pUnitsTable)[i]->GetUnitsList();
        for (size_t j=0;j<units.size();j++)
           {
             name=units[j]->GetName(); symbol=units[j]->GetSymbol();
             if(str==name||str==symbol) 
-              { return theUnitsTable[i]->GetName(); }
+              { return (*pUnitsTable)[i]->GetName(); }
           }
      }
   std::ostringstream message;
@@ -178,8 +182,8 @@ G4String G4UnitDefinition::GetCategory(const G4String& str)
  
 void G4UnitDefinition::PrintDefinition()
 {
-  G4int nameL = theUnitsTable[CategoryIndex]->GetNameMxLen();
-  G4int symbL = theUnitsTable[CategoryIndex]->GetSymbMxLen();
+  G4int nameL = (*pUnitsTable)[CategoryIndex]->GetNameMxLen();
+  G4int symbL = (*pUnitsTable)[CategoryIndex]->GetSymbMxLen();
   G4cout << std::setw(nameL) << Name << " (" 
          << std::setw(symbL) << SymbolName << ") = " << Value << G4endl;
 }
@@ -332,9 +336,10 @@ void G4UnitDefinition::BuildUnitsTable()
 void G4UnitDefinition::PrintUnitsTable()
 {
   G4cout << "\n          ----- The Table of Units ----- \n";
-  for(size_t i=0;i<theUnitsTable.size();i++)
+  if (!pUnitsTable)  { pUnitsTable = new G4UnitsTable; }
+  for(size_t i=0;i<pUnitsTable->size();i++)
   {
-    theUnitsTable[i]->PrintCategory();
+    (*pUnitsTable)[i]->PrintCategory();
   }
 }
 
@@ -342,11 +347,12 @@ void G4UnitDefinition::PrintUnitsTable()
 
 void G4UnitDefinition::ClearUnitsTable()
 {
-  for (size_t i=0;i<theUnitsTable.size();i++)
+  if (!pUnitsTable)  { pUnitsTable = new G4UnitsTable; }
+  for (size_t i=0;i<pUnitsTable->size();i++)
   {
-    delete theUnitsTable[i];
+    delete (*pUnitsTable)[i];
   }
-  theUnitsTable.clear();
+  pUnitsTable->clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

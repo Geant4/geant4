@@ -32,7 +32,7 @@
 //    *                   *
 //    *********************
 //
-// $Id$
+// $Id: PurgMag.cc 72967 2013-08-14 14:57:48Z gcosmo $
 //
 // Comments: Main program for the Purgin Magnet example. 
 //
@@ -74,7 +74,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PurgMagPhysicsList);
   
-  runManager->SetUserAction(new PurgMagPrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new PurgMagPrimaryGeneratorAction());
     
 #ifdef G4VIS_USE
   // visualization manager
@@ -95,11 +95,11 @@ int main(int argc,char** argv) {
 #endif   
 
   // set user action classes
-  PurgMagRunAction* RunAct = new PurgMagRunAction(detector);
+  PurgMagRunAction* RunAct = new PurgMagRunAction();
   runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new PurgMagEventAction(RunAct));
-  runManager->SetUserAction(new PurgMagTrackingAction(RunAct)); 
-  runManager->SetUserAction(new PurgMagSteppingAction(RunAct,detector));
+  runManager->SetUserAction(new PurgMagEventAction());
+  runManager->SetUserAction(new PurgMagTrackingAction()); 
+  runManager->SetUserAction(new PurgMagSteppingAction(detector));
   
   //Initialize G4 kernel
   runManager->Initialize();

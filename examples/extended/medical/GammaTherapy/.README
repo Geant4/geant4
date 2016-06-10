@@ -61,43 +61,11 @@ The vis.mac file can be used an example of visualization.
 
 \section ExampleGammaTherapy_s3 HISTOGRAMS
 
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org). \n
-See also \link ExampleA01AIDA README.AIDA \endlink page.
-
-A package including AIDA and extended interfaces also using Python
-is PI, available from: http://cern.ch/pi .
-
-Once installed PI or PI-Lite in a specified local area $MYPI, it is
-required to add the installation path to $PATH, i.e. for example,
-for release 1.2.1 of PI:
+Built in histograms are provided. Name of output root file can be
+defined via UI command
 
 \verbatim
-setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+/testem/histoName <myName>
 \endverbatim
-
-CERN users can use the PATH to the LCG area on AFS.
-
-Before compilation of the example it is optimal to clean up old 
-files:
-\verbatim
-gmake histclean
-setenv G4ANALYSIS_USE 1
-gmake
-\endverbatim
-
-Before running the example the command should be issued:
-\verbatim
-eval `aida-config --runtime csh`
-\endverbatim
-
-It is possible to choose the format of the output file with 
-histograms using UI command:
-\verbatim
-/testem/histoName type
-/testem/histoType type
-\endverbatim
-
-The following types are available: hbook, root, xml.
 
 */

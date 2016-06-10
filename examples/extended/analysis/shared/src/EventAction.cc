@@ -27,7 +27,7 @@
 /// \brief Implementation of the EventAction class
 //
 //
-// $Id$
+// $Id: EventAction.cc 68015 2013-03-13 13:27:27Z gcosmo $
 //
 // 
 
@@ -44,7 +44,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run, HistoManager* histo)
-:fRunAct(run),fHistoManager(histo)
+:G4UserEventAction(),
+ fRunAct(run),fHistoManager(histo),
+ fEnergyAbs(0.), fEnergyGap(0.),
+ fTrackLAbs(0.), fTrackLGap(0.),
+ fPrintModulo(0)                             
 {
  fPrintModulo = 100; }
 

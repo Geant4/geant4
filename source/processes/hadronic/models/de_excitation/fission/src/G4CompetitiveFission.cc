@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4CompetitiveFission.cc 70744 2013-06-05 10:50:30Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -254,13 +254,13 @@ G4CompetitiveFission::FissionAtomicNumber(G4int A,
 {
 
   // For Simplicity reading code
-  const G4double A1 = theParam.GetA1();
-  const G4double A2 = theParam.GetA2();
-  const G4double As = theParam.GetAs();
-  //    const G4double Sigma1 = theParam.GetSigma1();
-  const G4double Sigma2 = theParam.GetSigma2();
-  const G4double SigmaS = theParam.GetSigmaS();
-  const G4double w = theParam.GetW();
+  G4double A1 = theParam.GetA1();
+  G4double A2 = theParam.GetA2();
+  G4double As = theParam.GetAs();
+  //    G4double Sigma1 = theParam.GetSigma1();
+  G4double Sigma2 = theParam.GetSigma2();
+  G4double SigmaS = theParam.GetSigmaS();
+  G4double w = theParam.GetW();
   
   //    G4double FasymAsym = 2.0*std::exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
   //	std::exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
@@ -336,7 +336,7 @@ G4int G4CompetitiveFission::FissionCharge(G4double A, G4double Z,
 					  G4double Af)
   // Calculates the charge of a fission product for a given atomic number Af
 {
-  const G4double sigma = 0.6;
+  static const G4double sigma = 0.6;
   G4double DeltaZ = 0.0;
   if (Af >= 134.0) DeltaZ = -0.45;                    //                      134 <= Af
   else if (Af <= (A-134.0)) DeltaZ = 0.45;             // Af <= (A-134) 
@@ -436,14 +436,14 @@ G4CompetitiveFission::FissionKineticEnergy(G4int A, G4int Z,
 
 G4double G4CompetitiveFission::AsymmetricRatio(G4int A, G4double A11)
 {
-  const G4double B1 = 23.5;
-  const G4double A00 = 134.0;
+  static const G4double B1 = 23.5;
+  static const G4double A00 = 134.0;
   return Ratio(G4double(A),A11,B1,A00);
 }
 
 G4double G4CompetitiveFission::SymmetricRatio(G4int A, G4double A11)
 {
-  const G4double B1 = 5.32;
+  static const G4double B1 = 5.32;
   const G4double A00 = A/2.0;
   return Ratio(G4double(A),A11,B1,A00);
 }

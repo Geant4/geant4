@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopoleEquation.cc
 /// \brief Implementation of the G4MonopoleEquation class
 //
-// $Id$
+// $Id: G4MonopoleEquation.cc 69705 2013-05-13 09:09:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,10 +74,13 @@ G4MonopoleEquation::~G4MonopoleEquation()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void  
-G4MonopoleEquation::SetChargeMomentumMass(G4double particleMagneticCharge, 
-                                          G4double particleElectricCharge,
-                                          G4double particleMass)
+G4MonopoleEquation::SetChargeMomentumMass( G4ChargeState particleChargeState, 
+                                           G4double      ,           // momentum, 
+                                           G4double particleMass)
 {
+   G4double particleMagneticCharge= particleChargeState.MagneticCharge(); 
+   G4double particleElectricCharge= particleChargeState.GetCharge(); 
+
   //   fElCharge = particleElectricCharge;
   fElCharge =eplus* particleElectricCharge*c_light;
    

@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -40,19 +38,36 @@
 
 namespace G4INCL {
 
-  TransmissionChannel::TransmissionChannel(Nucleus *nucleus, Particle *particle)
-    : theNucleus(nucleus), theParticle(particle)
+  TransmissionChannel::TransmissionChannel(Nucleus * const nucleus, Particle * const particle)
+    : theNucleus(nucleus), theParticle(particle),
+    refraction(false),
+    pOutMag(0.),
+    kineticEnergyOutside(initializeKineticEnergyOutside()),
+    cosRefractionAngle(1.)
+  {}
+
+  TransmissionChannel::TransmissionChannel(Nucleus * const nucleus, Particle * const particle, const G4double TOut)
+    : theNucleus(nucleus), theParticle(particle),
+    refraction(false),
+    pOutMag(0.),
+    kineticEnergyOutside(TOut),
+    cosRefractionAngle(1.)
+  {}
+
+  TransmissionChannel::TransmissionChannel(Nucleus * const nucleus, Particle * const particle, const G4double kOut, const G4double cosR)
+    : theNucleus(nucleus), theParticle(particle),
+    refraction(true),
+    pOutMag(kOut),
+    kineticEnergyOutside(initializeKineticEnergyOutside()),
+    cosRefractionAngle(cosR)
   {}
 
   TransmissionChannel::~TransmissionChannel() {}
 
-  G4double TransmissionChannel::particleLeaves() {
-
-    // \todo{this is the place to add refraction}
-
+  G4double TransmissionChannel::initializeKineticEnergyOutside() {
     // The particle energy outside the nucleus. Subtract the nuclear
     // potential from the kinetic energy when leaving the nucleus
-    G4double kineticEnergyOutside = theParticle->getEnergy()
+    G4double TOut = theParticle->getEnergy()
       - theParticle->getPotentialEnergy()
       - theParticle->getMass();
 
@@ -60,15 +75,37 @@ namespace G4INCL {
     const G4int AParent = theNucleus->getA();
     const G4int ZParent = theNucleus->getZ();
     const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(AParent,ZParent);
-    kineticEnergyOutside += theQValueCorrection;
-    theParticle->setTableMass();
+    TOut += theQValueCorrection;
+    return TOut;
+  }
 
+  void TransmissionChannel::particleLeaves() {
+
+    // Use the table mass in the outside world
+    theParticle->setTableMass();
+    theParticle->setPotentialEnergy(0.);
+
+    if(refraction) {
+      // Change the momentum direction
+      // The magnitude of the particle momentum outside the nucleus will be
+      // fixed by the kineticEnergyOutside variable. This is done in order to
+      // avoid numerical inaccuracies.
+      const ThreeVector &position = theParticle->getPosition();
+      const G4double r2 = position.mag2();
+      ThreeVector normal;
+      if(r2>0.)
+        normal = position / std::sqrt(r2);
+
+      const ThreeVector &momentum = theParticle->getMomentum();
+
+      const ThreeVector pOut = normal * (pOutMag * cosRefractionAngle) + momentum - normal * normal.dot(momentum);
+// assert(std::fabs(pOut.mag()-pOutMag)<1.e-5);
+
+      theParticle->setMomentum(pOut);
+    }
     // Scaling factor for the particle momentum
     theParticle->setEnergy(kineticEnergyOutside + theParticle->getMass());
     theParticle->adjustMomentumFromEnergy();
-    theParticle->setPotentialEnergy(0.);
-
-    return theQValueCorrection;
   }
 
   FinalState* TransmissionChannel::getFinalState() {
@@ -77,10 +114,14 @@ namespace G4INCL {
     initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
 
     // Correction for real masses
-    initialEnergy += theParticle->getTableMass() - theParticle->getMass();
+    const G4int AParent = theNucleus->getA();
+    const G4int ZParent = theNucleus->getZ();
+    initialEnergy += theParticle->getTableMass() - theParticle->getMass()
+      + theParticle->getEmissionQValueCorrection(AParent,ZParent);
 
-    const G4double theQValueCorrection = particleLeaves();
-    fs->setTotalEnergyBeforeInteraction(initialEnergy + theQValueCorrection);
+    particleLeaves();
+
+    fs->setTotalEnergyBeforeInteraction(initialEnergy);
     fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
     return fs;
   }

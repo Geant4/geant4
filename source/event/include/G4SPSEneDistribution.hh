@@ -291,8 +291,8 @@ private:
         G4bool Biased; // true - biased to power-law
 	G4bool EnergySpec; // true - energy spectra, false - momentum spectra
 	G4bool DiffSpec; // true - differential spec, false integral spec
-	G4bool ApplyRig; // false no rigidity cutoff, true then apply one
-	G4double ERig; // energy of rigidity cutoff
+	//G4bool ApplyRig; // false no rigidity cutoff, true then apply one
+	//G4double ERig; // energy of rigidity cutoff
 	G4PhysicsOrderedFreeVector UDefEnergyH; // energy hist data
 	G4PhysicsOrderedFreeVector IPDFEnergyH;
 	G4bool IPDFEnergyExist, IPDFArbExist, Epnflag;

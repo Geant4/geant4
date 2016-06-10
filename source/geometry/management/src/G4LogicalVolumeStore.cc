@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LogicalVolumeStore.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // G4LogicalVolumeStore
 //
@@ -43,8 +43,8 @@
 // ***************************************************************************
 //
 G4LogicalVolumeStore* G4LogicalVolumeStore::fgInstance = 0;
-G4VStoreNotifier* G4LogicalVolumeStore::fgNotifier = 0;
-G4bool G4LogicalVolumeStore::locked = false;
+G4ThreadLocal G4VStoreNotifier* G4LogicalVolumeStore::fgNotifier = 0;
+G4ThreadLocal G4bool G4LogicalVolumeStore::locked = false;
 
 // ***************************************************************************
 // Protected constructor: Construct underlying container with

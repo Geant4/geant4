@@ -30,6 +30,10 @@
 
 #include "G4UImessenger.hh"
 
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
+
 class G4MPImanager;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
@@ -40,30 +44,40 @@ class G4UIcommand;
 
 class G4MPImessenger : public G4UImessenger {
 public:
-  G4MPImessenger(G4MPImanager* manager);
+  G4MPImessenger();
   ~G4MPImessenger();
 
   virtual void SetNewValue(G4UIcommand* command, G4String newValue);
   virtual G4String GetCurrentValue(G4UIcommand* command);
 
+  void SetTargetObject(G4MPImanager* mpi_manager);
+
 private:
-  G4MPImanager* g4MPI;
+  DISALLOW_COPY_AND_ASSIGN(G4MPImessenger);
+
+  G4MPImanager* g4mpi_;
 
   // /mpi
-  G4UIdirectory* dir;
+  G4UIdirectory* dir_;
 
-  G4UIcmdWithAnInteger* verbose;
-  G4UIcmdWithoutParameter* status;
+  G4UIcmdWithAnInteger* verbose_;
+  G4UIcmdWithoutParameter* status_;
 
-  G4UIcmdWithAString* execute;
+  G4UIcmdWithAString* execute_;
 
-  G4UIcommand* beamOn;
-  G4UIcommand* dotbeamOn;
-  G4UIcmdWithADouble* masterWeight;
+  G4UIcommand* beam_on_;
+  G4UIcommand* dot_beam_on_;
+  G4UIcmdWithADouble* master_weight_;
 
-  G4UIcmdWithoutParameter* showSeeds;
-  G4UIcmdWithAnInteger* setMasterSeed;
-  G4UIcommand* setSeed;
+  G4UIcmdWithoutParameter* show_seeds_;
+  G4UIcmdWithAnInteger* set_master_seed_;
+  G4UIcommand* set_seed_;
 };
+
+// ====================================================================
+inline void G4MPImessenger::SetTargetObject(G4MPImanager* mpi_manager)
+{
+  g4mpi_ = mpi_manager;
+}
 
 #endif

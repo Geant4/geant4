@@ -1,4 +1,4 @@
-// $Id: Doxymodules_optical.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_optical.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_optical.h
@@ -9,6 +9,25 @@
  *  Extended optical examples classes
  *  @{
  */
+
+/** @defgroup extended_optical_OpNovice OpNovice
+ *  Optical example OpNovice
+ *  @ingroup extended_optical
+ *  @{
+ */
+ 
+  class OpNoviceActionInitialization {};
+  class OpNoviceDetectorConstruction {};
+  class OpNovicePhysicsList {};
+  class OpNovicePhysicsListMessenger {};
+  class OpNovicePrimaryGeneratorAction {};
+  class OpNovicePrimaryGeneratorMessenger {};
+  class OpNoviceRunAction {};
+  class OpNoviceStackingAction {};
+  class OpNoviceSteppingVerbose {}; 
+
+/** @} */
+
 
 /** @defgroup extended_optical_LXe LXe
  *  Optical example LXe 
@@ -51,6 +70,7 @@
  *  @{
  */
 
+  class WLSActionInitialization {};
   class WLSDetectorConstruction {};
   class WLSDetectorMessenger {};
   class WLSEventAction {};

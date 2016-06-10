@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSPhysicsListMessenger.cc 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/src/WLSPhysicsListMessenger.cc
 /// \brief Implementation of the WLSPhysicsListMessenger class
 //
 //
-//
-
 #include "globals.hh"
 
 #include "WLSPhysicsListMessenger.hh"
@@ -44,8 +44,10 @@
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4PionRadiativeDecayChannel.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSPhysicsListMessenger::WLSPhysicsListMessenger(WLSPhysicsList* pPhys)
-:fPhysicsList(pPhys)
+  : fPhysicsList(pPhys)
 {
 
     fDirectory = new G4UIdirectory("/WLS/phys/");
@@ -55,18 +57,19 @@ WLSPhysicsListMessenger::WLSPhysicsListMessenger(WLSPhysicsList* pPhys)
     fSetAbsorptionCMD->SetGuidance("Turn on or off absorption process");
     fSetAbsorptionCMD->AvailableForStates(G4State_Idle);
 
-    verboseCmd = new G4UIcmdWithAnInteger("/WLS/phys/verbose",this);
-    verboseCmd->SetGuidance("set verbose for physics processes");
-    verboseCmd->SetParameterName("verbose",true);
-    verboseCmd->SetDefaultValue(1);
-    verboseCmd->SetRange("verbose>=0");
-    verboseCmd->AvailableForStates(G4State_Idle);
+    fVerboseCmd = new G4UIcmdWithAnInteger("/WLS/phys/verbose",this);
+    fVerboseCmd->SetGuidance("set verbose for physics processes");
+    fVerboseCmd->SetParameterName("verbose",true);
+    fVerboseCmd->SetDefaultValue(1);
+    fVerboseCmd->SetRange("verbose>=0");
+    fVerboseCmd->AvailableForStates(G4State_Idle);
  
-    cerenkovCmd = new G4UIcmdWithAnInteger("/WLS/phys/cerenkovMaxPhotons",this);
-    cerenkovCmd->SetGuidance("set max nb of photons per step");
-    cerenkovCmd->SetParameterName("MaxNumber",false);
-    cerenkovCmd->SetRange("MaxNumber>=0");
-    cerenkovCmd->AvailableForStates(G4State_Idle);
+    fCerenkovCmd =
+                new G4UIcmdWithAnInteger("/WLS/phys/cerenkovMaxPhotons",this);
+    fCerenkovCmd->SetGuidance("set max nb of photons per step");
+    fCerenkovCmd->SetParameterName("MaxNumber",false);
+    fCerenkovCmd->SetRange("MaxNumber>=0");
+    fCerenkovCmd->AvailableForStates(G4State_Idle);
 
     fGammaCutCMD = new G4UIcmdWithADoubleAndUnit("/WLS/phys/gammaCut",this);
     fGammaCutCMD->SetGuidance("Set gamma cut");
@@ -114,7 +117,8 @@ WLSPhysicsListMessenger::WLSPhysicsListMessenger(WLSPhysicsList* pPhys)
     fClearPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
     fRemovePhysicsCMD = new G4UIcmdWithAString("/WLS/phys/removePhysics",this);
-    fRemovePhysicsCMD->SetGuidance("Remove a physics process from Physics List");
+    fRemovePhysicsCMD->
+                     SetGuidance("Remove a physics process from Physics List");
     fRemovePhysicsCMD->SetParameterName("PList",false);
     fRemovePhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
@@ -133,10 +137,12 @@ WLSPhysicsListMessenger::WLSPhysicsListMessenger(WLSPhysicsList* pPhys)
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSPhysicsListMessenger::~WLSPhysicsListMessenger()
 {
-    delete verboseCmd;
-    delete cerenkovCmd;
+    delete fVerboseCmd;
+    delete fCerenkovCmd;
 
     delete fSetAbsorptionCMD;
 
@@ -156,6 +162,8 @@ WLSPhysicsListMessenger::~WLSPhysicsListMessenger()
     delete fDirectory;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {
@@ -163,20 +171,21 @@ void WLSPhysicsListMessenger::SetNewValue(G4UIcommand* command,
        fPhysicsList->SetAbsorption(G4UIcmdWithABool::GetNewBoolValue(newValue));
     }
 
-    else if( command == verboseCmd ) {
-       fPhysicsList->SetVerbose(verboseCmd->GetNewIntValue(newValue));
+    else if( command == fVerboseCmd ) {
+       fPhysicsList->SetVerbose(fVerboseCmd->GetNewIntValue(newValue));
     }
 
-    else if( command == cerenkovCmd ) {
+    else if( command == fCerenkovCmd ) {
        fPhysicsList->
-           SetNbOfPhotonsCerenkov(cerenkovCmd->GetNewIntValue(newValue));
+           SetNbOfPhotonsCerenkov(fCerenkovCmd->GetNewIntValue(newValue));
     }
 
     else if (command == fPienuCMD) {
-       particleTable = G4ParticleTable::GetParticleTable();
-       particleDef = particleTable->FindParticle("pi+");
-       mode = new G4PhaseSpaceDecayChannel("pi+",1.0,2,"e+","nu_e");
-       table=new G4DecayTable();
+       G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+       G4ParticleDefinition* particleDef = particleTable->FindParticle("pi+");
+       G4VDecayChannel* mode = 
+                        new G4PhaseSpaceDecayChannel("pi+",1.0,2,"e+","nu_e");
+       G4DecayTable* table = new G4DecayTable();
        table->Insert(mode);
       // mode = new G4PionRadiativeDecayChannel("pi+",0.000017);
       // table->Insert(mode);
@@ -184,10 +193,11 @@ void WLSPhysicsListMessenger::SetNewValue(G4UIcommand* command,
     }
 
     else if (command == fPimunuCMD) {
-       particleTable = G4ParticleTable::GetParticleTable();
-       particleDef = particleTable->FindParticle("pi+");
-       mode = new G4PhaseSpaceDecayChannel("pi+",1.000,2,"mu+","nu_mu");
-       table=new G4DecayTable();
+       G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+       G4ParticleDefinition* particleDef = particleTable->FindParticle("pi+");
+       G4VDecayChannel* mode =
+                     new G4PhaseSpaceDecayChannel("pi+",1.000,2,"mu+","nu_mu");
+       G4DecayTable* table = new G4DecayTable();
        table->Insert(mode);
        particleDef->SetDecayTable(table);
     }

@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -52,47 +50,38 @@
 namespace G4INCL {
 
   /// \brief Static class for the deuteron density
-  class DeuteronDensity {
-    public:
+  namespace DeuteronDensity {
 
-      /** \brief PDF for a nucleon in r space
-       *
-       * The distribution is normalised to 1.
-       *
-       * \param r distance from the deuteron centre [fm]
-       * \return 4 * pi * r^2 * |psi|^2
-       */
-      static G4double densityR(const G4double r);
+    /** \brief PDF for a nucleon in r space
+     *
+     * The distribution is normalised to 1.
+     *
+     * \param r distance from the deuteron centre [fm]
+     * \return 4 * pi * r^2 * |psi|^2
+     */
+    G4double densityR(const G4double r);
 
-      /** \brief First derivative of the r-space density function
-       *
-       * \param r distance from the deuteron centre [fm]
-       * \return d|psi|^2/dr
-       */
-      static G4double derivDensityR(const G4double r);
+    /** \brief First derivative of the r-space density function
+     *
+     * \param r distance from the deuteron centre [fm]
+     * \return d|psi|^2/dr
+     */
+    G4double derivDensityR(const G4double r);
 
-      /** \brief PDF for a nucleon in p space
-       *
-       * The distribution is normalised to 1.
-       *
-       * \param p nucleon momentum [MeV/c]
-       * \return 4 * pi * p^2 * d|psi|^2/dp
-       */
-      static G4double densityP(const G4double p);
+    /** \brief PDF for a nucleon in p space
+     *
+     * The distribution is normalised to 1.
+     *
+     * \param p nucleon momentum [MeV/c]
+     * \return 4 * pi * p^2 * d|psi|^2/dp
+     */
+    G4double densityP(const G4double p);
 
-      static G4double wavefunctionR(const G4int l, const G4double r);
-      static G4double wavefunctionP(const G4int l, const G4double p);
-      static G4double derivWavefunctionR(const G4int l, const G4double r);
+    G4double wavefunctionR(const G4int l, const G4double r);
+    G4double wavefunctionP(const G4int l, const G4double p);
+    G4double derivWavefunctionR(const G4int l, const G4double r);
 
-    private:
-
-      static const G4int coeffTableSize = 13;
-      static const G4double coeff1[coeffTableSize];
-      static const G4double coeff2[coeffTableSize];
-      static const G4double normalisationR;
-      static const G4double normalisationP;
-      static const G4double al;
-  };
+  }
 
 }
 

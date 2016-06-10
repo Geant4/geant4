@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeWLSSlab.cc 77486 2013-11-25 10:14:16Z gcosmo $
+//
 /// \file optical/LXe/src/LXeWLSSlab.cc
 /// \brief Implementation of the LXeWLSSlab class
 //
@@ -53,30 +55,26 @@ LXeWLSSlab::LXeWLSSlab(G4RotationMatrix *pRot,
 {
   CopyValues();
  
-  if(!fScintSlab_log || fUpdated){
-
-    G4double slab_x = fScint_x/2.;
-    G4double slab_y = fScint_y/2.;
+  G4double slab_x = fScint_x/2.;
+  G4double slab_y = fScint_y/2.;
  
-    G4Box* ScintSlab_box = new G4Box("Slab",slab_x,slab_y,fSlab_z);
+  G4Box* ScintSlab_box = new G4Box("Slab",slab_x,slab_y,fSlab_z);
  
-    fScintSlab_log
+  fScintSlab_log
       = new G4LogicalVolume(ScintSlab_box,
                             G4Material::GetMaterial("Polystyrene"),
                             "Slab",0,0,0);
  
-    G4double spacing = 2*slab_y/fNfibers;
+  G4double spacing = 2*slab_y/fNfibers;
  
-    G4RotationMatrix* rm = new G4RotationMatrix();
-    rm->rotateY(90*deg);
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm->rotateY(90*deg);
  
-    //Place fibers
-    for(G4int i=0;i<fNfibers;i++){
-      G4double Y=-(spacing)*(fNfibers-1)*0.5 + i*spacing;
-      new LXeWLSFiber(rm,G4ThreeVector(0.,Y,0.),fScintSlab_log,false,0,
-                      fConstructor);
-    }
- 
+  //Place fibers
+  for(G4int i=0;i<fNfibers;i++){
+     G4double Y=-(spacing)*(fNfibers-1)*0.5 + i*spacing;
+     new LXeWLSFiber(rm,G4ThreeVector(0.,Y,0.),fScintSlab_log,false,0,
+                     fConstructor);
   }
  
   SetLogicalVolume(fScintSlab_log);
@@ -85,7 +83,6 @@ LXeWLSSlab::LXeWLSSlab(G4RotationMatrix *pRot,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeWLSSlab::CopyValues(){
-  fUpdated=fConstructor->GetUpdated();
  
   fScint_x=fConstructor->GetScintX();
   fScint_y=fConstructor->GetScintY();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Ions.cc 72955 2013-08-14 14:23:14Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -57,14 +57,35 @@ G4Ions::G4Ions(
        G4DecayTable        *decaytable , G4bool              shortlived,
        const G4String&     subType,
        G4int               anti_encoding,
-       G4double            excitation      )
+       G4double            excitation,
+       G4int               isomer
+)
   : G4ParticleDefinition( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable,
-           shortlived, subType, anti_encoding)
+			  shortlived, subType, anti_encoding),
+    theExcitationEnergy(excitation),
+    theIsomerLevel(isomer)
 {
-  // initialize excitation energy/level
-   theExcitationEnergy = excitation;
+   if ((aName == "proton") || (aName == "neutron")) { 
+     isGeneralIon = false ;
+   } else if (   (aName == "GenericIon") || (aName == "alpha") 
+       || (aName == "He3") || (aName == "deuteron")|| (aName == "triton")) {
+     isGeneralIon = false ;
+   } else if ( (aName == "anti_He3") || (aName == "anti_deuteron")
+	|| (aName == "anti_triton") || (aName == "anti_alpha") ) {
+     isGeneralIon = false ;
+   } else if ( (aName == "iron") || (aName == "oxygen") ||  (aName == "nitrogen")
+        || (aName == "carbon") || (aName == "helium") || (aName == "alpha+")
+        || (aName == "hydrogen") || (aName == "Ps-1s") || (aName == "Ps-2s")) {
+     isGeneralIon = false ;
+   } else {
+     isGeneralIon = true;
+   }
+
+  // isomer level isset to 9 
+  // if isomer level is set to 0 for excited state
+  if ((theExcitationEnergy > 0.0) && (isomer==0)) isomer =9; 
 
    if (GetAtomicNumber() == 0  ) {
      // AtomicNumber/Mass is positve even for anti_nulceus
@@ -76,15 +97,9 @@ G4Ions::G4Ions(
 
 G4Ions::~G4Ions()
 {
-
-  //G4cout << "G4Ions::" << GetParticleName() << G4endl; 
 }
 
 
-G4Ions* G4Ions::IonsDefinition()
-{
-  return this;
-}
 
 
 

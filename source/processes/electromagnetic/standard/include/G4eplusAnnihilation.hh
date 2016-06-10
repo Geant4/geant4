@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eplusAnnihilation.hh 68797 2013-04-05 13:27:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,8 +59,6 @@
 #define G4eplusAnnihilation_h 1
 
 #include "G4VEmProcess.hh"
-#include "G4Positron.hh"
-#include "G4VEmModel.hh"
 
 class G4ParticleDefinition;
 

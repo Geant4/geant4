@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ExcitedLambdaConstructor.cc 72955 2013-08-14 14:23:14Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -39,7 +39,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4ShortLivedTable.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4VDecayChannel.hh"
 #include "G4DecayTable.hh"

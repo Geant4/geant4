@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPLegendreTable_h
 #define G4NeutronHPLegendreTable_h 1
@@ -64,7 +63,7 @@ class G4NeutronHPLegendreTable
     }
   }
   
-  inline void Init(std::ifstream & aDataFile) 
+  inline void Init(std::istream & aDataFile) 
   {
     G4double eNeu, coeff;
     G4int nPoly;

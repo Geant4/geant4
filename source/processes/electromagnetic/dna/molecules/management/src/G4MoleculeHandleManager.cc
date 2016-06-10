@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeHandleManager.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4MoleculeHandleManager.cc 66872 2013-01-15 01:25:57Z japost $
 //
 #include "G4MoleculeHandleManager.hh"
 #include "G4Molecule.hh"
 
 using namespace std;
 
-G4MoleculeHandleManager* G4MoleculeHandleManager::fInstance (0);
+G4ThreadLocal G4MoleculeHandleManager* G4MoleculeHandleManager::fInstance (0);
 
 G4MoleculeHandleManager::G4MoleculeHandleManager()
 {

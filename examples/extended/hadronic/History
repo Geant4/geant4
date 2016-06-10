@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-11-13 G. Cosmo (exHadronic-V09-06-01)
+- Added Hadr05 in CMakeLists.txt and README
+
+22-11-13 I. Hrivnacova (exHadronic-V09-06-00)
+- Added Hadr04 in CMakeLists.txt and README
+
 17-11-12 I. Hrivnacova (exHadronic-V09-05-03)
 - Updated documentation:
   - Fixed .README files for artefacts from Markdown support

@@ -32,7 +32,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(TestEm2 TestEm2.cc ${sources} ${headers})
-target_link_libraries(TestEm2 ${Geant4_LIBRARIES} )
+target_link_libraries(TestEm2 ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -42,7 +42,7 @@ target_link_libraries(TestEm2 ${Geant4_LIBRARIES} )
 set(TestEm2_SCRIPTS
     egs4.mac run01.mac run02.mac run03.mac TestEm2.in TestEm2.out vis.mac
   )
-
+  
 foreach(_script ${TestEm2_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}

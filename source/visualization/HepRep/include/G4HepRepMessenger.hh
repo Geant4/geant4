@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HepRepMessenger.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //
 #ifndef G4HepRepMessenger_HH
@@ -103,7 +103,6 @@ class G4HepRepMessenger : public G4UImessenger {
         G4UIcmdWithABool* useSolidsCommand;
         
         G4bool invisibles;
-        G4UIcmdWithABool* writeInvisiblesCommand;
 };
 
 #endif

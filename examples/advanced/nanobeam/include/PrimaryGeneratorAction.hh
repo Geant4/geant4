@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "globals.hh"
+#include <CLHEP/Matrix/Matrix.h>
+
 #include "Randomize.hh"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
@@ -39,9 +39,6 @@
 #include "G4Event.hh"
 
 #include "DetectorConstruction.hh"
-#include "PrimaryGeneratorMessenger.hh"
-
-#include "CLHEP/Matrix/Matrix.h"
 
 class PrimaryGeneratorMessenger;
 
@@ -50,33 +47,36 @@ class PrimaryGeneratorMessenger;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
+
   PrimaryGeneratorAction(DetectorConstruction*);    
   ~PrimaryGeneratorAction();
   
-public:
-  
   void GeneratePrimaries(G4Event*);
-  G4ParticleGun* GetParticleGun() {return particleGun;};
+
+  G4ParticleGun* GetParticleGun() {return fParticleGun;};
+  
   void SetEmission (G4int);
 
-  CLHEP::HepMatrix GetMatrix(){return beamMatrix;};
+  CLHEP::HepMatrix GetMatrix(){return fBeamMatrix;};
   
-  G4int emission;
+  G4int fEmission;
  
 private:
   
   G4double XYofAngle(G4double);	
   
-  G4ParticleGun* particleGun;
-  DetectorConstruction* detector;
-  PrimaryGeneratorMessenger* gunMessenger;     
-  G4double angleMax;
-  G4bool shoot;
+  G4ParticleGun* fParticleGun;
   
-   // Matrix
-  CLHEP::HepMatrix beamMatrix;
-
-	
+  DetectorConstruction* fDetector;
+  
+  PrimaryGeneratorMessenger* fGunMessenger;     
+  
+  G4double fAngleMax;
+  
+  G4bool fShoot;
+  
+  // Matrix
+  CLHEP::HepMatrix fBeamMatrix;	
 };
 
 #endif

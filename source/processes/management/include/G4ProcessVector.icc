@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProcessVector.icc 71231 2013-06-12 13:06:28Z gcosmo $
 //
 inline G4bool G4ProcessVector::operator==(const G4ProcessVector &right) const
 {

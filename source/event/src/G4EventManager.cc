@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EventManager.cc 71031 2013-06-10 09:11:38Z gcosmo $
 //
 //
 //
@@ -42,7 +42,7 @@
 #include "G4Navigator.hh"
 #include "Randomize.hh"
 
-G4EventManager* G4EventManager::fpEventManager = 0;
+G4ThreadLocal G4EventManager* G4EventManager::fpEventManager = 0;
 G4EventManager* G4EventManager::GetEventManager()
 { return fpEventManager; }
 
@@ -63,6 +63,7 @@ G4EventManager::G4EventManager()
   trackContainer = new G4StackManager;
   theMessenger = new G4EvManMessenger(this);
   sdManager = G4SDManager::GetSDMpointerIfExist();
+  stateManager = G4StateManager::GetStateManager();
   fpEventManager = this;
   userEventAction = 0;
   userStackingAction = 0;
@@ -98,7 +99,6 @@ G4int G4EventManager::operator!=(const G4EventManager &right) const { }
 void G4EventManager::DoProcessing(G4Event* anEvent)
 {
   abortRequested = false;
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_GeomClosed)
   {
@@ -338,7 +338,8 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 
 void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent)
 {
-  static G4String randStat;
+  static G4ThreadLocal G4String *randStat = 0;
+  if (!randStat) randStat = new G4String;
   trackIDCounter = 0;
   G4bool tempEvent = false;
   if(!anEvent)
@@ -350,7 +351,7 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent
   {
     std::ostringstream oss;
     CLHEP::HepRandom::saveFullState(oss);
-    anEvent->SetRandomNumberStatus(randStat=oss.str());
+    anEvent->SetRandomNumberStatus(*randStat=oss.str());
   }
   StackTracks(trackVector,false);
   DoProcessing(anEvent);
@@ -360,7 +361,6 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent
 
 void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
 { 
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_EventProc || currentEvent==0)
   {
@@ -375,7 +375,6 @@ void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
 
 G4VUserEventInformation* G4EventManager::GetUserInformation()
 { 
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_EventProc || currentEvent==0)
   { return 0; }

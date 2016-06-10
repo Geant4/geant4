@@ -18,6 +18,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29/11/12 I.Hrivnacova (doxygen-V09-06-01)
+- Updated configuration files for 10.0 release
+
+17/11/12 I.Hrivnacova (doxygen-V09-06-00)
+- Updated configuration files for 10.0 release
+
 26/11/12 I.Hrivnacova (doxygen-V09-05-02)
 - Updated Doxyfile for removing .README.HowToRunTestEm1
 

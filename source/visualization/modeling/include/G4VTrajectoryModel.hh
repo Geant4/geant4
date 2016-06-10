@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VTrajectoryModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
@@ -52,8 +52,6 @@ public:
   virtual ~G4VTrajectoryModel();
   
   // Draw method
-  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0,
-		    const G4bool& visible = true) const = 0;
   virtual void Draw(const G4VTrajectory& trajectory, 
 		    const G4bool& visible = true) const = 0;
   

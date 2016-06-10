@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id$
+// $Id: TrackingAction.cc 68734 2013-04-05 09:47:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -45,8 +45,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(PrimaryGeneratorAction* prim,HistoManager* histo)
-:fPrimary(prim),fHistoManager(histo)
+TrackingAction::TrackingAction(PrimaryGeneratorAction* prim)
+:G4UserTrackingAction(), fPrimary(prim)
 { 
  // parameters for generator action #3
   fNewUz = fPrimary->GetAction3()->GetNewUz();
@@ -63,6 +63,7 @@ TrackingAction::TrackingAction(PrimaryGeneratorAction* prim,HistoManager* histo)
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
  G4int selectedGeneratorAction = fPrimary->GetSelectedAction();
+ G4AnalysisManager* analysis = G4AnalysisManager::Instance(); 
  G4int id = 0;
 
  if(selectedGeneratorAction==2)
@@ -70,7 +71,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //energy spectrum
   //
   id = 1;   
-  fHistoManager->FillHisto(id, track->GetKineticEnergy());
+  analysis->FillH1(id, track->GetKineticEnergy());
  }
  else if(selectedGeneratorAction==3)
  {
@@ -79,9 +80,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   id = 2;
   G4ThreeVector um = track->GetMomentumDirection();
   G4double alpha  = std::acos(fNewUz*um);
-  G4double dalfa  = fHistoManager->GetBinWidth(id);
+  G4double dalfa  = analysis->GetH1Width(id);
   G4double dOmega = twopi*std::sin(alpha)*dalfa;     
-  if (dOmega > 0.) fHistoManager->FillHisto(id, alpha, 1./dOmega);
+  if (dOmega > 0.) analysis->FillH1(id, alpha, 1./dOmega);
     
   //momentum direction : angular distr dN/dOmega = f(psi)
   //
@@ -92,10 +93,10 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //  
   G4double psi = std::atan2(u2*um, u1*um);
   if (psi < 0.) psi += twopi;    
-  G4double dpsi  = fHistoManager->GetBinWidth(id);
+  G4double dpsi  = analysis->GetH1Width(id);
   G4double alphaMax = fPrimary->GetAction3()->GetAlphaMax();    
   dOmega = (1. - std::cos(alphaMax))*dpsi;     
-  if (dOmega > 0.) fHistoManager->FillHisto(id, psi, 1./dOmega);  
+  if (dOmega > 0.) analysis->FillH1(id, psi, 1./dOmega);  
  }
  else if(selectedGeneratorAction==4)
  {
@@ -108,35 +109,35 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //vertex position: radial distribution : dN/dv = f(r)
   //
   id = 4;
-  G4double dr = fHistoManager->GetBinWidth(id);
+  G4double dr = analysis->GetH1Width(id);
   G4double dv = 2*twopi*r*r*dr;
-  if (dv > 0.) fHistoManager->FillHisto(id, r, 1./dv);
+  if (dv > 0.) analysis->FillH1(id, r, 1./dv);
 
   //vertex position: angular distribution : dN/dv = f(theta)
   //
   id = 5;
   G4double theta  = std::acos(ur.z());
-  G4double dteta  = fHistoManager->GetBinWidth(id);
+  G4double dteta  = analysis->GetH1Width(id);
   dv = fDeltaR3*twopi*std::sin(theta)*dteta;
-  if (dv > 0.) fHistoManager->FillHisto(id, theta, 1./dv);
+  if (dv > 0.) analysis->FillH1(id, theta, 1./dv);
 
   //vertex position: angular distribution : dN/dv = f(phi)
   //
   id = 6;
   G4double phi  = std::atan2(ur.y(), ur.x());
   if (phi < 0.) phi += twopi;
-  G4double dphi  = fHistoManager->GetBinWidth(id);
+  G4double dphi  = analysis->GetH1Width(id);
   dv = 2*fDeltaR3*dphi;
-  if (dv > 0.) fHistoManager->FillHisto(id, phi, 1./dv);
+  if (dv > 0.) analysis->FillH1(id, phi, 1./dv);
 
   //momentum direction : angular distr dN/dOmega = f(alpha)
   //
   id = 7;
   G4ThreeVector um = track->GetMomentumDirection();
   G4double alpha  = std::acos(ur*um);
-  G4double dalfa  = fHistoManager->GetBinWidth(id);
+  G4double dalfa  = analysis->GetH1Width(id);
   G4double dOmega = twopi*std::sin(alpha)*dalfa;
-  if (dOmega > 0.) fHistoManager->FillHisto(id, alpha, 1./dOmega);
+  if (dOmega > 0.) analysis->FillH1(id, alpha, 1./dOmega);
 
   //momentum direction : angular distr dN/dOmega = f(psi)
   //
@@ -147,9 +148,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //
   G4double psi = std::atan2(u2*um, u1*um);
   if (psi < 0.) psi += twopi;
-  G4double dpsi  = fHistoManager->GetBinWidth(id);
+  G4double dpsi  = analysis->GetH1Width(id);
   dOmega = (fCosAlphaMin - fCosAlphaMax)*dpsi;
-  if (dOmega > 0.) fHistoManager->FillHisto(id, psi, 1./dOmega);
+  if (dOmega > 0.) analysis->FillH1(id, psi, 1./dOmega);
  }
 }
 

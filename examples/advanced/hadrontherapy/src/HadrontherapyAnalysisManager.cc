@@ -90,6 +90,7 @@ void HadrontherapyAnalysisManager::Clear()
 
 	delete theROOTNtuple;
 	theROOTNtuple = 0;
+	
 
 	delete histo16;
 	histo16 = 0;
@@ -353,10 +354,9 @@ void HadrontherapyAnalysisManager::FillVoxelFragmentTuple(G4int i, G4int j, G4in
 	}
 }
 
-void HadrontherapyAnalysisManager::FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letT, G4double letD)
+void HadrontherapyAnalysisManager::FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letD)
 {
-	letFragNtuple -> Fill( i, j, k, A, Z, letT, letD);
-
+  letFragNtuple -> Fill( i, j, k, A, Z, letD/MeV);
 }
 	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::FillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ)

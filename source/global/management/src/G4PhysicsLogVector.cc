@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsLogVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -41,10 +41,12 @@
 //    9  Mar. 2001, H.Kurashige : added PhysicsVector type and Retrieve
 //    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 //    19 Jun. 2009, V.Ivanchenko : removed hidden bin 
+//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method, use G4Log
 //
 // --------------------------------------------------------------
 
 #include "G4PhysicsLogVector.hh"
+#include "G4Exp.hh"
 
 G4PhysicsLogVector::G4PhysicsLogVector()
   : G4PhysicsVector()
@@ -74,20 +76,19 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
 {
   type = T_G4PhysicsLogVector;
 
-  dBin     =  std::log10(theEmax/theEmin)/theNbin;
-  baseBin  =  std::log10(theEmin)/dBin;
+  dBin     =  G4Log(theEmax/theEmin)/theNbin;
+  baseBin  =  G4Log(theEmin)/dBin;
 
   numberOfNodes = theNbin + 1;
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);
-  static const G4double g4log10 = std::log(10.); 
 
   binVector.push_back(theEmin);
   dataVector.push_back(0.0);
 
   for (size_t i=1; i<numberOfNodes-1; i++)
     {
-      binVector.push_back(std::exp(g4log10*(baseBin+i)*dBin));
+      binVector.push_back(G4Exp((baseBin+i)*dBin));
       dataVector.push_back(0.0);
     }
   binVector.push_back(theEmax);
@@ -107,8 +108,8 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   if (success)
   {
     G4double theEmin = binVector[0];
-    dBin = std::log10(binVector[1]/theEmin);
-    baseBin = std::log10(theEmin)/dBin;
+    dBin = G4Log(binVector[1]/theEmin);
+    baseBin = G4Log(theEmin)/dBin;
   }
   return success;
 }
@@ -117,23 +118,6 @@ void G4PhysicsLogVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
   G4double theEmin = binVector[0];
-  dBin = std::log10(binVector[1]/theEmin);
-  baseBin = std::log10(theEmin)/dBin;
+  dBin = G4Log(binVector[1]/theEmin);
+  baseBin = G4Log(theEmin)/dBin;
 }
-
-size_t G4PhysicsLogVector::FindBinLocation(G4double theEnergy) const
-{
-  // For G4PhysicsLogVector, FindBinLocation is implemented using
-  // a simple arithmetic calculation.
-  //
-  // Because this is a virtual function, it is accessed through a
-  // pointer to the G4PhyiscsVector object for most usages. In this
-  // case, 'inline' will not be invoked. However, there is a possibility 
-  // that the user access to the G4PhysicsLogVector object directly and 
-  // not through pointers or references. In this case, the 'inline' will
-  // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
-  //G4cout << "G4PhysicsLogVector::FindBinLocation: e= " << theEnergy
-
-  return size_t( std::log10(theEnergy)/dBin - baseBin );
-}
-

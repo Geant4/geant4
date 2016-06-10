@@ -23,33 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/src/HepMCG4PythiaMessenger.cc
+/// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4PythiaMessenger.cc
 /// \brief Implementation of the HepMCG4PythiaMessenger class
 //
-// ====================================================================
+// $Id: HepMCG4PythiaMessenger.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   HepMCG4PythiaMessenger.cc
-//   $Id$
-//
-// ====================================================================
 
 #ifdef G4LIB_USE_PYTHIA
 
-#include "HepMCG4PythiaMessenger.hh"
-#include "HepMCG4PythiaInterface.hh"
-
 #include <sstream>
 #include <fstream>
-
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "HepMCG4PythiaMessenger.hh"
+#include "HepMCG4PythiaInterface.hh"
 
-////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 HepMCG4PythiaMessenger::HepMCG4PythiaMessenger(HepMCG4PythiaInterface* agen)
   : gen(agen)
-////////////////////////////////////////////////////////////////////////////
 {
   dir= new G4UIdirectory("/generator/pythia/");
   dir-> SetGuidance("Commands for Pythia event generation");
@@ -87,11 +80,11 @@ HepMCG4PythiaMessenger::HepMCG4PythiaMessenger(HepMCG4PythiaInterface* agen)
   cpygive= new G4UIcommand("/generator/pythia/pygive",this);
   cpygive-> SetGuidance("call PYGIVE");
   G4UIparameter* parameter= new G4UIparameter ("Parameter", 's', false);
-  cpygive-> SetParameter(parameter);  
+  cpygive-> SetParameter(parameter);
 
-  setUserParameters= 
+  setUserParameters=
     new G4UIcmdWithoutParameter("/generator/pythia/setUserParameters",this);
-  setUserParameters-> 
+  setUserParameters->
     SetGuidance("Set user parameters in the Pythia common blocks");
 
   setSeed= new G4UIcmdWithAnInteger("/generator/pythia/setSeed", this);
@@ -114,22 +107,21 @@ HepMCG4PythiaMessenger::HepMCG4PythiaMessenger(HepMCG4PythiaInterface* agen)
   move-> SetDefaultValue(0);
   cpyrset-> SetParameter(move);
 
-  printRandomStatus= 
+  printRandomStatus=
     new G4UIcmdWithAString("/generator/pythia/printRandomStatus", this);
   printRandomStatus-> SetGuidance("print random number status.");
   printRandomStatus-> SetParameterName("filename", true, false);
   printRandomStatus-> SetDefaultValue("std::cout");
 }
 
-/////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 HepMCG4PythiaMessenger::~HepMCG4PythiaMessenger()
-/////////////////////////////////////////////////
 {
   delete verbose;
   delete mpylist;
   delete print;
   delete cpyinit;
-  delete cpystat;  
+  delete cpystat;
   delete cpygive;
   delete setUserParameters;
   delete setSeed;
@@ -140,10 +132,9 @@ HepMCG4PythiaMessenger::~HepMCG4PythiaMessenger()
   delete dir;
 }
 
-//////////////////////////////////////////////////////////////
-void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command, 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command,
                                          G4String newValues)
-//////////////////////////////////////////////////////////////
 {
   if(command == verbose) {  // /verbose ...
     G4int level= verbose-> GetNewIntValue(newValues);
@@ -199,7 +190,7 @@ void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command,
     } else {
       // to a file (overwrite mode)
       std::ofstream ofs;
-      ofs.open(s.c_str(), std::ios::out);  
+      ofs.open(s.c_str(), std::ios::out);
       //ofs.open(randomStatusFileName.c_str(), std::ios::out|std::ios::app);
       ofs.setf(std::ios::fixed | std::ios::showpoint);
       gen-> PrintRandomStatus(ofs);
@@ -208,9 +199,8 @@ void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command,
   }
 }
 
-//////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4String HepMCG4PythiaMessenger::GetCurrentValue(G4UIcommand* command)
-//////////////////////////////////////////////////////////////////////
 {
   G4String cv;
   if (command == verbose) {

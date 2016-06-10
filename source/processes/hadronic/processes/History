@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2009-03-31 19:16:38 vnivanch Exp $
+$Id: History 69176 2013-04-22 06:51:19Z gcosmo $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,16 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+     
+19 April 2013 Michel Maire (hadr-proc-V09-06-01)
+------------------------------------------------
+- modify all processNames to try to get coherence between various packages.
+    
+17 December 2012 Vladimir Ivantchenko (hadr-proc-V09-06-00)
+-------------------------------------------------------
+- G4WHadronElasticProcess - removed
+- G4HadronElasticProcess - added full printout about hadronic exception 
+    inside G4Exception printout (bug#1377 for inelastic process)
 
 06 November 2012 Vladimir Ivantchenko (hadr-proc-V09-05-12)
 -------------------------------------------------------

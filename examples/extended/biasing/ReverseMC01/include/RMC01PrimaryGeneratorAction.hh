@@ -26,14 +26,14 @@
 /// \file biasing/ReverseMC01/include/RMC01PrimaryGeneratorAction.hh
 /// \brief Definition of the RMC01PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: RMC01PrimaryGeneratorAction.hh 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01PrimaryGeneratorAction
+//  Class Name:           RMC01PrimaryGeneratorAction
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -60,12 +60,10 @@ class RMC01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     RMC01PrimaryGeneratorAction();    
     virtual ~RMC01PrimaryGeneratorAction();
 
-  public:
     virtual void GeneratePrimaries(G4Event*);
   
   private:
     G4GeneralParticleSource* fParticleSource;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

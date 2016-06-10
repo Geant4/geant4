@@ -35,7 +35,7 @@
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4NeutronHPFissionERelease.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
  void G4NeutronHPFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
  {
@@ -49,7 +49,7 @@
     theFF.Init(A, Z, M, dirName, aFSType);
     if ( getenv("G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS") && theFF.HasFSData() ) 
     {
-       G4cout << "Activate Fission Fragments Prodcution for the target isotope of " 
+       G4cout << "Activate Fission Fragments Production for the target isotope of " 
        << "Z = " << (G4int)Z
        << ", A = " << (G4int)A
        //<< "M = " << M
@@ -267,7 +267,7 @@
       //G4cout << fragA_Z << " " << fragA_A << " " << fragA_M << G4endl;
       //G4cout << fragB_Z << " " << fragB_A << G4endl;
 
-      G4ParticleTable* pt = G4ParticleTable::GetParticleTable();
+      G4IonTable* pt = G4IonTable::GetIonTable();
       //Excitation energy is not taken into account 
       G4ParticleDefinition* pdA = pt->GetIon( fragA_Z , fragA_A , 0.0 );
       G4ParticleDefinition* pdB = pt->GetIon( fragB_Z , fragB_A , 0.0 );

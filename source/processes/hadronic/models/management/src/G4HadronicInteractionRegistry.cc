@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronicInteractionRegistry.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
 // 17-Aug-2012 V.Ivanchenko added hadronic model factories
@@ -31,12 +31,12 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4HadronicInteraction.hh"
 
-G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::theInstance = 0;
+G4ThreadLocal G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::theInstance = 0;
 
 G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::Instance()
 {
   if(0 == theInstance) {
-    static G4HadronicInteractionRegistry manager;
+    static G4ThreadLocal G4HadronicInteractionRegistry *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4HadronicInteractionRegistry  ;  G4HadronicInteractionRegistry &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;

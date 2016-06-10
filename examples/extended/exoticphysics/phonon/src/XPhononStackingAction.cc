@@ -25,71 +25,66 @@
 //
 /// \file exoticphysics/phonon/src/XPhononStackingAction.cc
 /// \brief Implementation of the XPhononStackingAction class
+///     This stacking action is necessary to ensure that velocity and 
+///     propagation direction are set properly for phonons created with
+///     G4ParticleGun
 //
-// $Id$
+// $Id: XPhononStackingAction.cc 76246 2013-11-08 11:17:29Z gcosmo $
 //
 
 #include "XPhononStackingAction.hh"
-#include "XPhononTrackInformation.hh"
+#include "G4LatticeManager.hh"
+#include "G4PhononLong.hh"
+#include "G4PhononPolarization.hh"
+#include "G4PhononTrackMap.hh"
+#include "G4PhononTransFast.hh"
+#include "G4PhononTransSlow.hh"
+#include "G4RandomDirection.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
 #include "G4Track.hh"
 #include "G4TrackStatus.hh"
-#include "XLatticeManager3.hh"
-#include "G4RandomDirection.hh"
-#include "G4ThreeVector.hh"
-#include "G4SystemOfUnits.hh"
-#include "XTPhononFast.hh"
-#include "XTPhononSlow.hh"
-#include "XLPhonon.hh"
 
-XPhononStackingAction::XPhononStackingAction()
-{;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XPhononStackingAction::~XPhononStackingAction()
-{;}
+XPhononStackingAction::XPhononStackingAction() {;}
 
-G4ClassificationOfNewTrack XPhononStackingAction::ClassifyNewTrack(const G4Track* aTrack)
-{
-  //This stacking action is necessary to ensure that velocity and 
-  //propagation direction are set properly for phonons created with
-  //G4ParticleGun
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+XPhononStackingAction::~XPhononStackingAction() {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4ClassificationOfNewTrack 
+XPhononStackingAction::ClassifyNewTrack(const G4Track* aTrack) {
   G4ClassificationOfNewTrack classification = fUrgent;
 
-  if(aTrack->GetParentID() == 0)
-    {
-      //Obtain LatticeManager for phonon dynamics
-      XLatticeManager3* LM = XLatticeManager3::GetXLatticeManager();
-      
-      //cast to non-const pointer so we can set the velocity
-      G4Track* theTrack=(G4Track*)aTrack;
+  if (aTrack->GetParentID() == 0) {
+    //Obtain LatticeManager for phonon dynamics
+    G4LatticeManager* LM = G4LatticeManager::GetLatticeManager();
+    
+    G4int pol = G4PhononPolarization::Get(aTrack->GetDefinition());
+    
+    //Compute random wave-vector (override whatever ParticleGun did)
+    G4ThreeVector Ran = G4RandomDirection();
+    
+    //Store wave-vector as track information
+    G4PhononTrackMap* theKmap = G4PhononTrackMap::GetPhononTrackMap();
+    theKmap->SetK(aTrack, Ran);
+    
+    //Compute direction of propagation from wave vector
+    G4ThreeVector momentumDir = LM->MapKtoVDir(aTrack->GetVolume(), pol, Ran);
+    
+    //Compute true velocity of propagation
+    G4double velocity = LM->MapKtoV(aTrack->GetVolume(), pol, Ran);
+    
+    //cast to non-const pointer so we can set the velocity
+    G4Track* theTrack = const_cast<G4Track*>(aTrack);
 
-      G4int pol=0;
-      if(theTrack->GetDefinition()==XLPhonon::PhononDefinition()) {
-        pol = 0;
-      } else if(theTrack->GetDefinition()==XTPhononSlow::PhononDefinition()) {
-        pol = 1;
-      } else if(theTrack->GetDefinition()==XTPhononFast::PhononDefinition()) {
-        pol = 2;
-      }
-      
-      //Compute random wave-vector
-      G4ThreeVector Ran = G4RandomDirection();
-
-      //Store wave-vector as track information
-      theTrack->SetUserInformation(new XPhononTrackInformation(Ran));     
-      
-      //Compute direction of propagation from wave vector
-      G4ThreeVector momentumDir;
-      momentumDir =  LM->MapKtoVDir(theTrack->GetVolume(),pol,Ran);
-      theTrack->SetMomentumDirection(momentumDir);
-      
-      //Compute true velocity of propagation
-      G4double velocity;
-      velocity = LM->MapKtoV(theTrack->GetVolume(), pol, Ran)*m/s;
-      theTrack->SetVelocity(velocity);
-      theTrack->UseGivenVelocity(true);
-      
-    }
+    theTrack->SetMomentumDirection(momentumDir);
+    theTrack->SetVelocity(velocity);
+    theTrack->UseGivenVelocity(true);
+  }
   
   return classification; 
 }

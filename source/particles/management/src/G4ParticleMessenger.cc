@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleMessenger.cc 72999 2013-08-15 08:05:14Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -94,9 +94,16 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
   findCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   //Commnad   /particle/createAllIon
-  createAllCmd = new G4UIcmdWithoutParameter("/particle/createAllIon",this);
-  createAllCmd->SetGuidance("Create All ions");
-  createAllCmd->AvailableForStates(G4State_Idle);
+  createAllIonCmd = new G4UIcmdWithoutParameter("/particle/createAllIon",this);
+  createAllIonCmd->SetGuidance("Create All ions (ground state)");
+  createAllIonCmd->AvailableForStates(G4State_Idle);
+  createAllIonCmd->SetToBeBroadcasted(false);
+
+  //Commnad   /particle/createAllIsomer
+  createAllIsomerCmd = new G4UIcmdWithoutParameter("/particle/createAllIsomer",this);
+  createAllIsomerCmd->SetGuidance("Create All isomers");
+  createAllIsomerCmd->AvailableForStates(G4State_Idle);
+  createAllIsomerCmd->SetToBeBroadcasted(false);
 
   // -- particle/property/Verbose ---
   verboseCmd = new G4UIcmdWithAnInteger("/particle/verbose",this);
@@ -122,7 +129,8 @@ G4ParticleMessenger::~G4ParticleMessenger()
   delete listCmd; 
   delete selectCmd;
   delete findCmd;
-  delete createAllCmd;
+  delete createAllIonCmd;
+  delete createAllIsomerCmd;
   delete verboseCmd;
 
   delete thisDirectory;
@@ -178,9 +186,13 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
       tmp->DumpTable();
     }
 
-  } else if( command==createAllCmd ) {
+  } else if( command==createAllIonCmd ) {
     //Commnad   /particle/createAllIon
     theParticleTable->GetIonTable()->CreateAllIon();
+
+  } else if( command==createAllIsomerCmd ) {
+    //Commnad   /particle/createAllIsomer
+    theParticleTable->GetIonTable()->CreateAllIsomer();
 
   } else if( command==verboseCmd ) {
     //Commnad   /particle/verbose
@@ -202,7 +214,7 @@ G4String G4ParticleMessenger::GetCurrentValue(G4UIcommand * command)
     }
     selectCmd->SetCandidates((const char *)(candidates));   
 
-    static G4String noName("none");
+    static const G4String noName("none");
     // current value
     if(currentParticle == 0) {
       // no particle is selected. return null 

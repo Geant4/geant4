@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeChannelTables.hh 69336 2013-04-30 20:20:23Z mkelsey $
+//
 // Factory class to return pointer to Bertini cross-section table based on
 // collision initial state (hadron type codes).
 //
@@ -33,6 +35,9 @@
 // 20110915  M. Kelsey -- Move static implementations (won't work on Windows);
 //		Add local table instantiating function (to replace self-reg)
 // 20110923  M. Kelsey -- Add optional stream& argument to printTable().
+// 20130129  M. Kelsey -- Drop load-on-demand interfaces, fill in ctor
+// 20130306  M. Kelsey -- Add inclusive printing of all tables here
+// 20130429  M. Kelsey -- Change instance to thread-local pointer.
 
 #ifndef G4_CASCADE_CHANNEL_TABLES_HH
 #define G4_CASCADE_CHANNEL_TABLES_HH
@@ -52,32 +57,22 @@ public:
   // Arguments are individual G4InuclElementaryParticle types
   static const G4CascadeChannel* GetTable(G4int had1, G4int had2);
 
-  // Convenience function for diagnostic output
+  // Convenience functions for diagnostic output
+  static void Print(std::ostream& os=G4cout);
   static void PrintTable(G4int initialState, std::ostream& os=G4cout);
 
-  // Register cross-section table for later lookup
-  static void AddTable(G4int initialState, G4CascadeChannel* table);
-
 private:
-  static G4CascadeChannelTables& instance();	// Singleton
+  static const G4CascadeChannelTables& instance();		// Singleton
+  static G4ThreadLocal G4CascadeChannelTables* theInstance;	// per thread
 
-  G4CascadeChannelTables() { tables.clear(); }	// Must initialize map
-  ~G4CascadeChannelTables() {}	// Tables are created externally, not owned
+  G4CascadeChannelTables();
+  ~G4CascadeChannelTables();
 
   // Fetch table from map if already registered, or return null
-  const G4CascadeChannel* FindTable(G4int initialState);
-
-  // Save table for specified interaction in map 
-  void SaveTable(G4int initialState, G4CascadeChannel* table);
-
-  // Special function to create and store table for specified interaction
-  const G4CascadeChannel* LoadTable(G4int initialState);
+  const G4CascadeChannel* FindTable(G4int initialState) const;
 
   typedef std::map<G4int, G4CascadeChannel*> TableMap;
-  typedef std::pair<const G4int, G4CascadeChannel*> TableEntry;
   TableMap tables;
-
-  static void DeleteTable(TableEntry& t);	// For use by destructor
 };
 
 #endif	/* G4_CASCADE_CHANNEL_TABLES_HH */

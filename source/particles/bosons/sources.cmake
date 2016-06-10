@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:47:40 bmorgan Exp $
+# $Id: sources.cmake 75122 2013-10-28 09:51:40Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -36,6 +36,9 @@ GEANT4_DEFINE_MODULE(NAME G4bosons
         G4Gamma.hh
         G4Geantino.hh
         G4OpticalPhoton.hh
+	G4PhononLong.hh
+	G4PhononTransFast.hh
+	G4PhononTransSlow.hh
         G4UnknownParticle.hh
     SOURCES
         G4BosonConstructor.cc
@@ -43,6 +46,9 @@ GEANT4_DEFINE_MODULE(NAME G4bosons
         G4Gamma.cc
         G4Geantino.cc
         G4OpticalPhoton.cc
+	G4PhononLong.cc
+	G4PhononTransFast.cc
+	G4PhononTransSlow.cc
         G4UnknownParticle.cc
     GRANULAR_DEPENDENCIES
         G4globman

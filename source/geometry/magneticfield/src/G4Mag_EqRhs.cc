@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Mag_EqRhs.cc 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //  This is the standard right-hand side for equation of motion  
 //    in a pure Magnetic Field .
@@ -53,12 +53,13 @@ G4Mag_EqRhs::G4Mag_EqRhs( G4MagneticField *magField )
 }
 
 void  
-G4Mag_EqRhs::SetChargeMomentumMass( G4double particleCharge, // e+ units
+G4Mag_EqRhs::SetChargeMomentumMass( G4ChargeState particleCharge,
 			            G4double,                // MomentumXc
                                     G4double )               // particleMass
 {
-   fCof_val = particleCharge*eplus*c_light ; //  B must be in Tesla
-   //  fCof_val = fUnitConstant*particleCharge/MomentumXc; //  B must be in Tesla
+   G4double pcharge = particleCharge.GetCharge();
+   fCof_val = pcharge*eplus*c_light ; //  B must be in Tesla
+   //  fCof_val = fUnitConstant*pcharge/MomentumXc; //  B must be in Tesla
    // fMass = particleMass;
 }
 

@@ -32,16 +32,18 @@
 // Institute in the framework of the MC-INFN Group
 //
 
-#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "HadrontherapyDetectorSD.hh"
-#include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyDetectorHit.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
 #include "HadrontherapyMatrix.hh"
+#include "HadrontherapyLet.hh"
+#include "G4Track.hh"
+#include "HadrontherapyAnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorSD::HadrontherapyDetectorSD(G4String name):
@@ -62,46 +64,80 @@ HadrontherapyDetectorSD::~HadrontherapyDetectorSD()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorSD::Initialize(G4HCofThisEvent*)
 {
+  
     HitsCollection = new HadrontherapyDetectorHitsCollection(sensitiveDetectorName,
 	    collectionName[0]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
+G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
 {
-    //The code doesn't seem to get here if we use the IAEA geometry. FIXME
-    if(!ROhist)
-	return false;
 
-    if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() != "DetectorPhys")
-	return false;
+ 
+  if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() != "RODetectorZDivisionPhys") return false;
+	
+
     // Get kinetic energy
     G4Track * theTrack = aStep  ->  GetTrack();
-    //G4double kineticEnergy =  theTrack -> GetKineticEnergy();     
+    G4double kineticEnergy =  theTrack -> GetKineticEnergy();  
 
     G4ParticleDefinition *particleDef = theTrack -> GetDefinition();
     //Get particle name  
     G4String particleName =  particleDef -> GetParticleName();  
-    // G4cout << particleDef -> GetParticleType() << '\n';  
+
+    G4int pdg = particleDef ->GetPDGEncoding();
+
     // Get unique track_id (in an event)
     G4int trackID = theTrack -> GetTrackID();
 
     G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
 
+    G4double DX = aStep -> GetStepLength();
     G4int Z = particleDef-> GetAtomicNumber();
-    //G4int A = particleDef-> GetAtomicMass();
+    G4int A = particleDef-> GetAtomicMass();
 
-    // Read voxel indexes: i is the x index, k is the z index
-    G4int k  = ROhist -> GetReplicaNumber(0);
-    G4int i  = ROhist -> GetReplicaNumber(2);
-    G4int j  = ROhist -> GetReplicaNumber(1);
+  
+ // Read voxel indexes: i is the x index, k is the z index
+ const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
+ G4int k  = touchable->GetReplicaNumber(0);
+ G4int i  = touchable->GetReplicaNumber(2);
+ G4int j  = touchable->GetReplicaNumber(1);
+
+    
 
 #ifdef G4ANALYSIS_USE_ROOT
     HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
 #endif
 
     HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+    HadrontherapyLet* let = HadrontherapyLet::GetInstance();
+    
+    
+  //  ******************** let ***************************
+     if (let)
+    {
+     if ( !(Z==0 && A==1) ) // All but not neutrons 
+    {
+	  if( energyDeposit>0. && DX >0. )
+	    {
+	      if (pdg !=22) // not gamma
+		{
+		  let -> FillEnergySpectrum(trackID, particleDef,energyDeposit, DX, i, j, k);
+		}
+	      else if (kineticEnergy > 50.*keV) // gamma cut
+		{
+		    let -> FillEnergySpectrum(trackID, particleDef,energyDeposit, DX, i , j, k);
+		}
 
+	    }
+	}
+    }
+    
+    
+    
+    //  ******************** let ***************************
+  
+    
     if (matrix)
     {
 
@@ -110,13 +146,14 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	G4int* hitTrack = matrix -> GetHitTrack(i,j,k); // hitTrack MUST BE cleared at every eventAction!
 	if ( *hitTrack != trackID )
 	{
-	    *hitTrack = trackID;
+                 *hitTrack = trackID;
 		/*
 		 * Fill FLUENCE data for every single nuclide 
 		 * Exclude e-, neutrons, gamma, ...
 		 */
-		if ( Z >= 1)      
-		    matrix -> Fill(trackID, particleDef, i, j, k, 0, true);
+		if ( Z >= 1) matrix -> Fill(trackID, particleDef, i, j, k, 0, true);
+		    
+
 #ifdef G4ANALYSIS_USE_ROOT
 /*
 	    // Fragments kinetic energy (ntuple)
@@ -162,28 +199,28 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	if(trackID != 1)
 	{
 	    if (particleName == "proton")
-		analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/CLHEP::MeV);
+		analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/MeV);
 
 	    else if (particleName == "neutron")
-		analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit/CLHEP::MeV);
+		analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit/MeV);
 
 	    else if (particleName == "alpha")
-		analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit/CLHEP::MeV);
+		analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit/MeV);
 
 	    else if (particleName == "gamma")
-		analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit/CLHEP::MeV);
+		analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit/MeV);
 
 	    else if (particleName == "e-")
-		analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit/CLHEP::MeV);
+		analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit/MeV);
 
 	    else if (particleName == "triton")
-		analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit/CLHEP::MeV);
+		analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit/MeV);
 
 	    else if (particleName == "deuteron")
-		analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/CLHEP::MeV);
+		analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/MeV);
 
 	    else if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
-		analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/CLHEP::MeV);   	
+		analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
 	}
     }
 #endif
@@ -194,6 +231,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
+ 
     static G4int HCID = -1;
     if(HCID < 0)
     { 

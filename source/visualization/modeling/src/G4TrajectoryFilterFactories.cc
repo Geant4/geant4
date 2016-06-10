@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.cc,v 1.5 2006-09-12 18:53:03 tinslay Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+/// $Id: G4TrajectoryFilterFactories.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //
 // Trajectory filter model factories creating filters

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eeToTwoGammaModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,6 +77,8 @@
 #include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -125,7 +127,7 @@ G4double G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(
   G4double bg2   = tau * (tau+2.0);
   G4double bg    = sqrt(bg2);
 
-  G4double cross = pi_rcl2*((gamma2+4*gam+1.)*log(gam+bg) - (gam+3.)*bg)
+  G4double cross = pi_rcl2*((gamma2+4*gam+1.)*G4Log(gam+bg) - (gam+3.)*bg)
                  / (bg2*(gam+1.));
   return cross;  
 }
@@ -204,7 +206,7 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4double epsil, greject;
 
     do {
-      epsil = epsilmin*pow(epsilqot,G4UniformRand());
+      epsil = epsilmin*G4Exp(G4Log(epsilqot)*G4UniformRand());
       greject = 1. - epsil + (2.*gam*epsil-1.)/(epsil*tau2*tau2);
     } while( greject < G4UniformRand() );
 

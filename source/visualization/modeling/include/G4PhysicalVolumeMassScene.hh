@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicalVolumeMassScene.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  12th September 2004
@@ -124,7 +124,6 @@ public:
   virtual void AddPrimitive (const G4Square&)     {}
   virtual void AddPrimitive (const G4Polymarker&) {}
   virtual void AddPrimitive (const G4Polyhedron&) {}
-  virtual void AddPrimitive (const G4NURBS&)      {}
 
 private:
   void AccrueMass (const G4VSolid&);

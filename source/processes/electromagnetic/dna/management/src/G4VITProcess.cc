@@ -23,20 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITProcess.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4VITProcess.cc 74551 2013-10-14 12:59:14Z gcosmo $
 //
 #include "G4VITProcess.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4IT.hh"
 
-size_t G4VITProcess::fNbProcess = 0;
+/*G4ThreadLocal*/ size_t *G4VITProcess::fNbProcess = 0;
 
 G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
     G4VProcess( name, type ),
-    fpState (0),
-    fProcessID(fNbProcess)
+    fpState (0)//,
+			  //fProcessID(fNbProcess)
 {
-        fNbProcess++;
+        if (!fNbProcess) fNbProcess = new size_t (0);
+        fProcessID = *fNbProcess;
+        (*fNbProcess)++;
         SetInstantiateProcessState(true);
         currentInteractionLength            = 0;
         theInteractionTimeLeft              = 0;
@@ -93,26 +95,3 @@ void G4VITProcess::StartTracking(G4Track* track)
     fpState = 0;
 }
 
-void G4VITProcess::SubtractNumberOfInteractionLengthLeft(
-                                  G4double previousStepSize )
-{
-  if (fpState->currentInteractionLength>0.0) {
-    fpState->theNumberOfInteractionLengthLeft -= previousStepSize/(fpState->currentInteractionLength);
-    if(fpState->theNumberOfInteractionLengthLeft<0.) {
-       fpState->theNumberOfInteractionLengthLeft=perMillion;
-    }
-
-  } else {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cerr << "G4VProcess::SubtractNumberOfInteractionLengthLeft()";
-      G4cerr << " [" << theProcessName << "]" <<G4endl;
-      G4cerr << " currentInteractionLength = " << *currentInteractionLength/cm << " [cm]";
-      G4cerr << " previousStepSize = " << previousStepSize/cm << " [cm]";
-      G4cerr << G4endl;
-    }
-#endif
-    G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
-		"Negative currentInteractionLength",EventMustBeAborted,theProcessName);
-  }
-}

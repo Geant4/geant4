@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:fDetector(DC)
+:fParticleGun(0), fDetector(DC), fGunMessenger(0)
 {
   fParticleGun  = new G4ParticleGun(1);
 

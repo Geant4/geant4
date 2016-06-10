@@ -27,7 +27,7 @@
 /// \brief Implementation of the UVA_VisAction class
 //
 //
-// $Id$
+// $Id: UVA_VisAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
 
 #include "UVA_VisAction.hh"
 
@@ -38,6 +38,8 @@
 #include "G4SubtractionSolid.hh"
 #include "G4Text.hh"
 #include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void UVA_VisAction::Draw() {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
@@ -59,3 +61,6 @@ void UVA_VisAction::Draw() {
 
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

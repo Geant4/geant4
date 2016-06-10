@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsTableHelper.hh 70369 2013-05-29 14:59:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -84,20 +84,8 @@ class G4PhysicsTableHelper
 
 
  protected:
-   static G4int verboseLevel;
+   static G4ThreadLocal G4int verboseLevel;
    // controle flag for output message
 };
-
-inline
- void  G4PhysicsTableHelper::SetVerboseLevel(G4int value)
-{
-  verboseLevel = value;
-}
-
-inline
- G4int G4PhysicsTableHelper::GetVerboseLevel()
-{
-  return verboseLevel;
-}
 
 #endif

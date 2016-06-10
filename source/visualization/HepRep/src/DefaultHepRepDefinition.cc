@@ -11,7 +11,7 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepDefinition.cc,v 1.8 2005-06-02 21:28:45 duns Exp $
+ * @version $Id: DefaultHepRepDefinition.cc 66373 2012-12-18 09:41:34Z gcosmo $
  */
 namespace cheprep {
 

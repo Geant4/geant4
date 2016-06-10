@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronicInteractionRegistry.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
 // 17-Aug-2012 V.Ivanchenko added hadronic model factories
@@ -65,7 +65,7 @@ private:
 
   G4HadronicInteractionRegistry();
 
-  static G4HadronicInteractionRegistry* theInstance;
+  static G4ThreadLocal G4HadronicInteractionRegistry* theInstance;
   
   std::vector <G4HadronicInteraction*>  allModels;
 

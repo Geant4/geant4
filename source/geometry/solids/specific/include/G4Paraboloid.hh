@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Paraboloid.hh 66356 2012-12-18 09:02:32Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -122,7 +122,6 @@ class G4Paraboloid : public G4VSolid
     void DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
     G4Polyhedron* GetPolyhedron () const;
-    G4NURBS*      CreateNURBS() const;
 
   public:  // without description
 

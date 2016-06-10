@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 77083 2013-11-21 10:35:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,9 +42,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* DET, RunAction* RA,
+SteppingAction::SteppingAction(DetectorConstruction* DET,
                                EventAction* EA)
-:fDetector(DET), fRunAction(RA), fEventAction(EA)
+:G4UserSteppingAction(),fDetector(DET), fEventAction(EA)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +58,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
      != fDetector->GetAbsorber()) return;
-
+    
  fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
    
  G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();

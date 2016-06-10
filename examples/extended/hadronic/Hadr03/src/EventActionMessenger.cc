@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/src/EventActionMessenger.cc
 /// \brief Implementation of the EventActionMessenger class
 //
-// $Id$
+// $Id: EventActionMessenger.cc 70759 2013-06-05 12:26:43Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:fEventAction(EvAct)
+:G4UImessenger(),
+ fEventAction(EvAct),fEventDir(0), fPrintCmd(0) 
 { 
   fEventDir = new G4UIdirectory("/testhadr/event/");
   fEventDir ->SetGuidance("event control");

@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
+$Id: README 74821 2013-10-22 14:40:25Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -74,10 +74,14 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
   histo 3 : total track length of charged particles in absorber per event 	
   histo 4 : total track length of charged particles in gap per event 
  
- And 1 Ntuple :
-  one row per event : EnergyAbs EnergyGap TrackLAbs TrackLGap
+ And 2 Ntuples :
+ - ntuple 1:
+   - one row per event : EnergyAbs EnergyGap
+ - ntuple 1:
+   - one row per event : TrackLAbs TrackLGap
   
- These histos are booked in HistoManager and filled from EventAction.
+ These histos and ntuples are booked in HistoManager and filled from 
+ EventAction.
  
  One can control the name of the histograms file and its format:
  default name     : AnaEx03
@@ -91,7 +95,6 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
  4- OpenScientist
  ----------------
 
- See the files README.AIDA and README.OpenScientist in A01 example 
- for more indications how to use this system to visualize and handle 
- histogram files.
+ See the files README.AIDA and README.OpenScientist for more indications 
+ how to use this system to visualize and handle histogram files.
   

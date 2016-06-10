@@ -30,13 +30,12 @@
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 //
 #include "G4NeutronHPCapture.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4NeutronHPDeExGammas.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-
-#include "G4NeutronHPManager.hh"
 
   G4NeutronHPCapture::G4NeutronHPCapture()
    :G4HadronicInteraction("NeutronHPCapture")
@@ -153,4 +152,13 @@ void G4NeutronHPCapture::addChannelForNewElement()
    }
    delete theFS;
    numEle = (G4int)G4Element::GetNumberOfElements();
+}
+
+G4int G4NeutronHPCapture::GetVerboseLevel() const
+{
+   return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+}
+void G4NeutronHPCapture::SetVerboseLevel( G4int newValue ) 
+{
+   G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
 }

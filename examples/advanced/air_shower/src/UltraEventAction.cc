@@ -36,10 +36,9 @@
 //    ****************************************************
 //
 //    Ultra EventAction class. The UltraAnalysisManager class is used for histogram
-//    filling if the G4ANALYSIS_USE environment variable is set.
+//    filling 
 //
 #include "UltraEventAction.hh"
-#include "UltraRunAction.hh"
 #include "UltraPrimaryGeneratorAction.hh"
 #include "UltraOpticalHit.hh"
 
@@ -50,14 +49,13 @@
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
 #include "G4GeneralParticleSource.hh" 
-
-#ifdef G4ANALYSIS_USE
 #include "UltraAnalysisManager.hh"
-#endif
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-UltraEventAction::UltraEventAction(UltraRunAction* run)
-  :UltraRun(run),OpticalHitsCollID(-1)
+UltraEventAction::UltraEventAction()
+  :OpticalHitsCollID(-1)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,45 +86,38 @@ void UltraEventAction::BeginOfEventAction(const G4Event* evt)
 
 void UltraEventAction::EndOfEventAction(const G4Event* evt)
 {
-
-G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-UltraOpticalHitsCollection* OpticalHitsColl = 0;
   
-if(HCE){
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  UltraOpticalHitsCollection* OpticalHitsColl = 0;
+  
+  // Fill histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  if(OpticalHitsCollID != -1) OpticalHitsColl = 
-  (UltraOpticalHitsCollection*)(HCE->GetHC(OpticalHitsCollID));
-
-}
-  G4int nOptHits = 0 ; 
-
-  if(OpticalHitsColl){
-
-    nOptHits = OpticalHitsColl->entries();
-
-#ifdef ULTRA_VERBOSE
-    if (nOptHits > 0){
-     G4cout << " Optical Hit # " << " " << "Energy (eV)" <<  " " << "x,y,z (cm)" << G4endl ;
-    }
-#endif
-
-    for(G4int iHit=0; iHit<nOptHits; iHit++){
-
-#ifdef G4ANALYSIS_USE
-      G4double HitEnergy ;
-      HitEnergy = (*OpticalHitsColl)[iHit]->GetEnergy() ;
-      UltraAnalysisManager* analysis = UltraAnalysisManager::getInstance();
-      analysis->FillHistogram(1,HitEnergy/eV);
-#endif
-
-    }
-
+  if(HCE){    
+    if(OpticalHitsCollID != -1) OpticalHitsColl = 
+      (UltraOpticalHitsCollection*)(HCE->GetHC(OpticalHitsCollID));    
   }
 
-#ifdef G4ANALYSIS_USE
-  UltraAnalysisManager* analysis = UltraAnalysisManager::getInstance();
-  analysis->FillHistogram(2,nOptHits);
+  G4int nOptHits = 0 ; 
+  
+  if(OpticalHitsColl){    
+    nOptHits = OpticalHitsColl->entries();
+    
+#ifdef ULTRA_VERBOSE
+    if (nOptHits > 0){
+      G4cout << " Optical Hit # " << " " << "Energy (eV)" <<  " " << "x,y,z (cm)" << G4endl ;
+    }
 #endif
+       
+    for(G4int iHit=0; iHit<nOptHits; iHit++){
+      G4double HitEnergy = (*OpticalHitsColl)[iHit]->GetEnergy() ;
+      man->FillH1(1,HitEnergy/eV);
+    }
+
+ }
+
+  man->FillH1(2,nOptHits);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

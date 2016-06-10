@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeSigmaPlusNChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -908,7 +908,7 @@ namespace {
       0.08, 0.10, 0.12, 0.15, 0.18, 0.21, 0.24, 0.27, 0.27, 0.27, 0.27} };
 }
 
-G4CascadeSigmaPlusNChannelData::data_t
+const G4CascadeSigmaPlusNChannelData::data_t
 G4CascadeSigmaPlusNChannelData::data(spn2bfs, spn3bfs, spn4bfs,
 				     spn5bfs, spn6bfs, spn7bfs,
 				     spnCrossSections, sp*neu, "SigmaPlusN");

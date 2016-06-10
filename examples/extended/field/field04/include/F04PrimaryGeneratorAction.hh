@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04PrimaryGeneratorAction.hh 77884 2013-11-29 08:41:11Z gcosmo $
+//
 /// \file field/field04/include/F04PrimaryGeneratorAction.hh
 /// \brief Definition of the F04PrimaryGeneratorAction class
 //
-//
+
 #ifndef F04PrimaryGeneratorAction_h
 #define F04PrimaryGeneratorAction_h 1
 
@@ -69,7 +71,7 @@ class F04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     G4String fRndmFlag;                      // flag for random impact point
 
-    static G4bool fFirst;
+    G4bool fFirst;
 
     G4AffineTransform fGlobal2local;
 

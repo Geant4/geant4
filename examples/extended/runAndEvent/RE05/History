@@ -1,0 +1,277 @@
+$Id: History 77724 2013-11-27 17:11:16Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example RE05 History file
+                    ------------------------
+                    (previously N04)
+                    
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+27-11-13 G.Folger (exampleRE05-V09-06-09)
+- remove setting number of threads from macro file
+
+25-10-13 M.Asai (exampleRE05-V09-06-08)
+- Code cleanup.
+
+27-08-13 G.Cosmo (exampleRE05-V09-06-07)
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+26-05-13 M.Asai (exampleRE05-V09-06-06)
+- Additional verbosity to HEPEvtInterface. Co-working with
+  event-V09-06-06 tag.
+
+26-05-13 M.Asai (exampleRE05-V09-06-05)
+- Pythia data now has 100 events.
+
+23-05-13 M.Asai (exampleRE05-V09-06-04)
+- Roll back to old pythia data file to see if it goes with Windows.
+
+15-05-13 M.Asai (exampleRE05-V09-06-03)
+- Migrated to parallel world that descibes the readout geometry.
+
+13-05-13 M.Asai (exampleRE05-V09-06-02)
+- Migrated to multi-thread.
+- Readout geometry is disabled, as it won't be supported by Geant4
+  version 10.
+
+10-05-13 K.Murakami  (exampleRE05-V09-06-01)
+- update pythia_main.f and data file. # of events in event data is 100.
+  increase digits for PDG code of HEPEVT.
+
+14-03-13 A.Kimura        (exampleRE05-V09-06-00)
+- fixed some member functions to virtual ones along the super classes
+
+15-02-13 I. Hrivnacova
+- Fixed GNUmakefile 
+
+15-02-13 I. Hrivnacova
+- Applied coding guidelines (data members initialization)
+
+19-12-12 I.Hrivnacova
+- /novice/N04 moved in runAndEvent as RE05
+
+29-11-11 Ben Morgan (exampleN04-V09-04-02)
+- CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
+  to build directory, plus comments and neatification.
+
+30-09-11 G.Folger        (exampleN04-V09-04-01)
+- Fix gcc46 compilation warning in ExN04DetectorConstruction.cc
+
+14-07-11 M.Asai (exampleN04-V09-04-00)
+- Optimise initialisation of Phi angles in parameterisations to avoid
+  recomputation of trigonometry.
+
+04-06-10 J.Perl (exampleN04-V09-03-01)
+- Updated vis usage
+
+04-06-10 V.Ivant (exampleN04-V09-03-00)
+- Substituted QGSP -> QGSP_BERT
+     
+30-10-09 John Allison (exampleN04-V09-02-00)
+- Introduced G4UIExecutive.
+
+07-05-08 J.Allison (exampleN04-V09-01-00)
+- Protected "/control/execute vis.mac" with G4VIS_USE flag.
+     
+02-07-07 V.Ivant (exampleN04-V09-00-00)
+
+25-06-07 mma (exampleN04-V08-03-01)
+- cosmetic in exampleN04.cc
+
+14-06-07 G.Cosmo (exampleN04-V08-03-00)
+- Delete materials and elements when quitting application.
+
+12-12-06 G.Cosmo (exampleN04-V08-01-08)
+- Commented out drawing of hits in vis.mac.
+
+06-12-06 V.Ivanchenko (exampleN04-V08-01-07)
+- GNUmakefile - remove obsolete echo
+
+23-11-06 Gunter Folger (exampleN04-V08-01-06)
+-  remove hadronic_lists.gmk
+
+17-11-06 Makoto Asai (exampleN04-V08-01-05)
+- Fix a bug in ExN04CalorimeterSD::ProcessHits() concerning about the
+  transformation vector and rotation materix of the calorimater cell
+  in the readoout geometry.
+
+15-11-06 Joseph Perl (exampleN04-V08-01-04)
+- Remove troublesome #include <map> statement from ExNo4CalorimeterHit.hh
+
+13-11-06 Joseph Perl (exampleN04-V08-01-03)
+- Change attribute name Type to HitType.
+- Add HitType attribute to all hit classes.
+- Skipped tag exampleN04-V08-02 since that tag seems to have been
+- accidentally applied many months ago.
+
+08-11-06 Gunter Folger (exampleN04-V08-01-02)
+- Adapt to moved physics lists, ie. phyisics lists are normal libraries
+  and special setup no longer needed.
+  
+06-11-06 John Allison (exampleN04-V08-01-01)
+- Add hits attributes for picking.
+- Make material world and readout world top volumes invisible.
+- Remove forcedWireframe from tracker and caloLayer.
+- Set readout geometry name.
+
+19-10-06 John Allison (exampleN04-V08-01-00)
+- Migrate to new trajectory modeling commands.
+
+16-06-06 Gabriele Cosmo (exampleN04-V08-00-01)
+- Use coherent allocation scheme for user-classes and
+  initialisation in main().
+
+15-06-06 Gabriele Cosmo (exampleN04-V08-00-00)
+- Separate instantiation of the user-stepping-verbose class from
+  initialisation of the G4VSteppingVerbose singleton.
+
+3rd December 2005  John Allison  (exampleN04-V07-01-00)
+- Replaced vis code in EndOfEventAction and EndOfRunAction by suitable
+  vis commands in vis.mac.  Prevents ERROR messages in batch mode.
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+14 Dec 2004  Sergey Sadilov (exampleN04-V06-02-03)
+- Removed bad first string in hadronics-lists.gmk
+
+Dec.13, 2004  Gabriele Cosmo (exampleN04-V06-02-02)
+- Use new phys-lists structure.
+
+Dec.03, 2004  Makoto Asai (exampleN04-V06-02-01)
+- Switch physics list to QGSP.
+
+Dec.02, 2004  Makoto Asai (exampleN04-V06-02-00)
+- Migration to <cmath>
+
+Nov.19, 2003  Makoto Asai (exampleN04-V05-02-06)
+- ExN04GeneralPhysics.cc: 
+  Remove protection of assigning decay against short-lived particle
+
+19-11-03  V.Ivanchenko (exampleN04-V05-02-05)
+- Revome extra verbose
+
+10-11-03 G.Cosmo (exampleN04-V05-02-04)
+- Removed OPACS driver from vis-manager.
+- Cleared warnings for parameterised detectors.
+
+30-10-03 G.Cosmo (exampleN04-V05-02-03)
+- Cleared compilation warnings due to new class G4Orb.
+
+24-10-03 mma (exampleN04-V05-02-02)
+- PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+06-10-03  mma (exampleN04-V05-02-01)
+- cosmetic cleanup in material definitions
+
+27-05-03  V.Ivanchenko (exampleN04-V05-02-00)
+- Include DefineMaterials() method in the constructor of DetectorConstruction
+- Clean up PhysicsLists
+
+28-05-03  G.Cosmo (exampleN04-V05-01-01)
+- Get rid of pedantic warnings ...
+
+09-05-03  G.Cosmo (exampleN04-V05-01-00)
+- Still minor correction to text in warning printed from HadronPhysics list.
+
+28-03-03  G.Cosmo (exampleN04-V05-00-02)
+- Corrected text in warning printed from HadronPhysics list.
+
+26-03-03  mma (exampleN04-V05-00-01)
+- Use G4PVPlacement and G4PVParametrised constructors in logical mother.
+      
+Feb 27, 2003  mma (exampleN04-V05-00-00)
+- added capture and fission in HadronPhysics (Hans-Peter)
+
+Jun 19, 2002  Gabriele Cosmo (exampleN04-V04-00-02)
+- Added protection for usage of G4UItcsh... in  exampleN04.cc.
+
+May 30, 2002  Makoto Asai (exampleN04-V04-00-01)
+- Fixed the size of the muon counter.
+     
+May 02, 2002  Michel Maire
+- Added tools for interactive session:
+  UItcsh, visualisation of tracks, saving random engine status.
+- Drawing of hits (in EventAction) are temporarly deactivated.  
+
+December 18, 2001  Gabriele Cosmo (exampleN04-V04-00-00)
+- ExN04PhysicsList.cc: added call to DumpCutValuesTable().
+  Reference outputs will be modified (V.Ivantchenko)
+- GNUmakefile: removed restriction for egcs compiler
+
+October 19, 2001  Steve O'Neale
+- Updated reference output
+
+March 07 2001 H.Kurashige (exampleN04-V03-00-07)
+-  Add G4MuonMinusCaptureAtRest in G4MuonPhysics 
+
+February 25 2001 S.W.O'Neale (exampleN04-V03-00-06)
+- Add exampleN04.EMtest.large_N.out reference output and remove
+  some empty "reference" .err files
+
+February 20 2001 S.W.O'Neale (exampleN04-V03-00-05)
+- Update reference outputs following materials-V03-00-04  
+
+February 9 2001 S.W.O'Neale (exampleN04-V03-00-04)
+- Update SUN CC reference outouts for test104 and test104.EMtest
+
+February 9 2001 H.Kurashige (exampleN04-V03-00-03)
+- Introduce Modular Physics List
+
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for min.delta energy cut
+- Update test outputs for small"ish" changes from em tags
+
+August 18, 2000  Michel Maire  
+- standard G4ionIonisation removed from the PhysicsList
+
+June 24, 2000  John Allison  (exampleN04-V01-01-03)
+- Updated exampleN04*.out for stand-V01-01-05 and utils-V01-01-03.
+
+June 19, 2000  John Allison  (exampleN04-V01-01-02)
+- Updated exampleN04.out for geant4-01-01-cand-07.
+
+June 17, 2000  John Allison  (exampleN04-V01-01-01)
+- Updated exampleN04*.out for geant4-01-01-ref-06.
+
+9th June 2000  Makoto Asai  (exampleN04-V01-01-00)
+- ExN04StackingAction.cc: protection against illegal value of an argument.
+
+5th June 1999  John Allison
+- GNUmakefile: Force non-optimised compliation of some files on HP with
+  aCC: HP ANSI C++ B3910B A.01.15.
+
+23th  April 1999 H.Kurashige
+- remove ConstructLeptHad, AddParameterisation inExN04PhysicsList
+
+16th April 1999 H.Kurashige
+- modify ExN04RunAction ExN04StackingAction ExN04SteppingAction ExN04TrackingAction
+- modify ExN04PhysicsList::SetCuts
+- modify ExN04PhysicsList::ConstructParticle
+
+ 
+21st November 1998  John Allison
+- Made ExN04Field compatible with G4Field.
+
+9 Oct, 1998  M.Asai
+- A bug fixed in ExN04DetectorParameterDef.icc.
+
+26th August 1998  John Allison.
+- /vis/Draw/current -> /vis/draw/current in ExN04EventAction.cc.
+
+9th August 1998  John Allison.
+- Changed G4UIterminal to G4UIGAG.
+
+April 09, 98 G. Cosmo
+
+- Created.

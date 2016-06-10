@@ -5,16 +5,16 @@ $Id$
 
 /*! \page ExampleHepMCEx01 Example HepMCEx01
 
- HepMCEx01 is based on Example N04, which has a simplified collider detector 
-geometry. Only part of the primary generator action is replaced with new one. 
+ HepMCEx01 is based on Example N04, which has a simplified collider detector
+geometry. Only part of the primary generator action is replaced with new one.
 This example demonstrates the following features.
 
 \section ExampleHepMCEx01_s1 HepMC interface
 
  ExN04PrimaryGeneratorAction has HepMCG4Interface as the generator.
-There are two types of generators provided as samples. One generator reads 
+There are two types of generators provided as samples. One generator reads
 primary information from a HepMC Ascii file (data/example_MyPythia.dat).
-The other one generates primaries directly invoking PYTHIA routines 
+The other one generates primaries directly invoking PYTHIA routines
 in every event.
 
 \section ExampleHepMCEx01_s2 Readout geometry
@@ -30,7 +30,7 @@ a readout geometry to find the phi-z cell.
 \section ExampleHepMCEx01_s3 Full set of "ordinary" physics processes
 
 FTFP_BERT physics list defines almost all of leptons and hadrons which
-Geant4 has dedicated classes for. Also almost all physics processes 
+Geant4 has dedicated classes for. Also almost all physics processes
 Geant4 has are defined.
 
 \section ExampleHepMCEx01_s4 Event filtering by the stacking mechanism.
@@ -48,10 +48,10 @@ ExN04StackingAction.
 \section ExampleHepMCEx01_s5 Installation
 
  See \ref Examples_HepMC how to build this example.
-  
+
 \section ExampleHepMCEx01_s6 Execution
 \verbatim
 % HepMCEx01 hepmc_pygen.in
-\endverbatim                
+\endverbatim
 
 */

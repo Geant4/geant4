@@ -36,55 +36,12 @@
 //    *      UltraAnalysisManager.hh
 //    ****************************************************
 //
-//    Class used for analysis procedures if the environment variable 
-//    G4ANALYSIS_USE is set. AIDA is supported.
+//    Class used for analysis procedures
 //
-#ifdef G4ANALYSIS_USE 
 #ifndef ULTRAANALYSISMANAGER_HH
-#define ULTRAANALYSISMANAGER_HH
+#define ULTRAANALYSISMANAGER_HH 1
 
-#include "globals.hh"
-#include <vector>
-#include "G4ThreeVector.hh"
-
-#ifdef G4ANALYSIS_USE
-#include "AIDA/AIDA.h"
-#endif
-
-#ifdef G4ANALYSIS_USE
-namespace AIDA{
-  class ITree;
-  class IHistogramFactory;
-  class IAnalysisFactory;
-  class ITreeFactory;
-}
-#endif
-
-class UltraAnalysisManager
-{
-private:
-  UltraAnalysisManager();
-
-public:
-
-  ~UltraAnalysisManager();
-  static UltraAnalysisManager* getInstance();
-  void book();
-  void FillHistogram(G4int i, G4double f);
-  void finish();
-
-  
-private:
-  static UltraAnalysisManager* instance;
-
-  AIDA::IAnalysisFactory*  aFact;
-  AIDA::ITree*             theTree;
-  AIDA::IHistogramFactory *histFact;
-  AIDA::ITreeFactory      *treeFact;
-  AIDA::IHistogram1D *h1;
-  AIDA::IHistogram1D *h2;
-};
-
-#endif
+//#include "g4root.hh"
+#include "g4xml.hh"
 
 #endif

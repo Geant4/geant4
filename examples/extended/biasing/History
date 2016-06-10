@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2009-11-20 17:48:26 gcosmo Exp $
+$Id: History 78124 2013-12-03 17:40:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 03, 2013 I.Hrivnacova - exbiasing-V09-06-06
+- Fixed files description (for Doxygen)
+
+Nov 29, 2013 I.Hrivnacova - exbiasing-V09-06-05
+- Fixed documentation for Doxygen,
+  added missing GNUmakefile in GB01, GB02
+
+Nov 23, 2013 A. Howard - exbiasing-V09-06-04
+- Fixed single threaded problem with B03 (double bias process)
+
+Nov 22, 2013 A. Howard - exbiasing-V09-06-03
+- Combined tag of B01, B02 and B03 with last accepted of GB01, GB02, ReverseMC01
+
+Nov 22, 2013 A. Howard - exbiasing-V09-06-02 (internal)
+- Changed README and .README to reflect B02 correctly. Added B03
+  directory. Added GB01, GB02 and B03 to CMakeLists.txt and GNUmakefile
+
+Nov 15, 2012 A. Howard - exbiasing-V09-06-01
+- Changed README and .README to reflect the B02 correctly.
 
 Nov 15, 2012 I.Hrivnacova - exbiasing-V09-05-04
 - Minor fixes in .README

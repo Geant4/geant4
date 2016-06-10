@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//    $Id: G4AntiNeutronAnnihilationAtRest.cc 66872 2013-01-15 01:25:57Z japost $
 //    G4AntiNeutronAnnihilationAtRest physics process
 //    Larry Felawka (TRIUMF), April 1998
 //---------------------------------------------------------------------
@@ -235,10 +236,10 @@ G4VParticleChange* G4AntiNeutronAnnihilationAtRest::AtRestDoIt(
 
 void G4AntiNeutronAnnihilationAtRest::GenerateSecondaries()
 {
-  static G4int index;
-  static G4int l;
-  static G4int nopt;
-  static G4int i;
+  static G4ThreadLocal G4int index;
+  static G4ThreadLocal G4int l;
+  static G4ThreadLocal G4int nopt;
+  static G4ThreadLocal G4int i;
   // DHW 15 May 2011: unused: static G4ParticleDefinition* jnd;
 
   for (i = 1; i <= MAX_SECONDARIES; ++i) {
@@ -303,10 +304,10 @@ void G4AntiNeutronAnnihilationAtRest::GenerateSecondaries()
 
 void G4AntiNeutronAnnihilationAtRest::Poisso(G4float xav, G4int *iran)
 {
-  static G4int i;
-  static G4float r, p1, p2, p3;
-  static G4int fivex;
-  static G4float rr, ran, rrr, ran1;
+  static G4ThreadLocal G4int i;
+  static G4ThreadLocal G4float r, p1, p2, p3;
+  static G4ThreadLocal G4int fivex;
+  static G4ThreadLocal G4float rr, ran, rrr, ran1;
 
   // *** GENERATION OF POISSON DISTRIBUTION ***
   // *** NVE 16-MAR-1988 CERN GENEVA ***
@@ -380,7 +381,7 @@ G4int G4AntiNeutronAnnihilationAtRest::NFac(G4int n)
 {
   G4int ret_val;
 
-  static G4int i, j;
+  static G4ThreadLocal G4int i, j;
 
   // *** NVE 16-MAR-1988 CERN GENEVA ***
   // ORIGIN : H.FESEFELDT (27-OCT-1983)
@@ -402,7 +403,7 @@ G4int G4AntiNeutronAnnihilationAtRest::NFac(G4int n)
 
 void G4AntiNeutronAnnihilationAtRest::Normal(G4float *ran)
 {
-  static G4int i;
+  static G4ThreadLocal G4int i;
 
   // *** NVE 14-APR-1988 CERN GENEVA ***
   // ORIGIN : H.FESEFELDT (27-OCT-1983)
@@ -417,24 +418,24 @@ void G4AntiNeutronAnnihilationAtRest::Normal(G4float *ran)
 
 void G4AntiNeutronAnnihilationAtRest::AntiNeutronAnnihilation(G4int *nopt)
 {
-  static G4float brr[3] = { G4float(.125),G4float(.25),G4float(.5) };
+  static G4ThreadLocal G4float brr[3] = { G4float(.125),G4float(.25),G4float(.5) };
 
   G4float r__1;
 
-  static G4int i, ii, kk;
-  static G4int nt;
-  static G4float cfa, eka;
-  static G4int ika, nbl;
-  static G4float ran, pcm;
-  static G4int isw;
-  static G4float tex;
-  static G4ParticleDefinition* ipa1;
-  static G4float ran1, ran2, ekin, tkin;
-  static G4float targ;
-  static G4ParticleDefinition* inve;
-  static G4float ekin1, ekin2, black;
-  static G4float pnrat, rmnve1, rmnve2;
-  static G4float ek, en;
+  static G4ThreadLocal G4int i, ii, kk;
+  static G4ThreadLocal G4int nt;
+  static G4ThreadLocal G4float cfa, eka;
+  static G4ThreadLocal G4int ika, nbl;
+  static G4ThreadLocal G4float ran, pcm;
+  static G4ThreadLocal G4int isw;
+  static G4ThreadLocal G4float tex;
+  static G4ThreadLocal G4ParticleDefinition* ipa1;
+  static G4ThreadLocal G4float ran1, ran2, ekin, tkin;
+  static G4ThreadLocal G4float targ;
+  static G4ThreadLocal G4ParticleDefinition* inve;
+  static G4ThreadLocal G4float ekin1, ekin2, black;
+  static G4ThreadLocal G4float pnrat, rmnve1, rmnve2;
+  static G4ThreadLocal G4float ek, en;
 
   // *** ANTI NEUTRON ANNIHILATION AT REST ***
   // *** NVE 04-MAR-1988 CERN GENEVA ***
@@ -679,9 +680,9 @@ G4double G4AntiNeutronAnnihilationAtRest::ExNu(G4float ek1)
 {
   G4float ret_val, r__1;
 
-  static G4float cfa, gfa, ran1, ran2, ekin1, atno3;
-  static G4int magic;
-  static G4float fpdiv;
+  static G4ThreadLocal G4float cfa, gfa, ran1, ran2, ekin1, atno3;
+  static G4ThreadLocal G4int magic;
+  static G4ThreadLocal G4float fpdiv;
 
   // *** NUCLEAR EVAPORATION AS FUNCTION OF ATOMIC NUMBER ATNO ***
   // *** AND KINETIC ENERGY EKIN OF PRIMARY PARTICLE ***

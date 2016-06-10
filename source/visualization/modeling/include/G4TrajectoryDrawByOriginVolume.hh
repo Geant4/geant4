@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4TrajectoryDrawByOriginVolume.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Class Description:
 // Trajectory model which colours a trajectory according to
@@ -49,8 +49,6 @@ public: // With description
   virtual ~G4TrajectoryDrawByOriginVolume();
 
   // Draw method
-  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0,
-		    const G4bool& visible = true) const;
   virtual void Draw(const G4VTrajectory& trajectory, 
 		    const G4bool& visible = true) const;
   

@@ -27,69 +27,62 @@
 /// \brief Implementation of the F03PhysicsListMessenger class
 //
 //
-// $Id$
+// $Id: F03PhysicsListMessenger.cc 76602 2013-11-13 08:33:35Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F03PhysicsListMessenger.hh"
 
 #include "F03PhysicsList.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03PhysicsListMessenger::F03PhysicsListMessenger(F03PhysicsList * List)
-:F03List(List)
+  : fF03List(List)
 {
-  cutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
-  cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
-  cutGCmd->SetParameterName("range",true);
-  cutGCmd->SetDefaultValue(1.);
-  cutGCmd->SetDefaultUnit("mm");
-  cutGCmd->AvailableForStates(G4State_Idle);
+  fCutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
+  fCutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
+  fCutGCmd->SetParameterName("range",true);
+  fCutGCmd->SetDefaultValue(1.);
+  fCutGCmd->SetDefaultUnit("mm");
+  fCutGCmd->AvailableForStates(G4State_Idle);
 
-  cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
-  cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
-  cutECmd->SetParameterName("range",true);
-  cutECmd->SetDefaultValue(1.);
-  cutECmd->SetDefaultUnit("mm");
-  cutECmd->AvailableForStates(G4State_Idle);
+  fCutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
+  fCutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
+  fCutECmd->SetParameterName("range",true);
+  fCutECmd->SetDefaultValue(1.);
+  fCutECmd->SetDefaultUnit("mm");
+  fCutECmd->AvailableForStates(G4State_Idle);
 
-  setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
-  setMaxStepCmd->SetGuidance("Set max. step length in the detector");
-  setMaxStepCmd->SetParameterName("mxStep",true);
-  setMaxStepCmd->SetDefaultUnit("mm");
-
+  fSetMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
+  fSetMaxStepCmd->SetGuidance("Set max. step length in the detector");
+  fSetMaxStepCmd->SetParameterName("mxStep",true);
+  fSetMaxStepCmd->SetDefaultUnit("mm");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03PhysicsListMessenger::~F03PhysicsListMessenger()
 {
-
-  delete setMaxStepCmd;
-
-  delete cutGCmd;
-  delete cutECmd;
-
+  delete fSetMaxStepCmd;
+  delete fCutGCmd;
+  delete fCutECmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-void F03PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F03PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 {
-  if(command == cutGCmd)
-    { F03List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
-  if(command == cutECmd)
-    { F03List->SetElectronCut(eCmd->GetNewDoubleValue(newValue));}
-  if(command == setMaxStepCmd)
-    { F03List->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
+  if(command == fCutGCmd)
+    {fF03List->SetGammaCut(fCutGCmd->GetNewDoubleValue(newValue));}
+  if(command == fCutECmd)
+    {fF03List->SetElectronCut(fCutECmd->GetNewDoubleValue(newValue));}
+  if(command == fSetMaxStepCmd)
+    {fF03List->SetMaxStep(fSetMaxStepCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

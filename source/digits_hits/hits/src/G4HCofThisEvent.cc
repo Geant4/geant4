@@ -24,20 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4HCofThisEvent.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #include "G4HCofThisEvent.hh"
 
-G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+G4ThreadLocal G4Allocator<G4HCofThisEvent> *anHCoTHAllocator_G4MT_TLS_ = 0;
 
 G4HCofThisEvent::G4HCofThisEvent()
-{
+{ if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ;
   HC = new std::vector<G4VHitsCollection*>;
 }
 
 G4HCofThisEvent::G4HCofThisEvent(G4int cap)
-{
+{ if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ;
   HC = new std::vector<G4VHitsCollection*>;
   for(G4int i=0;i<cap;i++)
   {
@@ -46,7 +46,7 @@ G4HCofThisEvent::G4HCofThisEvent(G4int cap)
 }
 
 G4HCofThisEvent::~G4HCofThisEvent()
-{
+{ if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ;
   //HC->clearAndDestroy();
   for(size_t i=0;i<HC->size();i++)
   { delete (*HC)[i]; }
@@ -55,7 +55,7 @@ G4HCofThisEvent::~G4HCofThisEvent()
 }
 
 void G4HCofThisEvent::AddHitsCollection(G4int HCID,G4VHitsCollection * aHC)
-{
+{ if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ;
   if(HCID>=0 && HCID<G4int(HC->size()))
   { (*HC)[HCID] = aHC; }
 }

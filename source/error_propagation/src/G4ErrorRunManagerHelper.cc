@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorRunManagerHelper.cc 69014 2013-04-15 09:42:51Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -44,7 +44,8 @@
 
 //-----------------------------------------------------------------------
 
-G4ErrorRunManagerHelper* G4ErrorRunManagerHelper::fRunManagerKernel = 0;
+G4ThreadLocal G4ErrorRunManagerHelper*
+G4ErrorRunManagerHelper::fRunManagerKernel = 0;
 
 //-----------------------------------------------------------------------
 G4ErrorRunManagerHelper* G4ErrorRunManagerHelper::GetRunManagerKernel()

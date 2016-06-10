@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportation.cc 64374 2012-10-31 16:37:23Z gcosmo $
+// $Id: G4ITTransportation.cc 71125 2013-06-11 15:39:09Z gcosmo $
 //
 /// \brief This class is a slightly modified version of G4Transportation
 ///        initially written by John Apostolakis and colleagues
@@ -172,8 +172,9 @@ G4ITTransportation::G4ITTransportationState::G4ITTransportationState() : G4Proce
     fEndGlobalTimeComputed = false;
     fCandidateEndGlobalTime = -1;
     fParticleIsLooping = false;
-    static G4TouchableHandle nullTouchableHandle; // Points to (G4VTouchable*) 0
-    fCurrentTouchableHandle = nullTouchableHandle;
+    static G4ThreadLocal G4TouchableHandle *nullTouchableHandle = 0;
+    if (!nullTouchableHandle) nullTouchableHandle = new  G4TouchableHandle; // Points to (G4VTouchable*) 0
+    fCurrentTouchableHandle = *nullTouchableHandle;
     fGeometryLimitedStep = false;
     fPreviousSftOrigin = G4ThreeVector(0,0,0);
     fPreviousSafety = 0.0;
@@ -613,10 +614,12 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
 
     //    G4cout << "G4ITTransportation::AlongStepDoIt" << G4endl;
     // set  pdefOpticalPhoton
-    static  G4ParticleDefinition* pdefOpticalPhoton =
-            G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+    //Andrea Dotti: the following statement should be in a single line:
+    // G4-MT transformation tools get confused if statement spans two lines
+    // If needed contact: adotti@slac.stanford.edu
+    static G4ThreadLocal  G4ParticleDefinition* pdefOpticalPhoton  = 0 ; if (!pdefOpticalPhoton) pdefOpticalPhoton= G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
 
-    static G4int noCalls=0;
+    static G4ThreadLocal G4int noCalls=0;
     noCalls++;
 
     fParticleChange.Initialize(track) ;
@@ -964,7 +967,7 @@ G4ITTransportation::StartTracking(G4Track* track)
     }
 
     // Make sure to clear the chord finders of all fields (ie managers)
-    static G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+    static G4ThreadLocal G4FieldManagerStore* fieldMgrStore = 0 ; if (!fieldMgrStore) fieldMgrStore= G4FieldManagerStore::GetInstance();
     fieldMgrStore->ClearAllChordFindersState();
 
     // Update the current touchable handle  (from the track's)

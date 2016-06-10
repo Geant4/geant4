@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4hBremsstrahlungModel.cc 74020 2013-09-19 13:38:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 #include "G4hBremsstrahlungModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
 
 using namespace std;
 
@@ -83,7 +84,7 @@ G4double G4hBremsstrahlungModel::ComputeDMicroscopicCrossSection(
   G4double rab0=delta*sqrte ;
 
   G4int iz = G4int(Z);
-  if(iz < 1) iz = 1;
+  if(iz < 1) { iz = 1; }
 
   G4double z13 = 1.0/nist->GetZ13(iz);
   G4double dn  = mass*nist->GetA27(iz)/(70.*MeV);
@@ -93,12 +94,12 @@ G4double G4hBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 
   // nucleus contribution logarithm
   G4double rab1=b*z13;
-  G4double fn=log(rab1/(dn*(electron_mass_c2+rab0*rab1))*
+  G4double fn=G4Log(rab1/(dn*(electron_mass_c2+rab0*rab1))*
               (mass+delta*(dn*sqrte-2.))) ;
   if(fn <0.) fn = 0. ;
 
   G4double x = 1.0 - v;
-  if(particle->GetPDGSpin() != 0) x += 0.75*v*v;
+  if(particle->GetPDGSpin() != 0) { x += 0.75*v*v; }
 
   dxsection = coeff*x*Z*Z*fn/gammaEnergy;
 

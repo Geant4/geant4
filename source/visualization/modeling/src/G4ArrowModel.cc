@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ArrowModel.cc 76285 2013-11-08 13:01:44Z gcosmo $
 //
 // 
 // John Allison  15th July 2012
@@ -36,13 +36,17 @@
 #include "G4VGraphicsScene.hh"
 #include "G4VisAttributes.hh"
 #include "G4Tubs.hh"
-#include "G4Polycone.hh"
+#include "G4GenericPolycone.hh"
 #include "G4Polyhedron.hh"
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 #include "G4Transform3D.hh"
 
-G4ArrowModel::~G4ArrowModel () {}
+G4ArrowModel::~G4ArrowModel ()
+{
+  delete fpHeadPolyhedron;
+  delete fpShaftPolyhedron;
+}
 
 G4ArrowModel::G4ArrowModel
 (G4double x1, G4double y1, G4double z1,
@@ -84,7 +88,7 @@ G4ArrowModel::G4ArrowModel
     r[i] *= 2.*shaftRadius;
     z[i] = halfShaftLength + z[i] * 2.*shaftRadius;
   }
-  G4Polycone head("head",0,twopi,numRZ,r,z);
+  G4GenericPolycone head("head",0,twopi,numRZ,r,z);
   fpHeadPolyhedron = head.CreatePolyhedron();
 
   // Transform to position

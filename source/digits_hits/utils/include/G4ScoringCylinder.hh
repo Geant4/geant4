@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoringCylinder.hh 68735 2013-04-05 09:49:13Z gcosmo $
 //
 
 #ifndef G4ScoringCylinder_h
@@ -46,6 +46,7 @@ class G4ScoringCylinder : public G4VScoringMesh
 
   public:
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
+
       virtual void List() const;
       virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
       virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
@@ -59,12 +60,13 @@ class G4ScoringCylinder : public G4VScoringMesh
   // get 3D index (z,phi,r) from sequential index
   void GetRZPhi(G4int index, G4int q[3]) const;
 
-private:
+//Xin Dong 09302011 for Scorers
+public:
+  //private:
   //enum IDX {IR, IZ, IPHI};
   enum IDX {IZ, IPHI, IR};
 
-  G4LogicalVolume * fMeshElementLogical;
-  
+private:  
   void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
 };
 

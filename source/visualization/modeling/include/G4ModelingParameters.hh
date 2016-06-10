@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ModelingParameters.hh 77479 2013-11-25 10:01:22Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -80,6 +80,8 @@ public: // With description
     fName(name), fCopyNo(copyNo) {}
     const G4String& GetName() const {return fName;}
     G4int GetCopyNo() const {return fCopyNo;}
+    G4bool operator!=(const PVNameCopyNo&) const;
+    G4bool operator==(const PVNameCopyNo& rhs) const {return !operator!=(rhs);}
   private:
     G4String fName;
     G4int fCopyNo;
@@ -103,6 +105,9 @@ public: // With description
       {return fSignifier;}
     const PVNameCopyNoPath& GetPVNameCopyNoPath() const
       {return fPVNameCopyNoPath;}
+    G4bool operator!=(const VisAttributesModifier&) const;
+    G4bool operator==(const VisAttributesModifier& rhs) const
+      {return !operator!=(rhs);}
   private:
     G4VisAttributes fVisAtts;
     VisAttributesSignifier fSignifier;
@@ -160,15 +165,7 @@ public: // With description
   void SetSectionSolid         (G4VSolid* pSectionSolid);
   void SetCutawaySolid         (G4VSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
-  void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>);
-
-  static G4bool PVNameCopyNoPathNotEqual
-  (const PVNameCopyNoPath&,
-   const PVNameCopyNoPath&);
-
-  static G4bool VAMSNotEqual
-  (const std::vector<VisAttributesModifier>&,
-   const std::vector<VisAttributesModifier>&);
+  void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>&);
 
   friend std::ostream& operator <<
   (std::ostream& os, const G4ModelingParameters&);

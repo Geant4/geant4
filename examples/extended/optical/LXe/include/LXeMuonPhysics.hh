@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeMuonPhysics.hh 68752 2013-04-05 10:23:47Z gcosmo $
+//
 /// \file optical/LXe/include/LXeMuonPhysics.hh
 /// \brief Definition of the LXeMuonPhysics class
 //

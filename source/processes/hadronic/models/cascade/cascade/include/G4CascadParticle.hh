@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadParticle.hh 67738 2013-03-05 05:54:30Z mkelsey $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100126  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector,
@@ -34,6 +34,9 @@
 // 20110806  M. Kelsey -- Add fill() function to replicate ctor/op=() action
 // 20110922  M. Kelsey -- Add stream argument to print(), add operator<<().
 // 20120306  M. Kelsey -- Add access for cumulative path through nucleus.
+// 20130221  M. Kelsey -- Move constructor to .cc file for parameter access.
+// 20130304  M. Kelsey -- Add index data member, for use with G4CascadeHistory,
+//		and explicit copy operations and destructor.
 
 #ifndef G4CASCAD_PARTICLE_HH
 #define G4CASCAD_PARTICLE_HH
@@ -52,21 +55,30 @@ public:
 
   G4CascadParticle(const G4InuclElementaryParticle& particle, 
 		   const G4ThreeVector& pos, G4int izone, G4double cpath,
-                   G4int gen) 
-    : verboseLevel(0), theParticle(particle), position(pos), 
-      current_zone(izone), current_path(cpath), movingIn(true),
-      reflectionCounter(0), reflected(false), generation(gen) {}
+                   G4int gen);
+
+  ~G4CascadParticle() {;}			// No subclasses allowed
+
+  // Allow copying of object data (for use with history and elsewhere)
+  // NOTE: history index IS copied (to avoid double counting)
+  G4CascadParticle(const G4CascadParticle& cpart) { *this = cpart; }
+  G4CascadParticle& operator=(const G4CascadParticle& cpart);
 
   // Analogue to operator=() to support filling vectors w/o temporaries
+  // NOTE: history index IS NOT copied (new particle is being made)
   void fill(const G4InuclElementaryParticle& particle, 
 	    const G4ThreeVector& pos, G4int izone, G4double cpath,
 	    G4int gen);
 
+  // Data accessors
   const G4InuclElementaryParticle& getParticle() const { return theParticle; }
   G4InuclElementaryParticle& getParticle() { return theParticle; }
 
   G4int getGeneration() const { return generation; }
   void setGeneration(G4int gen) { generation = gen; }
+
+  G4int getHistoryId() const { return historyId; }
+  void setHistoryId(G4int id) { historyId = id; }
 
   G4LorentzVector getMomentum() const {		// Can't return ref; temporary
     return theParticle.getMomentum(); 
@@ -117,6 +129,7 @@ private:
   G4int reflectionCounter;   
   G4bool reflected;
   G4int generation;
+  G4int historyId;
 };        
 
 // Proper stream output (just calls print())

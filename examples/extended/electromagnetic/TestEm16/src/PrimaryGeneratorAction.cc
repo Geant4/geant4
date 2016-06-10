@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 68208 2013-03-18 18:17:16Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:fDetector(DC)                                        
+:G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(DC)
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle

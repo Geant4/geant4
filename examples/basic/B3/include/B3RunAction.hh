@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B3RunAction.hh 70599 2013-06-03 11:14:56Z gcosmo $
 //
 /// \file B3RunAction.hh
 /// \brief Definition of the B3RunAction class
@@ -43,16 +43,10 @@ class B3RunAction : public G4UserRunAction
   public:
     B3RunAction();
     virtual ~B3RunAction();
-
+    
+    virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-  
-    void CountEvents() { fGoodEvents++;};
-    void SumDose(G4double dose) { fSumDose += dose;};  
-  
-  public:
-    G4int fGoodEvents;
-    G4double fSumDose;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

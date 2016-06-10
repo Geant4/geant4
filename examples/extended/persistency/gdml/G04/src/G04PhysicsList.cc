@@ -27,7 +27,7 @@
 /// \brief Implementation of the G04PhysicsList class
 //
 //
-// $Id$
+// $Id: G04PhysicsList.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 //
 
@@ -36,6 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G04PhysicsList::G04PhysicsList()
+ : G4VUserPhysicsList()
 {
 }
 

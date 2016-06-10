@@ -32,8 +32,8 @@
 // Institute in the framework of the MC-INFN Group
 //
 
-#include <CLHEP/Units/SystemOfUnits.h>
 
+#include "G4UnitsTable.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4GeometryManager.hh"
@@ -58,10 +58,14 @@
 #include "HadrontherapyDetectorMessenger.hh"
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyMatrix.hh"
+#include "HadrontherapyLet.hh"
+#include "PassiveProtonBeamLine.hh"
 #include "HadrontherapyAnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <cmath>
 
+HadrontherapyDetectorConstruction* HadrontherapyDetectorConstruction::instance = 0;
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysicalVolume* physicalTreatmentRoom)
   : motherPhys(physicalTreatmentRoom), // pointer to WORLD volume 
@@ -84,17 +88,19 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
 
   // Default detector voxels size
   // 200 slabs along the beam direction (X)
-  sizeOfVoxelAlongX = 200 *CLHEP::um; 
-  sizeOfVoxelAlongY = 4 *CLHEP::cm; 
-  sizeOfVoxelAlongZ = 4 *CLHEP::cm; 
+  sizeOfVoxelAlongX = 200 *um; 
+  sizeOfVoxelAlongY = 4 *cm; 
+  sizeOfVoxelAlongZ = 4 *cm; 
 
   // Define here the material of the water phantom and of the detector
   SetPhantomMaterial("G4_WATER"); 
   // Construct geometry (messenger commands)
-  SetDetectorSize(4.*CLHEP::cm, 4.*CLHEP::cm, 4.*CLHEP::cm);
-  SetPhantomSize(40. *CLHEP::cm, 40. *CLHEP::cm, 40. *CLHEP::cm);
-  SetPhantomPosition(G4ThreeVector(20. *CLHEP::cm, 0. *CLHEP::cm, 0. *CLHEP::cm));
-  SetDetectorToPhantomPosition(G4ThreeVector(0. *CLHEP::cm, 18. *CLHEP::cm, 18. *CLHEP::cm));
+  SetDetectorSize(4.*cm, 4.*cm, 4.*cm);
+  SetPhantomSize(40. *cm, 40. *cm, 40. *cm);
+  SetPhantomPosition(G4ThreeVector(20. *cm, 0. *cm, 0. *cm));
+  SetDetectorToPhantomPosition(G4ThreeVector(0. *cm, 18. *cm, 18. *cm));
+  SetDetectorPosition();
+//GetDetectorToWorldPosition();
 
 
   // Write virtual parameters to the real ones and check for consistency      
@@ -108,6 +114,14 @@ HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
     delete matrix;  
     delete detectorMessenger;
 }
+
+
+HadrontherapyDetectorConstruction* HadrontherapyDetectorConstruction::GetInstance()
+{
+
+	return instance;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // ConstructPhantom() is the method that reconstuct a water box (called phantom 
@@ -210,49 +224,29 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
 
-void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector(G4ThreeVector detectorToWorldPosition)
-{  
-    // Install new Sensitive Detector and ROGeometry 
-    delete detectorROGeometry; // this should be safe in C++ also if we have a NULL pointer
-    //if (detectorSD) detectorSD->PrintAll();
-    //delete detectorSD;
-    // Sensitive Detector and ReadOut geometry definition
-    G4SDManager* sensitiveDetectorManager = G4SDManager::GetSDMpointer();
+///////////////////////////////////////////////////////////////////////
 
-    static G4String sensitiveDetectorName = "Detector"; 
-    if (!detectorSD)
-	{
-	    // The sensitive detector is instantiated
-	    detectorSD = new HadrontherapyDetectorSD(sensitiveDetectorName);
-	}
-    // The Read Out Geometry is instantiated
-    static G4String ROGeometryName = "DetectorROGeometry";
-    detectorROGeometry = new HadrontherapyDetectorROGeometry(ROGeometryName,
-							    detectorToWorldPosition,
-							    detectorSizeX/2,
-							    detectorSizeY/2,
-							    detectorSizeZ/2,
-							    numberOfVoxelsAlongX,
-							    numberOfVoxelsAlongY,
-							    numberOfVoxelsAlongZ);
-
-    G4cout << "Instantiating new Read Out Geometry \"" << ROGeometryName << "\""<< G4endl;
-    // This will invoke Build() HadrontherapyDetectorROGeometry virtual method 
-    detectorROGeometry -> BuildROGeometry();
-    // Attach ROGeometry to SDetector
-    detectorSD -> SetROgeometry(detectorROGeometry);
-    //sensitiveDetectorManager -> Activate(sensitiveDetectorName, true);
-    if (!sensitiveDetectorManager -> FindSensitiveDetector(sensitiveDetectorName, false))
-	{
-	    G4cout << "Registering new DetectorSD \"" << sensitiveDetectorName << "\""<< G4endl;
-	    // Register user SD
-	    sensitiveDetectorManager -> AddNewDetector(detectorSD);
-	    // Attach SD to detector logical volume
-	    detectorLogicalVolume -> SetSensitiveDetector(detectorSD);
-	}
+void HadrontherapyDetectorConstruction::InitializeDetectorROGeometry(
+								     HadrontherapyDetectorROGeometry* RO,
+								     G4ThreeVector 
+								     detectorToWorldPosition)
+{
+  RO->Initialize(detectorToWorldPosition,
+		 detectorSizeX/2,
+		 detectorSizeY/2,
+		 detectorSizeZ/2,
+		 numberOfVoxelsAlongX,
+		 numberOfVoxelsAlongY,
+		 numberOfVoxelsAlongZ);
 }
+
+
+
+
+
+/////////////////////////////////////////////////////////
+
 void  HadrontherapyDetectorConstruction::ParametersCheck()
 {
     // Check phantom/detector sizes & relative position
@@ -347,63 +341,93 @@ void HadrontherapyDetectorConstruction::SetDetectorToPhantomPosition(G4ThreeVect
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::UpdateGeometry()
 {
-    /* 
-     * Check parameters consistency
-     */
-    ParametersCheck();
-
-    G4GeometryManager::GetInstance() -> OpenGeometry();
-    if (phantom)
+  /* 
+   * Check parameters consistency
+   */
+  ParametersCheck();
+  
+  G4GeometryManager::GetInstance() -> OpenGeometry();
+  if (phantom)
     {
-	phantom -> SetXHalfLength(phantomSizeX/2);
-	phantom -> SetYHalfLength(phantomSizeY/2);
-	phantom -> SetZHalfLength(phantomSizeZ/2);
-	phantomPhysicalVolume -> SetTranslation(phantomPosition);
+      phantom -> SetXHalfLength(phantomSizeX/2);
+      phantom -> SetYHalfLength(phantomSizeY/2);
+      phantom -> SetZHalfLength(phantomSizeZ/2);
+      phantomPhysicalVolume -> SetTranslation(phantomPosition);
     }
-    else   ConstructPhantom();
-
-    // Get the center of the detector 
-    SetDetectorPosition();
-    if (detector)
+  else   ConstructPhantom();
+  
+  // Get the center of the detector 
+  SetDetectorPosition();
+  if (detector)
     {
-	detector -> SetXHalfLength(detectorSizeX/2);
-	detector -> SetYHalfLength(detectorSizeY/2);
-	detector -> SetZHalfLength(detectorSizeZ/2);
-	detectorPhysicalVolume -> SetTranslation(detectorPosition);
+      detector -> SetXHalfLength(detectorSizeX/2);
+      detector -> SetYHalfLength(detectorSizeY/2);
+      detector -> SetZHalfLength(detectorSizeZ/2);
+      detectorPhysicalVolume -> SetTranslation(detectorPosition);
     }
-    else    ConstructDetector();
+  else    ConstructDetector();
+  
+  // Round to nearest integer number of voxel 
 
-    // Round to nearest integer number of voxel 
-    numberOfVoxelsAlongX = G4lrint(detectorSizeX / sizeOfVoxelAlongX);
-    sizeOfVoxelAlongX = ( detectorSizeX / numberOfVoxelsAlongX );
+  numberOfVoxelsAlongX = G4lrint(detectorSizeX / sizeOfVoxelAlongX);
 
-    numberOfVoxelsAlongY = G4lrint(detectorSizeY / sizeOfVoxelAlongY);
-    sizeOfVoxelAlongY = ( detectorSizeY / numberOfVoxelsAlongY );
+  sizeOfVoxelAlongX = ( detectorSizeX / numberOfVoxelsAlongX );
+  
+  numberOfVoxelsAlongY = G4lrint(detectorSizeY / sizeOfVoxelAlongY);
 
-    numberOfVoxelsAlongZ = G4lrint(detectorSizeZ / sizeOfVoxelAlongZ);
-    sizeOfVoxelAlongZ = ( detectorSizeZ / numberOfVoxelsAlongZ );
-
-    ConstructSensitiveDetector(GetDetectorToWorldPosition());
-
-    volumeOfVoxel = sizeOfVoxelAlongX * sizeOfVoxelAlongY * sizeOfVoxelAlongZ;
-    massOfVoxel = detectorMaterial -> GetDensity() * volumeOfVoxel;
-    //  This will clear the existing matrix (together with all data inside it)! 
-    matrix = HadrontherapyMatrix::GetInstance(numberOfVoxelsAlongX, 
-	    numberOfVoxelsAlongY,
-	    numberOfVoxelsAlongZ,
-	    massOfVoxel);
-
-    // Initialize analysis
+  sizeOfVoxelAlongY = ( detectorSizeY / numberOfVoxelsAlongY );
+    
+  numberOfVoxelsAlongZ = G4lrint(detectorSizeZ / sizeOfVoxelAlongZ);
+  
+  sizeOfVoxelAlongZ = ( detectorSizeZ / numberOfVoxelsAlongZ );
+  
+  PassiveProtonBeamLine *ppbl= (PassiveProtonBeamLine*) 
+  
+  G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+  
+  
+  HadrontherapyDetectorROGeometry* RO = (HadrontherapyDetectorROGeometry*) ppbl->GetParallelWorld(0);
+  
+   //Set parameters, either for the Construct() or for the UpdateROGeometry()
+  RO->Initialize(GetDetectorToWorldPosition(),
+		 detectorSizeX/2,
+		 detectorSizeY/2,
+		 detectorSizeZ/2,
+		 numberOfVoxelsAlongX,
+		 numberOfVoxelsAlongY,
+		 numberOfVoxelsAlongZ);
+  
+  //This method below has an effect only if the RO geometry is already built.
+  RO->UpdateROGeometry();
+ 
+  volumeOfVoxel = sizeOfVoxelAlongX * sizeOfVoxelAlongY * sizeOfVoxelAlongZ;
+  massOfVoxel = detectorMaterial -> GetDensity() * volumeOfVoxel;
+  //  This will clear the existing matrix (together with all data inside it)! 
+  matrix = HadrontherapyMatrix::GetInstance(numberOfVoxelsAlongX, 
+					    numberOfVoxelsAlongY,
+					    numberOfVoxelsAlongZ,
+					    massOfVoxel);
+					    
+					    
+// Comment out the line below if let calculation is not needed! 
+  // Initialize LET with energy of primaries and clear data inside       
+  if ( (let = HadrontherapyLet::GetInstance(this)) )
+    {
+      HadrontherapyLet::GetInstance() -> Initialize();
+    }					    
+					    
+  
+  // Initialize analysis
 #ifdef G4ANALYSIS_USE_ROOT
-        HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
-    analysis -> flush();     // Finalize the root file 
-    analysis -> book();
+  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
+  analysis -> flush();     // Finalize the root file 
+  analysis -> book();
 #endif
-    // Inform the kernel about the new geometry
-    G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
-
-    PrintParameters();
+  // Inform the kernel about the new geometry
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
+  G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
+  
+  PrintParameters();
 }
 
 void HadrontherapyDetectorConstruction::PrintParameters()

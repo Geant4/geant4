@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04EventAction.cc 78002 2013-12-02 08:25:49Z gcosmo $
+//
 /// \file field/field04/src/F04EventAction.cc
 /// \brief Implementation of the F04EventAction class
 //
-//
+
 #include "F04EventAction.hh"
 
 #include "F04RunAction.hh"
@@ -69,38 +71,41 @@ void F04EventAction::BeginOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4Threading.hh"
 
 void F04EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-
-   G4int n_trajectories = 0;
-
-   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-   for(G4int i=0; i<n_trajectories; i++)
-      { G4Trajectory* trj = 
-                      (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-        if (fDrawFlag == "all") trj->DrawTrajectory(50);
-        else if ((fDrawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(50);
-      }
-  }
+//  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+//
+//  if(pVVisManager)
+//  {
+//   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+//
+//   G4int n_trajectories = 0;
+//
+//   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+//   for(G4int i=0; i<n_trajectories; i++)
+//      { G4Trajectory* trj = 
+//                      (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
+//        if (fDrawFlag == "all") trj->DrawTrajectory();
+//        else if ((fDrawFlag == "charged")&&(trj->GetCharge() != 0.))
+//                               trj->DrawTrajectory();
+//      }
+//  }
 
   if (fVerboselevel>0)
      G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
 
   if (fRunaction->GetRndmFreq() == 2)
     {
-     CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");
+     std::ostringstream os;
+     os<<"endOfEvent_"<<G4Threading::G4GetThreadId()<<".rndm";
+     G4Random::saveEngineStatus(os.str().c_str());
      G4int evtNb = evt->GetEventID();
      if (evtNb%fPrintModulo == 0)
        {
         G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        CLHEP::HepRandom::showEngineStatus();
+        G4Random::showEngineStatus();
        }
     }
 }

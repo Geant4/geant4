@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F06PrimaryGeneratorAction.hh 69762 2013-05-14 08:08:54Z gcosmo $
+//
 /// \file field/field06/include/F06PrimaryGeneratorAction.hh
 /// \brief Definition of the F06PrimaryGeneratorAction class
 //
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,11 +50,11 @@ public:
   F06PrimaryGeneratorAction(void);    
   virtual ~F06PrimaryGeneratorAction();
 
-  void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
 
 private:
 
-  G4ParticleGun* particleGun;
+  G4ParticleGun* fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

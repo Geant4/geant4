@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
+$Id: History 74755 2013-10-21 11:56:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,22 @@ $Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+21.10.2013 -  L. Pandola; brachy-V09-06-02
+	      Fix bug in BrachySteppingAction.cc reported by John A. 
+              (replace = with ==). Use G4ParticleDefinition instead 
+              of string.
+
+19.09.2013 -  S. Guatelli; tag brachy-V09-06-01
+              Multithreading option introduced
+
+09.05.2013 -  S. Guatelli; tag brachy-V09-06-00
+              Modular Physics List introduced
+              Analysis class introduced using g4tools
+              GeneralParticleSource substitutes G4ParticleGun
+              Radioactive Decay introduced
+              Energy spectrum of gamma deriving from radioactive decay.
+              Now it is possible to switch among brachy sources with freedom.
 
 12.10.2012 -  L. Pandola; tag brachy-V09-05-01
 	      Added a CMakeLists.txt file

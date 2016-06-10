@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITStepProcessor2.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITStepProcessor2.cc 77292 2013-11-22 10:58:39Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -35,7 +35,6 @@
 
 #include "G4ITStepProcessor.hh"
 #include "G4LossTableManager.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4VITProcess.hh"

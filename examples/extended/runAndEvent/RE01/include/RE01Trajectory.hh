@@ -27,7 +27,7 @@
 /// \brief Definition of the RE01Trajectory class
 //
 //
-// $Id$
+// $Id: RE01Trajectory.hh 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #ifndef RE01Trajectory_h
@@ -58,7 +58,7 @@ public:
   virtual ~RE01Trajectory();
 
   virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-  virtual void DrawTrajectory(G4int i_mode =0) const;
+  virtual void DrawTrajectory() const;
   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
   virtual std::vector<G4AttValue>* CreateAttValues() const;
   virtual void AppendStep(const G4Step* aStep);
@@ -94,18 +94,18 @@ public:
 
 };
 
-extern G4Allocator<RE01Trajectory> myTrajectoryAllocator;
+extern G4ThreadLocal G4Allocator<RE01Trajectory> * myTrajectoryAllocator;
 
 inline void* RE01Trajectory::operator new(size_t)
 {
-  void* aTrajectory;
-  aTrajectory = (void*)myTrajectoryAllocator.MallocSingle();
-  return aTrajectory;
+  if(!myTrajectoryAllocator)
+    myTrajectoryAllocator = new G4Allocator<RE01Trajectory>;
+  return (void*)myTrajectoryAllocator->MallocSingle();
 }
 
 inline void RE01Trajectory::operator delete(void* aTrajectory)
 {
-  myTrajectoryAllocator.FreeSingle((RE01Trajectory*)aTrajectory);
+  myTrajectoryAllocator->FreeSingle((RE01Trajectory*)aTrajectory);
 }
 
 #endif

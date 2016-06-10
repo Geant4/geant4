@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04OpticalPhysics.cc 68751 2013-04-05 10:21:24Z gcosmo $
+//
 /// \file field/field04/src/F04OpticalPhysics.cc
 /// \brief Implementation of the F04OpticalPhysics class
 //
-//
+
 #include "globals.hh"
 
 #include "G4Scintillation.hh"
@@ -104,11 +106,11 @@ void F04OpticalPhysics::ConstructProcess()
   theScintProcess->SetScintillationExcitationRatio(0.0);
   theScintProcess->SetTrackSecondariesFirst(true);
 
-  theParticleIterator->reset();
+  aParticleIterator->reset();
 
-  while( (*theParticleIterator)() ){
+  while( (*aParticleIterator)() ){
 
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     pManager = particle->GetProcessManager();

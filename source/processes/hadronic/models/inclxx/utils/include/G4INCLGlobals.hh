@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -40,6 +38,7 @@
 #define G4INCLGlobals_hh 1
 
 #include <cmath>
+#include <string>
 #include "G4INCLParticleType.hh"
 
 namespace G4INCL {
@@ -59,6 +58,9 @@ namespace G4INCL {
     /// \brief Fermi momentum squared [(MeV/c)^2]
     const G4double PfSquared = Pf*Pf;
 
+    /// \brief Fermi momentum cubed [(MeV/c)^3]
+    const G4double PfCubed = Pf*PfSquared;
+
     /** \brief Coulomb conversion factor [MeV*fm]
      *
      * \f[ e^2/(4 pi epsilon_0) \f]
@@ -71,6 +73,7 @@ namespace G4INCL {
     const G4double twoPi = 2.0 * pi;
     const G4double tenPi = 10.0 * pi;
     const G4double piOverTwo = 0.5 * pi;
+    const G4double oneOverSqrtTwo = 1./std::sqrt((G4double)2.);
     const G4double oneOverSqrtThree = 1./std::sqrt((G4double)3.);
     const G4double oneThird = 1./3.;
     const G4double twoThirds = 2./3.;
@@ -98,16 +101,56 @@ namespace G4INCL {
       return std::pow(x, twoThirds);
     }
 
+    inline G4double aSinH(G4double x) {
+      return std::log(x + std::sqrt(x*x+1.));
+    }
+
     /**
      * A simple sign function that allows us to port fortran code to c++ more easily.
      */
-    template <typename T> inline G4int sign(T t) {
+    template <typename T> inline G4int sign(const T t) {
       return t > 0 ? 1: t < 0 ? -1 : 0;
     }
+
+    /// brief Return the largest of the two arguments
+    template <typename T> inline T max(const T t1, const T t2) {
+      return t1 > t2 ? t1 : t2;
+    }
+
+    /// brief Return the smallest of the two arguments
+    template <typename T> inline T min(const T t1, const T t2) {
+      return t1 < t2 ? t1 : t2;
+    }
+
+    /** \brief Cumulative distribution function for Gaussian
+     *
+     * A public-domain approximation taken from Abramowitz and Stegun. Applies
+     * to a Gaussian with mean=0 and sigma=1.
+     *
+     * \param x a Gaussian variable
+     */
+    G4double gaussianCDF(const G4double x);
+
+    /** \brief Generic cumulative distribution function for Gaussian
+     *
+     * A public-domain approximation taken from Abramowitz and Stegun. Applies
+     * to a generic Gaussian.
+     *
+     * \param x a Gaussian variable
+     * \param x0 mean of the Gaussian
+     * \param sigma standard deviation of the Gaussian
+     */
+    G4double gaussianCDF(const G4double x, const G4double x0, const G4double sigma);
+
   }
 
   namespace ParticleConfig {
     G4bool isPair(Particle const * const p1, Particle const * const p2, ParticleType t1, ParticleType t2);
+  }
+
+  namespace String {
+    void wrap(std::string &str, const size_t lineLength=78, const std::string &separators=" \t");
+    void replaceAll(std::string &str, const std::string &from, const std::string &to, const size_t maxPosition=std::string::npos);
   }
 }
 #endif

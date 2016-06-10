@@ -1,4 +1,4 @@
-# $Id: TestEm0.in,v 1.4 2010-03-23 09:17:42 vnivanch Exp $
+# $Id: TestEm0.in 68220 2013-03-19 15:15:02Z maire $
 #
 # Macro file for "TestEm0.cc"
 #
@@ -6,8 +6,10 @@
 /run/verbose 0
 #
 /testem/phys/addPhysics local
-###/testem/phys/addPhysics emstandard_opt0
+###/testem/phys/addPhysics emstandard_opt3
+#
 /run/initialize
+/process/eLoss/verbose 0
 #
 /testem/det/setMat Germanium
 /gun/particle gamma

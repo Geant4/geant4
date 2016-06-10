@@ -1,4 +1,4 @@
-$Id$
+$Id: README 78001 2013-12-02 08:24:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -46,9 +46,25 @@ $Id$
    
    See more on installation of the datasets in Geant4 Installation Guide,
    Chapter 3.3: Note On Geant4 Datasets:
-   http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html
- 	 
- 3- PRIMARY GENERATOR
+   http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides
+                                          /InstallationGuide/html/ch03s03.html
+ 3- ACTION INITALIZATION
+
+   A newly introduced class, B1ActionInitialization, instantiates and registers 
+   to Geant4 kernel all user action classes.
+
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B3ActionInitialization::Build() 
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+   A run action class is instantiated both thread-local 
+   and global that's why its instance is created also in the method
+      B3ActionInitialization::BuildForMaster() 
+   which is invoked only in multi-threading mode.
+    	 
+ 4- PRIMARY GENERATOR
   
    The default particle beam is an ion (F18), at rest, randomly distributed 
    within a zone inside a patient and is defined in 
@@ -56,22 +72,25 @@ $Id$
    The type of a primary particle can be changed with G4ParticleGun commands 
    (see run2.mac).
    
- 4- DETECTOR RESPONSE:  scorers
+ 5- DETECTOR RESPONSE:  scorers
 
    A 'good' event is an event in which an identical energy of 511 keV is 
    deposited in two separate Crystals. A count of the number of such events 
    corresponds to a measure of the efficiency of the PET system. 
    The total dose deposited in a patient during a run is also computed. 
    
-   Scorers are defined in DetectorConstruction::CreateScorers(). There are
+   Scorers are defined in DetectorConstruction::ConstructSDandField(). There are
    two G4MultiFunctionalDetector objects: one for the Crystal (EnergyDeposit), 
    and one for the Patient (DoseDeposit)
 	
-   EventAction::EndOfEventAction() collects informations event per event
-   from the hits collections, and accumulates statistic for 
+   B3Run::RecordEvent(), called at end of event, collects informations 
+   event per event from the hits collections, and accumulates statistic for 
    RunAction::EndOfRunAction().	
+   
+   In multi-threading mode the statistics accumulated per workers is merged 
+   to the master in Run::Merge().
    		
- 5- STACKING ACTION
+ 6- STACKING ACTION
  
    Beta decay of Fluor generates a neutrino. One wishes not to track this
    neutrino; therefore one kills it immediately, before created particles

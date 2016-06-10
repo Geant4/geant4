@@ -1,0 +1,142 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UTrd.icc
+//
+// Implementation of inline methods of UTrd
+//
+// 19.10.12 Marek Gayer
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
+
+inline
+double UTrd::GetXHalfLength1() const
+{
+  return fDx1;
+}
+
+inline
+double UTrd::GetXHalfLength2() const
+{
+  return fDx2;
+}
+
+inline
+double UTrd::GetYHalfLength1() const
+{
+  return fDy1;
+}
+
+inline
+double UTrd::GetYHalfLength2() const
+{
+  return fDy2;
+}
+
+inline
+double UTrd::GetZHalfLength() const
+{
+  return fDz;
+}
+
+inline
+void UTrd::SetXHalfLength1(double val)
+{
+  fDx1 = val;
+  fCubicVolume = 0.;
+  fSurfaceArea = 0;
+
+}
+
+inline
+void UTrd::SetXHalfLength2(double val)
+{
+  fDx2 = val;
+  fCubicVolume = 0.;
+  fSurfaceArea = 0;
+}
+
+inline
+void UTrd::SetYHalfLength1(double val)
+{
+  fDy1 = val;
+  fCubicVolume = 0.;
+  fSurfaceArea = 0;
+}
+
+inline
+void UTrd::SetYHalfLength2(double val)
+{
+  fDy2 = val;
+  fCubicVolume = 0.;
+  fSurfaceArea = 0;
+
+}
+
+inline
+void UTrd::SetZHalfLength(double val)
+{
+  fDz = val;
+  fCubicVolume = 0.;
+  fSurfaceArea = 0;
+
+}
+
+inline
+double UTrd::Capacity()
+{
+  if (fCubicVolume != 0.)
+  {
+    ;
+  }
+  else
+  {
+    fCubicVolume = 2 * fDz * ((fDx1 + fDx2) * (fDy1 + fDy2)
+                              + (fDx2 - fDx1) * (fDy2 - fDy1) / 3);
+  }
+  return fCubicVolume;
+}
+
+inline
+double UTrd::SurfaceArea()
+{
+  if (fSurfaceArea != 0.)
+  {
+    ;
+  }
+  else
+  {
+    fSurfaceArea = 4 * (fDx1 * fDy1 + fDx2 * fDy2)
+                   + 2 * ((fDy1 + fDy2) * std::sqrt(4 * fDz * fDz + (fDx2 - fDx1) * (fDx2 - fDx1))
+                          + (fDx1 + fDx2) * std::sqrt(4 * fDz * fDz + (fDy2 - fDy1) * (fDy2 - fDy1)));
+  }
+  return fSurfaceArea;
+}
+inline double UTrd::amin(int n, const double* a) const
+{
+  // Return value from array with the minimum element.
+  double xmin = a[0];
+  for (int i = 1; i < n; i++)
+  {
+    if (xmin > a[i]) xmin = a[i];
+  }
+  return xmin;
+}
+
+inline double UTrd::amax(int n, const double* a)const
+{
+  // Return value from array with the maximum element.
+  double xmax = a[0];
+  for (int i = 1; i < n; i++)
+  {
+    if (xmax < a[i]) xmax = a[i];
+  }
+  return xmax;
+}

@@ -23,12 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04ElementField.hh 77884 2013-11-29 08:41:11Z gcosmo $
+//
 /// \file field/field04/include/F04ElementField.hh
 /// \brief Definition of the F04ElementField class
 //
-//
+
 #ifndef F04ElementField_h
 #define F04ElementField_h 1
+
+class G4VPhysicalVolume;
 
 #include "globals.hh"
 
@@ -61,10 +65,11 @@ class F04ElementField
     F04ElementField(const G4ThreeVector, G4LogicalVolume*);
 
     /// the actual implementation constructs the F04ElementField
-    void Construct();
+    void Construct(G4VPhysicalVolume* currentWorld);
+    void UpdateWorld(G4VPhysicalVolume* currentWorld);
 
     ///  Destructor.
-    virtual ~F04ElementField() { if (fNavigator) delete fNavigator; }
+    virtual ~F04ElementField() {}
 
     /// SetMaxStep(G4double) sets the max. step size
     void SetMaxStep(G4double stp)
@@ -141,7 +146,7 @@ class F04ElementField
 
   private:
 
-    static G4Navigator* fNavigator;
+    static G4ThreadLocal G4Navigator* fNavigator;
 
     G4String fColor;
 

@@ -23,10 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4CascadeParameters.cc
+// $Id: G4CascadeParameters.cc 72016 2013-07-03 16:24:15Z mkelsey $
 // Encapsulate all user-configurable parameters with associated envvars
 //
 // 20120912  M. Kelsey -- Add interface to support UI commands
+// 20130304  M. Kelsey -- Add flag to collect and display cascade structure
+// 20130308  M. Kelsey -- Add flag to use separate 3-body momentum generators
+// 20130421  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's
+// 20130702  M. Kelsey -- Add flag to use N-body phase-space generator
 
 #include "G4CascadeParameters.hh"
 #include "G4CascadeParamMessenger.hh"
@@ -49,8 +53,12 @@ const G4CascadeParameters* G4CascadeParameters::Instance() {
 
 G4CascadeParameters::G4CascadeParameters()
   : G4CASCADE_VERBOSE(getenv("G4CASCADE_VERBOSE")),
+    G4CASCADE_CHECK_ECONS(getenv("G4CASCADE_CHECK_ECONS")),
     G4CASCADE_USE_PRECOMPOUND(getenv("G4CASCADE_USE_PRECOMPOUND")),
     G4CASCADE_DO_COALESCENCE(getenv("G4CASCADE_DO_COALESCENCE")),
+    G4CASCADE_SHOW_HISTORY(getenv("G4CASCADE_SHOW_HISTORY")),
+    G4CASCADE_USE_3BODYMOM(getenv("G4CASCADE_USE_3BODYMOM")),
+    G4CASCADE_USE_PHASESPACE(getenv("G4CASCADE_USE_PHASESPACE")),
     G4CASCADE_RANDOM_FILE(getenv("G4CASCADE_RANDOM_FILE")),
     G4NUCMODEL_USE_BEST(getenv("G4NUCMODEL_USE_BEST")),
     G4NUCMODEL_RAD_2PAR(getenv("G4NUCMODEL_RAD_2PAR")),
@@ -71,8 +79,12 @@ G4CascadeParameters::G4CascadeParameters()
 
 void G4CascadeParameters::Initialize() {
   VERBOSE_LEVEL = (G4CASCADE_VERBOSE ? atoi(G4CASCADE_VERBOSE) : 0);
+  CHECK_ECONS = (0!=G4CASCADE_CHECK_ECONS);
   USE_PRECOMPOUND = (0!=G4CASCADE_USE_PRECOMPOUND);
   DO_COALESCENCE = (0!=G4CASCADE_DO_COALESCENCE);
+  SHOW_HISTORY = (0!=G4CASCADE_SHOW_HISTORY);
+  USE_3BODYMOM = (0!=G4CASCADE_USE_3BODYMOM);
+  USE_PHASESPACE = (0!=G4CASCADE_USE_PHASESPACE);
   RANDOM_FILE = (G4CASCADE_RANDOM_FILE ? G4CASCADE_RANDOM_FILE : "");
   BEST_PAR = (0!=G4NUCMODEL_USE_BEST);
   TWOPARAM_RADIUS = (0!=G4NUCMODEL_RAD_2PAR);
@@ -104,10 +116,18 @@ G4CascadeParameters::~G4CascadeParameters() {
 void G4CascadeParameters::DumpConfig(std::ostream& os) const {
   if (G4CASCADE_VERBOSE)
     os << "G4CASCADE_VERBOSE = " << G4CASCADE_VERBOSE << endl;
+  if (G4CASCADE_CHECK_ECONS)
+    os << "G4CASCADE_CHECK_ECONS = " << G4CASCADE_CHECK_ECONS << endl;
   if (G4CASCADE_USE_PRECOMPOUND)
     os << "G4CASCADE_USE_PRECOMPOUND = " << G4CASCADE_USE_PRECOMPOUND << endl;
   if (G4CASCADE_DO_COALESCENCE)
     os << "G4CASCADE_DO_COALESCENCE = " << G4CASCADE_DO_COALESCENCE << endl;
+  if (G4CASCADE_SHOW_HISTORY)
+    os << "G4CASCADE_SHOW_HISTORY = " << G4CASCADE_SHOW_HISTORY << endl;
+  if (G4CASCADE_USE_3BODYMOM)
+    os << "G4CASCADE_USE_3BODYMOM = " << G4CASCADE_USE_3BODYMOM << endl;
+  if (G4CASCADE_USE_PHASESPACE)
+    os << "G4CASCADE_USE_PHASESPACE = " << G4CASCADE_USE_PHASESPACE << endl;
   if (G4CASCADE_RANDOM_FILE)
     os << "G4CASCADE_RANDOM_FILE = " << G4CASCADE_RANDOM_FILE << endl;
   if (G4NUCMODEL_USE_BEST)

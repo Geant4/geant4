@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PVParameterised.cc 73250 2013-08-22 13:22:23Z gcosmo $
 //
 // 
 // class G4PVParameterised
@@ -151,10 +151,13 @@ void  G4PVParameterised::SetRegularStructureId( G4int Code )
 // CheckOverlaps
 //
 G4bool
-G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
+G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
+                                 G4bool verbose, G4int maxErr)
 {
   if (res<=0) { return false; }
 
+  G4int trials = 0;
+  G4bool retval = false;
   G4VSolid *solidA = 0, *solidB = 0;
   G4LogicalVolume *motherLog = GetMotherLogical();
   G4VSolid *motherSolid = motherLog->GetSolid();
@@ -192,6 +195,7 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
         G4double distin = motherSolid->DistanceToIn(mp);
         if (distin > tol)
         {
+          trials++; retval = true;
           std::ostringstream message;
           message << "Overlap with mother volume !" << G4endl
                   << "         Overlap is detected for volume "
@@ -201,9 +205,15 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
                   << "          at mother local point " << mp << ", "
                   << "overlapping by at least: "
                   << G4BestUnit(distin, "Length");
+          if (trials>=maxErr)
+          {
+            message << G4endl
+                    << "NOTE: Reached maximum fixed number -" << maxErr
+                    << "- of overlaps reports for this volume !";
+          }
           G4Exception("G4PVParameterised::CheckOverlaps()",
                       "GeomVol1002", JustWarning, message);
-          return true;
+          if (trials>=maxErr)  { return true; }
         }
       }
       points.push_back(mp);
@@ -233,6 +243,7 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
           G4double distout = solidB->DistanceToOut(md);
           if (distout > tol)
           {
+            trials++; retval = true;
             std::ostringstream message;
             message << "Overlap within parameterised volumes !" << G4endl
                     << "          Overlap is detected for volume "
@@ -243,9 +254,15 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
                     << "overlapping by at least: "
                     << G4BestUnit(distout, "Length")
                     << ", related to volume instance: " << j << ".";
+            if (trials>=maxErr)
+            {
+              message << G4endl
+                      << "NOTE: Reached maximum fixed number -" << maxErr
+                      << "- of overlaps reports for this volume !";
+            }
             G4Exception("G4PVParameterised::CheckOverlaps()",
                         "GeomVol1002", JustWarning, message);
-            return true;
+            if (trials>=maxErr)  { return true; }
           }
         }
       }
@@ -256,5 +273,5 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
     G4cout << "OK! " << G4endl;
   }
 
-  return false;
+  return retval;
 }

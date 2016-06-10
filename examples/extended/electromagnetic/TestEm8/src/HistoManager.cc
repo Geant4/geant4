@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.cc 78171 2013-12-04 13:22:18Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 #include "G4LossTableManager.hh"
 #include "G4ElectronIonPair.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,6 +66,8 @@ HistoManager* HistoManager::GetPointer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::HistoManager()
+ : fHisto(0),
+   fElIonPair(0)
 {
   fNHisto      = 2;
   fVerbose     = 1;
@@ -72,8 +75,25 @@ HistoManager::HistoManager()
   fBinsE       = 100;
   fBinsCluster = 200;
 
+  // normalisation to PAI
+  fFactorALICE = 325;
+
+  // normalisation to Opt0
+  //fFactorALICE = 275;
+
+  fEvt = 0.0;
+  fTotStepGas = 0.0;
+  fTotCluster = 0.0;
+  fMeanCluster= 0.0;
+  fOverflow   = 0.0;
+
+  fTotEdep = 0.0;
+  fStepGas = 0;
+  fCluster = 0;
+
+  fHistoBooked = false;
+
   fHisto     = new Histo();
-  bookHisto();
   fElIonPair = G4LossTableManager::Instance()->ElectronIonPair();
 }
 
@@ -86,27 +106,27 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::bookHisto()
-{
-  fHisto->Add1D("10","Energy deposition in detector (keV)",
-                fBinsE,0.0,fMaxEnergy/keV,1.0);
-  fHisto->Add1D("11","Number of primary clusters",
-                fBinsCluster,-0.5,fBinsCluster-0.5,1.0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void HistoManager::BeginOfRun()
 {
   // initilise scoring
   fEvt = 0.0;
   fTotStepGas = 0.0;
   fTotCluster = 0.0;
-  fOverflow = 0.0;
+  fMeanCluster= 0.0;
+  fOverflow   = 0.0;
 
-  if(fHisto->IsActive()) { 
+  if(fHisto->IsActive() && !fHistoBooked) { 
+
+    fHisto->Add1D("10","Energy deposition in detector (keV)",
+		  fBinsE,0.0,fMaxEnergy/keV,1.0);
+    fHisto->Add1D("11","Number of primary clusters",
+		  fBinsCluster,-0.5,fBinsCluster-0.5,1.0);
+    fHisto->Add1D("12","Energy deposition in detector (ADC)",
+		  200,0.0,2000,1.0);
+
     fHisto->Activate(0, true); 
     fHisto->Activate(1, true); 
+    fHisto->Activate(2, true); 
   }
   fHisto->Book();
 
@@ -127,9 +147,10 @@ void HistoManager::EndOfRun()
   G4double norm = fEvt;
   if(fEvt > 0.0) { norm = 1.0/norm; }
 
-  fTotStepGas *= norm;
-  fTotCluster *= norm;
-  fOverflow   *= norm;
+  fTotStepGas  *= norm;
+  fTotCluster  *= norm;
+  fMeanCluster *= norm;
+  fOverflow    *= norm;
 
   G4double y1 = 0.0;
   G4double y2 = 0.0;
@@ -152,15 +173,26 @@ void HistoManager::EndOfRun()
 
   G4cout << " ================== run summary =====================" << G4endl;
   G4int prec = G4cout.precision(5);
-  G4cout << "   End of Run TotNbofEvents = " <<
-           G4int(fEvt) << G4endl ;
+  G4cout << "   End of Run TotNbofEvents    = " 
+	 << G4int(fEvt) << G4endl;
+  G4cout << "   Energy(keV) per ADC channel = " 
+	 << 1.0/(keV*fFactorALICE) << G4endl;
+  /*
+  G4double p1 = 1*GeV;
+  G4double p2 = 3*GeV;
+  G4double mass = proton_mass_c2;
+  G4cout << std::sqrt(p1*p1 + mass*mass) - mass << "   " 
+	 << std::sqrt(p2*p2 + mass*mass) - mass << G4endl; 
+  */
   G4cout << G4endl;
   G4cout << "   Mean energy deposit in absorber = " <<
            y1/keV << " +- " << y2*std::sqrt(norm)/keV << " keV; ";
   if(y1 > 0.0) { G4cout << "   RMS/Emean = " << y2/y1; }
   G4cout << G4endl;
   G4cout << "   Mean number of steps in absorber= " 
-         << fTotStepGas << ";  mean number of ion-clusters = " << fTotCluster    
+         << fTotStepGas << ";  mean number of ion-clusters = " 
+	 << fTotCluster    
+	 << " MeanCluster= " << fMeanCluster    
          << G4endl;
   G4cout << G4endl;
 
@@ -184,11 +216,15 @@ void HistoManager::EndOfRun()
     x1 += de;
   }
   G4cout.precision(prec);
+
   // normalise histograms
-  fHisto->ScaleH1(0,norm);
-  fHisto->ScaleH1(1,norm);
-  
-  fHisto->Save();
+  if(fHisto->IsActive() && !fHistoBooked) { 
+    fHisto->ScaleH1(0,norm);
+    fHisto->ScaleH1(1,norm);
+    //    fHisto->ScaleH1(2,0.05);
+    fHisto->ScaleH1(2,0.1);
+    fHisto->Save();
+  }
   G4cout << " ================== run end ==========================" << G4endl;
 }
 
@@ -217,20 +253,24 @@ void HistoManager::EndOfEvent()
   // fill histo
   fHisto->Fill(0,fTotEdep/keV,1.0);
   fHisto->Fill(1,fCluster,1.0);
+  fHisto->Fill(2,fTotEdep*fFactorALICE/keV,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::AddEnergy(G4double edep, G4Step* step)
+void HistoManager::AddEnergy(G4double edep, const G4Step* step)
 {
   if(1 < fVerbose) {
     G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
            << G4endl;
   }
   fTotEdep += edep;
-  if(step->GetTrack()->GetTrackID() == 1) { fStepGas += 1.0; }
+  if(step) {
+    if(1 == step->GetTrack()->GetTrackID()) { fStepGas += 1.0; }
 
-  fCluster += fElIonPair->SampleNumberOfIonsAlongStep(step);
+    fMeanCluster += fElIonPair->MeanNumberOfIonsAlongStep(step);
+    fCluster += fElIonPair->SampleNumberOfIonsAlongStep(step);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

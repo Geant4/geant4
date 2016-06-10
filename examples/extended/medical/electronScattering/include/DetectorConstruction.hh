@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.hh 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetMaterialScatter (G4String);
      void SetThicknessScatter(G4double);
 
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
 

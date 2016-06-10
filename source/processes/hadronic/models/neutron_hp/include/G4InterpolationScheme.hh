@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4InterpolationScheme_h
 #define G4InterpolationScheme_h 1

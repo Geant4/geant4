@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/particleGun/include/SteppingVerbose.hh
+/// \file radioactivedecay/rdecay01/include/SteppingVerbose.hh
 /// \brief Definition of the SteppingVerbose class
 //
 //
-// $Id$
+// $Id: SteppingVerbose.hh 71030 2013-06-10 09:07:23Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingVerbose_h
 #define SteppingVerbose_h 1
@@ -45,10 +45,9 @@ public:
 
   SteppingVerbose();
  ~SteppingVerbose();
-
-  void StepInfo();
-  void TrackingStarted();
-
+ 
+  virtual void TrackingStarted();
+  virtual void StepInfo();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

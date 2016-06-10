@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -48,6 +46,10 @@
  */
 
 #include "G4INCLINuclearPotential.hh"
+#include "G4INCLNuclearPotentialEnergyIsospinSmooth.hh"
+#include "G4INCLNuclearPotentialEnergyIsospin.hh"
+#include "G4INCLNuclearPotentialIsospin.hh"
+#include "G4INCLNuclearPotentialConstant.hh"
 
 namespace G4INCL {
 
@@ -55,6 +57,55 @@ namespace G4INCL {
 
     const G4double INuclearPotential::vPionDefault = 30.6; // MeV
 
-  }
-}
+    namespace {
+
+      G4ThreadLocal std::map<long,INuclearPotential const *> *nuclearPotentialCache = NULL;
+
+    }
+
+    INuclearPotential const *createPotential(const PotentialType type, const G4int theA, const G4int theZ, const G4bool pionPotential) {
+      if(!nuclearPotentialCache)
+        nuclearPotentialCache = new std::map<long,INuclearPotential const *>;
+
+      const long nuclideID = (pionPotential ? 1 : -1) * (1000*theZ + theA + 1000000*type); // MCNP-style nuclide IDs
+      const std::map<long,INuclearPotential const *>::const_iterator mapEntry = nuclearPotentialCache->find(nuclideID);
+      if(mapEntry == nuclearPotentialCache->end()) {
+        INuclearPotential const *thePotential = NULL;
+        switch(type) {
+          case IsospinEnergySmoothPotential:
+            thePotential = new NuclearPotentialEnergyIsospinSmooth(theA, theZ, pionPotential);
+            break;
+          case IsospinEnergyPotential:
+            thePotential = new NuclearPotentialEnergyIsospin(theA, theZ, pionPotential);
+            break;
+          case IsospinPotential:
+            thePotential = new NuclearPotentialIsospin(theA, theZ, pionPotential);
+            break;
+          case ConstantPotential:
+            thePotential = new NuclearPotentialConstant(theA, theZ, pionPotential);
+            break;
+          default:
+            INCL_FATAL("Unrecognized potential type at Nucleus creation." << std::endl);
+            break;
+        }
+        (*nuclearPotentialCache)[nuclideID] = thePotential;
+        return thePotential;
+      } else {
+        return mapEntry->second;
+      }
+    }
+
+    void clearCache() {
+      if(nuclearPotentialCache) {
+        for(std::map<long,INuclearPotential const *>::const_iterator i = nuclearPotentialCache->begin(), e=nuclearPotentialCache->end(); i!=e; ++i)
+          delete i->second;
+        nuclearPotentialCache->clear();
+        delete nuclearPotentialCache;
+        nuclearPotentialCache = NULL;
+      }
+    }
+
+  } // namespace NuclearPotential
+
+} // namespace G4INCL
 

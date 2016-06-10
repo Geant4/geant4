@@ -26,10 +26,10 @@
 /// \file medical/fanoCavity2/fanoCavity2.cc
 /// \brief Main program of the medical/fanoCavity2 example
 //
-// $Id$
-// 
+// $Id: fanoCavity2.cc 72961 2013-08-14 14:35:56Z gcosmo $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -44,7 +44,6 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -60,10 +59,10 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
+ 
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
+
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -71,61 +70,58 @@ int main(int argc,char** argv) {
   DetectorConstruction* det;
   PhysicsList* phys;
   PrimaryGeneratorAction* kin;
-  HistoManager* histo   = new HistoManager();
-     
+
   runManager->SetUserInitialization(det  = new DetectorConstruction);
-  runManager->SetUserInitialization(phys = new PhysicsList(det));
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det,histo));
-    
-  //set user action classes  
-  RunAction* run        = new RunAction(det,kin,histo);
-  EventAction* event    = new EventAction(run,histo);
-  TrackingAction* track = new TrackingAction(run,histo);      
-  SteppingAction* step  = new SteppingAction(det,run,event,track,histo);
-  
-  runManager->SetUserAction(run); 
+  runManager->SetUserInitialization(phys = new PhysicsList());
+  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
+
+  //set user action classes
+  RunAction* run        = new RunAction(det,kin);
+  EventAction* event    = new EventAction(run);
+  TrackingAction* track = new TrackingAction(run);
+  SteppingAction* step  = new SteppingAction(det,run,track);
+
+  runManager->SetUserAction(run);
   runManager->SetUserAction(event);
   runManager->SetUserAction(track);      
   runManager->SetUserAction(step);
 
-  //get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
 #ifdef G4VIS_USE
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
 #endif
 
-  if (argc!=1)   // batch mode  
+  if (argc!=1)   // batch mode
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UImanager->ApplyCommand(command+fileName);
     }
-    
+ 
   else           // interactive mode :define visualization and UI terminal
-    { 
+    {
 #ifdef G4UI_USE
      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-     UImanager->ApplyCommand("/control/execute vis.mac");     
+     UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
      ui->SessionStart();
      delete ui;
-#endif     
+#endif
 
 #ifdef G4VIS_USE
      delete visManager;
-#endif     
+#endif
     }
-
 
   //job termination
   //
-  delete histo;
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

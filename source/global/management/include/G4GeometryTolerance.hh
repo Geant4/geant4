@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GeometryTolerance.hh 70333 2013-05-29 08:56:45Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file 
@@ -83,7 +83,7 @@ class G4GeometryTolerance
 
   private:
 
-    static G4GeometryTolerance* fInstance;
+    static G4GeometryTolerance* fpInstance;
     static G4double fCarTolerance;
     static G4double fAngTolerance;
     static G4double fRadTolerance;

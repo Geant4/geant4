@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ICRU73QOModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,8 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4AntiProton.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -133,7 +135,8 @@ G4double G4ICRU73QOModel::ComputeCrossSectionPerElectron(
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy 
+      - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
     cross *= CLHEP::twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -192,7 +195,7 @@ G4double G4ICRU73QOModel::ComputeDEDXPerVolume(const G4Material* material,
     G4double beta2 = bg2/(gam*gam);
     G4double x     = cutEnergy/tmax;
 
-    dedx += chargeSquare*( log(x) + (1.0 - x)*beta2 ) * twopi_mc2_rcl2
+    dedx += chargeSquare*( G4Log(x) + (1.0 - x)*beta2 ) * twopi_mc2_rcl2
           * material->GetElectronDensity()/beta2;
   }
   if(dedx < 0.0) { dedx = 0.0; }
@@ -279,10 +282,12 @@ G4double G4ICRU73QOModel::GetOscillatorEnergy(G4int Z,
  
   G4double PlasmaEnergy2 = PlasmaEnergy * PlasmaEnergy;
 
-  G4double plasmonTerm = 0.66667 * G4AtomicShells::GetNumberOfElectrons(Z,nbOfTheShell)  
+  G4double plasmonTerm = 0.66667 
+    * G4AtomicShells::GetNumberOfElectrons(Z,nbOfTheShell)  
     * PlasmaEnergy2 / (Z*Z) ; 
 
-  G4double ionTerm = std::exp(0.5) * (G4AtomicShells::GetBindingEnergy(Z,nbOfTheShell)) ;
+  G4double ionTerm = G4Exp(0.5) * 
+    (G4AtomicShells::GetBindingEnergy(Z,nbOfTheShell)) ;
   G4double ionTerm2 = ionTerm*ionTerm ;
    
   G4double oscShellEnergy = std::sqrt( ionTerm2 + plasmonTerm );

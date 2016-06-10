@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysicsMessenger.cc
 /// \brief Implementation of the G4MonopolePhysicsMessenger class
 //
-// $Id$
+// $Id: G4MonopolePhysicsMessenger.cc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
 //
@@ -46,7 +46,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopolePhysicsMessenger::G4MonopolePhysicsMessenger(G4MonopolePhysics* p)
-  : fPhys(p) 
+  : G4UImessenger(),
+    fPhys(p), 
+    fPhysicsDir(0),    
+    fPhysicsCmd(0),
+    fMCmd(0),
+    fZCmd(0),
+    fMassCmd(0)
 {
   fPhysicsDir = new G4UIdirectory("/monopole/");
   fPhysicsDir->SetGuidance("histograms control");

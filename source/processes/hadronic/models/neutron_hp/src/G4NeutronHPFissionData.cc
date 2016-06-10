@@ -34,10 +34,12 @@
 // 100729 Add safty for 0 lenght cross sections by T. Koi
 
 #include "G4NeutronHPFissionData.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
+#include "G4NeutronHPManager.hh"
 
 G4NeutronHPFissionData::G4NeutronHPFissionData()
 :G4VCrossSectionDataSet("NeutronHPFissionXS")
@@ -51,7 +53,7 @@ G4NeutronHPFissionData::G4NeutronHPFissionData()
    material_cache = NULL;
 
    theCrossSections = 0;
-   BuildPhysicsTable(*G4Neutron::Neutron());
+   //BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4NeutronHPFissionData::~G4NeutronHPFissionData()
@@ -114,7 +116,7 @@ void G4NeutronHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 
   // make a PhysicsVector for each element
 
-  static const G4ElementTable *theElementTable = G4Element::GetElementTable();
+  static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
   for( size_t i=0; i<numberOfElements; ++i )
   {
     G4PhysicsVector* physVec = G4NeutronHPData::
@@ -145,7 +147,7 @@ void G4NeutronHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
    G4cout << G4endl;
 
    size_t numberOfElements = G4Element::GetNumberOfElements();
-   static const G4ElementTable *theElementTable = G4Element::GetElementTable();
+   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
 
    for ( size_t i = 0 ; i < numberOfElements ; ++i )
    {
@@ -236,4 +238,13 @@ if ( ( ( *theCrossSections )( index ) )->GetVectorLength() == 0 ) return result;
   }
   result /= counter;
   return result;
+}
+
+G4int G4NeutronHPFissionData::GetVerboseLevel() const 
+{
+   return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+}
+void G4NeutronHPFissionData::SetVerboseLevel( G4int newValue ) 
+{
+   G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
 }

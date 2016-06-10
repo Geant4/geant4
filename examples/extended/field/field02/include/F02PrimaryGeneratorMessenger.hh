@@ -26,34 +26,34 @@
 /// \file field/field02/include/F02PrimaryGeneratorMessenger.hh
 /// \brief Definition of the F02PrimaryGeneratorMessenger class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F02PrimaryGeneratorMessenger.hh 76247 2013-11-08 11:18:52Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02PrimaryGeneratorMessenger_h
 #define F02PrimaryGeneratorMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
 
 class F02PrimaryGeneratorAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
     F02PrimaryGeneratorMessenger(F02PrimaryGeneratorAction*);
-    ~F02PrimaryGeneratorMessenger();
+    virtual ~F02PrimaryGeneratorMessenger();
     
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-    F02PrimaryGeneratorAction* fAction; 
+    F02PrimaryGeneratorAction* fAction;
     G4UIcmdWithAString*        fRndmCmd;
     G4UIcmdWithADoubleAndUnit* fSetXVertexCmd;
     G4UIcmdWithADoubleAndUnit* fSetYVertexCmd;
@@ -61,4 +61,3 @@ class F02PrimaryGeneratorMessenger: public G4UImessenger
 };
 
 #endif
-

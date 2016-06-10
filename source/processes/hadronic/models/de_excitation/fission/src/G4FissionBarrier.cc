@@ -23,20 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4FissionBarrier.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
 // 17.11.2010 V.Ivanchenko cleanup and add usage of G4Pow
+// 21.03.2013 V.Ivanchenko redesign parameters classes
 
 #include "G4FissionBarrier.hh"
+#include "G4ShellCorrection.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 
 G4FissionBarrier::G4FissionBarrier()
-{}
+{
+  SPtr = 
+    G4ShellCorrection::GetInstance()->GetCameronShellPlusPairingCorrections();
+}
 
 G4FissionBarrier::~G4FissionBarrier()
 {}
@@ -57,10 +61,10 @@ G4FissionBarrier::BarashenkovFissionBarrier(G4int A, G4int Z)
 {
   // Liquid drop model parameters for
   // surface energy of a spherical nucleus
-  const G4double aSurf = 17.9439*MeV;
+  static const G4double aSurf = 17.9439*MeV;
   // and coulomb energy
-  const G4double aCoul = 0.7053*MeV;
-  const G4double k = 1.7826;
+  static const G4double aCoul = 0.7053*MeV;
+  static const G4double k = 1.7826;
   G4int N = A - Z;
 
   // fissibility parameter

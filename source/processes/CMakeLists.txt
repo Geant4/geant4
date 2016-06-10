@@ -8,8 +8,9 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.3 2010-11-23 13:29:25 gcosmo Exp $
+# $Id: CMakeLists.txt 76305 2013-11-08 13:38:31Z gcosmo $
 #
+# 20130225  M. Kelsey -- Remove cascade/evaporation, cascade/utils
 #------------------------------------------------------------------------------
 
 # Add allocation export symbol for the EM category
@@ -25,6 +26,7 @@ add_subdirectory(electromagnetic)
 add_subdirectory(hadronic)
 add_subdirectory(management)
 add_subdirectory(optical)
+add_subdirectory(phonon)
 add_subdirectory(parameterisation)
 add_subdirectory(scoring)
 add_subdirectory(transportation)
@@ -33,7 +35,9 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
     include(Geant4MacroLibraryTargets)
     GEANT4_GLOBAL_LIBRARY_TARGET(NAME G4processes
         COMPONENTS
-            biasing/sources.cmake
+            biasing/management/sources.cmake
+            biasing/generic/sources.cmake
+            biasing/importance/sources.cmake
             cuts/sources.cmake
             decay/sources.cmake
             electromagnetic/adjoint/sources.cmake
@@ -53,16 +57,10 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             electromagnetic/xrays/sources.cmake
             hadronic/cross_sections/sources.cmake
             hadronic/management/sources.cmake
+            hadronic/models/abla/sources.cmake
             hadronic/models/abrasion/sources.cmake
             hadronic/models/binary_cascade/sources.cmake
             hadronic/models/cascade/cascade/sources.cmake
-            hadronic/models/cascade/evaporation/sources.cmake
-            hadronic/models/cascade/utils/sources.cmake
-            hadronic/models/chiral_inv_phase_space/body/sources.cmake
-            hadronic/models/chiral_inv_phase_space/cross_sections/sources.cmake
-            hadronic/models/chiral_inv_phase_space/fragmentation/sources.cmake
-            hadronic/models/chiral_inv_phase_space/interface/sources.cmake
-            hadronic/models/chiral_inv_phase_space/processes/sources.cmake
             hadronic/models/coherent_elastic/sources.cmake
             hadronic/models/de_excitation/ablation/sources.cmake
             hadronic/models/de_excitation/evaporation/sources.cmake
@@ -75,16 +73,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/de_excitation/photon_evaporation/sources.cmake
             hadronic/models/de_excitation/util/sources.cmake
             hadronic/models/em_dissociation/sources.cmake
-            hadronic/models/high_energy/sources.cmake
+            hadronic/models/fission/sources.cmake
             hadronic/models/im_r_matrix/sources.cmake
             hadronic/models/inclxx/utils/sources.cmake
             hadronic/models/inclxx/incl_physics/sources.cmake
             hadronic/models/inclxx/interface/sources.cmake
-            hadronic/models/isotope_production/sources.cmake
             hadronic/models/lend/sources.cmake
             hadronic/models/lepto_nuclear/sources.cmake
-            hadronic/models/lll_fission/sources.cmake
-            hadronic/models/low_energy/sources.cmake
             hadronic/models/management/sources.cmake
             hadronic/models/neutron_hp/sources.cmake
             hadronic/models/parton_string/diffraction/sources.cmake
@@ -103,6 +98,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/util/sources.cmake
             management/sources.cmake
             optical/sources.cmake
+	    phonon/sources.cmake
             parameterisation/sources.cmake
             scoring/sources.cmake
             transportation/sources.cmake

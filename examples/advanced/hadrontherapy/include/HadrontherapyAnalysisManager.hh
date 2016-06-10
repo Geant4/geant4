@@ -154,9 +154,9 @@ public:
   void FillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ);
   ///< Energy ntuple
 	
-  void FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letT, G4double letD);
+ // void FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letT, G4double letD);
   ///< let ntuple
-
+  void FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letD);
   void genericIonInformation(G4int, G4double, G4int, G4double);
 	
   void ThintargetBeamDisp(G4double,G4double);

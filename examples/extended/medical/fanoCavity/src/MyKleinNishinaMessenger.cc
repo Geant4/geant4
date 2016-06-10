@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/MyKleinNishinaMessenger.cc
 /// \brief Implementation of the MyKleinNishinaMessenger class
 //
-// $Id$
+// $Id: MyKleinNishinaMessenger.cc 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MyKleinNishinaMessenger::MyKleinNishinaMessenger(MyKleinNishinaCompton* pPhys)
-:fKleinNishina(pPhys)
+:fKleinNishina(pPhys), fCsFactor(0)
 {  
   fCsFactor = new G4UIcmdWithADouble("/testem/phys/crossSectionFactor",this);
   fCsFactor->SetGuidance("multiply Compton cross section");

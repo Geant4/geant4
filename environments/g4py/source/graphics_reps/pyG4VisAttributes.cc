@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VisAttributes.cc,v 1.5 2010-12-02 08:23:49 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VisAttributes.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VisAttributes.cc
 //
@@ -42,24 +41,24 @@ using namespace boost::python;
 namespace pyG4VisAttributes {
 
 // SetColor()
-void(G4VisAttributes::*f1_SetColor)(const G4Color&)= 
+void(G4VisAttributes::*f1_SetColor)(const G4Color&)=
   &G4VisAttributes::SetColor;
 
-void(G4VisAttributes::*f2_SetColor)(G4double, G4double, G4double, G4double)= 
+void(G4VisAttributes::*f2_SetColor)(G4double, G4double, G4double, G4double)=
   &G4VisAttributes::SetColor;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetColor, SetColor, 3, 4);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetColor, SetColor, 3, 4)
 
 // SetColour()
-void(G4VisAttributes::*f1_SetColour)(const G4Colour&)= 
+void(G4VisAttributes::*f1_SetColour)(const G4Colour&)=
   &G4VisAttributes::SetColour;
 
-void(G4VisAttributes::*f2_SetColour)(G4double, G4double, G4double, G4double)= 
+void(G4VisAttributes::*f2_SetColour)(G4double, G4double, G4double, G4double)=
   &G4VisAttributes::SetColour;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetColour, SetColour, 3, 4);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetColour, SetColour, 3, 4)
 
-};
+}
 
 using namespace pyG4VisAttributes;
 
@@ -68,7 +67,7 @@ using namespace pyG4VisAttributes;
 // ====================================================================
 void export_G4VisAttributes()
 {
-  scope in_G4VisAttributes= 
+  scope in_G4VisAttributes=
     class_<G4VisAttributes, G4VisAttributes*>
     ("G4VisAttributes", "visualization attributes")
     // constructors
@@ -79,7 +78,7 @@ void export_G4VisAttributes()
     .def_readonly("Invisible",     &G4VisAttributes::Invisible)
     .def("GetInvisible",           &G4VisAttributes::GetInvisible,
 	 return_value_policy<reference_existing_object>())
-    .staticmethod("GetInvisible")    
+    .staticmethod("GetInvisible")
     .def("IsVisible",              &G4VisAttributes::IsVisible)
     .def("IsDaughtersInvisible",   &G4VisAttributes::IsDaughtersInvisible)
     // ---

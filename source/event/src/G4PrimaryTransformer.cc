@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PrimaryTransformer.cc 72252 2013-07-12 09:04:11Z gcosmo $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -41,7 +41,10 @@
 #include "Randomize.hh"
 
 G4PrimaryTransformer::G4PrimaryTransformer()
-:verboseLevel(0),trackID(0),unknown(0),unknownParticleDefined(false)
+:verboseLevel(0),trackID(0),
+ unknown(0),unknownParticleDefined(false),
+ opticalphoton(0),opticalphotonDefined(false),
+ nWarn(0)
 {
   particleTable = G4ParticleTable::GetParticleTable();
   CheckUnknown();
@@ -57,6 +60,11 @@ void G4PrimaryTransformer::CheckUnknown()
   { unknownParticleDefined = true; }
   else
   { unknownParticleDefined = false; }
+  opticalphoton = particleTable->FindParticle("opticalphoton");
+  if(opticalphoton) 
+  { opticalphotonDefined = true; }
+  else
+  { opticalphotonDefined = false; }
 }
     
 G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent,G4int trackIDCounter)
@@ -108,10 +116,6 @@ void G4PrimaryTransformer::GenerateSingleTrack
      (G4PrimaryParticle* primaryParticle,
       G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
 {
-  static G4ParticleDefinition* optPhoton = 0;
-  static G4int nWarn = 0;
-  if(!optPhoton) optPhoton = particleTable->FindParticle("opticalphoton");
-
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);
   if(!IsGoodForTrack(partDef))
   // The particle cannot be converted to G4Track, check daughters
@@ -147,7 +151,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
       new G4DynamicParticle(partDef,
 			    primaryParticle->GetMomentumDirection(),
 			    primaryParticle->GetKineticEnergy());
-    if(partDef==optPhoton && primaryParticle->GetPolarization().mag2()==0.)
+    if(opticalphotonDefined && partDef==opticalphoton && primaryParticle->GetPolarization().mag2()==0.)
     {
       if(nWarn<10)
       {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4dEventAction.hh 75215 2013-10-29 16:07:06Z gcosmo $
 //
 /// \file B4dEventAction.hh
 /// \brief Definition of the B4dEventAction class
@@ -36,18 +36,11 @@
 #include "G4THitsMap.hh"
 #include "globals.hh"
 
-class G4GenericMessenger;
-
 /// Event action class
 ///
 /// In EndOfEventAction(), it prints the accumulated quantities of the energy 
 /// deposit and track lengths of charged particles in Absober and Gap layers 
 /// stored in the hits collections.
-///
-/// The data member fPrintModulo defines the frequency of printing
-/// the accumulated quantities. Its value can be changed via a command
-/// defined using G4GenericMessenger class:
-/// - /B4/event/setPrintModulo value
 
 class B4dEventAction : public G4UserEventAction
 {
@@ -57,28 +50,21 @@ public:
 
   virtual void  BeginOfEventAction(const G4Event* event);
   virtual void    EndOfEventAction(const G4Event* event);
-                     
-  // set methods
-  void SetPrintModulo(G4int value);
     
 private:
   // methods
-  G4THitsMap<G4double>* GetHitsCollection(const G4String& hcName,
+  G4THitsMap<G4double>* GetHitsCollection(G4int hcID,
                                           const G4Event* event) const;
   G4double GetSum(G4THitsMap<G4double>* hitsMap) const;
   void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength,
                             G4double gapEdep, G4double gapTrackLength) const;
   
   // data members                   
-  G4GenericMessenger*  fMessenger;
-  G4int  fPrintModulo;
+  G4int  fAbsoEdepHCID;
+  G4int  fGapEdepHCID;
+  G4int  fAbsoTrackLengthHCID;
+  G4int  fGapTrackLengthHCID;
 };
-
-// inline functions
-
-inline void B4dEventAction::SetPrintModulo(G4int value) {
-  fPrintModulo = value;
-}
                      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -28,7 +28,7 @@
 //
 
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68165 2013-03-15 21:10:27Z maire $
 //
 // 
 
@@ -55,7 +55,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fBox(0),fBoxSize(0),fMaterial(0),fDetectorMessenger(0)
+:G4VUserDetectorConstruction(),
+ fBox(0),fBoxSize(0),fMaterial(0),fDetectorMessenger(0)
 {
   fBoxSize = 1*mm;
   DefineMaterials();
@@ -141,8 +142,24 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("ams", density= 7.409*g/cm3, ncomponents=3);
   ams->AddElement(Pb, fractionmass = 94.81*perCent);
   ams->AddElement(C , fractionmass =  4.79*perCent);
-  ams->AddElement(H , fractionmass =  0.40*perCent);    
-    
+  ams->AddElement(H , fractionmass =  0.40*perCent);
+  
+  G4Material* argonGas =   
+  new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
+                 kStateGas, 273.15*kelvin, 1*atmosphere);
+		       
+ G4Material* butane =
+ new G4Material("Isobutane",density= 2.42*mg/cm3, ncomponents=2,
+                 kStateGas,273.15*kelvin, 1*atmosphere);
+ butane->AddElement(C, natoms=4);
+ butane->AddElement(H, natoms=10);
+ 
+ G4Material* ArButane =
+ new G4Material("ArgonButane", density= 1.835*mg/cm3, ncomponents=2,
+                 kStateGas,273.15*kelvin,1.*atmosphere);
+ ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
+ ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
+     
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

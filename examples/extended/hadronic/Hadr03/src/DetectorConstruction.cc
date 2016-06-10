@@ -26,11 +26,8 @@
 /// \file hadronic/Hadr03/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-
+// $Id: DetectorConstruction.cc 77251 2013-11-22 10:06:41Z gcosmo $
 //
-// $Id$
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,10 +50,16 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4RunManager.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fPBox(0), fLBox(0), fMaterial(0), fMagField(0)
+:G4VUserDetectorConstruction(),
+ fPBox(0), fLBox(0), fMaterial(0), fMagField(0), fDetectorMessenger(0)
 {
   fBoxSize = 10*m;
   DefineMaterials();
@@ -82,16 +85,7 @@ void DetectorConstruction::DefineMaterials()
 {
  // define a Material from isotopes
  //
- MaterialWithSingleIsotope("Boron10",      "B10",    2.46*g/cm3, 5,  10);
- MaterialWithSingleIsotope("Boron11",      "B11",    2.46*g/cm3, 5,  11);
- MaterialWithSingleIsotope("Oxygen16",     "O16",    1.43*g/cm3, 8,  16);
- MaterialWithSingleIsotope("Cacium40",     "Ca40",   1.55*g/cm3, 20, 40);
- MaterialWithSingleIsotope("Zirconium90",  "Zr90",   6.51*g/cm3, 40, 90);    
  MaterialWithSingleIsotope("Molybdenum98", "Mo98",  10.28*g/cm3, 42, 98);
- MaterialWithSingleIsotope("Molybdenum100","Mo100", 10.28*g/cm3, 42, 100); 
- MaterialWithSingleIsotope("Lead208",      "Pb208", 11.34*g/cm3, 82, 208); 
- MaterialWithSingleIsotope("Uranium235",   "U235",  19.05*g/cm3, 92, 235);  
- MaterialWithSingleIsotope("Uranium238",   "U238",  19.05*g/cm3, 92, 238);     
     
  // or use G4-NIST materials data base
  //
@@ -142,7 +136,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   fPBox = new G4PVPlacement(0,                          //no rotation
                             G4ThreeVector(),            //at (0,0,0)
-                            fLBox,                      //its logical volume                           
+                            fLBox,                      //its logical volume
                             fMaterial->GetName(),       //its name
                             0,                          //its mother  volume
                             false,                      //no boolean operation
@@ -169,12 +163,16 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name
-  ////G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   G4Material* pttoMaterial = 
      G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   
-  if (pttoMaterial) { fMaterial = pttoMaterial;
-    } else {
+  if (pttoMaterial) { 
+    if(fMaterial != pttoMaterial) {
+      fMaterial = pttoMaterial;
+      if(fLBox) { fLBox->SetMaterial(pttoMaterial); }
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;
   }              
@@ -185,12 +183,10 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   fBoxSize = value;
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
 
 void DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -215,11 +211,3 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

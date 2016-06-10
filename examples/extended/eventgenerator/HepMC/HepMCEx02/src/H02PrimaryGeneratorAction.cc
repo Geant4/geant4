@@ -25,24 +25,17 @@
 //
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02PrimaryGeneratorAction.cc
 /// \brief Implementation of the H02PrimaryGeneratorAction class
+//   $Id: H02PrimaryGeneratorAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
-// ====================================================================
-//
-//   H02PrimaryGeneratorAction.cc
-//   $Id$
-//
-// ====================================================================
-#include "H02PrimaryGeneratorAction.hh"
-#include "H02PrimaryGeneratorMessenger.hh"
-
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "HepMCG4AsciiReader.hh"
 #include "HepMCG4PythiaInterface.hh"
+#include "H02PrimaryGeneratorAction.hh"
+#include "H02PrimaryGeneratorMessenger.hh"
 
-////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02PrimaryGeneratorAction::H02PrimaryGeneratorAction()
-////////////////////////////////////////////////////
 {
   // default generator is particle gun.
   currentGenerator= particleGun= new G4ParticleGun();
@@ -58,25 +51,22 @@ H02PrimaryGeneratorAction::H02PrimaryGeneratorAction()
   gentypeMap["hepmcAscii"]= hepmcAscii;
   gentypeMap["pythia"]= pythiaGen;
 
-  messenger= new H02PrimaryGeneratorMessenger(this);  
+  messenger= new H02PrimaryGeneratorMessenger(this);
 }
 
-/////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02PrimaryGeneratorAction::~H02PrimaryGeneratorAction()
-/////////////////////////////////////////////////////
 {
   delete messenger;
 }
 
-//////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-//////////////////////////////////////////////////////////////////
 {
   if(currentGenerator)
     currentGenerator-> GeneratePrimaryVertex(anEvent);
-  else 
+  else
     G4Exception("H02PrimaryGeneratorAction::GeneratePrimaries",
                 "InvalidSetup", FatalException,
                 "Generator is not instanciated.");
 }
-

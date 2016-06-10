@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VUserParallelWorld.hh 69917 2013-05-17 13:28:02Z gcosmo $
 //
 
 #ifndef G4VUserParallelWorld_h
 #define G4VUserParallelWorld_h 1
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
+class G4VSensitiveDetector;
 
 #include "globals.hh"
 
@@ -51,6 +53,7 @@ class G4VUserParallelWorld
 
   public:
     virtual void Construct() = 0;
+    virtual void ConstructSD();
 
   protected:
     G4String fWorldName;
@@ -61,6 +64,11 @@ class G4VUserParallelWorld
   public:
     inline G4String GetName() { return fWorldName; }
 
+  protected:
+    void SetSensitiveDetector(const G4String& logVolName,
+                G4VSensitiveDetector* aSD,G4bool multi=false);
+    void SetSensitiveDetector(G4LogicalVolume* logVol,
+                G4VSensitiveDetector* aSD);
 };
 
 #endif

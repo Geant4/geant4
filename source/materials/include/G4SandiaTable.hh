@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SandiaTable.hh 75603 2013-11-04 13:15:47Z gcosmo $
 
 // class description
 //
@@ -43,6 +43,8 @@
 //          in GetSandiaCofPerAtom(). mma
 // 03.04.01 fnulcof[4] added; returned if energy < emin
 // 05.03.04 V.Grichine, new methods for old sorting algorithm for PAI model
+// 21.21.13 V.Ivanchenko, changed signature of methods, reduced number of 
+//                        static variables, methods
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -54,10 +56,12 @@
 #include "G4OrderedTable.hh"      
 #include "G4ios.hh"
 #include "globals.hh"
+#include <vector>
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
 class G4Material;
+// class G4MaterialCutsCouple;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -70,21 +74,21 @@ public:  // with description
   ~G4SandiaTable();
 
   //main computation per atom:
-  static G4double* GetSandiaCofPerAtom(G4int Z, G4double energy);
+  void GetSandiaCofPerAtom(G4int Z, G4double energy, std::vector<G4double>& coeff);
   static G4double GetZtoA(G4int Z);
 
   //per volume of a material:
   G4int GetMatNbOfIntervals();
   G4double  GetSandiaCofForMaterial(G4int,G4int);
-  G4double* GetSandiaCofForMaterial(G4double energy);
   G4double  GetSandiaMatTable(G4int,G4int);
+  const G4double* GetSandiaCofForMaterial(G4double energy);
 
   G4double  GetSandiaCofForMaterialPAI(G4int,G4int);
-  G4double* GetSandiaCofForMaterialPAI(G4double energy);
   G4double  GetSandiaMatTablePAI(G4int,G4int);
-  G4OrderedTable*  GetSandiaMatrixPAI();
+  const G4double* GetSandiaCofForMaterialPAI(G4double energy);
+  G4OrderedTable* GetSandiaMatrixPAI();
 
-  void SetVerbose(G4int ver){fVerbose = ver;};
+  inline void SetVerbose(G4int ver) { fVerbose = ver; };
 
 public:  // without description
 
@@ -99,61 +103,70 @@ private:
   void ComputeMatSandiaMatrixPAI();
 
   // methods per atom
-  G4int     GetNbOfIntervals   (G4int Z);
-  G4double  GetSandiaCofPerAtom(G4int Z, G4int, G4int);
-  G4double  GetIonizationPot   (G4int Z);
+  G4int     GetNbOfIntervals(G4int Z);
+  G4double  GetSandiaPerAtom(G4int Z, G4int, G4int);
+  G4double  GetIonizationPot(G4int Z);
 
   // static members of the class
   static const G4int      fNumberOfElements;
   static const G4int      fIntervalLimit;
-  static const G4int      fNumberOfIntervals;
+  static const G4int      fNumberOfIntervals;  
+  static const G4int      fH2OlowerInt;
 
   static const G4double   fSandiaTable[981][5];
+  static const G4double   fH2OlowerI1[23][5];
   static const G4int      fNbOfIntervals[101];
   static const G4double   fZtoAratio[101];
   static const G4double   fIonizationPotentials[101];
   static const G4double   funitc[5];
+  static const G4double   fnulcof[4];
                
-  static       G4int      fCumulInterval[101];
-  static       G4double   fSandiaCofPerAtom[4];
+  // computed once
+  static G4int            fCumulInterval[101];
+
+  // used at initialisation
+  std::vector<G4double>   fSandiaCofPerAtom;
   
   // members of the class
   G4Material*     fMaterial;
   G4int           fMatNbOfIntervals;
   G4OrderedTable* fMatSandiaMatrix;
   G4OrderedTable* fMatSandiaMatrixPAI;
-  
-  G4double        fnulcof[4];
-		   
+  		   
 /////////////////////////////////////////////////////////////////////
 //
-// Methods for old implementation of PAI model
-// Will be removed for the next major release
+// Methods for implementation of PAI model
+//
+/////////////////////////////////////////////////////////////////////
 
 public:  // without description
 
-  G4SandiaTable(G4int);	         
+  G4SandiaTable(G4int);	 
+        
+  G4SandiaTable();
 
-  inline void SandiaSwap( G4double** da,
-			  G4int i,
-			  G4int j );
+  void Initialize(G4Material*);	         
+  // void Initialize(G4MaterialCutsCouple*);	         
+  void Initialize(G4int);	         
 
-  void SandiaSort( G4double** da,
-		   G4int sz );
 
-  G4int SandiaIntervals( G4int Z[],
-			 G4int el );
+  void SandiaSwap(G4double** da, G4int i, G4int j);
 
-  G4int SandiaMixing(       G4int Z[],
-			    const G4double* fractionW,
-			    G4int el,
-			    G4int mi );
+  void SandiaSort(G4double** da, G4int sz);
 
-  inline G4double GetPhotoAbsorpCof(G4int i , G4int j) const;
+  G4int SandiaIntervals(G4int Z[], G4int el);
 
-  inline G4int GetMaxInterval() const; 
+  G4int SandiaMixing(G4int Z[], const G4double* fractionW,
+		     G4int el, G4int mi);
 
-  inline G4double** GetPointerToCof(); 
+  G4double GetPhotoAbsorpCof(G4int i , G4int j) const;
+
+  G4int GetMaxInterval() const; 
+
+  G4double** GetPointerToCof(); 
+
+  G4bool GetLowerI1(){return fLowerI1;};
+  void SetLowerI1(G4bool flag){fLowerI1=flag;};
 
 private:
 
@@ -163,59 +176,13 @@ private:
   G4SandiaTable(G4SandiaTable &);
   G4SandiaTable & operator=(const G4SandiaTable &right);
 
-//////////////////////////////////////////////////////////////////////////
-//
-// data members for PAI model
+  // data members for PAI model
 
-private:
-		
-  G4double** fPhotoAbsorptionCof ;	// SandiaTable  for mixture
+  G4double** fPhotoAbsorptionCof;  // SandiaTable  for mixture
 
   G4int fMaxInterval ;
   G4int fVerbose;
-  
-
-//
-//
-//////////////////////////////////////////////////////////////////////////
-  
+  G4bool fLowerI1;  
 };
     
-///////////////////////////////////////////////////////////////////////
-//
-// Inline methods for PAI model, will be removed in next major release
-
-inline G4int 
-G4SandiaTable::GetMaxInterval() const { 
-  return fMaxInterval;
-}
-
-inline G4double** 
-G4SandiaTable::GetPointerToCof() 
-{ 
-  if(!fPhotoAbsorptionCof) { ComputeMatTable(); }
-  return fPhotoAbsorptionCof;
-}
-
-inline void
-G4SandiaTable::SandiaSwap( G4double** da ,
-                           G4int i,
-                           G4int j )
-{
-  G4double tmp = da[i][0] ;
-  da[i][0] = da[j][0] ;
-  da[j][0] = tmp ;
-}
-
-inline
-G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
-{
-  return  fPhotoAbsorptionCof[i][j]*funitc[j];
-}
-
-//
-//
-////////////////////////////////////////////////////////////////////////////
-
-
 #endif 

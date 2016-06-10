@@ -32,71 +32,45 @@
 //    *                                  *
 //    ************************************
 //
-// $Id$
+// $Id: PurgMagAnalysisManager.hh 69086 2013-04-18 07:29:59Z gcosmo $
 //
 
-#ifdef G4ANALYSIS_USE
 #ifndef G4PROCESSTESTANALYSIS_HH
 #define G4PROCESSTESTANALYSIS_HH
 
 #include "globals.hh"
 #include <vector>
 #include "G4ThreeVector.hh"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-#include "AIDA/IAnalysisFactory.h"
 
-namespace AIDA
-{
-  class ITree;
-  class IHistogramFactory;
-  class IAnalysisFactory;
-  class ITupleFactory;
-  class ITuple;
-  class ITreeFactory;
-}
+//#include "g4root.hh"
+//#include "g4xml.hh"
+#include "g4csv.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-class PurgMagAnalysisManager
 
+class PurgMagAnalysisManager
 {
-public:
-  
+public:  
   ~PurgMagAnalysisManager();
-  
   void book();
-  
   void finish();
-  
   static PurgMagAnalysisManager* getInstance();
-  
-  void fill_Tuple_Electrons(G4double,G4double,G4double,G4double,G4double,G4double,G4double);
-  void fill_Tuple_Gamma(G4double,G4double,G4double,G4double,G4double,G4double,G4double);
-  void fill_Tuple_Positrons(G4double,G4double,G4double,G4double,G4double,G4double,G4double);
-  
-private:
-  
-  G4double ex,ey,ez,ee,epx,epy,epz,gx,gy,gz,ge,gpx,gpy,gpz,px,py,pz,pe,ppx,ppy,ppz;
-  
+  void fill_Tuple_Electrons(G4double,G4double,G4double,G4double,G4double,
+			    G4double,G4double);
+  void fill_Tuple_Gamma(G4double,G4double,G4double,G4double,G4double,
+			G4double,G4double);
+  void fill_Tuple_Positrons(G4double,G4double,G4double,G4double,G4double,
+			    G4double,G4double);
+private:  
   static PurgMagAnalysisManager* instance;
   
 private:
   PurgMagAnalysisManager();
-  
-private:
-  
-  AIDA::IAnalysisFactory*  aFact;
-  AIDA::ITree*             theTree;
-  AIDA::IHistogramFactory *histFact;
-  AIDA::ITupleFactory     *tupFact;
-  AIDA::ITreeFactory      *treeFact;
-  AIDA::ITuple *ntuple1;
-  AIDA::ITuple *ntuple2;
-  AIDA::ITuple *ntuple3;
 };
 
 #endif
-#endif
+
 
 
 

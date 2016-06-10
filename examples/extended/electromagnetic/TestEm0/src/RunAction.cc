@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm0/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 68243 2013-03-19 18:03:11Z vnivanch $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:fDetector(det), fPrimary(kin)
+:G4UserRunAction(),fDetector(det), fPrimary(kin)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -225,44 +225,71 @@ void RunAction::BeginOfRunAction(const G4Run*)
   std::vector<G4double> dedx1;
   std::vector<G4double> dedx2;  
   G4double dedx, dedxtot = 0.;
+  size_t nproc = emName.size();
 
-  for (size_t j=0; j<emName.size();j++) {
+  for (size_t j=0; j<nproc; j++) {
     dedx = emCal.ComputeDEDX(energy,particle,emName[j],material,enerCut[j]);
+    dedxtot += dedx;
     dedx1.push_back(dedx);
     dedx2.push_back(dedx/density);                        
   }
-  dedxtot = emCal.GetDEDX(energy,particle,material);
   dedx1.push_back(dedxtot);
   dedx2.push_back(dedxtot/density);          
     
   //print stopping power
   G4cout << "\n \n  restricted dE/dx         : ";
-  for (size_t j=0; j<sigma1.size();j++) {             
+  for (size_t j=0; j<=nproc; j++) {             
+    G4cout << "\t" << std::setw(13) 
+	   << G4BestUnit(dedx1[j],"Energy/Length");
+  }
+  
+  G4cout << "\n      (MeV/g/cm2)          : ";
+  for (size_t j=0; j<=nproc; j++) {
+    G4cout << "\t" << std::setw(13) 
+	   << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
+  }
+  dedxtot = 0.;
+
+  for (size_t j=0; j<nproc; j++) {
+    dedx = emCal.ComputeDEDX(energy,particle,emName[j],material,energy);
+    dedxtot += dedx;
+    dedx1[j] = dedx;
+    dedx2[j] = dedx/density;                        
+  }
+  dedx1[nproc] = dedxtot;
+  dedx2[nproc] = dedxtot/density;          
+    
+  //print stopping power
+  G4cout << "\n \n  unrestricted dE/dx       : ";
+  for (size_t j=0; j<=nproc; j++) {             
     G4cout << "\t" << std::setw(13) << G4BestUnit(dedx1[j],"Energy/Length");
   }
   
   G4cout << "\n      (MeV/g/cm2)          : ";
-  for (size_t j=0; j<sigma2.size();j++) {
-  G4cout << "\t" << std::setw(13) << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
+  for (size_t j=0; j<=nproc; j++) {
+    G4cout << "\t" << std::setw(13) 
+	   << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
   
   //get range from restricted dedx
   G4double range1 = emCal.GetRangeFromRestricteDEDX(energy,particle,material);
   G4double range2 = range1*density;
-  
-   //get range from full dedx
-  G4double Range1 = emCal.GetCSDARange(energy,particle,material);
-  G4double Range2 = Range1*density;
-  
+
   //print range
   G4cout << "\n \n  range from restrict dE/dx: " 
          << "\t" << std::setw(8) << G4BestUnit(range1,"Length")
          << " (" << std::setw(8) << G4BestUnit(range2,"Mass/Surface") << ")";
-         
-  G4cout << "\n  range from full dE/dx    : " 
-         << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
-         << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
-         
+  
+   //get range from full dedx
+  if(energy < GeV) {
+    G4double Range1 = emCal.GetCSDARange(energy,particle,material);
+    G4double Range2 = Range1*density;
+     
+    G4cout << "\n  range from full dE/dx    : " 
+	   << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
+	   << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
+  }         
+
   //get transport mean free path (for multiple scattering)
   G4double MSmfp1 = emCal.GetMeanFreePath(energy,particle,"msc",material);
   G4double MSmfp2 = MSmfp1*density;

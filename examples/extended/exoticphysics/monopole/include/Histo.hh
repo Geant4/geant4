@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/Histo.hh
 /// \brief Definition of the Histo class
 //
-// $Id$
+// $Id: Histo.hh 66817 2013-01-12 16:16:08Z gcosmo $
 
 #ifndef Histo_h
 #define Histo_h 1

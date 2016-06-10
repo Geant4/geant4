@@ -54,7 +54,6 @@
 
 #include "G4VEmModel.hh"
 #include "globals.hh"
-#include "G4NistManager.hh"
 #include "G4ScreeningMottCrossSection.hh"
 
 #include <vector>
@@ -62,6 +61,8 @@ using namespace std;
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;
+class G4IonTable;
+class G4Nistmanager;
 
 class G4eSingleCoulombScatteringModel : public G4VEmModel
 {
@@ -82,11 +83,6 @@ public:
 				G4double cut,
 				G4double emax);
 
-
-
-
-
-
   	virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
@@ -95,28 +91,18 @@ public:
   	
   	inline void SetRecoilThreshold(G4double eth);
 
-
-
 protected: 
-
 	 
   	inline void DefineMaterial(const G4MaterialCutsCouple*);
   	inline void SetupParticle(const G4ParticleDefinition*);
 
-
-
 private:
-
 
   	// hide assignment operator
   G4eSingleCoulombScatteringModel & operator=(const G4eSingleCoulombScatteringModel &right);
   G4eSingleCoulombScatteringModel(const  G4eSingleCoulombScatteringModel&);
 
-
-protected:
-
-
-  	G4ParticleTable*          theParticleTable;
+  	G4IonTable*               theIonTable;
   	G4ParticleChangeForGamma* fParticleChange; 
   	G4NistManager*            fNistManager;
   	G4ScreeningMottCrossSection* Mottcross;	  
@@ -145,6 +131,8 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline
 void G4eSingleCoulombScatteringModel::DefineMaterial(const G4MaterialCutsCouple* cup)
 { 
   	if(cup != currentCouple) {

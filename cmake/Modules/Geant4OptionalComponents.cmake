@@ -8,17 +8,17 @@
 # own Module.
 #
 # Options configured here:
-#  CLHEP  - Control use of internal G4clhep, or locate external CLHEP
-#  EXPAT  - Control use of internal G4expat, or locate external EXPAT.
-#  ZLIB   - Control use of internal G4zlib, or locate external ZLIB
-#           (NOTIMPLEMENTEDYET - always uses internal zlib)
-#  GDML   - Requires external XercesC
-#  G3TOG4 - UNIX only
+#  CLHEP   - Control use of internal G4clhep, or locate external CLHEP
+#  EXPAT   - Control use of internal G4expat, or locate external EXPAT.
+#  ZLIB    - Control use of internal G4zlib, or locate external ZLIB
+#  GDML    - Requires external XercesC
+#  G3TOG4  - UNIX only
+#  USOLIDS - Allow use of USolids classes in geometry
 
 #-----------------------------------------------------------------------
 # Find required CLHEP package
 # We prefer to use our internal CLHEP library, but provide an option
-# to allow an external CLHEP to be used should the user require this. 
+# to allow an external CLHEP to be used should the user require this.
 # We also allow that it can be automatically enabled by providing
 # the CLHEP_ROOT_DIR option (which FindCLHEP will recognize)
 #
@@ -38,6 +38,7 @@ if(GEANT4_USE_SYSTEM_CLHEP)
   set(GEANT4_USE_SYSTEM_CLHEP TRUE)
 else()
   set(CLHEP_FOUND TRUE)
+  set(GEANT4_USE_BUILTIN_CLHEP TRUE)
   set(CLHEP_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/source/externals/clhep/include")
   if(BUILD_SHARED_LIBS)
     set(CLHEP_LIBRARIES G4clhep)
@@ -46,19 +47,20 @@ else()
   endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library")
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library")
 
 #-----------------------------------------------------------------------
 # Find required EXPAT package
 # We always use the internal G4expat on WIN32.
 # On other platforms, we default to use the system library.
-# If we use the internal G4expat, fix the EXPAT_XXX variables to point 
-# to the internal location of expat headers and library target so Geant4 
+# If we use the internal G4expat, fix the EXPAT_XXX variables to point
+# to the internal location of expat headers and library target so Geant4
 # clients of expat have a consistent interface.
 #
 # KNOWNISSUE : For internal expat, how to deal with static and shared?
 if(WIN32)
   set(EXPAT_FOUND TRUE)
+  set(GEANT4_USE_BUILTIN_EXPAT TRUE)
   set(EXPAT_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/expat/include)
   set(EXPAT_LIBRARIES G4expat)
 else()
@@ -69,6 +71,7 @@ else()
     find_package(EXPAT REQUIRED)
   else()
     set(EXPAT_FOUND TRUE)
+    set(GEANT4_USE_BUILTIN_EXPAT TRUE)
     set(EXPAT_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/expat/include)
     if(BUILD_SHARED_LIBS)
       set(EXPAT_LIBRARIES G4expat)
@@ -78,19 +81,35 @@ else()
   endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_EXPAT "Use system EXPAT library")
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_EXPAT "Using system EXPAT library")
 
 #-----------------------------------------------------------------------
 # Find required ZLIB package
-# For now, we always use the internal Geant4 zlib...
-#
-#option(GEANT4_USE_SYSTEM_ZLIB "Use the system's zlib library" OFF)
+# Default to use internal zlib, otherwise point interface variables to
+# internal zlib
+option(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_ZLIB)
-  # This needs more work - use ITK's way of doing it as an example.
   find_package(ZLIB REQUIRED)
-endif(GEANT4_USE_SYSTEM_ZLIB)
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library")
+  # NB : FindZLIB on cmake < 2.8 does not set the ZLIB_INCLUDE_DIRS
+  # variable, only the ZLIB_INCLUDE_DIR variable. Set the DIRS variable
+  # here for backward compatibility.
+  if(${CMAKE_VERSION} VERSION_LESS "2.8.0")
+    set(ZLIB_INCLUDE_DIRS "${ZLIB_INCLUDE_DIR}")
+  endif()
+else()
+  set(ZLIB_FOUND TRUE)
+  set(GEANT4_USE_BUILTIN_ZLIB TRUE)
+  set(ZLIB_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/zlib/include
+                        ${PROJECT_BINARY_DIR}/source/externals/zlib)
+  if(BUILD_SHARED_LIBS)
+    set(ZLIB_LIBRARIES G4zlib)
+  else()
+    set(ZLIB_LIBRARIES G4zlib-static)
+  endif()
+endif()
+
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
 
 #-----------------------------------------------------------------------
 # Optional Support for GDML - requires Xerces-C package
@@ -106,15 +125,15 @@ option(GEANT4_USE_GDML "Build Geant4 with GDML support" ${_default_use_gdml}
 
 if(GEANT4_USE_GDML)
   find_package(XercesC REQUIRED)
-endif(GEANT4_USE_GDML)
+endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Build Geant4 with GDML support")
+GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 
 #-----------------------------------------------------------------------
 # Optional support for G3TOG4 convertion interface.
 # We do not build the rztog4 application.
 # -- OLDER NOTES --
-# The G3toG4 *library* should always be built, but the rztog4 application 
+# The G3toG4 *library* should always be built, but the rztog4 application
 # requires a Fortran compiler AND CERNLIB, so is optional.
 # Only on *NIX because converter requires CERNLIB, and Windows support for
 # this is an unknown quantity at present (can always change later).
@@ -122,6 +141,21 @@ GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Build Geant4 with GDML support")
 #
 if(UNIX)
   option(GEANT4_USE_G3TOG4 "Build Geant3 ASCII call list reader library" OFF)
-  GEANT4_ADD_FEATURE(GEANT4_USE_G3TOG4 "Build Geant3 ASCII call list reader library")
+  GEANT4_ADD_FEATURE(GEANT4_USE_G3TOG4 "Building Geant3 ASCII call list reader library")
+endif()
+
+#-----------------------------------------------------------------------
+# Optional support for use of USolids classes for geometry
+# - Advanced option only
+# - If enabled, require
+#   1) Global Compile definition G4GEOM_USE_USOLIDS (also exported)
+#   2) Global add of geometry/solids/usolids/include to include path
+option(GEANT4_USE_USOLIDS "EXPERIMENTAL: Allow use of USolids geometry classes" OFF)
+mark_as_advanced(GEANT4_USE_USOLIDS)
+
+if(GEANT4_USE_USOLIDS)
+  add_definitions(-DG4GEOM_USE_USOLIDS)
+  include_directories(${PROJECT_SOURCE_DIR}/source/geometry/solids/usolids/include)
+  GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Building support for USolids geometry classes (EXPERIMENTAL)")
 endif()
 

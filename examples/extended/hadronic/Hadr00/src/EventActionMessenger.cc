@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/src/EventActionMessenger.cc
 /// \brief Implementation of the EventActionMessenger class
 //
-// $Id$
+// $Id: EventActionMessenger.cc 70760 2013-06-05 12:28:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -49,7 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* evAct)
-  : fEventAction(evAct)
+  : G4UImessenger(), fEventAction(evAct),
+    fPrintCmd(0), fCmd(0)
 {   
   fPrintCmd = new G4UIcmdWithAnInteger("/testhadr/PrintModulo",this);
   fPrintCmd->SetGuidance("Print events modulo n");

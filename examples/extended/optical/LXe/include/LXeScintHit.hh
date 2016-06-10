@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeScintHit.hh 72250 2013-07-12 08:59:26Z gcosmo $
+//
 /// \file optical/LXe/include/LXeScintHit.hh
 /// \brief Definition of the LXeScintHit class
 //
@@ -38,6 +40,8 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
+
+#include "tls.hh"
 
 class LXeScintHit : public G4VHit
 {
@@ -74,18 +78,18 @@ class LXeScintHit : public G4VHit
 
 typedef G4THitsCollection<LXeScintHit> LXeScintHitsCollection;
 
-extern G4Allocator<LXeScintHit> LXeScintHitAllocator;
+extern G4ThreadLocal G4Allocator<LXeScintHit>* LXeScintHitAllocator;
 
 inline void* LXeScintHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) LXeScintHitAllocator.MallocSingle();
-  return aHit;
+  if(!LXeScintHitAllocator)
+      LXeScintHitAllocator = new G4Allocator<LXeScintHit>;
+  return (void *) LXeScintHitAllocator->MallocSingle();
 }
 
 inline void LXeScintHit::operator delete(void *aHit)
 {
-  LXeScintHitAllocator.FreeSingle((LXeScintHit*) aHit);
+  LXeScintHitAllocator->FreeSingle((LXeScintHit*) aHit);
 }
 
 #endif

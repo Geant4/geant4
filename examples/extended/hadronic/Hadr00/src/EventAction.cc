@@ -26,9 +26,9 @@
 /// \file hadronic/Hadr00/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 70760 2013-06-05 12:28:00Z gcosmo $
 //
-/////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // EventAction
 //
@@ -36,8 +36,7 @@
 //
 // Modified:
 //
-////////////////////////////////////////////////////////////////////////
-// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
 #include "G4Event.hh"
@@ -46,26 +45,29 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction():
+  G4UserEventAction(),
+  fEventMessenger(0), 
+  fUI(0), 
+  fSelectedEvents(),
   fPrintModulo(100),
   fSelected(0),
   fDebugStarted(false)
 {
   fEventMessenger = new EventActionMessenger(this);
-  UI = G4UImanager::GetUIpointer();
-  fSelectedEvents.clear();
+  fUI = G4UImanager::GetUIpointer();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
   delete fEventMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {
@@ -75,8 +77,8 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   if(fSelected>0) {
     for(G4int i=0; i<fSelected; ++i) {
       if(nEvt == fSelectedEvents[i]) {
-        UI->ApplyCommand("/random/saveThisEvent");
-        UI->ApplyCommand("/tracking/verbose  2");
+        fUI->ApplyCommand("/random/saveThisEvent");
+        fUI->ApplyCommand("/tracking/verbose  2");
         fDebugStarted = true;
         break;
       }
@@ -90,15 +92,15 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
   if(fDebugStarted) {
-    UI->ApplyCommand("/tracking/verbose  0");
+    fUI->ApplyCommand("/tracking/verbose  0");
     fDebugStarted = false;
     G4cout << "EventAction: Event ended" << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -111,14 +111,15 @@ G4ScreeningMottCrossSection::G4ScreeningMottCrossSection():
 		}
 	}
 
-
-
-
+	mottcoeff = new G4MottCoefficients();
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ScreeningMottCrossSection::~G4ScreeningMottCrossSection()
-{}
+{
+  delete mottcoeff;
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ScreeningMottCrossSection::Initialise(const G4ParticleDefinition* p,
@@ -309,7 +310,7 @@ G4double G4ScreeningMottCrossSection::NuclearCrossSection()
         G4double anglemin =std::acos(cosTetMinNuc);
         G4double anglemax =std::acos(cosTetMaxNuc); 
 
-        const G4double limit = 1.e-9;
+        static const G4double limit = 1.e-9;
         if(anglemin < limit) {
 	  anglemin = GetScreeningAngle()/10.;
           if(anglemin < limit) { anglemin = limit; }
@@ -430,7 +431,7 @@ G4double G4ScreeningMottCrossSection::GetScatteringAngle()
 	G4double anglemin=std::acos(cosTetMinNuc);	
 	G4double anglemax= std::acos(cosTetMaxNuc);
 
-        const G4double limit = 1.e-9;
+        static const G4double limit = 1.e-9;
         if(anglemin < limit) {
 	  anglemin = GetScreeningAngle()/10.;
           if(anglemin < limit) { anglemin = limit; }
@@ -500,8 +501,8 @@ G4ThreeVector dir(0.0,0.0,1.0);
 	
 	G4double z1=GetScatteringAngle();
 
-        G4double cost = cos(z1);
         G4double sint = sin(z1);
+        G4double cost = sqrt(1.0 - sint*sint);
         G4double phi  = twopi* G4UniformRand();
         G4double dirx = sint*cos(phi);
         G4double diry = sint*sin(phi);
@@ -514,12 +515,7 @@ G4ThreeVector dir(0.0,0.0,1.0);
 	Trec=(1.0 - cost)* mass2*(etot*etot - mass*mass )/
                               (mass*mass + mass2*mass2+ 2.*mass2*etot);
         
-
-
 	dir.set(dirx,diry,dirz);
-
-
-
 
 return dir;
 

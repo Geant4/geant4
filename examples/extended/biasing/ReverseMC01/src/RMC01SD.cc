@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01SD.cc
 /// \brief Implementation of the RMC01SD class
 //
-// $Id$
+// $Id: RMC01SD.cc 70966 2013-06-07 15:22:09Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01SD
@@ -127,11 +127,11 @@ G4bool RMC01SD::ProcessHits(G4Step*aStep,G4TouchableHistory* )
     G4double eKin = preStepPoint->GetKineticEnergy();
     G4ParticleDefinition* thePartDef = aStep->GetTrack()->GetDefinition();
     if (thePartDef == G4Electron::Electron())  fElectronCurrentCollection->
-                                                         insert(new RMC01DoubleWithWeightHit(eKin,weight));
+                            insert(new RMC01DoubleWithWeightHit(eKin,weight));
     else if (thePartDef == G4Gamma::Gamma())   fGammaCurrentCollection->
-                                                         insert(new RMC01DoubleWithWeightHit(eKin,weight));
+                          insert(new RMC01DoubleWithWeightHit(eKin,weight));
     else if (thePartDef == G4Proton::Proton()) fProtonCurrentCollection->
-                                                         insert(new RMC01DoubleWithWeightHit(eKin,weight));
+                            insert(new RMC01DoubleWithWeightHit(eKin,weight));
   }   
   return true;   
 }  
@@ -140,7 +140,8 @@ G4bool RMC01SD::ProcessHits(G4Step*aStep,G4TouchableHistory* )
 
 void RMC01SD::EndOfEvent(G4HCofThisEvent*)
 {
-  fEventEdepCollection->insert(new RMC01DoubleWithWeightHit(fTotalEventEdep,1.));
+  fEventEdepCollection->insert(
+                            new RMC01DoubleWithWeightHit(fTotalEventEdep,1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PolarizationHelper.hh 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class header file
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FieldManager.hh 68055 2013-03-13 14:43:28Z gcosmo $
 //
 //  
 // class G4FieldManager
@@ -139,6 +139,9 @@ class G4FieldManager
      inline void     SetFieldChangesEnergy(G4bool value);
        //  For electric field this should be true
        //  For magnetic field this should be false
+    
+    virtual G4FieldManager* Clone() const;
+    //Needed for multi-threading, create a clone of this object
 
   private:
 

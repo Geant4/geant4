@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITProcess.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4VITProcess.hh 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -140,14 +140,6 @@ protected:  // with description
 
     inline virtual void ClearInteractionTimeLeft();
 
-    //_________________________________________________
-    // Redefine needed members and method of G4VProcess
-    virtual void      SubtractNumberOfInteractionLengthLeft(
-        G4double previousStepSize
-    );
-    // subtract NumberOfInteractionLengthLeft by the value corresponding to
-    // previousStepSize
-
     inline virtual void      ClearNumberOfInteractionLengthLeft();
     // clear NumberOfInteractionLengthLeft
     // !!! This method should be at the end of PostStepDoIt()
@@ -163,10 +155,13 @@ protected:  // with description
     G4bool fProposesTimeStep;
 
 private :
-    const size_t fProcessID; // During all the simulation will identify a
-    // process, so if two identical process are created using a copy constructor
-    // they will have the same fProcessID
-    static size_t fNbProcess ;
+
+    size_t fProcessID;
+    // During all the simulation will identify a process, so if two identical
+    // processes are created using a copy constructor they will have the same
+    // fProcessID. NOTE: due to MT, this cannot be "const".
+
+    static /*G4ThreadLocal*/ size_t *fNbProcess;
 
     G4bool fInstantiateProcessState;
     //_________________________________________________
@@ -206,6 +201,7 @@ inline G4bool G4VITProcess::ProposesTimeStep() const
 
 inline const size_t& G4VITProcess::GetMaxProcessIndex()
 {
-    return fNbProcess ;
+    if (!fNbProcess) fNbProcess = new size_t ( 0);
+    return *fNbProcess ;
 }
 #endif // G4VITProcess_H

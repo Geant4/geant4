@@ -1,6 +1,6 @@
 #
 # ------ MacOS-X ------
-#                                 MacOS 10.7 gcc-4.2
+#                                 MacOS 10.8, 10.9 gcc-4.2
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
@@ -9,9 +9,11 @@
 #
 ifeq ($(G4SYSTEM),Darwin-g++)
   CXX       := g++
-  CXXFLAGS  := -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  := -Wall -Wno-non-virtual-dtor -Wno-long-long
 # CXXFLAGS  += -Wunused-parameter -Winline -Wunreachable-code
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow
+# CXXFLAGS  += -stdlib=libstdc++
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
     FCFLAGS   := -O2
@@ -35,12 +37,12 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
-  LDFLAGS += -bind_at_load -arch_multiple
+  LDFLAGS += -bind_at_load
   FCLIBS := -lg2c -lnsl
   SHEXT   := dylib
-  LOADLIBS += -lm -lstdc++
+  LOADLIBS += -lm
   ifndef X11FLAGS
-    X11FLAGS  := -I/usr/X11R6/include/X11/extensions -I/usr/X11R6/include/X11
+    X11FLAGS  := -I/usr/X11R6/include
   endif
   ifndef X11LIBS
     X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
@@ -93,43 +95,57 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef QTHOME
     QTHOME := /Library/Frameworks
   endif
-  ifndef QTMOC
-    ifeq ($(QTHOME),/Library/Frameworks)
+  ifeq ($(QTHOME),/Library/Frameworks)
+    ifndef QTMOC
       QTMOC      := /usr/bin/moc
-    else
-      QTMOC      := $(QTHOME)/bin/moc
     endif
-  endif
-  ifndef QTFLAGS
-    QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
-    QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
-    QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
-    QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
-  endif
-  ifndef QTLIBPATH
-    ifeq ($(QTHOME),/Library/Frameworks)
+    ifndef QTFLAGS
+      QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
+      QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
+      QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
+    endif
+    ifndef QTLIBPATH
       QTLPATH  := $(QTHOME)
-    else
-      QTLPATH  := $(QTHOME)/lib
     endif
     QTLIBPATH  := -F$(QTLPATH)
-  endif
-
-  QT_AS_FRAMEWORK := $(shell test -d $(QTLPATH)/QtCore.framework && echo yes)
-
-  ifndef QTLIBS
-    ifdef QT_AS_FRAMEWORK
-       QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
-    else
-       QTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui
+    QT_AS_FRAMEWORK := $(shell test -d $(QTLPATH)/QtCore.framework && echo yes)
+    ifndef QTLIBS
+      ifdef QT_AS_FRAMEWORK
+        QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+      else
+        QTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui
+      endif   
+    endif
+    ifndef GLQTLIBS  
+      ifdef QT_AS_FRAMEWORK
+        GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+        GLQTLIBS    += -framework QtOpenGL
+      else
+        GLQTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
+      endif   
+    endif
+  else
+    ifndef QTMOC
+      QTMOC      := $(QTHOME)/bin/moc
+    endif
+    QTLPATH  := $(QTHOME)/lib
+    ifndef QTFLAGS                          # Qt5
+      QTFLAGS   := -I $(QTLPATH)/QtCore.framework/Headers 
+      QTFLAGS   += -I $(QTLPATH)/QtGui.framework/Headers 
+      QTFLAGS   += -I $(QTLPATH)/QtWidgets.framework/Headers
+      QTFLAGS   += -I $(QTLPATH)/QtOpenGL.framework/Headers
+      QTFLAGS   += -I $(QTLPATH)/QtPrintSupport.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
+    endif
+    ifndef QTLIBS
+       QTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
+       QTLIBS    += -framework QtWidgets -framework QtPrintSupport
     endif   
-  endif
-  ifndef GLQTLIBS  
-    ifdef QT_AS_FRAMEWORK
-      GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
-      GLQTLIBS    += -framework QtOpenGL
-    else
-      GLQTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
+    ifndef GLQTLIBS  
+      GLQTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
+      GLQTLIBS    += -framework QtWidgets
+      GLQTLIBS    += -framework QtOpenGL -framework QtPrintSupport
     endif   
   endif
 

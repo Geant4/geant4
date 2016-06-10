@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -38,5 +37,5 @@
 #include "G4Types.hh"
 #include "G4ReferenceCountedHandle.hh"
 
-G4Allocator<G4CountedObject<void> > aCountedObjectAllocator;
-G4Allocator<G4ReferenceCountedHandle<void> > aRCHAllocator;
+G4ThreadLocal G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator = 0;
+G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator = 0;

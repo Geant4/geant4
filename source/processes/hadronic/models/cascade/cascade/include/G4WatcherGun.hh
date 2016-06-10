@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WatcherGun.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100407  M. Kelsey -- Return const-ref to avoid copy overhead.
 

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //

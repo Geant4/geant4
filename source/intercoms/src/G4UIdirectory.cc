@@ -24,17 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIdirectory.cc 74098 2013-09-22 16:05:49Z gcosmo $
 //
 //
 
 #include "G4UIdirectory.hh"
 
-G4UIdirectory::G4UIdirectory(char * theCommandPath)
-:G4UIcommand(theCommandPath,NULL)
+G4UIdirectory::G4UIdirectory(char * theCommandPath,G4bool commandsToBeBroadcasted)
+:G4UIcommand(theCommandPath,NULL,commandsToBeBroadcasted)
 {;}
 
-G4UIdirectory::G4UIdirectory(const char * theCommandPath)
-:G4UIcommand(theCommandPath,NULL)
+G4UIdirectory::G4UIdirectory(const char * theCommandPath,G4bool commandsToBeBroadcasted)
+:G4UIcommand(theCommandPath,NULL,commandsToBeBroadcasted)
 {;}
 

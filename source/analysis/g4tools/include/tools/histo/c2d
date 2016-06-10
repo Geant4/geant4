@@ -1,0 +1,416 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_c2d
+#define tools_histo_c2d
+
+#include "base_cloud"
+
+#include "../mnmx"
+
+#include "h2d"
+
+namespace tools {
+namespace histo {
+
+class c2d : public base_cloud {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::c2d");
+    return s_v;
+  }
+public:
+  bool set_title(const std::string&);
+  unsigned int dimension() const {return 2;}
+  bool reset();
+  unsigned int entries() const;
+public:
+  double sum_of_weights() const;
+  bool convert_to_histogram();
+  bool is_converted() const;
+  bool scale(double);
+public:
+  bool fill(double,double,double = 1);
+  double lower_edge_x() const;
+  double upper_edge_x() const;
+  double lower_edge_y() const;
+  double upper_edge_y() const;
+  double value_x(unsigned int) const;
+  double value_y(unsigned int) const;
+  double weight(unsigned int) const;
+  double mean_x() const;
+  double mean_y() const;
+  double rms_x() const;
+  double rms_y() const;
+  bool convert(unsigned int,double,double,
+               unsigned int,double,double);
+  bool convert(const std::vector<double>&,const std::vector<double>&);
+  const histo::h2d& histogram() const;
+  bool fill_histogram(histo::h2d& a_histo) const {
+    unsigned int number = m_xs.size();
+    for(unsigned int index=0;index<number;index++) {
+      if(!a_histo.fill(m_xs[index],m_ys[index],m_ws[index])) return false;
+    }
+    return true;
+  }
+  bool set_conversion_parameters(unsigned int,double,double,  
+                                 unsigned int,double,double);
+
+  bool set_histogram(h2d* a_histo){ //we take ownership of a_histo.
+    reset();
+    m_histo = a_histo;
+    return true;
+  }
+public:
+  c2d();
+  c2d(const std::string&,int=-1);
+  virtual ~c2d(){delete m_histo;}
+public:
+  c2d(const c2d& a_from)
+  :base_cloud(a_from)
+  ,m_xs(a_from.m_xs)
+  ,m_ys(a_from.m_ys)
+  ,m_lower_x(a_from.m_lower_x)
+  ,m_upper_x(a_from.m_upper_x)
+  ,m_lower_y(a_from.m_lower_y)
+  ,m_upper_y(a_from.m_upper_y)
+  ,m_Sxw(a_from.m_Sxw)
+  ,m_Sx2w(a_from.m_Sx2w)
+  ,m_Syw(a_from.m_Syw)
+  ,m_Sy2w(a_from.m_Sy2w)
+  ,m_cnv_x_num(a_from.m_cnv_x_num)
+  ,m_cnv_x_min(a_from.m_cnv_x_min)
+  ,m_cnv_x_max(a_from.m_cnv_x_max)
+  ,m_cnv_y_num(a_from.m_cnv_y_num)
+  ,m_cnv_y_min(a_from.m_cnv_y_min)
+  ,m_cnv_y_max(a_from.m_cnv_y_max)
+  ,m_histo(0)
+  {
+    if(a_from.m_histo) {
+      m_histo = new histo::h2d(*a_from.m_histo);
+    }
+  }
+
+  c2d& operator=(const c2d& a_from) {
+    base_cloud::operator=(a_from);
+    if(&a_from==this) return *this;
+    m_xs = a_from.m_xs;
+    m_ys = a_from.m_ys;
+    m_lower_x = a_from.m_lower_x;
+    m_upper_x = a_from.m_upper_x;
+    m_lower_y = a_from.m_lower_y;
+    m_upper_y = a_from.m_upper_y;
+    m_Sxw = a_from.m_Sxw;
+    m_Sx2w = a_from.m_Sx2w;
+    m_Syw = a_from.m_Syw;
+    m_Sy2w = a_from.m_Sy2w;
+    m_cnv_x_num = a_from.m_cnv_x_num;
+    m_cnv_x_min = a_from.m_cnv_x_min;
+    m_cnv_x_max = a_from.m_cnv_x_max;
+    m_cnv_y_num = a_from.m_cnv_y_num;
+    m_cnv_y_min = a_from.m_cnv_y_min;
+    m_cnv_y_max = a_from.m_cnv_y_max;
+    delete m_histo;
+    m_histo = 0;
+    if(a_from.m_histo) {
+      m_histo = new histo::h2d(*a_from.m_histo);
+    }
+    return *this;
+  }
+protected:
+  void clear();
+protected:
+  std::vector<double> m_xs;
+  std::vector<double> m_ys;
+  double m_lower_x;
+  double m_upper_x;
+  double m_lower_y;
+  double m_upper_y;
+  double m_Sxw;
+  double m_Sx2w;
+  double m_Syw;
+  double m_Sy2w;
+  //
+  unsigned int m_cnv_x_num;
+  double m_cnv_x_min;
+  double m_cnv_x_max;
+  unsigned int m_cnv_y_num;
+  double m_cnv_y_min;
+  double m_cnv_y_max;
+  histo::h2d* m_histo;
+};
+
+}}
+
+namespace tools {
+namespace histo {
+
+inline
+c2d::c2d()
+:base_cloud(UNLIMITED())
+,m_lower_x(0)
+,m_upper_x(0)
+,m_lower_y(0)
+,m_upper_y(0)
+,m_Sxw(0)
+,m_Sx2w(0)
+,m_Syw(0)
+,m_Sy2w(0)
+,m_cnv_x_num(0)
+,m_cnv_x_min(0)
+,m_cnv_x_max(0)
+,m_cnv_y_num(0)
+,m_cnv_y_min(0)
+,m_cnv_y_max(0)
+,m_histo(0)
+{}
+
+inline
+c2d::c2d(const std::string& a_title,int aLimit)
+:base_cloud(aLimit)
+,m_lower_x(0)
+,m_upper_x(0)
+,m_lower_y(0)
+,m_upper_y(0)
+,m_Sxw(0)
+,m_Sx2w(0)
+,m_Syw(0)
+,m_Sy2w(0)
+,m_cnv_x_num(0)
+,m_cnv_x_min(0)
+,m_cnv_x_max(0)
+,m_cnv_y_num(0)
+,m_cnv_y_min(0)
+,m_cnv_y_max(0)
+,m_histo(0)
+{
+  set_title(a_title);
+}
+
+inline
+bool c2d::is_converted() const {return m_histo ? true : false;}
+
+inline
+void c2d::clear(){
+  m_lower_x = 0;
+  m_upper_x = 0;
+  m_lower_y = 0;
+  m_upper_y = 0;
+  m_Sw = 0;
+  m_Sxw = 0;
+  m_Sx2w = 0;
+  m_Syw = 0;
+  m_Sy2w = 0;
+  m_xs.clear();
+  m_ys.clear();
+  m_ws.clear();
+}
+
+inline
+bool c2d::convert( 
+ unsigned int aBinsX,double aLowerEdgeX,double aUpperEdgeX
+,unsigned int aBinsY,double aLowerEdgeY,double aUpperEdgeY 
+) { 
+  if(m_histo) return true; // Done.
+  m_histo = new histo::h2d(base_cloud::title(),
+                           aBinsX,aLowerEdgeX,aUpperEdgeX,
+                           aBinsY,aLowerEdgeY,aUpperEdgeY);
+  if(!m_histo) return false;
+  bool status = fill_histogram(*m_histo);
+  clear();
+  return status;
+}
+
+inline
+bool c2d::convert_to_histogram(){
+  if( (m_cnv_x_num<=0) || (m_cnv_x_max<=m_cnv_x_min) ||
+      (m_cnv_y_num<=0) || (m_cnv_y_max<=m_cnv_y_min) ) {
+    double dx = 0.01 * (upper_edge_x() - lower_edge_x())/BINS();
+    double dy = 0.01 * (upper_edge_y() - lower_edge_y())/BINS();
+    return convert(BINS(),lower_edge_x(),upper_edge_x()+dx,
+                   BINS(),lower_edge_y(),upper_edge_y()+dy);
+  } else {
+    return convert(m_cnv_x_num,m_cnv_x_min,m_cnv_x_max,
+                   m_cnv_y_num,m_cnv_y_min,m_cnv_y_max);
+  }
+}
+
+
+inline
+bool c2d::set_title(const std::string& a_title){
+  m_title = a_title;
+  if(m_histo) m_histo->set_title(a_title);
+  return true;
+}
+
+inline
+bool c2d::scale(double a_scale) {
+  if(m_histo) {
+    return m_histo->scale(a_scale);
+  } else {
+    unsigned int number = m_ws.size();
+    for(unsigned int index=0;index<number;index++) m_ws[index] *= a_scale;
+    m_Sw *= a_scale;
+    m_Sxw *= a_scale;
+    m_Sx2w *= a_scale;
+    m_Syw *= a_scale;
+    m_Sy2w *= a_scale;
+    return true;
+  }
+}
+
+inline
+bool c2d::reset() { 
+  clear();
+  delete m_histo;
+  m_histo = 0;
+  return true;
+}
+
+inline
+bool c2d::fill(double aX,double aY,double aW){
+  if(!m_histo && (m_limit!=UNLIMITED()) && ((int)m_xs.size()>=m_limit)){
+    convert_to_histogram();
+  }
+
+  if(m_histo) {
+    return m_histo->fill(aX,aY,aW);
+  } else {
+    if(m_xs.size()) {
+      m_lower_x = mn<double>(aX,m_lower_x);
+      m_upper_x = mx<double>(aX,m_upper_x);
+    } else {
+      m_lower_x = aX;
+      m_upper_x = aX;
+    }
+    if(m_ys.size()) { 
+      m_lower_y = mn<double>(aY,m_lower_y);
+      m_upper_y = mx<double>(aY,m_upper_y);
+    } else {
+      m_lower_y = aY;
+      m_upper_y = aY;
+    }
+    m_xs.push_back(aX);
+    m_ys.push_back(aY);
+    m_ws.push_back(aW);
+    m_Sw += aW;
+    double xw = aX * aW;
+    m_Sxw += xw;
+    m_Sx2w += aX * xw;
+    double yw = aY * aW; 
+    m_Syw += yw;
+    m_Sy2w += aY * yw;
+    return true;
+  }
+}
+
+inline
+bool c2d::convert(const std::vector<double>& aEdgesX,const std::vector<double>& aEdgesY) { 
+  if(m_histo) return true;
+  m_histo = new histo::h2d(base_cloud::title(),
+                           aEdgesX,aEdgesY);
+  if(!m_histo) return false;
+  bool status = fill_histogram(*m_histo);
+  clear();
+  return status;
+}
+
+inline
+bool c2d::set_conversion_parameters(
+ unsigned int aCnvXnumber,double aCnvXmin,double aCnvXmax
+,unsigned int aCnvYnumber,double aCnvYmin,double aCnvYmax
+){
+  m_cnv_x_num = aCnvXnumber;
+  m_cnv_x_min = aCnvXmin;
+  m_cnv_x_max = aCnvXmax;
+  m_cnv_y_num = aCnvYnumber;
+  m_cnv_y_min = aCnvYmin;
+  m_cnv_y_max = aCnvYmax;
+  return true;
+}
+
+inline
+const h2d& c2d::histogram() const { 
+  if(!m_histo) const_cast<c2d&>(*this).convert_to_histogram();
+  return *m_histo;
+}
+
+inline
+unsigned int c2d::entries() const { 
+  return m_histo ? m_histo->all_entries() : m_ws.size();
+}
+
+inline
+double c2d::sum_of_weights() const { 
+  return (m_histo ? m_histo->sum_bin_heights() : m_Sw);
+}
+
+inline
+double c2d::lower_edge_x() const {
+  return m_histo ? m_histo->axis_x().lower_edge() : m_lower_x;
+}
+inline
+double c2d::lower_edge_y() const { 
+  return m_histo ? m_histo->axis_y().lower_edge() : m_lower_y;
+}
+inline
+double c2d::upper_edge_x() const { 
+  return m_histo ? m_histo->axis_x().upper_edge() : m_upper_x;
+}
+inline
+double c2d::upper_edge_y() const { 
+  return m_histo ? m_histo->axis_y().upper_edge() : m_upper_y;
+}
+inline
+double c2d::value_x(unsigned int aIndex) const { 
+  return m_histo ? 0 : m_xs[aIndex];
+}
+inline
+double c2d::value_y(unsigned int aIndex) const { 
+  return m_histo ? 0 : m_ys[aIndex];
+}
+inline
+double c2d::weight(unsigned int aIndex) const { 
+  return m_histo ? 0 : m_ws[aIndex];
+}
+
+inline
+double c2d::mean_x() const {
+  return m_histo ? m_histo->mean_x() : (m_Sw?m_Sxw/m_Sw:0);
+}
+inline
+double c2d::mean_y() const {
+  return m_histo ? m_histo->mean_y() : (m_Sw?m_Syw/m_Sw:0);
+}
+inline
+double c2d::rms_x() const {
+  double rms = 0; //FIXME nan.
+  if(m_histo) {
+    rms = m_histo->rms_x();
+  } else {
+    if(m_Sw==0) {
+    } else {
+      double mean = m_Sxw / m_Sw;
+      rms = ::sqrt(::fabs( (m_Sx2w / m_Sw) - mean * mean));
+    }
+  }
+  return rms;
+}
+inline
+double c2d::rms_y() const {
+  double rms = 0; //FIXME nan.
+  if(m_histo) {
+    rms = m_histo->rms_y();
+  } else {
+    if(m_Sw==0) {
+    } else {
+      double mean = m_Syw / m_Sw;
+      rms = ::sqrt(::fabs( (m_Sy2w / m_Sw) - mean * mean));
+    }
+  }
+  return rms;
+}
+
+}}
+
+#endif

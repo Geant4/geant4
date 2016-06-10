@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -61,6 +60,10 @@ class G4NeutronHPElastic : public G4HadronicInteraction
   G4int GetNiso() {return (*theElastic[0]).GetNiso();}
 
   void DoNotSuspend() {overrideSuspension = true;}
+
+   public:
+      G4int GetVerboseLevel() const;
+      void SetVerboseLevel( G4int );
 
   private:
   

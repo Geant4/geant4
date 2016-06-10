@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PathFinder.cc 73734 2013-09-09 15:01:46Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -47,7 +47,7 @@
 
 // Initialise the static instance of the singleton
 //
-G4PathFinder* G4PathFinder::fpPathFinder=0;
+G4ThreadLocal G4PathFinder* G4PathFinder::fpPathFinder=0;
 
 // ----------------------------------------------------------------------------
 // GetInstance()
@@ -56,10 +56,9 @@ G4PathFinder* G4PathFinder::fpPathFinder=0;
 //
 G4PathFinder* G4PathFinder::GetInstance()
 {
-   static G4PathFinder theInstance; 
    if( ! fpPathFinder )
    {
-     fpPathFinder = &theInstance; 
+     fpPathFinder = new G4PathFinder; 
    }
    return fpPathFinder;
 }
@@ -115,7 +114,8 @@ G4PathFinder::G4PathFinder()
 //
 G4PathFinder::~G4PathFinder() 
 {
-   delete fpMultiNavigator; 
+   delete fpMultiNavigator;
+   if (fpPathFinder)  { delete fpPathFinder; fpPathFinder=0; }
 }
 
 // ----------------------------------------------------------------------------
@@ -468,7 +468,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   G4ThreeVector moveVec = (position - lastEndPosition );
   G4double      moveLenSq= moveVec.mag2();
   if( (!fNewTrack) && (!fRelocatedPoint)
-   && ( moveLenSq> kCarTolerance*kCarTolerance ) )
+   && ( moveLenSq> 10*kCarTolerance*kCarTolerance ) )
   {
      ReportMove( position, lastEndPosition, "Position" ); 
   }

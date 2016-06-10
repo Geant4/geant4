@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -95,17 +93,16 @@ namespace G4INCL {
           const n) const;
 
     private:
-      /// \brief Return the maximum impact parameter for Coulomb-distorted trajectories.
-      G4double maxImpactParameterParticle(ParticleSpecies const &p, const G4double kinE, Nucleus const *
-          const n) const;
-
       /// \brief Return the minimum distance of approach in a head-on collision (b=0).
       G4double minimumDistance(ParticleSpecies const &p, const G4double kineticEnergy, Nucleus const * const n) const {
         const G4double particleMass = ParticleTable::getTableSpeciesMass(p);
         const G4double nucleusMass = n->getTableMass();
         const G4double reducedMass = particleMass*nucleusMass/(particleMass+nucleusMass);
-        return ParticleTable::eSquared * p.theZ * n->getZ() * particleMass
-          / (kineticEnergy * reducedMass);
+        const G4double kineticEnergyInCM = kineticEnergy * reducedMass / particleMass;
+        const G4double theMinimumDistance = PhysicalConstants::eSquared * p.theZ * n->getZ() * particleMass
+          / (kineticEnergyInCM * reducedMass);
+        INCL_DEBUG("Minimum distance of approach due to Coulomb = " << theMinimumDistance << std::endl);
+        return theMinimumDistance;
       }
 
       /// \brief Return the minimum distance of approach in a head-on collision (b=0).
@@ -140,6 +137,23 @@ namespace G4INCL {
        * \return false if below the barrier
        */
       G4bool coulombDeviation(Particle * const p, Nucleus const * const n) const;
+
+      /** \brief Get the Coulomb radius for a given particle
+       *
+       * That's the radius of the sphere that the Coulomb trajectory of the
+       * incoming particle should intersect. The intersection point is used to
+       * determine the effective impact parameter of the trajectory and the new
+       * entrance angle.
+       *
+       * If the particle is not a Cluster, the Coulomb radius reduces to the
+       * surface radius. We use a parametrisation for d, t, He3 and alphas. For
+       * heavier clusters we fall back to the surface radius.
+       *
+       * \param p the particle species
+       * \param n the deflecting nucleus
+       * \return Coulomb radius
+       */
+      G4double getCoulombRadius(ParticleSpecies const &p, Nucleus const * const n) const;
 
       /// \brief Internal CoulombNone slave to generate the avatars
       CoulombNone theCoulombNoneSlave;

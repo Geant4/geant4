@@ -36,7 +36,12 @@
 //   *******************************************************
 
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -48,20 +53,24 @@
 #include "G4UIExecutive.hh"
 #endif
 
-#include "UltraRunAction.hh"
+#include "UltraActionInitializer.hh"
 #include "UltraDetectorConstruction.hh"
-#include "UltraPrimaryGeneratorAction.hh"
 #include "UltraPhysicsList.hh"
-#include "UltraEventAction.hh"
-//#include "CLHEP/Random/RanluxEngine.h"
+
 
 int main(int argc,char** argv) {
 
 //choose the Random engine from CLHEP 
 //(lets use C++ implementation of Jame's RANLUX generator)
  
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine);
+  G4Random::setTheEngine(new CLHEP::RanluxEngine);
+  
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  //runManager->SetNumberOfThreads(2); 
+#else
   G4RunManager* runManager = new G4RunManager;
+#endif
 
   // UserInitialization classes - mandatory
   UltraDetectorConstruction* detector = new UltraDetectorConstruction;
@@ -70,12 +79,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(list);
 
   // UserAction classes - optional
-  UltraPrimaryGeneratorAction* PrimGenAct = new UltraPrimaryGeneratorAction();
-  runManager->SetUserAction(PrimGenAct);
-  UltraRunAction* RunAct = new UltraRunAction();
-  runManager->SetUserAction(RunAct);
-  UltraEventAction* EvAct = new UltraEventAction(RunAct);
-  runManager->SetUserAction(EvAct);
+  runManager->SetUserInitialization(new UltraActionInitializer());
 
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!

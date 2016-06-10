@@ -38,7 +38,7 @@
 #include "G4ios.hh"
 
 
-G4DigiManager* G4DigiManager::fDManager = 0;
+G4ThreadLocal G4DigiManager* G4DigiManager::fDManager = 0;
 
 G4DigiManager* G4DigiManager::GetDMpointer()
 {

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UserStackingAction.cc,v 1.7 2006-06-29 15:31:44 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4UserStackingAction.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4UserStackingAction.cc
 //
@@ -43,7 +42,7 @@ namespace pyG4UserStackingAction {
 
 struct CB_G4UserStackingAction : G4UserStackingAction,
 				 wrapper<G4UserStackingAction> {
-  
+
   // ClassifyNewTrack
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) {
     if(const override& f= get_override("ClassifyNewTrack")) {
@@ -70,7 +69,7 @@ struct CB_G4UserStackingAction : G4UserStackingAction,
 
 };
 
-};
+}
 
 using namespace pyG4UserStackingAction;
 

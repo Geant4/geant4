@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.14 2011-01-03 14:53:34 lgarnier Exp $
+# $Id: GNUmakefile 74059 2013-09-20 10:01:33Z gcosmo $
 
 name := G4RayTracer
 
@@ -40,6 +40,7 @@ CPPFLAGS += -I$(G4BASE)/digits_hits/detector/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/event/include
+CPPFLAGS += -I$(G4BASE)/run/include
 CPPFLAGS += -I$(G4BASE)/track/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include

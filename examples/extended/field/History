@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2009-11-19 22:39:10 gum Exp $
+$Id: History 78053 2013-12-03 08:25:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02nd Dec 2013 Ivana Hrivnacova (fieldex-V09-06-02)
+- Fixed gui.mac macros in field01-06
+
+1st Apr 2013 A.Dotti (fieldex-V09-06-01)
+- Grouping single ex tags for new API of PhysicsList needed for MT
+
+14th Feb 2013 Ivana Hrivnacova (fieldex-V09-06-00)
+- Applied coding guidelines in field01, 02, 03 
+  (data members initialization, separators)
 
 17th Nov 2012 Ivana Hrivnacova (fieldex-V09-05-03)
 - Updated documentation:

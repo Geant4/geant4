@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(radioprotection)
 
 #----------------------------------------------------------------------------
-# Find Geant4 package, activating all available UI and Vis drivers by default
-# You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
+# Find Geant4 package, activating all available Vis drivers by default
+# You can set WITH_GEANT4_VIS to OFF via the command line or ccmake/cmake-gui
 # to build a batch mode only executable
 #
 option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
@@ -14,33 +14,38 @@ if(WITH_GEANT4_UIVIS)
 else()
   find_package(Geant4 REQUIRED)
 endif()
-
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
+# Setup of ROOT ANALYSIS : optional. 
+option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
+if(WITH_ANALYSIS_USE)
+add_definitions(-DANALYSIS_USE)
+else()
+endif()
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include  
+                     ${Geant4_INCLUDE_DIR} )
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(remsim remsim.cc ${sources} ${headers})
-target_link_libraries(remsim ${Geant4_LIBRARIES} )
+add_executable(radioprotection radioprotection.cc ${sources} ${headers})
+target_link_libraries(radioprotection ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build radioprotection. This is so that we can run the executable directly because it
+# build basic_radioprotection. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
 set(radioprotection_SCRIPTS
-    interactive.mac moon.mac physics.mac vehicle1.mac vehicle2.mac vis.mac
+   vis.mac physics.mac primary.mac run.mac  MergeFiles LoadPlotNtuple.C
   )
 
 foreach(_script ${radioprotection_SCRIPTS})
@@ -52,13 +57,7 @@ foreach(_script ${radioprotection_SCRIPTS})
 endforeach()
 
 #----------------------------------------------------------------------------
-# Add program to the project targets
-# (this avoids the need of typing the program name after make)
-#
-add_custom_target(radioprotection DEPENDS remsim)
-
-#----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS remsim DESTINATION bin)
+install(TARGETS radioprotection DESTINATION bin)
 

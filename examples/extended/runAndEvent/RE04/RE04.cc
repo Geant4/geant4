@@ -28,7 +28,11 @@
 //
 // $Id: $
 //
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 #include "G4ScoringManager.hh"
 #include "G4UImanager.hh"
 
@@ -40,19 +44,24 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "RE04ActionInitialization.hh"
 #include "RE04DetectorConstruction.hh"
 #include "RE04ParallelWorldConstruction.hh"
-#include "RE04PhysicsList.hh"
-#include "RE04PrimaryGeneratorAction.hh"
-#include "RE04EventAction.hh"
-#include "RE04TrackingAction.hh"
-#include "RE04SteppingAction.hh"
+
+#include "FTFP_BERT.hh"
+#include "G4ParallelWorldPhysics.hh"
 
 int main(int argc,char** argv)
 {
  // Construct the run manager
  //
+#ifdef G4MULTITHREADED
+ G4MTRunManager * runManager = new G4MTRunManager;
+ //runManager->SetNumberOfThreads(4);
+#else
  G4RunManager * runManager = new G4RunManager;
+#endif
+
  G4ScoringManager::GetScoringManager();
 
  G4String paraWorldName = "ParallelWorld";
@@ -65,15 +74,14 @@ int main(int argc,char** argv)
  realWorld->RegisterParallelWorld(parallelWorld);
  runManager->SetUserInitialization(realWorld);
  //
- G4VUserPhysicsList* physics = new RE04PhysicsList(paraWorldName);
- runManager->SetUserInitialization(physics);
+ G4VModularPhysicsList* physicsList = new FTFP_BERT;
+ physicsList->RegisterPhysics
+       (new G4ParallelWorldPhysics(paraWorldName,true));
+ runManager->SetUserInitialization(physicsList);
     
  // Set user action classes
  //
- runManager->SetUserAction(new RE04PrimaryGeneratorAction);
- // runManager->SetUserAction(new RE04EventAction);
- // runManager->SetUserAction(new RE04TrackingAction);
- // runManager->SetUserAction(new RE04SteppingAction);
+ runManager->SetUserInitialization(new RE04ActionInitialization);
   
 #ifdef G4VIS_USE
  // Visualization manager

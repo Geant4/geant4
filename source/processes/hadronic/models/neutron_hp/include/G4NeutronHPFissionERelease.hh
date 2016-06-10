@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 070606 fix for Valgrind by T. Koi
 //
@@ -53,7 +52,7 @@ class G4NeutronHPFissionERelease
      }
   ~G4NeutronHPFissionERelease(){}
   
-  inline void Init(std::ifstream & aDataFile)
+  inline void Init(std::istream & aDataFile)
   {
     G4double dummy;
     

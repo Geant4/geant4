@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StaticSandiaData.hh 75603 2013-11-04 13:15:47Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 30.11.13 V. Grichine, add array of sandia cofs for H2O lower I1
 // 15.04.02 V.Grichine, bug fixed in Pb: comma after  15.861, 
 // 09.11.98 simplified public interface; removed mixting stuf.  MMA
 // 10.06.97 created. V. Grichine
@@ -42,7 +43,7 @@
 // class description 
 // 
 // File for static data of PhotoAbsorption cross section coefficients 
-// according Sandia parametrisation
+// according to the Sandia parametrisation
 //
 // const G4double G4SandiaTable::fSandiaTable[981][5]
 //
@@ -1510,7 +1511,8 @@ const G4double G4SandiaTable::fZtoAratio[101] =
 // and Technology, January 1990). Here the ionization energy is the least
 // energy necessary to remove to infinity one electron from an atom of the
 // element.
-																		
+
+															
 const G4double G4SandiaTable::fIonizationPotentials[101] =
 {
      0,  // nonexisting 'zero' element
@@ -1553,16 +1555,49 @@ const G4double G4SandiaTable::fIonizationPotentials[101] =
 
 };     // ............... end of fIonizationPotentials array
 
+const G4double G4SandiaTable::fH2OlowerI1[23][5] = 
+{
 
+  { 1.993334e-09,	1.864182e-09,	8.181011e-18,	-4.963267e-26,	5.482299e-35 },
+  { 3.542440e-09,	2.295515e-07,	-2.550247e-15,	9.520090e-24,	-1.182973e-32 },
+  { 8.265693e-09,	2.419315e-06,	-5.185288e-14,	3.850516e-22,	-9.721559e-31 },
+  { 1.458652e-08,	-2.138240e-05,	1.643523e-12,	-3.480304e-20,	2.262279e-28 },
+  { 4.132847e-08,	1.163509e-04,	-1.618066e-11,	7.512400e-19,	-1.157132e-26 },
 
-const G4int G4SandiaTable::fNumberOfElements  = 100 ;
+  { 8.265693e-08,	-1.946930e-03,	5.192037e-10,	-4.396552e-17,	1.190807e-24 },
+  { 1.127140e-07,	-3.556992e-04,	2.022037e-10,	-3.496181e-17,	1.927092e-24 },
+  { 2.101447e-07,	8.219810e-04,	-4.068946e-10,	5.406362e-17,	-7.994889e-25 },
+  { 2.695335e-07,	6.356669e-03,	-5.718310e-09,	1.708048e-15,	-1.691025e-22 },
+  { 3.542440e-07,	3.848023e-01,	-3.932039e-07,	1.338606e-13,	-1.518195e-20 },
 
-const G4int G4SandiaTable::fIntervalLimit     = 100 ;
+  { 3.999529e-07,	-2.188466e-01,	3.069956e-07,	-1.435787e-13,	2.238863e-20 },
+  { 4.768669e-07,	-2.583732e-03,	4.487951e-09,	-2.584317e-15,	4.937746e-22 },
+  { 6.630235e-07,	-2.588443e-03,	6.014290e-09,	-4.641238e-15,	1.190398e-21 },
+  { 8.856100e-07,	-1.412888e-05,	5.165073e-11,	-6.265984e-17,	2.526911e-23 },
+  { 1.180813e-06,	-7.560692e-07,	3.495110e-12,	-5.397347e-18,	2.795713e-24 },
 
-const G4int G4SandiaTable::fNumberOfIntervals = 980 ;
+  { 1.653139e-06,	-4.152569e-10,	-3.183958e-16,	9.563069e-22,	5.949129e-27 },
+  { 1.907468e-06,	-2.200394e-10,	-1.724842e-16,	6.191766e-22,	3.885457e-27 },
+  { 2.637987e-06,	4.906945e-12,	1.528506e-17,	4.704439e-23,	1.431829e-28 },
+  { 3.237217e-06,	1.741139e-09,	-5.306422e-15,	-1.443243e-20,	4.344915e-26 },
+  { 6.199270e-06,	3.071044e-08,	6.358247e-14,	-3.363603e-19,	-6.273536e-24 },
 
+  { 6.888078e-06,	5.892109e-01,	-1.218984e-05,	8.406958e-11,	-1.932789e-16 },
+  { 8.856100e-06,	6.202134e+00,	-1.665382e-04,	1.499314e-09,	-4.518366e-15 },
+  { 1.239854e-05,	-7.553203e+00,	5.564263e-04,	-1.032141e-08,	5.718112e-14 }
 
+};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+const G4int G4SandiaTable::fNumberOfElements  = 100;
+
+const G4int G4SandiaTable::fIntervalLimit     = 100;
+
+const G4int G4SandiaTable::fNumberOfIntervals = 980;
+
+const G4int G4SandiaTable::fH2OlowerInt       = 23;
+
+//
+//
+///////////////////////////////////////////////////////////////////////////////////////
 
 

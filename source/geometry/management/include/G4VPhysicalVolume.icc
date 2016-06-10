@@ -24,12 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPhysicalVolume.icc 74466 2013-10-07 15:36:32Z gcosmo $
 //
 //
 // class G4VPhysicalVolume Inline Implementation
 //
 // --------------------------------------------------------------------
+
+// These macros change the references to fields that are now encapsulated
+// in the class G4PVData.
+//
+#define G4MT_rot ((subInstanceManager.offset[instanceID]).frot)
+#define G4MT_trans ((subInstanceManager.offset[instanceID]).ftrans)
+
+#define G4MT_pvdata (subInstanceManager.offset[instanceID])
 
 inline
 G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& right) const
@@ -38,33 +46,40 @@ G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& right) const
 }
 
 inline
+G4int G4VPhysicalVolume::GetInstanceID() const
+{
+  return instanceID;
+}
+
+
+inline
 const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
 {
-  return ftrans;
+  return G4MT_trans;
 }
 
 inline
 void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &vec)
 {
-  ftrans=vec;
+  G4MT_trans=vec;
 }
 
 inline
 const G4RotationMatrix* G4VPhysicalVolume::GetRotation() const
 {
-  return frot;
+  return G4MT_rot;
 }
 
 inline
 G4RotationMatrix* G4VPhysicalVolume::GetRotation()
 {
-  return frot;
+  return G4MT_rot;
 }
 
 inline
 void G4VPhysicalVolume::SetRotation(G4RotationMatrix *pRot)
 {
-  frot=pRot;
+  G4MT_rot=pRot;
 }
 
 inline
@@ -104,14 +119,34 @@ void G4VPhysicalVolume::SetName(const G4String& pName)
 }
 
 inline
+EVolume G4VPhysicalVolume::VolumeType() const
+{
+  EVolume type;
+  EAxis axis;
+  G4int nReplicas;
+  G4double width,offset;
+  G4bool consuming;
+  if ( IsReplicated() )
+  {
+    GetReplicationData(axis,nReplicas,width,offset,consuming);
+    type = (consuming) ? kReplica : kParameterised;
+  }
+  else
+  {
+    type = kNormal;
+  }
+  return type;
+}
+
+inline
 G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 {
   G4RotationMatrix  aRotM;   // Initialised to identity
 
-  // Insure against frot being a null pointer
-  if(frot)
+  // Insure against G4MT_rot being a null pointer
+  if(G4MT_rot)
   {
-     aRotM= frot->inverse();
+     aRotM= G4MT_rot->inverse();
   }
   return aRotM;
 }
@@ -119,17 +154,20 @@ G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 inline
 G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
 {
-  return  ftrans;
+  return G4MT_trans;
 }
 
 inline
 const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
 {
-  return frot;
+  return G4MT_rot;
 }
 
 inline
 G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
 {
-  return -ftrans;
+  return -G4MT_trans;
 }
+
+#undef G4MT_rot
+#undef G4MT_trans

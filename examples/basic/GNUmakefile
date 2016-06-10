@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003-04-11 10:49:49 gcosmo Exp $
+# $Id: GNUmakefile 76474 2013-11-11 10:36:34Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -9,7 +9,7 @@ endif
  
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIRS = B1 B2/B2a B2/B2b B3 B4/B4a B4/B4b B4/B4c B4/B4d
+SUBDIRS = B1 B2/B2a B2/B2b B3 B4/B4a B4/B4b B4/B4c B4/B4d B5
 
 .PHONY : all clean clean_libs
 

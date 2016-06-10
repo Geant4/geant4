@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeIonisationCrossSection.cc 74626 2013-10-17 07:00:59Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -97,6 +97,8 @@ G4double G4PenelopeIonisationCrossSection::CrossSection(G4int Z,
   if (!theCrossSectionHandler)
     theCrossSectionHandler = new G4PenelopeIonisationXSHandler();
 
+  theCrossSectionHandler->BuildXSTable(material,0.,G4Electron::Electron());
+
   G4int nmax = std::min(nMaxLevels,transitionManager->NumberOfShells(Z));
 
   if(G4int(shell) < nmax && 
@@ -112,7 +114,7 @@ G4double G4PenelopeIonisationCrossSection::CrossSection(G4int Z,
       if (index < 0)
 	return cross;
 
-      G4PenelopeCrossSection* theXS = 
+      const G4PenelopeCrossSection*  theXS = 
 	theCrossSectionHandler->GetCrossSectionTableForCouple(G4Electron::Electron(),
 							      material,
 							      0.);

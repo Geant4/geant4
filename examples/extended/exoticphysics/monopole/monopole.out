@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -19,16 +19,19 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 /monopole/setup 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
-/control/execute /build/cdash/G4/release/09-06-cand-00_branch/examples/extended/exoticphysics/monopole/monopole.in
+/control/execute /ec/G4-builds/release/slc6-gcc47-RelWithDebInfo/09-06-ref-11_branch/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /run/verbose 0
 /testex/run/verbose 1
 /tracking/verbose 0
 /testex/det/setMat G4_Si
 /testex/det/setSizeX 10 cm
+/run/geometryModified
 /testex/det/setSizeYZ 20 cm
+/run/geometryModified
 /testex/det/setStepSize 0.2 mm
 /testex/run/binSize 0.2 mm
+/process/em/verbose 1
 /run/initialize
 
 ---------------------------------------------------------
@@ -36,7 +39,28 @@ Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
 
 ---------------------------------------------------------
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
-/process/eLoss/verbose 1
+/process/em/verbose 1
+/particle/select monopole
+/particle/process/dump
+G4ProcessManager:  particle[monopole]
+[0]=== process[MonopoleTransportation :Transportation] Active 
+  Ordering::             AtRest             AlongStep          PostStep   
+                    GetPIL/    DoIt    GetPIL/    DoIt    GetPIL/    DoIt 
+  Ordering::      
+  index                 -1:      -1:       1:       0:       2:       0:
+  parameter             -1:      -1:       1:       1:       1:       1:
+[1]=== process[mplIoni :Electromagnetic] Active 
+  Ordering::             AtRest             AlongStep          PostStep   
+                    GetPIL/    DoIt    GetPIL/    DoIt    GetPIL/    DoIt 
+  Ordering::      
+  index                 -1:      -1:       0:       1:       1:       1:
+  parameter             -1:      -1:       2:       2:       2:       2:
+[2]=== process[StepLimiter :General] Active 
+  Ordering::             AtRest             AlongStep          PostStep   
+                    GetPIL/    DoIt    GetPIL/    DoIt    GetPIL/    DoIt 
+  Ordering::      
+  index                 -1:      -1:      -1:      -1:       0:       2:
+  parameter             -1:      -1:      -1:      -1:    1000:    1000:
 /testex/event/printModulo 10
 /gun/particle monopole
 /gun/energy 100 GeV
@@ -63,7 +87,7 @@ conv:   for  gamma    SubType= 14
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
@@ -90,7 +114,7 @@ CoulombScat:   for  e-    SubType= 1
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
@@ -140,13 +164,14 @@ hBrems:   for  proton    SubType= 3
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -160,7 +185,7 @@ ionIoni:   for  GenericIon    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -192,6 +217,7 @@ hBrems:   for  anti_proton    SubType= 3
 hPairProd:   for  anti_proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -217,6 +243,7 @@ hBrems:   for  kaon+    SubType= 3
 hPairProd:   for  kaon+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -242,6 +269,7 @@ hBrems:   for  kaon-    SubType= 3
 hPairProd:   for  kaon-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -268,6 +296,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -300,6 +329,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -331,6 +361,7 @@ hBrems:   for  pi+    SubType= 3
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -356,186 +387,192 @@ hBrems:   for  pi-    SubType= 3
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-============================================================================================
-             HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-                                  Hadronic Processes for <GenericIon>
-                                  -----------------------------------
-        ionInelastic  Models:     Binary Light Ion Cascade: Emin(GeV)=    0  Emax(GeV)= 4
-                                                      FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-        ionInelastic  Crs sctns: Glauber-Gribov nucleus nucleus: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
 
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-                                  Hadronic Processes for <anti_neutron>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-AntiNeutronInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
 
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-                                  Hadronic Processes for <anti_proton>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 0.1
-                                              AntiAElastic: Emin(GeV)=  0.1  Emax(GeV)= 100000
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-          hadElastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: hFritiofCaptureAtRest
 
- AntiProtonInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for e+
 
- AntiProtonInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-          hFritiofCaptureAtRest
+---------------------------------------------------
+                           Hadronic Processes for e-
 
-                                  Hadronic Processes for <e+>
-                                  -----------------------------------
-     PositronNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-     PositronNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for gamma
 
+  Process: photonNuclear
+        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-                                  Hadronic Processes for <e->
-                                  -----------------------------------
-      ElectroNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
+---------------------------------------------------
+                           Hadronic Processes for kaon+
 
-      ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
+  Process: kaon+Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-                                  Hadronic Processes for <gamma>
-                                  -----------------------------------
-     PhotonInelastic  Models:               BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 3.5
-                                           TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for kaon-
 
-     PhotonInelastic  Crs sctns:            PhotoNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
+  Process: kaon-Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-                                  Hadronic Processes for <kaon+>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: hBertiniCaptureAtRest
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for lambda
 
-   KaonPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-   KaonPlusInelastic  Crs sctns:  ChipsKaonPlusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: lambdaInelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
+---------------------------------------------------
+                           Hadronic Processes for mu-
 
-                                  Hadronic Processes for <kaon->
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: muMinusCaptureAtRest
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for neutron
 
-  KaonMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  KaonMinusInelastic  Crs sctns: ChipsKaonMinusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: neutronInelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-          hBertiniCaptureAtRest
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
 
-                                  Hadronic Processes for <lambda>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for pi+
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-     LambdaInelastic  Models:               BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 6
-                                                      FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
-
-     LambdaInelastic  Crs sctns:   ChipsHyperonInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                     Hadronic Processes for <mu->
-          muMinusCaptureAtRest
-
-                                  Hadronic Processes for <neutron>
-                                  -----------------------------------
-          hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:     ChipsNeutronElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-    NeutronInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-    NeutronInelastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-            nCapture  Models:                   G4LCapture: Emin(GeV)=    0  Emax(GeV)= 20000
-
-            nCapture  Crs sctns:          GheishaCaptureXS: Emin(GeV)=    0  Emax(GeV)= 100000
-
-            nFission  Models:                   G4LFission: Emin(GeV)=    0  Emax(GeV)= 20000
-
-            nFission  Crs sctns:          GheishaFissionXS: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <pi+>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 1
-                                           hElasticGlauber: Emin(GeV)=    1  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
-                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-   PionPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-   PionPlusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: pi+Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
+---------------------------------------------------
+                           Hadronic Processes for pi-
 
-                                  Hadronic Processes for <pi->
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 1
-                                           hElasticGlauber: Emin(GeV)=    1  Emax(GeV)= 100000
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-          hadElastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
-                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-  PionMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-  PionMinusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: pi-Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-          hBertiniCaptureAtRest
+  Process: hBertiniCaptureAtRest
 
-                                  Hadronic Processes for <proton>
-                                  -----------------------------------
-          hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
+---------------------------------------------------
+                           Hadronic Processes for proton
 
-          hadElastic  Crs sctns:      ChipsProtonElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-     ProtonInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+  Process: protonInelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-     ProtonInelastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-============================================================================================
+================================================================
 ### Run 0 start.
 ### Histo::Save: Opended file <monopole.root>  for 5 histograms 
 
@@ -561,66 +598,66 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
  The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
 
- projected Range= -2.2615 cm    rms= 85.347 um 
+ projected Range= 7.7473 cm    rms= 93.057 um 
 ### Stopping Powers
- E(MeV)= 0.001  dedxp= 24.465 dedxmp= 1.4828
- E(MeV)= 0.0012589  dedxp= 27.276 dedxmp= 1.6637
- E(MeV)= 0.0015849  dedxp= 30.767 dedxmp= 1.8667
- E(MeV)= 0.0019953  dedxp= 34.558 dedxmp= 2.0945
- E(MeV)= 0.0025119  dedxp= 38.769 dedxmp= 2.3501
- E(MeV)= 0.0031623  dedxp= 43.491 dedxmp= 2.6368
- E(MeV)= 0.0039811  dedxp= 48.814 dedxmp= 2.9586
- E(MeV)= 0.0050119  dedxp= 54.773 dedxmp= 3.3196
- E(MeV)= 0.0063096  dedxp= 61.455 dedxmp= 3.7246
- E(MeV)= 0.0079433  dedxp= 68.933 dedxmp= 4.1791
- E(MeV)= 0.01  dedxp= 77.356 dedxmp= 4.689
- E(MeV)= 0.012589  dedxp= 85.192 dedxmp= 5.2612
- E(MeV)= 0.015849  dedxp= 93.469 dedxmp= 5.9031
- E(MeV)= 0.019953  dedxp= 101.92 dedxmp= 6.6234
- E(MeV)= 0.025119  dedxp= 110.26 dedxmp= 7.4316
- E(MeV)= 0.031623  dedxp= 117.88 dedxmp= 8.3384
- E(MeV)= 0.039811  dedxp= 123.92 dedxmp= 9.3559
- E(MeV)= 0.050119  dedxp= 127.47 dedxmp= 10.497
- E(MeV)= 0.063096  dedxp= 127.65 dedxmp= 11.778
- E(MeV)= 0.079433  dedxp= 124.16 dedxmp= 13.215
- E(MeV)= 0.1  dedxp= 117.53 dedxmp= 14.828
- E(MeV)= 0.12589  dedxp= 108.93 dedxmp= 16.637
- E(MeV)= 0.15849  dedxp= 99.664 dedxmp= 18.667
- E(MeV)= 0.19953  dedxp= 90.588 dedxmp= 20.945
- E(MeV)= 0.25119  dedxp= 82.081 dedxmp= 23.501
- E(MeV)= 0.31623  dedxp= 74.169 dedxmp= 26.368
- E(MeV)= 0.39811  dedxp= 66.763 dedxmp= 29.586
- E(MeV)= 0.50119  dedxp= 59.742 dedxmp= 33.196
- E(MeV)= 0.63096  dedxp= 53.434 dedxmp= 37.246
- E(MeV)= 0.79433  dedxp= 47.062 dedxmp= 41.791
- E(MeV)= 1  dedxp= 40.845 dedxmp= 46.89
- E(MeV)= 1.2589  dedxp= 35.325 dedxmp= 52.611
- E(MeV)= 1.5849  dedxp= 30.422 dedxmp= 59.031
- E(MeV)= 1.9953  dedxp= 26.068 dedxmp= 66.233
- E(MeV)= 2.5119  dedxp= 22.267 dedxmp= 74.315
- E(MeV)= 3.1623  dedxp= 18.934 dedxmp= 83.382
- E(MeV)= 3.9811  dedxp= 16.043 dedxmp= 93.556
- E(MeV)= 5.0119  dedxp= 13.589 dedxmp= 104.86
- E(MeV)= 6.3096  dedxp= 11.42 dedxmp= 106.51
- E(MeV)= 7.9433  dedxp= 9.608 dedxmp= 108.92
- E(MeV)= 10  dedxp= 8.0524 dedxmp= 112.22
- E(MeV)= 12.589  dedxp= 6.6936 dedxmp= 116.54
- E(MeV)= 15.849  dedxp= 5.5755 dedxmp= 122.07
- E(MeV)= 19.953  dedxp= 4.6616 dedxmp= 129
- E(MeV)= 25.119  dedxp= 3.9107 dedxmp= 137.56
- E(MeV)= 31.623  dedxp= 3.2703 dedxmp= 148
- E(MeV)= 39.811  dedxp= 2.7356 dedxmp= 160.64
- E(MeV)= 50.119  dedxp= 2.2882 dedxmp= 175.82
- E(MeV)= 63.096  dedxp= 1.9184 dedxmp= 193.93
- E(MeV)= 79.433  dedxp= 1.6121 dedxmp= 215.44
- E(MeV)= 100  dedxp= 1.3599 dedxmp= 240.86
- E(MeV)= 125.89  dedxp= 1.153 dedxmp= 270.8
- E(MeV)= 158.49  dedxp= 0.98406 dedxmp= 305.95
- E(MeV)= 199.53  dedxp= 0.84666 dedxmp= 347.09
- E(MeV)= 251.19  dedxp= 0.73555 dedxmp= 395.12
- E(MeV)= 316.23  dedxp= 0.64633 dedxmp= 451.06
- E(MeV)= 398.11  dedxp= 0.57535 dedxmp= 516.06
- E(MeV)= 501.19  dedxp= 0.51956 dedxmp= 591.46
+ E(MeV)= 0.001  dedxp= 24.465 dedxmp= 1.2659
+ E(MeV)= 0.0012589  dedxp= 27.276 dedxmp= 1.4204
+ E(MeV)= 0.0015849  dedxp= 30.767 dedxmp= 1.5937
+ E(MeV)= 0.0019953  dedxp= 34.558 dedxmp= 1.7881
+ E(MeV)= 0.0025119  dedxp= 38.769 dedxmp= 2.0063
+ E(MeV)= 0.0031623  dedxp= 43.491 dedxmp= 2.2511
+ E(MeV)= 0.0039811  dedxp= 48.814 dedxmp= 2.5258
+ E(MeV)= 0.0050119  dedxp= 54.773 dedxmp= 2.834
+ E(MeV)= 0.0063096  dedxp= 61.455 dedxmp= 3.1798
+ E(MeV)= 0.0079433  dedxp= 68.933 dedxmp= 3.5678
+ E(MeV)= 0.01  dedxp= 77.356 dedxmp= 4.0031
+ E(MeV)= 0.012589  dedxp= 85.192 dedxmp= 4.4916
+ E(MeV)= 0.015849  dedxp= 93.469 dedxmp= 5.0397
+ E(MeV)= 0.019953  dedxp= 101.92 dedxmp= 5.6546
+ E(MeV)= 0.025119  dedxp= 110.26 dedxmp= 6.3445
+ E(MeV)= 0.031623  dedxp= 117.88 dedxmp= 7.1187
+ E(MeV)= 0.039811  dedxp= 123.92 dedxmp= 7.9873
+ E(MeV)= 0.050119  dedxp= 127.47 dedxmp= 8.9619
+ E(MeV)= 0.063096  dedxp= 127.65 dedxmp= 10.055
+ E(MeV)= 0.079433  dedxp= 124.16 dedxmp= 11.282
+ E(MeV)= 0.1  dedxp= 117.53 dedxmp= 12.659
+ E(MeV)= 0.12589  dedxp= 108.93 dedxmp= 14.204
+ E(MeV)= 0.15849  dedxp= 99.664 dedxmp= 15.937
+ E(MeV)= 0.19953  dedxp= 90.588 dedxmp= 17.881
+ E(MeV)= 0.25119  dedxp= 82.081 dedxmp= 20.063
+ E(MeV)= 0.31623  dedxp= 74.169 dedxmp= 22.511
+ E(MeV)= 0.39811  dedxp= 66.763 dedxmp= 25.258
+ E(MeV)= 0.50119  dedxp= 59.742 dedxmp= 28.34
+ E(MeV)= 0.63096  dedxp= 53.434 dedxmp= 31.798
+ E(MeV)= 0.79433  dedxp= 47.062 dedxmp= 35.678
+ E(MeV)= 1  dedxp= 40.845 dedxmp= 40.031
+ E(MeV)= 1.2589  dedxp= 35.325 dedxmp= 44.916
+ E(MeV)= 1.5849  dedxp= 30.422 dedxmp= 50.396
+ E(MeV)= 1.9953  dedxp= 26.068 dedxmp= 56.545
+ E(MeV)= 2.5119  dedxp= 22.267 dedxmp= 63.444
+ E(MeV)= 3.1623  dedxp= 18.934 dedxmp= 71.185
+ E(MeV)= 3.9811  dedxp= 16.043 dedxmp= 79.871
+ E(MeV)= 5.0119  dedxp= 13.589 dedxmp= 89.528
+ E(MeV)= 6.3096  dedxp= 11.42 dedxmp= 91.388
+ E(MeV)= 7.9433  dedxp= 9.608 dedxmp= 94.03
+ E(MeV)= 10  dedxp= 8.0524 dedxmp= 97.584
+ E(MeV)= 12.589  dedxp= 6.6936 dedxmp= 102.2
+ E(MeV)= 15.849  dedxp= 5.5755 dedxmp= 108.06
+ E(MeV)= 19.953  dedxp= 4.6616 dedxmp= 115.36
+ E(MeV)= 25.119  dedxp= 3.9107 dedxmp= 124.33
+ E(MeV)= 31.623  dedxp= 3.2703 dedxmp= 135.25
+ E(MeV)= 39.811  dedxp= 2.7356 dedxmp= 148.41
+ E(MeV)= 50.119  dedxp= 2.2882 dedxmp= 164.17
+ E(MeV)= 63.096  dedxp= 1.9184 dedxmp= 182.94
+ E(MeV)= 79.433  dedxp= 1.6121 dedxmp= 205.18
+ E(MeV)= 100  dedxp= 1.3599 dedxmp= 231.43
+ E(MeV)= 125.89  dedxp= 1.153 dedxmp= 262.3
+ E(MeV)= 158.49  dedxp= 0.98406 dedxmp= 298.49
+ E(MeV)= 199.53  dedxp= 0.84666 dedxmp= 340.8
+ E(MeV)= 251.19  dedxp= 0.73555 dedxmp= 390.13
+ E(MeV)= 316.23  dedxp= 0.64633 dedxmp= 447.53
+ E(MeV)= 398.11  dedxp= 0.57535 dedxmp= 514.18
+ E(MeV)= 501.19  dedxp= 0.51956 dedxmp= 591.42
  E(MeV)= 630.96  dedxp= 0.47644 dedxmp= 631.06
  E(MeV)= 794.33  dedxp= 0.44387 dedxmp= 669.72
  E(MeV)= 1000  dedxp= 0.42068 dedxmp= 708.41
@@ -630,8 +667,8 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
  E(MeV)= 2511.9  dedxp= 0.3885 dedxmp= 863.59
  E(MeV)= 3162.3  dedxp= 0.39046 dedxmp= 902.56
  E(MeV)= 3981.1  dedxp= 0.39483 dedxmp= 941.63
- E(MeV)= 5011.9  dedxp= 0.40102 dedxmp= 980.83
- E(MeV)= 6309.6  dedxp= 0.40852 dedxmp= 1020.2
+ E(MeV)= 5011.9  dedxp= 0.40101 dedxmp= 980.83
+ E(MeV)= 6309.6  dedxp= 0.4085 dedxmp= 1020.2
  E(MeV)= 7943.3  dedxp= 0.41692 dedxmp= 1059.7
  E(MeV)= 10000  dedxp= 0.42591 dedxmp= 1099.5
  E(MeV)= 12589  dedxp= 0.43526 dedxmp= 1139.6
@@ -668,8 +705,8 @@ Range table for G4_Si
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.842161 0.474074 0.744008 0.810087 0.954491 0.604513 0.99711 0.0147059 0.836503 0.26239 0.450087 0.757084 0.921169 0.378492 0.234518 0.414893 0.750936 0.54648 0.710336 0.841439 0.10809 0.793819 0.692806 0.808077 
- i_lag = 11, j_lag = 21
- carry = 5.96046e-08, count24 = 6
+ float_seed_table[] = 0.20186 0.823798 0.983611 0.756257 0.0414395 0.573316 0.56747 0.0561031 0.349564 0.604423 0.97899 0.188702 0.447539 0.800086 0.478464 0.0459619 0.625123 0.45142 0.281967 0.262283 0.441753 0.205168 0.216096 0.0768507 
+ i_lag = 13, j_lag = 23
+ carry = 5.96046e-08, count24 = 4
  luxury = 3 nskip = 199
 ----------------------------------------

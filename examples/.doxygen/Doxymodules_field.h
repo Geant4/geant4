@@ -1,4 +1,4 @@
-// $Id: Doxymodules_field.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_field.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_field.h
@@ -30,6 +30,7 @@
  *  @{
  */
 
+  class F01ActionInitialization {};
   class F01CalorHit {};
   class F01CalorimeterSD {};
   class F01DetectorConstruction {};
@@ -45,8 +46,6 @@
   class F01RunAction {};
   class F01RunMessenger {};
   class F01StepCut {};
-  class F01SteppingAction {};
-  class F01SteppingMessenger {};
   class F01SteppingVerbose {};
 
 /** @} */
@@ -56,6 +55,7 @@
  *  @{
  */
 
+  class F02ActionInitialization {};
   class F02CalorHit {};
   class F02CalorimeterSD {};
   class F02DetectorConstruction {};
@@ -71,8 +71,6 @@
   class F02RunAction {};
   class F02RunMessenger {};
   class F02StepCut {};
-  class F02SteppingAction {};
-  class F02SteppingMessenger {};
   class F02SteppingVerbose {};
 
 /** @} */
@@ -97,8 +95,6 @@
   class F03RunAction {};
   class F03RunMessenger {};
   class F03StepCut {};
-  class F03SteppingAction {};
-  class F03SteppingMessenger {};
   class F03SteppingVerbose {};
 
 /** @} */
@@ -143,12 +139,14 @@
  *  @{
  */
 
+  class F05ActionInitialization {};
   class F05DetectorConstruction {};
   class F05ExtraPhysics {};
   class F05Field {};
   class F05PhysicsList {};
   class F05PrimaryGeneratorAction {};
   class F05SteppingAction {};
+  class F05SteppingVerbose {};
 
 /** @} */
 
@@ -157,11 +155,9 @@
  *  @{
  */
 
+  class F06ActionInitialization {};
   class F06DetectorConstruction {};
-  class F06EventAction {};
-  class F06EventActionMessenger {};
   class F06ExtraPhysics {};
-  class F06Field {};
   class F06PhysicsList {};
   class F06PrimaryGeneratorAction {};
 

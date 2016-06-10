@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpRayleigh.cc 71487 2013-06-17 08:19:40Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -84,15 +84,13 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName, G4ProcessType type)
 {
         SetProcessSubType(fOpRayleigh);
 
-        thePhysicsTable = 0;
+        thePhysicsTable = NULL;
 
         DefaultWater = false;
 
         if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;
         }
-
-        BuildThePhysicsTable();
 }
 
 // G4OpRayleigh::G4OpRayleigh(const G4OpRayleigh &right)
@@ -105,7 +103,7 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName, G4ProcessType type)
 
 G4OpRayleigh::~G4OpRayleigh()
 {
-        if (thePhysicsTable!= 0) {
+        if (thePhysicsTable!= NULL) {
            thePhysicsTable->clearAndDestroy();
            delete thePhysicsTable;
         }
@@ -114,6 +112,11 @@ G4OpRayleigh::~G4OpRayleigh()
         ////////////
         // Methods
         ////////////
+
+void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+    if (!thePhysicsTable) BuildThePhysicsTable();
+}
 
 // PostStepDoIt
 // -------------

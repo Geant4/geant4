@@ -27,7 +27,7 @@
 /// \brief Definition of the B02PVolumeStore class
 //
 //
-// $Id$
+// $Id: B02PVolumeStore.hh 77475 2013-11-25 09:38:51Z gcosmo $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -57,6 +57,7 @@ public:
   
   void AddPVolume(const G4GeometryCell &cell);
   const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
+  G4int Size();
   G4String GetPNames() const;
 
 private:

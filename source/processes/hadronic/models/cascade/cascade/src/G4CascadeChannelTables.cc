@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4CascadeChannelTables.cc 69632 2013-05-09 01:17:48Z dwright $
+//
 // Factory to return pointer to Bertini cross-section table based on
 // collision initial state (hadron type codes).
 //
@@ -35,78 +37,11 @@
 // 20110923  M. Kelsey -- Add optional stream& argument to printTable(),
 //		pass through.
 // 20111007  M. Kelsey -- Add new gamma-n and gamma-p tables.
+// 20130129  M. Kelsey -- Drop load-on-demand interfaces, fill in ctor
+// 20130429  M. Kelsey -- Change instance to thread-local pointer.
 
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeChannel.hh"
-#include <iostream>
-#include <map>
-
-
-// Singleton is created at first invocation
-
-G4CascadeChannelTables& G4CascadeChannelTables::instance() {
-  static G4CascadeChannelTables theInstance;
-  return theInstance;
-}
-
-
-// Argument is interaction code, product of G4InuclEP types
-
-const G4CascadeChannel* G4CascadeChannelTables::GetTable(G4int initialState) {
-  const G4CascadeChannel* theTable = instance().FindTable(initialState);
-  if (!theTable) theTable = instance().LoadTable(initialState);
-  return theTable;
-}
-
-// Arguments are individual G4InuclElementaryParticle types
-
-const G4CascadeChannel* 
-G4CascadeChannelTables::GetTable(G4int had1, G4int had2) {
-  return GetTable(had1*had2);
-}
-
-// Register cross-section table for later lookup
-
-void  
-G4CascadeChannelTables::AddTable(G4int initialState, G4CascadeChannel* table) {
-  instance().SaveTable(initialState, table);
-}
-
-// Return cross-section table requested by user
-
-const G4CascadeChannel* 
-G4CascadeChannelTables::FindTable(G4int initialState) {
-#ifdef G4CASCADE_DEBUG_SAMPLER
-  G4cout << "G4CascadeChannelTables::FindTable " << initialState << G4endl;
-#endif
-  return (tables.find(initialState)!=tables.end()) ? tables[initialState] : 0;
-}
-
-
-// Register specified table in list, replacing previous version
-
-void 
-G4CascadeChannelTables::SaveTable(G4int initialState, G4CascadeChannel* table) {
-#ifdef G4CASCADE_DEBUG_SAMPLER
-  G4cout << "G4CascadeChannelTables::SaveTable " << initialState << G4endl;
-#endif
-  if (!table) return;		// Avoid unnecessary work
-
-  if (FindTable(initialState)) delete tables[initialState];
-  tables[initialState] = table;
-}
-
-
-// Convenience function for diagnostic output
-
-void G4CascadeChannelTables::PrintTable(G4int initialState, std::ostream& os) {
-  const G4CascadeChannel* tbl = GetTable(initialState);
-  if (tbl) tbl->printTable(os);
-}
-
-
-// Special function to create and store table for specified interaction
-
 #include "G4CascadeGamNChannel.hh"
 #include "G4CascadeGamPChannel.hh"
 #include "G4CascadeKminusNChannel.hh"
@@ -140,52 +75,109 @@ void G4CascadeChannelTables::PrintTable(G4int initialState, std::ostream& os) {
 #include "G4CascadeXiZeroPChannel.hh"
 #include "G4CascadeOmegaMinusNChannel.hh"
 #include "G4CascadeOmegaMinusPChannel.hh"
+#include "G4CascadeMuMinusPChannel.hh"
 #include "G4InuclParticleNames.hh"
+#include <iostream>
+#include <map>
 using namespace G4InuclParticleNames;
 
-const G4CascadeChannel* G4CascadeChannelTables::LoadTable(G4int initialState) {
-#ifdef G4CASCADE_DEBUG_SAMPLER
-  G4cout << "G4CascadeChannelTables::LoadTable " << initialState << G4endl;
-#endif
 
-  G4CascadeChannel* tbl = 0;
-  switch (initialState) {
-  case gam*neu: tbl = new G4CascadeGamNChannel; break;
-  case gam*pro: tbl = new G4CascadeGamPChannel; break;
-  case k0*neu:  tbl = new G4CascadeKzeroNChannel; break;
-  case k0*pro:  tbl = new G4CascadeKzeroPChannel; break;
-  case k0b*neu: tbl = new G4CascadeKzeroBarNChannel; break;
-  case k0b*pro: tbl = new G4CascadeKzeroBarPChannel; break;
-  case kmi*neu: tbl = new G4CascadeKminusNChannel; break;
-  case kmi*pro: tbl = new G4CascadeKminusPChannel; break;
-  case kpl*neu: tbl = new G4CascadeKplusNChannel; break;
-  case kpl*pro: tbl = new G4CascadeKplusPChannel; break;
-  case lam*neu: tbl = new G4CascadeLambdaNChannel; break;
-  case lam*pro: tbl = new G4CascadeLambdaPChannel; break;
-  case neu*neu: tbl = new G4CascadeNNChannel; break;
-  case neu*pro: tbl = new G4CascadeNPChannel; break;
-  case pi0*neu: tbl = new G4CascadePiZeroNChannel; break;
-  case pi0*pro: tbl = new G4CascadePiZeroPChannel; break;
-  case pim*neu: tbl = new G4CascadePiMinusNChannel; break;
-  case pim*pro: tbl = new G4CascadePiMinusPChannel; break;
-  case pip*neu: tbl = new G4CascadePiPlusNChannel; break;
-  case pip*pro: tbl = new G4CascadePiPlusPChannel; break;
-  case pro*pro: tbl = new G4CascadePPChannel; break;
-  case s0*neu:  tbl = new G4CascadeSigmaZeroNChannel; break;
-  case s0*pro:  tbl = new G4CascadeSigmaZeroPChannel; break;
-  case sm*neu:  tbl = new G4CascadeSigmaMinusNChannel; break;
-  case sm*pro:  tbl = new G4CascadeSigmaMinusPChannel; break;
-  case sp*neu:  tbl = new G4CascadeSigmaPlusNChannel; break;
-  case sp*pro:  tbl = new G4CascadeSigmaPlusPChannel; break;
-  case xi0*neu: tbl = new G4CascadeXiZeroNChannel; break;
-  case xi0*pro: tbl = new G4CascadeXiZeroPChannel; break;
-  case xim*neu: tbl = new G4CascadeXiMinusNChannel; break;
-  case xim*pro: tbl = new G4CascadeXiMinusPChannel; break;
-  case om*neu:  tbl = new G4CascadeOmegaMinusNChannel; break;
-  case om*pro:  tbl = new G4CascadeOmegaMinusPChannel; break;
-  default: tbl = 0;
+// Singleton is created at first invocation
+
+G4ThreadLocal G4CascadeChannelTables* G4CascadeChannelTables::theInstance = 0;
+
+const G4CascadeChannelTables& G4CascadeChannelTables::instance() {
+  if (!theInstance) theInstance = new G4CascadeChannelTables;
+  return *theInstance;
+}
+
+
+// Constructor and destructor fully populate tables
+
+G4CascadeChannelTables::G4CascadeChannelTables() {
+  tables.clear();
+  tables[gam*neu] = new G4CascadeGamNChannel;
+  tables[gam*pro] = new G4CascadeGamPChannel;
+  tables[k0*neu]  = new G4CascadeKzeroNChannel;
+  tables[k0*pro]  = new G4CascadeKzeroPChannel;
+  tables[k0b*neu] = new G4CascadeKzeroBarNChannel;
+  tables[k0b*pro] = new G4CascadeKzeroBarPChannel;
+  tables[kmi*neu] = new G4CascadeKminusNChannel;
+  tables[kmi*pro] = new G4CascadeKminusPChannel;
+  tables[kpl*neu] = new G4CascadeKplusNChannel;
+  tables[kpl*pro] = new G4CascadeKplusPChannel;
+  tables[lam*neu] = new G4CascadeLambdaNChannel;
+  tables[lam*pro] = new G4CascadeLambdaPChannel;
+  tables[neu*neu] = new G4CascadeNNChannel;
+  tables[neu*pro] = new G4CascadeNPChannel;
+  tables[pi0*neu] = new G4CascadePiZeroNChannel;
+  tables[pi0*pro] = new G4CascadePiZeroPChannel;
+  tables[pim*neu] = new G4CascadePiMinusNChannel;
+  tables[pim*pro] = new G4CascadePiMinusPChannel;
+  tables[pip*neu] = new G4CascadePiPlusNChannel;
+  tables[pip*pro] = new G4CascadePiPlusPChannel;
+  tables[pro*pro] = new G4CascadePPChannel;
+  tables[s0*neu]  = new G4CascadeSigmaZeroNChannel;
+  tables[s0*pro]  = new G4CascadeSigmaZeroPChannel;
+  tables[sm*neu]  = new G4CascadeSigmaMinusNChannel;
+  tables[sm*pro]  = new G4CascadeSigmaMinusPChannel;
+  tables[sp*neu]  = new G4CascadeSigmaPlusNChannel;
+  tables[sp*pro]  = new G4CascadeSigmaPlusPChannel;
+  tables[xi0*neu] = new G4CascadeXiZeroNChannel;
+  tables[xi0*pro] = new G4CascadeXiZeroPChannel;
+  tables[xim*neu] = new G4CascadeXiMinusNChannel;
+  tables[xim*pro] = new G4CascadeXiMinusPChannel;
+  tables[om*neu]  = new G4CascadeOmegaMinusNChannel;
+  tables[om*pro]  = new G4CascadeOmegaMinusPChannel;
+  tables[mum*pro] = new G4CascadeMuMinusPChannel;
+}
+
+G4CascadeChannelTables::~G4CascadeChannelTables() {
+  TableMap::iterator entry;
+  for (entry = tables.begin(); entry != tables.end(); ++entry) {
+    delete entry->second; entry->second = 0;
   }
 
-  SaveTable(initialState, tbl);
-  return tbl;
+  tables.clear();
+}
+
+
+// Argument is interaction code, product of G4InuclEP types
+
+const G4CascadeChannel* G4CascadeChannelTables::GetTable(G4int initialState) {
+  return instance().FindTable(initialState);
+}
+
+// Arguments are individual G4InuclElementaryParticle types
+
+const G4CascadeChannel* 
+G4CascadeChannelTables::GetTable(G4int had1, G4int had2) {
+  return GetTable(had1*had2);
+}
+
+// Return cross-section table requested by user
+
+const G4CascadeChannel* 
+G4CascadeChannelTables::FindTable(G4int initialState) const {
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << "G4CascadeChannelTables::FindTable " << initialState << G4endl;
+#endif
+  TableMap::const_iterator entry = tables.find(initialState);
+  return (entry != tables.end()) ? entry->second : 0;
+}
+
+
+// Convenience functions for diagnostic output
+
+void G4CascadeChannelTables::Print(std::ostream& os) {
+  const TableMap& theTables = instance().tables;	// For convenience
+  TableMap::const_iterator entry;
+  for (entry = theTables.begin(); entry != theTables.end(); ++entry) {
+    if (entry->second) entry->second->printTable(os);
+  }
+}
+
+void G4CascadeChannelTables::PrintTable(G4int initialState, std::ostream& os) {
+  const G4CascadeChannel* tbl = GetTable(initialState);
+  if (tbl) tbl->printTable(os);
 }

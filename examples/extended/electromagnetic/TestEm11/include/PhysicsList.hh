@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id$
+// $Id: PhysicsList.hh 74997 2013-10-25 10:52:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -74,7 +74,7 @@ class PhysicsList: public G4VModularPhysicsList
        
     G4String               fEmName;
     G4VPhysicsConstructor* fEmPhysicsList;    
-    StepMax*               fStepMaxProcess;
+    static G4ThreadLocal StepMax* fStepMaxProcess;
     
     PhysicsListMessenger*  fMessenger;
 };

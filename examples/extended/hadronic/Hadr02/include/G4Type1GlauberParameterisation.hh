@@ -36,6 +36,9 @@
 /// \file hadronic/Hadr02/include/G4Type1GlauberParameterisation.hh
 /// \brief Definition of the G4Type1GlauberParameterisation class
 //
+// $Id: G4Type1GlauberParameterisation.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4Type1GlauberParameterisation_h
 #define G4Type1GlauberParameterisation_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,38 +65,40 @@
 
 #include "globals.hh"
 #include <fstream>
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4Type1GlauberParameterisation
 {
-  public:
-    G4Type1GlauberParameterisation ();
-   ~G4Type1GlauberParameterisation ();
+public:
 
-    G4double GetFitParameters (const G4double *bsite, G4double *p) const;
+  G4Type1GlauberParameterisation ();
+  ~G4Type1GlauberParameterisation ();
 
-    G4double GetParameterisedValueN (const G4double f, const G4double ppn) const;
-    G4double GetParameterisedValueM (const G4double f, const G4double ppn) const;
+  G4double GetFitParameters (const G4double *bsite, G4double *p) const;
 
-  public:
-    G4int    maxArrayp;
-    G4int    maxigp;
+  G4double GetParameterisedValueN (const G4double f, const G4double ppn) const;
+  G4double GetParameterisedValueM (const G4double f, const G4double ppn) const;
 
-    G4double paramn[24][10];
-    G4double paramm[24][10];
+  G4int    maxArrayp;
+  G4int    maxigp;
+
+  G4double paramn[24][10];
+  G4double paramm[24][10];
     
-    G4double mun1[24];
-    G4double mun2[24];
-    G4double cn[24];
-    G4double mum1[24];
-    G4double mum2[24];
-    G4double cm[24];
+  G4double mun1[24];
+  G4double mun2[24];
+  G4double cn[24];
+  G4double mum1[24];
+  G4double mum2[24];
+  G4double cm[24];
 
-    G4double limit1;
-    G4double limit2;
-    G4double limit3;
-    G4double limit4;
+  G4double limit1;
+  G4double limit2;
+  G4double limit3;
+  G4double limit4;
 };
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif

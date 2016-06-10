@@ -26,19 +26,20 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackingAction.cc
 /// \brief Implementation of the ExN04TrackingAction class
 //
+// $Id: ExN04TrackingAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
-
-#include "ExN04TrackingAction.hh"
-#include "G4TrackingManager.hh"
 #include "G4Track.hh"
+#include "G4TrackingManager.hh"
+#include "ExN04TrackingAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   // Create trajectory only for primaries
-  if(aTrack->GetParentID()==0)
-  { fpTrackingManager->SetStoreTrajectory(true); }
-  else
-  { fpTrackingManager->SetStoreTrajectory(false); }
+  if ( aTrack-> GetParentID() == 0 ) {
+    fpTrackingManager->SetStoreTrajectory(true);
+  } else {
+    fpTrackingManager->SetStoreTrajectory(false);
+  }
 }
-
-

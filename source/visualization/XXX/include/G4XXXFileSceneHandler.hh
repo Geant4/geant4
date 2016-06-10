@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4XXXFileSceneHandler.hh 66870 2013-01-14 23:38:59Z adotti $
 //
 // 
 // John Allison  7th March 2006
@@ -87,7 +87,6 @@ public:
   void AddPrimitive(const G4Circle&);
   void AddPrimitive(const G4Square&);
   void AddPrimitive(const G4Polyhedron&);
-  void AddPrimitive(const G4NURBS&);
   // Further optional AddPrimitive methods.  Explicitly invoke base
   // class methods if not otherwise defined to avoid warnings about
   // hiding of base class methods.

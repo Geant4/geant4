@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ChordFinder.cc,v 1.4 2006-06-29 15:31:53 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4ChordFinder.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4ChordFinder.cc
 //
@@ -41,9 +40,9 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4ChordFinder {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetVerbose, SetVerbose, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetVerbose, SetVerbose, 0, 1)
 
-};
+}
 
 using namespace pyG4ChordFinder;
 

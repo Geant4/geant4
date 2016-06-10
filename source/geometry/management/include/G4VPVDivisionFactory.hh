@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPVDivisionFactory.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4VPVDivisionFactory
@@ -97,7 +97,7 @@ class G4VPVDivisionFactory
 
   protected:
 
-   static G4VPVDivisionFactory* fgInstance;
+   static G4ThreadLocal G4VPVDivisionFactory* fgInstance;
      
 };
 

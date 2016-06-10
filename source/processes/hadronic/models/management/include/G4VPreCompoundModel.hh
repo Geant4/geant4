@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPreCompoundModel.hh 66785 2013-01-12 15:10:13Z gcosmo $
 //
 
 #ifndef G4VPreCompoundModel_h

@@ -11,8 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-11-29 17:48:07 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: sources.cmake 73601 2013-09-02 09:25:49Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -68,7 +67,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_photon_evaporation
         G4PhotonEvaporation.hh
         G4PromptPhotonEvaporation.hh
         G4PtrLevelVector.hh
-        G4RandGeneralTmp.hh
         G4VGammaDeexcitation.hh
         G4VGammaTransition.hh
         G4VPhotonEvaporation.hh

@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id$
+// $Id: RunAction.hh 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,8 +52,8 @@ public:
   RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   virtual ~RunAction();
 
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
 
   void FillHisto(G4int id, G4double x, G4double weight = 1.0);
            

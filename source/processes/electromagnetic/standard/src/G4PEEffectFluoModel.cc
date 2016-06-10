@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PEEffectFluoModel.cc 73607 2013-09-02 10:04:03Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +52,7 @@
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
+#include "G4Material.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4VAtomDeexcitation.hh"
@@ -71,6 +72,8 @@ G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
   SetDeexcitationFlag(true);
   fParticleChange = 0;
   fAtomDeexcitation = 0;
+
+  fSandiaCof.resize(4,0.0);
 
   // default generator
   SetAngularDistribution(new G4SauterGavrilaAngularDistribution());
@@ -98,14 +101,18 @@ G4PEEffectFluoModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 						G4double Z, G4double,
 						G4double, G4double)
 {
-  G4double* SandiaCof = G4SandiaTable::GetSandiaCofPerAtom((G4int)Z, energy);
+  // This method may be used only if G4MaterialCutsCouple pointer
+  //   has been set properly
+
+  CurrentCouple()->GetMaterial()
+    ->GetSandiaTable()->GetSandiaCofPerAtom((G4int)Z, energy, fSandiaCof);
 
   G4double energy2 = energy*energy;
   G4double energy3 = energy*energy2;
   G4double energy4 = energy2*energy2;
 
-  return SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
-    SandiaCof[2]/energy3 + SandiaCof[3]/energy4;
+  return fSandiaCof[0]/energy  + fSandiaCof[1]/energy2 +
+    fSandiaCof[2]/energy3 + fSandiaCof[3]/energy4;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,7 +123,7 @@ G4PEEffectFluoModel::CrossSectionPerVolume(const G4Material* material,
 					   G4double energy,
 					   G4double, G4double)
 {
-  G4double* SandiaCof = 
+  const G4double* SandiaCof = 
     material->GetSandiaTable()->GetSandiaCofForMaterial(energy);
 				
   G4double energy2 = energy*energy;
@@ -136,6 +143,7 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 				       G4double,
 				       G4double)
 {
+  SetCurrentCouple(couple);
   const G4Material* aMaterial = couple->GetMaterial();
 
   G4double energy = aDynamicPhoton->GetKineticEnergy();
@@ -165,23 +173,9 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   // Normally one shell is available 
   if (i < nShells) { 
   
-    G4double bindingEnergy  = anElement->GetAtomicShell(i);
-    G4double elecKineEnergy = energy - bindingEnergy;
-
-    // create photo electron
-    //
-    if (elecKineEnergy > fminimalEnergy) {
-      edep = bindingEnergy;
-      G4ThreeVector elecDirection =
-	GetAngularDistribution()->SampleDirection(aDynamicPhoton, 
-						  elecKineEnergy,
-						  i, 
-						  couple->GetMaterial());
-   
-      G4DynamicParticle* aParticle = 
-	new G4DynamicParticle(theElectron, elecDirection, elecKineEnergy);
-      fvect->push_back(aParticle);
-    } 
+    G4double bindingEnergy = anElement->GetAtomicShell(i);
+    edep = bindingEnergy;
+    G4double esec = 0.0;
 
     // sample deexcitation
     //
@@ -191,15 +185,62 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 	G4int Z = G4lrint(anElement->GetZ());
 	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
 	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+        G4double eshell = shell->BindingEnergy();
+        if(eshell > bindingEnergy && eshell <= energy) {
+          bindingEnergy = eshell;
+          edep = eshell;
+	}
 	size_t nbefore = fvect->size();
 	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
 	size_t nafter = fvect->size();
 	if(nafter > nbefore) {
 	  for (size_t j=nbefore; j<nafter; ++j) {
-	    edep -= ((*fvect)[j])->GetKineticEnergy();
+            G4double e = ((*fvect)[j])->GetKineticEnergy();
+            if(esec + e > edep) {
+	      /*
+	      G4cout << "### G4PEffectFluoModel Edep(eV)= " << edep/eV 
+		     << " Esec(eV)= " << esec/eV 
+		     << " E["<< j << "](eV)= " << e/eV
+		     << " N= " << nafter
+		     << " Z= " << Z << " shell= " << i 
+		     << "  Ebind(keV)= " << bindingEnergy/keV 
+		     << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
+		     << G4endl;
+	      */
+              for (size_t jj=j; jj<nafter; ++jj) { delete (*fvect)[jj]; }
+              for (size_t jj=j; jj<nafter; ++jj) { fvect->pop_back(); }
+	      break;	      
+	    }
+	    esec += e;
 	  } 
 	}
+        edep -= esec;
       }
+    }
+    // create photo electron
+    //
+    G4double elecKineEnergy = energy - bindingEnergy;
+    if (elecKineEnergy > fminimalEnergy) {
+      G4DynamicParticle* aParticle = new G4DynamicParticle(theElectron, 
+	GetAngularDistribution()->SampleDirection(aDynamicPhoton, 
+						  elecKineEnergy,
+						  i, couple->GetMaterial()), 
+							   elecKineEnergy);
+      fvect->push_back(aParticle);
+    } else {
+      edep += elecKineEnergy;
+      elecKineEnergy = 0.0;
+    }
+    if(fabs(energy - elecKineEnergy - esec - edep) > eV) {
+      G4cout << "### G4PEffectFluoModel dE(eV)= " 
+	     << (energy - elecKineEnergy - esec - edep)/eV 
+	     << " shell= " << i 
+	     << "  E(keV)= " << energy/keV 
+	     << "  Ebind(keV)= " << bindingEnergy/keV 
+	     << "  Ee(keV)= " << elecKineEnergy/keV 
+	     << "  Esec(keV)= " << esec/keV 
+	     << "  Edep(keV)= " << edep/keV 
+	     << G4endl;
     }
   }
 

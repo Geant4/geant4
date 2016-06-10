@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RuAct, HistoManager* Hist)
-  :fRunAction(RuAct), fHistoManager(Hist)
+  :G4UserSteppingAction(),fRunAction(RuAct), fHistoManager(Hist)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,7 +74,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (procName == "muIoni")          id = 1; 
   else if (procName == "muPairProd") id = 2;
   else if (procName == "muBrems")    id = 3;
-  else if (procName == "muNucl")     id = 4;    
+  //  else if (procName == "muNucl")     id = 4;    
+  else if (procName == "muonNuclear")id = 4;    
   else if (procName == "hIoni")      id = 5; 
   else if (procName == "hPairProd")  id = 6;
   else if (procName == "hBrems")     id = 7;

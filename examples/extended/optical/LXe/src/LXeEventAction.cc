@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeEventAction.cc 68752 2013-04-05 10:23:47Z gcosmo $
+//
 /// \file optical/LXe/src/LXeEventAction.cc
 /// \brief Implementation of the LXeEventAction class
 //
@@ -97,7 +99,7 @@ void LXeEventAction::EndOfEventAction(const G4Event* anEvent){
         trj->SetForceDrawTrajectory(fForcedrawphotons);
         trj->SetForceNoDrawTrajectory(fForcenophotons);
       }
-      trj->DrawTrajectory(50);
+      trj->DrawTrajectory();
     }
   }
  

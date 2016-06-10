@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VTrajectory.cc 78003 2013-12-02 08:26:54Z gcosmo $
 //
 // ---------------------------------------------------------------
 //
@@ -109,34 +109,14 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 
     delete attValues;  // AttValues must be deleted after use.
   }
+  os << "\n";
 }
 
-/***
 void G4VTrajectory::DrawTrajectory() const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if (0 != pVVisManager) {
     pVVisManager->DispatchToModel(*this);
-  }
-}
-***/
-
-void G4VTrajectory::DrawTrajectory(G4int i_mode) const
-{
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  static G4bool warnedAboutIMode = false;
-  if (!warnedAboutIMode && i_mode != 0) {
-    G4Exception
-        ("G4VTrajectory::DrawTrajectory()",
-         "Tracking0100", JustWarning,
-         "DEPRECATED! The use of i_mode argument in DrawTrajectory()"
-         "\n  is deprecated and will be removed at the next major release.");
-    warnedAboutIMode = true;
-  }
-
-  if (0 != pVVisManager) {
-    pVVisManager->DispatchToModel(*this, i_mode);
   }
 }

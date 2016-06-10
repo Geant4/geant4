@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -57,11 +55,10 @@ namespace G4INCL {
 
   }
 
-  G4INCL::IChannel* DecayAvatar::getChannel() const
-  {
+  G4INCL::IChannel* DecayAvatar::getChannel() {
     if(particle1->isDelta()) {
-      DEBUG("DeltaDecayChannel chosen." << std::endl);
-      return new DeltaDecayChannel(theNucleus, particle1, incidentDirection);
+      INCL_DEBUG("DeltaDecayChannel chosen." << std::endl);
+      return new DeltaDecayChannel(particle1, incidentDirection);
     }
     else
       return NULL;
@@ -100,14 +97,14 @@ namespace G4INCL {
       fs->setTotalEnergyBeforeInteraction(oldTotalEnergy);
       const G4bool success = enforceEnergyConservation(fs);
       if(!success) {
-        DEBUG("Enforcing energy conservation: failed!" << std::endl);
+        INCL_DEBUG("Enforcing energy conservation: failed!" << std::endl);
 
         if(theNucleus) {
           // Restore the state of the initial particles
           restoreParticles();
 
           // Delete newly created particles
-          for( ParticleIter i = created.begin(); i != created.end(); ++i )
+          for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
             delete *i;
 
           FinalState *fsBlocked = new FinalState;
@@ -120,10 +117,10 @@ namespace G4INCL {
           // If there is no nucleus we have to continue anyway, even if energy
           // conservation failed. We cannot afford producing unphysical
           // remnants.
-          DEBUG("No nucleus, continuing anyway." << std::endl);
+          INCL_DEBUG("No nucleus, continuing anyway." << std::endl);
         }
       } else {
-        DEBUG("Enforcing energy conservation: success!" << std::endl);
+        INCL_DEBUG("Enforcing energy conservation: success!" << std::endl);
       }
 
       if(theNucleus) {
@@ -132,20 +129,20 @@ namespace G4INCL {
         // Copy the final state, but don't include the pion (as if it had been
         // emitted right away).
         FinalState *emissionFS = new FinalState;
-        for(ParticleIter i=modified.begin(); i!=modified.end(); ++i)
+        for(ParticleIter i=modified.begin(), e=modified.end(); i!=e; ++i)
           emissionFS->addModifiedParticle(*i);
 
         // Test CDPP blocking
         G4bool isCDPPBlocked = Pauli::isCDPPBlocked(created, theNucleus);
 
         if(isCDPPBlocked) {
-          DEBUG("CDPP: Blocked!" << std::endl);
+          INCL_DEBUG("CDPP: Blocked!" << std::endl);
 
           // Restore the state of both particles
           restoreParticles();
 
           // Delete newly created particles
-          for( ParticleIter i = created.begin(); i != created.end(); ++i )
+          for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
             delete *i;
 
           FinalState *fsBlocked = new FinalState;
@@ -157,7 +154,7 @@ namespace G4INCL {
 
           return fsBlocked; // Interaction is blocked. Return an empty final state.
         }
-        DEBUG("CDPP: Allowed!" << std::endl);
+        INCL_DEBUG("CDPP: Allowed!" << std::endl);
 
         // If all went well (energy conservation enforced and CDPP satisfied),
         // delete the auxiliary final state
@@ -170,14 +167,14 @@ namespace G4INCL {
     if(theNucleus) {
       switch(fs->getValidity()) {
         case PauliBlockedFS:
-          theNucleus->getStore()->getBook()->incrementBlockedDecays();
+          theNucleus->getStore()->getBook().incrementBlockedDecays();
           break;
         case NoEnergyConservationFS:
         case ParticleBelowFermiFS:
         case ParticleBelowZeroFS:
           break;
         case ValidFS:
-          theNucleus->getStore()->getBook()->incrementAcceptedDecays();
+          theNucleus->getStore()->getBook().incrementAcceptedDecays();
       }
     }
     return fs;
@@ -186,7 +183,7 @@ namespace G4INCL {
   std::string DecayAvatar::dump() const {
     std::stringstream ss;
     ss << "(avatar " << theTime << " 'decay" << std::endl
-      << "(list " << std::endl 
+      << "(list " << std::endl
       << particle1->dump()
       << "))" << std::endl;
     return ss.str();

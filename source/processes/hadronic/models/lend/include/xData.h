@@ -68,11 +68,11 @@ typedef int xData_Int;
 //extern char const * const xData_twod_xShared_yHistogram_ID;
 //extern char const * const xData_matrix_ID;
 
-char const * const xData_oned_x_ID = "1d.x";
-char const * const xData_twod_xy_ID = "2d.xy";
-char const * const xData_twod_xindex_y_ID = "2d.xindex_y";
-char const * const xData_twod_xShared_yHistogram_ID = "2d_xShared_yHistogram";
-char const * const xData_matrix_ID = "matrix";
+const char * const xData_oned_x_ID = "1d.x";
+const char * const xData_twod_xy_ID = "2d.xy";
+const char * const xData_twod_xindex_y_ID = "2d.xindex_y";
+const char * const xData_twod_xShared_yHistogram_ID = "2d_xShared_yHistogram";
+const char * const xData_matrix_ID = "matrix";
 
 enum xData_status { xData_statusParsing = 1, xData_statusCompleted, xData_statusError };
 enum xData_errorCodes { xData_errNone, xData_errXML_ParserCreate, xData_errFileError,

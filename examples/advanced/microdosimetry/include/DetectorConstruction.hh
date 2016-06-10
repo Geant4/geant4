@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
@@ -57,22 +58,19 @@ public:
 
   G4VPhysicalVolume* Construct();
 
-  G4Region* GetTargetRegion()
-  {
-      return fRegion;
-  }
+  G4Region* GetTargetRegion() {return fRegion;}
                          
 private:
    
-  G4double           WorldSizeX;
-  G4double           WorldSizeY;
-  G4double           WorldSizeZ;
+  G4double           fWorldSizeX;
+  G4double           fWorldSizeY;
+  G4double           fWorldSizeZ;
 
-  G4VPhysicalVolume* physiWorld;
-  G4LogicalVolume*   logicWorld;  
-  G4Box*             solidWorld;
+  G4VPhysicalVolume* fPhysiWorld;
+  G4LogicalVolume*   fLogicWorld;  
+  G4Box*             fSolidWorld;
 
-  G4Material*        waterMaterial;
+  G4Material*        fWaterMaterial;
   G4Region*          fRegion;
 
   void DefineMaterials();

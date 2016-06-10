@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/src/G4LindhardPartition.cc
-/// \brief Implementation of the G4LindhardPartition class
-//
-// $Id$
-//
-
 /*
- *  G4LindhardPartition.cc
+ *  \file electromagnetic/TestEm7/src/G4LindhardPartition.cc
+ *  \brief Implementation of the G4LindhardPartition class
  *
  *  Created by Marcus Mendenhall on 1/14/08.
  *  2008 Vanderbilt University, Nashville, TN, USA.
  *
  */
+
+//
+// $Id: G4LindhardPartition.cc 68263 2013-03-20 10:16:46Z maire $
 
 #include "G4LindhardPartition.hh"
 #include "G4Material.hh"
@@ -96,9 +94,11 @@ G4double G4LindhardRobinsonPartition::PartitionNIEL(
   G4double asum=a1+a2;
         
   G4double el=30.724*z1*z2*std::sqrt(zpow)*asum/a2;
-  G4double fl=0.0793*z23[z1]*std::sqrt(z2*asum*asum*asum/(a1*a1*a1*a2))/std::pow(zpow, 0.75);
+  G4double fl=0.0793*z23[z1]*std::sqrt(z2*asum*asum*asum/(a1*a1*a1*a2))
+              /std::pow(zpow, 0.75);
   G4double eps=(energy/eV)*(1.0/el);
 
-  return 1.0/(1+fl*(3.4008*std::pow(eps, 0.16667)+0.40244*std::pow(eps, 0.75)+eps));
+  return 
+    1.0/(1+fl*(3.4008*std::pow(eps, 0.16667)+0.40244*std::pow(eps, 0.75)+eps));
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LossTableBuilder.cc 71484 2013-06-17 08:12:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -107,7 +107,11 @@ G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
     if(pv0) {
       size_t npoints = pv0->GetVectorLength();
       G4PhysicsLogVector* pv = new G4PhysicsLogVector(*pv0);
-      //    pv = new G4PhysicsLogVector(elow, ehigh, npoints-1);
+      /*
+      G4PhysicsLogVector* pv = new G4PhysicsLogVector(pv0->Energy(0), 
+						      pv0->GetMaxEnergy(), 
+						      npoints-1);
+      */
       pv->SetSpline(splineFlag);
       for (size_t j=0; j<npoints; ++j) {
 	G4double dedx = 0.0;
@@ -414,9 +418,7 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
   }
   InitialiseBaseMaterials(table);
 
-  G4int nbins = G4int(std::log10(emax/emin) + 0.5)
-    *G4LossTableManager::Instance()->GetNumberOfBinsPerDecade();
-  if(nbins < 3) { nbins = 3; }
+  G4int nbins = G4LossTableManager::Instance()->GetNumberOfBinsPerDecade();
 
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=
@@ -424,7 +426,7 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
   G4PhysicsLogVector* aVector = 0;
-  G4PhysicsLogVector* bVector = 0;
+  //G4PhysicsLogVector* bVector = 0;
 
   for(size_t i=0; i<numOfCouples; ++i) {
 
@@ -443,27 +445,19 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
 
       G4double tmin = std::max(emin,model->MinPrimaryEnergy(mat,part));
       if(0.0 >= tmin) { tmin = eV; }
-      G4int n = nbins + 1;
+      G4int n = nbins;
 
       if(tmin >= emax) {
 	aVector = 0;
-      } else if(tmin > emin) {
-	G4int bin = nbins*G4int(std::log10(emax/tmin) + 0.5);
-	if(bin < 3) { bin = 3; }
-	n = bin + 1;
-	aVector = new G4PhysicsLogVector(tmin, emax, bin);
-
-      } else if(!bVector) {
-	aVector = new G4PhysicsLogVector(emin, emax, nbins);
-        bVector = aVector;
-
       } else {
-        aVector = new G4PhysicsLogVector(*bVector);
+	n *= G4int(std::log10(emax/tmin) + 0.5);
+	if(n < 3) { n = 3; }
+	aVector = new G4PhysicsLogVector(tmin, emax, n);
       }
 
       if(aVector) {
 	aVector->SetSpline(spline);
-        for(G4int j=0; j<n; ++j) {
+        for(G4int j=0; j<=n; ++j) {
           aVector->PutValue(j, model->Value(couple, part, aVector->Energy(j)));
 	}
 	if(spline) { aVector->FillSecondDerivatives(); }

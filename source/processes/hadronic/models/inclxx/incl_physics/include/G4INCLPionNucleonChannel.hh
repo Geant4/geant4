@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -47,7 +45,7 @@
 namespace G4INCL {
   class PionNucleonChannel : public IChannel {
     public:
-      PionNucleonChannel(Particle *, Particle *, Nucleus *, const G4bool localE=false);
+      PionNucleonChannel(Particle *, Particle *, Nucleus *);
       virtual ~PionNucleonChannel();
 
       FinalState* getFinalState();
@@ -55,7 +53,6 @@ namespace G4INCL {
     private:
       Nucleus *theNucleus;
       Particle *particle1, *particle2;
-      const G4bool locE;
 
   };
 }

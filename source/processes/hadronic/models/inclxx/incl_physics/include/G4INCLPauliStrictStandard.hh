@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -49,10 +47,16 @@ namespace G4INCL {
     PauliStrictStandard();
     ~PauliStrictStandard();
 
-    G4bool isBlocked(ParticleList const, Nucleus const * const) const;
+    /// \brief Dummy copy constructor to silence Coverity warning
+    PauliStrictStandard(const PauliStrictStandard &rhs);
+
+    /// \brief Dummy assignment operator to silence Coverity warning
+    PauliStrictStandard &operator=(const PauliStrictStandard &rhs);
+
+    G4bool isBlocked(ParticleList const &, Nucleus const * const);
 
   private:
-    IPauli const *theStrictBlocker, *theStandardBlocker;
+    IPauli *theStrictBlocker, *theStandardBlocker;
   };
 }
 

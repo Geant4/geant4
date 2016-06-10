@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BetheHeitlerModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,10 +60,27 @@
 #include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+
+static const G4double GammaEnergyLimit = 1.5*MeV;
+static const G4double Egsmall=2.*MeV;
+static const G4double
+    a0= 8.7842e+2*microbarn, a1=-1.9625e+3*microbarn, a2= 1.2949e+3*microbarn,
+    a3=-2.0028e+2*microbarn, a4= 1.2575e+1*microbarn, a5=-2.8333e-1*microbarn;
+
+static const G4double
+    b0=-1.0342e+1*microbarn, b1= 1.7692e+1*microbarn, b2=-8.2381   *microbarn,
+    b3= 1.3063   *microbarn, b4=-9.0815e-2*microbarn, b5= 2.3586e-3*microbarn;
+
+static const G4double
+    c0=-4.5263e+2*microbarn, c1= 1.1161e+3*microbarn, c2=-8.6749e+2*microbarn,
+    c3= 2.1773e+2*microbarn, c4=-2.0467e+1*microbarn, c5= 6.5372e-1*microbarn;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 					 const G4String& nam)
@@ -73,6 +90,7 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
   theElectron = G4Electron::Electron();
+  g4pow = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,7 +104,15 @@ void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p,
 				     const G4DataVector& cuts)
 {
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
-  InitialiseElementSelectors(p, cuts);
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4BetheHeitlerModel::InitialiseLocal(const G4ParticleDefinition*,
+					  G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,26 +128,14 @@ G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 // below 1.5 MeV: sigma=sigma(1.5MeV)*(GammaEnergy-2electronmass)
 //                                   *(GammaEnergy-2electronmass) 
 {
-  static const G4double GammaEnergyLimit = 1.5*MeV;
   G4double xSection = 0.0 ;
   if ( Z < 0.9 || GammaEnergy <= 2.0*electron_mass_c2 ) { return xSection; }
 
-  static const G4double
-    a0= 8.7842e+2*microbarn, a1=-1.9625e+3*microbarn, a2= 1.2949e+3*microbarn,
-    a3=-2.0028e+2*microbarn, a4= 1.2575e+1*microbarn, a5=-2.8333e-1*microbarn;
-
-  static const G4double
-    b0=-1.0342e+1*microbarn, b1= 1.7692e+1*microbarn, b2=-8.2381   *microbarn,
-    b3= 1.3063   *microbarn, b4=-9.0815e-2*microbarn, b5= 2.3586e-3*microbarn;
-
-  static const G4double
-    c0=-4.5263e+2*microbarn, c1= 1.1161e+3*microbarn, c2=-8.6749e+2*microbarn,
-    c3= 2.1773e+2*microbarn, c4=-2.0467e+1*microbarn, c5= 6.5372e-1*microbarn;
 
   G4double GammaEnergySave = GammaEnergy;
   if (GammaEnergy < GammaEnergyLimit) { GammaEnergy = GammaEnergyLimit; }
 
-  G4double X=log(GammaEnergy/electron_mass_c2), X2=X*X, X3=X2*X, X4=X3*X, X5=X4*X;
+  G4double X=G4Log(GammaEnergy/electron_mass_c2), X2=X*X, X3=X2*X, X4=X3*X, X5=X4*X;
 
   G4double F1 = a0 + a1*X + a2*X2 + a3*X3 + a4*X4 + a5*X5,
            F2 = b0 + b1*X + b2*X2 + b3*X3 + b4*X4 + b5*X5,
@@ -169,9 +183,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   G4double epsil0 = electron_mass_c2/GammaEnergy ;
   if(epsil0 > 1.0) { return; }
 
-  // do it fast if GammaEnergy < 2. MeV
-  static const G4double Egsmall=2.*MeV;
-
+  // do it fast if GammaEnergy < Egsmall
   // select randomly one element constituing the material
   const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
 
@@ -208,7 +220,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     do {
       if ( NormF1/(NormF1+NormF2) > G4UniformRand() ) {
-	epsil = 0.5 - epsilrange*pow(G4UniformRand(), 0.333333);
+	epsil = 0.5 - epsilrange*g4pow->A13(G4UniformRand());
 	screenvar = screenfac/(epsil*(1-epsil));
 	greject = (ScreenFunction1(screenvar) - FZ)/F10;
               
@@ -246,10 +258,12 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
   G4double u;
-  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
+  static const G4double aa1 = 0.625; 
+  static const G4double aa2 = 1.875;
+  static const G4double d = 27. ;
 
-  if (9./(9.+d) >G4UniformRand()) u= - log(G4UniformRand()*G4UniformRand())/a1;
-  else                            u= - log(G4UniformRand()*G4UniformRand())/a2;
+  if (9./(9.+d) >G4UniformRand()) u= - G4Log(G4UniformRand()*G4UniformRand())/aa1;
+  else                            u= - G4Log(G4UniformRand()*G4UniformRand())/aa2;
 
   G4double TetEl = u*electron_mass_c2/ElectTotEnergy;
   G4double TetPo = u*electron_mass_c2/PositTotEnergy;

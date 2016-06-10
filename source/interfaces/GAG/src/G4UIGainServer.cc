@@ -25,7 +25,7 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id$
+// $Id: G4UIGainServer.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 #ifndef WIN32
 
@@ -781,7 +781,7 @@ void G4UIGainServer::SendDisableList(G4UIcommandTree* tree,int level){
 void G4UIGainServer::UpdateState(void)
 ///////////////////////////////
 {
-   static G4ApplicationState previousState= G4State_PreInit;
+   static G4ThreadLocal G4ApplicationState *previousState_G4MT_TLS_ = 0 ; if (!previousState_G4MT_TLS_) {previousState_G4MT_TLS_ = new  G4ApplicationState  ; *previousState_G4MT_TLS_= G4State_PreInit ; }  G4ApplicationState &previousState = *previousState_G4MT_TLS_;
    G4ApplicationState  newState;
    G4StateManager *statM = G4StateManager::GetStateManager();
    newState = statM->GetCurrentState();

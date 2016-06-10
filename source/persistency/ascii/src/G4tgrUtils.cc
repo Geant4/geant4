@@ -45,18 +45,20 @@
 #include "G4UIcommand.hh"
 
 
-G4tgrEvaluator* G4tgrUtils::theEvaluator = new G4tgrEvaluator;
+G4ThreadLocal G4tgrEvaluator* G4tgrUtils::theEvaluator  = 0 ;
 
 
 //-------------------------------------------------------------
 G4tgrUtils::G4tgrUtils()
 {
+  if (!theEvaluator)  { theEvaluator= new G4tgrEvaluator; }
 }
 
 
 //-------------------------------------------------------------
 G4tgrUtils::~G4tgrUtils()
 {
+  delete theEvaluator; theEvaluator = 0;
 }
 
 
@@ -202,6 +204,7 @@ G4String G4tgrUtils::GetString( const G4String& str )
 //-------------------------------------------------------------
 G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval ) 
 {
+  if (!theEvaluator)  { theEvaluator= new G4tgrEvaluator; }
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
@@ -473,7 +476,6 @@ void G4tgrUtils::CheckWLsize( const std::vector<G4String>& wl,
                               unsigned int nWcheck, WLSIZEtype st,
                               const G4String& methodName )
 {
-
   G4String outStr = methodName + G4String(".  Line read with number of words ");
   unsigned int wlsize = wl.size();
 
@@ -577,7 +579,7 @@ G4bool G4tgrUtils::WordIsUnit( const G4String& word )
       || word == "mrad"
       || word == "deg"
       || word == "ns"
-      || word == "curie"
+      || word == "becquerel"
       || word == "curie"   )
   { 
     return true;

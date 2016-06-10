@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2010-11-08 20:14:41 allison Exp $
+$Id: History 69567 2013-05-08 12:43:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 02, 2013 M. Asai (exampleRE03-V09-06-03)
+- Migrate to G4VUserActionInitalization so that it works
+  for both sequential and multi-threaded modes.
+
+May 01, 2013 M. Asai (exampleRE03-V09-06-02)
+- Fully migrated to the latest API.
+
+Apr 17, 2013 M. Asai (exampleRE03-V09-06-01)
+- Preparation for ref-04 API
+
+Mar 27, 2013 M. Asai (exampleRE03-V09-06-00)
+- Migrated to multi-threaded version. For internal use only
+
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members initialization)
 
 Oct 15, 2012 I.Hrivnacova (exampleRE03-V09-05-01)
 - Replaced tabulators with space characters

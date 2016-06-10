@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LPhysicsFreeVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 // ------------------------------------------------------------------
@@ -42,6 +42,8 @@
 // F.W. Jones, TRIUMF, 04-JUN-96
 // 11-NOV-00 H.Kurashige: use STL vector for dataVector and binVector
 // 02-APR-08 A.Bagulya: use GetValue() from base class
+// 02-OCT-13  V.Ivanchenko : Remove FindBinLocation method
+//
 // ------------------------------------------------------------------
 
 #ifndef G4LPhysicsFreeVector_h
@@ -58,7 +60,7 @@ public: // with description
 
    G4LPhysicsFreeVector(size_t nbin, G4double binmin, G4double binmax);
 
-   ~G4LPhysicsFreeVector();
+   virtual ~G4LPhysicsFreeVector();
 
    void PutValues(size_t binNumber, G4double binValue, G4double dataValue);
      // G4PhysicsVector has PutValue() but it is inconvenient.
@@ -66,9 +68,6 @@ public: // with description
 
    void DumpValues();
 
-private:
-   virtual size_t FindBinLocation(G4double theEnergy) const;
-     // Pure virtual in G4PhysicsVector
 };
 
 #include "G4LPhysicsFreeVector.icc"

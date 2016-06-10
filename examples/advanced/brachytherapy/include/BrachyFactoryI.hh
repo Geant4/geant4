@@ -34,7 +34,7 @@
 //  S.Guatelli
 //
 // 
-// $Id$
+// $Id: BrachyFactoryI.hh 69765 2013-05-14 10:11:22Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -49,9 +49,7 @@
 class G4ParticleGun;
 class G4Run;
 class G4Event;
-class BrachyAnalysisManager;
 class BrachyFactory;
-class BrachyPrimaryGeneratorActionI;
 class BrachyDetectorConstructionI;
 
 // This class manages the creation of Bebig Isoseed I-125 source 
@@ -62,12 +60,10 @@ public:
   BrachyFactoryI();
  ~BrachyFactoryI();
 
-  void CreatePrimaryGeneratorAction(G4Event* anEvent);
   void CreateSource(G4VPhysicalVolume*);
   void CleanSource();
 
 private:
   BrachyDetectorConstructionI* iodiumSource;
-  BrachyPrimaryGeneratorActionI* iodiumPrimaryParticle;
 };
 #endif

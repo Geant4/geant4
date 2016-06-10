@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2010-12-27 13:02:19 allison Exp $
+$Id: History 70646 2013-06-03 15:07:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,35 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+29th May 2013  John Allison  (openinventor-V09-06-04)
+- SoCounterAction.cc:
+  o Completed initialisation list in constructor (Coverity warning).
+
+09 April 2013  Frederick Jones
+- G4OpenInventorXtExaminerViewer.hh:
+  o Removed unneeded assignment operator in struct sceneElement.
+    (Coverity warning)
+
+15th March 2013  John Allison  (openinventor-V09-06-03)
+- G4OpenInventorXtExaminerViewer.cc:
+  o Changed strlcpy back to strncpy.  Fixes SLC5 compilation error.
+    (Can't remember why I changed to strlcopy in the first place.)
+
+24th February 2013  John Allison  (openinventor-V09-06-02)
+- SbPainterPS:
+  o Removed unused fields as warned by new clang compiler.
+
+29th January 2013  John Allison  (openinventor-V09-06-01)
+- More Coverity fixes and un-doing of some previous ones.
+
+8th January 2013  John Allison
+- G4OpenInventorXtExaminerViewer.cc, G4OpenInventorXtExtendedViewer.cc,
+  G4OpenInventorXtViewer.cc, SbPainterPS.cc:
+  o Fixes some Coverity warnings.
+
+2nd December 2012  John Allison  (openinventor-V09-06-00)
+- Remove NURBS.
 
 17th November 2012  John Allison (openinventor-V09-05-17)
 - G4OpenInventorXtExaminerViewer:

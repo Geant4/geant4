@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id$
+// $Id: PhysicsListMessenger.cc 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:fPhysicsList(pPhys)
+:fPhysicsList(pPhys), fPhysDir(0), fListCmd(0), fGammaCutCmd(0),
+ fElectCutCmd(0), fProtoCutCmd(0), fAllCutCmd(0)
 {
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");

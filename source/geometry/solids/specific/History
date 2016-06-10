@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2010-11-26 13:36:35 gcosmo Exp $
+$Id: History 78188 2013-12-04 16:32:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,175 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Dec-2013  G.Cosmo               (geom-specific-V09-06-36)
+- Corrected left-over debug printout in G4Polyhedra::SetOriginalParameters().
+
+22-Nov-2013  G.Cosmo               (geom-specific-V09-06-35)
+- Correction to USolids wrappers for proper setting of name to base class.
+
+19-Nov-2013  J.Apostolakis         (geom-specific-V09-06-34)
+- Fix for issue identified by Coverity: fixed implementation of
+  G4SolidsWorkspacePool singleton.
+
+20-Nov-2013  T.Mikitina            (geom-specific-V09-06-33)
+- Fixed Coverity defects to USolids wrappers.
+
+14-Nov-2013  G.Cosmo               (geom-specific-V09-06-32, 31)
+- Enabled use of Reset() in G4UPolycone.
+- Corrections to G4UPolycone and G4UPolyhedra to allow for visualization
+  of parameterisations on these solids.
+
+13-Nov-2013  G.Cosmo               (geom-specific-V09-06-30)
+- Correction to G4UTet and G4UGenericPolycone to explicitly include
+  symbols re-definitions from G4Tet and G4GenericPolycone respectively.
+
+12-Nov-2013  G.Cosmo               (geom-specific-V09-06-29)
+- Added dummy method G4UPolycone::Reset().
+  NOTE: Required related implementation (currently missing!) in UPolycone.
+
+12-Nov-2013  G.Cosmo               (geom-specific-V09-06-28)
+- Correction to USolids switch mechanism for G4Polycone.
+    
+08-Nov-2013  J.Apostolakis         (geom-specific-V09-06-27)
+- G4SolidsWorkspace: cleanup of verbosity.
+  Reduced verbosity by making it optional.  
+  Added Set/Get Verbose methods to toggle and view it.
+  Added parameter to constructor for verbosity (default=off).
+
+07-Nov-2013  G.Cosmo (geom-specific-V09-06-26)
+- Moved wrappers from usolids module.
+  Fixed internal dispatcher method for parameterisation in all wrappers.
+- Added switching mechanism for G4GenericPolycone, G4Polycone, G4Polyhedra
+  and G4Tet.
+
+06-Nov-2013  G.Cosmo (geom-specific-V09-06-25)
+- Added switch mechanism for USolids (G4GenericPolycone, G4Polycone,
+  G4Polyhedra, G4Tet). Renamed related G4 types to 'G4O'.
+- Moved wrappers from USolids module.
+
+01-Nov-2013  G.Cosmo (geom-specific-V09-06-24)
+- Corrected CMake script.
+
+31-Oct-2013  G.Cosmo (geom-specific-V09-06-23)
+- Fix for in G4Polyhedra::SetOriginalParameters(). (T.Nikitina)
+- Moved G4PolyconeHistorical and G4PolyhedraHistorical in separate
+  translation units.
+
+29-Oct-2013  T.Nikitina (geom-specific-V09-06-22)
+- Split G4Polycone for polycones with decreasing Z-sections.
+  Introduced new class G4GenericPolycone.
+- Fixed conversion of generic construct for G4Polyhedra.
+
+17-Oct-2013  J.Apostolakis/A.Dotti (geom-specific-V09-06-21)
+- Cleanup of code for workspace.
+
+16-Oct-2013  J.Apostolakis/A.Dotti (geom-specific-V09-06-20)
+- Created G4SolidsWorkspacePool class, to manage Workspaces
+  Fixed Singleton G4SolidsWorkspacePool for thread safe creation of object. 
+
+04-Oct-2013  J.Apostolakis (geom-specific-V09-06-19)
+- Retagged.
+  NOTE: requires tag "geommng-V09-06-12" and co-works with "geomvol-V09-06-13".
+
+04-Oct-2013  J.Apostolakis (geom-specific-V09-06-18)
+- Created G4SolidsWorkspace class, to create, initialize and destroy
+  per-thread state of PolyCone Sides and PolyHedra Sides.
+
+27-Aug-2013  G.Cosmo (geom-specific-V09-06-17)
+- Enabled G4Ellipsoid for parameterisation.
+
+14-Aug-2013  G.Cosmo (geom-specific-V09-06-16)
+- Move function-scoped 'static const' values for half-tolerances to private
+  data members of classes, to overcome false-positive race-conditions defects
+  reported by Valgrind in MT mode.
+- Fix in G4TessellatedSolid::DistanceToIn(p,v) for specific cases where points
+  are located near surface (T.Nikitina).
+
+16-Jul-2013  M.Gayer (geom-specific-V09-06-15)
+- Fix in G4SurfaceVoxelizer affecting tessellated-solid (and extruded-solid)
+  for wrong computation of DistanceToIn(p,v) for points outside, when
+  optimisation is active.
+
+11-Jul-2013  G.Cosmo (geom-specific-V09-06-14)
+- Fixed compilation warning in G4Polycone on MacOS/clang.
+
+09-Jul-2013  T.Nikitina (geom-specific-V09-06-13)
+- Extended method SetOriginalParameters() in G4Polycone in order to handle
+  all possible cases of conversion of generic polycone to polycone with
+  (Rmin,Rmaz,Z) parameters.
+  Addressing problem report #1462.
+
+03-Jun-2013  G.Cosmo (geom-specific-V09-06-12)
+- Fixed minor Coverity defect in G4PolyhedraSide and G4PolyconeSide.
+
+22-Apr-2013  J.Apostolakis (geom-specific-V09-06-11)
+- Revised G4ExtrudedSolid::IsSameLine to use the perpendicular
+  distance to a line when deciding - not the y-intercept difference.
+  ( Issue responsible for a problem in Subtraction Solid in Atlas.  
+     Tatiana & Ivana contributed to debugging. )
+- Changed GNUmakefile in test directory to work with Cmake and granular 
+  builds.
+
+16-Apr-2013  T.Nikitina (geom-specific-V09-06-10)
+- Fix in calculation of normal in G4Tet::DistanceToOut(p,v,..) and
+  SurfaceNormal(p).
+- Fix in G4Polycone::GetPointOnCone() for cases of shape with decreasing Z.
+  Fixes cases of false report for overlaps detection. Problem report #1462.
+  Added check with exception in constructor for polycone with rInner > rOuter
+  for the same Z.
+
+18-Mar-2013  G.Cosmo (geom-specific-V09-06-09)
+- G4TessellatedSolid: fixed problem with navigation in tessellated solids
+  with concave surfaces. Addresses problem report #1456.
+- More cleanup from MT changes in G4VTwistSurface and G4Tet.
+
+12-Mar-2013  G.Cosmo (geom-specific-V09-06-08)
+- Added public accessors for MT data to G4PolyconeSide and G4PolyhedraSide.
+
+11-Mar-2013  G.Cosmo (geom-specific-V09-06-07)
+- Redefined G4DLL_API to G4GEOM_DLL to avoid cases of macro redefinition.
+
+08-Mar-2013  G.Cosmo (geom-specific-V09-06-06)
+- Renamed G4MT macros to safer ID in G4PolyconeSide and G4PolyhedraSide.
+
+07-Mar-2013  G.Cosmo (geom-specific-V09-06-05)
+- Adopt G4GeomSplitter instead of G4MTTransitory in G4PolyconeSide and
+  G4PolyhedraSide. Fixed import/export of static symbols for WIN32 DLLs build.
+
+22-Feb-2013  G.Cosmo (geom-specific-V09-06-04)
+- Cleanup changes for multi-threading in G4Tet, G4VTwistSurface,
+  G4PolyconeSide and G4PolyhedraSide.
+- Removed unused private data member in G4TwistTrapParallelSide.
+
+07-Mar-2013  G.Cosmo (geom-specific-V09-06-05)
+- Adopt G4GeomSplitter instead of G4MTTransitory in G4PolyconeSide and
+  G4PolyhedraSide. Fixed import/export of static symbols for WIN32 DLLs build.
+
+22-Feb-2013  G.Cosmo (geom-specific-V09-06-04)
+- Cleanup changes for multi-threading in G4Tet, G4VTwistSurface,
+  G4PolyconeSide and G4PolyhedraSide.
+- Removed unused private data member in G4TwistTrapParallelSide.
+
+11-Jan-2013  G.Cosmo (geom-specific-V09-06-03)
+- Fixed condition in G4VTwistSurface::GetBoundaryLimit() for logical error.
+  Addressing problem report #1420.
+
+20-Dec-2012  M.Gayer (geom-specific-V09-06-02)
+- Fixed cases of hang-ups in G4ExtrudedSolid on 32-bits platforms, due to
+  G4TessellatedSolid and G4SurfVoxelizer, caused by accessing bitmask arrays
+  with negative indexes. The problem was related to floating-point rounding,
+  which can be different even on same platform with debug/release version.
+  Assure same number of computed voxels on 32-bit/64-bit platforms.
+  Fixed error in SetVertexIndex() method, which might cause problems on
+  certain configurations even for 64-bit systems. Fixed minor memory leaks.
+- Code cleanup for use of G4endl and tabs...
+
+14-Dec-2012  G.Cosmo (geom-specific-V09-06-01)
+- Restored SVN id headers.
+
+02-Dec-2012  J.Allison (geom-specific-V09-06-00)
+- Removed NURBS.
+
 29-Nov-2012  G.Cosmo (geom-specific-V09-05-24)
 - Remove inclusion of G4PhysicalConstants.hh from G4SurfaceVoxelizer.hh.
 - Fixed unit test for compilation errors.
@@ -31,6 +200,9 @@ committal in the CVS repository !
 14-Nov-2012  P.Mato (geom-specific-V09-05-21)
 - Added #undef NDEBUG in unit tests to ensure assert works also in
   full optimised mode.
+
+14-Nov-2012  P. Mato (geom-specific-V09-05-20)
+- Added #undef NDEBUG in unit tests to ensure that assert always works
 
 13-Nov-2012  M.Gayer (geom-specific-V09-05-19)
 - More fixes for out-of-bound array accesses in G4SurfaceVoxelizer.

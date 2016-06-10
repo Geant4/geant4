@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.hh 77083 2013-11-21 10:35:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,9 +69,6 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        fWorldMaterCmd;
     G4UIcmdWithADoubleAndUnit* fWorldXCmd;
     G4UIcmdWithADoubleAndUnit* fWorldYZCmd;
-
-    G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
-    G4UIcmdWithoutParameter*   fUpdateCmd;
 
 };
 

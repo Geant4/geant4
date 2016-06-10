@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPhysicalVolume.hh 78050 2013-12-03 08:17:33Z gcosmo $
 //
 //
 // class G4VPhysicalVolume
@@ -37,10 +37,11 @@
 // be represented by a particular G4VPhysicalVolume.
 
 // History:
-// 09.11.99 J.Apostolakis  Added GetObjectRotationValue() method & redid comments.
-// 28.08.96 P.Kent Replaced transform by rotmat + vector
-// 25.07.96 P.Kent Modified interface for new `Replica' capable geometry 
-// 24.07.95 P.Kent First non-stub version
+// 15.01.13 G.Cosmo, A.Dotti: Modified for thread-safety for MT
+// 09.11.99 J.Apostolakis: Added GetObjectRotationValue() method & comments
+// 28.08.96 P.Kent: Replaced transform by rotmat + vector
+// 25.07.96 P.Kent: Modified interface for new `Replica' capable geometry 
+// 24.07.95 P.Kent: First non-stub version
 // --------------------------------------------------------------------
 #ifndef G4VPHYSICALVOLUME_HH
 #define G4VPHYSICALVOLUME_HH
@@ -52,9 +53,29 @@
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
+#include "G4GeomSplitter.hh"
 
 class G4LogicalVolume;
 class G4VPVParameterisation;
+
+class G4PVData
+{
+  // Encapsulates the fields associated to G4VPhysicalVolume
+  //  that are not read-only - they will change during simulation
+  //  and must have a per-thread state.
+
+  public:
+    void initialize() {
+      frot = 0;
+      ftrans = G4ThreeVector(0,0,0);
+    }
+
+    G4RotationMatrix *frot;
+    G4ThreeVector ftrans;
+};
+
+typedef G4GeomSplitter<G4PVData> G4PVManager;
+// Implementation detail for use of G4PVData objects 
 
 class G4VPhysicalVolume
 {
@@ -85,11 +106,12 @@ class G4VPhysicalVolume
       // Equality defined by equal addresses only.
 
     // Access functions
+    //
+    // The following are accessor functions that make a distinction
+    // between whether the rotation/translation is being made for the
+    // frame or the object/volume that is being placed.
+    // (They are the inverse of each other).
 
-      // The following are accessor functions that make a distinction
-      // between whether the rotation/translation is being made for the
-      // frame or the object/volume that is being placed.
-      // (They are the inverse of each other).
     G4RotationMatrix* GetObjectRotation() const;              //  Obsolete 
     inline G4RotationMatrix  GetObjectRotationValue() const;  //  Replacement
     inline G4ThreeVector  GetObjectTranslation() const;
@@ -130,6 +152,9 @@ class G4VPhysicalVolume
     inline void SetName(const G4String& pName);
       // Set the volume's name.
 
+    inline EVolume VolumeType() const;
+      // Characterise the `type' of volume - normal/replicated/parameterised.
+
     virtual G4int GetMultiplicity() const;
       // Returns number of object entities (1 for normal placements,
       // n for replicas or parameterised).
@@ -165,7 +190,7 @@ class G4VPhysicalVolume
       //  If non-zero the volume is a candidate for specialised 
       //  navigation such as 'nearest neighbour' directly on volumes.
     virtual G4bool CheckOverlaps(G4int res=1000, G4double tol=0.,
-                                 G4bool verbose=true);
+                                 G4bool verbose=true, G4int errMax=1);
       // Verifies if the placed volume is overlapping with existing
       // daughters or with the mother volume. Provides default resolution
       // for the number of points to be generated and verified.
@@ -179,16 +204,36 @@ class G4VPhysicalVolume
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    inline G4int GetInstanceID() const;
+      // Returns the instance ID.
+
+    static const G4PVManager& GetSubInstanceManager();
+      // Returns the private data instance manager.
+
+  protected:
+
+    void InitialiseWorker(G4VPhysicalVolume *pMasterObject,
+                          G4RotationMatrix *pRot, const G4ThreeVector &tlate);
+      // This method is similar to the constructor. It is used by each worker
+      // thread to achieve the partial effect as that of the master thread.
+
+    void TerminateWorker(G4VPhysicalVolume *pMasterObject);
+      // This method is similar to the destructor. It is used by each worker
+      // thread to achieve the partial effect as that of the master thread.
+
+  protected:
+
+    G4int instanceID;
+      // For use in implementing the per-thread data,
+      //   It is equivalent to a pointer to a G4PVData object.
+    G4GEOM_DLL static G4PVManager subInstanceManager;
+      //  Needed to use G4PVManager for the G4PVData per-thread objects.
+
   private:
 
     G4VPhysicalVolume(const G4VPhysicalVolume&);
     G4VPhysicalVolume& operator=(const G4VPhysicalVolume&);
       // Private copy constructor and assignment operator.
-
-  protected:
-
-    G4RotationMatrix *frot;
-    G4ThreeVector ftrans;
 
   private:
 
@@ -198,6 +243,26 @@ class G4VPhysicalVolume
     G4String fname;              // The name of the volume
     G4LogicalVolume   *flmother; // The current mother logical volume
 };
+
+// NOTE: 
+// The type G4PVManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4PVData. When each thread
+// initializes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4VPhysicalVolume instance, there is
+// a corresponding G4PVData instance. All G4PVData instances are organized
+// by the class G4PVManager as an array.
+// The field "int instanceID" is added to the class G4VPhysicalVolume.
+// The value of this field in each G4VPhysicalVolume instance is the subscript
+// of the corresponding G4PVData instance.
+// In order to use the class G4PVManager, we add a static member in the class
+// G4VPhysicalVolume as follows: "static G4PVManager subInstanceManager;".
+// For the master thread, the array for G4PVData instances grows dynamically
+// along with G4VPhysicalVolume instances are created. For each worker thread,
+// it copies the array of G4PVData instances from the master thread.           
+// In addition, it invokes a method similiar to the constructor explicitly
+// to achieve the partial effect for each instance in the array.
+//
 
 #include "G4VPhysicalVolume.icc"
 

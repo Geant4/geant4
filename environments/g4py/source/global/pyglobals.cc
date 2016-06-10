@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyglobals.cc,v 1.7 2008-12-03 07:34:50 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyglobals.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyglobals.cc
 //
@@ -69,7 +68,7 @@ typedef std::vector<G4ThreeVector> G4ThreeVectorVector;
 #if G4VERSION_NUMBER >= 830
 typedef std::vector<G4TwoVector> G4TwoVectorVector;
 #endif
-};
+}
 
 using namespace pyglobals;
 

@@ -27,7 +27,7 @@
 /// \brief Implementation of the RunAction class
 //
 //
-// $Id$
+// $Id: RunAction.cc 68030 2013-03-13 13:51:27Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -46,7 +46,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(PrimaryGeneratorAction* kin)
-:fPrimary(kin)
+:G4UserRunAction(),
+ fHistoManager(0), fPrimary(kin)
 {
   fHistoManager = new HistoManager();
 }

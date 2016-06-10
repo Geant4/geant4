@@ -21,12 +21,12 @@
 # 20 events
 #
 /tracking/verbose 0
-/B4/event/setPrintModulo 5
+/run/printProgress 5
 /run/beamOn 20
 #
 # Magnetic field
 # 
-/B4/det/setMagField 0.2 tesla
+/globalField/setValue 0.2 0 0 tesla
 /run/beamOn 3
 #
 # Activate/inactivate physics processes

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/TargetSD.cc
 /// \brief Implementation of the TargetSD class
 //
-// $Id$
+// $Id: TargetSD.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 /////////////////////////////////////////////////////////////////////////
 //

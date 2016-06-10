@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PreCompoundProton.cc 74903 2013-10-23 16:47:40Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -46,6 +46,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Proton.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 G4PreCompoundProton::G4PreCompoundProton()
   : G4PreCompoundNucleon(G4Proton::Proton(), &theProtonCoulombBarrier)
@@ -110,7 +112,8 @@ G4double G4PreCompoundProton::GetAlpha()
     } 
   else 
     {
-      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
+      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ 
+	   - 0.66612e-01)*aZ + 0.98375;
     }
   return 1.0 + C;
 }
@@ -186,16 +189,17 @@ G4double G4PreCompoundProton::GetOpt2(G4double K)
   fac2=1.;
   if(rnneu > 1.5) { fac2 = g4pow->logZ(rnneu); }
   xine_th= 1.e+31*fac*fac2*(1.+ResidualAthrd-fac1);
-  xine_th=(1.-0.15*std::exp(-ekin))*xine_th/(1.00-0.0007*ResidualA);	
+  xine_th=(1.-0.15*G4Exp(-ekin))*xine_th/(1.00-0.0007*ResidualA);	
   ff1=0.70-0.0020*ResidualA;
   ff2=1.00+1/G4double(ResidualA);
   ff3=0.8+18/G4double(ResidualA)-0.002*ResidualA;
-  fac=1.-(1./(1.+std::exp(-8.*ff1*(std::log10(ekin)+1.37*ff2))));
+  G4double log10E = G4Log(ekin)/g4pow->logZ(10);
+  fac=1.-(1./(1.+G4Exp(-8.*ff1*(log10E + 1.37*ff2))));
   xine_th=xine_th*(1.+ff3*fac);
   ff1=1.-1/G4double(ResidualA)-0.001*ResidualA;
   ff2=1.17-2.7/G4double(ResidualA)-0.0014*ResidualA;
-  fac=-8.*ff1*(std::log10(ekin)+2.0*ff2);
-  fac=1./(1.+std::exp(fac));
+  fac=-8.*ff1*(log10E + 2.0*ff2);
+  fac=1./(1.+G4Exp(fac));
   xine_th=xine_th*fac;            
   if (xine_th < 0.0){
     std::ostringstream errOs;
@@ -277,7 +281,7 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
     if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; }
     
     signor2 = (ec-elab-c) / w;
-    signor2 = 1. + std::exp(signor2);
+    signor2 = 1. + G4Exp(signor2);
     sig = sig / signor2;
   }              //end for E<=Ec
   else{           //start for  E>Ec

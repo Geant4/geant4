@@ -26,26 +26,27 @@
 /// \file electromagnetic/TestEm5/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.cc 76464 2013-11-11 10:22:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StackingAction.hh"
 
-#include "RunAction.hh"
+#include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
 #include "StackingMessenger.hh"
 
+#include "G4RunManager.hh"
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(RunAction* RA, EventAction* EA)
-:fRunAction(RA), fEventAction(EA)
+StackingAction::StackingAction(EventAction* EA)
+:G4UserStackingAction(), fEventAction(EA),
+ fKillSecondary(0),fStackMessenger(0)
 {
-  fKillSecondary  = 0;
   fStackMessenger = new StackingMessenger(this);
 }
 
@@ -67,7 +68,10 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   if (aTrack->GetParentID() == 0) return fUrgent;
 
   //count secondary particles
-  fRunAction->CountParticles(aTrack->GetDefinition());
+    
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
+  run->CountParticles(aTrack->GetDefinition());
 
   //
   //energy spectrum of secondaries

@@ -1,8 +1,9 @@
-# $Id: TestEm5.in,v 1.23 2009-01-23 13:26:29 maire Exp $
+# $Id: TestEm5.in 77600 2013-11-26 17:07:41Z gcosmo $
 #
 # macro file for TestEm5.cc
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 2
 #
 /testem/det/setAbsMat Silicon
@@ -14,18 +15,23 @@
 /testem/phys/setCuts 7 um
 #
 /run/initialize
+/process/em/verbose 1
+/process/em/workerVerbose 0
 #
 /testem/gun/setDefault
 /gun/particle pi+ 
 /gun/energy 5 GeV
+#
+/run/printProgress 10000
 #
 /run/beamOn 100000
 #
 /testem/det/setAbsMat Gold
 /testem/det/setAbsThick 9.658 um
 /testem/det/setAbsYZ    1 mm
-/testem/det/update
 /testem/gun/setDefault
+# Field Should be issued after /run/initialize
+#/testem/det/setField 1 tesla
 /gun/particle e-
 /gun/energy 15.7 MeV
 /run/beamOn 50000
@@ -35,7 +41,6 @@
 /testem/det/setAbsMat G4_POLYETHYLENE
 /testem/det/setAbsThick 4.74 mm
 /testem/det/setAbsYZ    50 mm
-/testem/det/update
 /testem/gun/setDefault
 /gun/particle mu+
 /gun/energy 96.2 MeV
@@ -47,7 +52,6 @@
 #
 /testem/det/setAbsMat Aluminium
 /testem/det/setAbsThick 8.004 mm
-/testem/det/update
 /testem/gun/setDefault
 /gun/particle proton
 /gun/energy 174.664 GeV
@@ -55,7 +59,6 @@
 #
 /testem/det/setAbsMat Iron
 /testem/det/setAbsThick 1 m
-/testem/det/update
 /testem/gun/setDefault
 /gun/particle mu+
 /gun/energy 100 GeV

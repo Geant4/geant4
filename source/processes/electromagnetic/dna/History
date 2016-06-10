@@ -14,6 +14,97 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+21-11-2013  V.I.         tag emdna-V09-06-22
+            - G4ITStepProcessor2 - removed obsolete unused header
+
+01-11-2013  M.K          tag emdna-V09-06-21
+            - Correct incorrect singleton check introduced in previous tag
+
+01-11-2013  M.K          tag emdna-V09-06-20
+            - Prepare for release bis
+
+01-11-2013  M.K		 tag emdna-V09-06-19
+	    - Prepare for release
+
+10-10-2013  M.K.         tag emdna-V09-06-18
+            - Remove G4VERBOSE testing in G4DNABrownianTransportation::BuildPhysicsTable
+
+06-10-2013  M.K.         tag emdna-V09-06-17
+            - Same as before once again
+
+03-10-2013  M.K.         tag emdna-V09-06-16
+            - Same as before
+
+03-10-2013  M.K.	 tag emdna-V09-06-15
+	    - Improve MT compatibility
+	    - Enhance G4DNAChemistryManager to be the main interface used 
+	    by the user - stage 1
+
+14-09-2013  M.Asai       tag emdna-V09-06-14
+            G4VProcess::SubtractNumberOfInteractionLengthLeft() is no longer
+            a virtual methood since v9.6 and thus it must not be overwritten
+            with virtual keyword in G4VITProcess.
+
+12-09-2013  M.K.         tag emdna-V09-06-13
+	    Correction of an inadvertent modification introduced in previous tag
+
+12-09-2013  M.K.         tag emdna-V09-06-12
+	    Correct bound checks in G4ITManager.icc
+
+16-08-2013  S.I.         tag emdna-V09-06-11
+	    Adapted G4DNAGenericIonsManager to use of G4DNAIons
+
+16-08-2013  S.I.         tag emdna-V09-06-10
+	    Added G4DNAIons
+
+25-06-2013  M.K.         tag emdna-V09-06-09
+	    G4MoleculeID: Rectify initialization
+	    G4MoleculeCounter: Automatic switch between unique_ptr or 
+	    auto_ptr according to c++ std version
+
+11-06-2013  G.Cosmo         tag emdna-V09-06-08
+            Corrected static initialisation in G4VMolecularDecayDisplacer
+            for problem accidentally introduced in previous tag.
+
+11-06-2013  G.Cosmo         tag emdna-V09-06-07
+            Cleanup from automatic changes for MT in classes G4Molecule,
+            G4VMolecularDecayDisplacer, G4IT, G4ITModelProcessor, G4VITProcess,
+            G4ITTransportation, G4DNAChemistryManager, and porting MT
+            compilation on Windows.
+
+06-06-2013  S.I.            tag emdna-V09-06-06
+            Updated G4DNABornIonisationModel for speedup option
+	    Requires G4EMLOW version 6.33
+
+25-05-2013  M.K.            tag emdna-V09-06-05
+            *Fix warning compilation in G4KDMap for specific gcc version
+
+24-05-2013  M.K.            tag emdna-V09-06-04
+            * Track state class updated to fix compilation errors on mac 
+	    but still not in usage
+
+23-05-2013  M.K.            tag emdna-V09-06-03
+            * G4KDMap : try fix error on std:ceil call on windows
+
+23-V09-06-03-05-2013  M.K.            tag emdna-V09-06-02
+            * G4KDMap : used deque::iterator
+
+
+22-05-2013  M.K.            tag emdna-V09-06-01
+	    * Correct warning from G4KDTree.cc
+	    * G4KDMap : pop out elements from map
+
+22-05-2013  M.K.	    tag emdna-V09-06-00
+	    * !!! MT !!!! Promoted to thread-global storage : 
+		--> G4DNAGenericIonManager 
+		--> G4DNAMolecularMaterial
+		--> G4DNAMolecularReactionTable
+	    * G4KDMap added
+	    * G4DNASmoluchowskiReactionModel : exception description enhanced
+	    * G4ITTrackingInteractivity : "Initialize()" method added for simplify 
+					intialization of daughter classes
+	    * G4DNAChemistryManager : AddEmptyLineInOuputFile method added  
+
 12-11-2012  M.K             tag emdna-V09-05-35
             Remove unnecessary abort() and exit(-1) previously introduced to avoid
             coverity warnings (rev 64993)

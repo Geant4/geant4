@@ -75,6 +75,8 @@ public:
 
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4ParticleDefinition*);
 
+  G4double GetKaonNucleonXscGG(const G4DynamicParticle*, const G4ParticleDefinition*);
+
   G4double GetHadronNucleonXscVU(const G4DynamicParticle*, const G4ParticleDefinition*);
 
   // kinematics and set/get
@@ -98,11 +100,11 @@ public:
 
 private:
 
-  const G4double fUpperLimit;
+//  const G4double fUpperLimit;
   const G4double fLowerLimit; 
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc;
-  G4double fHadronNucleonXsc;
+//  G4double fHadronNucleonXsc;
 
   // K-nucleon tot xsc (mb) fit data, std::log(Tkin(MeV))
 

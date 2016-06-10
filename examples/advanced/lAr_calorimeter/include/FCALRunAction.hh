@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: FCALRunAction.hh 67976 2013-03-13 10:23:17Z gcosmo $
 //
 // 
 
@@ -43,15 +43,19 @@ class G4Run;
 
 class FCALRunAction : public G4UserRunAction
 {
-  public:
-    FCALRunAction();
-   ~FCALRunAction();
+public:
+  FCALRunAction();
+  ~FCALRunAction();
+  
+public:
+  void BeginOfRunAction(const G4Run*);
+  
+  void EndOfRunAction(const G4Run*);
+  
+  void SetOutputFileName(G4String name){fOutputFileName = name;};
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-
-    void EndOfRunAction(const G4Run*);
-
+private:
+  G4String fOutputFileName;
 };
 
 

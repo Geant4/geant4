@@ -23,10 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4CascadeParameters.hh
+// $Id: G4CascadeParameters.hh 72016 2013-07-03 16:24:15Z mkelsey $
 // Encapsulate all user-configurable parameters with associated envvars
 //
 // 20120912  M. Kelsey -- Add interface to support UI commands
+// 20130304  M. Kelsey -- Add flag to collect and display cascade structure
+// 20130308  M. Kelsey -- Add flag to use separate 3-body momentum generators
+// 20130421  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's
+// 20130702  M. Kelsey -- Add flag to use N-body phase-space generator
 
 #ifndef G4CascadeParameters_hh
 #define G4CascadeParameters_hh 1
@@ -44,8 +48,12 @@ public:
 
   // Top-level configuration flags
   static G4int verbose()              { return Instance()->VERBOSE_LEVEL; }
+  static G4bool checkConservation()   { return Instance()->CHECK_ECONS; }
   static G4bool usePreCompound()      { return Instance()->USE_PRECOMPOUND; }
   static G4bool doCoalescence()       { return Instance()->DO_COALESCENCE; }
+  static G4bool showHistory()         { return Instance()->SHOW_HISTORY; }
+  static G4bool use3BodyMom()	      { return Instance()->USE_3BODYMOM; }
+  static G4bool usePhaseSpace()       { return Instance()->USE_PHASESPACE; }
   static const G4String& randomFile() { return Instance()->RANDOM_FILE; }
 
   // Nuclear structure parameters
@@ -67,8 +75,12 @@ public:
 
 private:	// Environment variable values, null pointers mean not set
   const char* G4CASCADE_VERBOSE;
+  const char* G4CASCADE_CHECK_ECONS;
   const char* G4CASCADE_USE_PRECOMPOUND;
   const char* G4CASCADE_DO_COALESCENCE;
+  const char* G4CASCADE_SHOW_HISTORY;
+  const char* G4CASCADE_USE_3BODYMOM;
+  const char* G4CASCADE_USE_PHASESPACE;
   const char* G4CASCADE_RANDOM_FILE;
   const char* G4NUCMODEL_USE_BEST;
   const char* G4NUCMODEL_RAD_2PAR;
@@ -86,8 +98,12 @@ private:	// Environment variable values, null pointers mean not set
   void Initialize();		// Fill parameter values from envvar strings
 
   G4int VERBOSE_LEVEL;		// Top-level configuration flags
+  G4bool CHECK_ECONS;
   G4bool USE_PRECOMPOUND;
   G4bool DO_COALESCENCE;
+  G4bool SHOW_HISTORY;
+  G4bool USE_3BODYMOM;
+  G4bool USE_PHASESPACE;
   G4String RANDOM_FILE;
 
   G4bool BEST_PAR;		// Nuclear structure parameters

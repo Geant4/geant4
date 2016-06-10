@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GNASHTransitions.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 #ifndef G4GNASHTransitions_hh
 #define G4GNASHTransitions_hh 1
 
 #include "G4VPreCompoundTransitions.hh"
 #include "G4Fragment.hh"
+
+class G4PreCompoundParameters;
 
 class G4GNASHTransitions : public G4VPreCompoundTransitions
 {
@@ -52,6 +54,7 @@ const G4GNASHTransitions& operator=(const G4GNASHTransitions &right);
 
   G4bool operator!=(const G4GNASHTransitions &right) const;
 
+  G4PreCompoundParameters* theParameters;
 
 };
 

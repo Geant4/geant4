@@ -209,18 +209,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
         G4Nucleus & aNucleus)
 //----------------------------------------------------------------------------
 {
-    static G4int eventcounter=0;
-
-    //   if ( eventcounter == 0 ) {
-    //      SetEpReportLevel(3);   // report non conservation with model etc.
-    //      G4double relativeLevel = 1*perCent;
-    //      G4double absoluteLevel = 2*MeV;
-    //      SetEnergyMomentumCheckLevels(relativeLevel,absoluteLevel);
-    //   }
-
-    //if(eventcounter == 100*(eventcounter/100) )
-    eventcounter++;
-    if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number starts ######### "<<eventcounter<<G4endl;
+    if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction starts ######### "<< G4endl;
 
     G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
     G4ParticleDefinition * definition = const_cast<G4ParticleDefinition *>(aTrack.GetDefinition());
@@ -319,7 +308,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 
 
     } else {  // no interaction, return primary
-        if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number void ######### "<<eventcounter<<G4endl;
+        if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction void, return intial state ######### "<< G4endl;
         theParticleChange.SetStatusChange(isAlive);
         theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
         theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
@@ -331,7 +320,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     delete the3DNucleus;
     the3DNucleus = NULL;
 
-    if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number ends ######### "<<eventcounter<<G4endl;
+    if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction ends ######### "<< G4endl;
 
     return &theParticleChange;
 }
@@ -1736,7 +1725,7 @@ G4double G4BinaryCascade::CorrectShortlivedPrimaryForFermi(
         G4int PDGcode=primary->GetDefinition()->GetPDGEncoding();
         Efermi=((G4RKPropagation *)thePropagator)->GetField(PDGcode,primary->GetPosition());
 
-        if ( std::abs(PDGcode > 1000) && PDGcode != 2112 && PDGcode != 2212 )
+        if ( std::abs(PDGcode) > 1000 && PDGcode != 2112 && PDGcode != 2212 )
         {
             Efermi = ((G4RKPropagation *)thePropagator)->GetField(G4Neutron::Neutron()->GetPDGEncoding(),primary->GetPosition());
             G4LorentzVector mom4Primary=primary->Get4Momentum();
@@ -2454,9 +2443,6 @@ G4Fragment * G4BinaryCascade::FindFragments()
     //GF  fragment->SetNumberOfParticles(excitons-holes);
     fragment->SetNumberOfParticles(excitons);
     fragment->SetNumberOfCharged(zCaptured);
-    G4ParticleDefinition * aIonDefinition =
-            G4ParticleTable::GetParticleTable()->FindIon(a,z,0,z);
-    fragment->SetParticleDefinition(aIonDefinition);
 
     return fragment;
 }
@@ -2553,9 +2539,8 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
 {
     G4ReactionProductVector * products = new G4ReactionProductVector;
     G4ParticleDefinition * aHTarg = G4Proton::ProtonDefinition();
-    G4double mass = aHTarg->GetPDGMass();
     if (nucleus->GetCharge() == 0) aHTarg = G4Neutron::NeutronDefinition();
-    mass = aHTarg->GetPDGMass();
+    G4double mass = aHTarg->GetPDGMass();
     G4KineticTrackVector * secs = 0;
     G4ThreeVector pos(0,0,0);
     G4LorentzVector mom(mass);
@@ -2584,9 +2569,11 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
         }
     }
 
-    size_t current(0);
     ClearAndDestroy(&theFinalState);
-    for(current=0; secs && current<secs->size(); current++)
+    ClearAndDestroy(secondaries);
+    delete secondaries;
+
+    for(size_t current=0; secs && current<secs->size(); current++)
     {
         if((*secs)[current]->GetDefinition()->IsShortLived())
         {

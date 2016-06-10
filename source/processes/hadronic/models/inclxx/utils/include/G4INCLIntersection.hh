@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -50,6 +48,7 @@
 #include <utility>
 
 namespace G4INCL {
+
   /** \brief Intersection-point structure
    *
    * The structure contains the time and position of the intersection point
@@ -63,33 +62,80 @@ namespace G4INCL {
     ThreeVector position;
   };
 
-  class IntersectionFactory {
-    public:
-      /** \brief Compute the first intersection of a straight particle
-       *         trajectory with a sphere.
-       *
-       * \param x0 the starting position of the trajectory
-       * \param p the trajectory direction
-       * \param r the radius of the sphere (centred in the origin)
-       * \return an Intersection. The G4bool is true if an intersection exists,
-       *         in which case its position is stored in the ThreeVector and
-       *         its time in the G4double.
-       */
-      static inline Intersection getEarlierTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &p, const G4double r) {
-        return getTrajectoryIntersection(x0, p, r, true);
+  namespace IntersectionFactory {
+
+    /** \brief Compute the first intersection of a straight particle
+     *         trajectory with a sphere.
+     *
+     * \param x0 the starting position of the trajectory
+     * \param p the trajectory direction
+     * \param r the radius of the sphere (centred in the origin)
+     * \return an Intersection. The G4bool is true if an intersection exists,
+     *         in which case its position is stored in the ThreeVector and
+     *         its time in the G4double.
+     */
+    Intersection getEarlierTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &p, const G4double r);
+    /** \brief Compute the second intersection of a straight particle
+     *         trajectory with a sphere.
+     *
+     * \param x0 the starting position of the trajectory
+     * \param p the trajectory direction
+     * \param r the radius of the sphere (centred in the origin)
+     * \return an Intersection. The G4bool is true if an intersection exists,
+     *         in which case its position is stored in the ThreeVector and
+     *         its time in the G4double.
+     */
+    Intersection getLaterTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &p, const G4double r);
+    /** \brief Compute both intersections of a straight particle
+     *         trajectory with a sphere.
+     *
+     * \param x0 the starting position of the trajectory
+     * \param p the trajectory direction
+     * \param r the radius of the sphere (centred in the origin)
+     * \return an Intersection. The G4bool is true if an intersection exists,
+     *         in which case its position is stored in the ThreeVector and
+     *         its time in the G4double.
+     */
+    std::pair<Intersection,Intersection> getTrajectoryIntersections(const ThreeVector &x0, const ThreeVector &p, const G4double r);
+
+    namespace {
+
+      Intersection getTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &v, const G4double r, const G4bool earliest) {
+        const G4double scalarVelocity = v.mag();
+        ThreeVector velocityUnitVector = v / scalarVelocity;
+
+        ThreeVector positionTransverse = x0 - velocityUnitVector * x0.dot(velocityUnitVector);
+        const G4double impactParameter = positionTransverse.mag();
+
+        const G4double r2 = r*r;
+        G4double distanceZ2 = r2 - impactParameter * impactParameter;
+        if(distanceZ2 < 0.0)
+          return Intersection(false, 0.0, ThreeVector());
+
+        const G4double distanceZ = std::sqrt(distanceZ2);
+        const ThreeVector position = positionTransverse + velocityUnitVector * (earliest ? -distanceZ : distanceZ);
+        const G4double time = (position-x0).dot(velocityUnitVector)/scalarVelocity;
+        return Intersection(true, time, position);
       }
-      static inline Intersection getLaterTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &p, const G4double r) {
-        return getTrajectoryIntersection(x0, p, r, false);
-      }
-      static inline std::pair<Intersection,Intersection> getTrajectoryIntersections(const ThreeVector &x0, const ThreeVector &p, const G4double r) {
-        return std::make_pair(
-            getTrajectoryIntersection(x0, p, r, true),
-            getTrajectoryIntersection(x0, p, r, false)
-            );
-      }
-    private:
-      static Intersection getTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &p, const G4double r, const G4bool earliest);
-  };
+
+    }
+
+    inline Intersection getEarlierTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &p, const G4double r) {
+      return getTrajectoryIntersection(x0, p, r, true);
+    }
+
+    inline Intersection getLaterTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &p, const G4double r) {
+      return getTrajectoryIntersection(x0, p, r, false);
+    }
+
+    inline std::pair<Intersection,Intersection> getTrajectoryIntersections(const ThreeVector &x0, const ThreeVector &p, const G4double r) {
+      return std::make_pair(
+                            getTrajectoryIntersection(x0, p, r, true),
+                            getTrajectoryIntersection(x0, p, r, false)
+                           );
+    }
+  }
+
 }
 
 #endif /* G4INCLINTERSECTION_HH */

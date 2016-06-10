@@ -140,4 +140,5 @@ void G4VCollision::Print(const G4KineticTrack& trk1,
 	}
 }
 
-
+G4VCollision::G4VCollision(void*, void*, void *, void *, void *, void *, void *){}
+void G4VCollision::establish_G4MT_TLS_G4VCollision(){ }

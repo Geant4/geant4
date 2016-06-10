@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmHistoMessenger.cc 68030 2013-03-13 13:51:27Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmHistoMessenger.cc
 /// \brief Implementation of the exrdmHistoMessenger class
 //
@@ -41,7 +43,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmHistoMessenger::exrdmHistoMessenger(exrdmHisto* manager)
-:fHisto (manager)
+:G4UImessenger(),
+ fHisto (manager),
+ fHistoDir(0),   
+ fActoryCmd(0),
+ fIleCmd(0),
+ fHistoCmd(0)
 {
   fHistoDir = new G4UIdirectory("/histo/");
   fHistoDir->SetGuidance("histograms control");

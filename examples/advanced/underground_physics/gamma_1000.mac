@@ -45,7 +45,7 @@
 #
 /dmx/hitsfile gamma_1000.out
 /dmx/pmtfile gamma_1000_pmt.out
-/dmx/histogramfile gamma_1000.his
+/dmx/histogramfile gamma_1000
 
 /run/beamOn 1000
 

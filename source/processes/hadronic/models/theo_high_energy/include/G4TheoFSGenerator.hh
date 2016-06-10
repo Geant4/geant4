@@ -49,7 +49,6 @@
 #include "G4DecayStrongResonances.hh"
 #include "G4HadFinalState.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4ProjectileDiffractiveChannel.hh"
 
 class G4TheoFSGenerator : public G4HadronicInteraction 
 
@@ -69,7 +68,6 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       void SetTransport(G4VIntraNuclearTransportModel *const  value);
       void SetHighEnergyGenerator(G4VHighEnergyGenerator *const  value);
       void SetQuasiElasticChannel(G4QuasiElasticChannel *const value);
-      void SetProjectileDiffraction(G4ProjectileDiffractiveChannel *const value);
       virtual std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
       void ModelDescription(std::ostream& outFile) const;
 
@@ -85,7 +83,6 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       G4DecayStrongResonances theDecay;
       G4HadFinalState * theParticleChange;
       G4QuasiElasticChannel * theQuasielastic;
-      G4ProjectileDiffractiveChannel * theProjectileDiffraction;
 };
 
 inline const G4VIntraNuclearTransportModel * G4TheoFSGenerator::GetTransport() const
@@ -111,10 +108,6 @@ inline void G4TheoFSGenerator::SetHighEnergyGenerator(G4VHighEnergyGenerator *co
 inline void G4TheoFSGenerator::SetQuasiElasticChannel(G4QuasiElasticChannel *const value)
 {
   theQuasielastic = value;
-}
-inline void G4TheoFSGenerator::SetProjectileDiffraction(G4ProjectileDiffractiveChannel *const value)
-{
-  theProjectileDiffraction = value;
 }
 
 inline const G4HadFinalState * G4TheoFSGenerator::GetFinalState() const

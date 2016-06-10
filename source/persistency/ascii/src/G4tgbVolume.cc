@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbVolume.cc 77356 2013-11-22 17:10:29Z gcosmo $
 //
 //
 // class G4tgbVolume
@@ -77,6 +77,7 @@
 #include "G4Torus.hh"
 #include "G4Hype.hh"
 #include "G4Polycone.hh"
+#include "G4GenericPolycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4EllipticalTube.hh"
 #include "G4Ellipsoid.hh"
@@ -88,14 +89,6 @@
 #include "G4TwistedTrd.hh"
 #include "G4TwistedTubs.hh"
 #include "G4AssemblyVolume.hh"
-#include "G4BREPSolidBox.hh"
-#include "G4BREPSolidCylinder.hh"
-#include "G4BREPSolidCone.hh"
-#include "G4BREPSolidSphere.hh"
-#include "G4BREPSolidTorus.hh"
-#include "G4BREPSolidPCone.hh"
-#include "G4BREPSolidPolyhedra.hh"
-#include "G4BREPSolidOpenPCone.hh"
 #include "G4TessellatedSolid.hh"
 #include "G4TriangularFacet.hh"
 #include "G4QuadrangularFacet.hh"
@@ -160,10 +153,6 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
 	logvol = ConstructG4LogVol( solid );
 	g4vmgr->RegisterMe( logvol );
 	g4vmgr->RegisterChildParentLVs( logvol, parentLV ); 
-      }
-      else
-      {
-        return;
       }
     }
     else
@@ -362,11 +351,11 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     G4bool genericPoly = false;
     if( solParam.size() == 3+nplanes*3 )
     { 
-      genericPoly = true;
+      genericPoly = false;
     }
     else if( solParam.size() == 3+nplanes*2 )
     { 
-      genericPoly = false;
+      genericPoly = true;
     }
     else
     {
@@ -383,7 +372,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       return 0;
     }
 
-    if( genericPoly )
+    if( !genericPoly )
     {
       std::vector<G4double>* z_p = new std::vector<G4double>;
       std::vector<G4double>* rmin_p = new std::vector<G4double>;
@@ -411,7 +400,8 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       }
       G4double phiTotal = solParam[1];
       if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
-      solid = new G4Polycone( sname, solParam[0], phiTotal, // start,delta-phi
+      solid = new G4GenericPolycone( sname,
+                              solParam[0], phiTotal, // start,delta-phi
                               nplanes, // sections
                               &((*R_c)[0]), &((*Z_c)[0]));
     }
@@ -444,7 +434,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       return 0;
     }
     
-    if( genericPoly )
+    if( !genericPoly )
     {
       std::vector<G4double>* z_p = new std::vector<G4double>;
       std::vector<G4double>* rmin_p = new std::vector<G4double>;
@@ -535,123 +525,6 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     solid = new G4TwistedTubs( sname, solParam[0], solParam[1], solParam[2],
                                solParam[3], phiTotal);
-  }
-  else if( stype == "BREPBOX" )   // EntityType is = "Closed_Shell"
-  {
-    CheckNoSolidParams( stype, 24, solParam.size() );
-    std::vector<G4Point3D> points;
-    for( size_t ii = 0; ii < 8; ii++ )
-    {
-      points.push_back( G4Point3D(solParam[ii*3+0],
-                                  solParam[ii*3+1],
-                                  solParam[ii*3+2]) );
-    }
-    solid = new G4BREPSolidBox( sname, points[0], points[1], points[2],
-                                points[3], points[4], points[5], points[6],
-                                points[7] );
-  }
-  else if( stype == "BREPCYLINDER" )   // EntityType is = "Closed_Shell"
-  {
-    CheckNoSolidParams( stype, 11, solParam.size() );
-    solid = new G4BREPSolidCylinder( sname,
-                  G4ThreeVector( solParam[0], solParam[1], solParam[2] ),
-                  G4ThreeVector( solParam[3], solParam[4], solParam[5] ),
-                  G4ThreeVector( solParam[6], solParam[7], solParam[8] ),
-                  solParam[9], solParam[10] );
-  }
-  else if( stype == "BREPCONE" )   // EntityType is = "Closed_Shell"
-  {
-    CheckNoSolidParams( stype, 12, solParam.size() );
-    solid = new G4BREPSolidCone( sname,
-                  G4ThreeVector( solParam[0], solParam[1], solParam[2] ),
-                  G4ThreeVector( solParam[3], solParam[4], solParam[5] ),
-                  G4ThreeVector( solParam[6], solParam[7], solParam[8] ),
-                  solParam[9], solParam[10], solParam[11] );
-  }
-  else if( stype == "BREPSPHERE" )   // EntityType is = "Closed_Shell"
-  {
-    CheckNoSolidParams( stype, 10, solParam.size() );
-    solid = new G4BREPSolidSphere( sname,
-                  G4ThreeVector( solParam[0], solParam[1], solParam[2] ),
-                  G4ThreeVector( solParam[3], solParam[4], solParam[5] ),
-                  G4ThreeVector( solParam[6], solParam[7], solParam[8] ),
-                  solParam[9] );
-
-  }
-  else if( stype == "BREPTORUS" )   // EntityType is = "Closed_Shell"
-  {
-    CheckNoSolidParams( stype, 11, solParam.size() );
-    solid = new G4BREPSolidTorus( sname,
-                  G4ThreeVector( solParam[0], solParam[1], solParam[2] ),
-                  G4ThreeVector( solParam[3], solParam[4], solParam[5] ),
-                  G4ThreeVector( solParam[6], solParam[7], solParam[8] ),
-                  solParam[9], solParam[10] );
-  }
-  else if( stype == "BREPPCONE" )   // EntityType is = "Closed_Shell"
-  {
-    size_t nplanes = size_t(solParam[2]);
-    CheckNoSolidParams( stype, 4+3*nplanes, solParam.size() );
-    std::vector<G4double>* z_p = new std::vector<G4double>;
-    std::vector<G4double>* rmin_p = new std::vector<G4double>;
-    std::vector<G4double>* rmax_p = new std::vector<G4double>;
-    for( size_t ii = 0; ii < nplanes; ii++ )
-    {
-      (*z_p).push_back( solParam[4+3*ii] );
-      (*rmin_p).push_back( solParam[4+3*ii+1] );
-      (*rmax_p).push_back(  solParam[4+3*ii+2] );
-    }
-    G4double phiTotal = solParam[1];
-    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
-    CheckNoSolidParams( stype, 12, solParam.size() );
-    solid = new G4BREPSolidPCone( sname, solParam[0], phiTotal, // start,dph
-                                  nplanes,                      // sections
-                                  solParam[3],                  // z_start
-                                  &((*z_p)[0]), &((*rmin_p)[0]),
-                                  &((*rmax_p)[0]));
-  }
-  else if( stype == "BREPPOLYHEDRA" )   // EntityType is = "Closed_Shell"
-  {
-    size_t nplanes = size_t(solParam[3]);
-    CheckNoSolidParams( stype, 5+3*nplanes, solParam.size() );
-    std::vector<G4double>* z_p = new std::vector<G4double>;
-    std::vector<G4double>* rmin_p = new std::vector<G4double>;
-    std::vector<G4double>* rmax_p = new std::vector<G4double>;
-    for( size_t ii = 0; ii < nplanes; ii++ )
-    {
-      (*z_p).push_back( solParam[5+3*ii] );
-      (*rmin_p).push_back( solParam[5+3*ii+1] );
-      (*rmax_p).push_back(  solParam[5+3*ii+2] );
-    }
-    G4double phiTotal = solParam[1];
-    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
-    CheckNoSolidParams( stype, 12, solParam.size() );
-    solid = new G4BREPSolidPolyhedra( sname, solParam[0], phiTotal, // start,dph
-                                      G4int(solParam[2]), // sides
-                                      nplanes,            // sections
-                                      solParam[4],        // z_start
-                                      &((*z_p)[0]), &((*rmin_p)[0]),
-                                      &((*rmax_p)[0]));
-  }
-  else if( stype == "BREPOPENPCONE" )   // EntityType is = "Closed_Shell"
-  {
-    size_t nplanes = size_t(solParam[2]);
-    std::vector<G4double>* z_p = new std::vector<G4double>;
-    std::vector<G4double>* rmin_p = new std::vector<G4double>;
-    std::vector<G4double>* rmax_p = new std::vector<G4double>;
-    for( size_t ii = 0; ii < nplanes; ii++ )
-    {
-      (*z_p).push_back( solParam[4+3*ii] );
-      (*rmin_p).push_back( solParam[4+3*ii+1] );
-      (*rmax_p).push_back(  solParam[4+3*ii+2] );
-    }
-    G4double phiTotal = solParam[1];
-    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
-    CheckNoSolidParams( stype, 12, solParam.size() );
-    solid = new G4BREPSolidOpenPCone( sname, solParam[0], phiTotal, // start,dph
-                                      nplanes,                      // sections
-                                      solParam[3],                  // z_start
-                                      &((*z_p)[0]), &((*rmin_p)[0]),
-                                      &((*rmax_p)[0]));
   }
   else if( stype == "TESSELLATED" )
   {
@@ -1328,7 +1201,8 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
     solid = new G4Tubs( GetName(), psolid->GetInnerRadius()*redf,
                                    psolid->GetOuterRadius()*redf,
                                    psolid->GetZHalfLength()*redf,
-                                   psolid->GetSPhi(), psolid->GetDPhi());
+                                   psolid->GetStartPhiAngle(),
+                                   psolid->GetDeltaPhiAngle());
   } 
   else if ( parentSolid->GetEntityType() == "G4Cons" )
   {
@@ -1338,7 +1212,8 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
                                    psolid->GetInnerRadiusPlusZ()*redf,
                                    psolid->GetOuterRadiusPlusZ()*redf,
                                    psolid->GetZHalfLength()*redf,
-                                   psolid->GetSPhi(), psolid->GetDPhi());
+                                   psolid->GetStartPhiAngle(),
+                                   psolid->GetDeltaPhiAngle());
   } 
   else if ( parentSolid->GetEntityType() == "G4Trd" )
   {
@@ -1386,6 +1261,23 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
                                        psolid->GetEndPhi(),
                             origParam.Num_z_planes, origParam.Z_values,
                             origParam.Rmin, origParam.Rmax);
+
+  } 
+  else if ( parentSolid->GetEntityType() == "G4GenericPolycone" )
+  {
+    G4GenericPolycone* psolid = (G4GenericPolycone*)(parentSolid);
+    const G4int numRZ = psolid->GetNumRZCorner();
+    G4double* r = new G4double[numRZ];
+    G4double* z = new G4double[numRZ];
+    for( G4int ii = 0; ii < numRZ; ii++ )
+    {
+      r[ii] = psolid->GetCorner(ii).r;
+      z[ii] = psolid->GetCorner(ii).z;
+    }
+    solid = new G4GenericPolycone( GetName(), psolid->GetStartPhi(),
+                                   psolid->GetEndPhi() - psolid->GetStartPhi(),
+                                   numRZ, r, z);
+    delete [] r; delete [] z;
 
   } 
   else if ( parentSolid->GetEntityType() == "G4Polyhedra" )

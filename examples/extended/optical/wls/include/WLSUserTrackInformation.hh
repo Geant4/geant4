@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSUserTrackInformation.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSUserTrackInformation.hh
 /// \brief Definition of the WLSUserTrackInformation class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,10 +65,10 @@ class WLSUserTrackInformation : public G4VUserTrackInformation
   public:
 
     WLSUserTrackInformation();
-    ~WLSUserTrackInformation();
+    virtual ~WLSUserTrackInformation();
  
-    const G4ThreeVector& GetExitPosition() const { return exitPosition; }
-    void SetExitPosition (const G4ThreeVector& pos) { exitPosition = pos; }
+    const G4ThreeVector& GetExitPosition() const { return fExitPosition; }
+    void SetExitPosition (const G4ThreeVector& pos) { fExitPosition = pos; }
 
     // Try adding a status flag and return if it is successful or not
     // Cannot Add Undefine or a flag that conflicts with another flag
@@ -78,14 +77,12 @@ class WLSUserTrackInformation : public G4VUserTrackInformation
 
     // Check if a certain flag is on
     G4bool isStatus(TrackStatus s)
-       { return s == undefined ? !(status &= defined) : status & s; }
+       { return s == undefined ? !(fStatus &= defined) : fStatus & s; }
 
-    void Print() const { }
-  
   private:
 
-    G4int status;
-    G4ThreeVector exitPosition;
+    G4int fStatus;
+    G4ThreeVector fExitPosition;
 
 };
 

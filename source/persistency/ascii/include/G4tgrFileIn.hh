@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrFileIn.hh 68052 2013-03-13 14:38:53Z gcosmo $
 //
 //
 // class G4tgrFileIn
@@ -89,7 +89,7 @@ class G4tgrFileIn
     G4int theCurrentFile;
       // Index of file being read in theFiles
   
-    static std::vector<G4tgrFileIn*> theInstances;
+    static G4ThreadLocal std::vector<G4tgrFileIn*> *theInstances;
       // Vector of class instances (each one identified by its name)
   
     G4String theName;

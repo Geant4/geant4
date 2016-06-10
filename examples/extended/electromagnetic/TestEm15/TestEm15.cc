@@ -26,11 +26,10 @@
 /// \file electromagnetic/TestEm15/TestEm15.cc
 /// \brief Main program of the electromagnetic/TestEm15 example
 //
-// $Id$
+// $Id: TestEm15.cc 73022 2013-08-15 09:09:48Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
@@ -76,7 +75,7 @@ int main(int argc,char** argv) {
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim)); 
   runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new SteppingAction(det,prim,run));
+  runManager->SetUserAction(new SteppingAction(det,run));
    
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -113,4 +112,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

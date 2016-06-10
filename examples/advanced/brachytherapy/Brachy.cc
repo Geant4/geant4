@@ -38,12 +38,18 @@
 //    *******************************
 //
 //
+#ifdef G4MULTITHREADED
+  #include "G4MTRunManager.hh"
+#else
+  #include "G4RunManager.hh"
+#endif
 
-#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "BrachyFactoryIr.hh"
-#include "BrachyAnalysis.hh"
+#include "BrachyActionInitialization.hh"
+#include "BrachyAnalysisManager.hh"
+
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
@@ -52,7 +58,6 @@
 #include "BrachyPhysicsList.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "G4SDManager.hh"
-#include "BrachyRunAction.hh"
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
@@ -71,15 +76,21 @@
 int main(int argc ,char ** argv)
 
 {
-  G4ScoringManager::GetScoringManager(); // instanciate the interactive scoring manager
 
-  G4RunManager* pRunManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* pRunManager = new G4MTRunManager;
+  pRunManager->SetNumberOfThreads(4); // Is equal to 2 by default
+#else
+ G4RunManager* pRunManager = new G4RunManager;
+#endif
 
-  // Access to the Scoring Manager pointer
+ // Access to the Scoring Manager pointer
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
 
+
   // Overwrite the default output file with user-defined one 
-  scoringManager->SetScoreWriter(new BrachyUserScoreWriter());
+  BrachyAnalysisManager* analysis = new BrachyAnalysisManager();
+  scoringManager->SetScoreWriter(new BrachyUserScoreWriter(analysis));
 
   // Initialize the physics component
   pRunManager -> SetUserInitialization(new BrachyPhysicsList);
@@ -88,23 +99,26 @@ int main(int argc ,char ** argv)
   BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction();
   pRunManager -> SetUserInitialization(pDetectorConstruction);
 
-  // Initialize the primary particles
-  BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
-  pRunManager -> SetUserAction(primary);
+//  Analysis Manager
+#ifdef ANALYSIS_USE
+analysis -> book();
+#endif
 
-  BrachyRunAction *pRunAction = new BrachyRunAction();
-  pRunManager -> SetUserAction(pRunAction);
+  // User action initialization  
 
-  //// Initialize the Visualization component 
+  BrachyActionInitialization* actions = new BrachyActionInitialization(analysis);
+  pRunManager->SetUserInitialization(actions);
+ 
+  //Initialize G4 kernel
+  pRunManager -> Initialize();
+ 
+//// Initialize the Visualization component 
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-  
-  //Initialize G4 kernel
-  pRunManager -> Initialize();
-
+ 
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
   if (argc == 1)   // Define UI session for interactive mode.
@@ -128,6 +142,14 @@ int main(int argc ,char ** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+
+#ifdef ANALYSIS_USE
+// Close the output ROOT file with the results
+   analysis -> save(); 
+#endif
+
+  delete analysis;
+
 
   delete pRunManager;
 

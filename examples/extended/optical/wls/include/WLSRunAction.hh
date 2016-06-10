@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSRunAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSRunAction.hh
 /// \brief Definition of the WLSRunAction class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -49,24 +48,24 @@ class WLSRunAction : public G4UserRunAction
   public:
 
     WLSRunAction();
-    ~WLSRunAction();
+    virtual ~WLSRunAction();
 
   public:
 
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
-    void  SetRndmFreq(G4int val) { saveRndm = val; }
-    G4int GetRndmFreq()          { return saveRndm; }
+    void  SetRndmFreq(G4int val) { fSaveRndm = val; }
+    G4int GetRndmFreq()          { return fSaveRndm; }
 
-    inline void SetAutoSeed (const G4bool val) { autoSeed = val; }
+    inline void SetAutoSeed (const G4bool val) { fAutoSeed = val; }
 
   private:
  
-    WLSRunActionMessenger* runMessenger;
+    WLSRunActionMessenger* fRunMessenger;
 
-    G4int saveRndm;
-    G4bool autoSeed;
+    G4int fSaveRndm;
+    G4bool fAutoSeed;
 
 };
 

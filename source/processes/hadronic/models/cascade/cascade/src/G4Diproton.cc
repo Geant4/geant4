@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Diproton.cc 69389 2013-05-02 15:54:09Z mkelsey $
 //
 // ------------------------------------------------------------
 //      Bertini Cascade diproton class implementation file
@@ -34,6 +34,7 @@
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
 //	06 May 2010:  Remove created particle from master table.
 //      25 May 2012:  Add flags to suppress particle-table error message.
+//	01 May 2013:  Remove G4ThreadLocal from static pointer.
 // ----------------------------------------------------------------
 
 #include "G4Diproton.hh"
@@ -69,9 +70,10 @@ G4Diproton* G4Diproton::Definition() {
     theInstance = new G4Diproton;	// There can be only one
 
     G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+    G4bool tableReady = pTable->GetReadiness();
     pTable->SetReadiness(false);        // Suppress error message
     pTable->Remove(theInstance);        // Make invisible to GEANT4
-    pTable->SetReadiness(true);         // Set back 'ready to use' flag
+    pTable->SetReadiness(tableReady);   // Set back 'ready to use' flag
   }
 
   return theInstance;

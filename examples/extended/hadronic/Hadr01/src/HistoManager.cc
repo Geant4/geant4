@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.cc 70761 2013-06-05 12:30:51Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -71,6 +71,7 @@
 #include "Histo.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -90,20 +91,22 @@ HistoManager* HistoManager::GetPointer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::HistoManager()
+: fPrimaryDef(0),
+  fNeutron(0),
+  fEdepMax(1.0*GeV),
+  fLength (300.*mm),
+  fPrimaryKineticEnergy(0.0),  
+  fVerbose(0),  
+  fNBinsE (100),
+  fNSlices(300),
+  fNHisto (25),
+  fBeamFlag(true),
+  fHistoBooked(false),
+  fHisto(0)
 {
-  fVerbose=  0;
-  fNSlices   = 300;
-  fNBinsE    = 100;
-  fNHisto    = 25;
-  fLength    = 300.*mm;
-  fEdepMax   = 1.0*GeV;
-  fBeamFlag  = true;
-  fHistoBooked = false;
   fHisto     = new Histo();
   fHisto->SetVerbose(fVerbose);
   fNeutron   = G4Neutron::Neutron();
-  fPrimaryKineticEnergy = 0.0;
-  fPrimaryDef = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -129,25 +132,35 @@ void HistoManager::bookHisto()
   fHisto->Add1D("8","Log10 Energy (MeV) of pi0",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("9","Log10 Energy (MeV) of charged kaons",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("10","Log10 Energy (MeV) of neutral kaons",fNBinsE,-4.,6.,1.0);
-  fHisto->Add1D("11","Log10 Energy (MeV) of deuterons and tritons",fNBinsE,-5.,5.,1.0);
+  fHisto->Add1D("11","Log10 Energy (MeV) of deuterons and tritons",
+                fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("12","Log10 Energy (MeV) of He3 and alpha",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("13","Log10 Energy (MeV) of Generic Ions",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("14","Log10 Energy (MeV) of muons",fNBinsE,-4.,6.,1.0);
-  fHisto->Add1D("15","log10 Energy (MeV) of side-leaked neutrons",fNBinsE,-5.,5.,1.0);
-  fHisto->Add1D("16","log10 Energy (MeV) of forward-leaked neutrons",fNBinsE,-5.,5.,1.0);
-  fHisto->Add1D("17","log10 Energy (MeV) of backward-leaked neutrons",fNBinsE,-5.,5.,1.0);
-  fHisto->Add1D("18","log10 Energy (MeV) of leaking protons",fNBinsE,-4.,6.,1.0);
-  fHisto->Add1D("19","log10 Energy (MeV) of leaking charged pions",fNBinsE,-4.,6.,1.0);
+  fHisto->Add1D("15","log10 Energy (MeV) of side-leaked neutrons",
+                fNBinsE,-5.,5.,1.0);
+  fHisto->Add1D("16","log10 Energy (MeV) of forward-leaked neutrons",
+                fNBinsE,-5.,5.,1.0);
+  fHisto->Add1D("17","log10 Energy (MeV) of backward-leaked neutrons",
+                fNBinsE,-5.,5.,1.0);
+  fHisto->Add1D("18","log10 Energy (MeV) of leaking protons",
+                fNBinsE,-4.,6.,1.0);
+  fHisto->Add1D("19","log10 Energy (MeV) of leaking charged pions",
+                fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("20","Log10 Energy (MeV) of pi+",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("21","Log10 Energy (MeV) of pi-",fNBinsE,-4.,6.,1.0);
-  fHisto->Add1D("22","Energy deposition in the target normalized to beam energy",
-               110,0.0,1.1,1.0);
-  fHisto->Add1D("23","EM energy deposition in the target normalized to beam energy",
-               110,0.0,1.1,1.0);
-  fHisto->Add1D("24","Pion energy deposition in the target normalized to beam energy",
-               110,0.0,1.1,1.0);
-  fHisto->Add1D("25","Proton energy deposition in the target normalized to beam energy",
-               110,0.0,1.1,1.0);
+  fHisto->Add1D("22",
+                "Energy deposition in the target normalized to beam energy",
+                110,0.0,1.1,1.0);
+  fHisto->Add1D("23",
+                "EM energy deposition in the target normalized to beam energy",
+                110,0.0,1.1,1.0);
+  fHisto->Add1D("24",
+               "Pion energy deposition in the target normalized to beam energy",
+                110,0.0,1.1,1.0);
+  fHisto->Add1D("25",
+             "Proton energy deposition in the target normalized to beam energy",
+                110,0.0,1.1,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -231,28 +244,49 @@ void HistoManager::EndOfRun()
                                  << fPrimaryDef->GetParticleName() <<G4endl;
   G4cout                         << "Beam Energy(MeV)                     " 
                                  << fPrimaryKineticEnergy/MeV <<G4endl;
-  G4cout                         << "Number of events                     " << fNevt <<G4endl;
-  G4cout << std::setprecision(4) << "Average energy deposit (MeV)         " << fEdepSum/MeV 
+  G4cout                         << "Number of events                     " 
+                                 << fNevt <<G4endl;
+  G4cout << std::setprecision(4) << "Average energy deposit (MeV)         " 
+         << fEdepSum/MeV 
          << "   RMS(MeV) " << fEdepSum2/MeV << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps              " << xs << G4endl;
-  G4cout << std::setprecision(4) << "Average number of gamma              " << xg << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e-                 " << xe << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e+                 " << xp << G4endl;
-  G4cout << std::setprecision(4) << "Average number of neutrons           " << xn << G4endl;
-  G4cout << std::setprecision(4) << "Average number of protons            " << xpn << G4endl;
-  G4cout << std::setprecision(4) << "Average number of antiprotons        " << xap << G4endl;
-  G4cout << std::setprecision(4) << "Average number of pi+ & pi-          " << xpc << G4endl;
-  G4cout << std::setprecision(4) << "Average number of pi0                " << xp0 << G4endl;
-  G4cout << std::setprecision(4) << "Average number of kaons              " << xpk << G4endl;
-  G4cout << std::setprecision(4) << "Average number of muons              " << xpm << G4endl;
-  G4cout << std::setprecision(4) << "Average number of deuterons+tritons  " << xid << G4endl;
-  G4cout << std::setprecision(4) << "Average number of He3+alpha          " << xia << G4endl;
-  G4cout << std::setprecision(4) << "Average number of ions               " << xio << G4endl;
-  G4cout << std::setprecision(4) << "Average number of forward neutrons   " << xnf << G4endl;
-  G4cout << std::setprecision(4) << "Average number of reflected neutrons " << xnb << G4endl;
-  G4cout << std::setprecision(4) << "Average number of leaked neutrons    " << xnbw << G4endl;
-  G4cout << std::setprecision(4) << "Average number of proton leak        " << xpl << G4endl;
-  G4cout << std::setprecision(4) << "Average number of pion leak          " << xal << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps              " 
+         << xs << G4endl;
+  G4cout << std::setprecision(4) << "Average number of gamma              " 
+         << xg << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e-                 " 
+         << xe << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e+                 " 
+         << xp << G4endl;
+  G4cout << std::setprecision(4) << "Average number of neutrons           " 
+         << xn << G4endl;
+  G4cout << std::setprecision(4) << "Average number of protons            " 
+         << xpn << G4endl;
+  G4cout << std::setprecision(4) << "Average number of antiprotons        " 
+         << xap << G4endl;
+  G4cout << std::setprecision(4) << "Average number of pi+ & pi-          " 
+         << xpc << G4endl;
+  G4cout << std::setprecision(4) << "Average number of pi0                " 
+         << xp0 << G4endl;
+  G4cout << std::setprecision(4) << "Average number of kaons              " 
+         << xpk << G4endl;
+  G4cout << std::setprecision(4) << "Average number of muons              " 
+         << xpm << G4endl;
+  G4cout << std::setprecision(4) << "Average number of deuterons+tritons  " 
+         << xid << G4endl;
+  G4cout << std::setprecision(4) << "Average number of He3+alpha          " 
+         << xia << G4endl;
+  G4cout << std::setprecision(4) << "Average number of ions               " 
+         << xio << G4endl;
+  G4cout << std::setprecision(4) << "Average number of forward neutrons   " 
+         << xnf << G4endl;
+  G4cout << std::setprecision(4) << "Average number of reflected neutrons " 
+         << xnb << G4endl;
+  G4cout << std::setprecision(4) << "Average number of leaked neutrons    " 
+         << xnbw << G4endl;
+  G4cout << std::setprecision(4) << "Average number of proton leak        " 
+         << xpl << G4endl;
+  G4cout << std::setprecision(4) << "Average number of pion leak          " 
+         << xal << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
@@ -349,10 +383,12 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     } else if ( pd == G4PionZero::PionZero()) {
       fNpi0++;
       fHisto->Fill(7,e,1.0);
-    } else if ( pd == G4KaonPlus::KaonPlus() || pd == G4KaonMinus::KaonMinus()) {
+    } else if ( pd == G4KaonPlus::KaonPlus() || 
+                pd == G4KaonMinus::KaonMinus()) {
       fNkaons++;
       fHisto->Fill(8,e,1.0);
-    } else if ( pd == G4KaonZeroShort::KaonZeroShort() || pd == G4KaonZeroLong::KaonZeroLong()) {
+    } else if ( pd == G4KaonZeroShort::KaonZeroShort() || 
+                pd == G4KaonZeroLong::KaonZeroLong()) {
       fNkaons++;
       fHisto->Fill(9,e,1.0);
     } else if ( pd == G4Deuteron::Deuteron() || pd == G4Triton::Triton()) {
@@ -364,7 +400,8 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     } else if ( pd->GetParticleType() == "nucleus") {
       fNions++;
       fHisto->Fill(12,e,1.0);
-    } else if ( pd == G4MuonPlus::MuonPlus() || pd == G4MuonMinus::MuonMinus()) {
+    } else if ( pd == G4MuonPlus::MuonPlus() || 
+                pd == G4MuonMinus::MuonMinus()) {
       fNmuons++;
       fHisto->Fill(13,e,1.0);    
     }
@@ -377,6 +414,13 @@ void HistoManager::AddTargetStep(const G4Step* step)
 {
   fNstep++;
   G4double fEdep = step->GetTotalEnergyDeposit();
+  if(1 < fVerbose) {
+    G4cout << "TargetSD::ProcessHits: beta1= " 
+           << step->GetPreStepPoint()->GetVelocity()/c_light
+           << "  beta2= " << step->GetPostStepPoint()->GetVelocity()/c_light
+           << " weight= " << step->GetTrack()->GetWeight() 
+           << G4endl;
+  }
   if(fEdep >= DBL_MIN) { 
     const G4Track* track = step->GetTrack();
 
@@ -394,9 +438,11 @@ void HistoManager::AddTargetStep(const G4Step* step)
     if(pd == G4Gamma::Gamma() || pd == G4Electron::Electron() 
        || pd == G4Positron::Positron()) {
       fEdepEM += fEdep;
-    } else if ( pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) {
+    } else if ( pd == G4PionPlus::PionPlus() || 
+                pd == G4PionMinus::PionMinus()) {
       fEdepPI += fEdep;
-    } else if ( pd == G4Proton::Proton() || pd == G4AntiProton::AntiProton()) {
+    } else if ( pd == G4Proton::Proton() || 
+                pd == G4AntiProton::AntiProton()) {
       fEdepP  += fEdep;
     }
 
@@ -456,7 +502,8 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
     if(pd == G4Proton::Proton()) {
       fHisto->Fill(17,e,1.0);
       ++fNprot_leak;
-    } else if (pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) {
+    } else if (pd == G4PionPlus::PionPlus() || 
+               pd == G4PionMinus::PionMinus()) {
       fHisto->Fill(18,e,1.0);
       ++fNpiofNleak;
     }

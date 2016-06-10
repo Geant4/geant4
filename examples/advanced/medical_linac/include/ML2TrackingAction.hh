@@ -58,7 +58,6 @@ public:
      virtual void PreUserTrackingAction(const G4Track*);
 
 private:
-      G4Navigator* gNavigator; 
 };
 
 #endif

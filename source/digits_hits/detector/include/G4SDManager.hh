@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SDManager.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4SDManager_h
@@ -80,7 +80,7 @@ class G4SDManager
 
 
   private: 
-      static G4SDManager * fSDManager;
+      static G4ThreadLocal G4SDManager * fSDManager;
       G4SDStructure * treeTop;
       G4int verboseLevel;
       G4HCtable* HCtable;

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
 //
-// $Id$
+// $Id: StepMaxMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:fStepMax(stepM)
+:G4UImessenger(),fStepMax(stepM),fStepMaxCmd(0)
 { 
   fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
   fStepMaxCmd->SetGuidance("Set max allowed step length");

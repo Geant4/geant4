@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VCrossSectionHandler.cc,v 1.1 2008-12-03 06:56:18 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VCrossSectionHandler.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VCrossSectionHandler.cc
 //
@@ -43,7 +42,7 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4VCrossSectionHandler {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Initialise, Initialise, 0, 8);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Initialise, Initialise, 0, 8)
 
 // FindValue
 G4double (G4VCrossSectionHandler::*f1_FindValue)(G4int, G4double) const
@@ -52,7 +51,7 @@ G4double (G4VCrossSectionHandler::*f1_FindValue)(G4int, G4double) const
 G4double (G4VCrossSectionHandler::*f2_FindValue)(G4int, G4double, G4int) const
   = &G4VCrossSectionHandler::FindValue;
 
-};
+}
 
 using namespace pyG4VCrossSectionHandler;
 
@@ -67,7 +66,7 @@ void export_G4VCrossSectionHandler()
     .def("Initialise",           &G4VCrossSectionHandler::Initialise,
          f_Initialise())
     .def("SelectRandomElement",  &G4VCrossSectionHandler::SelectRandomElement,
-         return_value_policy<reference_existing_object>())         
+         return_value_policy<reference_existing_object>())
     .def("SelectRandomShell",    &G4VCrossSectionHandler::SelectRandomShell)
     .def("FindValue",            f1_FindValue)
     .def("FindValue",            f2_FindValue)

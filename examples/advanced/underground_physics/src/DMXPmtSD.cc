@@ -52,8 +52,8 @@
 #include "G4ios.hh"
 
 
-DMXPmtSD::DMXPmtSD(G4String name, DMXDetectorConstruction* DMXSD) 
-  :G4VSensitiveDetector(name),DMXDetector(DMXSD) {
+DMXPmtSD::DMXPmtSD(G4String name) 
+  :G4VSensitiveDetector(name) {
 
   G4String HCname="pmtCollection";
   collectionName.insert(HCname);

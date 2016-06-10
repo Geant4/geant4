@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-//
-/// \file B4dPrimaryGeneratorAction.cc
-/// \brief Implementation of the B4dPrimaryGeneratorAction class
+// $Id: B4PrimaryGeneratorAction.cc 75215 2013-10-29 16:07:06Z gcosmo $
+// 
+/// \file B4PrimaryGeneratorAction.cc
+/// \brief Implementation of the B4PrimaryGeneratorAction class
 
 #include "B4PrimaryGeneratorAction.hh"
 
@@ -85,9 +85,12 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     worldZHalfLength = worldBox->GetZHalfLength();  
   }
   else  {
-    G4cerr << "World volume of box not found." << G4endl;
-    G4cerr << "Perhaps you have changed geometry." << G4endl;
-    G4cerr << "The gun will be place in the center." << G4endl;
+    G4ExceptionDescription msg;
+    msg << "World volume of box not found." << G4endl;
+    msg << "Perhaps you have changed geometry." << G4endl;
+    msg << "The gun will be place in the center.";
+    G4Exception("B4PrimaryGeneratorAction::GeneratePrimaries()",
+      "MyCode0002", JustWarning, msg);
   } 
   
   // Set gun position

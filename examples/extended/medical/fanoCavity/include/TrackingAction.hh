@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.hh 68996 2013-04-15 09:19:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,25 +38,22 @@
 #include "globals.hh"
 
 class RunAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(RunAction*, HistoManager*);
+    TrackingAction(RunAction*);
    ~TrackingAction();
    
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
+    virtual void  PreUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
     
     void AddEdepCavity(G4double de) { fEdepCavity += de;};
         
   private:
-    RunAction*     fRunAction;
-    HistoManager*  fHistoManager;
-    
+    RunAction*     fRunAction;    
     G4double       fEdepCavity;            
 };
 

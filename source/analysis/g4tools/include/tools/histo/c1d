@@ -1,0 +1,244 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_c1d
+#define tools_histo_cld
+
+#include "base_cloud"
+
+#include "../mnmx"
+
+#include "h1d"
+
+namespace tools {
+namespace histo {
+
+class c1d : public base_cloud {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::c1d");
+    return s_v;
+  }
+public:
+  bool set_title(const std::string& a_title){
+    m_title = a_title;
+    if(m_histo) m_histo->set_title(a_title);
+    return true;
+  }
+
+  unsigned int dimension() const {return 1;}
+  bool reset() { 
+    clear();
+    delete m_histo;
+    m_histo = 0;
+    return true;
+  }
+  unsigned int entries() const { 
+    return m_histo ? m_histo->all_entries() : m_ws.size();
+  }
+public:
+  double sum_of_weights() const { 
+    return (m_histo ? m_histo->sum_bin_heights() : m_Sw);
+  }
+
+  bool convert_to_histogram(){
+    if( (m_cnv_x_num<=0) || (m_cnv_x_max<=m_cnv_x_min) ) {
+      // Cloud min, max should be included in the histo.
+      double dx = 0.01 * (upper_edge() - lower_edge())/BINS();
+      return convert(BINS(),lower_edge(),upper_edge() + dx);
+    } else {
+      return convert(m_cnv_x_num,m_cnv_x_min,m_cnv_x_max);
+    }
+  }
+
+  bool is_converted() const {return m_histo ? true : false;}
+  bool scale(double a_scale) {
+    if(m_histo) {
+      return m_histo->scale(a_scale);
+    } else {
+      unsigned int number = m_ws.size();
+      for(unsigned int index=0;index<number;index++) m_ws[index] *= a_scale;
+      m_Sw *= a_scale;
+      m_Sxw *= a_scale;
+      m_Sx2w *= a_scale;
+      return true;
+    }
+  }
+
+  bool set_histogram(h1d* a_histo){ //we take ownership of a_histo.
+    reset();
+    m_histo = a_histo;
+    return true;
+  }
+
+public:
+  bool fill(double aX,double aW = 1){
+    if(!m_histo && (m_limit!=UNLIMITED()) && 
+       ((int)m_xs.size()>=m_limit)){
+      convert_to_histogram();
+    }
+  
+    if(m_histo) {
+      return m_histo->fill(aX,aW);
+    } else {
+      if(m_xs.size()) {
+        m_lower_x = mn<double>(aX,m_lower_x);
+        m_upper_x = mx<double>(aX,m_upper_x);
+      } else {
+        m_lower_x = aX;
+        m_upper_x = aX;
+      }
+      m_xs.push_back(aX);
+      m_ws.push_back(aW);
+      m_Sw += aW;
+      double xw = aX * aW;
+      m_Sxw += xw;
+      m_Sx2w += aX * xw;
+      return true;
+    }
+  }
+
+  double lower_edge() const { 
+    return (m_histo ? m_histo->axis().lower_edge() : m_lower_x);
+  }
+  double upper_edge() const { 
+    return (m_histo ? m_histo->axis().upper_edge() : m_upper_x);
+  }
+  double value(unsigned int aIndex) const {return (m_histo ?0:m_xs[aIndex]);}
+  double weight(unsigned int aIndex) const {return (m_histo ?0:m_ws[aIndex]);}
+  double mean() const {
+    return (m_histo ? m_histo->mean() : (m_Sw?m_Sxw/m_Sw:0));
+  }
+  double rms() const {
+    double _rms = 0; //FIXME nan.
+    if(m_histo) {
+      _rms = m_histo->rms();
+    } else {
+      if(m_Sw==0) {
+      } else {
+        double _mean = m_Sxw / m_Sw;
+        _rms = ::sqrt(::fabs( (m_Sx2w / m_Sw) - _mean * _mean));
+      }
+    }
+    return _rms;
+  }
+
+  bool convert(unsigned int aBins,double aLowerEdge,double aUpperEdge){
+    if(m_histo) return true;
+    m_histo = new histo::h1d(base_cloud::title(),aBins,aLowerEdge,aUpperEdge);
+    if(!m_histo) return false;
+    bool status = fill_histogram(*m_histo);
+    clear();
+    return status;
+  }
+
+  bool convert(const std::vector<double>& aEdges) {
+    if(m_histo) return true;
+    m_histo = new histo::h1d(base_cloud::title(),aEdges);
+    if(!m_histo) return false;
+    bool status = fill_histogram(*m_histo);
+    clear();
+    return status;
+  }
+
+  const histo::h1d& histogram() const {
+    if(!m_histo) const_cast<c1d&>(*this).convert_to_histogram();
+    return *m_histo;
+  }
+  bool fill_histogram(histo::h1d& a_histo) const {
+    unsigned int number = m_xs.size();
+    for(unsigned int index=0;index<number;index++) {
+      if(!a_histo.fill(m_xs[index],m_ws[index])) return false;
+    }
+    return true;
+  }
+  bool set_conversion_parameters(unsigned int aCnvXnumber,
+                                 double aCnvXmin,double aCnvXmax){
+    m_cnv_x_num = aCnvXnumber;
+    m_cnv_x_min = aCnvXmin;
+    m_cnv_x_max = aCnvXmax;
+    return true;
+  }
+
+public:
+  c1d()
+  :base_cloud(UNLIMITED())
+  ,m_lower_x(0),m_upper_x(0)
+  ,m_Sxw(0),m_Sx2w(0)
+  ,m_cnv_x_num(0),m_cnv_x_min(0),m_cnv_x_max(0),m_histo(0)
+  {}
+  
+  c1d(const std::string& a_title,int aLimit = -1)
+  :base_cloud(aLimit)
+  ,m_lower_x(0),m_upper_x(0)
+  ,m_Sxw(0),m_Sx2w(0)
+  ,m_cnv_x_num(0),m_cnv_x_min(0),m_cnv_x_max(0),m_histo(0)
+  {
+    set_title(a_title);
+  }
+
+  virtual ~c1d(){delete m_histo;}
+public:
+  c1d(const c1d& a_from)
+  :base_cloud(a_from)
+  ,m_xs(a_from.m_xs)
+  ,m_lower_x(a_from.m_lower_x)
+  ,m_upper_x(a_from.m_upper_x)
+  ,m_Sxw(a_from.m_Sxw)
+  ,m_Sx2w(a_from.m_Sx2w)
+  ,m_cnv_x_num(a_from.m_cnv_x_num)
+  ,m_cnv_x_min(a_from.m_cnv_x_min)
+  ,m_cnv_x_max(a_from.m_cnv_x_max)
+  ,m_histo(0)
+  {
+    if(a_from.m_histo) {
+      m_histo = new histo::h1d(*a_from.m_histo);
+    }
+  }
+
+  c1d& operator=(const c1d& a_from){
+    base_cloud::operator=(a_from);
+    if(&a_from==this) return *this;
+    m_xs = a_from.m_xs;
+    m_lower_x = a_from.m_lower_x;
+    m_upper_x = a_from.m_upper_x;
+    m_Sxw = a_from.m_Sxw;
+    m_Sx2w = a_from.m_Sx2w;
+    m_cnv_x_num = a_from.m_cnv_x_num;
+    m_cnv_x_min = a_from.m_cnv_x_min;
+    m_cnv_x_max = a_from.m_cnv_x_max;
+    delete m_histo;
+    m_histo = 0;
+    if(a_from.m_histo) {
+      m_histo = new histo::h1d(*a_from.m_histo);
+    }
+    return *this;
+  }
+
+protected:
+  void clear(){
+    m_lower_x = 0;
+    m_upper_x = 0;
+    m_Sw = 0;
+    m_Sxw = 0;
+    m_Sx2w = 0;
+    m_xs.clear();
+    m_ws.clear();
+  }
+
+protected:
+  std::vector<double> m_xs;
+  double m_lower_x;
+  double m_upper_x;
+  double m_Sxw;
+  double m_Sx2w;
+  //
+  unsigned int m_cnv_x_num;
+  double m_cnv_x_min;
+  double m_cnv_x_max;
+  histo::h1d* m_histo;
+};
+
+}}
+
+#endif

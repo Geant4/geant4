@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: $
-// GEANT4 tag $Name: $
-//
+// $Id$
 //
 // Thread Local Storage typedefs
 
@@ -36,18 +33,23 @@
 #ifndef G4_TLS
 #define G4_TLS
 
-#if defined (G4LIB_BUILD_MULTITHREAD)
-  #if defined(__MACH__) && defined(__clang__) && defined(MAC_OS_X_VERSION_10_7) && defined(__x86_64__)
-  #  define G4TLOCAL static __thread
+#if defined (G4MULTITHREADED)
+  #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
+      ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 ) 
+  #  define G4ThreadLocalStatic static __thread
+  #  define G4ThreadLocal __thread
   #elif defined(__linux__) || defined(_AIX)
-  #  define G4TLOCAL static __thread
+  #  define G4ThreadLocalStatic static __thread
+  #  define G4ThreadLocal __thread
   #elif defined(WIN32)
-  #  define G4TLOCAL static __declspec(thread)
+  #  define G4ThreadLocalStatic static __declspec(thread)
+  #  define G4ThreadLocal __declspec(thread)
   #else
   #  error "No Thread Local Storage (TLS) technology supported for this platform. Use sequential build !"
   #endif
 #else
-  #  define G4TLOCAL static
+  #  define G4ThreadLocalStatic static
+  #  define G4ThreadLocal 
 #endif
 
 #endif

@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -79,7 +77,7 @@ namespace G4INCL {
   void CoulombNonRelativistic::distortOut(ParticleList const &pL,
       Nucleus const * const nucleus) const {
 
-    for(ParticleIter particle=pL.begin(); particle!=pL.end(); ++particle) {
+    for(ParticleIter particle=pL.begin(), e=pL.end(); particle!=e; ++particle) {
 
       const G4int Z = (*particle)->getZ();
       if(Z == 0) continue;
@@ -109,7 +107,7 @@ namespace G4INCL {
           const G4double bInf = std::sqrt(b0*(b0-eta));
           const G4double thr = std::atan(eta/(2.*bInf));
           G4double uTemp = (1.-b0/transmissionRadius) * std::sin(thr) +
-            b0/transmissionRadius;      
+            b0/transmissionRadius;
           if(uTemp>tcos) uTemp=tcos;
           const G4double thd = std::acos(cosTheta)-Math::piOverTwo + thr +
             std::acos(uTemp);
@@ -123,30 +121,23 @@ namespace G4INCL {
   }
 
   G4double CoulombNonRelativistic::maxImpactParameter(ParticleSpecies const &p, const G4double kinE,
-      Nucleus const * const n) const {
-    G4double theMaxImpactParameter = maxImpactParameterParticle(p, kinE, n);
-    if(theMaxImpactParameter <= 0.)
-      return 0.;
-    if(p.theType == Composite)
-      theMaxImpactParameter +=  2.*ParticleTable::getNuclearRadius(p.theA, p.theZ);
-    return theMaxImpactParameter;
-  }
-
-  G4double CoulombNonRelativistic::maxImpactParameterParticle(ParticleSpecies const &p, const G4double kinE,
-      Nucleus const * const n) const {
+                                                    Nucleus const * const n) const {
     const G4double theMinimumDistance = minimumDistance(p, kinE, n);
-    const G4double rMax = n->getCoulombRadius(p);
+    G4double rMax = n->getUniverseRadius();
+    if(p.theType == Composite)
+      rMax +=  2.*ParticleTable::getLargestNuclearRadius(p.theA, p.theZ);
     const G4double theMaxImpactParameterSquared = rMax*(rMax-theMinimumDistance);
     if(theMaxImpactParameterSquared<=0.)
       return 0.;
-    G4double theMaxImpactParameter = std::sqrt(theMaxImpactParameterSquared);
+    const G4double theMaxImpactParameter = std::sqrt(theMaxImpactParameterSquared);
     return theMaxImpactParameter;
   }
 
   G4bool CoulombNonRelativistic::coulombDeviation(Particle * const p, Nucleus const * const n) const {
     // Determine the rotation angle and the new impact parameter
     ThreeVector positionTransverse = p->getTransversePosition();
-    const G4double impactParameter = positionTransverse.mag();
+    const G4double impactParameterSquared = positionTransverse.mag2();
+    const G4double impactParameter = std::sqrt(impactParameterSquared);
 
     // Some useful variables
     const G4double theMinimumDistance = minimumDistance(p, n);
@@ -156,26 +147,22 @@ namespace G4INCL {
 
     G4double newImpactParameter, alpha; // Parameters that must be determined by the deviation
 
-    ParticleSpecies aSpecies = p->getSpecies();
-    G4double kineticEnergy = p->getKineticEnergy();
-    // Note that in the following call to maxImpactParameter we are not
-    // interested in the size of the cluster. This is why we call
-    // maxImpactParameterParticle.
-    if(impactParameter>maxImpactParameterParticle(aSpecies, kineticEnergy, n)) {
-      // This should happen only for composite particles, whose trajectory can
-      // geometrically miss the nucleus but still trigger a cascade because of
-      // the finite extension of the projectile.
-      // In this case, the sphere radius is the minimum distance of approach
-      // and the kinematics is very simple.
+    const G4double radius = getCoulombRadius(p->getSpecies(), n);
+    const G4double impactParameterTangentSquared = radius*(radius-theMinimumDistance);
+    if(impactParameterSquared >= impactParameterTangentSquared) {
+      // The particle trajectory misses the Coulomb sphere
+      // In this case the new impact parameter is the minimum distance of
+      // approach of the hyperbola
+// assert(std::abs(1. + 2.*impactParameter*impactParameter/(radius*theMinimumDistance))>=eccentricity);
       newImpactParameter = 0.5 * theMinimumDistance * (1.+eccentricity); // the minimum distance of approach
       alpha = Math::piOverTwo - deltaTheta2; // half the Rutherford scattering angle
     } else {
       // The particle trajectory intersects the Coulomb sphere
 
       // Compute the entrance angle
-      const G4double radius = n->getCoulombRadius(p->getSpecies());
-      G4double argument = -(1. + 2.*impactParameter*impactParameter/(radius*theMinimumDistance))
+      const G4double argument = -(1. + 2.*impactParameter*impactParameter/(radius*theMinimumDistance))
         / eccentricity;
+// assert(std::abs(argument)<=1.);
       const G4double thetaIn = Math::twoPi - std::acos(argument) - deltaTheta2;
 
       // Velocity angle at the entrance point
@@ -201,6 +188,44 @@ namespace G4INCL {
     }
 
     return true;
+  }
+
+  G4double CoulombNonRelativistic::getCoulombRadius(ParticleSpecies const &p, Nucleus const * const n) const {
+    if(p.theType == Composite) {
+      const G4int Zp = p.theZ;
+      const G4int Ap = p.theA;
+      const G4int Zt = n->getZ();
+      const G4int At = n->getA();
+      G4double barr, radius = 0.;
+      if(Zp==1 && Ap==2) { // d
+        barr = 0.2565*Math::pow23((G4double)At)-0.78;
+        radius = PhysicalConstants::eSquared*Zp*Zt/barr - 2.5;
+      } else if(Zp==1 && Ap==3) { // t
+        barr = 0.5*(0.5009*Math::pow23((G4double)At)-1.16);
+        radius = PhysicalConstants::eSquared*Zt/barr - 0.5;
+      } else if(Zp==2) { // alpha, He3
+        barr = 0.5939*Math::pow23((G4double)At)-1.64;
+        radius = PhysicalConstants::eSquared*Zp*Zt/barr - 0.5;
+      } else if(Zp>2) {
+        // Coulomb radius from the Shen model
+        const G4double Ap13 = Math::pow13((G4double)Ap);
+        const G4double At13 = Math::pow13((G4double)At);
+        const G4double rp = 1.12*Ap13 - 0.94/Ap13;
+        const G4double rt = 1.12*At13 - 0.94/At13;
+        const G4double someRadius = rp+rt+3.2;
+        const G4double theShenBarrier = PhysicalConstants::eSquared*Zp*Zt/someRadius - rt*rp/(rt+rp);
+        radius = PhysicalConstants::eSquared*Zp*Zt/theShenBarrier;
+      }
+      if(radius<=0.) {
+        radius = ParticleTable::getLargestNuclearRadius(Ap,Zp) + ParticleTable::getLargestNuclearRadius(At, Zt);
+        INCL_ERROR("Negative Coulomb radius! Using the sum of nuclear radii = " << radius << std::endl);
+      }
+      INCL_DEBUG("Coulomb radius for particle "
+            << ParticleTable::getShortName(p) << " in nucleus A=" << At <<
+            ", Z=" << Zt << ": " << radius << std::endl);
+      return radius;
+    } else
+      return n->getUniverseRadius();
   }
 
 }

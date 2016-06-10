@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4strstreambuf.hh 67970 2013-03-13 10:10:06Z gcosmo $
 // ====================================================================
 //
 //   G4strstreambuf
@@ -39,12 +39,18 @@
 
 class G4strstreambuf;
 
-#if defined G4GLOB_ALLOC_EXPORT
-extern G4DLLEXPORT G4strstreambuf G4coutbuf;
-extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
-#else
-extern G4DLLIMPORT G4strstreambuf G4coutbuf;
-extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
+#ifdef G4MULTITHREADED
+
+  extern G4GLOB_DLL G4ThreadLocal G4strstreambuf *G4coutbuf_p;
+  extern G4GLOB_DLL G4ThreadLocal G4strstreambuf *G4cerrbuf_p;
+  #define G4coutbuf (*G4coutbuf_p)
+  #define G4cerrbuf (*G4cerrbuf_p)
+
+#else  // Sequential
+
+  extern G4GLOB_DLL G4strstreambuf G4coutbuf;
+  extern G4GLOB_DLL G4strstreambuf G4cerrbuf;
+
 #endif
 
 class G4strstreambuf : public std::basic_streambuf<char>

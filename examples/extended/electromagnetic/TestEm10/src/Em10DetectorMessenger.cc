@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10DetectorMessenger class
 //
 //
-// $Id$
+// $Id: Em10DetectorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 
@@ -43,7 +43,8 @@
 //////////////////////////////////////////////////////////////////////////////
 
 Em10DetectorMessenger::Em10DetectorMessenger(Em10DetectorConstruction * Em10Det)
-:Em10Detector(Em10Det)
+:G4UImessenger(),
+ Em10Detector(Em10Det)
 { 
   Em10detDir = new G4UIdirectory("/XTRdetector/");
   Em10detDir->SetGuidance("Em10 detector control.");

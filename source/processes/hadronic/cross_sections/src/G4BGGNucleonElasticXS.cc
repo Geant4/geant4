@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BGGNucleonElasticXS.cc 78189 2013-12-04 16:34:08Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,16 +50,23 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4NistManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
+
+const G4double llog10 = G4Log(10.);
 
 G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition* p)
  : G4VCrossSectionDataSet("Barashenkov-Glauber") 
 {
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
+  fPDGEnergy = 5*GeV;
   fLowEnergy = 14.*MeV;
+  fSAIDLowEnergyLimit = 1*MeV;
   fSAIDHighEnergyLimit = 1.3*GeV;
+  fLowestXSection = millibarn;
   for (G4int i = 0; i < 93; ++i) {
     theGlauberFac[i] = 0.0;
     theCoulombFac[i] = 0.0;
@@ -95,11 +102,11 @@ G4BGGNucleonElasticXS::IsElementApplicable(const G4DynamicParticle*, G4int,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4BGGNucleonElasticXS::IsIsoApplicable(const G4DynamicParticle*, 
-					      G4int Z, G4int A,  
+					      G4int Z, G4int,  
 					      const G4Element*,
 					      const G4Material*)
 {
-  return (1 == Z && 2 >= A);
+  return (1 == Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,7 +126,7 @@ G4BGGNucleonElasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
     if(Z > 92) { Z = 92; }
 
     if(ekin <= fLowEnergy) {
-      cross = theCoulombFac[Z];
+      cross = theCoulombFac[Z]*CoulombFactor(ekin, Z);
 
     } else if(ekin > fGlauberEnergy) {
       cross = theGlauberFac[Z]*fGlauber->GetElasticGlauberGribov(dp, Z, theA[Z]);
@@ -136,6 +143,7 @@ G4BGGNucleonElasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
   }
+  //AR-04Dec2013  if(cross <= fLowestXSection) { cross = 0.0; }
   return cross;
 }
 
@@ -153,15 +161,20 @@ G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
   G4double cross = 0.0;
   G4double ekin = dp->GetKineticEnergy();
 
-  if(ekin <= fSAIDHighEnergyLimit) {
+  if(ekin <= fSAIDLowEnergyLimit) {
+    cross = theCoulombFac[0]*CoulombFactor(ekin, 1);
+  } else if(ekin <= fSAIDHighEnergyLimit) {
     cross = fSAID->GetElasticIsotopeCrossSection(particle, ekin, 1, 1);
+  } else if(ekin <= fPDGEnergy) {
+    G4double cross1 = 
+      fSAID->GetElasticIsotopeCrossSection(particle, fPDGEnergy, 1, 1);
+    G4double cross2 = theCoulombFac[1]; 
+    cross = cross1 + (cross2 - cross1)*(ekin - fSAIDHighEnergyLimit)
+      /(fPDGEnergy - fSAIDHighEnergyLimit);
   } else {
     fHadron->GetHadronNucleonXscPDG(dp, theProton);
-    cross = theCoulombFac[1]*fHadron->GetElasticHadronNucleonXsc();
+    cross = fHadron->GetElasticHadronNucleonXsc();
   } 
-  //  } else if(ekin <= 20*GeV) {
-  //  fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
-  //  cross = theGlauberFac[1]*fHadron->GetElasticHadronNucleonXsc();
   cross *= A;
 
   if(verboseLevel > 1) {
@@ -172,6 +185,7 @@ G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
   }
+  //AR-04Dec2013  if(cross <= fLowestXSection) { cross = 0.0; }
   return cross;
 }
 
@@ -234,23 +248,57 @@ void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	     << " factor= " << theGlauberFac[iz] << G4endl;
     } 
   }
-  dp.SetKineticEnergy(fSAIDHighEnergyLimit);
+
+  theCoulombFac[0] = 
+    fSAID->GetElasticIsotopeCrossSection(particle,fSAIDLowEnergyLimit,1,1)
+    /CoulombFactor(fSAIDLowEnergyLimit, 1);
+
+  dp.SetKineticEnergy(fPDGEnergy);
   fHadron->GetHadronNucleonXscPDG(&dp, theProton);
-  theCoulombFac[1] = 
-    fSAID->GetElasticIsotopeCrossSection(particle,fSAIDHighEnergyLimit,1,1)
-    /fHadron->GetElasticHadronNucleonXsc();
+  theCoulombFac[1] = fHadron->GetElasticHadronNucleonXsc();
+
   if(verboseLevel > 0) {
-    G4cout << "Z=1   A=1" << " CoulombFactor= " << theCoulombFac[1] << G4endl; 
+    G4cout << "Z=1  A=1 " << " factor0= " << theCoulombFac[0] 
+	   << " factor1= " << theCoulombFac[1] 
+	   << G4endl; 
   }
 
   dp.SetKineticEnergy(fLowEnergy);
   for(G4int iz=2; iz<93; iz++) {
-    theCoulombFac[iz] = fNucleon->GetElasticCrossSection(&dp, iz);
+    theCoulombFac[iz] = 
+      fNucleon->GetElasticCrossSection(&dp, iz)/CoulombFactor(fLowEnergy, iz);
     if(verboseLevel > 0) {
       G4cout << "Z= " << iz <<  "  A= " << theA[iz]
 	     << " factor= " << theCoulombFac[iz] << G4endl; 
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BGGNucleonElasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
+{
+  G4double res= 1.0;
+  
+  // from G4ProtonInelasticCrossSection
+  if(isProton) {
+
+    if (Z <= 1) { return kinEnergy*kinEnergy; }
+
+    G4double elog = G4Log(kinEnergy/GeV)/llog10;
+    G4double aa = theA[Z];
+
+    G4double ff1 = 5.6  - 0.016*aa;    // slope of the drop at medium energies.
+    G4double ff2 = 1.37 + 1.37/aa;     // start of the slope.
+    G4double ff3 = 0.8  + 18./aa - 0.002*aa;   // stephight
+    res = 1.0 + ff3*(1.0 - (1.0/(1+G4Exp(-ff1*(elog + ff2)))));
+
+    ff1 = 8.   - 8./aa  - 0.008*aa; // slope of the rise
+    ff2 = 2.34 - 5.4/aa - 0.0028*aa; // start of the rise
+    res /= (1.0 + G4Exp(-ff1*(elog + ff2)));
+
+  } 
+  return res;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,15 +26,11 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02MuonSD.hh
 /// \brief Definition of the H02MuonSD class
 //
-// ====================================================================
+//   $Id: H02MuonSD.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   H02MuonSD.hh
-//   $Id$
-//
-// ====================================================================
 #ifndef H02_MUON_SD_H
 #define H02_MUON_SD_H
- 
+
 #include "G4VSensitiveDetector.hh"
 #include "H02MuonHit.hh"
 
@@ -43,20 +39,20 @@ class G4HCofThisEvent;
 class G4TouchableHistory;
 
 class H02MuonSD : public G4VSensitiveDetector {
-private:
-  H02MuonHitsCollection* hitCollection;
-
 public:
   H02MuonSD(G4String name);
   ~H02MuonSD();
-  
+
   virtual void Initialize(G4HCofThisEvent* HCE);
   virtual G4bool ProcessHits(G4Step* astep, G4TouchableHistory* ROhist);
   virtual void EndOfEvent(G4HCofThisEvent* HCE);
   virtual void clear();
   virtual void DrawAll();
   virtual void PrintAll();
-  
+
+private:
+  H02MuonHitsCollection* hitCollection;
+
 };
 
 #endif

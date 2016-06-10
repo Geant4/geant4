@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm14/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 68313 2013-03-21 18:15:21Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : fDetector(det), fPrimary(prim)
+  : G4UserRunAction(),fDetector(det), fPrimary(prim), fHistoManager(0)
 {
   fHistoManager = new HistoManager(); 
 }
@@ -146,8 +146,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double MeanTransfer   = fEnTransfer/fTotalCount;
   G4double massTransfCoef = massicCS*MeanTransfer/energy;
    
-  G4cout << "\n mean energy of charged secondaries: " << G4BestUnit(MeanTransfer, "Energy")
-         << "\tmass_energy_transfer coef: "           << G4BestUnit(massTransfCoef, "Surface/Mass")
+  G4cout << "\n mean energy of charged secondaries: " 
+         << G4BestUnit(MeanTransfer, "Energy")
+         << "\tmass_energy_transfer coef: "          
+	 << G4BestUnit(massTransfCoef, "Surface/Mass")
          << G4endl;       
  
   //check cross section from G4EmCalculator
@@ -165,7 +167,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     if (particle == G4Gamma::Gamma())
        massSigma = 
        emCalculator.ComputeCrossSectionPerVolume(energy,particle,
-                                              procName,material)/density;                                              
+                                              procName,material)/density;
     sumc += massSigma;
     G4cout << "\t" << procName << "= " 
            << G4BestUnit(massSigma, "Surface/Mass");

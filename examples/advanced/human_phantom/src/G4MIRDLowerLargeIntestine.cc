@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -57,21 +57,22 @@ G4MIRDLowerLargeIntestine::~G4MIRDLowerLargeIntestine()
 
 }
 
+
 G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeName,
-							     G4VPhysicalVolume* mother,
-							     const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
+							G4VPhysicalVolume* mother,
+							const G4String& colourName, G4bool wireFrame,G4bool)
 {
-  G4cout << "Construct "<< volumeName <<G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
 
- G4double dx = 1.88 * cm; //a
- G4double dy = 2.13 *cm; //b
- G4double dz = 7.64 *cm; //(z1-z2)/2
+  G4double dx = 1.88 * cm; //a
+  G4double dy = 2.13 *cm; //b
+  G4double dz = 7.64 *cm; //(z1-z2)/2
 
- G4EllipticalTube* DescendingColonLowerLargeIntestine = new G4EllipticalTube("DiscendingColon",dx, dy, dz);
+  G4EllipticalTube* DescendingColonLowerLargeIntestine = new G4EllipticalTube("DiscendingColon",dx, dy, dz);
 
 
   G4double rmin= 0.0 *cm;
@@ -81,8 +82,8 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeNa
   G4double deltaphi= 90. * degree;
 
   G4Torus* SigmoidColonUpLowerLargeIntestine = new G4Torus("SigmoidColonUpLowerLargeIntestine",
-							    rmin, rmax,rtor,
-							    startphi, deltaphi);
+							   rmin, rmax,rtor,
+							   startphi, deltaphi);
 
   rtor = 3. * cm;//R2
   G4VSolid* SigmoidColonDownLowerLargeIntestine = new G4Torus("SigmoidColonDownLowerLargeIntestine",
@@ -94,17 +95,17 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeNa
   relative_rm -> rotateZ(90. * degree);
 
   G4UnionSolid*  SigmoidColonLowerLargeIntestine = new G4UnionSolid( "SigmoidColonLowerLargeIntestine",
-								      SigmoidColonUpLowerLargeIntestine,
-								      SigmoidColonDownLowerLargeIntestine,
-								      relative_rm,
-								      G4ThreeVector(0.0,8.72*cm,0.0));
+								     SigmoidColonUpLowerLargeIntestine,
+								     SigmoidColonDownLowerLargeIntestine,
+								     relative_rm,
+								     G4ThreeVector(0.0,8.72*cm,0.0));
   // R1 + R2
  
   G4RotationMatrix* relative_rm_2 =  new G4RotationMatrix();
   relative_rm_2 -> rotateX(90. * degree);
 
   G4UnionSolid* LowerLargeIntestine = new G4UnionSolid( "LowerLargeIntestine",
-						       DescendingColonLowerLargeIntestine,
+							DescendingColonLowerLargeIntestine,
 							SigmoidColonLowerLargeIntestine,
 							relative_rm_2,
 							G4ThreeVector(-5.72*cm,0.0*cm, -7.64*cm)
@@ -122,12 +123,7 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeNa
 								 mother,
 								 false,
 								 0, true);
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicLowerLargeIntestine->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
+ 
 
   // Visualization Attributes
   //G4VisAttributes* LowerLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));

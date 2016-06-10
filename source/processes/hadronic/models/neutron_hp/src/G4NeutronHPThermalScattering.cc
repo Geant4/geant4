@@ -42,9 +42,11 @@
 // 100729 Add model name in constructor Problem #1116
 
 #include "G4NeutronHPThermalScattering.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
+#include "G4MaterialTable.hh"
 
 G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
                              :G4HadronicInteraction("NeutronHPThermalScattering")
@@ -57,6 +59,7 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
    theXSection = new G4NeutronHPThermalScatteringData();
    theXSection->BuildPhysicsTable( *(G4Neutron::Neutron()) );
 
+   sizeOfMaterialTable = G4Material::GetMaterialTable()->size();
    buildPhysicsTable();
 
 }
@@ -127,7 +130,9 @@ std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* G4Ne
 
    std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* aCoherentFSDATA = new std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >;
 
-   std::ifstream theChannel( name.c_str() );
+   //std::ifstream theChannel( name.c_str() );
+   std::istringstream theChannel(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(name,theChannel);
 
    std::vector< G4double > vBraggE;
 
@@ -170,7 +175,9 @@ std::map < G4double , std::vector < E_P_E_isoAng* >* >* G4NeutronHPThermalScatte
 {
    std::map < G4double , std::vector < E_P_E_isoAng* >* >* anT_E_P_E_isoAng = new std::map < G4double , std::vector < E_P_E_isoAng* >* >;
 
-   std::ifstream theChannel( name.c_str() );
+   //std::ifstream theChannel( name.c_str() );
+   std::istringstream theChannel(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(name,theChannel);
 
    G4int dummy; 
    while ( theChannel >> dummy )   // MF
@@ -187,14 +194,14 @@ std::map < G4double , std::vector < E_P_E_isoAng* >* >* G4NeutronHPThermalScatte
       }
       anT_E_P_E_isoAng->insert ( std::pair < G4double , std::vector < E_P_E_isoAng* >* > ( temp , vE_P_E_isoAng ) );
    }    
-   theChannel.close();
+   //theChannel.close();
 
    return anT_E_P_E_isoAng; 
 }
 
 
 
-E_P_E_isoAng* G4NeutronHPThermalScattering::readAnE_P_E_isoAng( std::ifstream* file )
+E_P_E_isoAng* G4NeutronHPThermalScattering::readAnE_P_E_isoAng( std::istream* file )
 {
    E_P_E_isoAng* aData = new E_P_E_isoAng;
 
@@ -250,7 +257,9 @@ std::map < G4double , std::vector < E_isoAng* >* >* G4NeutronHPThermalScattering
 {
    std::map < G4double , std::vector < E_isoAng* >* >* T_E = new std::map < G4double , std::vector < E_isoAng* >* >;
 
-   std::ifstream theChannel( name.c_str() );
+   //std::ifstream theChannel( name.c_str() );
+   std::istringstream theChannel(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(name,theChannel);
 
    G4int dummy; 
    while ( theChannel >> dummy )   // MF
@@ -265,14 +274,14 @@ std::map < G4double , std::vector < E_isoAng* >* >* G4NeutronHPThermalScattering
         vE_isoAng->push_back ( readAnE_isoAng( &theChannel ) );
       T_E->insert ( std::pair < G4double , std::vector < E_isoAng* >* > ( temp , vE_isoAng ) );
    }
-   theChannel.close();
+   //theChannel.close();
 
    return T_E;
 }
 
 
 
-E_isoAng* G4NeutronHPThermalScattering::readAnE_isoAng( std::ifstream* file )
+E_isoAng* G4NeutronHPThermalScattering::readAnE_isoAng( std::istream* file )
 {
    E_isoAng* aData = new E_isoAng;
 
@@ -302,6 +311,12 @@ E_isoAng* G4NeutronHPThermalScattering::readAnE_isoAng( std::ifstream* file )
 G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
 {
 
+   //Trick for dynamically generated materials
+   if ( sizeOfMaterialTable != G4Material::GetMaterialTable()->size() ) { 
+      sizeOfMaterialTable = G4Material::GetMaterialTable()->size();
+      buildPhysicsTable();
+      theXSection->BuildPhysicsTable( *aTrack.GetDefinition() );
+   }
 // Select Element > Reaction >
 
    const G4Material * theMaterial = aTrack.GetMaterial();
@@ -379,6 +394,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
             vNEP_EPM_TL = itm->second;
             itm++;
             vNEP_EPM_TH = itm->second;
+            tempLH.first = tempLH.second;
+            tempLH.second = itm->first;
          }
          else if (  tempLH.second == 0.0 )
          {
@@ -388,9 +405,9 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
             vNEP_EPM_TH = itm->second;
             itm--;
             vNEP_EPM_TL = itm->second;
+            tempLH.second = tempLH.first;
+            tempLH.first = itm->first;
          } 
-
-//
 
          G4double rand_for_sE = G4UniformRand();
 
@@ -399,6 +416,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 
          G4double sE;
          sE = get_linear_interpolated ( aTemp , std::pair < G4double , G4double > ( tempLH.first , TL.first ) , std::pair < G4double , G4double > ( tempLH.second , TH.first ) );  
+
+         G4double mu=1.0;
          E_isoAng anE_isoAng; 
          if ( TL.second.n == TH.second.n ) 
          {
@@ -410,15 +429,15 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
                angle = get_linear_interpolated ( aTemp , std::pair< G4double , G4double > (  tempLH.first , TL.second.isoAngle[ i ] ) , std::pair< G4double , G4double > ( tempLH.second , TH.second.isoAngle[ i ] ) );  
                anE_isoAng.isoAngle.push_back( angle ); 
             }
-         }
-         else
-         {
-            std::cout << "Do not Suuport yet." << std::endl; 
+            mu = getMu( &anE_isoAng );
+
+         } else {
+            //TL.second.n != TH.second.n
+            G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Do not yet supported");
          }
      
          //set 
          theParticleChange.SetEnergyChange( sE );
-         G4double mu = getMu( &anE_isoAng );
          theParticleChange.SetMomentumChange( 0.0 , std::sqrt ( 1 - mu*mu ) , mu );
 
       } 
@@ -444,8 +463,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 //
 //       For T_L anEPM_TL  and T_H anEPM_TH
 //
-         std::vector< std::pair< G4double , G4double >* >* pvE_p_TL = 0; 
-         std::vector< std::pair< G4double , G4double >* >* pvE_p_TH = 0; 
+         std::vector< std::pair< G4double , G4double >* >* pvE_p_TL = NULL; 
+         std::vector< std::pair< G4double , G4double >* >* pvE_p_TH = NULL; 
 
          if ( tempLH.first != 0.0 && tempLH.second != 0.0 ) 
          {
@@ -456,6 +475,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          {
             pvE_p_TL = coherentFSs.find( ielement )->second->find ( v_temp[ 0 ] )->second;
             pvE_p_TH = coherentFSs.find( ielement )->second->find ( v_temp[ 1 ] )->second;
+            tempLH.first = tempLH.second;
+            tempLH.second = v_temp[ 1 ];
          }
          else if (  tempLH.second == 0.0 )
          {
@@ -465,8 +486,14 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
             itv--;
             itv--;
             pvE_p_TL = coherentFSs.find( ielement )->second->find ( *itv )->second;
+            tempLH.second = tempLH.first;
+            tempLH.first = *itv;
          }
-
+         else 
+         {
+            //tempLH.first == 0.0 && tempLH.second
+            G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Unexpected temperature values in data");
+         }
 
          std::vector< G4double > vE_T;
          std::vector< G4double > vp_T;
@@ -476,7 +503,7 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 
          for ( G4int i=1 ; i < n1 ; i++ ) 
          {
-            if ( (*pvE_p_TL)[i]->first != (*pvE_p_TH)[i]->first ) abort();
+            if ( (*pvE_p_TL)[i]->first != (*pvE_p_TH)[i]->first ) G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data!");
             vE_T.push_back ( (*pvE_p_TL)[i]->first );
             vp_T.push_back ( get_linear_interpolated ( aTemp , std::pair< G4double , G4double > ( tempLH.first , (*pvE_p_TL)[i]->second ) , std::pair< G4double , G4double > ( tempLH.second , (*pvE_p_TL)[i]->second ) ) );  
          }
@@ -548,6 +575,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          {
             anEPM_TL_E = create_E_isoAng_from_energy ( aTrack.GetKineticEnergy() , incoherentFSs.find( ielement )->second->find ( v_temp[ 0 ] )->second );
             anEPM_TH_E = create_E_isoAng_from_energy ( aTrack.GetKineticEnergy() , incoherentFSs.find( ielement )->second->find ( v_temp[ 1 ] )->second );
+            tempLH.first = tempLH.second;
+            tempLH.second = v_temp[ 1 ];
          }
          else if (  tempLH.second == 0.0 )
          {
@@ -557,9 +586,12 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
             itv--;
             itv--;
             anEPM_TL_E = create_E_isoAng_from_energy ( aTrack.GetKineticEnergy() , incoherentFSs.find( ielement )->second->find ( *itv )->second );
+            tempLH.second = tempLH.first;
+            tempLH.first = *itv;
          } 
         
          // E_isoAng for aTemp and aTrack.GetKineticEnergy() 
+         G4double mu=1.0;
          E_isoAng anEPM_T_E;  
 
          if ( anEPM_TL_E.n == anEPM_TH_E.n ) 
@@ -571,14 +603,12 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
                angle = get_linear_interpolated ( aTemp , std::pair< G4double , G4double > ( tempLH.first , anEPM_TL_E.isoAngle[ i ] ) , std::pair< G4double , G4double > ( tempLH.second , anEPM_TH_E.isoAngle[ i ] ) );  
                anEPM_T_E.isoAngle.push_back( angle ); 
             }
-         }
-         else
-         {
-            std::cout << "Do not Suuport yet." << std::endl; 
-         }
+            mu = getMu ( &anEPM_T_E );
 
-         // Decide mu 
-         G4double mu = getMu ( &anEPM_T_E );
+         } else {
+            // anEPM_TL_E.n != anEPM_TH_E.n
+            G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Do not yet supported");
+         }
 
          // Set Final State
          theParticleChange.SetEnergyChange( aTrack.GetKineticEnergy() );  // No energy change in Elastic
@@ -674,7 +704,7 @@ G4double G4NeutronHPThermalScattering::get_linear_interpolated ( G4double x , st
    if ( High.first - Low.first != 0 ) 
       y = ( High.second - Low.second ) / ( High.first - Low.first ) * ( x - Low.first ) + Low.second;
    else 
-      std::cout << "G4NeutronHPThermalScattering liner interpolation err!!" << std::endl; 
+      G4cout << "G4NeutronHPThermalScattering liner interpolation err!!" << G4endl; 
       
    return y; 
 } 
@@ -693,7 +723,7 @@ E_isoAng G4NeutronHPThermalScattering::create_E_isoAng_from_energy ( G4double en
       v_e.push_back ( (*iv)->energy );
 
    std::pair < G4double , G4double > energyLH = find_LH ( energy , &v_e );
-   //std::cout << " " << energy/eV << " " << energyLH.first/eV  << " " << energyLH.second/eV << std::endl;
+   //G4cout << " " << energy/eV << " " << energyLH.first/eV  << " " << energyLH.second/eV << G4endl;
 
    E_isoAng* panEPM_T_EL=0;
    E_isoAng* panEPM_T_EH=0;
@@ -767,7 +797,7 @@ G4double G4NeutronHPThermalScattering::get_secondary_energy_from_E_P_E_isoAng ( 
       total += ( ( anE_P_E_isoAng->prob[i] ) * dE );
    }
 
-   if ( std::abs( total - anE_P_E_isoAng->sum_of_probXdEs ) > 1.0e-14 ) std::cout << total - anE_P_E_isoAng->sum_of_probXdEs << std::endl;
+   if ( std::abs( total - anE_P_E_isoAng->sum_of_probXdEs ) > 1.0e-14 ) G4cout << total - anE_P_E_isoAng->sum_of_probXdEs << G4endl;
 */
    total =  anE_P_E_isoAng->sum_of_probXdEs;
 
@@ -860,7 +890,7 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
          }
          else
          {
-            std::cout << "Do not Suuport yet." << std::endl; 
+            G4cout << "Do not Suuport yet." << G4endl; 
          }
      
    
@@ -875,7 +905,7 @@ void G4NeutronHPThermalScattering::buildPhysicsTable()
    std::map < G4String , G4int > co_dic;   
 
    //Searching Nist Materials
-   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+   static G4ThreadLocal G4MaterialTable* theMaterialTable  = 0 ; if (!theMaterialTable) theMaterialTable= G4Material::GetMaterialTable();
    size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
    for ( size_t i = 0 ; i < numberOfMaterials ; i++ )
    {
@@ -908,7 +938,7 @@ void G4NeutronHPThermalScattering::buildPhysicsTable()
    }
 
    //Searching TS Elements 
-   static const G4ElementTable* theElementTable = G4Element::GetElementTable();
+   static G4ThreadLocal G4ElementTable* theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
    size_t numberOfElements = G4Element::GetNumberOfElements();
    //size_t numberOfThermalElements = 0; 
    for ( size_t i = 0 ; i < numberOfElements ; i++ )
@@ -985,6 +1015,8 @@ void G4NeutronHPThermalScattering::buildPhysicsTable()
       fileName = dirName + fsName + tsndlName;
       inelasticFSs.insert ( std::pair < G4int , std::map < G4double , std::vector < E_P_E_isoAng* >* >* > ( ts_ID , readAnInelasticFSDATA( fileName ) ) ); 
    } 
+
+   theXSection->BuildPhysicsTable( *(G4Neutron::Neutron()) );
 }
  
 
@@ -1000,4 +1032,11 @@ const std::pair<G4double, G4double> G4NeutronHPThermalScattering::GetFatalEnergy
 {
    //return std::pair<G4double, G4double>(10*perCent,10*GeV);
    return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+}
+
+void G4NeutronHPThermalScattering::AddUserThermalScatteringFile( G4String nameG4Element , G4String filename)
+{
+   names.AddThermalElement( nameG4Element , filename );
+   theXSection->AddUserThermalScatteringFile( nameG4Element , filename );
+   buildPhysicsTable();
 }

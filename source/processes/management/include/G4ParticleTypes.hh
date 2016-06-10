@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleTypes.hh 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -96,7 +96,7 @@
 #include "G4AntiBMesonZero.hh"
 #include "G4BsMesonZero.hh"
 #include "G4AntiBsMesonZero.hh"
-#include "G4Upsiron.hh"
+#include "G4Upsilon.hh"
 
 
 // Barions

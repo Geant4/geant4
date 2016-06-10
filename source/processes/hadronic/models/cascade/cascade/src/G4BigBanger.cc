@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BigBanger.cc 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100301  M. Kelsey -- In generateBangInSCM(), restore old G4CascMom calcs.
@@ -44,6 +44,9 @@
 // 20110806  M. Kelsey -- Pre-allocate buffers to reduce memory churn
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
+// 20130924  M. Kelsey -- Replace std::pow with G4Pow::powN() for CPU speed
 
 #include <algorithm>
 
@@ -54,33 +57,19 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
+#include "G4Pow.hh"
 
 using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-G4BigBanger::G4BigBanger() : G4CascadeColliderBase("G4BigBanger") {}
+G4BigBanger::G4BigBanger() : G4CascadeDeexciteBase("G4BigBanger") {}
 
-void
-G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
-		     G4CollisionOutput& output) {
+void G4BigBanger::deExcite(const G4Fragment& target,
+			   G4CollisionOutput& globalOutput) {
+  if (verboseLevel) G4cout << " >>> G4BigBanger::deExcite" << G4endl;
 
-  if (verboseLevel) G4cout << " >>> G4BigBanger::collide" << G4endl;
-
-  // primitive explosion model A -> nucleons to prevent too exotic evaporation
-
-  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
-  if (!nuclei_target) {
-    G4cerr << " BigBanger -> try to bang not nuclei " << G4endl;
-    return;
-  }
-
-  G4int A = nuclei_target->getA();
-  G4int Z = nuclei_target->getZ();
-
-  G4LorentzVector PEX = nuclei_target->getMomentum();
-  G4double EEXS = nuclei_target->getExitationEnergy();
-
+  getTargetData(target);
   G4ThreeVector toTheLabFrame = PEX.boostVector();	// From rest to lab
 
   // This "should" be difference between E-target and sum of m(nucleons)
@@ -88,7 +77,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   if (etot < 0.0) etot = 0.0;
   
   if (verboseLevel > 2) {
-    G4cout << " BigBanger: target\n" << *nuclei_target
+    G4cout << " BigBanger: target\n" << target
 	   << "\n etot " << etot << G4endl;
   }
 
@@ -110,7 +99,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
 
   if (particles.empty()) {	// No bang!  Don't know why...
     G4cerr << " >>> G4BigBanger unable to process fragment "
-	   << nuclei_target->getDefinition()->GetParticleName() << G4endl;
+	   << target << G4endl;
 
     // FIXME:  This will violate baryon number, momentum, energy, etc.
     return;
@@ -136,7 +125,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   
   std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 
-  validateOutput(0, target, particles);		// Checks <vector> directly
+  validateOutput(target, particles);		// Checks <vector> directly
   
   if (verboseLevel > 2) {
     G4cout << " In SCM: total outgoing momentum " << G4endl 
@@ -149,7 +138,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
 	   << " pz " << PEX.z() - totlab.z() << G4endl; 
   }
 
-  output.addOutgoingParticles(particles);
+  globalOutput.addOutgoingParticles(particles);
 }		     
 
 void G4BigBanger::generateBangInSCM(G4double etot, G4int a, G4int z) {
@@ -295,16 +284,17 @@ void G4BigBanger::generateMomentumModules(G4double etot, G4int a, G4int z) {
 G4double G4BigBanger::xProbability(G4double x, G4int a) const {
   if (verboseLevel > 3) G4cout << " >>> G4BigBanger::xProbability" << G4endl;
 
-  G4double ekpr = 0.0;
+  G4Pow* theG4Pow = G4Pow::GetInstance();	// For convenience
 
+  G4double ekpr = 0.0;
   if(x < 1.0 || x > 0.0) {
     ekpr = x * x;
 
     if (a%2 == 0) { // even A
-      ekpr *= std::sqrt(1.0 - x) * std::pow((1.0 - x), (3*a-6)/2); 
+      ekpr *= std::sqrt(1.0 - x) * theG4Pow->powN((1.0 - x), (3*a-6)/2); 
     }
     else {
-      ekpr *= std::pow((1.0 - x), (3*a-5)/2);
+      ekpr *= theG4Pow->powN((1.0 - x), (3*a-5)/2);
     };
   }; 
   

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPPolynomExpansion_h
 #define G4NeutronHPPolynomExpansion_h 1
@@ -48,7 +47,7 @@ class G4NeutronHPPolynomExpansion
     if(theCoeff!=0) delete [] theCoeff;
   }
   
-  inline void Init(std::ifstream & theData)
+  inline void Init(std::istream & theData)
   {
     theData >> nPoly;
     theCoeff = new G4double[nPoly];

@@ -36,6 +36,8 @@
 /// \file hadronic/Hadr02/src/G4ParamType1GlaubAADataSet.cc
 /// \brief Implementation of the G4ParamType1GlaubAADataSet class
 //
+// $Id: G4ParamType1GlaubAADataSet.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4ParamType1GlaubAADataSet.cc
@@ -54,6 +56,8 @@
 
 
 #include "G4ParamType1GlaubAADataSet.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 using namespace std;
 #include "G4DPMJET2_5Interface.hh"
@@ -241,7 +245,8 @@ G4double *G4ParamType1GlaubAADataSet::GetArrayPointerM (const G4double ppn)
 // This appends the Glauber data from the arrays to the output file stream.
 // The format is intended to match the standard GLAUBER data file format.
 //
-std::ofstream & G4ParamType1GlaubAADataSet::WriteDataToFile (std::ofstream &File) const
+std::ofstream & 
+G4ParamType1GlaubAADataSet::WriteDataToFile (std::ofstream &File) const
 {
   File.unsetf(std::ios::fixed);
   File.setf(std::ios::scientific|std::ios::right|std::ios::adjustfield);
@@ -295,7 +300,8 @@ std::ofstream & G4ParamType1GlaubAADataSet::WriteDataToFile (std::ofstream &File
 // This reads the Glauber data into the arrays from the input file stream.
 // The format is intended to match the standard GLAUBER data file format.
 //
-std::ifstream & G4ParamType1GlaubAADataSet::ReadDataFromFile (std::ifstream &File)
+std::ifstream & 
+G4ParamType1GlaubAADataSet::ReadDataFromFile (std::ifstream &File)
 {
   G4String dummy[10];
   File >>dummy[0]

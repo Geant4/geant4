@@ -1,12 +1,7 @@
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
-//
 // *********************************************************************
 // To execute this macro under ROOT, 
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
-// This macro needs the track.txt file
 // *********************************************************************
 {
 gROOT->Reset();
@@ -17,10 +12,13 @@ Double_t scale;
 c1 = new TCanvas ("c1","",20,20,1000,500);
 c1.Divide(2,1);
 
+system ("rm -rf microdosimetry.root");
+system ("hadd microdosimetry.root microdosimetry_*.root");
+
 TFile f("microdosimetry.root"); 
 
 TNtuple* ntuple;
-ntuple = (TNtuple*)f->Get("ntuple"); 
+ntuple = (TNtuple*)f->Get("microdosimetry"); 
      
 c1.cd(1);
   gStyle->SetOptStat(000000);

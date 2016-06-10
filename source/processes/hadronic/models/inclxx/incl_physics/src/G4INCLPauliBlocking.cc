@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -42,18 +40,18 @@
 
 namespace G4INCL {
 
-  G4INCL::IPauli const * Pauli::thePauliBlocker = 0;
-  G4INCL::IPauli const * Pauli::theCDPP = 0;
+  G4ThreadLocal IPauli * Pauli::thePauliBlocker = 0;
+  G4ThreadLocal IPauli * Pauli::theCDPP = 0;
 
-  void Pauli::setBlocker(IPauli const * pauliBlocker) {
+  void Pauli::setBlocker(IPauli * const pauliBlocker) {
     thePauliBlocker = pauliBlocker;
   }
 
-  void Pauli::setCDPP(IPauli const * cdpp) {
+  void Pauli::setCDPP(IPauli * const cdpp) {
     theCDPP = cdpp;
   }
 
-  G4bool Pauli::isBlocked(ParticleList const modifiedAndCreated, Nucleus const * const nucleus) {
+  G4bool Pauli::isBlocked(ParticleList const &modifiedAndCreated, Nucleus const * const nucleus) {
     G4bool isPauliBlocked = false;
     if(thePauliBlocker != 0) {
       isPauliBlocked = thePauliBlocker->isBlocked(modifiedAndCreated, nucleus);
@@ -62,7 +60,7 @@ namespace G4INCL {
     return isPauliBlocked;
   }
 
-  G4bool Pauli::isCDPPBlocked(ParticleList const created, Nucleus const * const nucleus) {
+  G4bool Pauli::isCDPPBlocked(ParticleList const &created, Nucleus const * const nucleus) {
     G4bool isCDPPBlocked = false;
     if(theCDPP != 0) {
       isCDPPBlocked = theCDPP->isBlocked(created, nucleus);

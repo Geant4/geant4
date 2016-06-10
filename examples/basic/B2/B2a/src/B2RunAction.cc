@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B2RunAction.cc 75214 2013-10-29 16:04:42Z gcosmo $
 //
 /// \file B2RunAction.cc
 /// \brief Implementation of the B2RunAction class
@@ -37,7 +37,10 @@
 
 B2RunAction::B2RunAction()
  : G4UserRunAction()
-{}
+{ 
+  // set printing event number per each 100 events
+  G4RunManager::GetRunManager()->SetPrintProgress(1000);     
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,12 +49,9 @@ B2RunAction::~B2RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B2RunAction::BeginOfRunAction(const G4Run* aRun)
+void B2RunAction::BeginOfRunAction(const G4Run*)
 { 
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
   //inform the runManager to save random number seed
-
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }
 

@@ -26,8 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04SteppingVerbose.cc
 /// \brief Implementation of the ExN04SteppingVerbose class
 //
-//
-// $Id$
+// $Id: ExN04SteppingVerbose.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,37 +37,36 @@
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 ExN04SteppingVerbose::ExN04SteppingVerbose()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 ExN04SteppingVerbose::~ExN04SteppingVerbose()
-{}
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04SteppingVerbose::StepInfo()
 {
   CopyState();
-  
+
   G4int prec = G4cout.precision(3);
 
   if( verboseLevel >= 1 ){
     if( verboseLevel >= 4 ) VerboseTrack();
     if( verboseLevel >= 3 ){
-      G4cout << G4endl;    
+      G4cout << G4endl;
       G4cout << std::setw( 5) << "#Step#"     << " "
              << std::setw( 6) << "X"          << "    "
-             << std::setw( 6) << "Y"          << "    "  
+             << std::setw( 6) << "Y"          << "    "
              << std::setw( 6) << "Z"          << "    "
              << std::setw( 9) << "KineE"      << " "
-             << std::setw( 9) << "dEStep"     << " "  
-             << std::setw(10) << "StepLeng"     
-             << std::setw(10) << "TrakLeng" 
+             << std::setw( 9) << "dEStep"     << " "
+             << std::setw(10) << "StepLeng"
+             << std::setw(10) << "TrakLeng"
              << std::setw(10) << "Volume"    << "  "
-             << std::setw(10) << "Process"   << G4endl;                  
+             << std::setw(10) << "Process"   << G4endl;
     }
 
     G4cout << std::setw(5) << fTrack->GetCurrentStepNumber() << " "
@@ -81,15 +79,15 @@ void ExN04SteppingVerbose::StepInfo()
         << std::setw(6) << G4BestUnit(fTrack->GetTrackLength(),"Length")
         << "  ";
 
-    // if( fStepStatus != fWorldBoundary){ 
-    if( fTrack->GetNextVolume() != 0 ) { 
+    // if( fStepStatus != fWorldBoundary){
+    if( fTrack->GetNextVolume() != 0 ) {
       G4cout << std::setw(10) << fTrack->GetVolume()->GetName();
     } else {
       G4cout << std::setw(10) << "OutOfWorld";
     }
 
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
-      G4cout << "  " 
+      G4cout << "  "
         << std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
                                         ->GetProcessName();
     } else {
@@ -104,7 +102,7 @@ void ExN04SteppingVerbose::StepInfo()
                             fN2ndariesPostStepDoIt;
       if(tN2ndariesTot>0){
         G4cout << "    :----- List of 2ndaries - "
-               << "#SpawnInStep=" << std::setw(3) << tN2ndariesTot 
+               << "#SpawnInStep=" << std::setw(3) << tN2ndariesTot
                << "(Rest="  << std::setw(2) << fN2ndariesAtRestDoIt
                << ",Along=" << std::setw(2) << fN2ndariesAlongStepDoIt
                << ",Post="  << std::setw(2) << fN2ndariesPostStepDoIt
@@ -113,7 +111,7 @@ void ExN04SteppingVerbose::StepInfo()
                << " ---------------"
                << G4endl;
 
-        for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
+        for(size_t lp1=(*fSecondary).size()-tN2ndariesTot;
                         lp1<(*fSecondary).size(); lp1++){
           G4cout << "    : "
                  << std::setw(6)
@@ -128,37 +126,35 @@ void ExN04SteppingVerbose::StepInfo()
                  << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
           G4cout << G4endl;
         }
-              
+
         G4cout << "    :-----------------------------"
                << "----------------------------------"
                << "-- EndOf2ndaries Info ---------------"
                << G4endl;
       }
     }
-    
+
   }
   G4cout.precision(prec);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ExN04SteppingVerbose::TrackingStarted()
 {
-
   CopyState();
-G4int prec = G4cout.precision(3);
+  G4int prec = G4cout.precision(3);
   if( verboseLevel > 0 ){
 
     G4cout << std::setw( 5) << "Step#"      << " "
            << std::setw( 6) << "X"          << "    "
-           << std::setw( 6) << "Y"          << "    "  
+           << std::setw( 6) << "Y"          << "    "
            << std::setw( 6) << "Z"          << "    "
            << std::setw( 9) << "KineE"      << " "
-           << std::setw( 9) << "dEStep"     << " "  
-           << std::setw(10) << "StepLeng"  
+           << std::setw( 9) << "dEStep"     << " "
+           << std::setw(10) << "StepLeng"
            << std::setw(10) << "TrakLeng"
            << std::setw(10) << "Volume"     << "  "
-           << std::setw(10) << "Process"    << G4endl;             
+           << std::setw(10) << "Process"    << G4endl;
 
     G4cout << std::setw(5) << fTrack->GetCurrentStepNumber() << " "
         << std::setw(6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
@@ -179,5 +175,3 @@ G4int prec = G4cout.precision(3);
   }
   G4cout.precision(prec);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

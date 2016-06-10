@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eBremsstrahlungRelModel.hh 75582 2013-11-04 12:13:01Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,8 @@
 
 #include "G4VEmModel.hh"
 #include "G4NistManager.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 
 class G4ParticleChangeForLoss;
 class G4PhysicsVector;
@@ -68,6 +70,9 @@ public:
   virtual ~G4eBremsstrahlungRelModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel* masterModel);
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
@@ -89,8 +94,16 @@ public:
   virtual void SetupForMaterial(const G4ParticleDefinition*,
                                 const G4Material*,G4double);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double cut);
+
   inline void SetLPMconstant(G4double val);
   inline G4double LPMconstant() const;
+
+  inline void SetLowestKinEnergy(G4double);
+  inline G4double LowestKinEnergy() const;
+
 
 protected:
 
@@ -136,8 +149,6 @@ protected:
   G4double kinEnergy;
   G4double totalEnergy;
   G4double currentZ;
-  //G4double z13, z23, lnZ;
-  //G4double Fel, Finel, fCoulomb, fMax; 
   G4double densityFactor;
   G4double densityCorr;
 
@@ -150,7 +161,7 @@ private:
   static const G4double Finel_light[5];
 
   // consts
-  G4double lowKinEnergy;
+  G4double lowestKinEnergy;
   G4double fMigdalConstant;
   G4double fLPMconstant;
   G4double energyThresholdLPM;
@@ -158,14 +169,8 @@ private:
   G4double preS1,logTwo;
 
   // cash
-  //G4double particleMass;
-  //G4double kinEnergy;
-  //G4double totalEnergy;
-  //G4double currentZ;
   G4double z13, z23, lnZ;
   G4double Fel, Finel, fCoulomb, fMax; 
-  //G4double densityFactor;
-  //G4double densityCorr;
 
   // LPM effect
   G4double lpmEnergy;
@@ -212,8 +217,8 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
 inline G4double G4eBremsstrahlungRelModel::Phi1(G4double gg, G4double)
 {
   //       Thomas-Fermi FF from Tsai, eq.(3.38) for Z>=5
-  return 20.863 - 2.*std::log(1. + sqr(0.55846*gg) )
-    - 4.*( 1. - 0.6*std::exp(-0.9*gg) - 0.4*std::exp(-1.5*gg) );
+  return 20.863 - 2.*G4Log(1. + sqr(0.55846*gg) )
+    - 4.*( 1. - 0.6*G4Exp(-0.9*gg) - 0.4*G4Exp(-1.5*gg) );
 }
 
 inline G4double G4eBremsstrahlungRelModel::Phi1M2(G4double gg, G4double)
@@ -226,8 +231,8 @@ inline G4double G4eBremsstrahlungRelModel::Phi1M2(G4double gg, G4double)
 inline G4double G4eBremsstrahlungRelModel::Psi1(G4double eps, G4double)
 {
   //       Thomas-Fermi FF from Tsai, eq.(3.40) for Z>=5 
-  return 28.340 - 2.*std::log(1. + sqr(3.621*eps) )
-    - 4.*( 1. - 0.7*std::exp(-8*eps) - 0.3*std::exp(-29.*eps) );
+  return 28.340 - 2.*G4Log(1. + sqr(3.621*eps) )
+    - 4.*( 1. - 0.7*G4Exp(-8*eps) - 0.3*G4Exp(-29.*eps) );
 }
 
 inline G4double G4eBremsstrahlungRelModel::Psi1M2(G4double eps, G4double)
@@ -250,6 +255,18 @@ inline
 G4double G4eBremsstrahlungRelModel::LPMconstant() const 
 {
   return fLPMconstant;
+}
+
+inline void G4eBremsstrahlungRelModel::SetLowestKinEnergy(G4double val)
+{
+  lowestKinEnergy = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eBremsstrahlungRelModel::LowestKinEnergy() const
+{
+  return lowestKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

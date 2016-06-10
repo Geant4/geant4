@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Tubs.cc 76263 2013-11-08 11:41:52Z gcosmo $
 //
 // 
 // class G4Tubs
@@ -61,6 +61,8 @@
 
 #include "G4Tubs.hh"
 
+#if !defined(G4GEOM_USE_UTUBS)
+
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
@@ -73,10 +75,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBStube.hh"
-#include "G4NURBScylinder.hh"
-#include "G4NURBStubesector.hh"
 
 using namespace CLHEP;
 
@@ -94,6 +92,10 @@ G4Tubs::G4Tubs( const G4String &pName,
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
+  halfCarTolerance=kCarTolerance*0.5;
+  halfRadTolerance=kRadTolerance*0.5;
+  halfAngTolerance=kAngTolerance*0.5;
 
   if (pDz<=0) // Check z-len
   {
@@ -125,7 +127,9 @@ G4Tubs::G4Tubs( __void__& a )
     fRMin(0.), fRMax(0.), fDz(0.), fSPhi(0.), fDPhi(0.),
     sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
-    fPhiFullTube(false)
+    fPhiFullTube(false), halfCarTolerance(0.), halfRadTolerance(0.),
+    halfAngTolerance(0.)
+
 {
 }
 
@@ -149,7 +153,10 @@ G4Tubs::G4Tubs(const G4Tubs& rhs)
     sinCPhi(rhs.sinCPhi), cosCPhi(rhs.sinCPhi),
     cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiOT),
     sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
-    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi), fPhiFullTube(rhs.fPhiFullTube)
+    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi), fPhiFullTube(rhs.fPhiFullTube),
+    halfCarTolerance(rhs.halfCarTolerance),
+    halfRadTolerance(rhs.halfRadTolerance),
+    halfAngTolerance(rhs.halfAngTolerance)
 {
 }
 
@@ -177,6 +184,9 @@ G4Tubs& G4Tubs::operator = (const G4Tubs& rhs)
    sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
    sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
    fPhiFullTube = rhs.fPhiFullTube;
+   halfCarTolerance = rhs.halfCarTolerance;
+   halfRadTolerance = rhs.halfRadTolerance;
+   halfAngTolerance = rhs.halfAngTolerance;
 
    return *this;
 }
@@ -415,9 +425,6 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 {
   G4double r2,pPhi,tolRMin,tolRMax;
   EInside in = kOutside ;
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
-  static const G4double halfRadTolerance=kRadTolerance*0.5;
-  static const G4double halfAngTolerance=kAngTolerance*0.5;
 
   if (std::fabs(p.z()) <= fDz - halfCarTolerance)
   {
@@ -587,9 +594,6 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
   G4double rho, pPhi;
   G4double distZ, distRMin, distRMax;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
-
-  static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
   G4ThreeVector norm, sumnorm(0.,0.,0.);
   G4ThreeVector nZ = G4ThreeVector(0, 0, 1.0);
@@ -814,9 +818,6 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
   G4double tolORMin2, tolIRMax2 ;  // 'generous' radii squared
   G4double tolORMax2, tolIRMin2, tolODz, tolIDz ;
   const G4double dRmax = 100.*fRMax;
-
-  static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfRadTolerance = 0.5*kRadTolerance;
 
   // Intersection point variables
   //
@@ -1240,9 +1241,6 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
   G4double snxt, srd=kInfinity, sphi=kInfinity, pdist ;
   G4double deltaR, t1, t2, t3, b, c, d2, roMin2 ;
 
-  static const G4double halfCarTolerance = kCarTolerance*0.5;
-  static const G4double halfAngTolerance = kAngTolerance*0.5;
- 
   // Vars for phi intersection:
 
   G4double pDistS, compS, pDistE, compE, sphi2, xi, yi, vphi, roi2 ;
@@ -1924,32 +1922,4 @@ G4Polyhedron* G4Tubs::CreatePolyhedron () const
 {
   return new G4PolyhedronTubs (fRMin, fRMax, fDz, fSPhi, fDPhi) ;
 }
-
-G4NURBS* G4Tubs::CreateNURBS () const 
-{
-  G4NURBS* pNURBS ;
-  if (fRMin != 0) 
-  {
-    if (fPhiFullTube) 
-    {
-      pNURBS = new G4NURBStube (fRMin,fRMax,fDz) ;
-    }
-    else 
-    {
-      pNURBS = new G4NURBStubesector (fRMin,fRMax,fDz,fSPhi,fSPhi+fDPhi) ;
-    }
-  }
-  else 
-  {
-    if (fPhiFullTube) 
-    {
-      pNURBS = new G4NURBScylinder (fRMax,fDz) ;
-    }
-    else 
-    {
-      const G4double epsilon = 1.e-4 ; // Cylinder sector not yet available!
-      pNURBS = new G4NURBStubesector (epsilon,fRMax,fDz,fSPhi,fSPhi+fDPhi) ;
-    }
-  }
-  return pNURBS ;
-}
+#endif

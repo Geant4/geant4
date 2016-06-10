@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4CoupledTransportation.hh 68048 2013-03-13 14:34:07Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -152,6 +152,9 @@ class G4CoupledTransportation : public G4VProcess
      void ReportInexactEnergy(G4double startEnergy, G4double endEnergy);
        // Issue warning
 
+     void ReportMove( G4ThreeVector OldVector, G4ThreeVector NewVector,
+                      const G4String& Quantity );
+
   private:
 
      G4Navigator*         fMassNavigator;
@@ -172,7 +175,6 @@ class G4CoupledTransportation : public G4VProcess
      G4double             fTransportEndKineticEnergy;
      G4ThreeVector        fTransportEndSpin;
      G4bool               fMomentumChanged;
-     G4bool               fEnergyChanged;
        // The particle's state after this Step, Store for DoIt
 
      G4bool               fEndGlobalTimeComputed; 
@@ -209,8 +211,6 @@ class G4CoupledTransportation : public G4VProcess
      G4int    fThresholdTrials;              //    for this no of trials
        // Above 'important' energy a 'looping' particle in field will 
        //   *NOT* be abandoned, except after fThresholdTrials attempts.
-     G4double fUnimportant_Energy;
-       //  Below this energy, no verbosity for looping particles is issued
 
   // Counter for steps in which particle reports 'looping',
   //   if it is above 'Important' Energy 

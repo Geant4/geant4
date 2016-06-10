@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4XXXSGSceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // 
 // John Allison  10th March 2006
@@ -398,15 +398,6 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   // Look at G4OpenGLSceneHandler::AddPrimitive(const G4Polyhedron&)
   // for an example of how to get facets out of a G4Polyhedron,
   // including how to cope with triangles if that's a problem.
-}
-
-void G4XXXSGSceneHandler::AddPrimitive(const G4NURBS&) {
-#ifdef G4XXXSGDEBUG
-  G4cout <<
-    "G4XXXSGSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
-	 << G4endl;
-#endif
-  //?? Don't bother implementing this.  NURBS are not functional.
 }
 
 void G4XXXSGSceneHandler::ClearStore ()

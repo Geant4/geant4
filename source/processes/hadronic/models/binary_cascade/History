@@ -13,6 +13,56 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 Sep 2013 Gunter Folger      had-binary-V09-06-08
+- revert change introduced for coverity fix, rev 72276, in tag 
+  had-binary-V09-06-07. The tag was rejected, and in teh ways for
+  unrelated fixes.
+  Remove commented lines for G4Fragment.SetParticleDefinition()
+  
+20 Sept 2013 V.Ivanchenko 
+- G4BinaryCascade, G4BinaryLightIonCascade - fixed infinite exception
+    output by commenting out G4Fragment.SetParticleDefinition() for
+    ions - ion definition is not used inside G4Fragment class
+
+10 Sep 2013 Gunter Folger
+- G4BinaryCascade.cc: fix typo, bug report 1511.
+
+12 Jul 2013 Gunter Folger      had-binary-V09-06-07
+- G4BinaryLightIonReaction: fix for coverity report on small leak 
+
+ 9 May 2013 John Apostolakis	 had-binary-V09-06-06  Retag
+ 8 May 2013 John Apostolakis	 had-binary-V09-06-05 
+- Revised signature of SetChargeMomentumMass for fields (G4KM_NucleonEqRhs,
+    G4KM_OpticalEqRhs).  Made these virtual methods non-inline.
+
+26 Feb 2013 Andrea Dotti	 had-binary-V09-06-04
+- Adding cloning of Dummy Field (required by multi-threading)
+  
+22 Feb 2013 Gunter Folger        had-binary-V09-06-03
+-  Checking for changes made for transition to MT
+     - G4BinaryCascade, G4BinaryLightIonReaction:
+         remove static variable used only to count interactions in debug mode
+     - G4RKFieldIntegrator.cc: make static array in fuction const array    
+     
+9 Jan. 2013 V. Uzhinsky          had-binary-V09-06-02
+-  Checking of G4GeneratorPrecompoundInterface::PropagateNuclNucl
+   for simulation of nucleus-nucleus interactions.
+
+8 Jan. 2013 V. Uzhinsky          had-binary-V09-06-01
+-  Checking a simplification of G4GeneratorPrecompoundInterface::Propagate
+   for hadron-nucleus interactions only.
+
+17 Dec. 2012 V. Uzhinsky         had-binary-V09-06-00
+-  Re-numeration of the previous tag.
+
+17 Dec. 2012 V. Uzhinsky         had-binary-V09-05-15
+-  An interface to Precompound model is implemented for nucleus-nucleus 
+   interactions at high (> 2GeV/N). It will be us17 Dec. 2012 V. Uzhinsky     
+    had-binary-V09-05-15
+
+15 Nov 2012 Gunter Folger        had-binary-V09-05-14
+- fix coverity warnings
+
 26 Oct 2012 Gunter Folger        had-binary-V09-05-13
 - send a warning message to G4cout, not G4cerr.
 

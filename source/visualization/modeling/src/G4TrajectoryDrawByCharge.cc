@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4TrajectoryDrawByCharge.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 #include "G4TrajectoryDrawByCharge.hh"
@@ -53,14 +53,6 @@ G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name,
 }
 
 G4TrajectoryDrawByCharge::~G4TrajectoryDrawByCharge() {}
-
-void
-G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& object,
-			       const G4int&,
-			       const G4bool& visible) const
-{
-  Draw(object, visible);
-}
 
 void
 G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4bool& visible) const

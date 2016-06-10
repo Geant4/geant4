@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLXmSeparator.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //Separator class. Inherits from G4OpenGLXmVWidgetComponent
 
@@ -39,6 +39,8 @@
 #include "globals.hh"
 
 G4OpenGLXmSeparator::G4OpenGLXmSeparator (unsigned char l) 
+: line(0)
+, parent(0)
 {
   line_type = l;
 }

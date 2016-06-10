@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.9 2010-10-06 12:16:59 sincerti Exp $
+$Id: README 73614 2013-09-02 10:16:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,6 @@ S. Incerti (a, *) et al.
 a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
-
-Last modified by S. Incerti, 06/10/2010
 
 ---->1. INTRODUCTION.                                                    
                                                                        
@@ -47,7 +45,7 @@ be found in the following papers:
 
 - A DETAILED RAY-TRACING SIMULATION OF THE HIGH RESOLUTION MICROBEAM AT THE
 AIFIRA FACILITY
-F. Andersson, Ph. Barberet, S. Incerti, Ph. Moretto (CENBG, Gradignan) . Dec 2007.
+By F. Andersson, Ph. Barberet, S. Incerti, Ph. Moretto
 Published in Nucl.Instrum.Meth.B266:1653-1658, 2008
 
 - MONTE CARLO SIMULATION OF THE CENBG MICROBEAM AND NANOBEAM LINES WITH THE
@@ -57,7 +55,7 @@ M.J. Merchant, D.T. Nguyen, C. Habchi, T. Pouthier and H. Seznec
 Published in Nucl.Instrum.Meth.B260:20-27, 2007
 
 - GEANT4 SIMULATION OF THE NEW CENBG MICRO AND NANO PROBES FACILITY
-By S. Incerti, C. Habchi, Ph. Moretto, J. Olivier and H. Seznec. May 2006. 5pp.
+By S. Incerti, C. Habchi, Ph. Moretto, J. Olivier and H. Seznec
 Published in Nucl.Instrum.Meth.B249:738-742, 2006
 
 - A COMPARISON OF RAY-TRACING SOFTWARE FOR THE DESIGN OF QUADRUPOLE MICROBEAM 
@@ -74,18 +72,13 @@ Visualization has not been implemented.
 1) You must have compiled your Geant4 installation with the FULL version of the
 CLHEP library which can handle matrix operations.
 
-2) The variable G4ANALYSIS_USE must be set to 1.
+2) The code should be compiled cmake and run with :
 
-3) In order to generate histograms, at least one of the AIDA implementations should be 
- available.
-  
-4) The code should be compiled with gmake and run with :
-
-> $G4WORDIR/bin/$G4SYSTEM/nanobeam 
+./nanobeam 
 
 The macro file default.mac is read by default.
 
-It can be one of the following macro files :
+Several macro files are provided:
 
 1) for the computation of intrinsic aberration coefficients :
 coef-square.mac : using square magnetic field model (=default.mac)
@@ -104,6 +97,14 @@ grid-enge.mac : using Enge's analytical field model
 
 These macros files are stored in the ./macros directory.
 
+To run macros which include *map* in their name, copy the file OM50.grid
+into the directory in which you run ./nanobeam.
+
+The code can be run in MT mode, for high statistics image simulation.
+Do not use MT for aberration coefficients calculation (32 rays only are shot).
+The switch to MT can be made in nanobeam.cc.
+
+
 ---->5. PHYSICS
 
 The example runs with protons with fluctuating energies around 3 MeV.
@@ -115,7 +116,8 @@ Physics builder G4EmStandardPhysics), including the G4StepLimiter process.
 All results are stored in the nanobeam.root file and can be displayed with the provided
 ROOT macro file plot.C: 
 * be sure to have ROOT installed on your machine
-* be sure to be in the nanobeam directory
+* be sure to be in the directory where ROOT output files are generated
+* copy plot.C into this directory
 * launch ROOT by typing root
 * under your ROOT session, type in : .X plot.C to execute the macro file
 
@@ -125,6 +127,10 @@ This macro file shows :
 - the beam image (Y vs X) on target
 - the beam emittance (THETA vs X) and (PHY vs Y) on target
 - the grid shadow image (option)
+
+The output ntuples can be written as xml or csv files, by uncommenting the 
+appropriate header file in include/Analysis.hh
+and by leaving all others commented. 
 
 ---------------------------------------------------------------------------
 

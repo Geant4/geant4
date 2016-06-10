@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.cc 68208 2013-03-18 18:17:16Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:fDetector(Det)
+:G4UImessenger(),fDetector(Det),
+ fTestemDir(0),
+ fDetDir(0),
+ fTrackdir(0),
+ fMaterCmd(0),
+ fSizeCmd(0),
+ fMagFieldCmd(0),
+ fMaxStepCmd(0),
+ fMaxStepLength(0),
+ fUpdateCmd(0)
 {
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");
@@ -84,7 +93,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 
   fTrackdir = new G4UIdirectory("/testem/tracking/");
   fTrackdir->SetGuidance("step length");
-  fMaxStepLength = new G4UIcmdWithADoubleAndUnit("/testem/tracking/setMaxStepLength",this);
+  fMaxStepLength= new G4UIcmdWithADoubleAndUnit("/testem/tracking/setMaxStepLength",this);
   fMaxStepLength->SetGuidance("Set the maximum length of tracking step");
   fMaxStepLength->SetGuidance("when integrating magnetic field line.");
   fMaxStepLength->SetParameterName("Size",false);

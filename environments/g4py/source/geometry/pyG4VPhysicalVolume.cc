@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VPhysicalVolume.cc,v 1.7 2008-03-13 07:32:18 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VPhysicalVolume.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VPhysicalVolume.cc
 //
@@ -49,7 +48,7 @@ const G4RotationMatrix*(G4VPhysicalVolume::*f1_GetRotation)() const
 G4RotationMatrix*(G4VPhysicalVolume::*f2_GetRotation)()
   = &G4VPhysicalVolume::GetRotation;
 
-};
+}
 
 using namespace pyG4VPhysicalVolume;
 

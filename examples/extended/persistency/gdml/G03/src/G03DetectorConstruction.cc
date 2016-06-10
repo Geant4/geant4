@@ -27,7 +27,7 @@
 /// \brief Implementation of the G03DetectorConstruction class
 //
 //
-// $Id$
+// $Id: G03DetectorConstruction.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G03DetectorConstruction implementation
 //
@@ -58,7 +58,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G03DetectorConstruction::G03DetectorConstruction()
-  : fAir(0), fAluminum(0), fPb(0), fXenon(0)
+  : G4VUserDetectorConstruction(),
+    fAir(0), fAluminum(0), fPb(0), fXenon(0),
+    fReader(0), fWriter(0), fParser(0),
+    fDetectorMessenger(0)
 {  
   fReadFile = "color_extension.gdml";
   fWriteFile = "color_extension_test.gdml";

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4JTPolynomialSolver.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // Class description:
 //
@@ -90,11 +90,11 @@ class G4JTPolynomialSolver
     G4double si;
     G4double u,v; 
     G4double a,b,c,d;
-    G4double a1,a2,a3,a6,a7;
+    G4double a1,a3,a7;
     G4double e,f,g,h;
     G4double szr,szi;
     G4double lzr,lzi;
-    G4int n,nmi;
+    G4int n;
   
     /*  The following statements set machine constants */
 

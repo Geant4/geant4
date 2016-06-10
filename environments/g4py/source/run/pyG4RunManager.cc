@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4RunManager.cc,v 1.6 2010-12-02 08:23:05 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4RunManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4RunManager.cc
 //
@@ -73,29 +72,24 @@ void (G4RunManager::*f6_SetUserAction)(G4UserSteppingAction*)
   = &G4RunManager::SetUserAction;
 
 // DumpRegion
-#if G4VERSION_NUMBER >= 932
 void (G4RunManager::*f1_DumpRegion)(const G4String&) const
   = &G4RunManager::DumpRegion;
-#else
-void (G4RunManager::*f1_DumpRegion)(G4String) const
-  = &G4RunManager::DumpRegion;
-#endif
 void (G4RunManager::*f2_DumpRegion)(G4Region*) const
   = &G4RunManager::DumpRegion;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpRegion, DumpRegion, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpRegion, DumpRegion, 0, 1)
 
 // BeamOn()
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_BeamOn, BeamOn, 1, 3);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_BeamOn, BeamOn, 1, 3)
 
 // AbortRun()
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AbortRun, AbortRun, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AbortRun, AbortRun, 0, 1)
 
 // DefineWorldVolume()
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DefineWorldVolume,
-               DefineWorldVolume, 1, 2);
+                                       DefineWorldVolume, 1, 2)
 
-};
+}
 
 using namespace pyG4RunManager;
 
@@ -104,7 +98,8 @@ using namespace pyG4RunManager;
 // ====================================================================
 void export_G4RunManager()
 {
-  class_<G4RunManager>("G4RunManager", "run manager class")
+  class_<G4RunManager, boost::noncopyable>
+    ("G4RunManager", "run manager class")
     // ---
     .def("GetRunManager", &G4RunManager::GetRunManager,
    "Get an instance of G4RunManager",

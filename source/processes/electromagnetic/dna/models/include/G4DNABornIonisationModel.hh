@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DNABornIonisationModel.hh 70823 2013-06-06 08:26:50Z gcosmo $
 //
 
 #ifndef G4DNABornIonisationModel_h
@@ -71,16 +71,20 @@ public:
 				
   double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
 
+  inline void SelectFasterComputation(G4bool input); 
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
 
+  G4bool fasterCode;
+
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;
 
-  //deexcitation manager to produce fluo photns and e-
+  // Deexcitation manager to produce fluo photons and e-
   G4VAtomDeexcitation*      fAtomDeexcitation;
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
@@ -103,10 +107,14 @@ private:
 
   G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
 
+  G4double RandomizeEjectedElectronEnergyFromCumulatedDcs(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
+
+  G4double RandomTransferedEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
+
   void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
                                            outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
    
-  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+  G4double Interpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
   G4double QuadInterpolator( G4double e11, 
 			     G4double e12, 
@@ -122,14 +130,23 @@ private:
 			     G4double e);
 
   typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  
   TriDimensionMap eDiffCrossSectionData[6];
+  TriDimensionMap eNrjTransfData[6]; // for cumulated dcs
+  
   TriDimensionMap pDiffCrossSectionData[6];
+  TriDimensionMap pNrjTransfData[6]; // for cumulated dcs
+  
   std::vector<double> eTdummyVec;
   std::vector<double> pTdummyVec;
 
   typedef std::map<double, std::vector<double> > VecMap;
+  
   VecMap eVecm;
   VecMap pVecm;
+  
+  VecMap eProbaShellMap[6]; // for cumulated dcs
+  VecMap pProbaShellMap[6]; // for cumulated dcs
   
   // Partial cross section
   
@@ -141,6 +158,11 @@ private:
   G4DNABornIonisationModel(const  G4DNABornIonisationModel&);
 
 };
+
+inline void G4DNABornIonisationModel::SelectFasterComputation (G4bool input) 
+{ 
+    fasterCode = input; 
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

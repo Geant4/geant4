@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
-// $Id$
+// $Id: PhysListEmStandard.cc 68585 2013-04-01 23:35:07Z adotti $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -82,9 +82,9 @@ void PhysListEmStandard::ConstructProcess()
   
   // Add standard EM Processes
   //
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
@@ -92,7 +92,7 @@ void PhysListEmStandard::ConstructProcess()
       ////ph->RegisterProcess(new G4RayleighScattering, particle);      
       ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
       G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
+      cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion, particle);
      

@@ -587,7 +587,7 @@ namespace {
 
 // Initialize n-n cross-section table
 
-G4CascadeNNChannelData::data_t
+const G4CascadeNNChannelData::data_t
 G4CascadeNNChannelData::data(nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
 			     nn8bfs, nn9bfs, nnCrossSections, nnTotXSec,
 			     neu*neu, "NeutronNeutron");

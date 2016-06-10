@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Polyhedra.hh 76263 2013-11-08 11:41:52Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -58,32 +58,24 @@
 // Author: 
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4Polyhedra_hh
 #define G4Polyhedra_hh
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UPOLYHEDRA 1
+#endif
+
+#if defined(G4GEOM_USE_UPOLYHEDRA)
+  #define G4UPolyhedra G4Polyhedra
+  #include "G4UPolyhedra.hh"
+#else
+
 #include "G4VCSGfaceted.hh"
 #include "G4PolyhedraSide.hh"
+#include "G4PolyhedraHistorical.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
-class G4PolyhedraHistorical
-{
-  public:
-
-    G4PolyhedraHistorical();
-    ~G4PolyhedraHistorical();
-    G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
-    G4PolyhedraHistorical& operator=( const G4PolyhedraHistorical& right );
-
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   numSide;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
-};
 
 class G4Polyhedra : public G4VCSGfaceted
 {
@@ -128,7 +120,6 @@ class G4Polyhedra : public G4VCSGfaceted
   std::ostream& StreamInfo( std::ostream& os ) const;
 
   G4Polyhedron* CreatePolyhedron() const;
-  G4NURBS*      CreateNURBS() const;
 
   G4bool Reset();
 
@@ -162,7 +153,7 @@ class G4Polyhedra : public G4VCSGfaceted
 
  protected:  // without description
 
-  inline void SetOriginalParameters();
+  void SetOriginalParameters(G4ReduciblePolygon *rz);
     // Sets internal parameters for the generic constructor.
 
   void Create( G4double phiStart,           // initial phi starting angle
@@ -199,5 +190,7 @@ class G4Polyhedra : public G4VCSGfaceted
 };
 
 #include "G4Polyhedra.icc"
+
+#endif
 
 #endif

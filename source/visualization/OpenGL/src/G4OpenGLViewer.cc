@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLViewer.cc 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -50,6 +50,11 @@
 #include "G4AttCheck.hh"
 #include "G4Text.hh"
 
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+// We need to have a Wt gl drawer because we will draw inside the WtGL component (ImmediateWtViewer)
+#include "G4OpenGLWtDrawer.hh"
+#endif
+
 // GL2PS
 #include "Geant4_gl2ps.h"
 
@@ -62,6 +67,9 @@ int G4OpenGLViewer::fPrintFilenameIndex = 0;
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+fWtDrawer(NULL),
+#endif
 fPrintColour (true),
 fVectoredPs (true),
 fOpenGLSceneHandler(scene),
@@ -120,6 +128,89 @@ G4OpenGLViewer::~G4OpenGLViewer ()
 
 void G4OpenGLViewer::InitializeGLView () 
 {
+#ifdef G4OPENGL_VERSION_2
+
+  const char *fragmentShaderSrc =
+  "#ifdef GL_ES\n"
+  "precision highp float;\n"
+  "#endif\n"
+  "\n"
+  "varying vec3 vLightWeighting;\n"
+  "uniform vec4 uPointColor; // Point Color\n"
+  "\n"
+  "void main(void) {\n"
+  "  vec4 matColor = uPointColor;\n"
+  "  gl_FragColor = vec4(matColor.rgb, matColor.a);\n"
+  "}\n";
+  
+  
+  
+  const char *vertexShaderSrc =
+  "attribute vec3 aVertexPosition;\n"
+  "attribute vec3 aVertexNormal;\n"
+  "\n"
+  "uniform mat4 uMVMatrix; // [M]odel[V]iew matrix\n"
+  "uniform mat4 uCMatrix;  // Client-side manipulated [C]amera matrix\n"
+  "uniform mat4 uPMatrix;  // Perspective [P]rojection matrix\n"
+  "uniform mat4 uNMatrix;  // [N]ormal transformation\n"
+  "// uNMatrix is the transpose of the inverse of uCMatrix * uMVMatrix\n"
+  "uniform mat4 uTMatrix;  // [T]ransformation  matrix\n"
+  "uniform float uPointSize;  // Point size\n"
+  "\n"
+  "varying vec3 vLightWeighting;\n"
+  "\n"
+  "void main(void) {\n"
+  "  // Calculate the position of this vertex\n"
+  "  gl_Position = uPMatrix * uCMatrix * uMVMatrix * uTMatrix * vec4(aVertexPosition, 1.0);\n"
+  "\n"
+  "  // Phong shading\n"
+  "  vec3 transformedNormal = normalize((uNMatrix * vec4(normalize(aVertexNormal), 0)).xyz);\n"
+  "  vec3 lightingDirection = normalize(vec3(1, 1, 1));\n"
+  "  float directionalLightWeighting = max(dot(transformedNormal, lightingDirection), 0.0);\n"
+  "  vec3 uAmbientLightColor = vec3(0.2, 0.2, 0.2);\n"
+  "  vec3 uDirectionalColor = vec3(0.8, 0.8, 0.8);\n"
+  "  gl_PointSize = uPointSize;\n"
+  "  vLightWeighting = uAmbientLightColor + uDirectionalColor * directionalLightWeighting;\n"
+  "}\n";
+  
+  vertexShader_ = vertexShaderSrc;
+  fragmentShader_ = fragmentShaderSrc;
+
+  
+  
+  // First, load a simple shader
+  Shader fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  const char *frag = fragmentShader_.c_str();
+  glShaderSource(fragmentShader, 1, &frag, NULL);
+  glCompileShader(fragmentShader);
+  Shader vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  const char *vert = vertexShader_.c_str();
+  glShaderSource(vertexShader, 1, &vert, NULL);
+  glCompileShader(vertexShader);
+  shaderProgram_ = glCreateProgram();
+  glAttachShader(shaderProgram_, vertexShader);
+  glAttachShader(shaderProgram_, fragmentShader);
+  glLinkProgram(shaderProgram_);
+  glUseProgram(shaderProgram_);
+  
+  //   UniformLocation uColor = getUniformLocation(shaderProgram_, "uColor");
+  //   uniform4fv(uColor, [0.0, 0.3, 0.0, 1.0]);
+  
+  // Extract the references to the attributes from the shader.
+
+  vertexPositionAttribute_ =
+  glGetAttribLocation(shaderProgram_, "aVertexPosition");
+  glEnableVertexAttribArray(vertexPositionAttribute_);
+  
+  // Extract the references the uniforms from the shader
+  pMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uPMatrix");
+  cMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uCMatrix");
+  mvMatrixUniform_ = glGetUniformLocation(shaderProgram_, "uMVMatrix");
+  nMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uNMatrix");
+  tMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uTMatrix");
+  
+#endif
+
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::InitializeGLView\n");
 #endif
@@ -801,11 +892,11 @@ bool G4OpenGLViewer::printGl2PS() {
   return true;
 }
 
-unsigned int G4OpenGLViewer::getWinWidth() {
+unsigned int G4OpenGLViewer::getWinWidth() const{
   return fWinSize_x;
 }
 
-unsigned int G4OpenGLViewer::getWinHeight() {
+unsigned int G4OpenGLViewer::getWinHeight() const{
   return fWinSize_y;
 }
 
@@ -1094,5 +1185,17 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy)
    fVP.SetViewAndLights (viewPoint);
 }
 
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+
+// Associate the Wt drawer to the OpenGLViewer and the OpenGLSceneHandler
+void G4OpenGLViewer::setWtDrawer(G4OpenGLWtDrawer* drawer) {
+  fWtDrawer = drawer;
+  try {
+    G4OpenGLSceneHandler& sh = dynamic_cast<G4OpenGLSceneHandler&>(fSceneHandler);
+    sh.setWtDrawer(fWtDrawer);
+  } catch(std::bad_cast exp) { }
+}
+
+#endif
 
 #endif

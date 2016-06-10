@@ -27,7 +27,7 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id$
+// $Id: DetectorConstruction.hh 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
   
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
      
      void SetSize     (G4double);              
      void SetMaterial (G4String);            

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PSTARStopping.hh 74458 2013-10-07 15:23:13Z gcosmo $
 
 #ifndef G4PSTARStopping_h
 #define G4PSTARStopping_h 1
@@ -70,7 +70,8 @@ public:
   G4int GetIndex(const G4Material*);
 
   G4double GetElectronicDEDX(G4int idx, G4double energy);
-  G4double GetElectronicDEDX(const G4Material*, G4double energy);
+
+  inline G4double GetElectronicDEDX(const G4Material*, G4double energy);
 
 private:
 

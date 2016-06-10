@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NeutronCaptureXS.cc 71324 2013-06-13 16:58:55Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -40,7 +40,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "G4HadronicException.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NeutronCaptureXS.hh"
 #include "G4Element.hh"
@@ -77,14 +76,13 @@ const G4int G4NeutronCaptureXS::amax[] = {0,
 
 G4NeutronCaptureXS::G4NeutronCaptureXS() 
  : G4VCrossSectionDataSet("G4NeutronCaptureXS"),
-   emax(20*MeV),maxZ(92)
+   emax(20*MeV),elimit(1.0e-10*eV)
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){
     G4cout  << "G4NeutronCaptureXS::G4NeutronCaptureXS: Initialise for Z < "
-	    << maxZ + 1 << G4endl;
+	    << MAXZCAPTURE << G4endl;
   }
-  //data.resize(maxZ+1, 0);
   data.SetName("NeutronCapture");
   work.resize(13,0);
   temp.resize(13,0.0);
@@ -92,13 +90,7 @@ G4NeutronCaptureXS::G4NeutronCaptureXS()
 }
 
 G4NeutronCaptureXS::~G4NeutronCaptureXS()
-{
-  /*
-  for(G4int i=0; i<=maxZ; ++i) {
-    delete data[i];
-  }
-  */
-}
+{}
 
 void G4NeutronCaptureXS::CrossSectionDescription(std::ostream& outFile) const
 {
@@ -121,7 +113,7 @@ G4NeutronCaptureXS::IsIsoApplicable(const G4DynamicParticle*,
 				    G4int /*ZZ*/, G4int /*AA*/,
 				    const G4Element*, const G4Material*)
 {
-  return false;
+  return true;
 }
 
 G4double 
@@ -130,24 +122,21 @@ G4NeutronCaptureXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
 {
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin > emax || Z < 1 || Z > maxZ) { return xs; }
-  const G4double elimit = 1.0e-10*eV;
+  if(ekin > emax || Z < 1 || Z >= MAXZCAPTURE) { return xs; }
   if(ekin < elimit) { ekin = elimit; }
 
-  //  G4PhysicsVector* pv = data[Z];
   G4PhysicsVector* pv = data.GetElementData(Z);
 
   // element was not initialised
   if(!pv) {
     Initialise(Z);
-    //    pv = data[Z];
     pv = data.GetElementData(Z);
     if(!pv) { return xs; }
   }
 
   G4double e1 = pv->Energy(0);
   if(ekin < e1) { xs = (*pv)[0]*std::sqrt(e1/ekin); }
-  else          { xs = pv->Value(ekin); }
+  else if(ekin <= pv->GetMaxEnergy()) { xs = pv->Value(ekin); }
 
   if(verboseLevel > 0){
     G4cout  << "ekin= " << ekin << ",  xs= " << xs << G4endl;
@@ -163,29 +152,37 @@ G4NeutronCaptureXS::GetIsoCrossSection(const G4DynamicParticle* aParticle,
 {
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin > emax || Z < 1 || Z > maxZ) { return xs; }
-  const G4double elimit = 1.0e-10*eV;
+  if(ekin <= emax && Z > 0 && Z < MAXZCAPTURE) { 
+    xs = IsoCrossSection(ekin, Z, A); 
+  }
+  return xs;
+}
+
+G4double G4NeutronCaptureXS::IsoCrossSection(G4double ekin, G4int Z, G4int A)
+{
+  G4double xs = 0.0;
   if(ekin < elimit) { ekin = elimit; }
 
-  //  G4PhysicsVector* pv = data[Z];
   G4PhysicsVector* pv = data.GetElementData(Z);
 
   // element was not initialised
   if(!pv) {
     Initialise(Z);
-    //    pv = data[Z];
     pv = data.GetElementData(Z);
     if(!pv) { return xs; }
   }
-  pv = data.GetComponentDataByID(Z, A);
-  if(!pv) { return xs; }
+  G4PhysicsVector* pviso  = data.GetComponentDataByID(Z, A);
+  if(pviso) { pv = pviso; }
 
-  G4double e1 = pv->Energy(0);
-  if(ekin < e1) { xs = (*pv)[0]*std::sqrt(e1/ekin); }
-  else          { xs = pv->Value(ekin); }
+  G4double e1 = pv->Energy(1);
+  if(ekin < e1) { xs = (*pv)[1]*std::sqrt(e1/ekin); }
+  else if(ekin <= pv->GetMaxEnergy()) { xs = pv->Value(ekin); }
 
   if(verboseLevel > 0){
-    G4cout  << "ekin= " << ekin << ",  xs= " << xs << G4endl;
+    G4cout  << "G4NeutronCaptureXS::IsoCrossSection: Ekin(MeV)= " << ekin/MeV 
+	    << "  xs(b)= " << xs/barn 
+	    << "  Z= " << Z << "  A= " << A << "  " << pv->GetVectorLength() 
+	    << G4endl;
   }
   return xs;
 }
@@ -200,7 +197,7 @@ G4Isotope* G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
   // more than 1 isotope
   if(1 < nIso) {
     G4int Z = G4lrint(anElement->GetZ());
-    if(Z > maxZ) { Z = maxZ; }
+    if(Z >= MAXZCAPTURE) { Z = MAXZCAPTURE-1; }
     G4double* abundVector = anElement->GetRelativeAbundanceVector();
     G4double q = G4UniformRand();
     G4double sum = 0.0;
@@ -219,8 +216,7 @@ G4Isotope* G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
       if(temp.size() < nmax) { temp.resize(nmax,0.0); }
       for (size_t i=0; i<nmax; ++i) {
 	G4int A = (*isoVector)[i]->GetN();
-	G4PhysicsVector* v = data.GetComponentDataByID(Z, A);
-        if(v) { sum += abundVector[i]*v->Value(kinEnergy); }
+        sum += abundVector[i]*IsoCrossSection(kinEnergy, Z, A);
         temp[i] = sum;
       }
       sum *= q;
@@ -244,7 +240,11 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	   << p.GetParticleName() << G4endl;
   }
   if(p.GetParticleName() != "neutron") { 
-    throw G4HadronicException(__FILE__, __LINE__,"Wrong particle type");
+    G4ExceptionDescription ed;
+    ed << p.GetParticleName() << " is a wrong particle type -"
+       << " only neutron is allowed";
+    G4Exception("G4NeutronCaptureXS::BuildPhysicsTable(..)","had012",
+		FatalException, ed, "");
     return; 
   }
   isInitialized = true;
@@ -252,11 +252,6 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   // check environment variable 
   // Build the complete string identifying the file with the data set
   char* path = getenv("G4NEUTRONXSDATA");
-  if (!path){
-    throw G4HadronicException(__FILE__, __LINE__, 
-			      "G4NEUTRONXSDATA environment variable not defined");
-    return;
-  }
 
   // Access to elements
   const G4ElementTable* theElmTable = G4Element::GetElementTable();
@@ -265,10 +260,9 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     for(size_t i=0; i<numOfElm; ++i) {
       G4int Z = G4int(((*theElmTable)[i])->GetZ());
       if(Z < 1)         { Z = 1; }
-      else if(Z > maxZ) { Z = maxZ; }
+      else if(Z >= MAXZCAPTURE) { Z = MAXZCAPTURE-1; }
       //G4cout << "Z= " << Z << G4endl;
       // Initialisation 
-      //      if(!data[Z]) { Initialise(Z, path); }
       if(!data.GetElementData(Z)) { Initialise(Z, path); }
     }
   }
@@ -284,8 +278,8 @@ G4NeutronCaptureXS::Initialise(G4int Z, const char* p)
   if(!p) {
     path = getenv("G4NEUTRONXSDATA");
     if (!path) {
-      throw G4HadronicException(__FILE__, __LINE__, 
-				"G4NEUTRONXSDATA environment variable not defined");
+      G4Exception("G4NeutronCaptureXS::Initialise(..)","had013",FatalException,
+                  "Environment variable G4NEUTRONXSDATA is not defined");
       return;
     }
   }
@@ -324,8 +318,11 @@ G4NeutronCaptureXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
   std::ifstream filein(ost.str().c_str());
   if (!(filein)) {
     if(!warn) { return v; }
-    G4cout << ost.str() << "  is not opened by G4NeutronCaptureXS" << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__,"NO data sets opened");
+    G4ExceptionDescription ed;
+    ed << "Data file <" << ost.str().c_str()
+       << "> is not opened!";
+    G4Exception("G4NeutronCaptureXS::RetrieveVector(..)","had014",
+                FatalException, ed, "Check G4NEUTRONXSDATA");
   }else{
     if(verboseLevel > 1) {
       G4cout << "File " << ost.str() 
@@ -334,8 +331,11 @@ G4NeutronCaptureXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
     // retrieve data from DB
     v = new G4PhysicsLogVector();
     if(!v->Retrieve(filein, true)) {
-      G4cout << ost.str() << " is not retrieved in G4NeutronCaptureXS" << G4endl;
-      throw G4HadronicException(__FILE__, __LINE__,"ERROR: retrieve data fail");
+      G4ExceptionDescription ed;
+      ed << "Data file <" << ost.str().c_str()
+	 << "> is not retrieved!";
+      G4Exception("G4NeutronCaptureXS::RetrieveVector(..)","had015",
+		  FatalException, ed, "Check G4NEUTRONXSDATA");
     }
   }
   return v;

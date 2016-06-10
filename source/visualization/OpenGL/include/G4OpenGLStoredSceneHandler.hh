@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLStoredSceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -64,7 +64,6 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
-  void AddPrimitive (const G4NURBS&);
   void ClearStore ();
   void ClearTransientStore ();
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NuclearLevel.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -64,7 +64,7 @@
 
 G4int G4NuclearLevel::Increment(G4int aF)
 {
-  static G4int instanceCount = 0;
+  static G4ThreadLocal G4int instanceCount = 0;
   instanceCount+=aF;
   return instanceCount;
 }

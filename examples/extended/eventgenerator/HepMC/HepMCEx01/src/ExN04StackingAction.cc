@@ -26,8 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04StackingAction.cc
 /// \brief Implementation of the ExN04StackingAction class
 //
+// $Id: ExN04StackingAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
-#include "ExN04StackingAction.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4Event.hh"
@@ -38,21 +39,24 @@
 #include "G4ParticleTypes.hh"
 #include "ExN04StackingActionMessenger.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ios.hh"
+#include "ExN04StackingAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04StackingAction::ExN04StackingAction()
  : trkHits(0), muonHits(0), stage(0)
-{ 
-  angRoI = 30.0*deg; 
+{
+  angRoI = 30.0*deg;
   reqMuon = 2;
   reqIso = 10;
   theMessenger = new ExN04StackingActionMessenger(this);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04StackingAction::~ExN04StackingAction()
 { delete theMessenger; }
 
-G4ClassificationOfNewTrack 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4ClassificationOfNewTrack
 ExN04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
   G4ClassificationOfNewTrack classification = fWaiting;
@@ -80,12 +84,12 @@ ExN04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
            //           Accept all secondaries in RoI
            //           Kill secondaries outside RoI
     if(aTrack->GetParentID()==0)
-    { 
+    {
       classification = fUrgent;
       break;
     }
     if((angRoI<0.)||InsideRoI(aTrack,angRoI))
-    { 
+    {
       classification = fUrgent;
       break;
     }
@@ -94,6 +98,7 @@ ExN04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
   return classification;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool ExN04StackingAction::InsideRoI(const G4Track * aTrack,G4double ang)
 {
   if(!muonHits)
@@ -115,6 +120,7 @@ G4bool ExN04StackingAction::InsideRoI(const G4Track * aTrack,G4double ang)
   return false;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VHitsCollection* ExN04StackingAction::GetCollection(G4String colName)
 {
   G4SDManager* SDMan = G4SDManager::GetSDMpointer();
@@ -129,6 +135,7 @@ G4VHitsCollection* ExN04StackingAction::GetCollection(G4String colName)
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04StackingAction::NewStage()
 {
   stage++;
@@ -146,7 +153,7 @@ void ExN04StackingAction::NewStage()
     G4cout << "Stage 0->1 : " << nhits << " hits found in the muon chamber."
          << G4endl;
     if(nhits<reqMuon)
-    { 
+    {
       stackManager->clear();
       G4cout << "++++++++ event aborted" << G4endl;
       return;
@@ -165,7 +172,8 @@ void ExN04StackingAction::NewStage()
   //              in the tracker layers.
     nhits = muonHits->entries();
     if(!trkHits)
-    { trkHits = (ExN04TrackerHitsCollection*)GetCollection("trackerCollection"); }
+    { trkHits =
+      (ExN04TrackerHitsCollection*)GetCollection("trackerCollection"); }
     if(!trkHits)
     { G4cerr << "trackerCollection NOT FOUND" << G4endl;
       return; }
@@ -199,12 +207,11 @@ void ExN04StackingAction::NewStage()
     stackManager->ReClassify();
   }
 }
-    
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04StackingAction::PrepareNewEvent()
-{ 
-  stage = 0; 
+{
+  stage = 0;
   trkHits = 0;
   muonHits = 0;
 }
-
-

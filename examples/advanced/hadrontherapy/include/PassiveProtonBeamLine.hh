@@ -46,6 +46,7 @@ class G4VPhysicalVolume;
 class HadrontherapyDetectorConstruction;
 class HadrontherapyModulator;
 class PassiveProtonBeamLineMessenger;
+class HadrontherapyDetectorROGeometry;
 
 class PassiveProtonBeamLine : public G4VUserDetectorConstruction
 {
@@ -56,6 +57,11 @@ public:
   ~PassiveProtonBeamLine();
 
   G4VPhysicalVolume* Construct();  
+//***************************** PW **************NON SERVE*************************
+ 
+  static PassiveProtonBeamLine* GetInstance();
+  
+   //***************************** PW **************NON SERVE*************************
 
   void HadrontherapyBeamLineSupport();
   // Definition of the beam line support
@@ -121,6 +127,8 @@ public:
 
 
 private:
+
+  static PassiveProtonBeamLine* instance;
 //passive proton line dimensions
   void SetDefaultDimensions(); 
   void ConstructPassiveProtonBeamLine();
@@ -350,5 +358,10 @@ private:
   G4Material* brassTube2Material;
   G4Material* brassTube3Material;
   G4Material* finalCollimatorMaterial;
+
+  
+  HadrontherapyDetectorROGeometry* RO;
+
+
 };
 #endif

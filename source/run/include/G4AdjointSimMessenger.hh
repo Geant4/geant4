@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointSimMessenger.hh 76245 2013-11-08 11:14:32Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:		G4AdjointSimMessenger.hh
@@ -117,6 +117,11 @@ class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
+/*
+#ifdef G4MULTITHREADED
+class G4MTAdjointSimManager;
+#endif
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -124,18 +129,26 @@ class G4AdjointSimMessenger: public G4UImessenger
 {
   public:
     G4AdjointSimMessenger(G4AdjointSimManager* );
+/*
+#ifdef G4MULTITHREADED
+    G4AdjointSimMessenger(G4MTAdjointSimManager* );
+#endif
+*/
+
    ~G4AdjointSimMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
     G4AdjointSimManager* theAdjointRunManager;
+/*
+#ifdef G4MULTITHREADED
+    G4MTAdjointSimManager* theMTAdjointRunManager;
+#endif
+*/
     
     G4UIdirectory*             AdjointSimDir;
-    G4UIdirectory*             PhysicsDir;
-    
     G4UIcommand *               beamOnCmd;
-    G4UIcommand *               testSourceCmd;   
     
     G4UIcommand *  DefineSpherExtSourceCmd;
     G4UIcommand *  DefineSpherExtSourceCenteredOnAVolumeCmd;

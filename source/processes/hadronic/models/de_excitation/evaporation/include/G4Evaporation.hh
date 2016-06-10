@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Evaporation.hh 69700 2013-05-13 08:56:05Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -35,6 +35,7 @@
 //                           of small objects
 // 22/04/2011 V.Ivanchenko - added maxZ and maxA for FermiBreakUp model
 // 23/01/2012 V.Ivanchenko added pointer of G4VPhotonEvaporation to the constructor
+// 06/05/2013 V.Ivanchenko added pointer to ion table
 
 #ifndef G4Evaporation_h
 #define G4Evaporation_h 1
@@ -49,6 +50,7 @@
 
 class G4VEvaporationFactory;
 class G4NistManager;
+class G4IonTable;
 
 class G4Evaporation : public G4VEvaporation
 {
@@ -56,7 +58,6 @@ public:
 
   G4Evaporation();
   G4Evaporation(G4VEvaporationChannel* photoEvaporation);
-  //G4Evaporation(std::vector<G4VEvaporationChannel*>* aChannelsVector);
 	 
   virtual ~G4Evaporation();
 
@@ -92,6 +93,7 @@ private:
   G4int    maxAforFBU;
   G4double minExcitation;
   G4NistManager* nist;
+  G4IonTable*    theTableOfIons;
   G4UnstableFragmentBreakUp unstableBreakUp;
     
 };

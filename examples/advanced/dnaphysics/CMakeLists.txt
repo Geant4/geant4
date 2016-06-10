@@ -40,7 +40,7 @@ target_link_libraries(dnaphysics ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(dnaphysics_SCRIPTS
-    dna.mac vis.mac
+    dna.mac vis.mac plot.C
   )
 
 foreach(_script ${dnaphysics_SCRIPTS})

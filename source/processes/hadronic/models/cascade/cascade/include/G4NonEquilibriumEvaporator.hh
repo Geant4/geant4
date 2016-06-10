@@ -23,34 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NonEquilibriumEvaporator.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100914  M. Kelsey -- Migrate to integer A and Z
+// 20130620  Address Coverity complaint about missing copy actions
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
+// 20130808  Use new object-version of paraMaker, for thread safety
+// 20130924  Add local pointer to G4Pow for convenience
 
 #ifndef G4NON_EQUILIBRIUM_EVAPORATOR_HH
 #define G4NON_EQUILIBRIUM_EVAPORATOR_HH
 
-#include "G4CascadeColliderBase.hh"
+#include "G4CascadeDeexciteBase.hh"
+#include "G4InuclSpecialFunctions.hh"
 
-class G4CollisionOutput;
-class G4InuclParticle;
+class G4Pow;
 
-class G4NonEquilibriumEvaporator : public G4CascadeColliderBase {
+class G4NonEquilibriumEvaporator : public G4CascadeDeexciteBase {
 public:
   G4NonEquilibriumEvaporator();
   virtual ~G4NonEquilibriumEvaporator() {}
 
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       G4CollisionOutput& output);
+  virtual void deExcite(const G4Fragment& target, G4CollisionOutput& output);
 
-private: 
+private:
+  G4InuclSpecialFunctions::paraMaker theParaMaker;
+  G4Pow* theG4Pow;			// Convenient reference to singleton
+
   G4double getMatrixElement(G4int A) const;
   G4double getE0(G4int A) const; 
   G4double getParLev(G4int A, G4int Z) const;
+
+private:
+  // Copying of modules is forbidden
+  G4NonEquilibriumEvaporator(const G4NonEquilibriumEvaporator&);
+  G4NonEquilibriumEvaporator& operator=(const G4NonEquilibriumEvaporator&);
 };
 
 #endif /* G4NON_EQUILIBRIUM_EVAPORATOR_HH */

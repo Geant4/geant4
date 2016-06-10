@@ -32,7 +32,7 @@ ApplyInteraction(G4HadProjectile& thePro,
                  const G4String& theProcessName,
                  const G4String& theModelName)
 {
-  static G4HadronicWhiteBoard & theBoard = G4HadronicWhiteBoard::Instance();
+  static G4ThreadLocal G4HadronicWhiteBoard  *theBoard_G4MT_TLS_ = 0 ; if (!theBoard_G4MT_TLS_) theBoard_G4MT_TLS_ = & G4HadronicWhiteBoard::Instance();G4HadronicWhiteBoard &theBoard = *theBoard_G4MT_TLS_;
   theBoard.SetProjectile(thePro);
   theBoard.SetTargetNucleus(targetNucleus);
   theBoard.SetProcessName(theProcessName);

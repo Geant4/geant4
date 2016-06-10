@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeXiZeroPChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100507  M. Kelsey -- Remove redundant total-bins template argument
 // 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler
@@ -40,7 +40,7 @@
 
 struct G4CascadeXiZeroPChannelData {
   typedef G4CascadeData<31,3,18,53,2,2,2> data_t;
-  static data_t data;
+  static const data_t data;
 };
 
 typedef G4CascadeFunctions<G4CascadeXiZeroPChannelData,G4KaonHypSampler> G4CascadeXiZeroPChannel;

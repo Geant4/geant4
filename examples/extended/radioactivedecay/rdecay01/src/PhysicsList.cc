@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id$
+// $Id: PhysicsList.cc 73284 2013-08-23 08:35:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -97,7 +97,10 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
-  radioactiveDecay->SetHLThreshold(-1.*s);
+  //Caution! With G4MT migration this threshold can no longer be set smaller
+  //than nanosecond
+  radioactiveDecay->SetHLThreshold(nanosecond);
+
   radioactiveDecay->SetICM(true);                //Internal Conversion
   radioactiveDecay->SetARM(false);               //Atomic Rearangement
   

@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -52,7 +50,7 @@ namespace G4INCL {
     iseed2 = 777;
   }
 
-  Ranecu::Ranecu(const SeedVector &sv) {
+  Ranecu::Ranecu(const Random::SeedVector &sv) {
     setSeeds(sv);
   }
 

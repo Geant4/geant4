@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4dEventAction.cc 75604 2013-11-04 13:17:26Z gcosmo $
 //
 /// \file B4dEventAction.cc
 /// \brief Implementation of the B4dEventAction class
@@ -35,7 +35,6 @@
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4GenericMessenger.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
@@ -45,46 +44,38 @@
 
 B4dEventAction::B4dEventAction()
  : G4UserEventAction(),
-   fMessenger(0),
-   fPrintModulo(1)
-{
-  // Define /B4/event commands using generic messenger class
-  fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
-
-  // Define /B4/event/setPrintModulo command
-  G4GenericMessenger::Command& setPrintModulo 
-    = fMessenger->DeclareProperty("setPrintModulo", 
-                                  fPrintModulo, 
-                                 "Print events modulo n");
-  setPrintModulo.SetRange("value>0");                                
-}
+   fAbsoEdepHCID(-1),
+   fGapEdepHCID(-1),
+   fAbsoTrackLengthHCID(-1),
+   fGapTrackLengthHCID(-1)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4dEventAction::~B4dEventAction()
-{
-  delete fMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4THitsMap<G4double>* 
-B4dEventAction::GetHitsCollection(const G4String& hcName,
+B4dEventAction::GetHitsCollection(G4int hcID,
                                   const G4Event* event) const
 {
-  G4int hcID 
-    = G4SDManager::GetSDMpointer()->GetCollectionID(hcName);
   G4THitsMap<G4double>* hitsCollection 
     = static_cast<G4THitsMap<G4double>*>(
         event->GetHCofThisEvent()->GetHC(hcID));
   
   if ( ! hitsCollection ) {
-    G4cerr << "Cannot access hitsCollection " << hcName << G4endl;
-    exit(1);
+    G4ExceptionDescription msg;
+    msg << "Cannot access hitsCollection ID " << hcID; 
+    G4Exception("B4dEventAction::GetHitsCollection()",
+      "MyCode0003", FatalException, msg);
   }         
 
   return hitsCollection;
 }    
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double B4dEventAction::GetSum(G4THitsMap<G4double>* hitsMap) const
 {
@@ -119,33 +110,34 @@ void B4dEventAction::PrintEventStatistics(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4dEventAction::BeginOfEventAction(const G4Event* event)
-{  
-
-  G4int eventID = event->GetEventID();
-  if ( eventID % fPrintModulo == 0 )  { 
-    G4cout << "\n---> Begin of event: " << eventID << G4endl;
-    //CLHEP::HepRandom::showEngineStatus();
-  }
-}
+void B4dEventAction::BeginOfEventAction(const G4Event* /*event*/)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4dEventAction::EndOfEventAction(const G4Event* event)
 {  
-  // Get sum value from hits collections
+   // Get hist collections IDs
+  if ( fAbsoEdepHCID == -1 ) {
+    fAbsoEdepHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("Absorber/Edep");
+    fGapEdepHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("Gap/Edep");
+    fAbsoTrackLengthHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("Absorber/TrackLength");
+    fGapTrackLengthHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("Gap/TrackLength");
+  }
+  
+  // Get sum values from hits collections
   //
-  G4double absoEdep 
-    = GetSum(GetHitsCollection("Absorber/Edep", event));
-
-  G4double gapEdep 
-    = GetSum(GetHitsCollection("Gap/Edep", event));
+  G4double absoEdep = GetSum(GetHitsCollection(fAbsoEdepHCID, event));
+  G4double gapEdep = GetSum(GetHitsCollection(fGapEdepHCID, event));
 
   G4double absoTrackLength 
-    = GetSum(GetHitsCollection("Absorber/TrackLength", event));
-
+    = GetSum(GetHitsCollection(fAbsoTrackLengthHCID, event));
   G4double gapTrackLength 
-    = GetSum(GetHitsCollection("Gap/TrackLength", event));
+    = GetSum(GetHitsCollection(fGapTrackLengthHCID, event));
 
   // get analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -168,9 +160,9 @@ void B4dEventAction::EndOfEventAction(const G4Event* event)
   //print per event (modulo n)
   //
   G4int eventID = event->GetEventID();
-  if ( eventID % fPrintModulo == 0) {
+  G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
-
     PrintEventStatistics(absoEdep, absoTrackLength, gapEdep, gapTrackLength);
   }
 }  

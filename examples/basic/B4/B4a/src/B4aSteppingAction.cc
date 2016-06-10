@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4aSteppingAction.cc 68058 2013-03-13 14:47:43Z gcosmo $
 // 
 /// \file B4aSteppingAction.cc
 /// \brief Implementation of the B4aSteppingAction class

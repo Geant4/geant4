@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2010-11-19 08:44:20 gcosmo Exp $
+# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
 # ------------------------------------------------------------------
 # GNUmakefile for electromagnetic library.  Gabriele Cosmo, 18/9/96.
 # ------------------------------------------------------------------

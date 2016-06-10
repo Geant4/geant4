@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NucleiProperties.cc 69015 2013-04-15 09:46:48Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -43,12 +43,12 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-G4double G4NucleiProperties::mass_proton = -1.;
-G4double G4NucleiProperties::mass_neutron = -1.;
-G4double G4NucleiProperties::mass_deuteron = -1.;
-G4double G4NucleiProperties::mass_triton = -1.;
-G4double G4NucleiProperties::mass_alpha = -1.;
-G4double G4NucleiProperties::mass_He3 = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_proton = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_neutron = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_deuteron = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_triton = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_alpha = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_He3 = -1.;
 
 G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 {
@@ -90,7 +90,7 @@ G4double G4NucleiProperties::GetNuclearMass(const G4int A, const G4int Z)
   if (A < 1 || Z < 0 || Z > A) {
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
-      G4cerr << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << A 
+      G4cout << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << A 
 	     << " and Z = " << Z << G4endl;
     }
 #endif    
@@ -143,7 +143,7 @@ G4bool G4NucleiProperties::IsInStableTable(const G4int A, const int Z)
   if (A < 1 || Z < 0 || Z > A) {
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
-      G4cerr << "G4NucleiProperties::IsInStableTable: Wrong values for A = " 
+      G4cout << "G4NucleiProperties::IsInStableTable: Wrong values for A = " 
 	     << A << " and Z = " << Z << G4endl;	
     }
 #endif 
@@ -166,7 +166,7 @@ G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
   if (A < 1 || Z < 0 || Z > A) {
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
-      G4cerr << "G4NucleiProperties::GetMassExccess: Wrong values for A = " 
+      G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " 
 	     << A << " and Z = " << Z << G4endl;
     }
 #endif    
@@ -191,7 +191,7 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
   if (A < 1 || Z < 0 || Z > A) {
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
-      G4cerr << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " 
+      G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " 
 	     << A << " and Z = " << Z << G4endl;	
     }
 #endif 
@@ -225,7 +225,7 @@ G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
   if (A < 1 || Z < 0 || Z > A) {
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
-      G4cerr << "G4NucleiProperties::GetMassExccess: Wrong values for A = " 
+      G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " 
 	     << A << " and Z = " << Z << G4endl;
     }
 #endif
@@ -265,7 +265,7 @@ G4double  G4NucleiProperties::NuclearMass(G4double A, G4double Z)
   if (A < 1 || Z < 0 || Z > A) {
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
-      G4cerr << "G4NucleiProperties::NuclearMass: Wrong values for A = " 
+      G4cout << "G4NucleiProperties::NuclearMass: Wrong values for A = " 
 	     << A << " and Z = " << Z << G4endl;
     }
 #endif 

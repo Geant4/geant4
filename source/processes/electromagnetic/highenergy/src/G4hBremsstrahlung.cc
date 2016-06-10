@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4hBremsstrahlung.cc 72943 2013-08-14 13:40:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -46,25 +46,15 @@
 
 #include "G4hBremsstrahlung.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Gamma.hh"
 #include "G4hBremsstrahlungModel.hh"
-#include "G4UniversalFluctuation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
 G4hBremsstrahlung::G4hBremsstrahlung(const G4String& name)
-  : G4VEnergyLossProcess(name),
-    theParticle(0),
-    theBaseParticle(0),
-    lowestKinEnergy(1.*GeV),
-    isInitialised(false)
-{
-  SetProcessSubType(fBremsstrahlung);
-  SetSecondaryParticle(G4Gamma::Gamma());
-  SetIonisation(false);
-}
+  : G4MuBremsstrahlung(name)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -80,25 +70,13 @@ G4bool G4hBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
-					     const G4Material*,
-					     G4double)
-{
-  return lowestKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4hBremsstrahlung::InitialiseEnergyLossProcess(
-				 const G4ParticleDefinition* part,
+				 const G4ParticleDefinition*,
 				 const G4ParticleDefinition*)
 {
   if(!isInitialised) {
 
     isInitialised = true;
-
-    theParticle = part;
-
     if (!EmModel()) { SetEmModel(new G4hBremsstrahlungModel()); }
 
     G4VEmFluctuationModel* fm = 0;
@@ -107,11 +85,6 @@ void G4hBremsstrahlung::InitialiseEnergyLossProcess(
     AddEmModel(1, EmModel(), fm);
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hBremsstrahlung::PrintInfo()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

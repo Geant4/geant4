@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleGunMessenger.hh 72940 2013-08-14 13:29:44Z gcosmo $
 //
 // 
 
@@ -63,6 +63,7 @@ class G4ParticleGunMessenger: public G4UImessenger
 
   private:
     void IonCommand(G4String newValues);
+    void IonLevelCommand(G4String newValues);
 
   private:
     G4ParticleGun * fParticleGun;
@@ -82,6 +83,7 @@ class G4ParticleGunMessenger: public G4UImessenger
     G4UIcmdWithAnInteger *      numberCmd;
     
     G4UIcommand *               ionCmd;
+    G4UIcommand* ionLvlCmd;
 
   private: // for ion shooting
     G4bool   fShootIon; 
@@ -89,6 +91,7 @@ class G4ParticleGunMessenger: public G4UImessenger
     G4int    fAtomicMass;
     G4int    fIonCharge;
     G4double fIonExciteEnergy;
+    G4int    fIonEnergyLevel;
 };
 
 #endif

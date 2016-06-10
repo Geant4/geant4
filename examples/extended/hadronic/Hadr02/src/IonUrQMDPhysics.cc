@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr02/src/IonUrQMDPhysics.cc
 /// \brief Implementation of the IonUrQMDPhysics class
 //
-// $Id$
-// GEANT4 tag $Name: $
+// $Id: IonUrQMDPhysics.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -59,6 +58,8 @@
 #include "G4UrQMD1_3Model.hh"
 
 #include "G4BuilderType.hh"
+#include "G4SystemOfUnits.hh"
+
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

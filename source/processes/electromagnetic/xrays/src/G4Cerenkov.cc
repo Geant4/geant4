@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Cerenkov.cc 71478 2013-06-17 07:49:29Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -103,8 +103,6 @@ G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
 	if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;
 	}
-
-	BuildThePhysicsTable();
 }
 
 // G4Cerenkov::G4Cerenkov(const G4Cerenkov &right)
@@ -126,6 +124,22 @@ G4Cerenkov::~G4Cerenkov()
         ////////////
         // Methods
         ////////////
+
+G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
+{
+    G4bool result = false;
+    if (aParticleType.GetPDGCharge() != 0.0 && 
+	aParticleType.GetPDGMass() != 0.0 &&
+	aParticleType.GetParticleName() != "chargedgeantino" &&
+	!aParticleType.IsShortLived() ) { result = true; }
+
+    return result;
+}
+
+void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+    if (!thePhysicsTable) BuildThePhysicsTable();
+}
 
 // PostStepDoIt
 // -------------
@@ -368,8 +382,7 @@ void G4Cerenkov::BuildThePhysicsTable()
 
 	for (G4int i=0 ; i < numOfMaterials; i++)
 	{
-		G4PhysicsOrderedFreeVector* aPhysicsOrderedFreeVector =
-					new G4PhysicsOrderedFreeVector();
+	        G4PhysicsOrderedFreeVector* aPhysicsOrderedFreeVector = 0;
 
 		// Retrieve vector of refraction indices for the material
 		// from the material's optical properties table 
@@ -381,6 +394,7 @@ void G4Cerenkov::BuildThePhysicsTable()
 
 		if (aMaterialPropertiesTable) {
 
+		   aPhysicsOrderedFreeVector = new G4PhysicsOrderedFreeVector();
 		   G4MaterialPropertyVector* theRefractionIndexVector = 
 		    	   aMaterialPropertiesTable->GetProperty("RINDEX");
 
@@ -466,8 +480,14 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
         *condition = NotForced;
         G4double StepLimit = DBL_MAX;
 
-        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4Material* aMaterial = aTrack.GetMaterial();
+	G4int materialIndex = aMaterial->GetIndex();
+
+	// If Physics Vector is not defined no Cerenkov photons
+	//    this check avoid string comparison below
+	if(!(*thePhysicsTable)[materialIndex]) { return StepLimit; }
+
+        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
 
         G4double kineticEnergy = aParticle->GetKineticEnergy();

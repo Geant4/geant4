@@ -158,11 +158,11 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
                  G4cout << "G4PionRadiativeDecayChannel::DecayIt ";
 #endif
 
-  if (parent == 0) FillParent();  
-  if (daughters == 0) FillDaughters();
+  if (G4MT_parent == 0) FillParent();  
+  if (G4MT_daughters == 0) FillDaughters();
 
   // parent mass
-  G4double parentmass = parent->GetPDGMass();
+  G4double parentmass = G4MT_parent->GetPDGMass();
 
   G4double EMPI = parentmass;
 
@@ -170,7 +170,7 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   G4double daughtermass[3]; 
   G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<3; index++){
-    daughtermass[index] = daughters[index]->GetPDGMass();
+    daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
 
@@ -179,7 +179,7 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = 
-                               new G4DynamicParticle( parent, dummy, 0.0);
+                               new G4DynamicParticle( G4MT_parent, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
@@ -238,7 +238,7 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   G4ThreeVector direction0(px,py,pz);
 
   G4DynamicParticle * daughterparticle0 
-    = new G4DynamicParticle( daughters[0], daughtermomentum[0]*direction0);
+    = new G4DynamicParticle( G4MT_daughters[0], daughtermomentum[0]*direction0);
 
   products->PushProducts(daughterparticle0);
 
@@ -261,7 +261,7 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   direction1.rotateUz(direction0);
 
   G4DynamicParticle * daughterparticle1
-    = new G4DynamicParticle( daughters[1], daughtermomentum[1]*direction1);
+    = new G4DynamicParticle( G4MT_daughters[1], daughtermomentum[1]*direction1);
 
   products->PushProducts(daughterparticle1);
 

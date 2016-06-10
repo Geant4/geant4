@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HeatedKleinNishinaCompton.cc 69548 2013-05-08 10:03:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -46,7 +46,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include <CLHEP/Random/RandGamma.h>
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -155,7 +154,7 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
   // Then we try to boost to the electron rest frame and make scattering.
   // The final step is to recover new gamma 4momentum in the lab frame
 
-  G4double eMomentumC2   = CLHEP::RandGamma::shoot(1.5,1.);
+  G4double eMomentumC2   = G4RandGamma::shoot(1.5,1.);
   eMomentumC2          *= 2*electron_mass_c2*fTemperature; // electron (pc)^2
   G4ThreeVector eMomDir = G4RandomDirection();
   eMomDir              *= std::sqrt(eMomentumC2);

@@ -144,13 +144,13 @@
   The histograms are managed by the HistoManager class and its Messenger. 
   The histos can be individually activated with the command :
 \verbatim
-/testem/histo/setHisto id nbBins  valMin valMax unit 
+/analysis/h1/set id nbBins  valMin valMax unit 
 \endverbatim
   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
    One can control the name of the histograms file with the command:
 \verbatim
-/testem/histo/setFileName  name  (default fanoCavity)
+/analysis/setFileName  name  (default fanoCavity)
 \endverbatim
    
    It is possible to choose the format of the histogram file :
@@ -158,7 +158,7 @@
    
    It is also possible to print selected histograms on an ascii file:
 \verbatim
-/testem/histo/printHisto id
+/analysis/h1/setAscii id
 \endverbatim
    All selected histos will be written on a file name.ascii (default fanocavity)
  	

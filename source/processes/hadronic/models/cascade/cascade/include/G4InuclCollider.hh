@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InuclCollider.hh 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
@@ -40,6 +40,7 @@
 //		pre-existing secondaries as input.  Add setVerboseLevel().
 // 20110304  M. Kelsey -- Modify rescatter to use original Propagate() input
 // 20110308  M. Kelsey -- Add ::deexcite() function to handle nuclear fragment
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4INUCL_COLLIDER_HH
 #define G4INUCL_COLLIDER_HH
@@ -85,6 +86,11 @@ private:
 
   G4CollisionOutput output;		// Secondaries from main cascade
   G4CollisionOutput DEXoutput;		// Secondaries from de-excitation
+
+private:
+  // Copying of modules is forbidden
+  G4InuclCollider(const G4InuclCollider&);
+  G4InuclCollider& operator=(const G4InuclCollider&);
 };        
 
 #endif /* G4INUCL_COLLIDER_HH */

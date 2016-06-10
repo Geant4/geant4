@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularReactionTable.cc 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4DNAMolecularReactionTable.cc 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -48,6 +48,7 @@
 using namespace std;
 
 G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::fInstance(0);
+//G4ThreadLocal G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::fInstance(0);
 
 G4DNAMolecularReactionData::G4DNAMolecularReactionData():
     fReactive1(),fReactive2(),
@@ -284,7 +285,7 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
     G4cout<<"Number of possible reactions: "<< n << G4endl;
 
     ////////////////////////////////////////////////////////////////////
-    // Tableau dynamique en fonction du nombre de caractère maximal dans
+    // Tableau dynamique en fonction du nombre de caractere maximal dans
     // chaque colonne
     ////////////////////////////////////////////////////////////////////
 

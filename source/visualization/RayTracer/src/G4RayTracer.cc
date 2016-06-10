@@ -24,13 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RayTracer.cc 74050 2013-09-20 09:38:19Z gcosmo $
 
 #include "G4RayTracer.hh"
 #include "G4RayTracerFeatures.hh"
 #include "G4RayTracerSceneHandler.hh"
 #include "G4RayTracerViewer.hh"
+#ifdef G4MULTITHREADED
+#include "G4TheMTRayTracer.hh"
+#else
 #include "G4TheRayTracer.hh"
+#endif
 
 G4RayTracer::G4RayTracer():
   G4VGraphicsSystem("RayTracer",
@@ -38,7 +42,11 @@ G4RayTracer::G4RayTracer():
 		     RAYTRACER_FEATURES,
 		     G4VGraphicsSystem::threeD)
 {
+#ifdef G4MULTITHREADED
+  theRayTracer = new G4TheMTRayTracer;  // Establish default ray tracer.
+#else
   theRayTracer = new G4TheRayTracer;  // Establish default ray tracer.
+#endif
 }
 
 G4RayTracer::~G4RayTracer()

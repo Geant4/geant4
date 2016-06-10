@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpticalSurface.hh 70822 2013-06-06 08:25:05Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -49,6 +49,7 @@
 /////////////
 
 #include "G4Types.hh"
+#include "G4Physics2DVector.hh"
 #include "G4SurfaceProperty.hh"
 
 // Class Description:
@@ -99,7 +100,8 @@ enum G4OpticalSurfaceModel
 {
    glisur,                      // original GEANT3 model
    unified,                     // UNIFIED model
-   LUT                          // Look-Up-Table model
+   LUT,                         // Look-Up-Table model
+   dichroic                     // dichroic filter
 };
 
 class G4MaterialPropertiesTable;
@@ -183,13 +185,18 @@ public: // With description
 	void DumpInfo() const;
         // Prints information about the optical surface.
 
-        void ReadFile(void);
+        void ReadLUTFile(void);
         // Method to read the Look-Up-Table into array AngularDistribution
 
         inline G4double GetAngularDistributionValue(G4int, G4int, G4int);
 
         inline G4int GetThetaIndexMax(void) const { return thetaIndexMax; }
-        inline G4int GetPhiIndexMax(void) const { return phiIndexMax; } 
+        inline G4int GetPhiIndexMax(void) const { return phiIndexMax; }
+
+        void ReadDichroicFile(void);
+        // Method to read the dichroic surface data file into Dichroic
+
+        inline G4Physics2DVector* GetDichroicVector();
 
 private:
 
@@ -212,7 +219,9 @@ private:
         G4float* AngularDistribution;
 
         // Open LUT with Material and Integer Angle
-        FILE* readFileHandle;
+        FILE* readLUTFileHandle;
+
+        G4Physics2DVector* DichroicVector;
 
 };
 
@@ -228,6 +237,12 @@ inline
   return AngularDistribution[angleIncident+
                              thetaIndex*incidentIndexMax+
                              phiIndex*thetaIndexMax*incidentIndexMax];
+}
+
+inline
+ G4Physics2DVector* G4OpticalSurface::GetDichroicVector()
+{
+  return DichroicVector;
 }
 
 #endif /* G4OpticalSurface_h */

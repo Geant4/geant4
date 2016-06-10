@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01TrackerHit.cc
 /// \brief Implementation of the RE01TrackerHit class
 //
-// $Id$
+// $Id: RE01TrackerHit.cc 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #include "RE01TrackerHit.hh"
@@ -42,7 +42,7 @@
 #include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"    
 
-G4Allocator<RE01TrackerHit> RE01TrackerHitAllocator;
+G4ThreadLocal G4Allocator<RE01TrackerHit> * RE01TrackerHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackerHit::RE01TrackerHit()

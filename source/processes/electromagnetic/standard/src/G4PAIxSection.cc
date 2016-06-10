@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PAIxSection.cc 76879 2013-11-18 12:44:54Z gcosmo $
 // GEANT4 tag $Name: geant4-09-03-ref-06 $
 //
 // 
@@ -84,8 +84,41 @@ fRefGammaNumber = 29;         // The number of gamma for creation of
 const G4double G4PAIxSection::fDelta = 0.005; // 0.005 energy shift from interval border
 const G4double G4PAIxSection::fError = 0.005; // 0.005 error in lin-log approximation
 
-const G4int G4PAIxSection::fMaxSplineSize = 500;  // Max size of output spline
+const G4int G4PAIxSection::fMaxSplineSize = 1000;  // Max size of output spline
                                                     // arrays
+//////////////////////////////////////////////////////////////////
+//
+// Constructor
+//
+
+G4PAIxSection::G4PAIxSection()
+{
+  fSandia = 0;
+  fDensity = fElectronDensity = fNormalizationCof = fLowEnergyCof = 0.0;
+  fIntervalNumber = fSplineNumber = 0;
+  fVerbose = 0;
+    
+  fSplineEnergy          = G4DataVector(fMaxSplineSize,0.0);
+  fRePartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
+  fImPartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralTerm          = G4DataVector(fMaxSplineSize,0.0);
+  fDifPAIxSection        = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxCerenkov          = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxPlasmon           = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxMM                = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxResonance         = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPAIxSection   = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPAIdEdx       = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralCerenkov      = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPlasmon       = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralMM            = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralResonance     = G4DataVector(fMaxSplineSize,0.0);
+
+  for( G4int i = 0; i < 500; ++i ) 
+  {
+    for( G4int j = 0; j < 112; ++j )  fPAItable[i][j] = 0.0; 
+  }
+}
 
 //////////////////////////////////////////////////////////////////
 //
@@ -98,6 +131,7 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
   G4int matIndex = matCC->GetMaterial()->GetIndex();
   fMaterialIndex = matIndex;   
   fSandia        = new G4SandiaTable(matIndex);
+  fVerbose = 0;
 
   G4int i, j; 
   fMatSandiaMatrix = new G4OrderedTable();
@@ -114,8 +148,9 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
     {
       (*(*fMatSandiaMatrix)[i])[j] = fSandia->GetSandiaMatTable(i,j)*fDensity;
     }     
-  }	         	
-  fEnergyInterval = fA1 = fA2 = fA3 = fA4 = 0;
+  }
+  ComputeLowEnergyCof();      	         	
+  //  fEnergyInterval = fA1 = fA2 = fA3 = fA4 = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -125,6 +160,7 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
 {
    fSandia = 0;
    fMatSandiaMatrix = 0;
+  fVerbose = 0;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    G4int i, j;   
 
@@ -137,11 +173,11 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
       fIntervalNumber--;      
       // G4cout<<fDensity<<"\t"<<fElectronDensity<<"\t"<<fIntervalNumber<<G4endl;
 
-      fEnergyInterval = new G4double[fIntervalNumber+2];
-      fA1             = new G4double[fIntervalNumber+2];
-      fA2             = new G4double[fIntervalNumber+2];
-      fA3             = new G4double[fIntervalNumber+2];
-      fA4             = new G4double[fIntervalNumber+2];
+  fEnergyInterval = G4DataVector(fIntervalNumber+2,0.0);
+  fA1             = G4DataVector(fIntervalNumber+2,0.0);
+  fA2             = G4DataVector(fIntervalNumber+2,0.0);
+  fA3             = G4DataVector(fIntervalNumber+2,0.0);
+  fA4             = G4DataVector(fIntervalNumber+2,0.0);
 
       for(i = 1; i <= fIntervalNumber; i++ )
       {
@@ -216,19 +252,20 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
          fIntegralPAIxSection[i]   = 0.0;   
       }
       **************************************************  */   
-
+      ComputeLowEnergyCof();      
       InitPAI();  // create arrays allocated above
-      
+      /*     
       delete[] fEnergyInterval;
       delete[] fA1;
       delete[] fA2;
       delete[] fA3;
-      delete[] fA4;    
+      delete[] fA4; 
+      */   
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Constructor with beta*gamma square value
+// Constructor called from G4PAIPhotonModel !!!
 
 G4PAIxSection::G4PAIxSection( G4int materialIndex,
 			      G4double maxEnergyTransfer,
@@ -236,6 +273,32 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
                               G4double** photoAbsCof, 
                               G4int intNumber                   )
 {
+  fSandia = 0;
+  fDensity = fElectronDensity = fNormalizationCof = fLowEnergyCof = 0.0;
+  fIntervalNumber = fSplineNumber = 0;
+  fVerbose = 0;
+    
+  fSplineEnergy          = G4DataVector(500,0.0);
+  fRePartDielectricConst = G4DataVector(500,0.0);
+  fImPartDielectricConst = G4DataVector(500,0.0);
+  fIntegralTerm          = G4DataVector(500,0.0);
+  fDifPAIxSection        = G4DataVector(500,0.0);
+  fdNdxCerenkov          = G4DataVector(500,0.0);
+  fdNdxPlasmon           = G4DataVector(500,0.0);
+  fdNdxMM                = G4DataVector(500,0.0);
+  fdNdxResonance         = G4DataVector(500,0.0);
+  fIntegralPAIxSection   = G4DataVector(500,0.0);
+  fIntegralPAIdEdx       = G4DataVector(500,0.0);
+  fIntegralCerenkov      = G4DataVector(500,0.0);
+  fIntegralPlasmon       = G4DataVector(500,0.0);
+  fIntegralMM            = G4DataVector(500,0.0);
+  fIntegralResonance     = G4DataVector(500,0.0);
+
+  for( G4int i = 0; i < 500; ++i ) 
+  {
+    for( G4int j = 0; j < 112; ++j )  fPAItable[i][j] = 0.0; 
+  }
+
    fSandia = 0;
    fMatSandiaMatrix = 0;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
@@ -250,12 +313,20 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       fIntervalNumber--;
       //   G4cout<<fDensity<<"\t"<<fElectronDensity<<"\t"<<fIntervalNumber<<G4endl;
   
+  fEnergyInterval = G4DataVector(fIntervalNumber+2,0.0);
+  fA1             = G4DataVector(fIntervalNumber+2,0.0);
+  fA2             = G4DataVector(fIntervalNumber+2,0.0);
+  fA3             = G4DataVector(fIntervalNumber+2,0.0);
+  fA4             = G4DataVector(fIntervalNumber+2,0.0);
+
+
+  /*
       fEnergyInterval = new G4double[fIntervalNumber+2];
       fA1             = new G4double[fIntervalNumber+2];
       fA2             = new G4double[fIntervalNumber+2];
       fA3             = new G4double[fIntervalNumber+2];
       fA4             = new G4double[fIntervalNumber+2];
-
+  */
       for( i = 1; i <= fIntervalNumber; i++ )
       {
          if( ( photoAbsCof[i-1][0] >= maxEnergyTransfer ) ||
@@ -270,19 +341,22 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          fA2[i]             = photoAbsCof[i-1][2];
          fA3[i]             = photoAbsCof[i-1][3];
          fA4[i]             = photoAbsCof[i-1][4];
-	 // G4cout<<i<<"\t"<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	 //        <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+	 // G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+	 //      <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
       }
-  // G4cout<<"i last = "<<i<<"; "<<"fIntervalNumber = "<<fIntervalNumber<<G4endl;   
+      // G4cout<<"i last = "<<i<<"; "<<"fIntervalNumber = "<<fIntervalNumber<<G4endl; 
+  
       if(fEnergyInterval[fIntervalNumber] != maxEnergyTransfer)
       {
          fIntervalNumber++;
          fEnergyInterval[fIntervalNumber] = maxEnergyTransfer;
       }
-      for(i=1;i<=fIntervalNumber;i++)
+      // G4cout<<"after check of max energy transfer"<<G4endl;
+
+      for( i = 1; i <= fIntervalNumber; i++ )
       {
-	//  G4cout<<i<<"\t"<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	//    <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+	// G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+	//   <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
       }
       // Now checking, if two borders are too close together
 
@@ -307,9 +381,17 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
           i--;
 	}
       }
+      // G4cout<<"after check of close borders"<<G4endl;
+
+      for( i = 1; i <= fIntervalNumber; i++ )
+      {
+	// G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+	//  <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+      }
 
       // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
-      
+
+      ComputeLowEnergyCof();            
       G4double   betaGammaSqRef = 
       fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
 
@@ -334,12 +416,13 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       IntegralPlasmon();
       IntegralResonance();
       IntegralPAIxSection();
-      
+      /*      
       delete[] fEnergyInterval;
       delete[] fA1;
       delete[] fA2;
       delete[] fA3;
-      delete[] fA4;    
+      delete[] fA4;
+      */    
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -352,6 +435,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 {
    fSandia = 0;
    fMatSandiaMatrix = 0;
+  fVerbose = 0;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
    G4int i, j, numberOfElements;   
@@ -381,12 +465,19 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 
    fIntervalNumber--;
 
+  fEnergyInterval = G4DataVector(fIntervalNumber+2,0.0);
+  fA1             = G4DataVector(fIntervalNumber+2,0.0);
+  fA2             = G4DataVector(fIntervalNumber+2,0.0);
+  fA3             = G4DataVector(fIntervalNumber+2,0.0);
+  fA4             = G4DataVector(fIntervalNumber+2,0.0);
+
+  /*
       fEnergyInterval = new G4double[fIntervalNumber+2];
       fA1             = new G4double[fIntervalNumber+2];
       fA2             = new G4double[fIntervalNumber+2];
       fA3             = new G4double[fIntervalNumber+2];
       fA4             = new G4double[fIntervalNumber+2];
-
+  */
       for( i = 1; i <= fIntervalNumber; i++ )
       {
   if((thisMaterialSandiaTable.GetPhotoAbsorpCof(i,0) >= maxEnergyTransfer) ||
@@ -461,7 +552,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       */ ////////////////////////
 
       // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
-      
+
+      ComputeLowEnergyCof();      
       G4double   betaGammaSqRef = 
       fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
 
@@ -484,12 +576,6 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       IntegralPlasmon();
       IntegralResonance();
       
-      delete[] fEnergyInterval;
-      delete[] fA1;
-      delete[] fA2;
-      delete[] fA3;
-      delete[] fA4;    
-      delete[] thisMaterialZ;
 }
 
 
@@ -509,6 +595,215 @@ G4PAIxSection::~G4PAIxSection()
    */ ////////////////////////
   delete fSandia;
   delete fMatSandiaMatrix;
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Constructor with beta*gamma square value called from G4PAIPhotModel/Data
+
+void G4PAIxSection::Initialize( const G4Material* material,
+				G4double maxEnergyTransfer,
+				G4double betaGammaSq, 
+				G4SandiaTable* sandia)
+{
+  if(fVerbose > 0)
+  {
+    G4cout<<G4endl;
+    G4cout<<"G4PAIxSection::Initialize(...,G4SandiaTable* sandia)"<<G4endl;
+    G4cout<<G4endl;
+  }
+  G4int i, j;
+
+  fSandia          = sandia;
+  fIntervalNumber  = sandia->GetMaxInterval();
+  fDensity         = material->GetDensity();
+  fElectronDensity = material->GetElectronDensity();
+
+  // fIntervalNumber--;
+
+  if( fVerbose > 0 )
+  {
+    G4cout<<"fDensity = "<<fDensity<<"\t"<<fElectronDensity<<"\t fIntervalNumber = "<<fIntervalNumber<<G4endl;
+  }  
+  fEnergyInterval = G4DataVector(fIntervalNumber+2,0.0);
+  fA1             = G4DataVector(fIntervalNumber+2,0.0);
+  fA2             = G4DataVector(fIntervalNumber+2,0.0);
+  fA3             = G4DataVector(fIntervalNumber+2,0.0);
+  fA4             = G4DataVector(fIntervalNumber+2,0.0);
+
+  for( i = 1; i <= fIntervalNumber; i++ ) 
+  {
+    if ( sandia->GetSandiaMatTablePAI(i-1,0) < 1.*eV && sandia->GetLowerI1() == false) 
+    { 
+      fIntervalNumber--;
+      continue;
+    }
+    if( ( sandia->GetSandiaMatTablePAI(i-1,0) >= maxEnergyTransfer ) || i >= fIntervalNumber ) 
+    {
+      fEnergyInterval[i] = maxEnergyTransfer;
+      fIntervalNumber = i;
+      break;
+    }
+    fEnergyInterval[i] = sandia->GetSandiaMatTablePAI(i-1,0);
+    fA1[i]             = sandia->GetSandiaMatTablePAI(i-1,1);
+    fA2[i]             = sandia->GetSandiaMatTablePAI(i-1,2);
+    fA3[i]             = sandia->GetSandiaMatTablePAI(i-1,3);
+    fA4[i]             = sandia->GetSandiaMatTablePAI(i-1,4);
+
+      if( fVerbose > 0 ) 
+      {
+        G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+             <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+      }
+  }
+  if( fVerbose > 0 ) G4cout<<"last i = "<<i<<"; "<<"fIntervalNumber = "<<fIntervalNumber<<G4endl;   
+
+  if( fEnergyInterval[fIntervalNumber] != maxEnergyTransfer )
+  {
+      fIntervalNumber++;
+      fEnergyInterval[fIntervalNumber] = maxEnergyTransfer;
+  }
+  if( fVerbose > 0 )
+  {  
+    for( i = 1; i <= fIntervalNumber; i++ )
+    {
+      G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+        <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+    }
+  }  
+  if( fVerbose > 0 )    G4cout<<"Now checking, if two borders are too close together"<<G4endl;
+
+  for( i = 1; i < fIntervalNumber; i++ )
+  {
+    if( fEnergyInterval[i+1]-fEnergyInterval[i] >
+	 1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]) && fEnergyInterval[i] > 0.) continue;
+    else
+    {
+      if( fVerbose > 0 )  G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fEnergyInterval[i+1]/keV;
+
+      for( j = i; j < fIntervalNumber; j++ )
+      {
+	      fEnergyInterval[j] = fEnergyInterval[j+1];
+	      fA1[j]             = fA1[j+1];
+	      fA2[j]             = fA2[j+1];
+	      fA3[j]             = fA3[j+1];
+	      fA4[j]             = fA4[j+1];
+      }
+      fIntervalNumber--;
+      i--;
+    }
+  }
+  if( fVerbose > 0 )
+  {
+    for( i = 1; i <= fIntervalNumber; i++ )
+    {
+      G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+        <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+    }
+  }
+  // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
+
+  ComputeLowEnergyCof(material);
+            
+  G4double   betaGammaSqRef = 
+    fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
+
+  NormShift(betaGammaSqRef);             
+  SplainPAI(betaGammaSqRef);
+      
+  // Preparation of integral PAI cross section for input betaGammaSq
+   
+  for( i = 1; i <= fSplineNumber; i++ )
+  {
+     fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
+
+
+     fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+     fdNdxMM[i]   = PAIdNdxMM(i,betaGammaSq);
+     fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
+     fdNdxResonance[i]  = PAIdNdxResonance(i,betaGammaSq);
+  }
+  IntegralPAIxSection();   
+  IntegralCerenkov();
+  IntegralMM();
+  IntegralPlasmon();
+  IntegralResonance();
+   
+  for( i = 1; i <= fSplineNumber; i++ )
+  {
+    if(fVerbose>0) G4cout<<i<<"; w = "<<fSplineEnergy[i]/keV<<" keV; dN/dx_>w = "<<fIntegralPAIxSection[i]<<" 1/mm"<<G4endl;
+  }
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Compute low energy cof. It reduces PAI xsc for Lorentz factors less than 4.
+//
+
+void G4PAIxSection::ComputeLowEnergyCof(const G4Material* material)
+{    
+  G4int i, numberOfElements = material->GetNumberOfElements();
+  G4double sumZ = 0., sumCof = 0.; 
+
+  static const G4double p0 =  1.20923e+00; 
+  static const G4double p1 =  3.53256e-01; 
+  static const G4double p2 = -1.45052e-03; 
+  
+  G4double* thisMaterialZ   = new G4double[numberOfElements];
+  G4double* thisMaterialCof = new G4double[numberOfElements];
+   
+  for( i = 0; i < numberOfElements; i++ )
+  {
+    thisMaterialZ[i] = material->GetElement(i)->GetZ();
+    sumZ += thisMaterialZ[i];
+    thisMaterialCof[i] = p0+p1*thisMaterialZ[i]+p2*thisMaterialZ[i]*thisMaterialZ[i];   
+  }
+  for( i = 0; i < numberOfElements; i++ )
+  {
+    sumCof += thisMaterialCof[i]*thisMaterialZ[i]/sumZ;
+  }
+  fLowEnergyCof = sumCof;
+  delete [] thisMaterialZ;
+  delete [] thisMaterialCof;
+  // G4cout<<"fLowEnergyCof = "<<fLowEnergyCof<<G4endl;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Compute low energy cof. It reduces PAI xsc for Lorentz factors less than 4.
+//
+
+void G4PAIxSection::ComputeLowEnergyCof()
+{    
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int i, numberOfElements = (*theMaterialTable)[fMaterialIndex]->GetNumberOfElements();
+  G4double sumZ = 0., sumCof = 0.; 
+
+  const G4double p0 =  1.20923e+00; 
+  const G4double p1 =  3.53256e-01; 
+  const G4double p2 = -1.45052e-03; 
+  
+  G4double* thisMaterialZ   = new G4double[numberOfElements];
+  G4double* thisMaterialCof = new G4double[numberOfElements];
+   
+  for( i = 0; i < numberOfElements; i++ )
+  {
+    thisMaterialZ[i] = (*theMaterialTable)[fMaterialIndex]->GetElement(i)->GetZ();
+    sumZ += thisMaterialZ[i];
+    thisMaterialCof[i] = p0+p1*thisMaterialZ[i]+p2*thisMaterialZ[i]*thisMaterialZ[i];   
+  }
+  for( i = 0; i < numberOfElements; i++ )
+  {
+    sumCof += thisMaterialCof[i]*thisMaterialZ[i]/sumZ;
+  }
+  fLowEnergyCof = sumCof;
+  // G4cout<<"fLowEnergyCof = "<<fLowEnergyCof<<G4endl;
+  delete [] thisMaterialZ;
+  delete [] thisMaterialCof;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -580,6 +875,9 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 {
   G4int i, j;
 
+  if(fVerbose>0) G4cout<<"      G4PAIxSection::NormShift call "<<G4endl;
+
+
   for( i = 1; i <= fIntervalNumber-1; i++ )
   {
     for( j = 1; j <= 2; j++ )
@@ -588,8 +886,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
       if( j == 1 ) fSplineEnergy[fSplineNumber] = fEnergyInterval[i  ]*(1+fDelta);
       else         fSplineEnergy[fSplineNumber] = fEnergyInterval[i+1]*(1-fDelta); 
-      //    G4cout<<"cn = "<<fSplineNumber<<"; "<<"energy = "
-      //  <<fSplineEnergy[fSplineNumber]<<G4endl;
+      if(fVerbose>0) G4cout<<"cn = "<<fSplineNumber<<"; "<<"w = "<<fSplineEnergy[fSplineNumber]/keV<<" keV"<<G4endl;
     }
   }
   fIntegralTerm[1]=RutherfordIntegral(1,fEnergyInterval[1],fSplineEnergy[1]);
@@ -598,7 +895,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
   for( i = 2; i <= fSplineNumber; i++ )
   {
-    if(fSplineEnergy[i]<fEnergyInterval[j+1])
+    if( fSplineEnergy[i]<fEnergyInterval[j+1] )
     {
          fIntegralTerm[i] = fIntegralTerm[i-1] + 
 	                    RutherfordIntegral(j,fSplineEnergy[i-1],
@@ -613,7 +910,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 	                    RutherfordIntegral(j,fEnergyInterval[j],
                                                  fSplineEnergy[i]    );
     }
-    // G4cout<<i<<"\t"<<fSplineEnergy[i]<<"\t"<<fIntegralTerm[i]<<"\n"<<G4endl;
+   if(fVerbose>0)  G4cout<<i<<"  Shift: w = "<<fSplineEnergy[i]/keV<<" keV \t"<<fIntegralTerm[i]<<"\n"<<G4endl;
   } 
   fNormalizationCof = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2;
   fNormalizationCof *= fElectronDensity/fIntegralTerm[fSplineNumber];
@@ -639,6 +936,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
          fdNdxMM[i]   = PAIdNdxMM(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
          fdNdxResonance[i]    = PAIdNdxResonance(i,betaGammaSq);
+   if(fVerbose>0)  G4cout<<i<<"  Shift: w = "<<fSplineEnergy[i]/keV<<" keV, xsc = "<<fDifPAIxSection[i]<<"\n"<<G4endl;
       }
    }
 
@@ -652,23 +950,28 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
 void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 {
-   G4int k = 1;
-   G4int i = 1;
+  G4int j, k = 1, i = 1;
 
-   while ( (i < fSplineNumber) && (fSplineNumber < fMaxSplineSize-1) )
-   {
-      if(fSplineEnergy[i+1] > fEnergyInterval[k+1])
-      {
+  if(fVerbose>0) G4cout<<"                   G4PAIxSection::SplainPAI call "<<G4endl;
+
+  while ( (i < fSplineNumber) && (fSplineNumber < fMaxSplineSize-1) )
+  {
+     // if( std::abs(fSplineEnergy[i+1]-fEnergyInterval[k+1]) > (fSplineEnergy[i+1]+fEnergyInterval[k+1])*5.e-7 )
+     if( fSplineEnergy[i+1] > fEnergyInterval[k+1] )
+     {
           k++;   // Here next energy point is in next energy interval
 	  i++;
+	  if(fVerbose>0) G4cout<<"                     in if: i = "<<i<<"; k = "<<k<<G4endl;
           continue;
-      }
+     }
+     if(fVerbose>0) G4cout<<"       out if: i = "<<i<<"; k = "<<k<<G4endl;
+
  	               // Shifting of arrayes for inserting the geometrical 
 		       // average of 'i' and 'i+1' energy points to 'i+1' place
-      fSplineNumber++;
+     fSplineNumber++;
 
-      for(G4int j = fSplineNumber; j >= i+2; j-- )
-      {
+     for( j = fSplineNumber; j >= i+2; j-- )
+     {
          fSplineEnergy[j]          = fSplineEnergy[j-1];
          fImPartDielectricConst[j] = fImPartDielectricConst[j-1];
 	 fRePartDielectricConst[j] = fRePartDielectricConst[j-1];
@@ -676,16 +979,22 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 
 	 fDifPAIxSection[j] = fDifPAIxSection[j-1];
          fdNdxCerenkov[j]   = fdNdxCerenkov[j-1];
-         fdNdxMM[j]   = fdNdxMM[j-1];
+         fdNdxMM[j]         = fdNdxMM[j-1];
          fdNdxPlasmon[j]    = fdNdxPlasmon[j-1];
          fdNdxResonance[j]  = fdNdxResonance[j-1];
-      }
+     }
       G4double x1  = fSplineEnergy[i];
       G4double x2  = fSplineEnergy[i+1];
       G4double yy1 = fDifPAIxSection[i];
       G4double y2  = fDifPAIxSection[i+1];
 
+      if(fVerbose>0) G4cout<<"Spline: x1 = "<<x1<<"; x2 = "<<x2<<", yy1 = "<<yy1<<"; y2 = "<<y2<<G4endl;
+
+
       G4double en1 = sqrt(x1*x2);
+      // G4double    en1 = 0.5*(x1 + x2);
+
+
       fSplineEnergy[i+1] = en1;
 
 		 // Calculation of logarithmic linear approximation
@@ -694,6 +1003,7 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
       G4double a = log10(y2/yy1)/log10(x2/x1);
       G4double b = log10(yy1) - a*log10(x1);
       G4double y = a*log10(en1) + b;
+
       y = pow(10.,y);
 
 		 // Calculation of the PAI dif. cross-section at this point
@@ -708,26 +1018,31 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 
       fDifPAIxSection[i+1] = DifPAIxSection(i+1,betaGammaSq);
       fdNdxCerenkov[i+1]   = PAIdNdxCerenkov(i+1,betaGammaSq);
-      fdNdxMM[i+1]   = PAIdNdxMM(i+1,betaGammaSq);
+      fdNdxMM[i+1]         = PAIdNdxMM(i+1,betaGammaSq);
       fdNdxPlasmon[i+1]    = PAIdNdxPlasmon(i+1,betaGammaSq);
       fdNdxResonance[i+1]  = PAIdNdxResonance(i+1,betaGammaSq);
 
 		  // Condition for next division of this segment or to pass
+
+    if(fVerbose>0) G4cout<<"Spline, a = "<<a<<"; b = "<<b<<"; new xsc = "<<y<<"; compxsc = "<<fDifPAIxSection[i+1]<<G4endl;
+
 		  // to higher energies
 
       G4double x = 2*(fDifPAIxSection[i+1] - y)/(fDifPAIxSection[i+1] + y);
+
+      G4double delta = 2.*(fSplineEnergy[i+1]-fSplineEnergy[i])/(fSplineEnergy[i+1]+fSplineEnergy[i]);
 
       if( x < 0 ) 
       {
 	 x = -x;
       }
-      if( x > fError && fSplineNumber < fMaxSplineSize-1 )
+      if( x > fError && fSplineNumber < fMaxSplineSize-1 && delta > 2.*fDelta )
       {
 	 continue;  // next division
       }
       i += 2;  // pass to next segment
 
-   }   // close 'while'
+  }   // close 'while'
 
 }  // end of SplainPAI 
 
@@ -961,9 +1276,10 @@ G4double G4PAIxSection::DifPAIxSection( G4int              i ,
 
    // low energy correction
 
-   G4double lowCof = 4.0 ; // Ar ~ 4.; -> fLowCof as f(Z1,Z2)? 
+   G4double lowCof = fLowEnergyCof; // 6.0 ; // Ar ~ 4.; -> fLowCof as f(Z1,Z2)? 
 
    result *= (1 - exp(-beta/betaBohr/lowCof));
+
 
    // result *= (1 - exp(-be2/betaBohr2/lowCof));
 
@@ -987,14 +1303,14 @@ G4double G4PAIxSection::PAIdNdxCerenkov( G4int    i ,
                                          G4double betaGammaSq  )
 {        
    G4double logarithm, x3, x5, argument, modul2, dNdxC; 
-   G4double be2, be4, betaBohr2,betaBohr4,cofBetaBohr;
+   G4double be2, betaBohr2, cofBetaBohr;
 
    cofBetaBohr = 4.0;
    betaBohr2   = fine_structure_const*fine_structure_const;
-   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
+   G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
 
    be2 = betaGammaSq/(1 + betaGammaSq);
-   be4 = be2*be2;
+   G4double be4 = be2*be2;
 
    if( betaGammaSq < 0.01 ) logarithm = log(1.0+betaGammaSq); // 0.0;
    else
@@ -1095,15 +1411,12 @@ G4double G4PAIxSection::PAIdNdxPlasmon( G4int    i ,
                                         G4double betaGammaSq  )
 {        
    G4double resonance, modul2, dNdxP, cof = 1.;
-   G4double be2, be4, betaBohr2, betaBohr4, cofBetaBohr;
-
+   G4double be2, betaBohr;
   
-   cofBetaBohr = 4.0;
-   betaBohr2   = fine_structure_const*fine_structure_const;
-   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
-
+   betaBohr   = fine_structure_const;
    be2 = betaGammaSq/(1 + betaGammaSq);
-   be4 = be2*be2;
+
+   G4double beta = sqrt(be2);
  
    resonance = log(2*electron_mass_c2*be2/fSplineEnergy[i]);  
    resonance *= fImPartDielectricConst[i]/hbarc;
@@ -1114,7 +1427,10 @@ G4double G4PAIxSection::PAIdNdxPlasmon( G4int    i ,
    if( dNdxP < 1.0e-8 ) dNdxP = 1.0e-8;
 
    dNdxP *= fine_structure_const/be2/pi;
-   dNdxP *= (1-exp(-be4/betaBohr4));
+
+   dNdxP  *= (1 - exp(-beta/betaBohr/fLowEnergyCof));
+
+   // dNdxP *= (1-exp(-be4/betaBohr4));
 
    if( fDensity >= 0.1 )
    { 
@@ -1176,9 +1492,9 @@ void G4PAIxSection::IntegralPAIxSection()
   fIntegralPAIxSection[fSplineNumber] = 0;
   fIntegralPAIdEdx[fSplineNumber]     = 0;
   fIntegralPAIxSection[0]             = 0;
-  G4int k = fIntervalNumber -1;
+  G4int i, k = fIntervalNumber -1;
 
-  for(G4int i = fSplineNumber-1; i >= 1; i--)
+  for( i = fSplineNumber-1; i >= 1; i--)
   {
     if(fSplineEnergy[i] >= fEnergyInterval[k])
     {
@@ -1193,6 +1509,7 @@ void G4PAIxSection::IntegralPAIxSection()
 	                           SumOverBorderdEdx(i+1,fEnergyInterval[k]);
       k--;
     }
+    if(fVerbose>0) G4cout<<"i = "<<i<<"; k = "<<k<<"; intPAIxsc[i] = "<<fIntegralPAIxSection[i]<<G4endl;
   }
 }   // end of IntegralPAIxSection 
 
@@ -1324,10 +1641,19 @@ G4double G4PAIxSection::SumOverInterval( G4int i )
 
    x0 = fSplineEnergy[i];
    x1 = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0 = fDifPAIxSection[i];
    yy1 = fDifPAIxSection[i+1];
+
+   if(fVerbose>0) G4cout<<"x0 = "<<x0<<"; x1 = "<<x1<<", y0 = "<<y0<<"; yy1 = "<<yy1<<G4endl;
+
    c = x1/x0;
    a = log10(yy1/y0)/log10(c);
+
+   if(fVerbose>0) G4cout<<"SumOverInterval, a = "<<a<<"; c = "<<c<<G4endl;
+
    // b = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a);
    a += 1.;
@@ -1360,6 +1686,9 @@ G4double G4PAIxSection::SumOverIntervaldEdx( G4int i )
 
    x0 = fSplineEnergy[i];
    x1 = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0 = fDifPAIxSection[i];
    yy1 = fDifPAIxSection[i+1];
    c = x1/x0;
@@ -1391,6 +1720,9 @@ G4double G4PAIxSection::SumOverInterCerenkov( G4int i )
 
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0  = fdNdxCerenkov[i];
    yy1 = fdNdxCerenkov[i+1];
    // G4cout<<"SumC, i = "<<i<<"; x0 ="<<x0<<"; x1 = "<<x1
@@ -1424,6 +1756,9 @@ G4double G4PAIxSection::SumOverInterMM( G4int i )
 
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0  = fdNdxMM[i];
    yy1 = fdNdxMM[i+1];
    // G4cout<<"SumC, i = "<<i<<"; x0 ="<<x0<<"; x1 = "<<x1
@@ -1457,6 +1792,9 @@ G4double G4PAIxSection::SumOverInterPlasmon( G4int i )
 
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0  = fdNdxPlasmon[i];
    yy1 = fdNdxPlasmon[i+1];
    c =x1/x0;
@@ -1488,6 +1826,9 @@ G4double G4PAIxSection::SumOverInterResonance( G4int i )
 
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0  = fdNdxResonance[i];
    yy1 = fdNdxResonance[i+1];
    c =x1/x0;
@@ -1526,6 +1867,9 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
+
+   if(fVerbose>0) G4cout<<"SumOverBorder, a = "<<a<<G4endl;
+
    // b0 = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a);  // pow(10.,b);
    
@@ -2165,7 +2509,7 @@ void G4PAIxSection::CallError(G4int i, const G4String& methodName) const
 {
   G4String head = "G4PAIxSection::" + methodName + "()";
   G4ExceptionDescription ed;
-  ed << "Wrong index " << i << " fSplineNumber= " << fSplineNumber << G4endl;
+  ed << "Wrong index " << i << " fSplineNumber= " << fSplineNumber;
   G4Exception(head,"pai001",FatalException,ed);
 }
 

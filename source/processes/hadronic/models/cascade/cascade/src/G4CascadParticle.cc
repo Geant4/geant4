@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadParticle.cc 67738 2013-03-05 05:54:30Z mkelsey $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100114  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector 
@@ -32,8 +32,12 @@
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
 //		Add stream argument to print(), add operator<<().
 // 20111017  M. Kelsey -- Add check for zero momentum in path calculation.
+// 20130221  M. Kelsey -- Set verbosity using global envvar, for both ctors.
+// 20130304  M. Kelsey -- Add index data member, for use with G4CascadeHistory,
+//		and explicit copy operations
 
 #include "G4CascadParticle.hh"
+#include "G4CascadeParameters.hh"
 #include "G4ios.hh"
 #include <cmath>
 
@@ -41,11 +45,46 @@
 // Default constructor produces non-functional object
 
 G4CascadParticle::G4CascadParticle()
-  : verboseLevel(0), current_zone(-1), current_path(-1.), movingIn(false),
-    reflectionCounter(0), reflected(false), generation(-1) {
+  : verboseLevel(G4CascadeParameters::verbose()),
+    current_zone(-1), current_path(-1.), movingIn(false),
+    reflectionCounter(0), reflected(false), generation(-1), historyId(-1) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadParticle::G4CascadParticle" << G4endl;
   }
+}
+
+G4CascadParticle::
+G4CascadParticle(const G4InuclElementaryParticle& particle, 
+		 const G4ThreeVector& pos, G4int izone, G4double cpath,
+		 G4int gen) 
+    : verboseLevel(G4CascadeParameters::verbose()),
+      theParticle(particle), position(pos), 
+      current_zone(izone), current_path(cpath), movingIn(true),
+      reflectionCounter(0), reflected(false), generation(gen), historyId(-1) {
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4CascadParticle::G4CascadParticle "
+	   << particle.getDefinition()->GetParticleName() 
+	   << " @ " << pos << G4endl;
+  }
+}
+
+// Copy contents, including history information
+
+G4CascadParticle& G4CascadParticle::operator=(const G4CascadParticle& cpart) {
+  if (&cpart != this) {				// Avoid unnecessary work
+    verboseLevel = cpart.verboseLevel;
+    theParticle = cpart.theParticle;
+    position = cpart.position;
+    current_zone = cpart.current_zone;
+    current_path = cpart.current_path;
+    movingIn = cpart.movingIn;
+    reflectionCounter = cpart.reflectionCounter;
+    reflected = cpart.reflected;
+    generation = cpart.generation;
+    historyId = cpart.historyId;
+  }
+
+  return *this;
 }
 
 // Analogue to operator=() to support filling vectors w/o temporaries
@@ -63,6 +102,7 @@ void G4CascadParticle::fill(const G4InuclElementaryParticle& particle,
   reflectionCounter = 0;
   reflected = false;
   generation = gen;
+  historyId = -1;	// New particle, no history entry yet
 }
 
 
@@ -143,10 +183,9 @@ std::ostream& operator<<(std::ostream& os, const G4CascadParticle& part) {
 }
 
 void G4CascadParticle::print(std::ostream& os) const {
-  os << theParticle << G4endl
-     << " zone " << current_zone << " current_path " << current_path
+  os << " pos " << position << " zone " << current_zone
+     << " current_path " << current_path
      << " reflectionCounter " << reflectionCounter << G4endl
-     << " x " << position.x() << " y " << position.y()
-     << " z " << position.z() << G4endl;
+     << theParticle << G4endl;     
 }
 

@@ -27,7 +27,6 @@
 /// \brief Implementation of the UrQMDAntiBarionBuilder class
 //
 // $Id: UrQMDAntiBarionBuilder.cc $
-// GEANT4 tag $Name:  $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +44,7 @@
 #include "G4ProcessManager.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"  // For anti-ions
 #include "G4CrossSectionInelastic.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

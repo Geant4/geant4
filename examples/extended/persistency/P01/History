@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2010-12-03 14:42:14 gcosmo Exp $
+$Id: History 73396 2013-08-27 09:29:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Nvember 14th, 2012 P. Mato (exampleP01-V09-05-08)
+
+August 27th, 2013  G. Cosmo (exampleP01-V09-06-03)
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+June 17th, 2013 I. Hrivnacova (exampleP01-V09-06-02)
+- Applied coding guidelines (data members names, intialization, separators)
+
+June 14th, 2013 W. Pokorski (exampleP01-V09-06-01)
+- changing the names of the members according to coding convention
+
+June 10th, 2013 W. Pokorski (exampleP01-V09-06-00)
+- changes to comply to coding rules
+
+May 27th, 2013 I. Hrivnacova
+- Fixed handling required packages/options in CMake files
+
+November 14th, 2012 P. Mato (exampleP01-V09-05-08)
 - Fixed compilation warning
 
 October 11th, 2012 A. Dotti (exampleP01-V09-05-07)

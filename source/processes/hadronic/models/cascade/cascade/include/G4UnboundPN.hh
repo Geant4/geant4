@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UnboundPN.hh 69389 2013-05-02 15:54:09Z mkelsey $
 //
 // ------------------------------------------------------------
 //      Bertini Cascade unboundPN class header file
@@ -32,6 +32,7 @@
 //      17 Nov 2009:  Michael Kelsey
 //	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
+//	01 May 2013:  Remove G4ThreadLocal from static pointer.
 // ----------------------------------------------------------------
 
 #ifndef G4UNBOUNDPN_HH
@@ -40,7 +41,7 @@
 #include "G4VShortLivedParticle.hh"
 
 // ######################################################################
-// ###                        UNBOUNDPN                                ###
+// ###                        UNBOUNDPN                               ###
 // ######################################################################
 
 class G4UnboundPN : public G4VShortLivedParticle {

@@ -27,7 +27,7 @@
 /// \brief Definition of the G03DetectorMessenger class
 //
 //
-// $Id$
+// $Id: G03DetectorMessenger.hh 69987 2013-05-21 12:33:52Z gcosmo $
 //
 // Class G03DetectorMessenger
 //
@@ -55,7 +55,7 @@ class G03DetectorMessenger: public G4UImessenger
     G03DetectorMessenger( G03DetectorConstruction* );
    ~G03DetectorMessenger();
     
-    void SetNewValue( G4UIcommand*, G4String );
+    virtual void SetNewValue( G4UIcommand*, G4String );
 
   private:
 

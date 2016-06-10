@@ -31,7 +31,7 @@
  The primary kinematic consists of a single particle which hits the
  geometry perpendicular to the input face. The FCALPrimaryGeneratorAction 
  class gives the particle and its energy (by default it is an electron of
- 80 GeV). These parameters can be changed in commands of ParticleGun class
+ 20 GeV). These parameters can be changed in commands of ParticleGun class
  inside the macros given in this example. 
  
  The subdirectory data-tracks contains the kinematic files 
@@ -87,8 +87,10 @@
 
  6. HISTOGRAMS
  --------------
+ The analysis is performed using the histogramming tools provided by 
+ Geant4. No external dependencies are required.
  
- lArCal produces 4 histograms (saved as fcal.his) which illustrate
+ lArCal produces 4 histograms (saved as fcal.root) which illustrate
  the final state of the most important variables of the example:
 
  Histo1 --> Number of tracks out of World
@@ -96,21 +98,11 @@
  Histo3 --> Total energy deposited (in MeV) in the electromagnetic module
  Histo4 --> Total energy deposited (in MeV) in the hadronic module
 
- See their definitions in FCALAnalysisManager.cc
+ See their definitions in FCALRunAction.cc 
 
- Note that histograms are disabled via the flag G4ANALYSIS_USE in GNUmakefile.
+ The histograms are saved (default) as a ROOT file. It is possible to save the 
+ histograms in a xml file by editing 
+   include/FCALAnalysisManager.hh
+ (comment g4root.hh and uncomment g4xml.hh)
 
-
- 7. Using the PI implementation of the AIDA histograms:
- ------------------------------------------------------
-
- In order to setup the proper environmental variables, needed for 
- running AIDA / PI , run the script:
-
-  --- For c-shell  :     source setupAidaPi.csh
-
-  --- For bash-shell :   . setupAidaPi.sh
-
- Notice that you need g++ 3.2 or 3.23.
- 
  

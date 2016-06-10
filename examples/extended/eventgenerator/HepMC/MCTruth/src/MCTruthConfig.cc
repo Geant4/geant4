@@ -27,7 +27,7 @@
 /// \brief Implementation of the MCTruthConfig class
 //
 //
-// $Id$
+// $Id: MCTruthConfig.cc 73446 2013-08-27 11:32:59Z gcosmo $
 //
 //
 // --------------------------------------------------------------

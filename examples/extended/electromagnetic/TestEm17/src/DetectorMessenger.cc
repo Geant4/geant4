@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorMessenger class
 //
 //
-// $Id$
+// $Id: DetectorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 
@@ -45,7 +45,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:fDetector(Det)
+:G4UImessenger(),fDetector(Det),
+ fTestemDir(0),
+ fDetDir(0),    
+ fMaterCmd(0),
+ fSizeCmd(0),
+ fUpdateCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance("commands specific to this example");

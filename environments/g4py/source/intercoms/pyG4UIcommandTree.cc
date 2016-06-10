@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UIcommandTree.cc,v 1.1 2006-08-08 05:20:57 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4UIcommandTree.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4UIcommandTree.cc
 //
@@ -41,12 +40,12 @@ using namespace boost::python;
 namespace pyG4UIcommandTree {
 
 // GetTree
-G4UIcommandTree*(G4UIcommandTree::*f1_GetTree)(G4int)= 
+G4UIcommandTree*(G4UIcommandTree::*f1_GetTree)(G4int)=
   &G4UIcommandTree::GetTree;
-G4UIcommandTree*(G4UIcommandTree::*f2_GetTree)(const char*)= 
+G4UIcommandTree*(G4UIcommandTree::*f2_GetTree)(const char*)=
   &G4UIcommandTree::GetTree;
 
-};
+}
 
 using namespace pyG4UIcommandTree;
 

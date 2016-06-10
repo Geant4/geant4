@@ -24,12 +24,46 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Randomize.hh 68844 2013-04-08 07:21:18Z gcosmo $
 //
 #ifndef randomize_h
 #define randomize_h 1
 
 #include <CLHEP/Random/Randomize.h>
+
+#ifdef G4MULTITHREADED
+
+// MT needs special Random Number distribution classes
+//
+#include "G4MTHepRandom.hh"
+#include "G4MTRandBit.hh"
+#include "G4MTRandExponential.hh"
+#include "G4MTRandFlat.hh"
+#include "G4MTRandGamma.hh"
+#include "G4MTRandGauss.hh"
+#include "G4MTRandGaussQ.hh"
+#include "G4MTRandGeneral.hh"
+
+// NOTE: G4RandStat MT-version is missing, but actually currently
+// never used in the G4 source
+//
+#define G4RandFlat G4MTRandFlat
+#define G4RandBit G4MTRandBit
+#define G4RandGamma G4MTRandGamma
+#define G4RandGauss G4MTRandGaussQ
+#define G4RandExponential G4MTRandExponential
+#define G4RandGeneral G4MTRandGeneral
+#define G4Random G4MTHepRandom
+
+#define G4UniformRand() G4MTHepRandom::getTheEngine()->flat()
+
+// Currently not be used in G4 source
+//
+#define G4RandFlatArray G4MTRandFlat::shootArray
+#define G4RandFlatInt G4MTRandFlat::shootInt
+#define G4RandGeneralTmp G4MTRandGeneral
+
+#else // Sequential mode
 
 // Distributions used ...
 //
@@ -52,4 +86,5 @@
 
 #define G4UniformRand() CLHEP::HepRandom::getTheEngine()->flat()
 
+#endif // G4MULTITHREADED
 #endif // randomize_h 

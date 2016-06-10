@@ -41,7 +41,7 @@
 #include "UltraOpticalHit.hh"
 #include "G4SystemOfUnits.hh"
 
-G4Allocator<UltraOpticalHit> UltraOpticalHitAllocator;
+G4ThreadLocal G4Allocator<UltraOpticalHit> *UltraOpticalHitAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

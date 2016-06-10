@@ -22,34 +22,33 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: DetectorConstruction.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file DetectorConstruction.cc
 /// @brief Define geometry
 
-#include "DetectorConstruction.hh"
-#include "Materials.hh"
-#include "G4Material.hh"
-#include "G4Tubs.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4PVPlacement.hh"
-#include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
+#include "G4VisAttributes.hh"
+#include "DetectorConstruction.hh"
+#include "Materials.hh"
 
-// constants (detector parameters)
-static const G4double DXYZ_AREA= 32.*cm;
-static const G4double DW= 10.*cm;
-
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DetectorConstruction::DetectorConstruction()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DetectorConstruction::~DetectorConstruction()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // material definition
@@ -60,18 +59,19 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4VisAttributes* va;
 
   // world volume
-  G4Box* areaSolid = new G4Box("AREA", 
-			      DXYZ_AREA/2., DXYZ_AREA/2., DXYZ_AREA/2.);
+  const G4double DXYZ_AREA = 32.*cm;
+  G4Box* areaSolid = new G4Box("AREA", DXYZ_AREA/2., DXYZ_AREA/2.,
+                                       DXYZ_AREA/2.);
 
-  G4Material* vacuum = G4Material::GetMaterial("Vacuum");  
+  G4Material* vacuum = G4Material::GetMaterial("Vacuum");
   G4LogicalVolume* areaLV = new G4LogicalVolume(areaSolid, vacuum, "AREA_LV");
-  G4PVPlacement* area = new G4PVPlacement(0, G4ThreeVector(), "AREA_PV", 
+  G4PVPlacement* area = new G4PVPlacement(0, G4ThreeVector(), "AREA_PV",
                                           areaLV, 0, false, 0);
   // vis. attributes
   va = new G4VisAttributes(G4Color(1.,1.,1.));
   va-> SetVisibility(false);
   areaLV-> SetVisAttributes(va);
-  
+
   // detectors
   // voxel
   const G4double dvoxel = 10.*mm;
@@ -86,8 +86,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4int ix, iz;
   G4int index = 0;
-  for (iz = 0; iz < 5; iz++) {
-    for (ix = -7; ix <= 7; ix++) {
+  for ( iz = 0; iz < 5; iz++ ) {
+    for ( ix = -7; ix <= 7; ix++ ) {
       G4double x0 = (2.*ix) * cm;
       G4double z0 = (-13.+2.*iz) * cm;
       new G4PVPlacement(0, G4ThreeVector(x0, 0., z0),
@@ -97,8 +97,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   }
 
   // tube
-  G4Tubs* stube = new G4Tubs("tube", 0.*mm, 19./2.*mm, dl,
-                             0., 360.*deg);
+  G4Tubs* stube = new G4Tubs("tube", 0.*mm, 19./2.*mm, dl, 0., 360.*deg);
   mate = G4Material::GetMaterial("Al");
   G4LogicalVolume* ltube = new G4LogicalVolume(stube, mate, "tube");
   va = new G4VisAttributes(G4Color(0.,0.8,0.8));
@@ -108,7 +107,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   rmtube-> rotateX(-90.*deg);
   new G4PVPlacement(rmtube, G4ThreeVector(),
                     ltube, "tube", lvoxel, false, 0);
-  
+
   // cal
   const G4double dxycal = 25.*mm;
   const G4double dzcal = 3.*cm;
@@ -120,7 +119,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   lcal-> SetVisAttributes(va);
 
   index = 0;
-  for (ix = -2; ix <= 2; ix++) {
+  for ( ix = -2; ix <= 2; ix++ ) {
     G4double x0 = (5.*ix)*cm;
     new G4PVPlacement(0, G4ThreeVector(x0, 0., 2.*cm),
                       lcal, "cal", areaLV, false, index);
@@ -128,4 +127,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   }
 
   return area;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DetectorConstruction::ConstructSDandField()
+{
 }

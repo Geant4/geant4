@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -47,7 +45,7 @@
 namespace G4INCL {
   class DeltaProductionChannel : public IChannel {
   public:
-    DeltaProductionChannel(Particle *, Particle *, Nucleus *);
+    DeltaProductionChannel(Particle *, Particle *);
     virtual ~DeltaProductionChannel();
 
     FinalState* getFinalState();
@@ -55,7 +53,6 @@ namespace G4INCL {
   private:
     G4double sampleDeltaMass(G4double ecm);
 
-    Nucleus *theNucleus;
     Particle *particle1, *particle2;
   };
 }

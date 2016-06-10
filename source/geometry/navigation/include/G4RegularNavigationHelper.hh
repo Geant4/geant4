@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RegularNavigationHelper.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -44,6 +44,8 @@
 #include <vector>
 #include "globals.hh"
 
+typedef std::vector< std::pair<G4int,G4double> > G4RegularNavigationHelper_theStepLengths_t;
+
 class G4RegularNavigationHelper
 {
   public:
@@ -58,7 +60,7 @@ class G4RegularNavigationHelper
 
   private:
     G4RegularNavigationHelper();
-    static G4RegularNavigationHelper * theInstance;
+    static G4ThreadLocal G4RegularNavigationHelper * theInstance;
 };
 
 #endif

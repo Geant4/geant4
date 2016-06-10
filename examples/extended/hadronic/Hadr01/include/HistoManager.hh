@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.hh 73016 2013-08-15 08:59:51Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -116,7 +116,6 @@ private:
   G4double fEdepP;
   G4double fEdepSum;
   G4double fEdepSum2;
-  G4double fBeamEnergy;
   G4double fLength;
   G4double fAbsZ0;
   G4double fPrimaryKineticEnergy;

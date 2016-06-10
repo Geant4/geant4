@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmEventActionMessenger.cc 68030 2013-03-13 13:51:27Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmEventActionMessenger.cc
 /// \brief Implementation of the exrdmEventActionMessenger class
 //
@@ -37,10 +39,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-exrdmEventActionMessenger::exrdmEventActionMessenger(
-                                                               exrdmEventAction* EvAct)
-:fEventAction(EvAct)
-{ 
+exrdmEventActionMessenger::exrdmEventActionMessenger(exrdmEventAction* EvAct)
+:G4UImessenger(),
+ fEventAction(EvAct),fDrawCmd(0)
+{
   fDrawCmd = new G4UIcmdWithAString("/event/draw",this);
   fDrawCmd->SetGuidance("Draw the tracks in the event");
   fDrawCmd->SetGuidance("  Choice : none, charged, all (default)");
@@ -60,7 +62,7 @@ exrdmEventActionMessenger::~exrdmEventActionMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmEventActionMessenger::SetNewValue(G4UIcommand * command,
-                                                                      G4String newValue)
+                                            G4String newValue)
 { 
   if(command == fDrawCmd)
     {fEventAction->SetDrawFlag(newValue);}

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/HadronPhysicsUrQMD.cc
 /// \brief Implementation of the HadronPhysicsUrQMD class
 //
-// $Id$
+// $Id: HadronPhysicsUrQMD.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,12 +47,18 @@
 #include <iomanip>   
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-#include "G4QHadronInelasticDataSet.hh"
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+
 #include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,15 +68,12 @@ HadronPhysicsUrQMD::HadronPhysicsUrQMD(G4int)
 {
   fNeutrons = 0;
   fUrQMDNeutron = 0;
-  fLEPNeutron = 0;
   fPiK = 0;
   fUrQMDPiK = 0;
   fPro = 0;
   fUrQMDPro = 0;    
   fHyperon = 0;
   fAntiBaryon = 0;
-  fUrQMDAntiBaryon = 0;
-  fCHIPSInelastic = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,12 +81,8 @@ HadronPhysicsUrQMD::HadronPhysicsUrQMD(G4int)
 void HadronPhysicsUrQMD::CreateModels()
 {
   fNeutrons=new G4NeutronBuilder;
-  fUrQMDNeutron=new UrQMDNeutronBuilder();
+  fUrQMDNeutron=new UrQMDNeutronBuilder();  // put fission and capture here
   fNeutrons->RegisterMe(fUrQMDNeutron);
-  //Need LEP for capture process
-  fNeutrons->RegisterMe(fLEPNeutron=new G4LEPNeutronBuilder);
-  fLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
-  fLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
 
   fPro=new G4ProtonBuilder;
   fUrQMDPro=new UrQMDProtonBuilder();
@@ -107,7 +106,6 @@ HadronPhysicsUrQMD::~HadronPhysicsUrQMD()
 {
   delete fNeutrons;
   delete fUrQMDNeutron;
-  delete fLEPNeutron;    
 
   delete fPiK;
   delete fUrQMDPiK;
@@ -118,8 +116,6 @@ HadronPhysicsUrQMD::~HadronPhysicsUrQMD()
   delete fHyperon;
   delete fAntiBaryon;
   delete fUrQMDAntiBaryon;
-  
-  delete fCHIPSInelastic;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,13 +140,24 @@ void HadronPhysicsUrQMD::ConstructProcess()
   fNeutrons->Build();
   fPro->Build();
   fPiK->Build();
+    
   // use CHIPS cross sections also for Kaons
-  fCHIPSInelastic = new G4QHadronInelasticDataSet();
-  
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(fCHIPSInelastic);
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(fCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(fCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(fCHIPSInelastic);
+  ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->
+    GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
+  ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->
+    GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
+  ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->
+    GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
+    //
+    
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->
+    AddDataSet(ChipsKaonMinus);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->
+    AddDataSet(ChipsKaonPlus);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->
+    AddDataSet(ChipsKaonZero );
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->
+    AddDataSet(ChipsKaonZero );
 
   fHyperon->Build();
   fAntiBaryon->Build();

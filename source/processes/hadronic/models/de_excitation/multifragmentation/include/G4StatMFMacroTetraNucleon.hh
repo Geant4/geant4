@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StatMFMacroTetraNucleon.hh 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -39,33 +39,28 @@ class G4StatMFMacroTetraNucleon : public G4VStatMFMacroCluster {
 
 public:
 
-    // Default constructor
-    G4StatMFMacroTetraNucleon() : G4VStatMFMacroCluster(4) {};
+  G4StatMFMacroTetraNucleon();
 
-    // Destructor
-    ~G4StatMFMacroTetraNucleon() {};
+  ~G4StatMFMacroTetraNucleon();
 	
+  G4double CalcMeanMultiplicity(const G4double FreeVol, const G4double mu, 
+				const G4double nu, const G4double T);
+								
+  inline G4double CalcZARatio(const G4double ) {return theZARatio = 0.5;}
+
+  G4double CalcEnergy(const G4double T);
+
+  G4double CalcEntropy(const G4double T, const G4double FreeVol);
 
 private:
 
-    // Copy constructor
-    G4StatMFMacroTetraNucleon(const G4StatMFMacroTetraNucleon & right);
+  // Copy constructor
+  G4StatMFMacroTetraNucleon(const G4StatMFMacroTetraNucleon & right);
 
-    // operators
-    G4StatMFMacroTetraNucleon & operator=(const G4StatMFMacroTetraNucleon & right);
-    G4bool operator==(const G4StatMFMacroTetraNucleon & right) const;
-    G4bool operator!=(const G4StatMFMacroTetraNucleon & right) const;
-
-public:
-
-    G4double CalcMeanMultiplicity(const G4double FreeVol, const G4double mu, 
-				  const G4double nu, const G4double T);
-								
-    G4double CalcZARatio(const G4double ) {return theZARatio = 0.5;}								
-
-    G4double CalcEnergy(const G4double T);
-
-    G4double CalcEntropy(const G4double T, const G4double FreeVol);
+  // operators
+  G4StatMFMacroTetraNucleon & operator=(const G4StatMFMacroTetraNucleon & right);
+  G4bool operator==(const G4StatMFMacroTetraNucleon & right) const;
+  G4bool operator!=(const G4StatMFMacroTetraNucleon & right) const;
 
 };
 

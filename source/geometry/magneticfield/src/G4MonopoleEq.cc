@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4MonopoleEq.cc 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 //  This is the right-hand side for equation of motion for a 
@@ -42,11 +42,12 @@
 #include "G4SystemOfUnits.hh"
 
 void  
-G4MonopoleEq::SetChargeMomentumMass(G4double particleCharge, // e+ units
-		                            G4double,
-                                            G4double particleMass)
+G4MonopoleEq::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units
+		                    G4double,
+                                    G4double particleMass)
 {
-  fElectroMagCof =  eplus*particleCharge;  // no *c_light as for ususal q
+  G4double pcharge = particleCharge.GetCharge();
+  fElectroMagCof =  eplus*pcharge;  // no *c_light as for ususal q
   fElectroMagCof /= 2*fine_structure_const;
 
   fMassCof = particleMass*particleMass ; 

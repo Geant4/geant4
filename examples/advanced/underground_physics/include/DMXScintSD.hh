@@ -46,7 +46,6 @@
 #include "globals.hh"
 #include "DMXScintHit.hh"
 
-class DMXDetectorConstruction;
 class G4Step;
 class G4HCofThisEvent;
 
@@ -56,7 +55,7 @@ class DMXScintSD : public G4VSensitiveDetector
 {
   public:
   
-     DMXScintSD(G4String, DMXDetectorConstruction*);
+     DMXScintSD(G4String);
      ~DMXScintSD();
 
       void Initialize(G4HCofThisEvent*);
@@ -69,7 +68,6 @@ class DMXScintSD : public G4VSensitiveDetector
 private:
   
   DMXScintHitsCollection*  scintillatorCollection;      
-  DMXDetectorConstruction* DMXDetector;
   G4int HitID;
 };
 

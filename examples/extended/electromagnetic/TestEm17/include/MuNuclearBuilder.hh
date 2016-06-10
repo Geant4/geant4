@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/include/MuNuclearBuilder.hh
 /// \brief Definition of the MuNuclearBuilder class
 //
-// $Id$
+// $Id: MuNuclearBuilder.hh 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,12 +47,12 @@ class MuNuclearBuilder : public G4VPhysicsConstructor
 
   public: 
     // This method is dummy for physics
-    void ConstructParticle() {};
+    virtual void ConstructParticle() {};
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-    void ConstructProcess();
+    virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

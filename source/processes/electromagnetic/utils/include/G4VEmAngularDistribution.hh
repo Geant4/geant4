@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VEmAngularDistribution.hh 73847 2013-09-13 14:32:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,6 +72,16 @@ public:
 					 G4double finalTotalEnergy,
 					 G4int Z,
 					 const G4Material*) = 0;
+
+  // Sample direction in global coordinate system for given electronic shell,
+  // this means for zero scattering angle this direction is the same
+  // as the direction of primary 
+  virtual G4ThreeVector& SampleDirectionForShell(
+					 const G4DynamicParticle* dp,
+					 G4double finalTotalEnergy,
+					 G4int Z,
+					 G4int shellID,
+					 const G4Material*);
 
   inline const G4String& GetName() const;
 

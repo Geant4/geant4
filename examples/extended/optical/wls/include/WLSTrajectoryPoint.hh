@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSTrajectoryPoint.hh 72065 2013-07-05 09:54:59Z gcosmo $
+//
 /// \file optical/wls/include/WLSTrajectoryPoint.hh
 /// \brief Definition of the WLSTrajectoryPoint class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -57,8 +56,8 @@ class WLSTrajectoryPoint : public G4TrajectoryPoint {
 // Constructor/Destructor
 
     WLSTrajectoryPoint();
-    WLSTrajectoryPoint(const G4Track* aTrack);
-    WLSTrajectoryPoint(const G4Step* aStep);
+    WLSTrajectoryPoint(const G4Track* );
+    WLSTrajectoryPoint(const G4Step* );
     WLSTrajectoryPoint(const WLSTrajectoryPoint &right);
     virtual ~WLSTrajectoryPoint();
 
@@ -94,17 +93,18 @@ class WLSTrajectoryPoint : public G4TrajectoryPoint {
 
 };
 
-extern G4Allocator<WLSTrajectoryPoint> WLSTrajPointAllocator;
+extern G4ThreadLocal G4Allocator<WLSTrajectoryPoint>* WLSTrajPointAllocator;
 
 inline void* WLSTrajectoryPoint::operator new(size_t)
 {
-    void *aTrajectoryPoint = (void *) WLSTrajPointAllocator.MallocSingle();
-    return aTrajectoryPoint;
+    if(!WLSTrajPointAllocator)
+      WLSTrajPointAllocator = new G4Allocator<WLSTrajectoryPoint>;
+    return (void *) WLSTrajPointAllocator->MallocSingle();
 }
 
 inline void WLSTrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-    WLSTrajPointAllocator.FreeSingle(
+    WLSTrajPointAllocator->FreeSingle(
         (WLSTrajectoryPoint *) aTrajectoryPoint);
 }
 

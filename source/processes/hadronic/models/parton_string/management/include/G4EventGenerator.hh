@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EventGenerator.hh 67999 2013-03-13 11:14:32Z gcosmo $
 //
 #ifndef G4EventGenerator_h
 #define G4EventGenerator_h 1

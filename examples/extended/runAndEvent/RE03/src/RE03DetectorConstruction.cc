@@ -26,10 +26,8 @@
 /// \file runAndEvent/RE03/src/RE03DetectorConstruction.cc
 /// \brief Implementation of the RE03DetectorConstruction class
 //
+// $Id: RE03DetectorConstruction.cc 68780 2013-04-05 13:06:07Z gcosmo $
 //
-// $Id$
-//
-// 
 
 #include "RE03DetectorConstruction.hh"
 
@@ -113,4 +111,6 @@ void RE03DetectorConstruction::SetupGeometry()
   phantomLogical->SetVisAttributes(simpleBoxVisAtt);
 }
 
+void RE03DetectorConstruction::ConstructSDandField()
+{;}
 

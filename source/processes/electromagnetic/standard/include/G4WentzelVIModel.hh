@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WentzelVIModel.hh 74726 2013-10-21 08:42:46Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,8 +63,6 @@
 
 class G4ParticleDefinition;
 class G4LossTableManager;
-class G4NistManager;
-class G4Pow;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,7 +86,7 @@ public:
 					      G4double cut = DBL_MAX,
 					      G4double emax= DBL_MAX);
 
-  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*, 
+  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
 					  G4double safety);
 
   virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
@@ -97,6 +95,15 @@ public:
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
   virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+
+  // defines low energy limit on energy transfer to atomic electron
+  inline void SetFixedCut(G4double);
+
+  // low energy limit on energy transfer to atomic electron
+  inline G4double GetFixedCut() const;
+
+  // access to cross section class
+  inline G4WentzelOKandVIxSection* GetWVICrossSection();
 
 private:
 
@@ -111,15 +118,14 @@ private:
   G4WentzelVIModel(const  G4WentzelVIModel&);
 
   G4LossTableManager*       theManager;
-  G4NistManager*            fNistManager;
   G4ParticleChangeForMSC*   fParticleChange;
   G4WentzelOKandVIxSection* wokvi;
-  G4Pow*                    fG4pow;
 
   const G4DataVector*       currentCuts;
 
   G4double tlimitminfix;
   G4double invsqrt12;
+  G4double fixedCut;
 
   // cache kinematics
   G4double preKinEnergy;
@@ -178,6 +184,27 @@ inline void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
     particle = p;
     wokvi->SetupParticle(p);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4WentzelVIModel::SetFixedCut(G4double val)
+{
+  fixedCut = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4WentzelVIModel::GetFixedCut() const
+{
+  return fixedCut;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4WentzelOKandVIxSection* G4WentzelVIModel::GetWVICrossSection()
+{
+  return wokvi;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

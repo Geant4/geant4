@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SteppingManager2.cc 73605 2013-09-02 09:34:55Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 #include "G4TransportationManager.hh"
 #include "G4SteppingManager.hh"
 #include "G4LossTableManager.hh"
+#include "G4ParticleTable.hh"
 
 /////////////////////////////////////////////////
 void G4SteppingManager::GetProcessNumber()
@@ -301,6 +302,8 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
      lifeTime =
        fCurrentProcess->AtRestGPIL( *fTrack, &fCondition );
 
+     
+
      if(fCondition==Forced && fCurrentProcess){
        (*fSelectedAtRestDoItVector)[ri] = Forced;
      }
@@ -309,18 +312,17 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        if(lifeTime < shortestLifeTime ){
           shortestLifeTime = lifeTime;
           fAtRestDoItProcTriggered =  G4int(ri);
-          (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
        }
      }
    }
 
+  (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
+
 // at least one process is necessary to destroy the particle  
 // exit with warning 
    if(NofInactiveProc==MAXofAtRestLoops){ 
-     G4cerr << "ERROR - G4SteppingManager::InvokeAtRestDoItProcs()" << G4endl
-            << "        No AtRestDoIt process is active!" << G4endl;
-     // G4Exception("G4SteppingManager::InvokeAtRestDoItProcs", "Tracking0013",
-     //             FatalException, "No AtRestDoIt process is active." );
+     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs()", "Tracking0013",
+                 JustWarning, "No AtRestDoIt process is active!" );
    }
 
    fStep->SetStepLength( 0. );  //the particle has stopped
@@ -367,6 +369,8 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+           if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
+           { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
@@ -441,6 +445,8 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+           if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
+           { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
@@ -557,6 +563,8 @@ void G4SteppingManager::InvokePSDIP(size_t np)
             // it invokes a rest process at the beginning of the tracking
 	    if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+              if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
+              { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 		fSecondary->push_back( tempSecondaryTrack );

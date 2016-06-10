@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -41,10 +39,21 @@
 
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLConfigEnums.hh"
-#include "G4INCLIRandomGenerator.hh"
+#include "G4INCLRandomSeedVector.hh"
 #include <iostream>
 #include <string>
 #include <sstream>
+// #include <cassert>
+
+#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
+#include <boost/program_options/options_description.hpp>
+#include <boost/program_options/parsers.hpp>
+#include <boost/program_options/variables_map.hpp>
+#include <fstream>
+#include <cstdlib>
+
+namespace po = boost::program_options;
+#endif
 
 namespace G4INCL {
 
@@ -124,10 +133,10 @@ namespace G4INCL {
     void setProjectileSpecies(ParticleSpecies const &ps) { projectileSpecies=ps; }
 
     /// \brief Get the projectile kinetic energy.
-    G4float getProjectileKineticEnergy() const { return projectileKineticEnergy; }
+    G4double getProjectileKineticEnergy() const { return projectileKineticEnergy; }
 
     /// \brief Set the projectile kinetic energy.
-    void setProjectileKineticEnergy(G4float const kinE) { projectileKineticEnergy=kinE; }
+    void setProjectileKineticEnergy(G4double const kinE) { projectileKineticEnergy=kinE; }
 
     /// \brief Get the number of the verbose event.
     G4int getVerboseEvent() const { return verboseEvent; }
@@ -135,9 +144,19 @@ namespace G4INCL {
     /// \brief Get the INCL version ID.
     static std::string const getVersionID();
 
+    /// \brief Get the INCL version hash.
+    static std::string const getVersionHash();
+
+    /// \brief Get the INCL version string.
+    static std::string const getVersionString() {
+      std::stringstream ss;
+      ss << getVersionID() << "-" << getVersionHash();
+      return ss.str();
+    }
+
     /// \brief Get the seeds for the random-number generator.
-    SeedVector const getRandomSeeds() const {
-      SeedVector s;
+    Random::SeedVector getRandomSeeds() const {
+      Random::SeedVector s;
       s.push_back(randomSeed1);
       s.push_back(randomSeed2);
       return s;
@@ -182,6 +201,9 @@ namespace G4INCL {
     /// \brief Get the de-excitation model.
     DeExcitationType getDeExcitationType() const { return deExcitationType; }
 
+    /// \brief Get the de-excitation string.
+    std::string getDeExcitationString() const { return deExcitationString; }
+
     /// \brief Get the clustering algorithm.
     ClusterAlgorithmType getClusterAlgorithm() const { return clusterAlgorithmType; }
 
@@ -199,9 +221,6 @@ namespace G4INCL {
 
     /// \brief Set whether to use real masses
     void setUseRealMasses(G4bool use) { useRealMasses = use; }
-
-    /// \brief Echo the input options.
-    std::string const echo() const;
 
     std::string const &getINCLXXDataFilePath() const {
       return INCLXXDataFilePath;
@@ -226,14 +245,90 @@ namespace G4INCL {
 
     G4double getImpactParameter() const { return impactParameter; }
 
-    /// \brief Get the separation-energy type.
+    /// \brief Get the separation-energy type
     SeparationEnergyType getSeparationEnergyType() const { return separationEnergyType; }
 
+    /// \brief Get the Fermi-momentum type
+    FermiMomentumType getFermiMomentumType() const { return fermiMomentumType; }
+
+    /// \brief Set the Fermi-momentum type
+    void setFermiMomentumType(FermiMomentumType const f) { fermiMomentumType=f; }
+
+    G4double getCutNN() const { return cutNN; }
+
+#ifdef INCL_ROOT_USE
+    std::string const &getROOTSelectionString() const {
+      return rootSelectionString;
+    }
+#endif
+
+#ifdef INCL_DEEXCITATION_FERMI_BREAKUP
+    G4int getMaxMassFermiBreakUp() const {
+      return maxMassFermiBreakUp;
+    }
+#endif
+
+    /// \brief Get the r-p correlation coefficient
+    G4double getRPCorrelationCoefficient(const ParticleType t) const {
+// assert(t==Proton || t==Neutron);
+      return ((t==Proton) ? rpCorrelationCoefficientProton : rpCorrelationCoefficientNeutron);
+    }
+
+    /// \brief Set the r-p correlation coefficient
+    void setRPCorrelationCoefficient(const ParticleType t, const G4double corrCoeff) {
+// assert(t==Proton || t==Neutron);
+      if(t==Proton)
+        rpCorrelationCoefficientProton=corrCoeff;
+      else
+        rpCorrelationCoefficientNeutron=corrCoeff;
+    }
+
+    /// \brief Set the r-p correlation coefficient
+    void setRPCorrelationCoefficient(const G4double corrCoeff) {
+      setRPCorrelationCoefficient(Proton,corrCoeff);
+      setRPCorrelationCoefficient(Neutron,corrCoeff);
+    }
+
+    /// \brief Get the neutron-skin thickness
+    G4double getNeutronSkinThickness() const { return neutronSkinThickness; }
+
+    /// \brief Set the neutron-skin thickness
+    void setNeutronSkinThickness(const G4double d) { neutronSkinThickness=d; }
+
+    /// \brief Get the neutron-skin additional diffuseness
+    G4double getNeutronSkinAdditionalDiffuseness() const { return neutronSkinAdditionalDiffuseness; }
+
+    /// \brief Set the neutron-skin additional diffuseness
+    void setNeutronSkinAdditionalDiffuseness(const G4double d) { neutronSkinAdditionalDiffuseness=d; }
+
+    /// \brief True if we should use refraction
+    G4bool getRefraction() const { return refraction; }
+
+    /// \brief Set the refraction variable
+    void setRefraction(const G4bool r) { refraction = r; }
+
+#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
+    /// \brief Echo the input options.
+    std::string const echo() const;
+#endif
+
   private:
+
+#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
+    std::string echoOptionsDescription(const po::options_description &aDesc) const;
+
+    po::options_description runOptDesc;
+    po::options_description hiddenOptDesc;
+    po::options_description genericOptDesc;
+    po::options_description physicsOptDesc;
+    po::variables_map variablesMap;
+#endif
+
     G4int verbosity;
     std::string inputFileName;
     std::string title;
     std::string outputFileRoot;
+    std::string fileSuffix;
     std::string logFileName;
 
     G4int nShots;
@@ -244,11 +339,12 @@ namespace G4INCL {
 
     std::string projectileString;
     ParticleSpecies projectileSpecies;
-    G4float projectileKineticEnergy;
+    G4double projectileKineticEnergy;
 
     G4int verboseEvent;
 
     G4int randomSeed1, randomSeed2;
+    static const G4int randomSeedMin, randomSeedMax;
 
     std::string pauliString;
     PauliType pauliType;
@@ -267,6 +363,8 @@ namespace G4INCL {
     std::string localEnergyPiString;
     LocalEnergyType localEnergyPiType;
 
+    std::string deExcitationModelList;
+    std::string deExcitationOptionDescription;
     std::string deExcitationString;
     DeExcitationType deExcitationType;
 #ifdef INCL_DEEXCITATION_ABLAXX
@@ -294,6 +392,27 @@ namespace G4INCL {
     std::string separationEnergyString;
     SeparationEnergyType separationEnergyType;
 
+    std::string fermiMomentumString;
+    FermiMomentumType fermiMomentumType;
+
+    G4double cutNN;
+
+#ifdef INCL_ROOT_USE
+    std::string rootSelectionString; 
+#endif
+
+#ifdef INCL_DEEXCITATION_FERMI_BREAKUP
+    G4int maxMassFermiBreakUp;
+#endif
+
+    G4double rpCorrelationCoefficient;
+    G4double rpCorrelationCoefficientProton;
+    G4double rpCorrelationCoefficientNeutron;
+
+    G4double neutronSkinThickness;
+    G4double neutronSkinAdditionalDiffuseness;
+
+    G4bool refraction;
   };
 
 }

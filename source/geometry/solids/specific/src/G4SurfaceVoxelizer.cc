@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4SurfaceVoxelizer.cc 78188 2013-12-04 16:32:00Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -55,7 +54,7 @@
 
 using namespace std;
 
-G4int G4SurfaceVoxelizer::fDefaultVoxelsCount = -1;
+G4ThreadLocal G4int G4SurfaceVoxelizer::fDefaultVoxelsCount = -1;
 
 //______________________________________________________________________________
 G4SurfaceVoxelizer::G4SurfaceVoxelizer()
@@ -114,7 +113,7 @@ void G4SurfaceVoxelizer::BuildEmpty()
     }
   }
 #ifdef G4SPECSDEBUG
-  G4cout << "Non-empty voxels count: " << fCandidates.size() << endl;
+  G4cout << "Non-empty voxels count: " << fCandidates.size() << G4endl;
 #endif
 }
 
@@ -189,6 +188,9 @@ void G4SurfaceVoxelizer::CreateSortedBoundary(std::vector<G4double> &boundary,
 
     // x boundaries
     //
+#ifdef G4SPECSDEBUG
+    G4cout << "Boundary " << p - d << " - " << p + d << G4endl;
+#endif
     boundary[2*i] = p - d;
     boundary[2*i+1] = p + d;
   }
@@ -228,11 +230,18 @@ void G4SurfaceVoxelizer::BuildBoundaries()
       for(G4int i = 0 ; i < 2*numNodes; ++i)
       {
         G4double newBoundary = sortedBoundary[i];
+#ifdef G4SPECSDEBUG	
+        if (j == 0) G4cout << "Examining " << newBoundary << "..." << G4endl;
+#endif
         G4int size = boundary.size();
         if(!size || abs(boundary[size-1] - newBoundary) > tolerance)
         {
           considered++;
           {
+#ifdef G4SPECSDEBUG	    
+            if (j == 0) G4cout << "Adding boundary " << newBoundary << "..."
+                               << G4endl;
+#endif	  
             boundary.push_back(newBoundary);
             continue;
           }
@@ -274,7 +283,7 @@ void G4SurfaceVoxelizer::DisplayBoundaries()
   char axis[3] = {'X', 'Y', 'Z'};
   for (G4int i = 0; i <= 2; ++i)
   {
-    G4cout << " * " << axis[i] << " axis:" << endl << "    | ";
+    G4cout << " * " << axis[i] << " axis:" << G4endl << "    | ";
     DisplayBoundaries(fBoundaries[i]);
   }
 }
@@ -291,7 +300,7 @@ void G4SurfaceVoxelizer::DisplayBoundaries(std::vector<G4double> &boundaries)
     G4cout << setw(10) << setiosflags(ios::fixed) << boundaries[i];
     if(i != count-1) G4cout << "-> ";
   }
-  G4cout << "|" << endl << "Number of boundaries: " << count << endl;
+  G4cout << "|" << G4endl << "Number of boundaries: " << count << G4endl;
   G4cout.precision(oldprec);
 }
 
@@ -315,6 +324,9 @@ void G4SurfaceVoxelizer::BuildBitmasks(std::vector<G4double> boundaries[],
     if (!countsOnly)
     {
       bitmask.Clear();
+#ifdef G4SPECSDEBUG
+      G4cout << "Allocating bitmask..." << G4endl;
+#endif
       bitmask.SetBitNumber(voxelsCount*bitsPerSlice-1, false);
         // it is here so we can set the maximum number of bits. this line
         // will rellocate the memory and set all to zero
@@ -337,12 +349,15 @@ void G4SurfaceVoxelizer::BuildBitmasks(std::vector<G4double> boundaries[],
       G4double max = p + d; // + localTolerance;
 
       G4int i = BinarySearch(boundary, min);
+      if (i < 0)  { i = 0; }
 
       do
       {
-        if (!countsOnly) 
-          bitmask.SetBitNumber(i*bitsPerSlice+j);
-
+        if (!countsOnly)
+        {
+          G4int index = i*bitsPerSlice+j;
+          bitmask.SetBitNumber(index);
+        }
         candidatesCount[i]++;
         total++;
         i++;
@@ -351,12 +366,12 @@ void G4SurfaceVoxelizer::BuildBitmasks(std::vector<G4double> boundaries[],
     }
   }
 #ifdef G4SPECSDEBUG
-  G4cout << "Build list nodes completed" << endl;
+  G4cout << "Build list nodes completed." << G4endl;
 #endif
 }
 
 //______________________________________________________________________________
-G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits)
+G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits) const
 {
   // Decodes the candidates in mask as G4String.
 
@@ -371,7 +386,7 @@ G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits)
 }
 
 //______________________________________________________________________________
-void G4SurfaceVoxelizer::DisplayListNodes()
+void G4SurfaceVoxelizer::DisplayListNodes() const
 {
   // Prints which solids are present in the slices previously elaborated.
 
@@ -381,7 +396,7 @@ void G4SurfaceVoxelizer::DisplayListNodes()
 
   for (G4int j = 0; j <= 2; ++j)
   {
-    G4cout << " * " << axis[j] << " axis:" << endl;
+    G4cout << " * " << axis[j] << " axis:" << G4endl;
     G4int count = fBoundaries[j].size();
     for(G4int i=0; i < count-1; ++i)
     {
@@ -390,7 +405,7 @@ void G4SurfaceVoxelizer::DisplayListNodes()
       bits.set(size,(const char *)fBitmasks[j].fAllBits+i
                                  *fNPerSlice*sizeof(G4int));
       G4String result = GetCandidatesAsString(bits);
-      G4cout << "[ " << result.c_str() << "]  " << endl;
+      G4cout << "[ " << result.c_str() << "]  " << G4endl;
     }
   }
 }
@@ -624,10 +639,22 @@ void G4SurfaceVoxelizer::Voxelize(std::vector<G4VFacet *> &facets)
 
   if ((size >= 10 || maxVoxels > 0) && maxVoxels != 0 && maxVoxels != 1)
   {
+#ifdef G4SPECSDEBUG
+    G4cout << "Building voxel limits..." << G4endl;
+#endif
+    
     BuildVoxelLimits(facets);
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Building boundaries..." << G4endl;
+#endif
+    
     BuildBoundaries();
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Building bitmasks..." << G4endl;
+#endif
+    
     BuildBitmasks(fBoundaries, 0, true);
 
     if (maxVoxels < 0 && reductionRatio == G4ThreeVector())
@@ -641,7 +668,7 @@ void G4SurfaceVoxelizer::Voxelize(std::vector<G4VFacet *> &facets)
     fCountOfVoxels = CountVoxels(fBoundaries);
 
 #ifdef G4SPECSDEBUG
-    G4cout << "Total number of voxels: " << fCountOfVoxels << endl;
+    G4cout << "Total number of voxels: " << fCountOfVoxels << G4endl;
 #endif
 
     BuildReduceVoxels2(fBoundaries, reductionRatio);
@@ -650,9 +677,13 @@ void G4SurfaceVoxelizer::Voxelize(std::vector<G4VFacet *> &facets)
 
 #ifdef G4SPECSDEBUG
     G4cout << "Total number of voxels after reduction: "
-           << fCountOfVoxels << endl;
+           << fCountOfVoxels << G4endl;
 #endif
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Building bitmasks..." << G4endl;
+#endif
+    
     BuildBitmasks(fBoundaries, fBitmasks);
 
     G4ThreeVector reductionRatioMini;
@@ -673,21 +704,44 @@ void G4SurfaceVoxelizer::Voxelize(std::vector<G4VFacet *> &facets)
 
     SetReductionRatio(voxelsCountMini, reductionRatioMini);
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Building reduced voxels..." << G4endl;
+#endif
+    
     BuildReduceVoxels(miniBoundaries, reductionRatioMini);
 
 #ifdef G4SPECSDEBUG
     G4int total = CountVoxels(miniBoundaries);
-    G4cout << "Total number of mini voxels: " << total << endl;
+    G4cout << "Total number of mini voxels: " << total << G4endl;
 #endif
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Building mini bitmasks..." << G4endl;
+#endif
+    
     BuildBitmasks(miniBoundaries, bitmasksMini);
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Creating Mini Voxels..." << G4endl;
+#endif
+    
     CreateMiniVoxels(miniBoundaries, bitmasksMini);
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Building bounding box..." << G4endl;
+#endif
+    
     BuildBoundingBox();
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Building empty..." << G4endl;
+#endif
+    
     BuildEmpty();
 
+#ifdef G4SPECSDEBUG
+    G4cout << "Deallocating unnecessary fields during runtime..." << G4endl;
+#endif    
     // deallocate fields unnecessary during runtime
     //
     fBoxes.resize(0);
@@ -712,7 +766,7 @@ void G4SurfaceVoxelizer::GetCandidatesVoxel(std::vector<G4int> &voxels)
   G4int count = GetCandidatesVoxelArray(voxels, candidates);
   G4cout << "[ ";
   for (G4int i = 0; i < count; ++i) G4cout << candidates[i];
-  G4cout << "]  " << endl;
+  G4cout << "]  " << G4endl;
 }
 
 //______________________________________________________________________________
@@ -940,7 +994,7 @@ G4SurfaceVoxelizer::DistanceToNext(const G4ThreeVector &point,
     G4int cur = curVoxel[i];
     if(direction[i] >= 1e-10)
     {
-        if (boundary[cur] - point[i] < fTolerance) // make sure shift would
+        if (boundary[++cur] - point[i] < fTolerance) // make sure shift would
         if (++cur >= (G4int) boundary.size())      // be non-zero
           continue;
     }
@@ -1045,4 +1099,4 @@ G4int G4SurfaceVoxelizer::AllocatedMemory()
 
   return size;
 }
-
+ 

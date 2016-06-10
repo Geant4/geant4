@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-11-15 08:24:43 gcosmo Exp $
+# $Id: sources.cmake 73081 2013-08-16 12:58:22Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,6 +52,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNACrossSectionDataSet.hh
         G4DNADamages.hh
         G4DNAGenericIonsManager.hh
+	G4DNAIons.hh
         G4DNAMolecularReactionTable.hh
         G4DNAWaterExcitationStructure.hh
         G4DNAWaterIonisationStructure.hh
@@ -62,6 +63,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNACrossSectionDataSet.cc
         G4DNADamages.cc
         G4DNAGenericIonsManager.cc
+	G4DNAIons.cc
         G4DNAMolecularReactionTable.cc
         G4DNAWaterExcitationStructure.cc
         G4DNAWaterIonisationStructure.cc

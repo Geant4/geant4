@@ -16,7 +16,6 @@
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
 /gui/addButton run run1 "/control/execute run1.mac"
-/gui/addButton run run2 "/control/execute run2.mac"
 #
 # Gun menu :
 /gui/addMenu gun Gun
@@ -31,14 +30,14 @@
 #
 # Field menu :
 /gui/addMenu field Field
-/gui/addButton field "off"       "/B2/det/setField 0.2 tesla"
-/gui/addButton field "0.2 tesla" "/B2/det/setField 0.2 tesla"
-/gui/addButton field "2.0 tesla" "/B2/det/setField 2.0 tesla"
+/gui/addButton field "off"       "/globalField/setValue 0   0 0 tesla"
+/gui/addButton field "0.2 tesla" "/globalField/setValue 0.2 0 0 tesla"
+/gui/addButton field "2.0 tesla" "/globalField/setValue 2.0 0 0 tesla"
 #
 # Viewer menu :
 /gui/addMenu viewer Viewer
 /gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"
-/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
+/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wireframe"
 /gui/addButton viewer "Refresh viewer" "/vis/viewer/refresh"
 /gui/addButton viewer "Update viewer (interaction or end-of-file)" "/vis/viewer/update"
 /gui/addButton viewer "Flush viewer (= refresh + update)" "/vis/viewer/flush"

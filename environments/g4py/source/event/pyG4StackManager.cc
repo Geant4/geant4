@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: pyG4StackManager.cc,v 1.4 2006-06-29 15:31:38 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4StackManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4StackManager.cc
 //
@@ -42,11 +41,11 @@ using namespace boost::python;
 namespace pyG4StackManager {
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ClearWaitingStack,
-                                       ClearWaitingStack, 0, 1);
+                                       ClearWaitingStack, 0, 1)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetNWaitingTrack,
-                                       GetNWaitingTrack, 0, 1);
-};
+                                       GetNWaitingTrack, 0, 1)
+}
 
 using namespace pyG4StackManager;
 

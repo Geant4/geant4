@@ -23,15 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exgps.cc 76468 2013-11-11 10:27:19Z gcosmo $
+//
 /// \file eventgenerator/exgps/exgps.cc
 /// \brief Main program of the eventgenerator/exgps example
 //
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "exGPSAnalysisManager.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
 #endif
+
+#include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -41,36 +47,30 @@
 #include "G4UIExecutive.hh"
 #endif
 
+
 #include "exGPSGeometryConstruction.hh"
 #include "exGPSPhysicsList.hh"
 #include "exGPSPrimaryGeneratorAction.hh"
 #include "exGPSRunAction.hh"
 #include "exGPSEventAction.hh"
-
+#include "exGPSActionInitialization.hh"
 
 int main(int argc,char** argv) {
 
   // Construct the default run manager
+#ifdef G4MULTITHREADED
+  G4int nThreads = 4;
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(nThreads);
+#else
   G4RunManager * runManager = new G4RunManager;
-
-#ifdef G4ANALYSIS_USE
-  //constructe the analysis manager (need here to activate the UI)
-  exGPSAnalysisManager::GetInstance();
 #endif
 
   // set mandatory initialization classes
   exGPSGeometryConstruction* detector = new exGPSGeometryConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new exGPSPhysicsList);
-  
-  // Set optional user action classes
-  exGPSEventAction* eventAction = new exGPSEventAction();
-  exGPSRunAction* runAction = new exGPSRunAction();
-
-  // set user action classes
-  runManager->SetUserAction(new exGPSPrimaryGeneratorAction);
-  runManager->SetUserAction(runAction);
-  runManager->SetUserAction(eventAction);
+  runManager->SetUserInitialization(new exGPSActionInitialization());
   
   //Initialize G4 kernel
   runManager->Initialize();
@@ -101,11 +101,6 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-
-#ifdef G4ANALYSIS_USE
-  exGPSAnalysisManager::Dispose();
-#endif
-
 #ifdef G4VIS_USE
   delete visManager;
 #endif

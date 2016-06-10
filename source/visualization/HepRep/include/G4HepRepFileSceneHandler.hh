@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4HepRepFileSceneHandler.hh 66870 2013-01-14 23:38:59Z adotti $
 //
 //
 // Joseph Perl  27th January 2002
@@ -98,7 +98,6 @@ public:
   void AddPrimitive(const G4Circle&);
   void AddPrimitive(const G4Square&);
   void AddPrimitive(const G4Polyhedron&);
-  void AddPrimitive(const G4NURBS&);
 
   ////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////

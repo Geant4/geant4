@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuMinusCaptureCascade.hh 66367 2012-12-18 09:18:08Z gcosmo $
 //
 //   G4MuMinusCaptureCascade physics process --------
 //   Vladimir Ivanchenko, April 2000

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4E1Probability.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -166,7 +166,7 @@ G4double G4E1Probability::EmissionIntegration(const G4Fragment& frag,
   // Simple integration
   // VI replace by direct integration over 100 point
 
-  const G4int numIters = 100;
+  static const G4int numIters = 100;
   G4double Step = (upLim-lowLim)/G4double(numIters);
 
   G4double res = 0.0;

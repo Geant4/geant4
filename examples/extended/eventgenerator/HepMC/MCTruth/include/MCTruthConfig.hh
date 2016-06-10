@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthConfig class
 //
 //
-// $Id$
+// $Id: MCTruthConfig.hh 73446 2013-08-27 11:32:59Z gcosmo $
 //
 //
 // --------------------------------------------------------------

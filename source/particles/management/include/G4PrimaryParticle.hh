@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PrimaryParticle.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 //
 
@@ -35,6 +35,8 @@
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
+
+#include "pwdefs.hh"
 
 class G4ParticleDefinition;
 class G4VUserPrimaryParticleInformation;
@@ -176,22 +178,20 @@ class G4PrimaryParticle
 
 };
 
-#if defined G4PARTICLES_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
-#endif
+extern G4PART_DLL G4ThreadLocal G4Allocator<G4PrimaryParticle> *aPrimaryParticleAllocator;
 
 inline void * G4PrimaryParticle::operator new(size_t)
 {
-  void * aPrimaryParticle;
-  aPrimaryParticle = (void *) aPrimaryParticleAllocator.MallocSingle();
-  return aPrimaryParticle;
+  if (!aPrimaryParticleAllocator)
+  {
+    aPrimaryParticleAllocator = new G4Allocator<G4PrimaryParticle>;
+  }
+  return (void *) aPrimaryParticleAllocator->MallocSingle();
 }
 
 inline void G4PrimaryParticle::operator delete(void * aPrimaryParticle)
 {
-  aPrimaryParticleAllocator.FreeSingle((G4PrimaryParticle *) aPrimaryParticle);
+  aPrimaryParticleAllocator->FreeSingle((G4PrimaryParticle *) aPrimaryParticle);
 }
 
 inline G4double G4PrimaryParticle::GetMass() const
@@ -331,4 +331,3 @@ inline void G4PrimaryParticle::SetPolarization(const G4ThreeVector& pol)
 }
 
 #endif
-

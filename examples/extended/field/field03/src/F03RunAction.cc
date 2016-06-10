@@ -26,11 +26,12 @@
 /// \file field/field03/src/F03RunAction.cc
 /// \brief Implementation of the F03RunAction class
 //
-// $Id$
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// $Id: F03RunAction.cc 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F03RunAction.hh"
 #include "F03RunMessenger.hh"
@@ -38,47 +39,46 @@
 #include "G4Run.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
+
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03RunAction::F03RunAction()
   : G4UserRunAction(),
-    fRunMessenger(0),
+    fMessenger(0),
     fSaveRndm(0)
 {
-  fRunMessenger = new F03RunMessenger(this);
+  fMessenger = new F03RunMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03RunAction::~F03RunAction()
 {
-  delete fRunMessenger;
+  delete fMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-///
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03RunAction::BeginOfRunAction(const G4Run* run)
-{  
+{
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-  
+
   // save Rndm status
   if (fSaveRndm > 0)
-  { 
-    CLHEP::HepRandom::showEngineStatus();
-    CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
-  }  
-  
-  G4UImanager* uiManager = G4UImanager::GetUIpointer();
+  {
+      G4Random::showEngineStatus();
+      G4Random::saveEngineStatus("beginOfRun.rndm");
+  }
+  G4UImanager* ui = G4UImanager::GetUIpointer();
+ 
   G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
 
-  if(visManager) uiManager->ApplyCommand("/vis/scene/notifyHandlers");
+  if (visManager) ui->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03RunAction::EndOfRunAction(const G4Run*)
 {
@@ -90,10 +90,10 @@ void F03RunAction::EndOfRunAction(const G4Run*)
   // save Rndm status
 
   if (fSaveRndm == 1)
-  { 
-    CLHEP::HepRandom::showEngineStatus();
-    CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
-  }     
+  {
+    G4Random::showEngineStatus();
+    G4Random::saveEngineStatus("endOfRun.rndm");
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

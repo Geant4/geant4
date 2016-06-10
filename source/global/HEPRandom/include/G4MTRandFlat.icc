@@ -1,0 +1,190 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id:$
+//
+inline G4MTRandFlat::
+G4MTRandFlat(CLHEP::HepRandomEngine & anEngine)
+: firstUnusedBit(0), localEngine(&anEngine), deleteEngine(false), 
+  defaultA(0.0), defaultB(1.0) {}
+
+inline G4MTRandFlat::
+G4MTRandFlat(CLHEP::HepRandomEngine & anEngine, G4double width )
+: firstUnusedBit(0), localEngine(&anEngine), deleteEngine(false), 
+  defaultA(0.0), defaultB(width) {}
+
+inline G4MTRandFlat::
+G4MTRandFlat(CLHEP::HepRandomEngine & anEngine, G4double a, G4double b )
+: firstUnusedBit(0), localEngine(&anEngine), deleteEngine(false), 
+  defaultA(a), defaultB(b) {}
+
+inline G4MTRandFlat::
+G4MTRandFlat(CLHEP::HepRandomEngine * anEngine)
+: firstUnusedBit(0), localEngine(anEngine), deleteEngine(true), 
+  defaultA(0.0), defaultB(1.0) {}
+
+inline G4MTRandFlat::
+G4MTRandFlat(CLHEP::HepRandomEngine * anEngine, G4double width )
+: firstUnusedBit(0), localEngine(anEngine), deleteEngine(true), 
+  defaultA(0.0), defaultB(width) {}
+
+inline G4MTRandFlat::
+G4MTRandFlat(CLHEP::HepRandomEngine * anEngine, G4double a, G4double b )
+: firstUnusedBit(0), localEngine(anEngine), deleteEngine(true), 
+  defaultA(a), defaultB(b) {}
+
+inline G4double G4MTRandFlat::shoot(G4double a, G4double b)
+{
+  return (b-a)* shoot() + a;
+}
+
+inline G4double G4MTRandFlat::shoot(G4double width)
+{
+  return width * shoot();
+}
+
+inline G4long G4MTRandFlat::shootInt(G4long n)
+{
+  return G4long(shoot()*G4double(n));
+}
+
+inline G4long G4MTRandFlat::shootInt(G4long mLong, G4long nLong)
+{
+  return G4long(shoot()*G4double(nLong-mLong)) + mLong;
+}
+
+inline void G4MTRandFlat::shootBits()
+{
+  const G4double factor= 2.0*MSB; // this should fit into a double! 
+  staticFirstUnusedBit= MSB;
+  staticRandomInt= (unsigned long)(factor*shoot());  
+}
+
+inline G4int G4MTRandFlat::shootBit()
+{
+  if (staticFirstUnusedBit==0)
+    shootBits();
+  unsigned long temp= staticFirstUnusedBit&staticRandomInt;
+  staticFirstUnusedBit>>= 1;
+  return temp!=0;   
+}
+
+//---------------------
+
+inline G4double G4MTRandFlat::shoot(CLHEP::HepRandomEngine* anEngine)
+{
+  return anEngine->flat();
+}
+
+
+inline G4double G4MTRandFlat::shoot(CLHEP::HepRandomEngine* anEngine,
+                                    G4double a, G4double b)
+{
+  return (b-a)* anEngine->flat() + a;
+}
+
+inline G4double G4MTRandFlat::shoot(CLHEP::HepRandomEngine* anEngine,
+                                    G4double width)
+{
+  return width * anEngine->flat();
+}
+
+inline G4long G4MTRandFlat::shootInt(CLHEP::HepRandomEngine* anEngine,
+                                     G4long n)
+{
+  return G4long(anEngine->flat()*G4double(n));
+}
+
+inline G4long G4MTRandFlat::shootInt(CLHEP::HepRandomEngine* anEngine,
+                                     G4long mparam, G4long n)
+{
+  return G4long(G4double(n-mparam)*anEngine->flat()) + mparam;
+}
+
+inline void G4MTRandFlat::shootArray(CLHEP::HepRandomEngine* anEngine,
+                                     const G4int size, G4double* vect)
+{
+  anEngine->flatArray(size,vect);
+}
+
+inline void G4MTRandFlat::shootBits(CLHEP::HepRandomEngine* engine)
+{
+  const G4double factor= 2.0*MSB; // this should fit into a double! 
+  staticFirstUnusedBit= MSB;
+  staticRandomInt= (unsigned long)(factor*shoot(engine));  
+}
+
+inline G4int G4MTRandFlat::shootBit(CLHEP::HepRandomEngine* engine)
+{
+  if (staticFirstUnusedBit==0)
+    shootBits(engine);
+  unsigned long temp= staticFirstUnusedBit&staticRandomInt;
+  staticFirstUnusedBit>>= 1;
+  return temp!=0;   
+}
+
+//---------------------
+
+inline G4double G4MTRandFlat::fire()
+{
+  return (defaultB-defaultA)*localEngine->flat()+defaultA;
+}
+
+inline G4double G4MTRandFlat::fire(G4double a, G4double b)
+{
+  return (b-a)* localEngine->flat() + a;
+}
+
+inline G4double G4MTRandFlat::fire(G4double width)
+{
+  return width * localEngine->flat();
+}
+
+inline G4long G4MTRandFlat::fireInt(G4long n)
+{
+  return G4long(localEngine->flat()*G4double(n));
+}
+
+inline G4long G4MTRandFlat::fireInt(G4long mparam, G4long n)
+{
+  return G4long(localEngine->flat()*G4double(n-mparam)) + mparam;
+}
+
+inline void G4MTRandFlat::fireBits()
+{
+  const G4double factor= 2.0*MSB; // this should fit into a double! 
+  firstUnusedBit= MSB;
+  randomInt= (unsigned long)(factor*localEngine->flat());  
+}
+
+inline G4int G4MTRandFlat::fireBit()
+{
+  if (firstUnusedBit==0)
+    fireBits();
+  unsigned long temp= firstUnusedBit&randomInt;
+  firstUnusedBit>>= 1;
+  return temp!=0;   
+}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoringCylinder.cc 68735 2013-04-05 09:49:13Z gcosmo $
 //
 
 #include "G4ScoringCylinder.hh"
@@ -53,7 +53,7 @@
 
 
 G4ScoringCylinder::G4ScoringCylinder(G4String wName)
-  :G4VScoringMesh(wName), fMeshElementLogical(0)
+  :G4VScoringMesh(wName)
 {
   fShape = cylinderMesh;
 
@@ -78,8 +78,6 @@ void G4ScoringCylinder::Construct(G4VPhysicalVolume* fWorldPhys)
     SetupGeometry(fWorldPhys);
   }
 }
-
-
 
 void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 

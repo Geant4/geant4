@@ -1,8 +1,8 @@
 
-                    Examples for event biasing: B01 and B02
-                    ---------------------------------------
+               Examples for event biasing: B01, B02 and B03
+               --------------------------------------------
 
-B01 and B02 applications demonstrate the usage of different variance
+B01, B02 and B03 applications demonstrate the usage of different variance
 reduction techniques supported in Geant4, or possible from the user
 applications.
 
@@ -20,29 +20,12 @@ to produce physical correct results.
 
 General remark to scoring
 -------------------------
-A interface G4VScorer is provided for the user. The user may create his 
-own class to perform the desired scoring. The user defined class 
-therefore should inherit from the interface G4VScorer. 
-An example of an implementation of a scorer is G4Scorer
-which may be found in source/event. 
-The scoring in these examples is done with a G4Scorer.
-The variance reduction techniques and scoring do not support all options
-of the Geant4 geometry. It only supports physical volumes and simple 
-replicas.
-To identify a physical volume (or replica) objects of the class
-G4GeometryCell are used. Scoring is done according to these
-cells and importance values or the weight windows  may be assigned to 
-them.
-When scoring is done in a parallel geometry special action has to be taken
-to prevent counting of "collisions" with boundaries of the mass geometry 
-as interactions. This is differently handled when scoring is done in the 
-mass geometry.
+Scoring is carried out using the built-in Multifunctional detectors. For
+parallel geometries this requires a special scoring physics process.
+See examples/extended/runAndEvent (especailly RE05) for clarification.
 
---> G4GeometryCell of the parallel geometry must not share boundaries with
-the world volume! <--
-
-Known problems
---------------
+Known problems - should not happen
+----------------------------------
 In the following scenario it can happen that a particle is not
 biased and it's weight is therefore not changed even if it crosses
 a boundary where biasing should happen.
@@ -78,22 +61,49 @@ The executable takes one optional argument: 0 or 1. Without argument or
 with argument: 0, the importance sampling is applied with argument: 1,
 the weight window technique is applied.
 
+A modular approach is applied to the physicslist and the extension for biasing.
 
 Example B02
 ===========
 
 This example uses a parallel geometry to define G4GeometryCell objects
-for scoring and importance sampling. In addition it customizes
-the scoring. In this example one scorer creates a histogram.
+for scoring and importance sampling. The output should be equivalent to B01.
 
-Compiling and running
----------------------
-To compile this example you need AIDA installed. To link 
-and run it you need a AIDA compliant analysis package.
-Histograms are saved in HBOOK format.
-You need to set the following variable in your environment:
-   "G4ANALYSIS_USE"
-The example stores the plot in the file b02.hbook.
+A modular approach is applied to the physicslist and the extension for biasing.
+The parallel geometry is included in this extension.
+
+Example B03
+===========
+
+This example uses a parallel geometry to define G4GeometryCell objects
+for scoring and importance sampling. The output should be statistically 
+equivalent to B02 (and B01).
+
+This demonstrates a customised "flat" physics implementation with the addition
+of biasing. Complementary approach to the modular physics lists of B01 and B02
+
+
+ ___________________________________________________________________________
+
+
+            Generic biasing examples GB01, GB02
+            ------------------------------------
+
+These examples illustrate the usage of a biasing scheme implemented since
+version Geant4 10.0.
+The scheme is meant to be extensible, not limited to these two examples.
+
+Example GB01:
+=============
+
+This example illustrates how to bias process cross-sections in this scheme.
+
+
+Example GB02:
+=============
+
+Illustrates a force collision scheme similar to the MCNP one.
+
 
  ___________________________________________________________________________
 

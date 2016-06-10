@@ -24,11 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VGraphicsScene.cc 73125 2013-08-19 07:57:38Z gcosmo $
 // John Allison  19th July 1996
 
 #include "G4VGraphicsScene.hh"
 
+#include "G4VisExtent.hh"
+
 G4VGraphicsScene::G4VGraphicsScene() {}
 
 G4VGraphicsScene::~G4VGraphicsScene() {}
+
+const G4VisExtent& G4VGraphicsScene::GetExtent() const
+{
+  return G4VisExtent::NullExtent;
+}

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ElementData.hh 72057 2013-07-04 13:07:29Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 #include "globals.hh"
 #include "G4NistElementBuilder.hh"
 #include "G4PhysicsVector.hh"
+#include "G4Physics2DVector.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +64,9 @@ public:
   // add cross section for the element
   void InitialiseForElement(G4int Z, G4PhysicsVector* v);
 
+  // add 2D cross section for the element
+  void InitialiseForElement(G4int Z, G4Physics2DVector* v);
+
   // reserve vector of components
   void InitialiseForComponent(G4int Z, G4int nComponents=0);
 
@@ -74,6 +78,9 @@ public:
 
   // get vector for the element 
   inline G4PhysicsVector* GetElementData(G4int Z);
+
+  // get 2-D vector for the element 
+  inline G4Physics2DVector* GetElement2DData(G4int Z);
 
   // get number of components for the element 
   inline size_t GetNumberOfComponents(G4int Z);
@@ -102,7 +109,8 @@ private:
   G4ElementData & operator=(const G4ElementData &right);
   G4ElementData(const G4ElementData&);
 
-  G4PhysicsVector* elmData[maxNumElements];
+  G4PhysicsVector* elmData[maxNumElements]; 
+  G4Physics2DVector* elm2Data[maxNumElements];
   std::vector<G4PhysicsVector*> compData[maxNumElements];
   std::vector<G4int> compID[maxNumElements];
   size_t compLength[maxNumElements];
@@ -118,6 +126,12 @@ inline
 G4PhysicsVector* G4ElementData::GetElementData(G4int Z)
 {
   return elmData[Z];
+}
+
+inline 
+G4Physics2DVector* G4ElementData::GetElement2DData(G4int Z)
+{
+  return elm2Data[Z];
 }
 
 inline 

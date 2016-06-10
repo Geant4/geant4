@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01PrimaryGeneratorMessenger.hh
 /// \brief Definition of the RE01PrimaryGeneratorMessenger class
 //
-// $Id$
+// $Id: RE01PrimaryGeneratorMessenger.hh 66379 2012-12-18 09:46:33Z gcosmo $
 //
 
 #ifndef RE01PrimaryGeneratorMessenger_h

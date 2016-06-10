@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4ITNavigator.hh,v 1.34 2010-12-15 13:46:39 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /// \brief { Class description:
@@ -519,7 +518,6 @@ if(fpNavigatorState == 0) \
     exceptionDescription << "Either NewNavigatorStateAndLocate was not called "; \
     exceptionDescription << "or the provided navigator state was already NULL."; \
     G4Exception((G4String("G4Navigator")+G4String(__FUNCTION__)).c_str(),"NavigatorStateNotValid",FatalException,exceptionDescription); \
-    exit(-1); \
 }
 
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VSensitiveDetector.cc,v 1.4 2006-06-29 15:30:26 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VSensitiveDetector.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VSensitiveDetector.cc
 //
@@ -46,7 +45,7 @@ class  CB_G4VSensitiveDetector :
 
 public:
   CB_G4VSensitiveDetector() : G4VSensitiveDetector("") { }
-  CB_G4VSensitiveDetector(const G4String& name) 
+  CB_G4VSensitiveDetector(const G4String& name)
     : G4VSensitiveDetector(name) { }
   ~CB_G4VSensitiveDetector() { }
 
@@ -55,7 +54,7 @@ public:
   }
 };
 
-};
+}
 
 using namespace pyG4VSensitiveDetector;
 
@@ -78,7 +77,7 @@ void export_G4VSensitiveDetector()
     .def("ProcessHits", pure_virtual(&CB_G4VSensitiveDetector::ProcessHits))
     // ---
     .def("SetROgeometry",   &G4VSensitiveDetector::SetROgeometry)
-    .def("GetNumberOfCollections", 
+    .def("GetNumberOfCollections",
 	 &G4VSensitiveDetector::GetNumberOfCollections)
     .def("GetCollectionName", &G4VSensitiveDetector::GetCollectionName)
     .def("SetVerboseLevel", &G4VSensitiveDetector::SetVerboseLevel)

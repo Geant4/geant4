@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DNAGenericIonsManager.cc 73124 2013-08-19 07:53:33Z gcosmo $
 
 #include "G4DNAGenericIonsManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Alpha.hh"
-#include "G4Ions.hh"
+#include "G4DNAIons.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,88 +65,88 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
   //         shortlived          subType  anti_encoding
   //         excitation   
   
- G4Ions *helium;
- G4Ions *hydrogen;
- G4Ions *alphaPlus;
- G4Ions *positronium1s;
- G4Ions *positronium2s;
+ G4DNAIons *helium;
+ G4DNAIons *hydrogen;
+ G4DNAIons *alphaPlus;
+ G4DNAIons *positronium1s;
+ G4DNAIons *positronium2s;
  
- G4Ions *carbon;
- G4Ions *nitrogen;
- G4Ions *oxygen;
- G4Ions *iron;
+ G4DNAIons *carbon;
+ G4DNAIons *nitrogen;
+ G4DNAIons *oxygen;
+ G4DNAIons *iron;
 
- iron=     new G4Ions(
+ iron=     new G4DNAIons(
 			"iron",    52.5672*GeV,       0.0*MeV,  +26.0*eplus,
 			0,              +1,             0,
 			0,               0,             0,
-			"nucleus",              +26,            +56,           0,
+			"DNAion",              +26,            +56,           0,
 			true,                -1.0,             0,       
 			false,		      "",               0,             
 			0.0);
 
- oxygen=   new G4Ions(
+ oxygen=   new G4DNAIons(
 			"oxygen",    15.0074*GeV,       0.0*MeV,  +8.0*eplus,
 			0,              +1,             0,
 			0,               0,             0,
-			"nucleus",              +8,            +16,           0,
+			"DNAion",              +8,            +16,           0,
 			true,                -1.0,             0,       
 			false,		      "",               0,             
 			0.0);
 
 
- nitrogen= new G4Ions(
+ nitrogen= new G4DNAIons(
 			"nitrogen",    13.132*GeV,       0.0*MeV,  +7.0*eplus,
 			0,              +1,             0,
 			0,               0,             0,
-			"nucleus",              +7,            +14,           0,
+			"DNAion",              +7,            +14,           0,
 			true,                -1.0,             0,       
 			false,		      "",               0,             
 			0.0);
 
- carbon=   new G4Ions(
+ carbon=   new G4DNAIons(
 			"carbon",    11.267025440*GeV,       0.0*MeV,  +6.0*eplus,
 			0,              +1,             0,
 			0,               0,             0,
-			"nucleus",              +6,            +12,           0,
+			"DNAion",              +6,            +12,           0,
 			true,                -1.0,             0,       
 			false,		      "",               0,             
 			0.0);
  
- helium=   new G4Ions(
+ helium=   new G4DNAIons(
 			"helium",    3.727417*GeV,       0.0*MeV,  +0.0*eplus,
 			0,              +1,             0,
 			0,               0,             0,
-			"nucleus",              +2,            +4,           0,
+			"DNAion",		+2,	       +4,	     0,
 			true,                -1.0,             0,       
 			false,		      "",               0,             
 			0.0);
 
- alphaPlus= new G4Ions("alpha+",    3.727417*GeV,       0.0*MeV,  +1.0*eplus,
+ alphaPlus= new G4DNAIons("alpha+",    3.727417*GeV,       0.0*MeV,  +1.0*eplus,
                                1,              +1,             0,
                                0,               0,             0,
-                       "nucleus",              +1,            +4,           0,
+                       "DNAion",              +1,            +4,           0,
 			true,            -1.0,             0, false,
 			      "",               0,             0.0);
 
- hydrogen= new G4Ions("hydrogen",   0.9382723*GeV,       0.0*MeV,  +0.0*eplus,
+ hydrogen= new G4DNAIons("hydrogen",   0.9382723*GeV,       0.0*MeV,  +0.0*eplus,
                                0,              +1,             0,
                                0,               0,             0,
-                       "nucleus",              +1,            +1,           0,
+                       "DNAion",              +1,            +1,           0,
 		        true,            -1.0,             0, false,
 			      "",               0,             0.0);
 
- positronium1s= new G4Ions("Ps-1s",   2*electron_mass_c2,      0.0*MeV,  +0.0*eplus,
+ positronium1s= new G4DNAIons("Ps-1s",   2*electron_mass_c2,      0.0*MeV,  +0.0*eplus,
                                0,               0,             0,
                                0,               0,             0,
-                       "nucleus",               0,             0,           0,
+                       "DNAion",               0,             0,           0,
 		            true,            -1.0,             0, false,
 			      "",               0,             0.0);
 
- positronium2s= new G4Ions("Ps-2s",   2*electron_mass_c2,      0.0*MeV,  +0.0*eplus,
+ positronium2s= new G4DNAIons("Ps-2s",   2*electron_mass_c2,      0.0*MeV,  +0.0*eplus,
                                0,               0,             0,
                                0,               0,             0,
-                       "nucleus",               0,             0,           0,
+                       "DNAion",               0,             0,           0,
 		            true,            -1.0,             0, false,
 			      "",               0,             0.0);
 

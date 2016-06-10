@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicalVolumeSearchScene.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 // 
 // John Allison  10th August 1998.
@@ -39,7 +39,8 @@
 G4PhysicalVolumeSearchScene::G4PhysicalVolumeSearchScene
 (G4PhysicalVolumeModel* pPVModel,
  const G4String& requiredPhysicalVolumeName,
- G4int requiredCopyNo):
+ G4int requiredCopyNo,
+ G4int verbosity):
   fpPVModel                     (pPVModel),
   fRequiredPhysicalVolumeName   (requiredPhysicalVolumeName),
   fRequiredCopyNo               (requiredCopyNo),
@@ -47,6 +48,7 @@ G4PhysicalVolumeSearchScene::G4PhysicalVolumeSearchScene
   fFoundDepth                   (0),
   fpFoundPV                     (0),
   fpFoundLV                     (0),
+  fVerbosity                    (verbosity),
   fMultipleOccurrence           (false)
 {}
 
@@ -82,7 +84,7 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
       fFoundObjectTransformation = *fpCurrentObjectTransformation;
     }
     else {
-      if (!fMultipleOccurrence) {
+      if (!fMultipleOccurrence && fVerbosity > 0) {
 	fMultipleOccurrence = true;
 	G4cout << "G4PhysicalVolumeSearchScene::FindVolume:"
 	       << "\n  Required volume \""

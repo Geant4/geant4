@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FieldManagerStore.cc 69589 2013-05-08 14:35:28Z gcosmo $
 //
 // G4FieldManagerStore
 //
@@ -42,8 +42,8 @@
 // Static class variables
 // ***************************************************************************
 //
-G4FieldManagerStore* G4FieldManagerStore::fgInstance = 0;
-G4bool G4FieldManagerStore::locked = false;
+G4ThreadLocal G4FieldManagerStore* G4FieldManagerStore::fgInstance = 0;
+G4ThreadLocal G4bool G4FieldManagerStore::locked = false;
 
 // ***************************************************************************
 // Protected constructor: Construct underlying container with
@@ -63,6 +63,7 @@ G4FieldManagerStore::G4FieldManagerStore()
 G4FieldManagerStore::~G4FieldManagerStore()
 {
   Clean();
+  if (fgInstance)  { delete fgInstance; fgInstance=0; }
 }
 
 // ***************************************************************************
@@ -130,10 +131,9 @@ void G4FieldManagerStore::DeRegister(G4FieldManager* pFieldMgr)
 //
 G4FieldManagerStore* G4FieldManagerStore::GetInstance()
 {
-  static G4FieldManagerStore worldStore;
   if (!fgInstance)
   {
-    fgInstance = &worldStore;
+    fgInstance = new G4FieldManagerStore;
   }
   return fgInstance;
 }

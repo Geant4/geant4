@@ -1,4 +1,4 @@
-// $Id: Doxymodules_medical.h 65679 2012-11-26 13:41:53Z gcosmo $
+// $Id: Doxymodules_medical.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_medical.h
@@ -16,6 +16,7 @@
  *  @{
  */
 
+  class DicomActionInitialization {};
   class DicomDetectorConstruction {};
   class DicomEventAction {};
   class DicomHandler {};
@@ -25,13 +26,12 @@
   class DicomPartialDetectorConstruction {};
   class DicomPhantomParameterisationColour {};
   class DicomPhantomZSliceHeader {};
+  class DicomPhantomZSliceMerged {};
   class DicomPhysicsList {};
   class DicomPrimaryGeneratorAction {};
   class DicomRegularDetectorConstruction {};
   class DicomRunAction {};
   class DicomRun {};
-  class NestedParamDicomDetectorConstruction {};
-  class RegularDicomDetectorConstruction {};
 
 /** @} */
 

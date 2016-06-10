@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronFissionDataSet.cc 68720 2013-04-05 09:18:58Z gcosmo $
 //
 //
 // G4 Physics class: HadronFissionDataSet for cross sections
@@ -31,15 +31,15 @@
 
 #include "G4HadronFissionDataSet.hh"
 #include "G4DynamicParticle.hh"
-#include "G4NistManager.hh"
-#include "G4HadTmpUtil.hh"
+//#include "G4NistManager.hh"
+//#include "G4HadTmpUtil.hh"
 #include <iostream>
 
 
 G4HadronFissionDataSet::G4HadronFissionDataSet(const G4String& nam)
   : G4VCrossSectionDataSet(nam)
 {
-  theHadronCrossSections = G4HadronCrossSections::Instance();
+  //theHadronCrossSections = G4HadronCrossSections::Instance();
 }
 
 
@@ -56,13 +56,23 @@ void G4HadronFissionDataSet::CrossSectionDescription(std::ostream& outFile) cons
 
 
 G4bool
-G4HadronFissionDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 
-					    G4int /*Z*/,
+G4HadronFissionDataSet::IsElementApplicable(const G4DynamicParticle*, 
+					    G4int,
 					    const G4Material*)
 {
-  return theHadronCrossSections->IsApplicable(aParticle);
+  return true;
+  //  return theHadronCrossSections->IsApplicable(aParticle);
 }
 
+G4double
+G4HadronFissionDataSet::GetElementCrossSection(const G4DynamicParticle*, 
+					       G4int, 
+					       const G4Material*)
+{
+  return 0.0;
+}
+
+/*
 G4double
 G4HadronFissionDataSet::GetElementCrossSection(const G4DynamicParticle* aParticle, 
 					       G4int Z, 
@@ -71,3 +81,4 @@ G4HadronFissionDataSet::GetElementCrossSection(const G4DynamicParticle* aParticl
   G4int A = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
   return theHadronCrossSections->GetFissionCrossSection(aParticle, Z, A);
 }
+*/

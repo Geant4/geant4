@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VSceneHandler.hh 73126 2013-08-19 08:01:37Z gcosmo $
 //
-// 
+//
 // John Allison  19th July 1996.
 //
 // Class description
@@ -191,8 +191,9 @@ public: // With description
   virtual void AddPrimitive (const G4Square&)     = 0;      
   virtual void AddPrimitive (const G4Polymarker&);
   // Default implementation in this class but can be over-ridden.
-  virtual void AddPrimitive (const G4Polyhedron&) = 0;  
-  virtual void AddPrimitive (const G4NURBS&)      = 0;       
+  virtual void AddPrimitive (const G4Polyhedron&) = 0;
+
+  virtual const G4VisExtent& GetExtent() const;
 
   //////////////////////////////////////////////////////////////
   // Access functions.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointPrimaryGeneratorAction.hh 76245 2013-11-08 11:14:32Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPrimaryGeneratorAction
@@ -123,10 +123,10 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     std::vector<G4ParticleDefinition*> ListOfPrimaryFwdParticles;
     std::vector<G4ParticleDefinition*> ListOfPrimaryAdjParticles;
     std::map<G4String, G4bool> PrimariesConsideredInAdjointSim; //if true considered if false not considered
-    G4int NbOfAdjointPrimaryTypes;
+
 
     size_t index_particle;
-    G4bool last_generated_part_was_adjoint;
+    //G4bool last_generated_part_was_adjoint;
     G4ThreeVector  pos,  direction, p; 
    
     G4String type_of_adjoint_source; //Spherical ExtSurfaceOfAVolume

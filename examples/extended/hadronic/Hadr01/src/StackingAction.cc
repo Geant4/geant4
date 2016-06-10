@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.cc 70761 2013-06-05 12:30:51Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -51,6 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
+ : G4UserStackingAction(),
+   fHistoManager(0), fStackMessenger(0), fParticle(0) 
 {
   fStackMessenger = new StackingMessenger(this);
   fHistoManager   = HistoManager::GetPointer();

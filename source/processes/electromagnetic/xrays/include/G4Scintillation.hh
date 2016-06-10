@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Scintillation.hh 71877 2013-06-27 13:55:53Z gunter $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -122,6 +122,9 @@ public:
         // Returns true -> 'is applicable', for any particle type except
         // for an 'opticalphoton' and for short-lived particles
 
+        void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
+        // Build table at the right time
+
 	G4double GetMeanFreePath(const G4Track& aTrack,
 				       G4double ,
                                        G4ForceCondition* );
@@ -139,6 +142,12 @@ public:
 			                const G4Step&  aStep);
         G4VParticleChange* AtRestDoIt (const G4Track& aTrack,
                                        const G4Step& aStep);
+
+        G4double GetScintillationYieldByParticleType(const G4Track &aTrack,
+						     const G4Step &aStep);
+        // Returns the number of scintillation photons calculated when
+        // scintillation depends on the particle type and energy
+        // deposited (includes nonlinear dependendency)
 
         // These are the methods implementing the scintillation process.
 
@@ -223,6 +232,10 @@ protected:
 
         G4bool scintillationByParticleType;
 
+#ifdef G4DEBUG_SCINTILLATION
+        G4double ScintTrackEDep, ScintTrackYield;
+#endif
+
 private:
 
         G4double single_exp(G4double t, G4double tau2);
@@ -232,6 +245,12 @@ private:
         G4double sample_time(G4double tau1, G4double tau2);
 
         G4EmSaturation* emSaturation;
+
+
+public:
+
+
+private:
 
 };
 

@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id$
+// $Id: plot.C 69157 2013-04-19 14:05:11Z gcosmo $
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -167,6 +167,9 @@ c1.cd(3);  // axe YX
   hist->SetTitle("Nucleus intensity on transverse section");
 
 //
+
+system ("rm -rf microbeam.root");
+system ("hadd microbeam.root microbeam_*.root");
 
 TFile f("microbeam.root"); 
 

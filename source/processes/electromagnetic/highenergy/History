@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2010-10-26 15:40:03 vnivanch Exp $
+$Id: History 76600 2013-11-13 08:30:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 November 2013: V.Ivant (emhighenergy-V09-06-09)
+- G4mplIonisationModel - fixed compillation problem of the previous tag
+
+12 November 2013: V.Ivant (emhighenergy-V09-06-08)
+- G4mplIonisationModel, G4mplIonisationWithDeltaModel - fixed electron
+    gas ionisation part of a model (problem is identified by Zukai Wang 
+    <zw4vm@virginia.edu>); before model was working correctly for 
+    very heavy monopoles in Silicon and not accurate for other media
+
+19 August 2013: V.Ivant (emhighenergy-V09-06-07)
+- G4hPairProductionModel - do not call obsolete SetElement() method;
+    use G4Log and G4Exp
+- G4hBremsstrahlungModel - use G4Log
+
+09 August 2013: V.Ivant (emhighenergy-V09-06-06)
+09 August 2013: V.Ivant (emhighenergy-V09-06-05)
+- G4hBremsstrahlung - use inheritence of G4MuBremsstrahlung; 
+    removed unused headers;
+- G4hPairProduction - use inheritence of G4MuPairProduction;
+    removed unused headers; lowestEnergy limit should not be lower 
+    than 8*mass because in that case the model is not applicable
+
+09 July 2013: V.Ivant (emhighenergy-V09-06-04)
+- G4hPairProductionModel - substitute SetCurrentElement(G4double) 
+    by SetElement(G4int)
+
+03 July 2013: V.Ivant (emhighenergy-V09-06-03)
+- G4mplIonisationModel, G4mplIonisationWithDeltaModel - changed
+    interface to G4VEmFluctuations
+
+10 January 2013: V.Ivant (emhighenergy-V09-06-02)
+- G4mplIonisationWithDeltaModel - minor cleanup
+
+09 January 2013: V.Ivant (emhighenergy-V09-06-01)
+- G4mplIonisationWithDeltaModel - fixed factor for cross section
+    of delta-electron production
+
+10 December 2012: V.Ivant (emhighenergy-V09-06-00)
+- G4eeTo3PiModel - removed printout from destructor (fixed bug #1404)
 
 21 July 2012: V.Ivant (emhighenergy-V09-05-03)
 - G4hBremsstrahlung, G4mplIonisation,  G4hPairProduction -

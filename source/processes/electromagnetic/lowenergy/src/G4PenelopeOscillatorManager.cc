@@ -82,7 +82,7 @@ G4PenelopeOscillatorManager::~G4PenelopeOscillatorManager()
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PenelopeOscillatorManager* G4PenelopeOscillatorManager::instance = 0;
+G4ThreadLocal G4PenelopeOscillatorManager* G4PenelopeOscillatorManager::instance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -498,7 +498,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       totalZ += iZ * (*StechiometricFactors)[i];
       totalMolecularWeight += (*elementVector)[i]->GetAtomicMassAmu() * (*StechiometricFactors)[i];
       meanExcitationEnergy += iZ*std::log(meanAtomExcitationEnergy[iZ-1])*(*StechiometricFactors)[i];
-      /*
+      /* 
       G4cout << iZ << " " << (*StechiometricFactors)[i] << " " << totalZ << " " << 
 	totalMolecularWeight/(g/mole) << " " << meanExcitationEnergy << " " << 
 	meanAtomExcitationEnergy[iZ-1]/eV << 
@@ -555,6 +555,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	      G4double occup = elementData[2][i];
 	      if (shellID > 0)
 		{
+		  		 
 		  if (std::fabs(occup) > 0)
 		    {
 		      G4PenelopeOscillator newOscLocal; 
@@ -576,12 +577,11 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 			  G4double ff = (*helper)[0].GetOscillatorStrength();
 			  ff += std::fabs(occup)*(*StechiometricFactors)[k];
 			  (*helper)[0].SetOscillatorStrength(ff);
-			}	
+			}		       	       
 		    }
 		}
-
 	    }
-	  if ( elementData[0][i] > Z)
+	  if (elementData[0][i] > Z)
 	    finished = true;	
 	}
     }
@@ -594,7 +594,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   std::sort(helper->begin(),helper->end());
   
   // Plasma energy and conduction band excitation
-  G4double RydbergEnergy = 13.60569*eV;
+  static const G4double RydbergEnergy = 13.60569*eV;
   G4double Omega = std::sqrt(4*pi*moleculeDensity*totalZ*Bohr_radius)*Bohr_radius*2.0*RydbergEnergy; 
   G4double conductionStrength = (*helper)[0].GetOscillatorStrength();
   G4double plasmaEnergy = Omega*std::sqrt(conductionStrength/totalZ);
@@ -607,10 +607,10 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   if (verbosityLevel > 1)
     {
       G4cout << "Estimated oscillator strenght and energy of plasmon: " << 
-	conductionStrength << " and " << plasmaEnergy/eV << " eV" << G4endl;
+	conductionStrength << " and " << plasmaEnergy/eV << " eV" << G4endl;     
     }
-
-  if (conductionStrength < 0.5 || plasmaEnergy<1.0*eV) //this is an insulator
+  
+  if (conductionStrength < 0.01 || plasmaEnergy<1.0*eV) //this is an insulator
     {
       if (verbosityLevel >1 )
 	G4cout << material->GetName() << " is an insulator " << G4endl;
@@ -654,8 +654,8 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       (*helper)[0].SetResonanceEnergy(plasmaEnergy);
       G4double hartree = 0.75/std::sqrt(3.0*pi*pi*moleculeDensity*
 					Bohr_radius*Bohr_radius*Bohr_radius*conductionStrength);
-      (*helper)[0].SetHartreeFactor(hartree/fine_structure_const);
-    }
+      (*helper)[0].SetHartreeFactor(hartree/fine_structure_const);     
+  }
 
   //Check f-sum rule
   G4double sum = 0;
@@ -695,13 +695,12 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	}
     }
 
-
   //Sternheimer's adjustment factor
-  G4double adjustmentFactor = 0;
+  G4double adjustmentFactor = 0; 
   if (helper->size() > 1)
     {
       G4double TST = totalZ*std::log(meanExcitationEnergy/eV);
-      G4double AALow = 0.5;
+      G4double AALow = 0.1;
       G4double AAHigh = 10.;
       do
 	{
@@ -729,6 +728,10 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	    AALow = adjustmentFactor;
 	  else
 	    AAHigh = adjustmentFactor;
+	  if (verbosityLevel > 3)					
+	    G4cout << "Sternheimer's adjustment factor loops: " << AALow << " " << AAHigh << " " << 
+	      adjustmentFactor << " " << TST << " " << 
+	      sumLocal << G4endl;
 	}while((AAHigh-AALow)>(1e-14*adjustmentFactor));      
     }
   else
@@ -744,7 +747,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   //Check again for data consistency
   G4double xcheck = (*helper)[0].GetOscillatorStrength()*std::log((*helper)[0].GetResonanceEnergy());
-  G4double TST = (*helper)[0].GetOscillatorStrength();
+  G4double TST = (*helper)[0].GetOscillatorStrength(); 
   for (size_t i=1;i<helper->size();i++)
     {
       xcheck += (*helper)[i].GetOscillatorStrength()*std::log((*helper)[i].GetResonanceEnergy());

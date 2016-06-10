@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -48,6 +46,8 @@ namespace G4INCL {
   class TransmissionChannel : public IChannel {
   public:
     TransmissionChannel(Nucleus *n, Particle *p);
+    TransmissionChannel(Nucleus *n, Particle *p, const G4double TOut);
+    TransmissionChannel(Nucleus *n, Particle *p, const G4double kOut, const G4double cosR);
     virtual ~TransmissionChannel();
 
     FinalState* getFinalState();
@@ -57,12 +57,31 @@ namespace G4INCL {
      *
      * Modify the particle momentum and/or position when the particle leaves
      * the nucleus.
-     *
-     * \return the Q-value correction for the leaving particle
      */
-    G4double particleLeaves();
-    Nucleus *theNucleus;
-    Particle *theParticle;
+    void particleLeaves();
+
+    /** \brief Kinetic energy of the transmitted particle
+     *
+     * Calculate the kinetic energy of the particle outside the nucleus, if the
+     * value has not been provided as a pre-calculated argument to the
+     * constructor.
+     */
+    G4double initializeKineticEnergyOutside();
+
+    Nucleus * const theNucleus;
+    Particle * const theParticle;
+
+    /// \brief True if refraction should be applied
+    const G4bool refraction;
+
+    /// \brief Momentum of the particle outside the nucleus
+    const G4double pOutMag;
+
+    /// \brief Kinetic energy of the particle outside the nucleus
+    const G4double kineticEnergyOutside;
+
+    /// \brief Cosine of the refraction angle
+    const G4double cosRefractionAngle;
   };
 }
 #endif // TransmissionChannel_hh

@@ -63,11 +63,13 @@ struct lend_target
 class G4LENDManager 
 {
 
-      static G4LENDManager* lend_manager;
+      static G4ThreadLocal G4LENDManager* lend_manager;
    
-   protected: 
+   //protected: 
+   private: 
       G4LENDManager();
-      G4LENDManager( const G4LENDManager& ){;};
+      G4LENDManager( const G4LENDManager& );
+      G4LENDManager& operator=(const G4LENDManager&);
 
       ~G4LENDManager();
 
@@ -80,8 +82,7 @@ class G4LENDManager
 
       G4GIDI_target* GetLENDTarget( G4ParticleDefinition* , G4String , G4int iZ , G4int iA , G4int iM = 0 );
       std::vector< G4String > IsLENDTargetAvailable( G4ParticleDefinition* , G4int iZ , G4int iA , G4int iM = 0 );
-      G4int GetNucleusEncoding ( G4int iZ , G4int iA ) // GroundState only
-      { return ionTable->GetNucleusEncoding( iZ , iA ); };
+      G4int GetNucleusEncoding ( G4int iZ , G4int iA , G4int iM );
 
       G4NistElementBuilder* GetNistElementBuilder(){ return nistElementBuilder; };
 

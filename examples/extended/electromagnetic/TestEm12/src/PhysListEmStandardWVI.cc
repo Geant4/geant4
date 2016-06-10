@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm12/src/PhysListEmStandardWVI.cc
 /// \brief Implementation of the PhysListEmStandardWVI class
 //
-// $Id$
+// $Id: PhysListEmStandardWVI.cc 77092 2013-11-21 10:50:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandardWVI.hh"
 #include "G4ParticleDefinition.hh"
@@ -42,6 +42,7 @@
 #include "G4eMultipleScattering.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
 #include "G4IonCoulombScatteringModel.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -85,9 +86,9 @@ void PhysListEmStandardWVI::ConstructProcess()
   // Add standard EM Processes
   //
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -104,7 +105,13 @@ void PhysListEmStandardWVI::ConstructProcess()
       pmanager->AddProcess(msc,                       -1, 1, 1);      
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 4);
+
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* model = 
+        new G4eCoulombScatteringModel();
+      model->SetLowEnergyThreshold(10*eV);
+      cs->SetEmModel(model,1);
+      pmanager->AddProcess(cs,   -1,-1, 4);
                   
     } else if (particleName == "e+") {
       //positron
@@ -133,7 +140,7 @@ void PhysListEmStandardWVI::ConstructProcess()
       //proton
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
-      pmanager->AddProcess(msc,                       -1, 1, 1);                
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);

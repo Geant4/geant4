@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Colour.hh 75130 2013-10-28 10:05:45Z gcosmo $
 //
 // 
 // John Allison 20th October 1996
@@ -98,6 +98,7 @@ public: // With description
 
   G4bool operator != (const G4Colour& c) const;
   G4bool operator == (const G4Colour& c) const {return !(operator != (c));}
+  G4Colour& operator += (const G4Colour&) {return *this;}  // Dummy
   G4double GetRed   () const;
   G4double GetGreen () const;
   G4double GetBlue  () const;
@@ -129,8 +130,8 @@ public: // With description
 private:
   G4double red, green, blue, alpha;
 
-  static std::map<G4String, G4Colour> fColourMap;
-  static G4bool fInitColourMap;
+  static G4ThreadLocal std::map<G4String, G4Colour> *fColourMap;
+  static G4ThreadLocal G4bool fInitColourMap;
   static void InitialiseColourMap();
     
 };

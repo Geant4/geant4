@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4
@@ -43,6 +43,9 @@
 #include "G4VVisManager.hh"
 #include "G4NistManager.hh"
 #include "G4Element.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

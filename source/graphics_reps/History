@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.144 2010-12-27 12:18:16 allison Exp $
+$Id: History 75130 2013-10-28 10:05:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,65 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th October 2013  John Allison  (greps-V09-06-12)
+- Cosmetic changes to code layout and comments.
+
+19th September 2013  Makoto Asai (greps-V09-06-11)
+- Fix compilation error for sequential mode.
+
+19th September 2013  Makoto Asai (greps-V09-06-10)
+- Introducing G4VVisManager::IgnoreStateChanges() virtual method.
+  This method should be invoked by a class that has its own event loop,
+  such as the RayTracer, material scanner, etc. If the argument is true,
+  the following state changes among Idle, GeomClosed and EventProc are
+  caused by such a class, and thus not by the ordinary event simulation.
+  The same method with false should be invoked once such an event loop
+  is over.
+
+17th September 2013  Makoto Asai (greps-V09-06-09)
+- G4Colour now has a dummy += operator.
+
+12th September 2013  Makoto Asai (greps-V09-06-08)
+- Introducing G4VVisManager::SetUpForAThread(). This method is invoked
+  by G4WorkerRunManager so that G4VisManager will get noticed at the
+  end of event of each worker thread.
+
+12th September 2013  Makoto Asai (greps-V09-06-07)
+- Remove G4ThreadLocal keyword from G4VVisManager.
+
+18th August 2013  John Allison  (greps-V09-06-06)
+- G4VGraphicsScene: Added GetExtent.
+
+15th May 2013  Gabriele Cosmo (greps-V09-06-05)
+- Cleanup of automatic changes for MT in G4AttCheck, G4AttDefStore,
+  G4TypeKey, G4TypeKeyT, G4Colour, HepPolyhedron and BooleanProcessor.
+
+6th March 2013  John Allison (greps-V09-06-04)
+- HepPolyhedron.cc:
+  o Introduced const G4double spatialTolerance = 0.01*nm;
+  o Used in RotateAroundZ and in HepPolyhedronSphere and HepPolyhedronTorus
+    constructors.
+  o Allows creation of nm-sized objects.
+  o Fixes bug report 1452.
+
+14th February 2013 Jean Jacquemier
+- Removed modifcations G4AttCheck.cc and G4DimentionedTypeUtil.cc for G4UnitTable
+  ( see  TAG greps-V09-06-02 ). These modifications will be done once 
+  MultiThreading performance loss will be recover
+  
+8th February 2013 Jean Jacquemier (greps-V09-06-02)
+- Modify G4AttCheck.cc and G4DimentionedTypeUtil.cc for G4UnitTable 
+  modification
+
+14th December 2012  John Allison (greps-V09-06-01)
+- Added dollar-Id expansion into first line of this file.
+
+3rd December 2012  John Allison (greps-V09-06-00)
+- Removed NURBS and i_mode.
+
 1st October 2012  John Allison (greps-V09-05-14)
 - G4DimensionedType: Another attempt to keep compilers happy:
-  o Created G4DimensionedType.cc.
+  o Created G4DimensionedTypeUtils.cc.
   o Moved "Helper class" HasName and utility function GetUnitValue from
     G4DimensionedType.hh to G4DimensionedTypeUtils.cc inside a new
     namespace, G4DimensionedTypeUtils.

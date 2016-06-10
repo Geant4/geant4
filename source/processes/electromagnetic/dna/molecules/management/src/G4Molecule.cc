@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Molecule.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4Molecule.cc 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // ---------------------------------------------------------------------
 //	GEANT 4 class header file
@@ -57,12 +57,12 @@
 
 using namespace std;
 
-double G4Molecule::fgTemperature = 310*kelvin;
+/*G4ThreadLocal*/ G4double G4Molecule::fgTemperature = 310;  // 310*kelvin;
 // 37°C, used to shoot an energy
 
 ITImp(G4Molecule)
 
-G4Allocator<G4Molecule> aMoleculeAllocator;
+G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator = 0;
 
 G4Molecule* GetMolecule(const G4Track& track)
 {
@@ -82,21 +82,19 @@ void G4Molecule::Print() const
 G4Molecule::G4Molecule(const G4Molecule& right) :
     G4VUserTrackInformation("G4Molecule"), G4IT(right)
 {
-    Init();
-    fMolecularConfiguration = right . fMolecularConfiguration;
+    fpMolecularConfiguration = right . fpMolecularConfiguration;
 }
 
 G4Molecule& G4Molecule::operator=(const G4Molecule& right)
 {
     if (&right==this) return *this;
-    Init();
-    fMolecularConfiguration = right . fMolecularConfiguration;
+    fpMolecularConfiguration = right . fpMolecularConfiguration;
     return *this;
 }
 
 G4bool G4Molecule::operator==(const G4Molecule& right) const
 {
-    if(fMolecularConfiguration==right.fMolecularConfiguration)
+    if(fpMolecularConfiguration==right.fpMolecularConfiguration)
     {
         return true;
     }
@@ -115,13 +113,7 @@ G4bool G4Molecule::operator!=(const G4Molecule& right) const
 
 G4bool G4Molecule::operator<(const G4Molecule& right) const
 {
-    return fMolecularConfiguration < right.fMolecularConfiguration ;
-}
-////////////////////////////////////////////////////////////////////////
-void G4Molecule::Init()
-{
-    fMolecularConfiguration = 0 ;
-    fDynamicParticle = 0;
+    return fpMolecularConfiguration < right.fpMolecularConfiguration ;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -131,7 +123,7 @@ void G4Molecule::Init()
 G4Molecule::G4Molecule() : G4VUserTrackInformation("G4Molecule"), G4IT()
   //////////////////////////
 {
-    Init();
+    fpMolecularConfiguration = 0 ;
 }
 
 //////////////////////////
@@ -147,10 +139,7 @@ G4Molecule::~G4Molecule()
         }
         fpTrack = 0;
     }
-    fMolecularConfiguration = 0;
-    fDynamicParticle = 0;
-    // DEBUG
-    // G4cout<<"Molecule killed"<<G4endl;
+    fpMolecularConfiguration = 0;
 }
 
 /** Build a molecule at ground state according to a given
@@ -161,8 +150,7 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
     G4VUserTrackInformation("G4Molecule"), G4IT()
   //////////////////////////
 {
-    Init();
-    fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition);
+    fpMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition);
 }
 
 /** Build a molecule at a specific excitation/ionisation state according
@@ -174,8 +162,6 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalT
     G4VUserTrackInformation("G4Molecule"), G4IT()
   //////////////////////////
 {
-    Init();
-
     G4ElectronOccupancy dynElectronOccupancy (*moleculeDefinition->GetGroundStateElectronOccupancy());
 
     if (OrbitalToFill != 0)
@@ -191,7 +177,7 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalT
         // dynElectronOccupancy.DumpInfo(); // DEBUG
     }
 
-    fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition, dynElectronOccupancy);
+    fpMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition, dynElectronOccupancy);
 }
 
 /** Specific builder for water molecules to be used in Geant4-DNA,
@@ -202,8 +188,6 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalT
 G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int Level, G4bool Excitation):
     G4VUserTrackInformation("G4Molecule"), G4IT()
 {
-    Init();
-
     G4ElectronOccupancy dynElectronOccupancy (*moleculeDefinition->GetGroundStateElectronOccupancy());
 
     if (Excitation == true)
@@ -219,61 +203,61 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int Level, G
         // dynElectronOccupancy.DumpInfo(); // DEBUG
     }
 
-    fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition, dynElectronOccupancy);
+    fpMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition, dynElectronOccupancy);
 }
 
 void G4Molecule::SetElectronOccupancy(const G4ElectronOccupancy* occ)
 {
-    fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(fMolecularConfiguration->GetDefinition(), *occ);
+    fpMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(fpMolecularConfiguration->GetDefinition(), *occ);
 }
 
 /** Method used in Geant4-DNA to excite water molecules
  */
 void G4Molecule::ExciteMolecule(G4int ExcitedLevel)
 {
-    fMolecularConfiguration = fMolecularConfiguration->ExciteMolecule(ExcitedLevel);
+    fpMolecularConfiguration = fpMolecularConfiguration->ExciteMolecule(ExcitedLevel);
 }
 
 /** Method used in Geant4-DNA to ionize water molecules
  */
 void G4Molecule::IonizeMolecule(G4int IonizedLevel)
 {
-    fMolecularConfiguration = fMolecularConfiguration->IonizeMolecule(IonizedLevel);
+    fpMolecularConfiguration = fpMolecularConfiguration->IonizeMolecule(IonizedLevel);
 }
 
 void G4Molecule::AddElectron(G4int orbit, G4int number)
 {
-    fMolecularConfiguration = fMolecularConfiguration->AddElectron(orbit,number);
+    fpMolecularConfiguration = fpMolecularConfiguration->AddElectron(orbit,number);
 }
 
 void G4Molecule::RemoveElectron(G4int orbit,G4int number)
 {
-    fMolecularConfiguration = fMolecularConfiguration->RemoveElectron(orbit,number);
+    fpMolecularConfiguration = fpMolecularConfiguration->RemoveElectron(orbit,number);
 }
 
 void G4Molecule::MoveOneElectron(G4int orbitToFree,G4int orbitToFill)
 {
-    fMolecularConfiguration = fMolecularConfiguration->MoveOneElectron(orbitToFree,orbitToFill);
+    fpMolecularConfiguration = fpMolecularConfiguration->MoveOneElectron(orbitToFree,orbitToFill);
 }
 
 const G4String& G4Molecule::GetName() const
 {
-    return fMolecularConfiguration->GetName();
+    return fpMolecularConfiguration->GetName();
 }
 
 G4int G4Molecule::GetAtomsNumber() const
 {
-    return fMolecularConfiguration->GetAtomsNumber();
+    return fpMolecularConfiguration->GetAtomsNumber();
 }
 
 G4double G4Molecule::GetNbElectrons() const
 {
-    return fMolecularConfiguration->GetNbElectrons();
+    return fpMolecularConfiguration->GetNbElectrons();
 }
 
 void G4Molecule::PrintState() const
 {
-    fMolecularConfiguration->PrintState();
+    fpMolecularConfiguration->PrintState();
 }
 
 G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Position)
@@ -296,8 +280,8 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Posit
 
     G4ThreeVector MomentumDirection(xMomentum, yMomentum, zMomentum);
     G4double KineticEnergy = GetKineticEnergy();
-    // G4cout << " **** KineticEnergy : " << KineticEnergy << G4endl;
-    fDynamicParticle = new G4DynamicParticle(fMolecularConfiguration->GetDefinition(),
+
+    G4DynamicParticle* dynamicParticle = new G4DynamicParticle(fpMolecularConfiguration->GetDefinition(),
                                              MomentumDirection,
                                              KineticEnergy);
 
@@ -305,7 +289,7 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Posit
         G4MoleculeCounter::GetMoleculeCounter()->AddAMoleculeAtTime(*this,globalTime);
 
     //Set the Track
-    fpTrack = new G4Track(fDynamicParticle, globalTime, Position);
+    fpTrack = new G4Track(dynamicParticle, globalTime, Position);
     fpTrack -> SetUserInformation (this);
 
     return fpTrack;
@@ -316,14 +300,14 @@ G4double G4Molecule::GetKineticEnergy() const
     ////
     // Ideal Gaz case
     double v = GetDiffusionVelocity();
-    double E = (fMolecularConfiguration->GetMass()/(c_squared))*(v*v)/2.;
+    double E = (fpMolecularConfiguration->GetMass()/(c_squared))*(v*v)/2.;
     ////
     return E;
 }
 
 G4double G4Molecule::GetDiffusionVelocity() const
 {
-    double moleculeMass = fMolecularConfiguration->GetMass()/(c_squared);
+    double moleculeMass = fpMolecularConfiguration->GetMass()/(c_squared);
 
     ////
     // Different possibilities
@@ -344,65 +328,80 @@ G4double G4Molecule::GetDiffusionVelocity() const
 // added - to be transformed in a "Decay method"
 const vector <const G4MolecularDecayChannel*>* G4Molecule::GetDecayChannel() const
 {
-    return fMolecularConfiguration->GetDecayChannel();
+    return fpMolecularConfiguration->GetDecayChannel();
 }
 
 G4int G4Molecule::GetMoleculeID() const
 {
-    return fMolecularConfiguration->GetMoleculeID();
+    return fpMolecularConfiguration->GetMoleculeID();
 }
 
 void G4Molecule::SetDecayTime(G4double dynDecayTime)
 {
-    fMolecularConfiguration->SetDecayTime(dynDecayTime);
+    fpMolecularConfiguration->SetDecayTime(dynDecayTime);
 }
 
 G4double G4Molecule::GetDecayTime() const
 {
-    return fMolecularConfiguration->GetDecayTime();
+    return fpMolecularConfiguration->GetDecayTime();
 }
 
 void G4Molecule::SetVanDerVaalsRadius(G4double dynVanDerVaalsRadius)
 {
-    fMolecularConfiguration->SetVanDerVaalsRadius(dynVanDerVaalsRadius);
+    fpMolecularConfiguration->SetVanDerVaalsRadius(dynVanDerVaalsRadius);
 }
 
 G4double G4Molecule::GetVanDerVaalsRadius() const
 {
-    return fMolecularConfiguration->GetVanDerVaalsRadius();
+    return fpMolecularConfiguration->GetVanDerVaalsRadius();
 }
 
 G4int G4Molecule::GetCharge() const
 {
-    return fMolecularConfiguration->GetCharge() ;
+    return fpMolecularConfiguration->GetCharge() ;
 }
 
 void G4Molecule::SetMass(G4double aMass)
 {
-    fMolecularConfiguration->SetMass(aMass);
+    fpMolecularConfiguration->SetMass(aMass);
 }
 
 G4double G4Molecule::GetMass() const
 {
-    return fMolecularConfiguration->GetMass();
+    return fpMolecularConfiguration->GetMass();
 }
 
 const G4ElectronOccupancy* G4Molecule::GetElectronOccupancy() const
 {
-    return fMolecularConfiguration->GetElectronOccupancy();
+    return fpMolecularConfiguration->GetElectronOccupancy();
 }
 
 const G4MoleculeDefinition* G4Molecule::GetDefinition() const
 {
-    return fMolecularConfiguration->GetDefinition();
+    return fpMolecularConfiguration->GetDefinition();
 }
 
 void G4Molecule::SetDiffusionCoefficient(G4double dynDiffusionCoefficient)
 {
-    fMolecularConfiguration->SetDiffusionCoefficient(dynDiffusionCoefficient);
+    fpMolecularConfiguration->SetDiffusionCoefficient(dynDiffusionCoefficient);
 }
 
 G4double G4Molecule::GetDiffusionCoefficient() const
 {
-    return fMolecularConfiguration->GetDiffusionCoefficient();
+    return fpMolecularConfiguration->GetDiffusionCoefficient();
+}
+
+G4MolecularConfiguration* G4Molecule::GetMolecularConfiguration() const
+{
+    return fpMolecularConfiguration ;
+}
+
+void G4Molecule::SetGlobalTemperature(G4double temperature)
+{
+    fgTemperature = temperature;
+}
+
+G4double G4Molecule::GetGlobalTemperature()
+{
+    return fgTemperature;
 }

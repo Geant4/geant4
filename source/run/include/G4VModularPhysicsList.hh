@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VModularPhysicsList.hh 72043 2013-07-04 12:10:30Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -50,12 +50,42 @@
 #ifndef G4VModularPhysicsList_h
 #define G4VModularPhysicsList_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include <vector>
+
+#include "globals.hh"
+#include "rundefs.hh"
+#include "G4ios.hh"
 
 #include "G4VUserPhysicsList.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "G4VUPLSplitter.hh"
+
+class G4VMPLData {
+    //Encapsulate the fields of class G4VModularPhysicsList
+    //that are per-thread.
+public:
+    void initialize();
+    typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVectorData;
+    G4PhysConstVectorData* physicsVector;
+};
+
+// The type G4VMPLManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4VMPLData. When each thread
+// changes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4VUserPhysicsList instance,
+// there is a corresponding G4VMPLData instance. All G4VMPLData instances
+// are organized by the class G4VMPLManager as an array.
+// The field "int G4VMPLInstanceID" is added to the class G4VUserPhysicsList.
+// The value of this field in each G4VUserPhysicsList instance is the
+// subscript of the corresponding G44VUPLData instance.
+// In order to use the class G44VUPLManager, we add a static member in the class
+// G4VUserPhysicsList as follows: "static G4VMPLManager subInstanceManager".
+// Both the master thread and worker threads change the length of the array
+// for G44VUPLData instances mutually along with G4VUserPhysicsList
+// instances are created.
+typedef G4VUPLSplitter<G4VMPLData> G4VMPLManager;
+typedef G4VMPLManager G4VModularPhysicsListSubInstanceManager;
 
 class G4VModularPhysicsList: public virtual G4VUserPhysicsList
 {
@@ -90,7 +120,7 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
     //  The existing physics constructor with same physics_type as one of
     //  the given physics constructor is replaced
     //  (existing physics will be deleted)
-    //  If any corresponding physics constructor is found, 
+    //  If a corresponding physics constructor is NOT found, 
     //  the given physics constructor is just added         
     void ReplacePhysics(G4VPhysicsConstructor* );
 
@@ -111,18 +141,32 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
 
   protected: // with description
    // vector of pointers to G4VPhysicsConstructor
-   typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
-   G4PhysConstVector* physicsVector;
+   //typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
+   //static G4ThreadLocal G4PhysConstVector* physicsVector;
    G4int verboseLevel;
+    typedef G4VMPLData::G4PhysConstVectorData G4PhysConstVector;
+    G4int g4vmplInstanceID;
+    G4RUN_DLL static G4VMPLManager G4VMPLsubInstanceManager;
+  public:
+    inline G4int GetInstanceID() const;
+    static const G4VMPLManager& GetSubInstanceManager();
 };
    
-
-
 inline  
  G4int G4VModularPhysicsList::GetVerboseLevel() const
 {
   return  verboseLevel;
-}   
-    
+}
 
+inline
+G4int G4VModularPhysicsList::GetInstanceID() const
+{
+    return g4vmplInstanceID;
+}
+
+inline
+const G4VMPLManager& G4VModularPhysicsList::GetSubInstanceManager()
+{
+    return G4VMPLsubInstanceManager;
+}
 #endif

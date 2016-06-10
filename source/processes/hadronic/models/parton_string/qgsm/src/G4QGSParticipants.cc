@@ -34,7 +34,7 @@
 
 // HPW Feb 1999
 // Promoting model parameters from local variables class properties
-G4int G4QGSParticipants_NPart = 0;
+G4ThreadLocal G4int G4QGSParticipants_NPart = 0;
 
 G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(), //0.7*GeV, 250*MeV, 250*MeV),
 		ModelMode(SOFT),

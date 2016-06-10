@@ -27,7 +27,7 @@
 /// \brief Definition of the PerspectiveVisActionMessenger class
 //
 //
-// $Id$
+// $Id: PerspectiveVisActionMessenger.hh 68031 2013-03-13 13:52:48Z gcosmo $
 
 #ifndef PERSPECTIVEVISACTIONMESSENGER_HH
 #define PERSPECTIVEVISACTIONMESSENGER_HH

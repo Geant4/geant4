@@ -25,7 +25,6 @@
 //
 //
 // $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
@@ -40,19 +39,22 @@
 //  Author:        Vladimir Ivanchenko
 //
 //  Creation date: 25.09.2011
+//
+//  Modified:
+//  16.05.2013 V.Ivanchenko removed cache; changed signature of 
+//             several methods; all run time methods become const;
+//             the class become read only in run time
 //---------------------------------------------------------------
 
 #ifndef G4Physics2DVector_h
 #define G4Physics2DVector_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 
-#include "G4Physics2DVectorCache.hh"
+#include "globals.hh"
+#include "G4ios.hh"
 #include "G4PhysicsVectorType.hh"
 
 typedef std::vector<G4double> G4PV2DDataVector;
@@ -71,9 +73,13 @@ public:  // with description
 
   ~G4Physics2DVector();
   // destructor
-
-  inline G4double Value(G4double x, G4double y);
+ 
+  G4double Value(G4double x, G4double y, 
+		 size_t& lastidx, size_t& lastidy) const;
+  G4double Value(G4double x, G4double y) const;
   // Main method to interpolate 2D vector
+  // Consumer class should provide initial values 
+  // lastidx and lastidy,  
 
   inline void PutX(size_t idx, G4double value);
   inline void PutY(size_t idy, G4double value);
@@ -89,11 +95,23 @@ public:  // with description
   // for example after Retrieve a vector from an external file to 
   // convert values into Geant4 units
 
+  G4double 
+  FindLinearX(G4double rand, G4double y, size_t& lastidy) const;
+  inline G4double FindLinearX(G4double rand, G4double y) const;
+  // Find Y using linear interpolation for Y-vector
+  // filled by cumulative probability function 
+  // value of rand should be between 0 and 1
+
   inline G4double GetX(size_t index) const;
   inline G4double GetY(size_t index) const;
   inline G4double GetValue(size_t idx, size_t idy) const;
   // Returns simply the values of the vector by index
   // of the energy vector. The boundary check will not be done. 
+
+  inline size_t FindBinLocationX(G4double x, size_t lastidx) const;
+  inline size_t FindBinLocationY(G4double y, size_t lastidy) const;
+  // Find the bin# in which theEnergy belongs
+  // Starting from 0 
 
   inline size_t GetLengthX() const;
   inline size_t GetLengthY() const;
@@ -109,13 +127,6 @@ public:  // with description
   G4bool Retrieve(std::ifstream& fIn);
   // To store/retrieve persistent data to/from file streams.
 
-  inline G4double GetLastX() const;
-  inline G4double GetLastY() const;
-  inline G4double GetLastValue() const;
-  inline size_t GetLastBinX() const;
-  inline size_t GetLastBinY() const;
-  // Get cache values 
-
   inline void SetVerboseLevel(G4int value);
   inline G4int GetVerboseLevel() const;
   // Set/Get Verbose level
@@ -128,28 +139,27 @@ protected:
 
   void CopyData(const G4Physics2DVector& vec);
 
-  void ComputeValue(G4double x, G4double y);
+  // void ComputeValue(G4double x, G4double y) const;
   // Main method to interpolate 2D vector 
   //   by default by linear interpolation
 
-  void BicubicInterpolation(size_t idx, size_t idy);
+  G4double BicubicInterpolation(G4double x, G4double y,
+				size_t idx, size_t idy) const;
   // Bicubic interpolation of 2D vector  
 
-  size_t FindBinLocation(G4double z, const G4PV2DDataVector&);
+  size_t FindBinLocation(G4double z, const G4PV2DDataVector&) const;
   // Main method to local bin
 
-  inline void FindBin(G4double z, const G4PV2DDataVector&, 
-			size_t& lastidx);
-  inline void FindBinLocationX(G4double x);
-  inline void FindBinLocationY(G4double y);
-  // Find the bin# in which theEnergy belongs
-  // Starting from 0 
+  inline size_t FindBin(G4double z, const G4PV2DDataVector&, 
+                        size_t idz, size_t idzmax) const;
 
 private:
 
-  inline G4double DerivativeX(size_t idx, size_t idy, G4double fac);
-  inline G4double DerivativeY(size_t idx, size_t idy, G4double fac);
-  inline G4double DerivativeXY(size_t idx, size_t idy, G4double fac);
+  G4double InterpolateLinearX(G4PV2DDataVector& v, G4double rand) const;
+
+  inline G4double DerivativeX(size_t idx, size_t idy, G4double fac) const;
+  inline G4double DerivativeY(size_t idx, size_t idy, G4double fac) const;
+  inline G4double DerivativeXY(size_t idx, size_t idy, G4double fac) const;
   // computation of derivatives
 
   G4int operator==(const G4Physics2DVector &right) const ;
@@ -159,8 +169,6 @@ private:
 
   size_t numberOfXNodes;
   size_t numberOfYNodes;
-
-  G4Physics2DVectorCache*  cache;
 
   G4PV2DDataVector  xVector;
   G4PV2DDataVector  yVector;

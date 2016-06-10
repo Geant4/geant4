@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointSimMessenger.cc 76245 2013-11-08 11:14:32Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -36,6 +36,7 @@
 #include <sstream>
 
 #include "G4AdjointSimMessenger.hh"
+#include "G4RunManager.hh"
 #include "G4AdjointSimManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
@@ -46,25 +47,38 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UnitsTable.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
+/*
+#ifdef G4MULTITHREADED
+#include "G4MTAdjointSimManager.hh"
+#endif
+*/
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointSimMessenger::G4AdjointSimMessenger(G4AdjointSimManager* pAdjointRunManager)
   : theAdjointRunManager(pAdjointRunManager)
+/*
+#ifdef G4MULTITHREADED
+   ,theMTAdjointRunManager(0),beamOnCmd(0)
+#endif
+*/
+
 { 
   AdjointSimDir = new G4UIdirectory("/adjoint/");
   AdjointSimDir->SetGuidance("Control of the adjoint or reverse monte carlo simulation");
 
+
   //Start and adjoint Run
   //---------------------
-  
-  beamOnCmd = new G4UIcommand("/adjoint/start_run",this);
-  beamOnCmd->SetGuidance("Start an adjoint Run.");
-  beamOnCmd->SetGuidance("Default number of events to be processed is 1.");
-  beamOnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  G4UIparameter* p1 = new G4UIparameter("numberOfEvent",'i',true);
-  p1->SetDefaultValue(1);
-  p1->SetParameterRange("numberOfEvent >= 0");
-  beamOnCmd->SetParameter(p1);
+  //if (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM){
+   beamOnCmd = new G4UIcommand("/adjoint/start_run",this);
+   beamOnCmd->SetGuidance("Start an adjoint Run.");
+   beamOnCmd->SetGuidance("Default number of events to be processed is 1.");
+   beamOnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+   G4UIparameter* p1 = new G4UIparameter("numberOfEvent",'i',true);
+   p1->SetDefaultValue(1);
+   p1->SetParameterRange("numberOfEvent >= 0");
+   beamOnCmd->SetParameter(p1);
+  //}
 
   //Commands to define parameters relative to the external source
   //------------------------------------------------------------
@@ -150,13 +164,54 @@ G4AdjointSimMessenger::G4AdjointSimMessenger(G4AdjointSimManager* pAdjointRunMan
   NeglectParticleAsPrimaryCmd->SetParameterName("particle",false);
   NeglectParticleAsPrimaryCmd->SetCandidates("e- gamma proton ion");
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+/*
+#ifdef G4MULTITHREADED
+G4AdjointSimMessenger::G4AdjointSimMessenger(G4MTAdjointSimManager* pAdjointRunManager)
+  : theAdjointRunManager(0),theMTAdjointRunManager(pAdjointRunManager),DefineSpherExtSourceCmd(0),
+    DefineSpherExtSourceCenteredOnAVolumeCmd(0), DefineExtSourceOnAVolumeExtSurfaceCmd(0),
+    setExtSourceEMaxCmd(0),DefineSpherAdjSourceCmd(0),DefineSpherAdjSourceCenteredOnAVolumeCmd(0),
+    DefineAdjSourceOnAVolumeExtSurfaceCmd(0),setAdjSourceEminCmd(0),setAdjSourceEmaxCmd(0),
+    ConsiderParticleAsPrimaryCmd(0),NeglectParticleAsPrimaryCmd(0)
+{
+  AdjointSimDir = new G4UIdirectory("/adjoint/");
+  AdjointSimDir->SetGuidance("Control of the adjoint or reverse monte carlo simulation");
+
+
+  //Start and adjoint Run
+  //---------------------
+  beamOnCmd = new G4UIcommand("/adjoint/start_run",this);
+  beamOnCmd->SetGuidance("Start an adjoint Run.");
+  beamOnCmd->SetGuidance("Default number of events to be processed is 1.");
+  beamOnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  G4UIparameter* p1 = new G4UIparameter("numberOfEvent",'i',true);
+  p1->SetDefaultValue(1);
+  p1->SetParameterRange("numberOfEvent >= 0");
+  beamOnCmd->SetParameter(p1);
+
+
+  ConsiderParticleAsPrimaryCmd = new G4UIcmdWithAString("/adjoint/ConsiderAsPrimary",this);
+  ConsiderParticleAsPrimaryCmd->SetGuidance("Set the selected particle as primary");
+  ConsiderParticleAsPrimaryCmd->SetParameterName("particle",false);
+  ConsiderParticleAsPrimaryCmd->SetCandidates("e- gamma proton ion");
+
+  NeglectParticleAsPrimaryCmd= new G4UIcmdWithAString("/adjoint/NeglectAsPrimary",this);
+  NeglectParticleAsPrimaryCmd->SetGuidance("Remove the selected particle from the lits of primaries");
+  NeglectParticleAsPrimaryCmd->SetParameterName("particle",false);
+  NeglectParticleAsPrimaryCmd->SetCandidates("e- gamma proton ion");
+
+
+}
+#endif
+*/
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
 G4AdjointSimMessenger::~G4AdjointSimMessenger()
 {
-  delete beamOnCmd;
+  if (beamOnCmd) delete beamOnCmd;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,15 +219,34 @@ G4AdjointSimMessenger::~G4AdjointSimMessenger()
 
 void G4AdjointSimMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
+  if (!command) return;
   if( command==beamOnCmd )
   {
     G4int nev;
     const char* nv = (const char*)newValue;
     std::istringstream is(nv);
     is >> nev ;
-    theAdjointRunManager->RunAdjointSimulation(nev); 
+    if (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM) theAdjointRunManager->RunAdjointSimulation(nev);
+/*
+#ifdef G4MULTITHREADED
+    else if (theMTAdjointRunManager) theMTAdjointRunManager->RunAdjointSimulation(nev);
+    else if (theAdjointRunManager) theAdjointRunManager->SwitchToAdjointSimulationMode();
+#endif
+*/
+    //G4cout<<"G4AdjointSimMessenger::SetNewValue BeamOnCmd out"<<std::endl;
   }
-  else if ( command==DefineSpherExtSourceCmd){
+  else if ( command==ConsiderParticleAsPrimaryCmd){
+     theAdjointRunManager->ConsiderParticleAsPrimary(newValue);
+  }
+  else if ( command==NeglectParticleAsPrimaryCmd){
+     theAdjointRunManager->NeglectParticleAsPrimary(newValue);
+  }
+/*
+#ifdef G4MULTITHREADED
+  if (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::masterRM) return;
+#endif
+*/
+  if ( command==DefineSpherExtSourceCmd){
     
     G4double  x,y,z,r;
     G4String unit;
@@ -239,13 +313,7 @@ void G4AdjointSimMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     
     theAdjointRunManager->SetAdjointSourceEmax(setAdjSourceEmaxCmd->GetNewDoubleValue(newValue));
   }
-  else if ( command==ConsiderParticleAsPrimaryCmd){
 
-     theAdjointRunManager->ConsiderParticleAsPrimary(newValue);
-  }
-  else if ( command==NeglectParticleAsPrimaryCmd){
 
-     theAdjointRunManager->NeglectParticleAsPrimary(newValue);
-  }
 }
 

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:10:42 bmorgan Exp $
+# $Id: sources.cmake 73917 2013-09-17 07:34:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -44,6 +44,23 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
+#TODO ANDREA: TODO REMOVE THIS DEPENDENCY AFTER REFACTORING G4WorkerThread and removing explicit BERT initialization
+# Check also granula dependency
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
+
+#Will need this when we'll enable tpmalloc
+#if(GEANT4_BUILD_MULTITHREADED)
+#include_directories(${CMAKE_SOURCE_DIR}/source/externals/tpmalloc/include)
+#endif()
 
 #
 # Define the Geant4 Module.
@@ -62,18 +79,29 @@ GEANT4_DEFINE_MODULE(NAME G4run
 	G4PhysicsListOrderingParameter.hh
         G4Run.hh
         G4RunManager.hh
+	G4MTRunManager.hh
+	G4WorkerRunManager.hh
         G4RunManagerKernel.hh
+        G4MTRunManagerKernel.hh
+        G4WorkerRunManagerKernel.hh
         G4RunMessenger.hh
         G4UserPhysicsListMessenger.hh
         G4UserRunAction.hh
+        G4UserWorkerInitialization.hh
+        G4UserWorkerThreadInitialization.hh
         G4VModularPhysicsList.hh
         G4VPersistencyManager.hh
         G4VPhysicsConstructor.hh
+        G4VUserActionInitialization.hh
         G4VUserDetectorConstruction.hh
         G4VUserParallelWorld.hh
         G4VUserPhysicsList.hh
         G4VUserPrimaryGeneratorAction.hh
-    SOURCES
+	G4WorkerThread.hh
+        G4VUPLSplitter.hh
+        rundefs.hh
+        G4RNGHelper.hh 
+   SOURCES
         G4AdjointPrimaryGeneratorAction.cc
         G4AdjointSimManager.cc
         G4AdjointSimMessenger.cc
@@ -85,17 +113,26 @@ GEANT4_DEFINE_MODULE(NAME G4run
 	G4PhysicsListOrderingParamater.cc
         G4Run.cc
         G4RunManager.cc
+	G4MTRunManager.cc
+	G4WorkerRunManager.cc
         G4RunManagerKernel.cc
+        G4MTRunManagerKernel.cc
+        G4WorkerRunManagerKernel.cc
         G4RunMessenger.cc
         G4UserPhysicsListMessenger.cc
         G4UserRunAction.cc
+        G4UserWorkerInitialization.cc
+        G4UserWorkerThreadInitialization.cc
         G4VModularPhysicsList.cc
         G4VPersistencyManager.cc
+        G4VUserActionInitialization.cc
         G4VUserDetectorConstruction.cc
         G4VUserParallelWorld.cc
         G4VPhysicsConstructor.cc
         G4VUserPhysicsList.cc
         G4VUserPrimaryGeneratorAction.cc
+	G4WorkerThread.cc
+        G4RNGHelper.cc
     GRANULAR_DEPENDENCIES
         G4cuts
         G4decay
@@ -120,6 +157,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4tracking
         G4transportation
         G4volumes
+	G4specsolids
     GLOBAL_DEPENDENCIES
         G4digits_hits
         G4event

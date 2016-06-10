@@ -26,8 +26,7 @@
 /// \file persistency/P02/include/ExP02PhysicsList.hh
 /// \brief Definition of the ExP02PhysicsList class
 //
-//
-// $Id$
+// $Id: ExP02PhysicsList.hh 71727 2013-06-21 07:55:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,21 +49,18 @@ class ExP02PhysicsList: public G4VUserPhysicsList
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
  
-    void SetCuts();
+    virtual void SetCuts();
 
-   
-  protected:
     // these methods Construct particles 
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
     void ConstructBaryons();
 
-  protected:
-  // these methods Construct physics processes and register them
+    // these methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
 };

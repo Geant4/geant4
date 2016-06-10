@@ -176,9 +176,12 @@ G4double G4RIsotopeTable::GetMeanLifeTime(G4int Z, G4int A, G4double& aE)
 
   G4double lifetime = -1.0;
 
-
   //Check if data have been provided by the user
-  G4String file= theUserRadioactiveDataFiles[1000*A+Z];
+  std::map<int,G4String>::iterator it = theUserRadioactiveDataFiles.find(1000*A+Z);
+  G4String file="";
+  if ( it != theUserRadioactiveDataFiles.end() ){
+      file=it->second;
+  }
   if (file ==""){
 	if (!getenv("G4RADIOACTIVEDATA")) {
 		G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files." << G4endl;

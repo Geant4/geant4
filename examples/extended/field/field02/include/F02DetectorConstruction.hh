@@ -26,84 +26,89 @@
 /// \file field/field02/include/F02DetectorConstruction.hh
 /// \brief Definition of the F02DetectorConstruction class
 //
-// $Id$
-// 
+//
+// $Id: F02DetectorConstruction.hh 77484 2013-11-25 10:11:57Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02DetectorConstruction_h
 #define F02DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-#include "G4ios.hh"
-
-class F02DetectorMessenger;
-class F02CalorimeterSD;
-class F02ElectricFieldSetup;
+#include "G4Cache.hh"
 
 class G4Box;
 class G4Tubs;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+
 class G4Material;
 class G4UniformMagField;
+
+class F02DetectorMessenger;
+class F02CalorimeterSD;
+class F02ElectricFieldSetup;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
+
     F02DetectorConstruction();
-    ~F02DetectorConstruction();
+    virtual ~F02DetectorConstruction();
 
   public:
-     
-     void SetAbsorberMaterial (G4String);     
-     void SetAbsorberThickness(G4double);     
-     void SetAbsorberRadius(G4double);          
-      
+
+     void SetAbsorberMaterial (G4String);
+     void SetAbsorberThickness(G4double);
+     void SetAbsorberRadius(G4double);
+
      void SetAbsorberZpos(G4double);
 
      void SetWorldMaterial(G4String);
      void SetWorldSizeZ(G4double);
      void SetWorldSizeR(G4double);
-     
+
      virtual G4VPhysicalVolume* Construct();
+     virtual void ConstructSDandField();
 
-     void UpdateGeometry();
-     
   public:
-  
-     void PrintCalorParameters(); 
-                    
-     G4Material* GetWorldMaterial()    {return fWorldMaterial;};
-     G4double GetWorldSizeZ()          {return fWorldSizeZ;}; 
-     G4double GetWorldSizeR()          {return fWorldSizeR;};
-     
-     G4double GetAbsorberZpos()        {return fZAbsorber;}; 
-     G4double GetZStartAbs()           {return fZStartAbs;};
-     G4double GetZEndAbs()             {return fZEndAbs;};
 
-     G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};
-     G4double    GetAbsorberThickness() {return fAbsorberThickness;};      
-     G4double GetAbsorberRadius()       {return fAbsorberRadius;};
-     
-     const G4VPhysicalVolume* GetPhysiWorld() {return fPhysiWorld;};           
-     const G4VPhysicalVolume* GetAbsorber()   {return fPhysiAbsorber;};
-     G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;};
-                 
+     void PrintCalorParameters();
+
+     G4Material* GetWorldMaterial()    {return fWorldMaterial;}
+     G4double GetWorldSizeZ()          {return fWorldSizeZ;}
+     G4double GetWorldSizeR()          {return fWorldSizeR;}
+
+     G4double GetAbsorberZpos()        {return fZAbsorber;}
+     G4double GetZStartAbs()           {return fZStartAbs;}
+     G4double GetZEndAbs()             {return fZEndAbs;}
+
+     G4Material* GetAbsorberMaterial() {return fAbsorberMaterial;}
+     G4double    GetAbsorberThickness(){return fAbsorberThickness;}
+     G4double    GetAbsorberRadius()   {return fAbsorberRadius;}
+
+     const G4VPhysicalVolume* GetPhysiWorld() {return fPhysiWorld;}
+     const G4VPhysicalVolume* GetAbsorber()   {return fPhysiAbsorber;}
+     G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;}
+
   private:
-     
-     G4Tubs*            fSolidWorld;    // pointer to the solid World 
-     G4LogicalVolume*   fLogicWorld;    // pointer to the logical World
-     G4VPhysicalVolume* fPhysiWorld;    // pointer to the physical World
+     F02DetectorMessenger* fDetectorMessenger;  // pointer -> Messenger
+     G4Cache<F02CalorimeterSD*> fCalorimeterSD; // pointer -> sensitive detector
+     G4Cache<F02ElectricFieldSetup*> fEmFieldSetup;
+
+
+     G4Tubs*            fSolidWorld;     // pointer to the solid World
+     G4LogicalVolume*   fLogicWorld;     // pointer to the logical World
+     G4VPhysicalVolume* fPhysiWorld;     // pointer to the physical World
 
      G4Tubs*            fSolidAbsorber;  // pointer to the solid Absorber
      G4LogicalVolume*   fLogicAbsorber;  // pointer to the logical Absorber
      G4VPhysicalVolume* fPhysiAbsorber;  // pointer to the physical Absorber
-     
-     F02ElectricFieldSetup* fEmFieldSetup;     // pointer to the field helper
-     F02DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
-     F02CalorimeterSD* fCalorimeterSD;   // pointer to the sensitive detector
-      
+
      G4Material*        fAbsorberMaterial;
      G4double           fAbsorberThickness;
      G4double           fAbsorberRadius;
@@ -111,26 +116,26 @@ class F02DetectorConstruction : public G4VUserDetectorConstruction
 
      G4double           fZAbsorber;
      G4double           fZStartAbs, fZEndAbs;
-     
+
      G4Material*        fWorldMaterial;
      G4double           fWorldSizeR;
      G4double           fWorldSizeZ;
-            
+
   private:
-    
+ 
      void DefineMaterials();
      void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
+     G4VPhysicalVolume* ConstructCalorimeter();
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void F02DetectorConstruction::ComputeCalorParameters()
 {
-  // Compute derived parameters of the calorimeter
+     // Compute derived parameters of the calorimeter
 
-     fZStartAbs = fZAbsorber-0.5*fAbsorberThickness; 
-     fZEndAbs   = fZAbsorber+0.5*fAbsorberThickness; 
+     fZStartAbs = fZAbsorber-0.5*fAbsorberThickness;
+     fZEndAbs   = fZAbsorber+0.5*fAbsorberThickness;
 
 }
 

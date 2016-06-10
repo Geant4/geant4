@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc 77094 2013-11-21 10:51:54Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@
 #include "G4DecayPhysics.hh"
 
 #include "G4PAIModel.hh"
-#include "G4PAIPhotonModel.hh"
+#include "G4PAIPhotModel.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -75,7 +75,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList(),
+  fConfig(0),
+  fEmPhysicsList(0),
+  fDecayPhysicsList(0),
+  fStepMaxProcess(0),
+  fMessenger(0)
 {
   fConfig = G4LossTableManager::Instance()->EmConfigurator();
   G4LossTableManager::Instance()->SetVerbose(1);
@@ -124,7 +129,8 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
   fDecayPhysicsList->ConstructProcess();
-  for(size_t i=0; i<fHadronPhys.size(); ++i) { fHadronPhys[i]->ConstructProcess(); }
+  for(size_t i=0; i<fHadronPhys.size(); ++i) { 
+    fHadronPhys[i]->ConstructProcess(); }
   AddStepMax();
 }
 
@@ -262,7 +268,7 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 void PhysicsList::SetCutForProton(G4double cut)
 {
-  fCutForPositron = cut;
+  fCutForProton = cut;
   SetParticleCuts(fCutForProton, G4Proton::Proton());
 }
 
@@ -302,7 +308,7 @@ void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
     fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
                               0.0,100.*TeV,pai);
   } else if(modname == "pai_photon") {
-    G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
+    G4PAIPhotModel* pai = new G4PAIPhotModel(part,"PAIPhotModel");
     fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
                               0.0,100.*TeV,pai);
   }

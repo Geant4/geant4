@@ -27,7 +27,7 @@
 /// \brief Implementation of the G04PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: G04PrimaryGeneratorAction.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 //
 
@@ -41,6 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G04PrimaryGeneratorAction::G04PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(), 
+   fParticleGun(0)
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);

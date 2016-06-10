@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeColliderBase.cc 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function
@@ -34,16 +34,20 @@
 // 20100925  M. Kelsey -- Add explosion() interfaces for G4Fragment and for
 //		(A,Z,E).  Move implementation to latter.  Add Z==0 condition.
 // 20110225  M. Kelsey -- Add setVerboseLevel(), calls through to members
+// 20130621  Move doConservationChecks to G4CascadeParameters, check there
+//		before instantiating CheckBalance; change explosion() to
+//		use reference, add validateOutput() w/G4Fragment
+// 20130622  Move fragment-handling functions to G4CascadeDeexciteBase
 
 #include "G4CascadeColliderBase.hh"
 #include "G4CascadeCheckBalance.hh"
+#include "G4CascadeParameters.hh"
 #include "G4CollisionOutput.hh"
-#include "G4Fragment.hh"
 #include "G4InteractionCase.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
-#include "G4ios.hh"
+#include <vector>
 
 using namespace G4InuclSpecialFunctions;
 
@@ -51,13 +55,10 @@ using namespace G4InuclSpecialFunctions;
 // Constructor and destructor
 
 G4CascadeColliderBase::G4CascadeColliderBase(const char* name, G4int verbose)
-  : G4VCascadeCollider(name, verbose),
-#ifdef G4CASCADE_CHECK_ECONS    
-    doConservationChecks(true),
-#else
-    doConservationChecks(false),
-#endif
-    balance(new G4CascadeCheckBalance(0.001, 0.001, name)) {}
+  : G4VCascadeCollider(name, verbose), balance(0) {
+  if (G4CascadeParameters::checkConservation())
+    balance = new G4CascadeCheckBalance(name);
+}
 
 G4CascadeColliderBase::~G4CascadeColliderBase() {
   delete balance;
@@ -65,7 +66,7 @@ G4CascadeColliderBase::~G4CascadeColliderBase() {
 
 void G4CascadeColliderBase::setVerboseLevel(G4int verbose) {
   G4VCascadeCollider::setVerboseLevel(verbose);
-  balance->setVerboseLevel(verbose);
+  if (balance) balance->setVerboseLevel(verbose);
 }
 
 
@@ -75,33 +76,6 @@ G4bool G4CascadeColliderBase::useEPCollider(G4InuclParticle* bullet,
 					    G4InuclParticle* target) const {
   return (dynamic_cast<G4InuclElementaryParticle*>(bullet) &&
 	  dynamic_cast<G4InuclElementaryParticle*>(target));
-}
-
-
-// Decide wether nuclear fragment is candidate for G4BigBanger
-
-G4bool G4CascadeColliderBase::explosion(G4InuclNuclei* target) const {
-  return target && explosion(target->getA(), target->getZ(), 
-			     target->getExitationEnergy());	// in MeV
-}
-
-G4bool G4CascadeColliderBase::explosion(G4Fragment* fragment) const {
-  return fragment && explosion(fragment->GetA_asInt(), fragment->GetZ_asInt(),
-			       fragment->GetExcitationEnergy());     // in MeV
-}
-
-G4bool 
-G4CascadeColliderBase::explosion(G4int A, G4int Z,
-				 G4double excitation) const {
-  if (verboseLevel) G4cout << " >>> " << theName << "::explosion ?" << G4endl;
-
-  const G4int a_cut = 20;
-  const G4double be_cut = 3.0;
-
-  // Neutron balls, or small fragments with high excitations can explode
-  return ((A <= a_cut || Z==0) && 
-	  (excitation >= be_cut * bindingEnergy(A,Z))
-	  );
 }
 
 
@@ -149,7 +123,7 @@ G4CascadeColliderBase::inelasticInteractionPossible(G4InuclParticle* bullet,
 G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
 					     G4InuclParticle* target,
 					     G4CollisionOutput& output) {
-  if (!doConservationChecks) return true;	// Skip checks if requested
+  if (!balance) return true;		// Skip checks unless requested
 
   if (verboseLevel > 1)
     G4cout << " >>> " << theName << "::validateOutput" << G4endl;
@@ -162,28 +136,27 @@ G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
   return balance->okay();			// Returns false if violations
 }
 
+G4bool G4CascadeColliderBase::validateOutput(const G4Fragment& fragment,
+					     G4CollisionOutput& output) {
+  if (!balance) return true;		// Skip checks unless requested
+
+  if (verboseLevel > 1)
+    G4cout << " >>> " << theName << "::validateOutput" << G4endl;
+
+  balance->setVerboseLevel(verboseLevel);
+  balance->collide(fragment, output);
+  return balance->okay();			// Returns false if violations
+}
+
 G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
 					     G4InuclParticle* target,
 		     const std::vector<G4InuclElementaryParticle>& particles) {
-  if (!doConservationChecks) return true;	// Skip checks if requested
+  if (!balance) return true;		// Skip checks unless requested
 
   if (verboseLevel > 1)
     G4cout << " >>> " << theName << "::validateOutput" << G4endl;
 
   balance->setVerboseLevel(verboseLevel);
   balance->collide(bullet, target, particles);
-  return balance->okay();			// Returns false if violations
-}
-
-G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
-					     G4InuclParticle* target,
-		     const std::vector<G4InuclNuclei>& fragments) {
-  if (!doConservationChecks) return true;	// Skip checks if requested
-
-  if (verboseLevel > 1)
-    G4cout << " >>> " << theName << "::validateOutput" << G4endl;
-
-  balance->setVerboseLevel(verboseLevel);
-  balance->collide(bullet, target, fragments);
   return balance->okay();			// Returns false if violations
 }

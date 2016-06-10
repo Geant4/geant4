@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04RunActionMessenger.cc 76690 2013-11-14 08:45:07Z gcosmo $
+//
 /// \file field/field04/src/F04RunActionMessenger.cc
 /// \brief Implementation of the F04RunActionMessenger class
 //
-//
+
 #include "globals.hh"
 #include "Randomize.hh"
 
@@ -89,8 +91,8 @@ void F04RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if (command == fRndmReadCmd)
   {  G4cout << "\n---> rndm status restored from file: " << newValue << G4endl;
-     CLHEP::HepRandom::restoreEngineStatus(newValue);
-     CLHEP::HepRandom::showEngineStatus();
+     G4Random::restoreEngineStatus(newValue);
+     G4Random::showEngineStatus();
   }
 
   if(command == fSetAutoSeedCmd)

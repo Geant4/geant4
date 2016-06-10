@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -87,7 +85,7 @@ namespace G4INCL {
         virtual ~INuclearPotential() {}
 
         /// \brief Do we have a pion potential?
-        G4bool hasPionPotential() { return pionPotential; }
+        G4bool hasPionPotential() const { return pionPotential; }
 
         virtual G4double computePotentialEnergy(const Particle * const p) const = 0;
 
@@ -204,6 +202,25 @@ namespace G4INCL {
         std::map<ParticleType,G4double> separationEnergy;
 
     };
+
+
+
+    /** \brief Create an INuclearPotential object
+     *
+     * This is the method that should be used to instantiate objects derived
+     * from INuclearPotential. It uses a caching mechanism to minimise
+     * thrashing and speed up the code.
+     *
+     * \param type the type of the potential to be created
+     * \param theA mass number of the nucleus
+     * \param theZ charge number of the nucleus
+     * \param pionPotential whether pions should also feel the potential
+     * \return a pointer to the nuclear potential
+     */
+    INuclearPotential const *createPotential(const PotentialType type, const G4int theA, const G4int theZ, const G4bool pionPotential);
+
+    /// \brief Clear the INuclearPotential cache
+    void clearCache();
 
   }
 

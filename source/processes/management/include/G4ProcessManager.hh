@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProcessManager.hh 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -360,8 +360,8 @@ class G4ProcessManager
    G4int verboseLevel;
   
  private:
-   static G4ProcessManagerMessenger* fProcessManagerMessenger;
-   static G4int                      counterOfObjects;
+   static G4ThreadLocal G4ProcessManagerMessenger* fProcessManagerMessenger;
+   static G4ThreadLocal G4int                      counterOfObjects;
 };
 #include "G4ProcessManager.icc"
 

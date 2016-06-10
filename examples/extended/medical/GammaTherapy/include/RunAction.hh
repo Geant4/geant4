@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: RunAction.hh 67994 2013-03-13 11:05:39Z gcosmo $
+//
 /// \file medical/GammaTherapy/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //

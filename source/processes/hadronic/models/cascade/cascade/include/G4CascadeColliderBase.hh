@@ -25,7 +25,7 @@
 //
 #ifndef G4CASCADE_COLLIDER_BASE_HH
 #define G4CASCADE_COLLIDER_BASE_HH
-// $Id$
+// $Id: G4CascadeColliderBase.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function
@@ -38,6 +38,10 @@
 //		consistency in subclass colliders.
 // 20110321  M. Kelsey -- Hide names of arguments to rescatter(), to avoid
 //		compiler warnings on some GCC versions.
+// 20130620  Address Coverity complaint about missing copy actions
+// 20130621  Move doConservationChecks to G4CascadeParameters; change
+//		explosion to use reference, add validateOutput() w/G4Fragment
+// 20130622  Move fragment-handling functions to G4CascadeDeexciteBase
 
 #include "G4VCascadeCollider.hh"
 
@@ -68,23 +72,12 @@ public:
 
   virtual void setVerboseLevel(G4int verbose=0);
 
-  virtual void setConservationChecks(G4bool doBalance=true) {
-    doConservationChecks = doBalance;
-  }
-
 protected:
   G4InteractionCase interCase;		// Determine bullet vs. target
-  G4bool doConservationChecks;		// Conservation-law validation
-  G4CascadeCheckBalance* balance;
 
   // Decide whether to use G4ElementaryParticleCollider or not
   virtual G4bool useEPCollider(G4InuclParticle* bullet, 
 			       G4InuclParticle* target) const;
-
-  // Decide whether to use G4BigBanger or not
-  virtual G4bool explosion(G4InuclNuclei* target) const;
-  virtual G4bool explosion(G4Fragment* target) const;
-  virtual G4bool explosion(G4int A, G4int Z, G4double excitation) const;
 
   // Decide whether to use G4IntraNuclearCascader or not
   virtual G4bool inelasticInteractionPossible(G4InuclParticle* bullet,
@@ -92,21 +85,26 @@ protected:
 					      G4double ekin) const;
 
   // ==> Provide same interfaces as G4CascadeCheckBalance itself
+  G4CascadeCheckBalance* balance;
 
   // Validate output for energy, momentum conservation, etc.
   virtual G4bool validateOutput(G4InuclParticle* bullet,
 				G4InuclParticle* target,
 				G4CollisionOutput& output);
 
-  // This is for use with G4EPCollider and G4BigBanger
+  // This is for use after de-excitation
+  virtual G4bool validateOutput(const G4Fragment& fragment,
+				G4CollisionOutput& output);
+
+  // This is for use with G4EPCollider
   virtual G4bool validateOutput(G4InuclParticle* bullet,
 				G4InuclParticle* target,
 		const std::vector<G4InuclElementaryParticle>& particles);
 
-  // This is for use with G4Fissioner
-  virtual G4bool validateOutput(G4InuclParticle* bullet,
-				G4InuclParticle* target,
-		const std::vector<G4InuclNuclei>& fragments);
+private:
+  // Copying of modules is forbidden
+  G4CascadeColliderBase(const G4CascadeColliderBase&);
+  G4CascadeColliderBase& operator=(const G4CascadeColliderBase&);
 };        
 
 #endif	/* G4CASCADE_COLLIDER_BASE_HH */

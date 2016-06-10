@@ -1,4 +1,4 @@
-// $Id$
+// $Id: README.TXT 66892 2013-01-17 10:57:59Z gunter $
 
  GEANT4
  

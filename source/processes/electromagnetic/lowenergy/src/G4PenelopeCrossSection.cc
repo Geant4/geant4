@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeCrossSection.cc 76220 2013-11-08 10:15:00Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -99,22 +99,22 @@ G4PenelopeCrossSection::~G4PenelopeCrossSection()
   //clean up tables
   if (shellCrossSections)
     {
-      shellCrossSections->clearAndDestroy();
+      //shellCrossSections->clearAndDestroy();
       delete shellCrossSections;	  
     }
   if (shellNormalizedCrossSections)
     {
-      shellNormalizedCrossSections->clearAndDestroy();
+      //shellNormalizedCrossSections->clearAndDestroy();
       delete shellNormalizedCrossSections;
     }
   if (softCrossSections)
     {
-      softCrossSections->clearAndDestroy();
+      //softCrossSections->clearAndDestroy();
       delete softCrossSections;
     }
   if (hardCrossSections)
     {
-      hardCrossSections->clearAndDestroy();
+      //hardCrossSections->clearAndDestroy();
       delete hardCrossSections;
     }
 }
@@ -221,7 +221,7 @@ void G4PenelopeCrossSection::AddShellCrossSectionPoint(size_t binNumber,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 
-G4double G4PenelopeCrossSection::GetTotalCrossSection(G4double energy)
+G4double G4PenelopeCrossSection::GetTotalCrossSection(G4double energy) const
 {
   G4double result = 0;
   //take here XS0 + XH0
@@ -265,7 +265,7 @@ G4double G4PenelopeCrossSection::GetTotalCrossSection(G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 
-G4double G4PenelopeCrossSection::GetHardCrossSection(G4double energy)
+G4double G4PenelopeCrossSection::GetHardCrossSection(G4double energy) const 
 {
   G4double result = 0;
   //take here XH0
@@ -295,7 +295,7 @@ G4double G4PenelopeCrossSection::GetHardCrossSection(G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 
-G4double G4PenelopeCrossSection::GetSoftStoppingPower(G4double energy)
+G4double G4PenelopeCrossSection::GetSoftStoppingPower(G4double energy) const
 {
   G4double result = 0;
   //take here XH0
@@ -324,7 +324,7 @@ G4double G4PenelopeCrossSection::GetSoftStoppingPower(G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 
-G4double G4PenelopeCrossSection::GetShellCrossSection(size_t shellID,G4double energy)
+G4double G4PenelopeCrossSection::GetShellCrossSection(size_t shellID,G4double energy) const
 {
   G4double result = 0;
   if (!shellCrossSections)
@@ -360,7 +360,7 @@ G4double G4PenelopeCrossSection::GetShellCrossSection(size_t shellID,G4double en
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 
-G4double G4PenelopeCrossSection::GetNormalizedShellCrossSection(size_t shellID,G4double energy)
+G4double G4PenelopeCrossSection::GetNormalizedShellCrossSection(size_t shellID,G4double energy) const
 {
   G4double result = 0;
   if (!shellNormalizedCrossSections)
@@ -372,7 +372,11 @@ G4double G4PenelopeCrossSection::GetNormalizedShellCrossSection(size_t shellID,G
     }
 
   if (!isNormalized)
-    NormalizeShellCrossSections();
+    {
+      G4cout << "Something wrong in G4PenelopeCrossSection::GetShellCrossSection" << G4endl;
+      G4cout << "The table of normalized cross section is not initialized" << G4endl;
+    }
+
 
   if (shellID >= numberOfShells)
     {
@@ -383,7 +387,8 @@ G4double G4PenelopeCrossSection::GetNormalizedShellCrossSection(size_t shellID,G
       return result;
     }
  
-  G4PhysicsFreeVector* theVector = (G4PhysicsFreeVector*) (*shellNormalizedCrossSections)[shellID];
+  const G4PhysicsFreeVector* theVector = 
+    (G4PhysicsFreeVector*) (*shellNormalizedCrossSections)[shellID];
 
   if (theVector->GetVectorLength() < numberOfEnergyPoints)
     {

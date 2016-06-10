@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmCorrections.cc 76333 2013-11-08 14:31:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -102,10 +102,10 @@ G4EmCorrections::G4EmCorrections()
 
 G4EmCorrections::~G4EmCorrections()
 {
-  for(G4int i=0; i<nIons; ++i) {delete stopData[i];}
-  delete BarkasCorr;
-  delete ThetaK;
-  delete ThetaL;
+  //  for(G4int i=0; i<nIons; ++i) {delete stopData[i];}
+  // delete BarkasCorr;
+  // delete ThetaK;
+  // delete ThetaL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -822,7 +822,7 @@ void G4EmCorrections::BuildCorrectionVector()
   const G4ParticleDefinition* ion = curParticle;
   G4int Z = Zion[idx];
   if(currentZ != Z) {
-    ion = G4ParticleTable::GetParticleTable()->FindIon(Z, Aion[idx], 0, Z);
+    ion = ionTable->GetIon(Z, Aion[idx], 0);
   }
   //G4cout << "BuildCorrectionVector: idx= " << idx << " Z= " << Z 
   //	 << " curZ= " << currentZ << G4endl;

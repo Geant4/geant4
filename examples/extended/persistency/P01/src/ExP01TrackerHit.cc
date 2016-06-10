@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01TrackerHit class
 //
 //
-// $Id$
+// $Id: ExP01TrackerHit.cc 71791 2013-06-24 14:08:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,8 @@ G4Allocator<ExP01TrackerHit> ExP01TrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01TrackerHit::ExP01TrackerHit() {}
+ExP01TrackerHit::ExP01TrackerHit()
+: G4VHit(), fTrackID(0), fChamberNb(0), fEdep(0), fPos(0,0,0) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,20 +55,20 @@ ExP01TrackerHit::~ExP01TrackerHit() {}
 ExP01TrackerHit::ExP01TrackerHit(const ExP01TrackerHit& right)
   : G4VHit()
 {
-  trackID   = right.trackID;
-  chamberNb = right.chamberNb;
-  edep      = right.edep;
-  pos       = right.pos;
+  fTrackID   = right.fTrackID;
+  fChamberNb = right.fChamberNb;
+  fEdep      = right.fEdep;
+  fPos       = right.fPos;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const ExP01TrackerHit& ExP01TrackerHit::operator=(const ExP01TrackerHit& right)
 {
-  trackID   = right.trackID;
-  chamberNb = right.chamberNb;
-  edep      = right.edep;
-  pos       = right.pos;
+  fTrackID   = right.fTrackID;
+  fChamberNb = right.fChamberNb;
+  fEdep      = right.fEdep;
+  fPos       = right.fPos;
   return *this;
 }
 
@@ -85,7 +86,7 @@ void ExP01TrackerHit::Draw()
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Circle circle(pos);
+    G4Circle circle(fPos);
     circle.SetScreenSize(2.);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
@@ -99,9 +100,9 @@ void ExP01TrackerHit::Draw()
 
 void ExP01TrackerHit::Print()
 {
-  G4cout << "  trackID: " << trackID << "  chamberNb: " << chamberNb
-         << "  energy deposit[MeV]: " << edep
-         << "  position[mm]: " << pos << G4endl;
+  G4cout << "  trackID: " << fTrackID << "  chamberNb: " << fChamberNb
+         << "  energy deposit[MeV]: " << fEdep
+         << "  position[mm]: " << fPos << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

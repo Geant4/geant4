@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -49,13 +47,12 @@ namespace G4INCL {
   class ElasticChannel : public IChannel {
 
   public:
-    ElasticChannel(Nucleus *n, Particle *p1, Particle *p2);
+    ElasticChannel(Particle *p1, Particle *p2);
     virtual ~ElasticChannel();
 
     FinalState* getFinalState();
 
   private:
-    Nucleus *theNucleus;
     Particle *particle1, *particle2;
   };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ContinuumGammaTransition.cc 74869 2013-10-23 09:26:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -53,11 +53,11 @@
 #include "G4ContinuumGammaTransition.hh"
 #include "G4VLevelDensityParameter.hh"
 #include "G4ConstantLevelDensityParameter.hh"
-#include "G4RandGeneralTmp.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
+#include "G4Log.hh"
 
 //
 // Constructor
@@ -112,29 +112,45 @@ void G4ContinuumGammaTransition::SelectGamma()
 
   _eGamma = 0.;
 
-  G4int nBins = 200;
-  G4double sampleArray[200];
+  G4int nBins = 100;
+  G4double sampleArray[101];
+  sampleArray[0] = 0.0;
   G4int i;
-  for (i=0; i<nBins; i++)
-    {
-      G4double e = _eMin + ( (_eMax - _eMin) / nBins) * i;
-      sampleArray[i] = E1Pdf(e);
-
-      if(_verbose > 10)
-	G4cout << "*---* G4ContinuumTransition: e = " << e 
-	       << " pdf = " << sampleArray[i] << G4endl;
+  G4double del = (_eMax - _eMin) / G4double(nBins);
+  G4double sum = 0;
+  G4double w1 = E1Pdf(_eMin);
+  G4double w2;
+  //G4cout << _eMin << "  " << _eMax << "  " << del << G4endl;
+  for (i=1; i<=nBins; i++) {
+    G4double e = _eMin + del * i;
+    w2 = E1Pdf(e);
+    sum += 0.5*(w1 + w2);
+    w1 = w2;
+    sampleArray[i] = sum;
+    if(_verbose > 10) {
+      G4cout << "*---* G4ContinuumTransition: e = " << e 
+	     << " pdf = " << sampleArray[i] << G4endl;
     }
-  G4RandGeneralTmp randGeneral(sampleArray, nBins);
-  G4double random = randGeneral.shoot();
-  
-  _eGamma = _eMin + (_eMax - _eMin) * random;
+  }
+  sum *= G4UniformRand();
+  _eGamma = _eMax;
+  for (i=1; i<=nBins; i++) {
+    if(sum <= sampleArray[i]) {
+      _eGamma = _eMin + del * i;
+      G4double w = sampleArray[i] - sampleArray[i-1];
+      //G4cout << _eGamma << "  " << w << G4endl;
+      if(w != 0.0) {
+	_eGamma -= (sampleArray[i] - sum)*del/w;
+      }
+      break;
+    }
+  }   
   
   G4double finalExcitation = _excitation - _eGamma;
   
   if(_verbose > 10) {
     G4cout << "*---*---* G4ContinuumTransition: eGamma = " << _eGamma
-	   << "   finalExcitation = " << finalExcitation 
-	   << " random = " << random << G4endl;
+	   << "   finalExcitation = " << finalExcitation << G4endl;
   }
   //  if (finalExcitation < 0)
   if(finalExcitation < _minLevelE/2.)
@@ -207,7 +223,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   G4double Egdp = (40.3 /G4Pow::GetInstance()->powZ(_nucleusA,0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
-  const G4double normC = 1.0 / (pi * hbarc)*(pi * hbarc);
+  static const G4double normC = 1.0 / (pi * hbarc)*(pi * hbarc);
 
   G4double numerator = sigma0 * e*e * GammaR*GammaR;
   G4double denominator = (e*e - Egdp*Egdp)* (e*e - Egdp*Egdp) + GammaR*GammaR*e*e;
@@ -234,24 +250,8 @@ G4double G4ContinuumGammaTransition::GammaTime()
 
   G4double GammaR = 0.30 * (40.3 /G4Pow::GetInstance()->powZ(_nucleusA,0.2) )*MeV;
   G4double tau = hbar_Planck/GammaR;
-  G4double creationTime = -tau*std::log(G4UniformRand());
-  /*
-  G4double tMin = 0;
-  G4double tMax = 10.0 * tau;
-  G4int nBins = 200;
-  G4double sampleArray[200];
+  G4double creationTime = -tau*G4Log(G4UniformRand());
 
-  for(G4int i = 0; i<nBins;i++)
-  {
-    G4double t = tMin + ((tMax-tMin)/nBins)*i;
-    sampleArray[i] = (std::exp(-t/tau))/tau;
-  }
-
-  G4RandGeneralTmp randGeneral(sampleArray, nBins);
-  G4double random = randGeneral.shoot();
-  
-  G4double creationTime = tMin + (tMax - tMin) * random;
-  */
   return creationTime;
 }
 

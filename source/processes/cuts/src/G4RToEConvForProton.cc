@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RToEConvForProton.cc 70745 2013-06-05 10:54:00Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -41,7 +41,13 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-G4RToEConvForProton::G4RToEConvForProton() : G4VRangeToEnergyConverter()
+G4RToEConvForProton::G4RToEConvForProton() 
+  : G4VRangeToEnergyConverter(),
+    Mass(0.0),
+    Z(-1.),  
+    tau0(0.0), taul(0.0), taum(0.0),
+    ionpot(0.0),
+    ca(0.0), cba(0.0), cc(0.0)
 {    
   theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("proton");
   if (theParticle ==0) {
@@ -51,6 +57,8 @@ G4RToEConvForProton::G4RToEConvForProton() : G4VRangeToEnergyConverter()
       G4cout << " proton is not defined !!" << G4endl;
     }
 #endif
+  } else {
+    Mass = theParticle->GetPDGMass();
   } 
 }
 
@@ -71,16 +79,10 @@ G4double G4RToEConvForProton::Convert(G4double rangeCut, const G4Material* )
 // ************************* ComputeLoss ********************************
 // **********************************************************************
 G4double G4RToEConvForProton::ComputeLoss(G4double AtomicNumber,
-                                                G4double KineticEnergy) const
+                                                G4double KineticEnergy) 
 {
   //  calculate dE/dx
-
-  static G4double Z;  
-  static G4double ionpot, tau0, taum, taul, ca, cba, cc;
-
-  G4double  z2Particle = theParticle->GetPDGCharge()/eplus;
-  z2Particle *=  z2Particle;
-  if (z2Particle < 0.1) return 0.0;
+  const G4double  z2Particle = 1.0;
 
   if( std::fabs(AtomicNumber-Z)>0.1 ){
     // recalculate constants
@@ -90,13 +92,13 @@ G4double G4RToEConvForProton::ComputeLoss(G4double AtomicNumber,
     taum = 0.035*Z13*MeV/proton_mass_c2;
     taul = 2.*MeV/proton_mass_c2;
     ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z));
-   cc = (taul+1.)*(taul+1.)*std::log(2.*electron_mass_c2*taul*(taul+2.)/ionpot)/(taul*(taul+2.))-1.;
+    cc = (taul+1.)*(taul+1.)*std::log(2.*electron_mass_c2*taul*(taul+2.)/ionpot)/(taul*(taul+2.))-1.;
     cc = 2.*twopi_mc2_rcl2*Z*cc*std::sqrt(taul);
     ca = cc/((1.-0.5*std::sqrt(tau0/taum))*tau0);
     cba = -0.5/std::sqrt(taum);
   }
 
-  G4double tau = KineticEnergy/theParticle->GetPDGMass();
+  G4double tau = KineticEnergy/Mass;
   G4double dEdx;
   if ( tau <= tau0 ) {
     dEdx = ca*(std::sqrt(tau)+cba*tau);

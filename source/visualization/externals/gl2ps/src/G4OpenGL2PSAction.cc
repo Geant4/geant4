@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGL2PSAction.cc 70646 2013-06-03 15:07:58Z gcosmo $
 //
 // 
 
@@ -39,6 +39,9 @@
 
 #include "G4OpenGL2PSAction.hh"
 
+#include <limits>
+#include <cstdlib>
+#include <cstring>
 
 G4OpenGL2PSAction::G4OpenGL2PSAction(
 )
@@ -51,8 +54,8 @@ G4OpenGL2PSAction::G4OpenGL2PSAction(
   fViewport[1] = 0;
   fViewport[2] = 0;
   fViewport[3] = 0;
-  fBufferSize = 1024;
-  fBufferSizeLimit = 8192;
+  fBufferSize = 2048;
+  fBufferSizeLimit = (std::numeric_limits<GLint>::max)();
   resetBufferSizeParameters();
 }
 
@@ -62,8 +65,7 @@ void G4OpenGL2PSAction::resetBufferSizeParameters(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  fBufferSize = 1024;
-  fBufferSizeLimit = 8192;
+  fBufferSize = 2048;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -109,7 +111,7 @@ void G4OpenGL2PSAction::setFileName(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  fFileName = aFileName;
+    fFileName = (strncpy((char*)malloc((unsigned)strlen(aFileName) + 1), aFileName, (unsigned)strlen(aFileName) + 1));
 }
 //////////////////////////////////////////////////////////////////////////////
 bool G4OpenGL2PSAction::enableFileWriting(
@@ -121,6 +123,9 @@ bool G4OpenGL2PSAction::enableFileWriting(
   if(!fFile) {
     return false;
   }
+
+  // No buffering for output file
+  setvbuf ( fFile , NULL , _IONBF , 2048 );
   return G4gl2psBegin();
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -144,7 +149,7 @@ bool G4OpenGL2PSAction::extendBufferSize(
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   // extend buffer size *2
-  if (fBufferSize*2 <= fBufferSizeLimit) {
+  if (fBufferSize < (fBufferSizeLimit/2)) {
     fBufferSize = fBufferSize*2;
     return true;
   }
@@ -166,13 +171,11 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
 {
   if(!fFile) return false;
   int options = GL2PS_OCCLUSION_CULL | 
-    GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT;
+    GL2PS_BEST_ROOT | GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT;
 //   int options = GL2PS_OCCLUSION_CULL | 
 //      GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
   int sort = GL2PS_BSP_SORT;
   //  int sort = GL2PS_SIMPLE_SORT;
-  GLint buffsize = 0;
-  buffsize += fBufferSize*fBufferSize;
   
   glGetIntegerv(GL_VIEWPORT,fViewport);
 
@@ -182,7 +185,7 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
                  sort, 
                  options, 
                  GL_RGBA,0, NULL,0,0,0,
-                 buffsize, 
+                 fBufferSize,
                  fFile,fFileName);    
   if (res == GL2PS_ERROR) {
     return false;

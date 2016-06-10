@@ -7,7 +7,7 @@
 #  This package contains a set of Python interface with Geant4.
 # ==================================================================
 """
-# $Id: __init__.py,v 1.23 2010-12-02 08:24:22 kmura Exp $
+# $Id: __init__.py 66892 2013-01-17 10:57:59Z gunter $
 __version__ ='9.5.0'
 __date__ = '02/December/2011'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'

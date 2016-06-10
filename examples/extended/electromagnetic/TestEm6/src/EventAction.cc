@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(0)
+:G4UserEventAction(),fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }

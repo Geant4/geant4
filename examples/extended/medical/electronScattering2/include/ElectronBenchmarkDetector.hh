@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ElectronBenchmarkDetector.hh 76691 2013-11-14 08:46:02Z gcosmo $
+//
 /// \file medical/electronScattering2/include/ElectronBenchmarkDetector.hh
 /// \brief Definition of the ElectronBenchmarkDetector class
-//
 
 #ifndef ElectronBenchmarkDetector_h
 #define ElectronBenchmarkDetector_h 1
@@ -33,25 +34,32 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "G4Cache.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+class G4MultiFunctionalDetector;
 class G4Material;
 class G4VisAttributes;
 class ElectronBenchmarkDetectorMessenger;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
 {
-  public:
-  
+public:
+    
     ElectronBenchmarkDetector();
     virtual ~ElectronBenchmarkDetector();
-
+    
     virtual G4VPhysicalVolume* Construct();
-
+    
+    // Sensitive Detector
+    void ConstructSDandField();
+    
     // Material Definition
     void DefineMaterials();
-
+    
     // Geometry Definition
     G4VPhysicalVolume* CreateWorld();
     void CreateExitWindow(G4LogicalVolume* logicWorld);
@@ -61,15 +69,12 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
     void CreateScorer(G4LogicalVolume* logicWorld);
     G4VPhysicalVolume* CreateGeometry();
     void UpdateGeometry();
-
-    // Scorer Activation
-    void ActivateScorer();
-
+    
     // Command Interface
     void SetPrimFoilMaterial(G4String matname);
     void SetPrimFoilThickness(G4double thicknessPrimFoil);
-
-  private:	
+    
+private:
     // Exit Window
     G4double fPosWindow0;
     G4double fPosWindow1;
@@ -105,7 +110,12 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
     G4double fRadDelta;
     
     // World volume
-    G4LogicalVolume* fLogWorld;    
+    G4LogicalVolume* fLogWorld;
+    
+    // SensitiveDetector
+    // G4Cache mechanism is necessary for multi-threaded operation
+    // as it allows us to store separate detector pointer per thread
+    const G4Cache<G4MultiFunctionalDetector*> fSensitiveDetectorCache;
     
     // Messenger
     ElectronBenchmarkDetectorMessenger* fMessenger;
@@ -120,5 +130,7 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
     G4VisAttributes* fRingVisAtt;
     G4VisAttributes* fScorerVisAtt;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

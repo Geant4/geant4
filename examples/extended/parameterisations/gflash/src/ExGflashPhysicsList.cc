@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ExGflashPhysicsList.cc 70923 2013-06-07 13:10:39Z gcosmo $
+//
 /// \file parameterisations/gflash/src/ExGflashPhysicsList.cc
 /// \brief Implementation of the ExGflashPhysicsList class
 //
@@ -118,16 +120,13 @@ void ExGflashPhysicsList::ConstructIons()
 
 void ExGflashPhysicsList::ConstructProcess()
 {
-  //  std::cout<<"1111"<<std::endl;
   AddTransportation();
-  //   std::cout<<"2222"<<std::endl;
   AddParameterisation();
   std::cout<<"AddParameterisation"<<std::endl;
  
   ConstructEM();
   std::cout<<"ConstructEM"<<std::endl;
   ConstructGeneral();
-  //  std::cout<<"5555"<<std::endl;
 }
 
 

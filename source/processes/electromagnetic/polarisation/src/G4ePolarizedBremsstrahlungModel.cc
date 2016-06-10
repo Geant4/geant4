@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ePolarizedBremsstrahlungModel.cc 75601 2013-11-04 13:08:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,9 +53,9 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4PolarizationHelper.hh"
 
-G4ePolarizedBremsstrahlungModel::G4ePolarizedBremsstrahlungModel(const G4ParticleDefinition* p,
-                                               const G4String& nam)
-  : G4eBremsstrahlungModel(p,nam),
+G4ePolarizedBremsstrahlungModel::G4ePolarizedBremsstrahlungModel(
+  const G4ParticleDefinition* p, const G4String& nam)
+  : G4SeltzerBergerModel(p,nam),
     crossSectionCalculator(0)
 {
 }
@@ -72,7 +72,7 @@ G4ePolarizedBremsstrahlungModel::~G4ePolarizedBremsstrahlungModel()
 void G4ePolarizedBremsstrahlungModel::Initialise(const G4ParticleDefinition* p, 
 							 const G4DataVector& d)
 {
-  G4eBremsstrahlungModel::Initialise(p,d);
+  G4SeltzerBergerModel::Initialise(p,d);
   if (!crossSectionCalculator)
     crossSectionCalculator = new G4PolarizedBremsstrahlungCrossSection();
 }
@@ -87,7 +87,7 @@ void G4ePolarizedBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicPar
 							G4double tmin,
 							G4double maxEnergy)
 {
-  G4eBremsstrahlungModel::SampleSecondaries(vdp,couple,dp,tmin,maxEnergy);
+  G4SeltzerBergerModel::SampleSecondaries(vdp,couple,dp,tmin,maxEnergy);
   G4int num = vdp->size();
 
   if(num > 0) {

@@ -37,7 +37,7 @@
 // -------------------------------------------------------------------
 
 TEMPLATE
-G4ITMANAGER * G4ITMANAGER::fInstance(0);
+G4ThreadLocal G4ITMANAGER * G4ITMANAGER::fInstance(0);
 
 TEMPLATE
 G4ITMANAGER * G4ITMANAGER::Instance()
@@ -118,15 +118,13 @@ void G4ITMANAGER::Push(G4Track* track)
         std::pair<typename BoxMap::iterator,bool> ret = fBox.insert(std::make_pair (T(key), itBox)) ;
 
         typename BoxMap::iterator box_placement = ret.first;
-        typename BoxMap::iterator previous_placement = ret.first;
-        previous_placement--;
-        typename BoxMap::iterator next_placement = ret.first;
-        next_placement++;
         typename BoxMap::iterator last_placement = fBox.end();
         last_placement--;
 
         if(box_placement != fBox.begin())
         {
+            typename BoxMap::iterator previous_placement = ret.first;
+            previous_placement--;
             G4ITBox* previous_box = previous_placement->second;
             if(previous_box)
             {
@@ -136,6 +134,8 @@ void G4ITMANAGER::Push(G4Track* track)
         }
         if(box_placement != last_placement)
         {
+            typename BoxMap::iterator next_placement = ret.first;
+            next_placement++;
             G4ITBox* next_box = next_placement->second;
             if(next_box)
             {
@@ -395,6 +395,14 @@ void G4ITMANAGER::UpdatePositionMap()
                                              position.y(),
                                              position.z(),
                                              currentIT);
+
+//        G4KDNode* node = currentTree->InsertMap(position.x(),
+//                                             position.y(),
+//                                             position.z(),
+//                                             currentIT);
+
         currentIT->SetNode(node);
     }
+
+    // currentTree->Build();
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DiffractiveSplitableHadron.hh 74627 2013-10-17 07:04:38Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -43,41 +43,35 @@
 #include "G4Nucleon.hh"
 #include "G4Parton.hh"
 
-class G4DiffractiveSplitableHadron : public G4VSplitableHadron
-{
 
-public:
+class G4DiffractiveSplitableHadron : public G4VSplitableHadron {
 
-	G4DiffractiveSplitableHadron();
-	G4DiffractiveSplitableHadron(const G4ReactionProduct & aPrimary);
-	G4DiffractiveSplitableHadron(const G4Nucleon & aNucleon);
-	G4DiffractiveSplitableHadron(const G4VKineticNucleon * aNucleon);
-	~G4DiffractiveSplitableHadron();
+  public:
+    G4DiffractiveSplitableHadron();
+    G4DiffractiveSplitableHadron( const G4ReactionProduct& aPrimary );
+    G4DiffractiveSplitableHadron( const G4Nucleon& aNucleon );
+    G4DiffractiveSplitableHadron( const G4VKineticNucleon* aNucleon );
+    ~G4DiffractiveSplitableHadron();
 
-private:
-   G4DiffractiveSplitableHadron(const G4DiffractiveSplitableHadron &);
-   G4DiffractiveSplitableHadron& operator=(const G4DiffractiveSplitableHadron &);
-	int operator==(const G4DiffractiveSplitableHadron &right) const;
-	int operator!=(const G4DiffractiveSplitableHadron &right) const;
+    void SplitUp();
+    G4Parton* GetNextParton() ;
+    G4Parton* GetNextAntiParton();
 
-public:
-	void SplitUp();
-	G4Parton * GetNextParton() ;
-	G4Parton * GetNextAntiParton();
+    void SetFirstParton( G4int PDGcode );
+    void SetSecondParton( G4int PDGcode );
 
-        void SetFirstParton(G4int PDGcode);  // Uzhi 24.11.10
-        void SetSecondParton(G4int PDGcode); // Uzhi 24.11.10
+  private:
+    G4DiffractiveSplitableHadron( const G4DiffractiveSplitableHadron& );
+    G4DiffractiveSplitableHadron& operator=( const G4DiffractiveSplitableHadron& );
+    int operator==( const G4DiffractiveSplitableHadron& right ) const;
+    int operator!=( const G4DiffractiveSplitableHadron& right ) const;
 
-private:
+    G4int Diquark( G4int aquark, G4int bquark, G4int Spin ) const;
+    void ChooseStringEnds( G4int PDGcode, G4int* aEnd, G4int* bEnd ) const;
 
-//implementation
-	G4int Diquark(G4int aquark,G4int bquark,G4int Spin) const; // to splitable hadron
-	void ChooseStringEnds(G4int PDGcode,G4int * aEnd, G4int * bEnd) const; // to splitable hadron
-
-private:
-	G4Parton *Parton[2];
-	G4int    PartonIndex; 
+    G4Parton* Parton[2];
+    G4int PartonIndex; 
 
 };
 
-#endif	
+#endif

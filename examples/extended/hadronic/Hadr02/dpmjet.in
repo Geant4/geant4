@@ -18,8 +18,7 @@
 /run/setCut           1 km
 /gun/particle ion
 /gun/ion 16 32
-/gun/energy 200. GeV
-#/testhadr/HistoType  root
-#/testhadr/HistoName  s32_al_dpmjet
-/run/beamOn 1000
+/gun/energy 60. GeV
+/testhadr/histo/fileName s32_al_dpmjet
+/run/beamOn 2000
 #

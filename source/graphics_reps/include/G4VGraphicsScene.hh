@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VGraphicsScene.hh 75130 2013-10-28 10:05:45Z gcosmo $
 // John Allison  19th July 1996
 //
 // Class Description:
@@ -64,7 +64,7 @@ class G4Circle;
 class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
-class G4NURBS;
+class G4VisExtent;
 
 class G4VGraphicsScene {
 
@@ -146,7 +146,11 @@ public: // With description
   virtual void AddPrimitive (const G4Square&)     = 0;
   virtual void AddPrimitive (const G4Polymarker&) = 0;
   virtual void AddPrimitive (const G4Polyhedron&) = 0;
-  virtual void AddPrimitive (const G4NURBS&)      = 0;
+
+  virtual const G4VisExtent& GetExtent() const;
+  // The concrete class should overload this or
+  // G4VisExtent::NullExtent will be returned.
+  // See G4VScenHandler for example.
 
 };
 

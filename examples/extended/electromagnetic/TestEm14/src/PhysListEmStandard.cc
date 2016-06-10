@@ -27,10 +27,10 @@
 /// \brief Implementation of the PhysListEmStandard class
 //
 //
-// $Id$
+// $Id: PhysListEmStandard.cc 73712 2013-09-09 09:58:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
@@ -41,6 +41,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4KleinNishinaModel.hh"
 #include "G4GammaConversion.hh"
+#include "G4GammaConversionToMuons.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -76,9 +77,9 @@ void PhysListEmStandard::ConstructProcess()
 {
   // Add standard EM Processes
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -87,9 +88,10 @@ void PhysListEmStandard::ConstructProcess()
       ////pmanager->AddDiscreteProcess(new G4RayleighScattering);               
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
+      cs->SetEmModel(new G4KleinNishinaModel());
       pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
+      pmanager->AddDiscreteProcess(new G4GammaConversionToMuons);      
       
     } else if (particleName == "e-") {
       //electron

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/TestEm8.cc
 /// \brief Main program of the electromagnetic/TestEm8 example
 //
-// $Id$
+// $Id: TestEm8.cc 67235 2013-02-08 16:34:49Z vnivanch $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "StackingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -68,6 +69,7 @@ int main(int argc,char** argv)
   runManager->SetUserAction(gun);
   runManager->SetUserAction(new RunAction());
   runManager->SetUserAction(new EventAction());
+  runManager->SetUserAction(new StackingAction());
   
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 

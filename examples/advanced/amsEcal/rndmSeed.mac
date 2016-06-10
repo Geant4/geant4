@@ -1,4 +1,4 @@
-# $Id: rndmSeed.mac,v 1.1 2009-04-16 11:05:40 maire Exp $
+# $Id: rndmSeed.mac 68740 2013-04-05 09:56:39Z gcosmo $
 #
 # This macro illustrates how to save random number seeds
 #

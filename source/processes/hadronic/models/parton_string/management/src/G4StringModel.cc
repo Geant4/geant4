@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StringModel.cc 67999 2013-03-13 11:14:32Z gcosmo $
 //
 // G4StringModel
 #include "G4StringModel.hh"

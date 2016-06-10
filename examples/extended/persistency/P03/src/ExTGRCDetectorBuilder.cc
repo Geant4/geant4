@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ExTGRCDetectorBuilder.cc 76943 2013-11-19 09:57:34Z gcosmo $
 //
-/// \file ExTGRCDetectorBuilder.cc
+/// \file persistency/P03/src/ExTGRCDetectorBuilder.cc
 /// \brief Implementation of the ExTGRCDetectorBuilder class
 
 #include "ExTGRCDetectorBuilder.hh"

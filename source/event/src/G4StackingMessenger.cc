@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StackingMessenger.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // --------------------------------------------------------------------
 
@@ -69,6 +69,7 @@ G4StackingMessenger::~G4StackingMessenger()
 {
   delete statusCmd;
   delete clearCmd;
+  delete verboseCmd;
   delete stackDir;
 }
 

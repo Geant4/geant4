@@ -46,7 +46,7 @@ class GammaKnifeFactoryI;
 class GammaKnifeRunAction : public G4UserRunAction
 {
 public:
-  GammaKnifeRunAction();
+  GammaKnifeRunAction(G4bool isOnMaster);
   ~GammaKnifeRunAction();
 
 public:
@@ -57,9 +57,9 @@ public:
 private: 
 
   G4Timer* timer;
- 
-  G4int electromagnetic;
-  G4int hadronic;
+  G4double sum_real;
+  G4double sum_user;
+
 };
 #endif
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ViewParameters.icc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  20th October 1996
@@ -37,10 +37,6 @@ G4ViewParameters::GetDrawingStyle () const {
 
 inline G4bool G4ViewParameters::IsAuxEdgeVisible () const {
   return fAuxEdgeVisible;
-}
-
-inline G4ViewParameters::RepStyle G4ViewParameters::GetRepStyle () const {
-  return fRepStyle;
 }
 
 inline G4bool G4ViewParameters::IsCulling () const {
@@ -223,11 +219,6 @@ G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
 
 inline void G4ViewParameters::SetAuxEdgeVisible (G4bool vis) {
   fAuxEdgeVisible = vis;
-}
-
-inline void
-G4ViewParameters::SetRepStyle (G4ViewParameters::RepStyle style) {
-  fRepStyle = style;
 }
 
 inline void G4ViewParameters::SetCulling (G4bool value) {

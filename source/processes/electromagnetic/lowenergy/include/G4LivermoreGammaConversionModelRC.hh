@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermoreGammaConversionModelRC.hh 74822 2013-10-22 14:42:13Z gcosmo $
 //
 // Author: Francesco Longo & Gerardo Depaola
 //         on base of G4LivermoreGammaConversionModel
@@ -90,6 +90,9 @@ private:
 
   G4LivermoreGammaConversionModelRC & operator=(const  G4LivermoreGammaConversionModelRC &right);
   G4LivermoreGammaConversionModelRC(const  G4LivermoreGammaConversionModelRC&);
+
+  G4double fbeta (G4double x);
+  G4double Dilog (G4double x);
 
 
 };

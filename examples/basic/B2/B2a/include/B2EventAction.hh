@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B2EventAction.hh 75214 2013-10-29 16:04:42Z gcosmo $
 //
 /// \file B2EventAction.hh
 /// \brief Definition of the B2EventAction class
@@ -45,19 +45,8 @@ class B2EventAction : public G4UserEventAction
 
     virtual void  BeginOfEventAction(const G4Event* );
     virtual void    EndOfEventAction(const G4Event* );
-
-    // Set methods
-    void SetPrintModulo(G4int value);
-
-  private:
-    G4int  fPrintModulo;
 };
 
-// inline functions
-
-inline void B2EventAction::SetPrintModulo(G4int value) {
-  fPrintModulo = value;
-} 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

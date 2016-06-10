@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsOrderedFreeVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Definition
@@ -86,7 +86,7 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
   
   void InsertValues(G4double energy, G4double value); 
 
-  G4double GetLowEdgeEnergy(size_t binNumber) const;
+  //G4double GetLowEdgeEnergy(size_t binNumber) const;
   
   G4double GetMaxValue();
   
@@ -101,8 +101,6 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
   void DumpValues();
 
  private:
-
-  virtual size_t FindBinLocation(G4double theEnergy) const;
   
   size_t FindValueBinLocation(G4double aValue);
   

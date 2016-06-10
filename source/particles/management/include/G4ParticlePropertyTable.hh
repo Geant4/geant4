@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ParticlePropertyTable.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -99,7 +99,7 @@ class G4ParticlePropertyTable
   
  private:
   G4int verboseLevel;
-  static G4ParticlePropertyTable*  fgParticlePropertyTable;
+  static G4ThreadLocal G4ParticlePropertyTable*  fgParticlePropertyTable;
   
  protected:
   std::vector<G4ParticlePropertyData*> arrayDataObject; 
@@ -107,12 +107,3 @@ class G4ParticlePropertyTable
 
 
 #endif
-
-
-
-
-
-
-
-
-

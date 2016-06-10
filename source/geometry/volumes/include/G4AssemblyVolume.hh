@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4AssemblyVolume.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // 
 // Class G4AssemblyVolume
@@ -210,7 +210,7 @@ class G4AssemblyVolume
     //
     // Number of imprints of the given assembly volume.
 
-  static unsigned int fsInstanceCounter;
+  static G4ThreadLocal unsigned int fsInstanceCounter;
     //
     // Class instance counter.
 

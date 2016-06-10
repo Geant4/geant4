@@ -26,40 +26,26 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02EventAction.cc
 /// \brief Implementation of the H02EventAction class
 //
-// ====================================================================
+//   $Id: H02EventAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   H02EventAction.cc
-//   $Id$
-//
-// ====================================================================
-#include "H02EventAction.hh"
 
 #include "G4Event.hh"
 #include "G4SDManager.hh"
+#include "H02EventAction.hh"
 #include "H02MuonSD.hh"
 
-// ====================================================================
-//
-// class description
-//
-// ====================================================================
-
-//////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02EventAction::H02EventAction()
-//////////////////////////////
 {
 }
 
-///////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02EventAction::~H02EventAction()
-///////////////////////////////
 {
 }
 
-
-//////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02EventAction::BeginOfEventAction(const G4Event* anEvent)
-//////////////////////////////////////////////////////////////
 {
   const G4Event* ev = anEvent; ev=0;
 #ifdef DEBUG_HEPMC
@@ -69,18 +55,17 @@ void H02EventAction::BeginOfEventAction(const G4Event* anEvent)
   G4int i;
   for(i=0; i< nVtx; i++) {
     const G4PrimaryVertex* primaryVertex= anEvent-> GetPrimaryVertex(i);
-    primaryVertex-> Print();  
+    primaryVertex-> Print();
   }
 #endif
 }
 
-////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02EventAction::EndOfEventAction(const G4Event*)
-////////////////////////////////////////////////////////////
 {
   G4cout << " Print out hit information" << G4endl;
   G4SDManager* SDManager= G4SDManager::GetSDMpointer();
-  H02MuonSD* muonSD= 
+  H02MuonSD* muonSD=
     (H02MuonSD*)SDManager-> FindSensitiveDetector("/mydet/muon");
   muonSD-> PrintAll();
   muonSD-> DrawAll();

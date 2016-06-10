@@ -1,4 +1,4 @@
-$Id: README,v 1.28 2010-06-06 04:25:24 perl Exp $
+$Id: README 77289 2013-11-22 10:53:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,7 +21,8 @@ $Id: README,v 1.28 2010-06-06 04:25:24 perl Exp $
    - the full size of the box.
 	 	
   In addition a transverse uniform magnetic field can be applied.
- 	
+     e.g. /globalField/setValue 0 0 5 tesla 	
+
   The default geometry is constructed in DetectorConstruction class, but all of 
   the above parameters can be changed interactively via the commands defined in 
   the DetectorMessenger class.

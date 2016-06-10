@@ -231,36 +231,35 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 
 	// new computation
         G4double finalT = gam*(eCM + bet*pzCM) - mass;
+	if(finalT < 0.0) { finalT = 0.0; }
         G4double trec = kinEnergy - finalT;
 
-  	if(finalT <= lowEnergyLimit) { 
-	  trec = kinEnergy;  
-	  finalT = 0.0;
-	} else if(trec < 0.0) {
-	  trec = 0.0;  
-	  finalT = kinEnergy;
-	}
-    
-  	fParticleChange->SetProposedKineticEnergy(finalT);
+  G4double edep = 0.0;
 
-  	G4double tcut = recoilThreshold;
-        if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); 
-
-			//G4cout<<" tcut eV "<<tcut/eV<<endl;
-			}
+  G4double tcut = recoilThreshold;
+  if(pCuts) { 
+    tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); 
+    //G4cout<<" tcut eV "<<tcut/eV<<endl;
+  }
  
-  	if(trec > tcut) {
-    		G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
-    		G4double plab = sqrt(finalT*(finalT + 2.0*mass));
-    		G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
-    		G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);
-    			fvect->push_back(newdp);
-  	} else if(trec > 0.0) {
-    		fParticleChange->ProposeLocalEnergyDeposit(trec);
-    		fParticleChange->ProposeNonIonizingEnergyDeposit(trec);
-  	}
+  if(trec > tcut) {
+    G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
+    G4double plab = sqrt(finalT*(finalT + 2.0*mass));
+    G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
+    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);
+    fvect->push_back(newdp);
+  } else if(trec > 0.0) {
+    edep = trec;
+    fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
+  }
 
-
+  // finelize primary energy and energy balance
+  if(finalT <= lowEnergyLimit) { 
+    edep += finalT;  
+    finalT = 0.0;
+  } 
+  fParticleChange->SetProposedKineticEnergy(finalT);
+  fParticleChange->ProposeLocalEnergyDeposit(edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

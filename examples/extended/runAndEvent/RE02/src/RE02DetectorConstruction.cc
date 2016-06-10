@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02DetectorConstruction class
 //
 //
-// $Id$
+// $Id: RE02DetectorConstruction.cc 75682 2013-11-05 09:11:19Z gcosmo $
 //
  
 #include "RE02DetectorConstruction.hh"
@@ -104,6 +104,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02DetectorConstruction::RE02DetectorConstruction()
+ : G4VUserDetectorConstruction() 
 {
   // Default size of water phantom,and segmentation.
     fPhantomSize.setX(200.*mm);
@@ -241,7 +242,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   G4String zVoxName("phantomSens");
   G4VSolid* solVoxel = 
     new G4Box(zVoxName,sensSize.x()/2.,sensSize.y()/2.,sensSize.z()/2.);
-  G4LogicalVolume* logicPhantomSens = new G4LogicalVolume(solVoxel,water,zVoxName);
+  fLVPhantomSens = new G4LogicalVolume(solVoxel,water,zVoxName);
   //
   //
   std::vector<G4Material*> phantomMat(2,water);
@@ -254,7 +255,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
     = new RE02NestedPhantomParameterisation(sensSize/2.,nzCells,phantomMat);
   //G4VPhysicalVolume * physiPhantomSens =
     new G4PVParameterised("PhantomSens",     // their name
-                          logicPhantomSens,  // their logical volume
+                          fLVPhantomSens,    // their logical volume
                           logXRep,           // Mother logical volume
                           kUndefined,        // Are placed along this axis 
                           nzCells,           // Number of cells
@@ -263,130 +264,11 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //    kUndefined, kXAxis, kYAxis, kZAxis.
   //
 
-  //================================================
-  // Sensitive detectors : MultiFunctionalDetector
-  //================================================
-  //
-  //  Sensitive Detector Manager.
-  G4SDManager* pSDman = G4SDManager::GetSDMpointer();
-  //
-  // Sensitive Detector Name
-  G4String phantomSDname = "PhantomSD";
-
-  //------------------------
-  // MultiFunctionalDetector
-  //------------------------
-  //
-  // Define MultiFunctionalDetector with name.
-  G4MultiFunctionalDetector* mFDet
-    = new G4MultiFunctionalDetector(phantomSDname);
-  pSDman->AddNewDetector( mFDet );                // Register SD to SDManager.
-  logicPhantomSens->SetSensitiveDetector(mFDet);  // Assign SD to the logical volume.
-
-  //---------------------------------------
-  // SDFilter : Sensitive Detector Filters
-  //---------------------------------------
-  //
-  // Particle Filter for Primitive Scorer with filter name(fltName) 
-  // and particle name(particleName),
-  // or particle names are given by add("particle name"); method.
-  //
-  G4String fltName,particleName;
-  //
-  //-- proton filter
-  G4SDParticleFilter* protonFilter = 
-      new G4SDParticleFilter(fltName="protonFilter", particleName="proton");
-  //
-  //-- electron filter
-  G4SDParticleFilter* electronFilter = 
-      new G4SDParticleFilter(fltName="electronFilter");
-  electronFilter->add(particleName="e+");   // accept electrons.
-  electronFilter->add(particleName="e-");   // accept positorons.
-  //
-  //-- charged particle filter
-  G4SDChargedFilter* chargedFilter = 
-      new G4SDChargedFilter(fltName="chargedFilter");
-
-  //------------------------
-  // PS : Primitive Scorers
-  //------------------------
-  // Primitive Scorers are used with SDFilters according to your purpose.
-  // 
-  //
-  //-- Primitive Scorer for Energy Deposit.
-  //      Total, by protons, by electrons.
-  G4String psName;
-  G4PSEnergyDeposit3D * scorer0 = new G4PSEnergyDeposit3D(psName="totalEDep",
-                                                          fNx,fNy,fNz);
-  G4PSEnergyDeposit3D * scorer1 = new G4PSEnergyDeposit3D(psName="protonEDep",
-                                                          fNx,fNy,fNz);
-  scorer1->SetFilter(protonFilter);
-
-  //
-  //-- Number of Steps for protons
-  G4PSNofStep3D * scorer2 =
-    new G4PSNofStep3D(psName="protonNStep",fNx,fNy,fNz);
-  scorer2->SetFilter(protonFilter);
-
-  //
-  //-- CellFlux for charged particles
-  G4PSPassageCellFlux3D * scorer3 =
-    new G4PSPassageCellFlux3D(psName="chargedPassCellFlux", fNx,fNy,fNz);
-  G4PSCellFlux3D *        scorer4 =
-    new G4PSCellFlux3D(psName="chargedCellFlux", fNx,fNy,fNz);
-  G4PSFlatSurfaceFlux3D * scorer5 =
-    new G4PSFlatSurfaceFlux3D(psName="chargedSurfFlux", fFlux_InOut,fNx,fNy,fNz);
-  scorer3->SetFilter(chargedFilter);
-  scorer4->SetFilter(chargedFilter);
-  scorer5->SetFilter(chargedFilter);
-
-  //
-  //------------------------------------------------------------
-  //  Register primitive scorers to MultiFunctionalDetector
-  //------------------------------------------------------------
-  mFDet->RegisterPrimitive(scorer0);
-  mFDet->RegisterPrimitive(scorer1);
-  mFDet->RegisterPrimitive(scorer2);
-  mFDet->RegisterPrimitive(scorer3);
-  mFDet->RegisterPrimitive(scorer4);
-  mFDet->RegisterPrimitive(scorer5);
-
-  //========================
-  // More additional Primitive Scoreres
-  //========================
-  //
-  //--- Surface Current for gamma with energy bin.
-  // This example creates four primitive scorers.
-  //  4 bins with energy   ---   Primitive Scorer Name
-  //    1.     to  10 KeV,        gammaSurfCurr000
-  //   10 keV  to 100 KeV,        gammaSurfCurr001
-  //  100 keV  to   1 MeV,        gammaSurfCurr002
-  //    1 MeV  to  10 MeV.        gammaSurfCurr003
-  //
-  char name[17];
-  for ( G4int i = 0; i < 4; i++){
-      std::sprintf(name,"gammaSurfCurr%03d",i);
-      G4String psgName(name);
-      G4double kmin = std::pow(10.,(G4double)i)*keV;
-      G4double kmax = std::pow(10.,(G4double)(i+1))*keV;
-      //-- Particle with kinetic energy filter.
-      G4SDParticleWithEnergyFilter* pkinEFilter =
-        new G4SDParticleWithEnergyFilter(fltName="gammaE filter",kmin,kmax);
-      pkinEFilter->add("gamma");  // Accept only gamma.
-      pkinEFilter->show();        // Show accepting condition to stdout.
-      //-- Surface Current Scorer which scores  number of tracks in unit area.
-      G4PSFlatSurfaceCurrent3D * scorer =
-          new G4PSFlatSurfaceCurrent3D(psgName,fCurrent_InOut,fNx,fNy,fNz);
-      scorer->SetFilter(pkinEFilter);    // Assign filter.
-      mFDet->RegisterPrimitive(scorer);  // Register it to MultiFunctionalDetector.
-  }
-  //
-
   //=============================== 
- //   Visualization attributes 
+  //   Visualization attributes 
   //===============================
 
-  G4VisAttributes* boxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  G4VisAttributes* boxVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   logicWorld  ->SetVisAttributes(boxVisAtt);  
   //logicWorld->SetVisAttributes(G4VisAttributes::Invisible);  
 
@@ -401,9 +283,131 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   logXRep->SetVisAttributes(xRepVisAtt);
   
   // Skip the visualization for those voxels.
-  logicPhantomSens->SetVisAttributes(G4VisAttributes::Invisible);
+  fLVPhantomSens->SetVisAttributes(G4VisAttributes::Invisible);
 
   
   return physiWorld;
+}
+
+void RE02DetectorConstruction::ConstructSDandField() {
+
+  //================================================
+  // Sensitive detectors : MultiFunctionalDetector
+  //================================================
+  //
+  //  Sensitive Detector Manager.
+  G4SDManager* pSDman = G4SDManager::GetSDMpointer();
+  //
+  // Sensitive Detector Name
+  G4String phantomSDname = "PhantomSD";
+  
+  //------------------------
+  // MultiFunctionalDetector
+  //------------------------
+  //
+  // Define MultiFunctionalDetector with name.
+  G4MultiFunctionalDetector* mFDet
+  = new G4MultiFunctionalDetector(phantomSDname);
+  pSDman->AddNewDetector( mFDet );                // Register SD to SDManager.
+  fLVPhantomSens->SetSensitiveDetector(mFDet);    // Assign SD to the logical volume.
+  
+  //---------------------------------------
+  // SDFilter : Sensitive Detector Filters
+  //---------------------------------------
+  //
+  // Particle Filter for Primitive Scorer with filter name(fltName)
+  // and particle name(particleName),
+  // or particle names are given by add("particle name"); method.
+  //
+  G4String fltName,particleName;
+  //
+  //-- proton filter
+  G4SDParticleFilter* protonFilter =
+  new G4SDParticleFilter(fltName="protonFilter", particleName="proton");
+  //
+  //-- electron filter
+  G4SDParticleFilter* electronFilter =
+  new G4SDParticleFilter(fltName="electronFilter");
+  electronFilter->add(particleName="e+");   // accept electrons.
+  electronFilter->add(particleName="e-");   // accept positorons.
+  //
+  //-- charged particle filter
+  G4SDChargedFilter* chargedFilter =
+  new G4SDChargedFilter(fltName="chargedFilter");
+  
+  //------------------------
+  // PS : Primitive Scorers
+  //------------------------
+  // Primitive Scorers are used with SDFilters according to your purpose.
+  //
+  //
+  //-- Primitive Scorer for Energy Deposit.
+  //      Total, by protons, by electrons.
+  G4String psName;
+  G4PSEnergyDeposit3D * scorer0 = new G4PSEnergyDeposit3D(psName="totalEDep",
+                                                          fNx,fNy,fNz);
+  G4PSEnergyDeposit3D * scorer1 = new G4PSEnergyDeposit3D(psName="protonEDep",
+                                                          fNx,fNy,fNz);
+  scorer1->SetFilter(protonFilter);
+  
+  //
+  //-- Number of Steps for protons
+  G4PSNofStep3D * scorer2 =
+  new G4PSNofStep3D(psName="protonNStep",fNx,fNy,fNz);
+  scorer2->SetFilter(protonFilter);
+  
+  //
+  //-- CellFlux for charged particles
+  G4PSPassageCellFlux3D * scorer3 =
+  new G4PSPassageCellFlux3D(psName="chargedPassCellFlux", fNx,fNy,fNz);
+  G4PSCellFlux3D *        scorer4 =
+  new G4PSCellFlux3D(psName="chargedCellFlux", fNx,fNy,fNz);
+  G4PSFlatSurfaceFlux3D * scorer5 =
+  new G4PSFlatSurfaceFlux3D(psName="chargedSurfFlux", fFlux_InOut,fNx,fNy,fNz);
+  scorer3->SetFilter(chargedFilter);
+  scorer4->SetFilter(chargedFilter);
+  scorer5->SetFilter(chargedFilter);
+  
+  //
+  //------------------------------------------------------------
+  //  Register primitive scorers to MultiFunctionalDetector
+  //------------------------------------------------------------
+  mFDet->RegisterPrimitive(scorer0);
+  mFDet->RegisterPrimitive(scorer1);
+  mFDet->RegisterPrimitive(scorer2);
+  mFDet->RegisterPrimitive(scorer3);
+  mFDet->RegisterPrimitive(scorer4);
+  mFDet->RegisterPrimitive(scorer5);
+  
+  //========================
+  // More additional Primitive Scoreres
+  //========================
+  //
+  //--- Surface Current for gamma with energy bin.
+  // This example creates four primitive scorers.
+  //  4 bins with energy   ---   Primitive Scorer Name
+  //    1.     to  10 KeV,        gammaSurfCurr000
+  //   10 keV  to 100 KeV,        gammaSurfCurr001
+  //  100 keV  to   1 MeV,        gammaSurfCurr002
+  //    1 MeV  to  10 MeV.        gammaSurfCurr003
+  //
+  char name[17];
+  for ( G4int i = 0; i < 4; i++){
+    std::sprintf(name,"gammaSurfCurr%03d",i);
+    G4String psgName(name);
+    G4double kmin = std::pow(10.,(G4double)i)*keV;
+    G4double kmax = std::pow(10.,(G4double)(i+1))*keV;
+    //-- Particle with kinetic energy filter.
+    G4SDParticleWithEnergyFilter* pkinEFilter =
+    new G4SDParticleWithEnergyFilter(fltName="gammaE filter",kmin,kmax);
+    pkinEFilter->add("gamma");  // Accept only gamma.
+    pkinEFilter->show();        // Show accepting condition to stdout.
+    //-- Surface Current Scorer which scores  number of tracks in unit area.
+    G4PSFlatSurfaceCurrent3D * scorer =
+    new G4PSFlatSurfaceCurrent3D(psgName,fCurrent_InOut,fNx,fNy,fNz);
+    scorer->SetFilter(pkinEFilter);    // Assign filter.
+    mFDet->RegisterPrimitive(scorer);  // Register it to MultiFunctionalDetector.
+  }
+
 }
 

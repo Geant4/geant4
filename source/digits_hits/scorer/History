@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2007-07-11 01:27:26 asaim Exp $
+$Id: History 76272 2013-11-08 11:53:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 7 2013  Gabriele Cosmo  (detscorer-V09-06-00)
+- Replaced deprecated calls to G4Sphere accessor methods.
 
 July 11, 2007  M.Asai (detscorer-V09-00-00)
 - Moved from digits_hits/utilis.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NistManager.cc 74262 2013-10-02 14:37:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,30 +72,6 @@ G4NistManager* G4NistManager::Instance()
     instance = &manager;
   }
   return instance;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4NistManager::G4NistManager()
-{
-  nElements  = 0;
-  nMaterials = 0;
-  verbose    = 0;
-
-  elmBuilder = new G4NistElementBuilder(verbose);
-  matBuilder = new G4NistMaterialBuilder(elmBuilder,verbose);
-  
-  messenger  = new G4NistMessenger(this);  
-  g4pow = G4Pow::GetInstance();
-
-  // compute frequently used values for mean atomic numbers
-  for(G4int j=1; j<101; ++j) {
-    G4double A = elmBuilder->GetAtomicMassAmu(j);
-    POWERA27[j] = std::pow(A,0.27);
-    LOGAZ[j]    = std::log(A);
-  }
-  POWERA27[0] = 1.0;
-  LOGAZ[0]    = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -213,6 +189,37 @@ void G4NistManager::SetVerbose(G4int val)
   verbose = val;
   elmBuilder->SetVerbose(val);
   matBuilder->SetVerbose(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Threading.hh"
+
+G4NistManager::G4NistManager()
+{
+  if(G4Threading::IsWorkerThread() == true) { 
+    G4Exception ("G4NistMaterial::G4NistManager()", "mat090", FatalException, 
+                 "Attempt to instantiate G4NistManager in worker thread");
+  }
+
+  nElements  = 0;
+  nMaterials = 0;
+  verbose    = 0;
+
+  elmBuilder = new G4NistElementBuilder(verbose);
+  matBuilder = new G4NistMaterialBuilder(elmBuilder,verbose);
+  
+  messenger  = new G4NistMessenger(this);  
+  g4pow = G4Pow::GetInstance();
+
+  // compute frequently used values for mean atomic numbers
+  for(G4int j=1; j<101; ++j) {
+    G4double A = elmBuilder->GetAtomicMassAmu(j);
+    POWERA27[j] = std::pow(A,0.27);
+    LOGAZ[j]    = std::log(A);
+  }
+  POWERA27[0] = 1.0;
+  LOGAZ[0]    = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

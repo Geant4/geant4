@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1RunAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
 //
 /// \file B1RunAction.cc
 /// \brief Implementation of the B1RunAction class

@@ -27,7 +27,7 @@ Here we recall only the basics.
 % cd path_to_exampleXYZ     # go to directory which contains your example
 % mkdir exampleXYZ_build
 % cd exampleXYZ_build
-% cmake -DGeant4_DIR=path_to_Geant4_installation/lib[64]/Geant4-9.6.0/ ../exampleXYZ
+% cmake -DGeant4_DIR=path_to_Geant4_installation/lib[64]/Geant4-10.0.0/ ../exampleXYZ
 % make -j N exampleXYZ      # "N" is the number of processes 
 % make install              # this step is optional              
 \endverbatim
@@ -37,7 +37,7 @@ Here we recall only the basics.
 To use GNUmake build system when Geant4 was installed with CMake, you have to source first
 the setup script in order to define needed environment variables:
 \verbatim
-source path_to_Geant4_installation/share/Geant4-9.6.0/geant4make/geant4make.[c]sh 
+source path_to_Geant4_installation/share/Geant4-10.0.0/geant4make/geant4make.[c]sh 
 \endverbatim
 
 Then to build example
@@ -92,14 +92,14 @@ Let's suppose that the \em TestEm1 directory is available in $HOME and Geant4 in
 % cd $HOME
 % mkdir TestEm1_build
 % cd TestEm1_build
-% cmake -DGeant4_DIR=/usr/local/lib64/Geant4-9.6.0/ ../TestEm1
+% cmake -DGeant4_DIR=/usr/local/lib64/Geant4-10.0.0/ ../TestEm1
 % make -j 2 TestEm1
 \endverbatim
 
 \subsection HowToRunTestEm1_subs12 With GNUmake
 \verbatim
 % cd $HOME/TestEm1
-% source /usr/local/share/Geant4-9.6.0/geant4make/geant4make.sh
+% source /usr/local/share/Geant4-10.0.0/geant4make/geant4make.sh
 % make 
 \endverbatim
 

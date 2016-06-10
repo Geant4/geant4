@@ -1,0 +1,112 @@
+# $Id: ParGNUmakefile 66241 2012-12-13 18:34:42Z gunter $
+# --------------------------------------------------------------
+#This file should be included in GNUmakefile of local directory.
+
+#Usage:  make     [ to compile parallel version ]
+#        make run [ to compile and run it ]
+#        make run-debug [ to compile and run in gdb ]
+#        make parclean [ remove intermediate and executable files ]
+# See `run' target for parameters by which executable is called.
+# This assumes Geant4 environment vars have been defined.
+# See ../info/NEW_APP_INSTALL (number 10) for an example of setting up
+#   the Geant4 environment variables.
+
+# MEM_MODEL can be --seq, --mpi, or --pthread in current version of TOP-C.
+MEM_MODEL=--seq
+MEM_MODEL=--mpi
+
+ifndef REMOTE_SHELL
+  REMOTE_SHELL=ssh
+endif
+
+MACROFILE=ParN02.in
+
+# DATAFILE=pythia_event.data
+DATAFILE=
+
+# Everything below here should be set automatically based on
+#   your environment variables, the G4TARGET of GNUmakefile, etc.
+# G4TARGET set in the makefile that includes this one.
+
+ifndef PARTARGET
+  PARTARGET = ${G4TARGET}
+endif
+
+include $(G4INSTALL)/config/architecture.gmk
+
+EXECUTABLE=${G4BIN}/${G4SYSTEM}/${PARTARGET}
+
+TOPC_LIBS   =  $(shell topc-config ${MEM_MODEL} --libs)
+TOPC_CFLAGS = -DG4USE_TOPC $(shell topc-config ${MEM_MODEL} --cflags)
+# optionally add: -DTOPC_DEBUG to TOPC_CFLAGS for debugging details.
+TOPC_OPTIONS = --TOPC-verbose
+
+EXTRALIBS=${TOPC_LIBS}
+CPPFLAGS=${TOPC_CFLAGS}
+
+TIMESTAMP=${G4BINDIR}/ParN02.timestamp
+
+# Unfortunately, .../geant4.x.x/config/binmake.gmk has target:
+#    $(G4BINDIR)/$(G4TARGET)
+#   (for example:  ${G4BIN}/$$G4SYSTEM/ParN02)
+# And that rule always triggers due to dependency on .../exe/obj.last
+# Also, G4BINDIR uses shell variables, that are guaranteed to expand
+#    only after recursive make.
+compile:
+	@ if [ "$$G4SYSTEM" = "" ]; then \
+	  echo '***' Environment variable G4SYSTEM not defined; \
+	  echo '***' Make sure G4INSTALL and G4SYSTEM are set; \
+	  exit 1; \
+	fi
+	${MAKE} G4BINDIR=${G4BINDIR} ${TIMESTAMP}
+	@ if which topc-config > /dev/null; then :; \
+	else \
+	  echo '***' topc-config is not in your path; \
+	  exit 1; \
+	fi
+	@ echo ""
+	@ echo 'To run, now type "make run"'
+	@ echo 'To remove built files, type "make parclean"'
+
+${TIMESTAMP}: *.cc *.icc src/*.cc include/*.hh ParGNUmakefile
+	@ if which topc-config > /dev/null; then :; \
+	else \
+	  echo ''; \
+	  echo '***' topc-config is not in your path; \
+	  exit 1; \
+	fi
+	${MAKE} all
+	rm -f ${TIMESTAMP}
+	echo "" > ${TIMESTAMP}
+	make -t ${EXECUTABLE}
+
+run: compile
+	pwd
+	echo ${EXECUTABLE}
+	cp -f ${MACROFILE} ${DATAFILE} procgroup `dirname ${EXECUTABLE}`/
+	# ${EXECUTABLE} will use procgroup file in current directory.
+	( cd `dirname ${EXECUTABLE}`; RSH=${REMOTE_SHELL}; export RSH; \
+	  ${EXECUTABLE} ${TOPC_OPTIONS} ${MACROFILE} )
+
+run-debug: compile
+	@ if [ "$$G4DEBUG" = "" ]; then \
+	  echo '***' Environment variable G4DEBUG not defined; \
+	  echo '***' Set it, make parclean, and re-compile  using GDEBUG; \
+	fi
+	#  exit 1; \
+	echo ${EXECUTABLE}
+	cp -f ${MACROFILE} ${DATAFILE} procgroup `dirname ${EXECUTABLE}`/
+	rm -f `dirname ${EXECUTABLE}`/tmp.gdb
+	echo 'set args ${TOPC_OPTIONS} ${MACROFILE}' \
+	     > `dirname ${EXECUTABLE}`/tmp.gdb
+	echo 'break main' >> `dirname ${EXECUTABLE}`/tmp.gdb
+	echo 'run' >> `dirname ${EXECUTABLE}`/tmp.gdb
+	# ${EXECUTABLE} will use procgroup file in current directory.
+	( cd `dirname ${EXECUTABLE}`; RSH=${REMOTE_SHELL}; export RSH; \
+	  gdb -x tmp.gdb ${EXECUTABLE} )
+parclean:
+	rm -f ${TIMESTAMP}
+	${MAKE} clean
+pardist: parclean
+	( dir=`basename $$PWD`; cd ..; tar cvf $$dir.tar ./$$dir; \
+	  gzip $$dir.tar && (cd $$dir; ls -l ../$$dir.tar.gz) )

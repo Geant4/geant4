@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StatMF.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -57,7 +57,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
   // Maximun average multiplicity: M_0 = 2.6 for A ~ 200 
   // and M_0 = 3.3 for A <= 110
   G4double MaxAverageMultiplicity = 
-    G4StatMFParameters::GetMaxAverageMultiplicity(static_cast<G4int>(theFragment.GetA()));
+    G4StatMFParameters::GetMaxAverageMultiplicity(theFragment.GetA_asInt());
 
 	
     // We'll use two kinds of ensembles

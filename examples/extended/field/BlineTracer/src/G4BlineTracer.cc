@@ -27,7 +27,7 @@
 /// \brief Implementation of the G4BlineTracer class
 //
 //
-// $Id$
+// $Id: G4BlineTracer.cc 77941 2013-11-29 15:22:58Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -117,10 +117,10 @@ void G4BlineTracer::ComputeBlines(G4int n_of_lines)
     (G4UserSteppingAction*)theRunManager->GetUserSteppingAction();
   theRunManager->SetUserAction(fSteppingAction);
   
-  G4VUserPrimaryGeneratorAction* fUserPrimaryAction =
+  G4VUserPrimaryGeneratorAction* userPrimaryAction =
     (G4VUserPrimaryGeneratorAction*)theRunManager->GetUserPrimaryGeneratorAction();
-  if (fUserPrimaryAction) 
-    fPrimaryGeneratorAction->SetUserPrimaryAction(fUserPrimaryAction);
+  if (userPrimaryAction) 
+    fPrimaryGeneratorAction->SetUserPrimaryAction(userPrimaryAction);
   theRunManager->SetUserAction(fPrimaryGeneratorAction);
 
   G4UserEventAction* user_event_action =
@@ -176,7 +176,7 @@ void G4BlineTracer::ComputeBlines(G4int n_of_lines)
 
   // Start the integration of n_of_lines different magnetic field lines
 
-  for (G4int i=0; i<n_of_lines;i++)
+  for (G4int il=0; il<n_of_lines;il++)
   {
     // for each magnetic field line we integrate once backward and once
     // forward from the same starting point
@@ -215,7 +215,7 @@ void G4BlineTracer::ComputeBlines(G4int n_of_lines)
 
   theRunManager->SetUserAction(user_run_action);
   theRunManager->SetUserAction(user_event_action);
-  theRunManager->SetUserAction(fUserPrimaryAction);
+  theRunManager->SetUserAction(userPrimaryAction);
   theRunManager->SetUserAction(user_stepping_action);
   theRunManager->SetUserAction(user_tracking_action);
   theRunManager->SetUserAction(user_stacking_action);

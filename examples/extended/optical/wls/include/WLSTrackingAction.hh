@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSTrackingAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSTrackingAction.hh
 /// \brief Definition of the WLSTrackingAction class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,10 +42,10 @@ class WLSTrackingAction : public G4UserTrackingAction {
   public:
 
     WLSTrackingAction() { };
-    ~WLSTrackingAction() { };
+    virtual ~WLSTrackingAction() { };
 
-    void PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
+    virtual void PreUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
 
 };
 

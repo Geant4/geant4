@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPGamma_h
 #define G4NeutronHPGamma_h 1
@@ -44,7 +43,7 @@ class G4NeutronHPGamma
   G4NeutronHPGamma();
   ~G4NeutronHPGamma();
   
-  G4bool Init(std::ifstream & aDataFile);
+  G4bool Init(std::istream & aDataFile);
   
   inline void SetNext(G4NeutronHPLevel * aLevel)
   {
@@ -91,7 +90,7 @@ class G4NeutronHPGamma
   G4double probability;
   
   G4NeutronHPLevel * next;
-  static int instancecount;
+  static G4ThreadLocal int instancecount;
 };
 
 #endif

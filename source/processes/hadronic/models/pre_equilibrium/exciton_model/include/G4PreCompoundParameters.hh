@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PreCompoundParameters.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // by V. Lara
 //
@@ -40,7 +40,7 @@ class G4PreCompoundParameters
 {
 public:
 
-  static G4PreCompoundParameters * GetAddress();
+  G4PreCompoundParameters();
 
   ~G4PreCompoundParameters();
  
@@ -54,9 +54,6 @@ public:
 
 private:
 
-  G4PreCompoundParameters();
-
-  static G4PreCompoundParameters* theParameters;
 
   // Level density parameter
   G4double fLevelDensity;

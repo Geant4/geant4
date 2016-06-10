@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-11-25 19:50:48 pia Exp $
+$Id: History 70904 2013-06-07 10:34:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-06-2013  G.Cosmo, tag empii-V09-06-00
+            Cleanup from MT changes in G4hRDEnergyLoss.cc.
 
 11-07-2012  G.Cosmo, tag empii-V09-05-02
             Explicitly use inclusion of headers for system of units and

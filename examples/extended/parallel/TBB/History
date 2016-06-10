@@ -1,0 +1,30 @@
+d: History 68751 2013-04-05 10:21:24Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                extended/parllel/tbb History file
+                ---------------------------------
+his file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+10th November 2013 I. Hrivnacova (tbbex-V09-06-02)
+- Added README files (and moved previous README in DevelopmentStatus.txt)
+- Fixed CMake build
+- Updated B2b classes for changes in B2b in basic
+
+7th November 2013 A. Dotti (tbbex-V09-06-01)
+- Bug fix for G4VSteppingVerbose
+- Remove unused macros
+
+6th November 2013 A. Dotti (tbbex-V09-06-00)
+- First import of new TBB based examples
+- Not ready yet for production or inclusion in release
+

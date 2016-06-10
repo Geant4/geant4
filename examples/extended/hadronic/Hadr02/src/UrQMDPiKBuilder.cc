@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/UrQMDPiKBuilder.cc
 /// \brief Implementation of the UrQMDPiKBuilder class
 //
-// $Id$
+// $Id: UrQMDPiKBuilder.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

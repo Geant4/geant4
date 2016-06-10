@@ -26,30 +26,28 @@
 /// \file exoticphysics/phonon/include/XPhysicsList.hh
 /// \brief Definition of the XPhysicsList class
 //
-// $Id$
+// $Id: XPhysicsList.hh 76938 2013-11-19 09:51:36Z gcosmo $
 //
+// 20131117  Add verbosity argument, to set verbosity from main program
+
 #ifndef XPhysicsList_h
 #define XPhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-class XPhysicsList: public G4VUserPhysicsList
-{
-  public:
-    XPhysicsList();
-   ~XPhysicsList();
-
-  public:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
-    void SetCuts();
-private:
-   
+class XPhysicsList : public G4VUserPhysicsList {
+public:
+  XPhysicsList(G4int verbose=0);
+  ~XPhysicsList();
+  
+  // Construct particle and physics
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
+  virtual void SetCuts();
 };
 
-#endif
+#endif  /* XPhysicsList_h */
 
 
 

@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm9/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-//
-// $Id$
+// $Id: DetectorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -57,7 +56,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
-  :fDetector(det)
+  :G4UImessenger(),fDetector(det),
+   fAtestemDir(0),
+   fAMaterCmd(0),
+   fALBinCmd(0),
+   fAl1Cmd(0),
+   fAl2Cmd(0),
+   fAl3Cmd(0),
+   fAl4Cmd(0),
+   fAl5Cmd(0),
+   fAl6Cmd(0),
+   fAUpdateCmd(0),
+   fAaccCmd1(0),
+   fAaccCmd2(0),
+   fAaccCmd3(0)
 {
   fAtestemDir = new G4UIdirectory("/testem/");
   fAtestemDir->SetGuidance(" detector control.");

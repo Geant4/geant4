@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +58,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-:fDetector(det), fPrimary(prim), fRunMessenger(0), fHistoManager(0)
+:G4UserRunAction(),fDetector(det), fPrimary(prim), fRunMessenger(0), 
+ fHistoManager(0)
 {
   fRunMessenger = new RunActionMessenger(this);
   fHistoManager = new HistoManager();

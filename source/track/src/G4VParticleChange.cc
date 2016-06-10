@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VParticleChange.cc 68795 2013-04-05 13:24:46Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -322,7 +322,7 @@ G4bool G4VParticleChange::CheckIt(const G4Track&
 
   G4bool    exitWithError = false;
   G4double  accuracy;
-  static G4int nError = 0;
+  static G4ThreadLocal G4int nError = 0;
 #ifdef G4VERBOSE
   const  G4int maxError = 30;
 #endif
@@ -399,7 +399,7 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
 {
   G4bool    exitWithError = false;
   G4double  accuracy;
-  static G4int nError = 0;
+  static G4ThreadLocal G4int nError = 0;
 #ifdef G4VERBOSE
   const  G4int maxError = 30;
 #endif

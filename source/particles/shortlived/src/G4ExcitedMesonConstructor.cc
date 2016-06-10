@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ExcitedMesonConstructor.cc 77701 2013-11-27 16:39:30Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -39,7 +39,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4ShortLivedTable.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4VDecayChannel.hh"
 #include "G4DecayTable.hh"
@@ -187,7 +186,7 @@ G4int  G4ExcitedMesonConstructor::GetQuarkContents(G4int iQ,
 
 G4double  G4ExcitedMesonConstructor::GetCharge(G4int iIsoSpin3, G4int idxType )
 {
-  static G4double quark_charge[7] = 
+  static const G4double quark_charge[7] = 
   {
     0., -1./3., +2./3., -1./3., +2./3., -1./3., +2./3.
   };

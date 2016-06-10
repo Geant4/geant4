@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NucleiModel.hh 71940 2013-06-28 19:04:44Z mkelsey $
 // GEANT4 tag: $Name:  $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -63,16 +63,25 @@
 // 20120307  M. Kelsey -- Add zone volume array for use with quasideuteron
 //		density, functions to identify projectile, compute interaction
 //		distance.
+// 20130129  M. Kelsey -- Add static objects for gamma-quasideuteron scattering
+// 20130221  M. Kelsey -- Add function to emplant particle along trajectory
+// 20130226  M. Kelsey -- Allow forcing zone selection in MFP calculation.
+// 20130302  M. Kelsey -- Add forceFirst() wrapper function (allows configuring)
+// 20130628  M. Kelsey -- Extend useQuasiDeuteron() to check good absorption,
+//		fix spelling of "Deutron" -> "Deuteron"
+// 20130808  M. Kelsey -- To avoid thread collisions, move static neutronEP
+//		and protonEP objects to const data members.
+// 20131001  M. Kelsey -- Move QDinterp object to data member, thread local
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
 
 #include <algorithm>
 #include <vector>
-#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4InuclElementaryParticle.hh"
 #include "G4CascadParticle.hh"
+#include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4LorentzConvertor.hh"
 
@@ -85,7 +94,7 @@ public:
   G4NucleiModel(G4int a, G4int z);
   explicit G4NucleiModel(G4InuclNuclei* nuclei);
 
-  ~G4NucleiModel();
+  virtual ~G4NucleiModel();
 
   void setVerboseLevel(G4int verbose) { verboseLevel = verbose; }
 
@@ -109,7 +118,7 @@ public:
   G4double getFermiKinetic(G4int ip, G4int izone) const;
 
   G4double getPotential(G4int ip, G4int izone) const {
-    if (ip == 9) return 0.0;		// Special case for photons
+    if (ip == 9 || ip < 0) return 0.0;		// Photons and leptons
     G4int ip0 = ip < 3 ? ip - 1 : 2;
     if (ip > 10 && ip < 18) ip0 = 3;
     if (ip > 20) ip0 = 4;
@@ -163,6 +172,7 @@ public:
 			    G4ElementaryParticleCollider* theEPCollider,
 			    std::vector<G4CascadParticle>& cascade); 
 
+  G4bool forceFirst(const G4CascadParticle& cparticle) const;
   G4bool isProjectile(const G4CascadParticle& cparticle) const;
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
@@ -173,9 +183,10 @@ public:
   G4double absorptionCrossSection(G4double e, G4int type) const;
   G4double totalCrossSection(G4double ke, G4int rtype) const;
 
-private:
-  G4int verboseLevel;
+  // Identify whether given particle can interact with dibaryons
+  static G4bool useQuasiDeuteron(G4int ptype, G4int qdtype=0);
 
+protected:
   G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 
@@ -183,9 +194,11 @@ private:
 
   void boundaryTransition(G4CascadParticle& cparticle);
 
-  G4InuclElementaryParticle generateQuasiDeutron(G4int type1, 
-						 G4int type2,
-						 G4int zone) const;
+  void choosePointAlongTraj(G4CascadParticle& cparticle);
+
+  G4InuclElementaryParticle generateQuasiDeuteron(G4int type1, 
+						  G4int type2,
+						  G4int zone) const;
 
   typedef std::pair<G4InuclElementaryParticle, G4double> partner;
 
@@ -220,12 +233,16 @@ private:
   // Average path length for any interaction of projectile and target
   //	= 1. / (density * cross-section)
   G4double inverseMeanFreePath(const G4CascadParticle& cparticle,
-			       const G4InuclElementaryParticle& target);
+			       const G4InuclElementaryParticle& target,
+			       G4int zone = -1);	// Override zone value
   // NOTE:  Function is non-const in order to use dummy_converter
 
   // Use path-length and MFP (above) to throw random distance to collision
   G4double generateInteractionLength(const G4CascadParticle& cparticle,
 				     G4double path, G4double invmfp) const;
+
+private:
+  G4int verboseLevel;
 
   // Buffers for processing interactions on each cycle
   G4LorentzConvertor dummy_convertor;	// For getting collision frame
@@ -246,7 +263,7 @@ private:
   G4double v1[6];		// Pseudo-volume (delta r^3) by zone
   std::vector<G4double> rod;	// Nucleon density
   std::vector<G4double> pf;	// Fermi momentum
-  std::vector<G4double> vz;	// Nucleo potential
+  std::vector<G4double> vz;	// Nucleon potential
 
   // Nuclear model configuration
   std::vector<std::vector<G4double> > nucleon_densities;
@@ -272,8 +289,14 @@ private:
   G4int current_nucl1;
   G4int current_nucl2;
 
+  G4CascadeInterpolator<30> gammaQDinterp;	// quasideuteron interpolator
+
   // Symbolic names for nuclear potentials
   enum PotentialType { WoodsSaxon=0, Gaussian=1 };
+
+  // Cutoffs for extreme values
+  static const G4double small;
+  static const G4double large;
 
   // Parameters for nuclear structure
   static const G4double skinDepth;
@@ -289,10 +312,17 @@ private:
   static const G4double kaon_vp;
   static const G4double hyperon_vp;
 
+  // Scale parameter for gamma-quasideuteron scattering
+  static const G4double gammaQDscale;
+
   // FIXME:  We should not be using this!
   static const G4double piTimes4thirds;
   static const G4double crossSectionUnits;
   static const G4double radiusUnits;
+
+  // Neutrons and protons, for computing trajectory placements
+  const G4InuclElementaryParticle neutronEP;
+  const G4InuclElementaryParticle protonEP;
 };        
 
 #endif // G4NUCLEI_MODEL_HH 

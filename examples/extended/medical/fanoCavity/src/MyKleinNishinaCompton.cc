@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/MyKleinNishinaCompton.cc
 /// \brief Implementation of the MyKleinNishinaCompton class
 //
-// $Id$
+// $Id: MyKleinNishinaCompton.cc 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -49,7 +49,7 @@ using namespace std;
 MyKleinNishinaCompton::MyKleinNishinaCompton(DetectorConstruction* det,
                                              const G4ParticleDefinition*,
                                              const G4String& nam)
-  :G4KleinNishinaCompton(0,nam), fDetector(det)
+  :G4KleinNishinaCompton(0,nam), fDetector(det), fMessenger(0)
 {
   fCrossSectionFactor = 1.;
   fMessenger = new MyKleinNishinaMessenger(this);    

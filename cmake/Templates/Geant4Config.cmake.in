@@ -1,6 +1,7 @@
 # - Geant4 CMake Configuration File for External Projects
 # This file is configured by Geant4 for use by an external project
-# As this file is configured by Geant4's CMake system it SHOULD NOT BE EDITED
+# This file is configured by Geant4's CMake system and SHOULD NOT BE EDITED
+#
 # It defines the following variables
 #  Geant4_INCLUDE_DIRS - include directories for Geant4
 #  Geant4_DEFINITIONS  - compile definitions needed to use Geant4
@@ -8,8 +9,8 @@
 #  Geant4_CXX_FLAGS    - Recommended CXX flags for the compiler used to
 #                        build the Geant4 libraries.
 #  Geant4_CXX_FLAGS_<CONFIG> - Recommended CXX flags for build mode CONFIG.
-#  Geant4_USE_FILE     - path to a CMake module which may be included to help
-#                        setup CMake variables 
+#  Geant4_USE_FILE     - path to a CMake module which may be included to
+#                        help setup CMake variables
 #
 # You may supply a version number through find_package which will be checked
 # against the version of this build. Standard CMake logic is used so that
@@ -18,12 +19,12 @@
 #
 #  VERSION_OF_THIS_BUILD >= VERSION_REQUESTED
 #
-# By default only the core (or kernel) of Geant4 is activated by this module.
-# You can specify additional components of Geant4 through the COMPONENTS
-# argument to find_package. By default, all core libraries of Geant4 are
-# appended to the Geant4_LIBRARIES variable. Specifiying additional components
-# will enable a check on the existence of these components, with the following
-# per component variables being set:
+# By default only the core (or kernel) of Geant4 is activated by this
+# module. You can specify additional components of Geant4 through the
+# COMPONENTS argument to find_package. By default, all core libraries of
+# Geant4 are appended to the Geant4_LIBRARIES variable. Specifiying
+# additional components will enable a check on the existence of these
+# components, with the following per component variables being set:
 #
 #  Geant4_${COMPONENT}_FOUND    TRUE is the Geant4 library "component" was
 #                               found
@@ -31,18 +32,20 @@
 #  Geant4_${COMPONENT}_LIBRARY  Contains the library for the specified
 #                               "component" IF the component is a library.
 #
-# In Geant4, components can be optional subcomponents of an always available
-# library. In that case there will be no Geant4_{COMPONENT}_LIBRARY variable.
-# These non-library components are generally activated by compile definitions, 
-# and in these cases the appropriate definition will be added to the
-# Geant4_DEFINITIONS component
+# In Geant4, components can be optional subcomponents of an always
+# available library. In that case there will be no
+# Geant4_{COMPONENT}_LIBRARY variable. These non-library components are
+# generally activated by compile definitions, and in these cases the
+# appropriate definition will be added to the Geant4_DEFINITIONS component.
 #
-# If you specify components and use the REQUIRED option to find_package, then
-# the module will issue a FATAL_ERROR if this build of Geant does not have 
-# the requested component(s).
+# If you specify components and use the REQUIRED option to find_package,
+# then the module will issue a FATAL_ERROR if this build of Geant4 does
+# not have the requested component(s).
 #
-# The list of components available generally corresponds to the optional extras
-# that Geant4 can be built with and are:
+# The list of components available generally corresponds to the optional
+# extras that Geant4 can be built with and are:
+#
+#  multithreaded     (Libraries built with multithreading support)
 #
 #  gdml              (GDML support)
 #  g3tog4            (Geant3 geometry call list reader library)
@@ -52,6 +55,7 @@
 #
 #  motif             (Motif-X11/OpenGL Graphical User Interface)
 #  qt                (Qt4/OpenGL Graphical User Interface)
+#  wt                (Wt/OpenGL Web based Graphical User Interface)
 #
 #  vis_network_dawn  (Client/Server network interface to DAWN visualization)
 #  vis_network_vrml  (Client/Server network interface to VRML visualization)
@@ -62,25 +66,54 @@
 #
 # In addition, two 'shorthand' components are defined to help activate all
 # available User Interface and Visualization drivers:
-# 
+#
 #  ui_all            (All available UI drivers)
 #  vis_all           (All available Vis drivers)
 #
-# These never result in a FATAL_ERROR, even if the REQUIRED find_package 
+# These never result in a FATAL_ERROR, even if the REQUIRED find_package
 # argument is set. This is because these options do not depend on specific
 # components being available.
 #
-# ===========================================================================
+# You can also query Geant4's use, or otherwise, of its builtin versions
+# of CLHEP, ZLIB and Expat after calling find_package via the variables
+#
+#  Geant4_builtin_clhep_FOUND  (TRUE if Geant4 built with internal CLHEP)
+#  Geant4_builtin_expat_FOUND  (TRUE if Geant4 built with internal Expat)
+#  Geant4_builtin_zlib_FOUND   (TRUE if Geant4 built with internal Zlib)
+#
+# These are not used via components as they do not, in general, affect
+# the use of Geant4 in an application unless you yourself make direct
+# calls to these APIs. As the builtin libraries only contain the code
+# required directly by the Geant4 toolkit, you may wish to perform a
+# configure time check in these cases that the builtin libraries contain
+# the calls required. In both cases, the Geant4_INCLUDE_DIRS and
+# Geant4_LIBRARIES variables will be populated to use the builtin or
+# system APIs as required, and you should use these to ensure you compile
+# and link against the same API version.
+#
+# Environment variables for and directory paths to physics datasets
+# used by some Geant4 physics processes may be determined from the
+# variables
+#
+#  Geant4_DATASETS               (List of dataset names known to Geant4)
+#  Geant4_DATASET_<NAME>_ENVVAR  (Name of environment variable used by
+#                                 Geant4 to query for path to dataset
+#                                 <NAME>)
+#  Geant4_DATASET_<NAME>_PATH    (Path to dataset <NAME>. NB this may
+#                                 point to a non-existent path if Geant4
+#                                 was configured not to install data)
+#
+#-----------------------------------------------------------------------
 # Variables used by this module which can change the default behaviour of
 # this module. They need to be set prior to the call to find_package
 #
-#  Geant4_CONFIG_DEBUG    If set, enable extra messaging output which can be
-#                         helpful in debugging and identifying problems with
-#                         the configuration.
+#  Geant4_CONFIG_DEBUG    If set, enable extra messaging output which can
+#                         be helpful in debugging and identifying problems
+#                         with the configuration.
 #
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # DEBUG : print out the variables passed via find_package arguments
 #
 if(Geant4_CONFIG_DEBUG)
@@ -97,7 +130,7 @@ if(Geant4_CONFIG_DEBUG)
 endif()
 
 #-----------------------------------------------------------------------
-# Locate ourselves, since all other config files should have been 
+# Locate ourselves, since all other config files should have been
 # installed alongside us...
 #
 get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
@@ -114,7 +147,7 @@ get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 # don't overwrite previous invocations)
 # Components may append to this
 # We set VIS/UI_USE directly here, because for now they are, unfortunately,
-# always needed for the Examples. 
+# always needed for the Examples.
 # However, they ARE NOT required to use Geant4 itself.
 #
 if(NOT Geant4_DEFINITIONS)
@@ -122,7 +155,7 @@ if(NOT Geant4_DEFINITIONS)
 endif()
 
 # We set VIS/UI_USE directly here, because for now they are, unfortunately,
-# always needed for the Examples. 
+# always needed for the Examples.
 # However, they ARE NOT required to use Geant4 itself.
 #
 if(NOT G4UI_NONE)
@@ -134,8 +167,8 @@ if(NOT G4VIS_NONE)
 endif()
 
 #-----------------------------------------------------------------------
-# Configure the path to the Geant4 headers, using a relative path if 
-# possible. This is only known at CMake time, so we expand a CMake 
+# Configure the path to the Geant4 headers, using a relative path if
+# possible. This is only known at CMake time, so we expand a CMake
 # supplied variable.
 #
 @GEANT4_INCLUDE_DIR_SETUP@
@@ -147,7 +180,7 @@ endif()
 # This is not a perfect solution to recording dependencies on external
 # libraries, but it does ensure that users of THIS Geant4 will pick up
 # those it was built against.
-# Library dependencies are generally handled through the 
+# Library dependencies are generally handled through the
 # Geant4LibraryDepends file listed below (apart from one exception!)
 #
 set(Geant4_THIRD_PARTY_INCLUDE_DIRS @GEANT4_THIRD_PARTY_INCLUDES@)
@@ -171,7 +204,7 @@ set(Geant4_INCLUDE_DIRS
 
 #-----------------------------------------------------------------------
 # Include the file listing all the imported targets.
-# (Not needed if used in the same Geant4 project, or if we have run before) 
+# (Not needed if used in the same Geant4 project, or if we have run before)
 # This is always installed in the same location as us...
 #
 if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
@@ -182,6 +215,23 @@ if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
 endif()
 
 #-----------------------------------------------------------------------
+# Data Resources
+# NB: Because data paths can be "forward declared" these offer no
+# guarantee of data existence. They only provide a hint.
+#
+set(Geant4_DATASET_DESCRIPTIONS "@GEANT4_DATASET_DESCRIPTIONS@")
+
+foreach(_g4dataset_tuple ${Geant4_DATASET_DESCRIPTIONS})
+  # Format is NAME|ENVVAR|PATH
+  string(REPLACE "|" ";" _g4dataset_tuple "${_g4dataset_tuple}")
+  list(GET _g4dataset_tuple 0 _g4dataset_name)
+  list(APPEND Geant4_DATASETS ${_g4dataset_name})
+  list(GET _g4dataset_tuple 1 Geant4_DATASET_${_g4dataset_name}_ENVVAR)
+  list(GET _g4dataset_tuple 2 Geant4_DATASET_${_g4dataset_name}_PATH)
+endforeach()
+unset(Geant4_DATASET_DESCRIPTIONS)
+
+#-----------------------------------------------------------------------
 # Setup components.
 # THIS SECTION IS VERY ROUGH AND VERY MUCH CUT AND PASTE.
 # TODO: INVESTIGATE TIDY UP WITH LESS PROCESSING.
@@ -189,6 +239,18 @@ endif()
 # Many components are simply present as parts of libraries or always built
 # but require additional compile definitions.
 #
+# Builtin/External packages
+set(Geant4_builtin_clhep_FOUND @GEANT4_USE_BUILTIN_CLHEP@)
+set(Geant4_builtin_expat_FOUND @GEANT4_USE_BUILTIN_EXPAT@)
+set(Geant4_builtin_zlib_FOUND @GEANT4_USE_BUILTIN_ZLIB@)
+
+# - Multithreading
+set(Geant4_multithreaded_FOUND @GEANT4_BUILD_MULTITHREADED@)
+if(Geant4_multithreaded_FOUND)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS multithreaded)
+  list(APPEND Geant4_DEFINITIONS -DG4MULTITHREADED)
+endif()
+
 # - GDML
 set(Geant4_gdml_FOUND @GEANT4_USE_GDML@)
 if(Geant4_gdml_FOUND)
@@ -217,8 +279,8 @@ endif()
 set(Geant4_ui_win32_FOUND @WIN32@)
 if(Geant4_ui_win32_FOUND)
   if(Geant4_FIND_REQUIRED_ui_win32 OR Geant4_FIND_REQUIRED_ui_all)
-    list(APPEND 
-      Geant4_DEFINITIONS 
+    list(APPEND
+      Geant4_DEFINITIONS
       -DG4INTY_USE_WIN32
       -DG4UI_USE_WIN32
       )
@@ -244,7 +306,7 @@ if(Geant4_vis_vrml_network_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_vrml_network)
 endif()
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Components which requires slightly more complex setup
 #
 # - Visualization : RayTracerX
@@ -262,11 +324,23 @@ endif()
 
 # - Qt (UI and Vis!)
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
+set(Geant4_USES_QT5 @Qt5Core_FOUND@)
 if(Geant4_qt_FOUND)
   if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR
       Geant4_FIND_REQUIRED_vis_all)
-    list(APPEND 
-      Geant4_DEFINITIONS 
+    # If we have Qt5, we need to refind the components because they use
+    # imported targets, so linking will not work unless we recreate
+    # them
+    if(Geant4_USES_QT5)
+      find_package(Qt5Core REQUIRED PATHS "@Qt5Core_DIR@")
+      find_package(Qt5Gui REQUIRED PATHS "@Qt5Gui_DIR@")
+      find_package(Qt5Widgets REQUIRED PATHS "@Qt5Widgets_DIR@")
+      find_package(Qt5OpenGL REQUIRED PATHS "@Qt5OpenGL_DIR@")
+      find_package(Qt5PrintSupport REQUIRED PATHS "@Qt5PrintSupport_DIR@")
+    endif()
+
+    list(APPEND
+      Geant4_DEFINITIONS
       -DG4INTY_USE_QT
       -DG4UI_USE_QT
       -DG4VIS_USE_OPENGLQT
@@ -274,6 +348,22 @@ if(Geant4_qt_FOUND)
     set(_geant4_use_opengl_library ON)
   endif()
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS qt)
+endif()
+
+# - Wt (UI and Vis!)
+set(Geant4_wt_FOUND @GEANT4_USE_WT@)
+if(Geant4_wt_FOUND)
+  if(Geant4_FIND_REQUIRED_wt OR Geant4_FIND_REQUIRED_ui_all OR
+      Geant4_FIND_REQUIRED_vis_all)
+    list(APPEND
+      Geant4_DEFINITIONS
+      -DG4INTY_USE_WT
+      -DG4UI_USE_WT
+      -DG4VIS_USE_OPENGLWT
+      )
+    set(_geant4_use_opengl_library ON)
+  endif()
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS wt)
 endif()
 
 # - Motif (UI and Vis!)
@@ -302,7 +392,7 @@ if(Geant4_vis_opengl_x11_FOUND)
       -DG4INTY_USE_XT
       -DG4VIS_USE_OPENGLX
       )
-    set(_geant4_use_opengl_library ON)    
+    set(_geant4_use_opengl_library ON)
   endif()
 
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_opengl_x11)
@@ -317,7 +407,7 @@ if(Geant4_vis_opengl_win32_FOUND)
       -DG4INTY_USE_WIN32
       -DG4VIS_USE_OPENGLWIN32
       )
-    set(_geant4_use_opengl_library ON)    
+    set(_geant4_use_opengl_library ON)
   endif()
 
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_opengl_win32)
@@ -350,8 +440,8 @@ endif()
 
 #-----------------------------------------------------------------------
 # Now perform final configuration of libraries...
-# We provide FOUND variables for shared and static but for now we don't 
-# allow users to choose - we prefer shared if available, and fallback to 
+# We provide FOUND variables for shared and static but for now we don't
+# allow users to choose - we prefer shared if available, and fallback to
 # static otherwise
 #
 set(Geant4_shared_FOUND @BUILD_SHARED_LIBS@)
@@ -369,7 +459,7 @@ endif()
 # - Always on Vis Components
 set(_geant4_internal_libraries
   G4Tree${_geant4_lib_use_suffix}
-  G4FR${_geant4_lib_use_suffix} 
+  G4FR${_geant4_lib_use_suffix}
   G4GMocren${_geant4_lib_use_suffix}
   G4visHepRep${_geant4_lib_use_suffix}
   G4RayTracer${_geant4_lib_use_suffix}
@@ -425,7 +515,7 @@ list(APPEND _geant4_internal_libraries
 
 # - Any externals built by Geant4
 foreach(_extlib @GEANT4_EXTERNALS_TARGETS@)
-  list(APPEND 
+  list(APPEND
     _geant4_internal_libraries
     ${_extlib}${_geant4_lib_use_suffix}
     )
@@ -434,10 +524,9 @@ endforeach()
 # - Now set them to Geant4_LIBRARIES
 set(Geant4_LIBRARIES ${_geant4_internal_libraries})
 
-
 #-----------------------------------------------------------------------
 # Remove any duplicates from the Geant4_{DEFINITIONS,INCLUDE_DIRS,LIBRARIES}
-# variables so that multiple passes append things correctly 
+# variables so that multiple passes append things correctly
 #
 list(REMOVE_DUPLICATES Geant4_DEFINITIONS)
 list(REMOVE_DUPLICATES Geant4_INCLUDE_DIRS)
@@ -451,9 +540,9 @@ set(Geant4_USE_FILE ${_thisdir}/UseGeant4.cmake)
 
 #-----------------------------------------------------------------------
 # Finally, handle any remaining components.
-# We should have dealt with all available components above, except for 
-# ui_all and vis_all, and removed them from the list of FIND_COMPONENTS 
-# so any left  we either didn't find or don't know about. Emit a warning 
+# We should have dealt with all available components above, except for
+# ui_all and vis_all, and removed them from the list of FIND_COMPONENTS
+# so any left  we either didn't find or don't know about. Emit a warning
 # if REQUIRED isn't set, or FATAL_ERROR otherwise
 #
 list(REMOVE_DUPLICATES Geant4_FIND_COMPONENTS)

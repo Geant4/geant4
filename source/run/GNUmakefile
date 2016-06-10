@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.18 2010-10-27 07:50:15 gcosmo Exp $
+# $Id: GNUmakefile 70423 2013-05-30 09:09:21Z gcosmo $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -39,6 +39,7 @@ CPPFLAGS += \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/geometry/magneticfield/include \
+            -I$(G4BASE)/geometry/solids/specific/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/tracking/include \
             -I$(G4BASE)/digits_hits/detector/include \
@@ -48,7 +49,16 @@ CPPFLAGS += \
             -I$(G4BASE)/event/include \
             -I$(G4BASE)/intercoms/include \
 	    -I$(G4BASE)/geometry/biasing/include \
-            -I$(G4BASE)/graphics_reps/include 
+            -I$(G4BASE)/graphics_reps/include \
+            -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
+            -I$(G4BASE)/processes/hadronic/models/management/include \
+            -I$(G4BASE)/processes/hadronic/models/util/include \
+            -I$(G4BASE)/processes/hadronic/util/include \
+            -I$(G4BASE)/particles/bosons/include \
+            -I$(G4BASE)/particles/leptons/include \
+            -I$(G4BASE)/particles/hadrons/mesons/include \
+            -I$(G4BASE)/particles/hadrons/barions/include \
+            -I$(G4BASE)/particles/hadrons/ions/include
 
 include $(G4INSTALL)/config/common.gmk
 

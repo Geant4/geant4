@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RToEConvForGamma.hh 70745 2013-06-05 10:54:00Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -65,7 +65,7 @@ class G4RToEConvForGamma : public G4VRangeToEnergyConverter
   protected:
     virtual G4double ComputeLoss( G4double AtomicNumber,
                                   G4double KineticEnergy
-				  ) const;
+				  ) ;
   
   //-------------- Range Table ------------------------------------------
     virtual void BuildRangeVector( const G4Material* aMaterial,
@@ -77,14 +77,19 @@ class G4RToEConvForGamma : public G4VRangeToEnergyConverter
  
     G4double ComputeCrossSection( G4double AtomicNumber,
 				  G4double KineticEnergy
-				  ) const;
+				  );
 
+    G4double Z;  
+    G4double s200keV, s1keV;
+    G4double tmin, tlow; 
+    G4double smin, slow;
+    G4double cmin, clow, chigh;
 
 };
 
 inline 
  G4double G4RToEConvForGamma::ComputeLoss(G4double AtomicNumber,
-					  G4double KineticEnergy) const
+					  G4double KineticEnergy) 
 {
   return ComputeCrossSection(AtomicNumber,KineticEnergy);
 }

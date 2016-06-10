@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 67797 2013-03-08 09:52:18Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RuAct)
-:fRunAction(RuAct)
+:G4UserSteppingAction(),fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,14 +74,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       if (lp)
         {
           G4double  Egamma =  (*secondary)[lp-1]->GetTotalEnergy();
-          fRunAction->n_gam_sync++;
-          fRunAction->e_gam_sync += Egamma;
-          fRunAction->e_gam_sync2 += Egamma*Egamma;
-          if (Egamma > fRunAction->e_gam_sync_max) 
+          fRunAction->f_n_gam_sync++;
+          fRunAction->f_e_gam_sync += Egamma;
+          fRunAction->f_e_gam_sync2 += Egamma*Egamma;
+          if (Egamma > fRunAction->f_e_gam_sync_max) 
             { 
-              fRunAction->e_gam_sync_max = Egamma;
+              fRunAction->f_e_gam_sync_max = Egamma;
             }
-          fRunAction->lam_gam_sync += aStep->GetStepLength();
+          fRunAction->f_lam_gam_sync += aStep->GetStepLength();
           if (iCalled<nprint)
             {
               G4double      Eelec  = PrePoint->GetTotalEnergy();

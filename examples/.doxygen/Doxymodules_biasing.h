@@ -1,4 +1,4 @@
-// $Id: Doxymodules_biasing.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_biasing.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_biasing.h
@@ -44,6 +44,33 @@
   class B02Run {};
   class B02ScoreTable {};
   class B02ScoringDetectorConstruction {};
+
+/** @} */
+
+/** @defgroup extended_biasing_GB01 GB01
+ *  Biasing example GB01
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB01ActionInitialization {};
+  class GB01BOptrChangeCrossSection {};
+  class GB01BOptrMultiParticleChangeCrossSection {};
+  class GB01DetectorConstruction {};
+  class GB01PrimaryGeneratorAction {};
+
+/** @} */
+
+/** @defgroup extended_biasing_GB02 GB02
+ *  Biasing example GB02
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB02ActionInitialization {};
+  class GB02BOptrMultiParticleForceCollision {};
+  class GB02DetectorConstruction {};
+  class GB02PrimaryGeneratorAction {};
 
 /** @} */
 

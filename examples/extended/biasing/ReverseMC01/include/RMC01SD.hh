@@ -26,14 +26,14 @@
 /// \file biasing/ReverseMC01/include/RMC01SD.hh
 /// \brief Definition of the RMC01SD class
 //
-// $Id$
+// $Id: RMC01SD.hh 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01SD
+//  Class Name:            RMC01SD
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -65,7 +65,6 @@ class G4VPhysicalVolume;
 
 class RMC01SD : public G4VSensitiveDetector
 {
-
   public:
     RMC01SD(G4String name);
     virtual ~RMC01SD();
@@ -82,7 +81,6 @@ class RMC01SD : public G4VSensitiveDetector
     RMC01DoubleWithWeightHitsCollection* fProtonCurrentCollection;
     RMC01DoubleWithWeightHitsCollection* fGammaCurrentCollection;
     RMC01DoubleWithWeightHitsCollection* fElectronCurrentCollection;
-    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -113,7 +113,7 @@ private:
 					 G4PenelopeOscillatorManager& right);
   G4PenelopeOscillatorManager(const G4PenelopeOscillatorManager&);
  
-  static G4PenelopeOscillatorManager* instance;
+  static G4ThreadLocal G4PenelopeOscillatorManager* instance;
   
   //In Penelope2008, the Ionisation and Compton oscillator tables are 
   //slightly different!

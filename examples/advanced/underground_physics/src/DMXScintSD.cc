@@ -55,8 +55,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-DMXScintSD::DMXScintSD(G4String name,DMXDetectorConstruction* DMXSD) 
-  :G4VSensitiveDetector(name),DMXDetector(DMXSD)
+DMXScintSD::DMXScintSD(G4String name) 
+  :G4VSensitiveDetector(name)
 {
   G4String HCname="scintillatorCollection";
   collectionName.insert(HCname);

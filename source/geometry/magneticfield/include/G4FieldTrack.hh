@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FieldTrack.hh 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 // class G4FieldTrack
@@ -49,6 +49,7 @@
 #define G4FieldTrack_HH
 
 #include "G4ThreeVector.hh"
+#include "G4ChargeState.hh"
 
 class  G4FieldTrack
 {
@@ -154,6 +155,7 @@ class  G4FieldTrack
                                       const G4ThreeVector& pMomentum,
                                       G4double       s_curve );
    private:
+
      G4double  SixVector[6];
      G4double  fDistanceAlongCurve;  // distance along curve of point
      G4double  fKineticEnergy;
@@ -165,48 +167,11 @@ class  G4FieldTrack
      // G4double  fInitialMomentumMag;  // At 'track' creation.
      // G4double  fLastMomentumMag;     // From last Update (for checking.)
 
-   private:   //  Implementation detail -- daughter class
+     G4ChargeState fChargeState;
 
-       class G4ChargeState  // Charge & moments
-       {
-         public:  // without description
+   public: // Access
 
-           inline G4ChargeState(G4double charge,                       
-                                G4double magnetic_dipole_moment= 0.0,  
-                                G4double electric_dipole_moment= 0.0,  
-                                G4double magnetic_charge= 0.0);  
-           inline G4ChargeState( const G4ChargeState& right ); 
-           inline G4ChargeState& operator = ( const G4ChargeState& right );
-
-           inline void SetCharge(G4double charge){ fCharge= charge; }
-
-           // Revise the charge (in units of the positron charge)
-           // do not change moments
-
-           void SetChargeAndMoments(G4double charge, 
-                                    G4double magnetic_dipole_moment= DBL_MAX,
-                                    G4double electric_dipole_moment= DBL_MAX,
-                                    G4double magnetic_charge=DBL_MAX );
-           //  Revise the charge and all moments
-
-           G4double GetCharge() const { return fCharge; }  
-           G4double GetMagneticDipoleMoment() const { return fMagn_dipole; } 
-           G4double ElectricDipoleMoment() const { return fElec_dipole; } 
-           G4double MagneticCharge() const { return fMagneticCharge; } 
- 
-         private:
-
-           G4double fCharge; 
-           G4double fMagn_dipole;
-           G4double fElec_dipole;
-           G4double fMagneticCharge;  // for magnetic monopole
-       };
-
-       G4ChargeState fChargeState;
-
-    public: // Access
-
-       const G4ChargeState* GetChargeState() const { return &fChargeState; } 
+     const G4ChargeState* GetChargeState() const { return &fChargeState; } 
 }; 
 
 #include "G4FieldTrack.icc"

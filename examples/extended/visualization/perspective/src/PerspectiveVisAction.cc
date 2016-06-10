@@ -27,7 +27,7 @@
 /// \brief Implementation of the PerspectiveVisAction class
 //
 //
-// $Id$
+// $Id: PerspectiveVisAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
 
 #include "PerspectiveVisAction.hh"
 
@@ -41,7 +41,10 @@
 #include "G4Point3D.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 PerspectiveVisAction::PerspectiveVisAction():
+  G4VUserVisAction(),
   fpVisManager(0),
   fOptionString("none"),
   fScene("room-and-chair"),
@@ -69,6 +72,8 @@ PerspectiveVisAction::PerspectiveVisAction():
   new PerspectiveVisActionMessenger(this);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PerspectiveVisAction::Draw()
 {
   fpVisManager = G4VVisManager::GetConcreteInstance();
@@ -82,6 +87,8 @@ void PerspectiveVisAction::Draw()
       }
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PerspectiveVisAction::RoomAndChair()
 {
@@ -132,6 +139,8 @@ void PerspectiveVisAction::RoomAndChair()
   Chair(chair_visAtts, chair_transform);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PerspectiveVisAction::Chair
 (const G4VisAttributes& visAtts,
  const G4Transform3D& transform)
@@ -157,6 +166,8 @@ void PerspectiveVisAction::Chair
     }
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PerspectiveVisAction::ExtendedDraw
 (const G4VSolid& solid,
@@ -216,3 +227,5 @@ void PerspectiveVisAction::ExtendedDraw
   // Draw actual object...
   fpVisManager->Draw(solid, visAtts, transform);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

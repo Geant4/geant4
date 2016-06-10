@@ -1486,6 +1486,15 @@ do_nothing_deleter::operator () ( void const * ) const
 }  // namespace CLHEP
 
 
+#if defined __GNUC__ 
+  #if __GNUC__ > 3 && __GNUC_MINOR__ > 6
+    #pragma GCC diagnostic pop
+  #endif
+#endif 
+#ifdef __clang__
+  #pragma clang diagnostic pop
+#endif
+
 
 
 #endif  // CLHEP_MEMORY_H

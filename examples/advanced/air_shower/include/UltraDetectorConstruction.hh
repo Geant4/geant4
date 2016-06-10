@@ -60,34 +60,35 @@ class UltraFresnelLens;
 class UltraDetectorConstruction : public G4VUserDetectorConstruction
 {
  
-  public:
-    UltraDetectorConstruction();
-    ~UltraDetectorConstruction();
-
-  public:
-    G4VPhysicalVolume* Construct();
-
-    inline G4double GetLambdaMin() const {return lambda_min;}
-    inline G4double GetLambdaMax() const {return lambda_max;}
-
-  private:
-    
+public:
+  UltraDetectorConstruction();
+  ~UltraDetectorConstruction();
+  
+public:
+  G4VPhysicalVolume* Construct();
+  void ConstructSDandField();
+  
+  
+  inline G4double GetLambdaMin() const {return lambda_min;}
+  inline G4double GetLambdaMax() const {return lambda_max;}
+  
+private:
+  
   // Methods to build ULTRA
-    G4VPhysicalVolume  *ConstructUVscope(G4VPhysicalVolume *);
-    G4VPhysicalVolume  *ConstructMirror(G4VPhysicalVolume *);
-    G4VPhysicalVolume  *ConstructGround(G4VPhysicalVolume *);
-    UltraFresnelLens   *FresnelLens ;
-
-    // Material definitions
-    void ConstructTableMaterials();
-
-
-  private:
-    UltraPMTSD*   PMTSD  ;          //pointer to the photomultiplier sensitive detector
-    G4SDManager*  SDmanager ;       // Sensitive Detector Manager
-    
-    G4double lambda_min ;
-    G4double lambda_max ;
+  G4VPhysicalVolume  *ConstructUVscope(G4VPhysicalVolume *);
+  G4VPhysicalVolume  *ConstructMirror(G4VPhysicalVolume *);
+  G4VPhysicalVolume  *ConstructGround(G4VPhysicalVolume *);
+  UltraFresnelLens   *FresnelLens ;
+  
+  // Material definitions
+  void ConstructTableMaterials();
+  
+  
+private:
+  G4LogicalVolume* logicalPMT;
+  
+  G4double lambda_min ;
+  G4double lambda_max ;
 };
 
 #endif 

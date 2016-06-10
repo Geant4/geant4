@@ -23,44 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ExTGPhysicsList.hh 76943 2013-11-19 09:57:34Z gcosmo $
+//
 /// \file persistency/P03/include/ExTGPhysicsList.hh
 /// \brief Definition of the ExTGPhysicsList class
-//
-// $Id$
 
 #ifndef ExTGPhysicsList_h
 #define ExTGPhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 
-/// Example of physics list
+/// Modular physics list
+///
+/// It includes the folowing physics builders
+/// - G4DecayPhysics
+/// - G4RadioactiveDecayPhysics
+/// - G4EmStandardPhysics
 
-class ExTGPhysicsList : public G4VUserPhysicsList
+class ExTGPhysicsList: public G4VModularPhysicsList
 {
-  public:
+public:
+  ExTGPhysicsList();
+  virtual ~ExTGPhysicsList();
 
-    ExTGPhysicsList();
-   ~ExTGPhysicsList();
-
-  protected:
-
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
-
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
-
-    // Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  virtual void SetCuts();
 };
 
-// ---------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4MagIntegratorDriver.hh 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 // class G4MagInt_Driver
@@ -113,12 +113,8 @@ class G4MagInt_Driver
 
      inline G4double ComputeAndSetErrcon();
 
-     inline void SetChargeMomentumMass( G4double particleCharge,
-                                        G4double MomentumXc,
-                                        G4double Mass );
-        // Change them in Equation. particleCharge is in e+ units.
-
      inline const G4MagIntegratorStepper* GetStepper() const;
+     inline G4MagIntegratorStepper* GetStepper();
 
      void  OneGoodStep(       G4double  ystart[], // Like old RKF45step()
                         const G4double  dydx[],

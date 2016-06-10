@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmElementSelector.hh 71484 2013-06-17 08:12:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -75,7 +75,7 @@ public:
 
   void Dump(const G4ParticleDefinition* p = 0);
 
-  inline const G4Element* SelectRandomAtom(G4double kineticEnergy);
+  inline const G4Element* SelectRandomAtom(G4double kineticEnergy) const;
 
   inline const G4Material* GetMaterial() const;
 
@@ -87,7 +87,6 @@ private:
 
   G4VEmModel*       model;
   const G4Material* material;
-  const G4Element*  element;
   const G4ElementVector* theElementVector;
 
   G4int    nElmMinusOne;
@@ -104,11 +103,11 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e)
+inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e) const
 {
+  const G4Element* element = (*theElementVector)[nElmMinusOne];
   if (nElmMinusOne > 0) {
     G4double x = G4UniformRand();
-    element = (*theElementVector)[nElmMinusOne];
     for(G4int i=0; i<nElmMinusOne; ++i) {
       if (x <= (xSections[i])->Value(e)) {
 	element = (*theElementVector)[i];

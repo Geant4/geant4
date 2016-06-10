@@ -27,7 +27,7 @@
 /// \brief Definition of the G4BlineEquation class
 //
 //
-// $Id$
+// $Id: G4BlineEquation.hh 68021 2013-03-13 13:36:07Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------

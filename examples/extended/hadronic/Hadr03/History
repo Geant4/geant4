@@ -1,5 +1,4 @@
-$Id: History,v 1.97 2010-11-09 21:00:43 asaim Exp $
--------------------------------------------------------------------
+$Id: History 78108 2013-12-03 14:53:10Z gcosmo $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -14,23 +13,105 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-12-13  I.Hrivnacova (exhadr03-V09-06-23)
+- Updated .README for changes in README
+
+22-11-13  A.Dotti      (exhadr03-V09-06-22)
+- Use G4RunManager::ReinitializeGeometry() to trigger geo
+ rebuild. Remove UI command to update geometry.
+
+29-07-13  P.Gumplinger (exhadr03-V09-06-21)
+- fix MAC/clang32 compilation warnings
+
+11-07-13 I.Hrivnacova (exhadr03-V09-06-20) 
+- In HistoManager: use new analysis manager method SetH1Activation()   
+
+19-06-13 mma (exhadr03-V09-06-19)
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep()
      
- 23-11-12 mma (exhadr03-V09-05-15)
+14-06-13 mma (exhadr03-V09-06-18)
+- SteppingAction: use G4Step::GetSecondaryInCurrentStep()
+
+05-06-13 I. Hrivnacova (exhadr03-V09-06-17)
+- applied coding guidelines (adding base class initialization in constructors, 
+  removed tabulations, fixed long lines)
+     
+28-05-13 mma (exhadr03-V09-06-16)
+- cosmetic in SteppingVerbose
+     
+21-04-13 mma (exhadr03-V09-06-15)
+- cleanup all macros for processName
+     
+24-03-13 mma (exhadr03-V09-06-14)
+- polish coding conventions
+     
+16-03-13 mma (exhadr03-V09-06-13)
+- restaure G4HadronPhysicsINCLXX    
+- G4 coding conventions
+
+13-03-13 V.Ivanchenko (exhadr03-V09-06-12)
+- RunAction - change printout from "warning XXXX" to "NOTE:"
+    because CDASH interpretation of "warning" is test failer 
+
+12-03-13 V.Ivanchenko (exhadr03-V09-06-11)
+- DetectorConstruction - improved material definition
+- HistoManager - do not delete singleton
+- PhsyicsList - new name for INCLXX physics constructor 
+     
+10-03-13 mma (exhadr03-V09-06-10)
+- PhysicsList: remove G4HadronPhysicsQGSP_INCLXX
+    
+10-03-13 mma (exhadr03-V09-06-09)
+- modify readme
+     
+09-03-13 mma (exhadr03-V09-06-08)
+- add envHadronic.csh to control environment variables
+     
+06-03-13 mma (exhadr03-V09-06-07)
+- RunAction - modify printing of cross section per atom
+     
+01-03-13 mma (exhadr03-V09-06-06)
+- DetectorConstruction - suppress natural abundance flag
+    
+22-02-13 V.Ivanchenko (exhadr03-V09-06-05)
+- DetectorConstruction - set natural abundances flag "false" for 
+    elements built from one isotope
+
+01-02-13 V.Ivanchenko (exhadr03-V09-06-04)
+- PhysicsList - adopted migration to new physics_lists directory 
+    structure and change of class names
+     
+01-02-13 mma (exhadr03-V09-06-03)
+- DetectorMessenger: change /buildMatIsotope to /setIsotopeMat
+      
+31-01-13 mma (exhadr03-V09-06-02)
+- DetectorMessenger: add command /buildMatIsotope 
+- RunAction: add material in GetCrossSectionPerAtom()
+     
+08-01-13 mma (exhadr03-V09-06-01)
+- DetectorConstruction: add function MaterialWithSingleIsotope()
+     
+04-12-12 mma (exhadr03-V09-06-00)
+- PhysicsList: QGSP_BERT_HP replaced by FTFP_BERT_HP
+- RunAction: compute crossSection per atom
+     
+23-11-12 mma (exhadr03-V09-05-15)
 - SteppingAction : add more protection for neutronHP
      
- 21-11-12 mma (exhadr03-V09-05-14)
+21-11-12 mma (exhadr03-V09-05-14)
 - PhysicsList: use QBBC instead of QGSP_BERT_HP
      
- 28-10-12 mma (exhadr03-V09-05-11)
+28-10-12 mma (exhadr03-V09-05-11)
 - update README and .README
 
- 17-10-12 Ivana Hrivnacova (exhadr03-V09-05-10)
+17-10-12 Ivana Hrivnacova (exhadr03-V09-05-10)
 - Adding missing explicit use of system of units 
  
- 12-10-12 Andrea Dotti (exhadr03-V09-05-09)
+12-10-12 Andrea Dotti (exhadr03-V09-05-09)
 - Adding explicit use of system of units
 
- 06-10-12 mma (exhadr03-V09-05-08)
+06-10-12 mma (exhadr03-V09-05-08)
 - SteppingAction, RunAction : print number of gamma
 - use G4Analysis
     

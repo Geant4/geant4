@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04RunAction.cc 78002 2013-12-02 08:25:49Z gcosmo $
+//
 /// \file field/field04/src/F04RunAction.cc
 /// \brief Implementation of the F04RunAction class
 //
-//
+
 #include "F04RunAction.hh"
 #include "F04RunActionMessenger.hh"
 
@@ -34,8 +36,6 @@
 #include "G4RunManager.hh"
 
 #include "Randomize.hh"
-
-#include "F04GlobalField.hh"
 
 #include <ctime>
 
@@ -55,6 +55,7 @@ F04RunAction::~F04RunAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4Threading.hh"
 
 void F04RunAction::BeginOfRunAction(const G4Run* aRun)
 {
@@ -72,21 +73,17 @@ void F04RunAction::BeginOfRunAction(const G4Run* aRun)
      time_t systime = time(NULL);
      seeds[0] = (long) systime;
      seeds[1] = (long) (systime*G4UniformRand());
-     CLHEP::HepRandom::setTheSeeds(seeds);
-     CLHEP::HepRandom::showEngineStatus();
+     G4Random::setTheSeeds(seeds);
+     G4Random::showEngineStatus();
   } else {
-     CLHEP::HepRandom::showEngineStatus();
+     G4Random::showEngineStatus();
   }
 
-  if (fSaveRndm > 0) CLHEP::HepRandom::saveEngineStatus("BeginOfRun.rndm");
-
-  FieldList* fields = F04GlobalField::GetObject()->GetFields();
-
-  if (fields) {
-     if (fields->size()>0) {
-        FieldList::iterator i;
-        for (i=fields->begin(); i!=fields->end(); ++i)(*i)->Construct();
-     }
+  if (fSaveRndm > 0)
+  {
+     std::ostringstream os;
+     os<<"beginOfRun_"<<G4Threading::G4GetThreadId()<<".rndm";
+     G4Random::saveEngineStatus(os.str().c_str());
   }
 }
 
@@ -95,7 +92,11 @@ void F04RunAction::BeginOfRunAction(const G4Run* aRun)
 void F04RunAction::EndOfRunAction(const G4Run*)
 {
   if (fSaveRndm == 1) {
-     CLHEP::HepRandom::showEngineStatus();
-     CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
+     G4Random::showEngineStatus();
+     std::ostringstream os;
+     os<<"endOfRun_"<<G4Threading::G4GetThreadId()<<".rndm";
+     G4Random::saveEngineStatus(os.str().c_str());
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Orb.hh 76263 2013-11-08 11:41:52Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -43,6 +43,15 @@
 
 #ifndef G4Orb_HH
 #define G4Orb_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UORB 1
+#endif
+
+#if defined(G4GEOM_USE_UORB)
+  #define G4UOrb G4Orb
+  #include "G4UOrb.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -107,7 +116,6 @@ class G4Orb : public G4CSGSolid
   
     void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
-    G4NURBS*      CreateNURBS() const;
 
   public:  // without description
 
@@ -137,5 +145,7 @@ class G4Orb : public G4CSGSolid
 };
 
 #include "G4Orb.icc"
+
+#endif
 
 #endif

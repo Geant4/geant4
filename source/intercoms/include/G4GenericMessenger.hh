@@ -91,10 +91,12 @@ public:
   };
   
   ///Declare Methods
-  //Command& DeclarePropertyWithUnit(const G4String& name, const G4Any& variable, const G4String& unit, const G4String& doc = "");
   Command& DeclareProperty(const G4String& name, const G4AnyType& variable, const G4String& doc = "");
+  Command& DeclarePropertyWithUnit
+   (const G4String& name, const G4String& defaultUnit, const G4AnyType& variable, const G4String& doc = "");
   Command& DeclareMethod(const G4String& name, const G4AnyMethod& fun, const G4String& doc = "");
-  //Command& DeclareMethodWithUnit(const G4String& name, const G4AnyFunc& fun, const G4String& unit, const G4String& doc = "");
+  Command& DeclareMethodWithUnit
+   (const G4String& name, const G4String& defaultUnit, const G4AnyMethod& fun, const G4String& doc = "");
   void SetDirectory(const G4String& dir) {directory = dir;}
   void SetGuidance(const G4String& s);
     

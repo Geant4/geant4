@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2010-10-06 15:49:24 allison Exp $
+$Id: History 68732 2013-04-05 09:44:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+26th March 2013  John Allison  (visXXX-V09-06-01)
+- G4XXXStoredViewer.cc: Removed unused typedef.
+
+2nd December 2012  John Allison  (visXXX-V09-06-00)
+- Remove NURBS.
 
 7th October 2012  John Allison  (visXXX-V09-05-04)
 - G4XXXStoredViewer::, G4XXXSGViewer::CompareForKernelVisit:

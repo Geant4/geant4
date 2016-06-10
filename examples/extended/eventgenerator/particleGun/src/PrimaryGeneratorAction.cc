@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/particleGun/src/PrimaryGeneratorAction.cc
-/// \brief Implementation of the PrimaryGeneratorAction class
+/// \file eventgenerator/fParticleGun/src/PrimaryGeneratorfAction.cc
+/// \brief Implementation of the PrimaryGeneratorfAction class
 //
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 68734 2013-04-05 09:47:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -48,61 +48,67 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0),
+   fAction1(0),
+   fAction2(0),
+   fAction3(0),
+   fAction4(0),
+   fSelectedAction(1),
+   fGunMessenger(0)     
 {
   // default particle kinematic
   //
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  fParticleGun  = new G4ParticleGun(n_particle);
     
   G4ParticleDefinition* particle
            = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
-  particleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleDefinition(particle);
         
-  particleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
   
-  action1 = new PrimaryGeneratorAction1(particleGun);
-  action2 = new PrimaryGeneratorAction2(particleGun);
-  action3 = new PrimaryGeneratorAction3(particleGun);
-  action4 = new PrimaryGeneratorAction4(particleGun);
-  
-  selectedAction = 1;
+  fAction1 = new PrimaryGeneratorAction1(fParticleGun);
+  fAction2 = new PrimaryGeneratorAction2(fParticleGun);
+  fAction3 = new PrimaryGeneratorAction3(fParticleGun);
+  fAction4 = new PrimaryGeneratorAction4(fParticleGun);
   
   //create a messenger for this class
-  gunMessenger = new PrimaryGeneratorMessenger(this);    
+  fGunMessenger = new PrimaryGeneratorMessenger(this);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete action1;
-  delete action2;
-  delete action3;
-  delete action4;
-  delete particleGun;  
-  delete gunMessenger;      
+  delete fAction1;
+  delete fAction2;
+  delete fAction3;
+  delete fAction4;
+  delete fParticleGun;  
+  delete fGunMessenger;      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  switch(selectedAction)
+  switch(fSelectedAction)
   {
    case 1:
-    action1->GeneratePrimaries(anEvent);
+    fAction1->GeneratePrimaries(anEvent);
     break;
    case 2:
-    action2->GeneratePrimaries(anEvent);
+    fAction2->GeneratePrimaries(anEvent);
     break;
    case 3:
-    action3->GeneratePrimaries(anEvent);
+    fAction3->GeneratePrimaries(anEvent);
     break;
    case 4:
-    action4->GeneratePrimaries(anEvent);
+    fAction4->GeneratePrimaries(anEvent);
     break;    
    default:
-    G4cerr << "Invalid generator action" << G4endl;
+    G4cerr << "Invalid generator fAction" << G4endl;
   }
 }
 

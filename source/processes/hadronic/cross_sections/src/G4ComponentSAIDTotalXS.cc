@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ComponentSAIDTotalXS.cc 76889 2013-11-18 13:01:55Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -40,22 +40,25 @@
 #include "G4ComponentSAIDTotalXS.hh"
 #include "G4PhysicsVector.hh"
 #include "G4LPhysicsFreeVector.hh"
-#include "G4HadronicException.hh"
 
-G4String G4ComponentSAIDTotalXS::fnames[13] = {
+const G4String G4ComponentSAIDTotalXS::fnames[13] = {
   "","pp","np","pip","pim",
   "pin","pie",
   "gp_pi0p","gp_pi+n","gn_pi-p","gn_pi0n","gp_etap","gp_etapp"
 };
-G4PhysicsVector* G4ComponentSAIDTotalXS::elastdata[13] = {0};
-G4PhysicsVector* G4ComponentSAIDTotalXS::inelastdata[13] = {0};
 
 G4ComponentSAIDTotalXS::G4ComponentSAIDTotalXS() 
-  : G4VComponentCrossSection("xsSAID"),numberOfSaidXS(13)
-{}
+  : G4VComponentCrossSection("xsSAID")
+{
+  for(G4int i=0; i<numberOfSaidXS; ++i) {
+    elastdata[i] = 0;
+    inelastdata[i] = 0;
+  }
+}
 
 G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
 {
+  /*
   for(G4int i=0; i<numberOfSaidXS; ++i) {
     if(elastdata[i]) {
       delete elastdata[i];
@@ -66,6 +69,7 @@ G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
       inelastdata[i] = 0;
     }
   }
+  */
 }
 
 G4double 
@@ -215,8 +219,9 @@ void G4ComponentSAIDTotalXS::Initialise(G4SAIDCrossSectionType tp)
   // Build the complete string identifying the file with the data set
   char* path = getenv("G4SAIDXSDATA");
   if (!path){
-    throw G4HadronicException(__FILE__, __LINE__, 
-                              "G4SAIDXSDATA environment variable not defined");
+    G4Exception("G4ComponentSAIDTotalXS::Initialise(..)","had013",
+		FatalException,
+		"Environment variable G4SAIDXSDATA is not defined");
     return;
   }
   if(idx <= 4) {
@@ -239,14 +244,11 @@ void G4ComponentSAIDTotalXS::ReadData(G4int index,
   ost << ss1 << "/" << fnames[index] << ss2;
   std::ifstream filein(ost.str().c_str());
   if (!(filein)) {
-    G4cout << ost.str() << " is not opened by G4ComponentSAIDTotalXS" 
-	   << G4endl;
-    G4String sss(ost.str());
-    throw G4HadronicException(__FILE__, __LINE__,
-			      "Data file " + sss + 
-			      " is not opened," +
-			      "chech that G4SAIDXSDATA correctly set");
-
+    G4ExceptionDescription ed;
+    ed << "Data file <" << ost.str().c_str()
+       << "> is not opened!";
+    G4Exception("G4ComponentSAIDTotalXS::ReadData(..)","had014",
+                FatalException, ed, "Check G4SAIDXSDATA");
   } else {
     if(GetVerboseLevel() > 1) {
       G4cout << "File " << ost.str() 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,9 @@
 
 ***** Table : Nb of materials = 20 *****
 
- Material:    G4_Ar    density:  1.662 mg/cm3  RadL: 117.621 m    Nucl.Int.Length: 719.260 m    Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    G4_Ar    density:  1.662 mg/cm3  RadL: 117.621 m    Nucl.Int.Length: 719.437 m  
+                       Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
          --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
@@ -21,7 +23,9 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Kr    density:  3.478 mg/cm3  RadL:  32.694 m    Nucl.Int.Length: 439.629 m    Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    G4_Kr    density:  3.478 mg/cm3  RadL:  32.694 m    Nucl.Int.Length: 440.022 m  
+                       Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Kr (Kr)   Z = 36.0   N =  83.9   A =  83.80 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
          --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
@@ -32,7 +36,9 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Xe    density:  5.485 mg/cm3  RadL:  15.462 m    Nucl.Int.Length: 324.779 m    Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    G4_Xe    density:  5.485 mg/cm3  RadL:  15.462 m    Nucl.Int.Length: 324.140 m  
+                       Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Xe (Xe)   Z = 54.0   N = 131.4   A = 131.29 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
@@ -46,7 +52,9 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_CARBON_DIOXIDE CO_2   density:  1.842 mg/cm3  RadL: 196.486 m    Nucl.Int.Length: 466.077 m    Imean:  85.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: G4_CARBON_DIOXIDE CO_2   density:  1.842 mg/cm3  RadL: 196.486 m    Nucl.Int.Length: 465.934 m  
+                       Imean:  85.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
@@ -59,16 +67,18 @@
           ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
+                       Imean:  78.700 eV 
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.50 %  ElmAbundance  45.46 % 
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -77,38 +87,46 @@
           ElmMassFraction:  33.30 %  ElmAbundance  18.18 % 
 
 
- Material: G4_METHANE    density:  0.667 kg/m3   RadL: 696.479 m    Nucl.Int.Length: 910.708 m    Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:  25.13 %  ElmAbundance  80.00 % 
+ Material: G4_METHANE    density:  0.667 kg/m3   RadL: 696.482 m    Nucl.Int.Length: 910.361 m  
+                       Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  74.87 %  ElmAbundance  20.00 % 
 
-
- Material: G4_PROPANE    density:  1.879 mg/cm3  RadL: 241.434 m    Nucl.Int.Length: 346.143 m    Imean:  47.100 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:  18.29 %  ElmAbundance  72.73 % 
+          ElmMassFraction:  25.13 %  ElmAbundance  80.00 % 
+
+
+ Material: G4_PROPANE    density:  1.879 mg/cm3  RadL: 241.434 m    Nucl.Int.Length: 345.995 m  
+                       Imean:  47.100 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  81.71 %  ElmAbundance  27.27 % 
 
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  18.29 %  ElmAbundance  72.73 % 
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114327973.206 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+
+ Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114319208.901 pc 
+                       Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:   Kr7CH4    density:  3.491 mg/cm3  RadL:  32.924 m    Nucl.Int.Length: 428.924 m    Imean: 337.765 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   Kr7CH4    density:  3.491 mg/cm3  RadL:  32.924 m    Nucl.Int.Length: 429.289 m  
+                       Imean: 337.765 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Kr (Kr)   Z = 36.0   N =  83.9   A =  83.80 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
          --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
@@ -118,18 +136,20 @@
          --->  Isotope:  Kr86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
           ElmMassFraction:  98.60 %  ElmAbundance  72.95 % 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   0.35 %  ElmAbundance  21.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:   1.05 %  ElmAbundance   5.41 % 
 
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   0.35 %  ElmAbundance  21.64 % 
 
- Material:   TRT_Xe    density:  5.485 mg/cm3  RadL:  15.463 m    Nucl.Int.Length: 324.801 m    Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+ Material:   TRT_Xe    density:  5.485 mg/cm3  RadL:  15.463 m    Nucl.Int.Length: 324.162 m  
+                       Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
    --->  Element: Xe (Xe)   Z = 54.0   N = 131.4   A = 131.29 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
@@ -143,7 +163,9 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:  TRT_CO2    density:  1.842 mg/cm3  RadL: 196.499 m    Nucl.Int.Length: 466.107 m    Imean:  90.958 eV   temperature: 293.15 K  pressure:   1.00 atm
+ Material:  TRT_CO2    density:  1.842 mg/cm3  RadL: 196.499 m    Nucl.Int.Length: 465.965 m  
+                       Imean:  90.958 eV   temperature: 293.15 K  pressure:   1.00 atm
+
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
@@ -156,7 +178,9 @@
           ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
 
 
- Material:  TRT_CF4    density:  3.900 mg/cm3  RadL:  87.158 m    Nucl.Int.Length: 234.197 m    Imean: 109.384 eV   temperature: 293.15 K  pressure:   1.00 atm
+ Material:  TRT_CF4    density:  3.900 mg/cm3  RadL:  87.158 m    Nucl.Int.Length: 234.176 m  
+                       Imean: 109.384 eV   temperature: 293.15 K  pressure:   1.00 atm
+
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
@@ -167,7 +191,9 @@
           ElmMassFraction:  86.35 %  ElmAbundance  80.00 % 
 
 
- Material: XeCO2CF4    density:  4.760 mg/cm3  RadL:  20.851 m    Nucl.Int.Length: 314.963 m    Imean: 345.469 eV   temperature: 293.15 K  pressure:   1.00 atm
+ Material: XeCO2CF4    density:  4.760 mg/cm3  RadL:  20.851 m    Nucl.Int.Length: 314.528 m  
+                       Imean: 345.469 eV   temperature: 293.15 K  pressure:   1.00 atm
+
    --->  Element: Xe (Xe)   Z = 54.0   N = 131.4   A = 131.29 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
@@ -196,7 +222,9 @@
           ElmMassFraction:  13.30 %  ElmAbundance  39.87 % 
 
 
- Material:     C3H8    density:  3.758 mg/cm3  RadL: 120.742 m    Nucl.Int.Length: 173.106 m    Imean:  52.014 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:     C3H8    density:  3.758 mg/cm3  RadL: 120.742 m    Nucl.Int.Length: 173.033 m  
+                       Imean:  52.014 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
@@ -208,7 +236,9 @@
           ElmMassFraction:  18.29 %  ElmAbundance  72.73 % 
 
 
- Material: XeCH4C3H8    density:  4.920 mg/cm3  RadL:  17.657 m    Nucl.Int.Length: 344.114 m    Imean: 438.263 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: XeCH4C3H8    density:  4.920 mg/cm3  RadL:  17.657 m    Nucl.Int.Length: 343.478 m  
+                       Imean: 438.262 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Xe (Xe)   Z = 54.0   N = 131.4   A = 131.29 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
@@ -221,36 +251,40 @@
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
           ElmMassFraction:  97.10 %  ElmAbundance  48.49 % 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   0.60 %  ElmAbundance  38.95 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:   2.30 %  ElmAbundance  12.56 % 
 
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   0.60 %  ElmAbundance  38.95 % 
 
- Material:   Ar7CH4    density:  1.709 mg/cm3  RadL: 116.342 m    Nucl.Int.Length: 680.394 m    Imean: 177.716 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+ Material:   Ar7CH4    density:  1.709 mg/cm3  RadL: 116.342 m    Nucl.Int.Length: 680.537 m  
+                       Imean: 177.716 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
          --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
          --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
           ElmMassFraction:  97.10 %  ElmAbundance  72.89 % 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   0.73 %  ElmAbundance  21.68 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:   2.17 %  ElmAbundance   5.42 % 
 
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   0.73 %  ElmAbundance  21.68 % 
 
- Material:    ArCO2    density:  1.822 mg/cm3  RadL: 119.168 m    Nucl.Int.Length: 604.526 m    Imean: 158.492 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+ Material:    ArCO2    density:  1.822 mg/cm3  RadL: 119.168 m    Nucl.Int.Length: 604.582 m  
+                       Imean: 158.492 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
          --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
@@ -269,7 +303,9 @@
           ElmMassFraction:  15.78 %  ElmAbundance  28.67 % 
 
 
- Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.450 m    Imean: 412.596 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 322.893 m  
+                       Imean: 412.596 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Xe (Xe)   Z = 54.0   N = 131.4   A = 131.29 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
@@ -294,7 +330,9 @@
           ElmMassFraction:   5.67 %  ElmAbundance  28.73 % 
 
 
- Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.157 m    Nucl.Int.Length: 391.053 m    Imean: 296.925 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.157 m    Nucl.Int.Length: 391.318 m  
+                       Imean: 296.925 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Kr (Kr)   Z = 36.0   N =  83.9   A =  83.80 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
          --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
@@ -316,7 +354,9 @@
           ElmMassFraction:   8.00 %  ElmAbundance  27.59 % 
 
 
- Material: TPC_Ne-CO2-2    density:  0.939 kg/m3   RadL: 320.739 m    Nucl.Int.Length: 998.070 m    Imean: 126.355 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: TPC_Ne-CO2-2    density:  0.939 kg/m3   RadL: 320.739 m    Nucl.Int.Length: 993.129 m  
+                       Imean: 126.355 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Ne (Ne)   Z = 10.0   N =  20.2   A =  20.18 g/mole
          --->  Isotope:  Ne20   Z = 10   N =  20   A =  19.99 g/mole   abundance:  90.48 %
          --->  Isotope:  Ne21   Z = 10   N =  21   A =  20.99 g/mole   abundance:   0.27 %
@@ -358,7 +398,6 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -398,7 +437,7 @@ conv:   for  gamma    SubType= 14
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
@@ -408,7 +447,7 @@ eIoni:   for  e-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -427,7 +466,7 @@ CoulombScat:   for  e-    SubType= 1
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
@@ -437,7 +476,7 @@ eIoni:   for  e+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -470,24 +509,26 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 hBrems:   for  proton    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -501,7 +542,7 @@ ionIoni:   for  GenericIon    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -529,10 +570,12 @@ hBrems:   for  anti_proton    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:   for  anti_proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -554,10 +597,12 @@ hBrems:   for  kaon+    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:   for  kaon+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -579,10 +624,12 @@ hBrems:   for  kaon-    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:   for  kaon-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -600,17 +647,19 @@ muIoni:   for  mu+    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -634,17 +683,19 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -667,17 +718,19 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 hBrems:   for  pi+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -694,17 +747,19 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 hBrems:   for  pi-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -730,21 +785,21 @@ Region <GasDetector> --  -- appears in <World> world volume
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  3.01995 keV    e-  420.081 keV    e+  407.38 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : XeCH4C3H8
  Range cuts        :  gamma  1.8 mm     e-  1.8 mm     e+  1.8 mm  proton 1.8 mm 
  Energy thresholds :  gamma  100 eV     e-  5.4687 keV    e+  5.37444 keV proton 180 keV
@@ -758,46 +813,47 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start
 HistoManager: Histograms are booked and run has been started
  BinsCluster= 200    BinsE= 20   Emax(keV)= 60
-Start Run processing.
 ### PrimaryGeneratorAction::GeneratePrimaries ##########
 ### proton  E(MeV)= 200000
 ########################################################
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.09s Real=0.09s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
-   End of Run TotNbofEvents = 1000
+   End of Run TotNbofEvents    = 1000
+   Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 0.7362 +- 0.11096 keV    RMS/Emean = 4.7663
-   Mean number of steps in absorber= 1.236  mean number of ion-clusters = 784.76
+   Mean energy deposit in absorber = 0.74768 +- 0.11538 keV    RMS/Emean = 4.8799
+   Mean number of steps in absorber= 1.228  mean number of ion-clusters = 815.78 MeanCluster= 816.34
 
- ====== Energy deposit distribution   Noverflows= 0.01 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.013 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           3       0.003
-    2         6          81       0.081
-    3         9         279       0.279
-    4        12         254       0.254
-    5        15         153       0.153
-    6        18         106       0.106
+    1         3           2       0.002
+    2         6          85       0.085
+    3         9         273       0.273
+    4        12         278       0.278
+    5        15         142       0.142
+    6        18          75       0.075
     7        21          49       0.049
-    8        24          25       0.025
-    9        27          12       0.012
-   10        30           9       0.009
-   11        33           7       0.007
-   12        36           3       0.003
-   13        39           1       0.001
+    8        24          24       0.024
+    9        27          15       0.015
+   10        30          15       0.015
+   11        33           6       0.006
+   12        36           4       0.004
+   13        39           5       0.005
    14        42           3       0.003
-   15        45           0           0
-   16        48           3       0.003
-   17        51           0           0
-   18        54           1       0.001
-   19        57           1       0.001
+   15        45           3       0.003
+   16        48           1       0.001
+   17        51           2       0.002
+   18        54           3       0.003
+   19        57           2       0.002
  ================== run end ==========================
 #
 G4 kernel has come to Quit state.
@@ -805,10 +861,15 @@ UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
-UImanager deleted.
 Units table cleared.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.45 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
-RunManager is deleted.
+RunManagerKernel is deleted. Good bye :)

@@ -4,7 +4,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DeflateOutputStreamBuffer.cc,v 1.6 2005-06-02 21:28:45 duns Exp $
+ * @version $Id: DeflateOutputStreamBuffer.cc 68043 2013-03-13 14:27:49Z gcosmo $
  */
 namespace cheprep {
 
@@ -92,6 +92,10 @@ namespace cheprep {
         zStream.zalloc = Z_NULL;
         zStream.zfree = Z_NULL;
         zStream.opaque = Z_NULL;
+        zStream.msg = 0;
+        zStream.next_in = 0;
+        zStream.next_out = 0;
+        zStream.state = 0;
 #endif // CHEPREP_NO_ZLIB
     }
         

@@ -25,7 +25,7 @@
 //
 //  Code developed by: Susanna Guatelli
 //
-// $Id$
+// $Id: BrachyFactory.hh 69765 2013-05-14 10:11:22Z gcosmo $
 //
 //    **********************************
 //    *                                *
@@ -34,7 +34,7 @@
 //    **********************************
 //
 // this is the abstract class which manages the sources' realisation
-// in terms of geometry and primary particle generated in the radioactive core
+// in terms of geometry 
 
 #ifndef BrachyFactory_h
 #define BrachyFactory_h 1
@@ -45,7 +45,6 @@ class G4ParticleGun;
 class G4Run;
 class G4Event;
 class G4VPhysicalVolume;
-class BrachyAnalysisManager;
 
 class BrachyFactory
 {
@@ -54,10 +53,6 @@ public:
   BrachyFactory();
   virtual ~BrachyFactory();
 
-  //Source primary particles' management ...
-  virtual void CreatePrimaryGeneratorAction(G4Event* anEven) = 0;
-
-  // ...
   // this function manages the creation of the source in terms of 
   // geometry ...
   virtual void CreateSource(G4VPhysicalVolume*) = 0;

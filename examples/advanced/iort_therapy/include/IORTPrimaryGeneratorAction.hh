@@ -86,7 +86,6 @@ private:
 private:
   G4ParticleGun*    		          particleGun;
   IORTPrimaryGeneratorMessenger* gunMessenger; 
-  G4double				  sigmaX;
 };
 
 #endif

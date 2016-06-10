@@ -1,4 +1,4 @@
-/$Id$
+//$Id$
 
 ///\file "hadronic/Hadr01/.README"
 ///\brief Example Hadr01 README page
@@ -36,13 +36,6 @@ modify the geometry:
 /testhadr/TargetRadius  10 mm
 /testhadr/TargetLength  20 cm
 /testhadr/NumberDivZ    200
-\endverbatim
-
-If geometry was changed between two runs, then the following command need to
-be executed:
-
-\verbatim
-/testhadr/Update
 \endverbatim
 
 Beam direction coincides with the target axis and is Z axis in the global
@@ -127,6 +120,7 @@ The cuts for electromagnetic physics can be established via
 /testhadr/CutsGamma   0.1 mm
 /testhadr/CutsEl      0.2 mm
 /testhadr/CutsPos     0.3 mm
+/testhadr/CutsProt    0.6 mm
 \endverbatim
 
 Note that testhadr UI commands are not available in the case when PHYSLIST 

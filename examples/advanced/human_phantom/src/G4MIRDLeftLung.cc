@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -60,77 +60,71 @@ G4MIRDLeftLung::~G4MIRDLeftLung()
 
 }
 
+
 G4VPhysicalVolume* G4MIRDLeftLung::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
-						  const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
+					     const G4String& colourName, G4bool wireFrame,G4bool)
 {
 
-  G4cout << "Construct " << volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* lung_material = material -> GetMaterial("lung_material");
- delete material;
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* lung_material = material -> GetMaterial("lung_material");
+  delete material;
 
- G4double ax = 5. *cm; //a
- G4double by = 7.5 *cm; //b
- G4double cz = 24.*cm; //c
- G4double zcut1 = 0.0 *cm; 
- G4double zcut2=24. *cm;
+  G4double ax = 5. *cm; //a
+  G4double by = 7.5 *cm; //b
+  G4double cz = 24.*cm; //c
+  G4double zcut1 = 0.0 *cm; 
+  G4double zcut2=24. *cm;
  
- G4Ellipsoid* oneLung = new G4Ellipsoid("OneLung",ax, by, cz, zcut1,zcut2);
+  G4Ellipsoid* oneLung = new G4Ellipsoid("OneLung",ax, by, cz, zcut1,zcut2);
 
- ax= 5.*cm; 
- by= 7.5*cm; 
- cz= 24.*cm;
+  ax= 5.*cm; 
+  by= 7.5*cm; 
+  cz= 24.*cm;
 
 
- G4Ellipsoid* subtrLung = new G4Ellipsoid("subtrLung",ax, by, cz);
+  G4Ellipsoid* subtrLung = new G4Ellipsoid("subtrLung",ax, by, cz);
 
- // y<0
+  // y<0
 
- G4double dx = 5.5* cm;
- G4double dy = 8.5 * cm;
- G4double dz = 24. * cm;
+  G4double dx = 5.5* cm;
+  G4double dy = 8.5 * cm;
+  G4double dz = 24. * cm;
 
- G4Box* box = new G4Box("Box", dx, dy, dz);
+  G4Box* box = new G4Box("Box", dx, dy, dz);
  
 
- //G4SubtractionSolid* section = new G4SubtractionSolid("BoxSub", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
-G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
+  //G4SubtractionSolid* section = new G4SubtractionSolid("BoxSub", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
+  G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
 
-//G4SubtractionSolid* lung1 =  new G4SubtractionSolid("Lung1", oneLung,
-//				       section,
-//				       0, G4ThreeVector(6.*cm,0*cm,0.0*cm));
+  //G4SubtractionSolid* lung1 =  new G4SubtractionSolid("Lung1", oneLung,
+  //				       section,
+  //				       0, G4ThreeVector(6.*cm,0*cm,0.0*cm));
  
- G4SubtractionSolid* lung2 =  new G4SubtractionSolid("Lung2", oneLung,
-					       section2,
-					      0, G4ThreeVector(-6.*cm,0*cm,0.0*cm));
+  G4SubtractionSolid* lung2 =  new G4SubtractionSolid("Lung2", oneLung,
+						      section2,
+						      0, G4ThreeVector(-6.*cm,0*cm,0.0*cm));
 
- // G4RotationMatrix* matrix = new G4RotationMatrix();  
- // matrix->rotateX(180. * degree);
- //matrix ->rotateZ(180.*degree);
- //matrix -> rotateY(180.* degree);
+  // G4RotationMatrix* matrix = new G4RotationMatrix();  
+  // matrix->rotateX(180. * degree);
+  //matrix ->rotateZ(180.*degree);
+  //matrix -> rotateY(180.* degree);
 
- //G4UnionSolid* lungs = new G4UnionSolid("Lungs", lung1, lung2, matrix, G4ThreeVector(17*cm, 0., 0.));
+  //G4UnionSolid* lungs = new G4UnionSolid("Lungs", lung1, lung2, matrix, G4ThreeVector(17*cm, 0., 0.));
 
 
- G4LogicalVolume* logicLeftLung = new G4LogicalVolume(lung2,lung_material,
-						  "logical" + volumeName, 0, 0, 0); 
+  G4LogicalVolume* logicLeftLung = new G4LogicalVolume(lung2,lung_material,
+						       "logical" + volumeName, 0, 0, 0); 
   
 
   G4VPhysicalVolume* physLeftLung = new G4PVPlacement(0,G4ThreeVector(8.50 *cm, 0.0*cm, 8.5*cm),
-						  "physicalLeftLung",                    
-  			       logicLeftLung,
-			       mother,
-			       false,
-			       0, true);
+						      "physicalLeftLung",                    
+						      logicLeftLung,
+						      mother,
+						      false,
+						      0, true);
 
-
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicLeftLung->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
- }
 
   // Visualization Attributes
   //G4VisAttributes* LeftLungVisAtt = new G4VisAttributes(G4Colour(0.25,0.41,0.88));
@@ -145,7 +139,7 @@ G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box,
   // Testing LeftLung Volume
   G4double LeftLungVol = logicLeftLung->GetSolid()->GetCubicVolume();
  
- G4cout << "Volume of LeftLung = " << (LeftLungVol)/cm3 << " cm^3" << G4endl;
+  G4cout << "Volume of LeftLung = " << (LeftLungVol)/cm3 << " cm^3" << G4endl;
   
   // Testing LeftLung Material
   G4String LeftLungMat = logicLeftLung->GetMaterial()->GetName();

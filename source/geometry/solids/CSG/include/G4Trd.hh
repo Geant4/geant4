@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Trd.hh 76263 2013-11-08 11:41:52Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -56,6 +56,15 @@
 
 #ifndef G4TRD_HH
 #define G4TRD_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UTRD 1
+#endif
+
+#if defined(G4GEOM_USE_UTRD)
+  #define G4UTrd G4Trd
+  #include "G4UTrd.hh"
+#else
 
 #include "G4CSGSolid.hh"
 
@@ -141,7 +150,6 @@ class G4Trd : public G4CSGSolid
 
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron   () const;
-    G4NURBS*      CreateNURBS        () const;
 
   public:  // without description
 
@@ -173,5 +181,7 @@ class G4Trd : public G4CSGSolid
 };
 
 #include "G4Trd.icc"
+
+#endif
 
 #endif

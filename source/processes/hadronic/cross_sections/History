@@ -14,6 +14,235 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04 December 2013 A.Ribon  (hadr-cross-V09-06-38)
+------------------------------------------------
+- Removed the 1 millibarn threshold in G4BGGNucleonElasticXS, to avoid
+  rare crashes observed in QBBC. A better fix of this problem will
+  be done after the release 10.
+
+27 November 2013 G.Cosmo  (hadr-cross-V09-06-37)
+------------------------------------------------
+- Replace G4ThreadLocal with 'const' for 'alpha' in Interpolate() for
+  G4ComponentBarNucleonNucleusXsc and G4NucleonNuclearCrossSection.
+  Required to allow for compilation on Intel icc compiler in MT-mode.
+
+15 September 2013 V.Ivanchenko  (hadr-cross-V09-06-36)
+-----------------------------------------------------
+- G4BGGNucleonInelasticXS - added threashold 1 millibarn, if 
+    cross section is less, it is set to zero
+- G4BGGNucleonElasticXS - added threashold 1 millibarn, added Coulomb 
+    barrier for protons (copied from G4BGGNucleonInelasticXS); for
+    Hydrogen target added linear approximation between SAID data and 
+    PDG data: SAID upper energy 3.3 GeV, PDG low energy 5 GeV
+
+08 November 2013 V.Ivanchenko 
+- G4ComponentSAIDTotalXS, G4NeutronElasticXS, 
+  G4UPiNuclearCrossSection - do not delete G4PhysicsVectors at the 
+  end of job (these modifications are trivial and may be peaked up 
+  with any new tag)
+
+11 September 2013 W.Pokorski    (hadr-cross-V09-06-35)
+-----------------------------------------------------
+- improvement in photonuclear cross section; 
+  replacing per-isotope calculation with per-element
+
+10 September 2013 W.Pokorski    (hadr-cross-V09-06-34)
+-----------------------------------------------------
+- started clean up of phononuclear XS 
+
+10 September 2013 W.Pokorski    (hadr-cross-V09-06-33)
+-----------------------------------------------------
+- adding factory to electronuclear XS
+
+09 September 2013 W.Pokorski    (hadr-cross-V09-06-32)
+-----------------------------------------------------
+- replacing 'per isotope' methods by 'per element' for electronuclear XS
+
+30 August 2013 W.Pokorski     (hadr-cross-V09-06-31)
+-----------------------------------------------------
+- retagging to include the fix from V.Grishine in G4HadronNucleonXsc.cc
+
+29 August 2013 W.Pokorski     (hadr-cross-V09-06-30)
+-----------------------------------------------------
+- major clean up and restructuring in G4ElectroNuclearXS. 
+The calculation is now done for average N.
+
+23 August 2013 W.Pokorski     (hadr-cross-V09-06-29)
+-----------------------------------------------------
+- renaming one variable to avoid shadowing with CLHEP
+
+22 August 2013 W.Pokorski     (hadr-cross-V09-06-28)
+-----------------------------------------------------
+- improvements and cleanup in G4ElectroNuclearCrossSection
+
+05 Jun 2013 W.Pokorski     (hadr-cross-V09-06-27)
+-----------------------------------------------------
+- Fixing memory leak in G4ComponentGGNuclNuclXsc
+
+20 Jun 2013 A.Dotti        (hadr-cross-V09-06-26)
+-----------------------------------------------------
+- G4ElectroNuclearCrossSection - fixed Coverity defect
+
+19 Jun 2013 V.Ivanchenko   (hadr-cross-V09-06-25)
+-----------------------------------------------------
+- G4ComponentAntiNuclNuclearXS - fixed trial Coverity defect
+
+13 Jun 2013 V.Ivanchenko   (hadr-cross-V09-06-24)
+-----------------------------------------------------
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS,
+  G4ComponentSAIDTotalXS - G4HadronicException is substituted by 
+    G4Exception, because these exceptions are happens at initialisation
+    and not in the event loop where G4HadronicException is couched
+
+06 Jun 2013 V.Ivanchenko   (hadr-cross-V09-06-23)
+-----------------------------------------------------
+- G4BGGPionInelasticXS, G4BGGNucleonInelasticXS - use G4Pow to compute
+    Coulomb correction factor (some CPU improvement) 
+
+04 Jun 2013 A. Ribon (hadr-cross-V09-06-22)
+----------------------------------------------------
+- Fix access to ions via the IonTable class and GetIon method
+  in the following .cc files: 
+  G4ChipsProtonElasticXS.cc, G4ChipsPionPlusElasticXS.cc,
+  G4ChipsKaonPlusElasticXS.cc, G4ChipsKaonMinusElasticXS.cc,
+  G4ChipsHyperonElasticXS.cc, G4ChipsAntiBaryonElasticXS.cc,
+  G4ChipsPionMinusElasticXS.cc, G4ChipsNeutronElasticXS.cc
+
+09 May 2013 A. Dotti (hadr-cross-V09-06-21)
+----------------------------------------------------
+- Bug fix: remove sporious debug cout in G4ElectroNuclearCrossSection
+
+07 May 2013 T. Koi (hadr-cross-V09-06-20)
+-----------------------------------------------------
+- Making Get and Set method of verbose level in G4VCrossSectionDataSet
+  into virtual function
+
+03 May 2013 A. Dotti (hadr-cross-V09-06-19)
+-----------------------------------------------------
+- Protecting against crash ad exit in G4ElectroNuclear 
+
+02 May 2013 A. Dotti (hadr-cross-V09-06-18)
+-----------------------------------------------------
+- Clean up ElectroNuclear cross-section for MT and optimize code.
+  Code is now 40% faster in simple setups.
+
+- G4BGGNucleonInelasticXS - reduced numebr of operation in the 
+    CoulombFactor method 
+
+10 April 2013 W. Pokorski (hadr-cross-V09-06-17)
+-----------------------------------------------------
+- removing obsolete statics
+
+1 April 2013 A. Dotti (hadr-cross-V09-06-16)
+-----------------------------------------------------
+- Rewrite mechansim of CrossSection factories to work with MT applications.
+  Factory registry is now a class on its own and it is shared among threads.
+  TLS CrossSectionDataSetRegistry access the shared resource to get XS. 
+  XS data sets can be created as now per-thread or shared. See factoy mechanism.
+
+22 March 2013 V.Ivanchenko   (hadr-cross-V09-06-15)
+-----------------------------------------------------
+- G4KokoulinMuonNuclearXS, G4NeutronCaptureXS, 
+  G4NeutronInelasticCrossSection,  G4ProtonInelasticCrossSection,
+  G4TripathiCrossSection - more correct definition of static data
+
+20 March 2013 V.Ivanchenko   (hadr-cross-V09-06-14)
+-----------------------------------------------------
+- G4HadronCrossSections - all data to be "static const" - no G4ThreadLocal 
+    declarations,  correctInelasticNearZero set to be false forever
+- G4HadronFissionDataSet - always return zero (only HP may simulate 
+    fission as a separate process)
+
+15 March 2013 V.Ivanchenko   (hadr-cross-V09-06-13)
+-----------------------------------------------------
+- G4CrossSectionDataStore, G4NeutronInelasticXS - fixed Coverity reports
+
+12 March 2013  Dennis Wright  (hadr-cross-V09-06-12)
+----------------------------------------------------
+- fixed MacOS clang compiler warnings for unused private variables
+  files affected:
+  G4ChipsNeutronInelasticXS.hh
+  G4ChipsProtonInelasticXS.hh
+  G4ChipsKaonMinusInelasticXS.hh
+  G4ChipsHyperonInelasticXS.hh
+  G4ChipsAntiBaryonInelasticXS.hh
+
+  G4IonsKoxCrossSection.hh, .cc
+  G4IonsShenCrossSection.hh, .cc
+  G4HadronCrossSections.hh, .cc
+  G4HadronNucleonXsc.hh, .cc
+  G4GlauberGribovCrossSection.hh, .cc
+  G4ComponentGGNuclNuclXsc.hh, .cc
+  G4ComponentGGHadronNucleusXsc.hh, .cc
+  G4ComponentAntiNuclNuclearXS.hh, .cc
+  G4GGNuclNuclCrossSection.hh, .cc
+     
+ 7 March 2013 M.Maire   (hadr-cross-V09-06-11)
+- fix a bug in DumpPhysicsTable     
+     
+ 7 March 2013 M.Maire   (hadr-cross-V09-06-10)
+- cosmetics in DumpPhysicsTable
+     
+ 4 March 2013 V. Uzhinsky   (hadr-cross-V09-06-09)
+---------------------------------------------------
+ - Bugs are fixed in G4ChipsProtonInelasticXS.cc
+                     G4ChipsNeutronInelasticXS.cc
+     
+01 March 2013 M.Maire   (hadr-cross-V09-06-08)
+----------------------------------------------
+- G4CrossSectionDataStore.cc - elm->GetNaturalAbundanceFlag()
+    
+27 February 2013 V.Ivanchenko   (hadr-cross-V09-06-07)
+-----------------------------------------------------
+- G4CrossSectionDataStore - fixed logic to compute cross section
+    for not natural isotopes
+- G4HadronCrossSection - fixed IsApplicable method - return false
+    if particle is not in the list - not G4HadronicException
+
+22 February 2013 V.Ivanchenko   (hadr-cross-V09-06-06)
+-----------------------------------------------------
+- G4ComponentSAIDTotalXS - removed G4ThreadLocal dclarations
+- G4NeutronCaptureXS, G4NeutronInelasticXS - set IsIsoApplicable
+    to "true"
+
+21 February 2013 V.Ivanchenko   (hadr-cross-V09-06-05)
+-----------------------------------------------------
+- G4ComponentSAIDTotalXS - initialise data in constructor; make
+    data static; G4ThreadLocal declaration is left so far, because
+    it is not clear if internal G4PhysicsVectors may be shared between 
+    threads
+- G4NeutronCaptureXS, G4NeutronInelasticXS - cleaned up isotope data
+    retrieve; added private method IsoCrossSection
+
+29 January 2013 A.Ribon     (hadr-cross-V09-06-04)
+----------------------------------------------------
+- G4ComponentAntiNuclNuclearXS : consider anti-protons and ant-neutrons
+  as default particles, so that they can be used also for anti-hyperons.
+  This fixes also a non-reproducibility seen in QBBC.
+
+10 January 2013 W.Pokorski  (hadr-cross-V09-06-03)
+----------------------------------------------------
+- fixed memory leak
+
+19 December 2012 A.Galoyan (hadr-cross-V09-06-02)
+-G4ComponentAntiNuclNuclearXS
+bug fixed
+
+17 December 2012 A.Galoyan     (hadr-cross-V09-06-01)
+-G4ComponentAntiNuclNuclearXS 
+description of class is implemented 
+
+3 December 2012  D.H. Wright  (hadr-cross-V09-06-00)
+----------------------------------------------------
+- fix several bugs indicated by Coverity:
+  G4ComponentAntiNuclNuclearXS.cc - initialize several varibales in ctor
+  G4ComponentGGNuclNuclXsc.cc - fix memory leak 
+    hnXsc = new G4HadronNucleonXsc() by deletion in dtor
+  G4GGNuclNuclCrossSection.cc - fix memory leak
+    hnXsc = new G4HadronNucleonXsc() by deletion in dtor 
+  G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy() - initialize
+    array Y[] to 0.0
+
 14 November 2012 V.Ivanchenko   (hadr-cross-V09-05-43)
 -----------------------------------------------------
 - G4ComponentSAIDTotalXS - more extended exception printout

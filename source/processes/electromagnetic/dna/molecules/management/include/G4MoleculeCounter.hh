@@ -28,16 +28,13 @@
 
 #include "G4Molecule.hh"
 #include <map>
-#include "G4ParticleDefinition.hh"
 #include <memory>
-
-using namespace std;
 
 struct compDoubleWithPrecision
 {
     bool operator() (const double& a, const double& b) const
     {
-        if(fabs(a - b) < fPrecision)
+        if(std::fabs(a - b) < fPrecision)
         {
             return false;
         }
@@ -47,39 +44,56 @@ struct compDoubleWithPrecision
         }
     }
 
-    static double fPrecision ;
+    static G4ThreadLocal double fPrecision ;
 };
 
-typedef map<G4double, G4int, compDoubleWithPrecision> NbMoleculeAgainstTime;
+typedef std::map<G4double, G4int, compDoubleWithPrecision> NbMoleculeAgainstTime;
 
 class G4MoleculeCounter
 {
+public:
+	typedef std::map<G4Molecule, NbMoleculeAgainstTime> CounterMapType;
+
+#if __cplusplus > 199711L && !defined __clang__
+    typedef std::unique_ptr<std::vector<G4Molecule> > RecordedMolecules;
+#else
+    typedef std::auto_ptr<std::vector<G4Molecule> > RecordedMolecules;
+#endif
+
 protected:
     G4MoleculeCounter();
     virtual ~G4MoleculeCounter(){;}
-    static G4MoleculeCounter* fpInstance;
-    typedef std::map<G4Molecule, NbMoleculeAgainstTime> CounterMapType;
+    static G4ThreadLocal G4MoleculeCounter* fpInstance;
 
     CounterMapType fCounterMap;
-
     std::map<const G4MoleculeDefinition*, G4bool> fDontRegister ;
-    G4bool fUse;
+    static G4bool fUse;
 
     G4int fVerbose ;
+
+    friend class G4Molecule;
+    virtual void AddAMoleculeAtTime(const G4Molecule&, G4double);
+    virtual void RemoveAMoleculeAtTime(const G4Molecule&, G4double);
 
 public:
     static void DeleteInstance();
 
     static  G4MoleculeCounter* GetMoleculeCounter();
     inline const NbMoleculeAgainstTime& GetNbMoleculeAgainstTime(const G4Molecule &molecule);
-    std::auto_ptr<vector<G4Molecule> > GetRecordedMolecules();
-    virtual void AddAMoleculeAtTime(const G4Molecule&, G4double);
-    virtual void RemoveAMoleculeAtTime(const G4Molecule&, G4double);
 
-    // inline void DontRegister(G4MoleculeID);
+    RecordedMolecules GetRecordedMolecules();
+
+    /*
+     * The dynamics of the given molecule won't be saved into memory.
+     */
     inline virtual void DontRegister(const G4MoleculeDefinition*);
-    inline virtual void ResetDontRegister();
+    inline virtual void RegisterAll();
 
+    /*
+     * If the molecule counter is used, it will be called
+     * at every creation/deletion of a molecule to
+     * to increase/decrease the number at a given time.
+     */
     void Use(G4bool flag = true)
     {
         fUse=flag;
@@ -91,6 +105,11 @@ public:
 
     inline void SetVerbose(G4int);
     inline G4int GetVerbose();
+
+    /*
+     * It sets the min time difference in between two time slices.
+     */
+    void SetTimeSlice(double);
 
     virtual void ResetCounter();
 };
@@ -120,7 +139,7 @@ inline void G4MoleculeCounter::DontRegister(const G4MoleculeDefinition* molDef)
     fDontRegister[molDef] = true ;
 }
 
-inline void G4MoleculeCounter::ResetDontRegister()
+inline void G4MoleculeCounter::RegisterAll()
 {
     fDontRegister.clear();
 }

@@ -1,6 +1,17 @@
-
+# THIS MACRO IS EXECUTED BY DEFAULT WHEN
+# THE SIMULATION IS EXECUTE IN INTERACTIVE MODE
+#
+#
+/control/execute physics.mac
+/run/initialize
+/control/execute primary.mac
+# Use these open statements to open selected visualization
+#
 # Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0
+#
+# Use this open statement to create an OpenInventor view:
+#/vis/open OIX
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
@@ -23,13 +34,15 @@
 /vis/drawVolume
 #
 # Specify view angle:
-/vis/viewer/set/viewpointThetaPhi 90. 180.
+/vis/viewer/set/viewpointThetaPhi 45. 45.
 #
 # Specify zoom value:
-/vis/viewer/zoom 2.
+/vis/viewer/zoom 1.4
 #
-# Specify style (surface or wireframe):
+# Specify style (surface, wireframe, auxiliary edges,...)
 #/vis/viewer/set/style wireframe
+#/vis/viewer/set/auxiliaryEdge true
+#/vis/viewer/set/lineSegmentsPerCircle 100
 #
 # Draw coordinate axes:
 #/vis/scene/add/axes 0 0 0 1 m
@@ -43,7 +56,7 @@
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:
-#/vis/scene/add/hits
+/vis/scene/add/hits
 #
 # To draw only gammas:
 #/vis/filtering/trajectories/create/particleFilter
@@ -56,10 +69,13 @@
 # Many other options are available with /vis/modeling and /vis/filtering.
 # For example, to select colour by particle ID:
 #/vis/modeling/trajectories/create/drawByParticleID
-#/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+#/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+# To select or override default colours (note: e+ is blue by default):
+#/vis/modeling/trajectories/list
+#/vis/modeling/trajectories/drawByParticleID-0/set e+ yellow
 #
 # To superimpose all of the events from a given run:
-#/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true

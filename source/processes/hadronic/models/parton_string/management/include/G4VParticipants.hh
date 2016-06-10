@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VParticipants.hh 67999 2013-03-13 11:14:32Z gcosmo $
 //
 
 #ifndef G4VParticipants_h
@@ -61,9 +61,12 @@ class G4VParticipants
       virtual void SetNucleus(G4V3DNucleus* aNucleus);
       virtual G4V3DNucleus* GetWoundedNucleus() const;
 
-//  protected:   // Uzhi 26 July 09
+      virtual void InitProjectileNucleus(G4int theZ, G4int theA); // Uzhi Nov. 2012
+      virtual void SetProjectileNucleus(G4V3DNucleus* aNucleus);  // Uzhi Nov. 2012
+      virtual G4V3DNucleus* GetProjectileNucleus() const;         // Uzhi Nov. 2012
+
       G4V3DNucleus* theNucleus;
-      
+      G4V3DNucleus* theProjectileNucleus;                         // Uzhi Nov. 2012      
   private:
   
 };
@@ -75,6 +78,10 @@ inline G4V3DNucleus * G4VParticipants::GetWoundedNucleus() const
   return theNucleus;
 }
 
+inline G4V3DNucleus * G4VParticipants::GetProjectileNucleus() const // Uzhi Nov. 2012
+{
+  return theProjectileNucleus;
+}
 #endif
 
 

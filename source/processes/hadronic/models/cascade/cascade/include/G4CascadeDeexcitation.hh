@@ -25,14 +25,19 @@
 //
 #ifndef G4CASCADE_DEEXCITATION_HH
 #define G4CASCADE_DEEXCITATION_HH
-// $Id$
+// $Id: G4CascadeDeexcitation.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
 //
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
+// 20130620  Address Coverity complaint about missing copy actions
+// 20130621  Drop collide() interface (base class will throw exception);
+//		follow base change to deExcite() with reference;
+//		add reusable G4InuclNuclei buffer, verbosity handler
+// 20130622  Inherit from G4CascadeDeexciteBase
 
-#include "G4VCascadeDeexcitation.hh"
+#include "G4CascadeDeexciteBase.hh"
 #include "globals.hh"
 
 class G4InuclParticle;
@@ -41,23 +46,28 @@ class G4NonEquilibriumEvaporator;
 class G4EquilibriumEvaporator;
 
 
-class G4CascadeDeexcitation : public G4VCascadeDeexcitation {
+class G4CascadeDeexcitation : public G4CascadeDeexciteBase {
 public:
   G4CascadeDeexcitation();
   virtual ~G4CascadeDeexcitation();
 
-  // Standard Collider interface (bullet is not used in this case)
-  virtual void collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
-		       G4CollisionOutput& globalOutput);
+  virtual void setVerboseLevel(G4int verbose);
 
   // Interface specific to pre-compound (post-cascade) processing
-  virtual void deExcite(G4Fragment* fragment,
+  virtual void deExcite(const G4Fragment& fragment,
 			G4CollisionOutput& globalOutput);
 
 private:
   G4BigBanger* theBigBanger;
   G4NonEquilibriumEvaporator* theNonEquilibriumEvaporator;
   G4EquilibriumEvaporator* theEquilibriumEvaporator;
+
+  G4CollisionOutput tempOutput;	// Local buffer for de-excitation stages
+
+private:
+  // Copying of modules is forbidden
+  G4CascadeDeexcitation(const G4CascadeDeexcitation&);
+  G4CascadeDeexcitation& operator=(const G4CascadeDeexcitation&);
 };
 
 #endif	/* G4CASCADE_DEEXCITATION_HH */

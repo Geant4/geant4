@@ -1,0 +1,87 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4NumIntTwoBodyAngDst.icc 71719 2013-06-21 00:01:54Z mkelsey $
+// Author:  Dennis Wright (SLAC)
+// Date:    28 January 2013
+//
+// Description: implementation base for numerically integrated two-body
+//              final state angular distributions in Bertini-style cascade
+//
+// 20130219	M. Kelsey: Move to .icc file, required for templated classes
+// 20130620  Fix Coverity #50295, recursive #include.
+// 20130924  M. Kelsey -- Use G4Log, G4Exp for CPU speedup
+
+#ifndef G4NumIntTwoBodyAngDst_icc
+#define G4NumIntTwoBodyAngDst_icc 1
+
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "Randomize.hh"
+
+
+template <G4int NKEBINS, G4int NANGLES> G4double
+G4NumIntTwoBodyAngDst<NKEBINS,NANGLES>::
+GetCosTheta(const G4double& ekin, const G4double& pcm) const
+{
+  G4double costh=1.0, slope=1.0;		// Buffers for final result
+  G4double xrand = G4UniformRand();		// Random value to sample CDF
+
+  if (ekin < labKE[nDists-1]) {
+    Interpolate(ekin);				// Get intermediate CDF @ energy
+    for (G4int i=1; i<nAngles; i++) {
+      if (xrand < angDist[i]) {
+        slope = (cosBins[i] - cosBins[i-1])/(angDist[i] - angDist[i-1]);
+        costh = (xrand - angDist[i-1])*slope + cosBins[i-1];
+        break;
+      }
+    }
+  } else {
+    slope = 2.*tcoeff*pcm*pcm; 
+    costh = G4Log(1.0 - xrand*(1. - G4Exp(2.*slope) ) )/slope - 1.0;
+  }
+  return costh;
+}
+
+
+// Find normalized indefinite integral of angular distribution at interpolated
+// kinetic energy
+
+template <G4int NKEBINS, G4int NANGLES>
+void G4NumIntTwoBodyAngDst<NKEBINS,NANGLES>::Interpolate(const G4double& ekin) const
+{
+  for (G4int j=1; j<nDists; j++) {
+    if (ekin >= labKE[j]) continue;	// Find desired pair of cos(theta) CDFs
+
+    G4double frac = (ekin - labKE[j-1])/(labKE[j] - labKE[j-1]);
+    for (G4int i=0; i < nAngles; i++) {
+      angDist[i] = (1.0 - frac)*angDists[j-1][i] + frac*angDists[j][i];
+    }
+
+    break;
+  }
+}
+
+#endif	/* G4NumIntTwoBodyAngDst_icc */

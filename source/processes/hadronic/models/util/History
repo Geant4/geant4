@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2010-11-03 17:37:57 gunter Exp $
+$Id: History 69574 2013-05-08 13:40:26Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,27 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+01-May-2013 Andrea Dotti		   hadr-mod-util-V09-06-05
+- Replace use of CLHEP::HepRandom with MT safe equivalent G4Random
+
+22-Apr-2013 Michael Kelsey                 hadr-mod-util-V09-06-04
+- Add family of "phase space" generator functions, intended to replace
+  model-specific redundancies.  G4HadDecayGenerator provides a simple
+  interface, with algorithm selection handled via constructor argument.
+
+21-Mar-2013 Alberto Ribon                  hadr-mod-util-V09-06-03
+- Fixed warning in the class G4NuclearShellModelDensity.
+
+08-Mar-2013 Gabriele Cosmo                 hadr-mod-util-V09-06-02
+- Fixed use of internal MT data in G4GeneralPhaseSpaceDecay.
+
+22-Feb-2013 Dennis Wright                  hadr-mod-util-V09-06-01
+- G4NuclearFermiDensity.hh, .cc: remove member variable theZ which
+  was unused and causing a compiler warning
+
+04-Feb-2013 Gunter Folger                  hadr-mod-util-V09-06-00
+- Protect LorentzContraction for at Rest nucleus
+- Add data member for excitation energy, including Add/Get methods. 
 
 20-Sep-2012 Gabriele Cosmo                 hadr-mod-util-V09-05-03
 - Explicitly use inclusion of headers for system of units and physical

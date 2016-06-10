@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleEquation.hh
 /// \brief Definition of the G4MonopoleEquation class
 //
-// $Id$
+// $Id: G4MonopoleEquation.hh 69705 2013-05-13 09:09:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,12 +59,12 @@ public:  // with description
 
   ~G4MonopoleEquation();
 
-  void  SetChargeMomentumMass(G4double particleMagneticCharge,
-                              G4double particleElectricCharge,
-                              G4double mass);
+  virtual void  SetChargeMomentumMass( G4ChargeState particleChargeState,
+                                       G4double      momentum, 
+                                       G4double      mass);
   // magnetic charge in e+ units
                                  
-  void EvaluateRhsGivenB(const G4double y[],
+  virtual void EvaluateRhsGivenB(const G4double y[],
                          const G4double Field[],
                          G4double dydx[] ) const;
   // Given the value of the electromagnetic field, this function 

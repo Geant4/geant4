@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2010-11-30 08:56:16 gcosmo Exp $
+$Id: History 77913 2013-11-29 10:59:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,45 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 November 2013 Tatiana Nikitina (gdml-V09-06-09)
+- Fixed GDML schema for spurious validation errors on last changes introduced
+  for parameterisation of polycone and polyhedra and multi-union.
+- Fixed typo in G4GDMLReadParamvol and some code cleanup.
+
+23 November 2013 Gabriele Cosmo (gdml-V09-06-08)
+- Fixed compilation warnings on SLC5/gcc-4.1.
+
+22 November 2013 Tatiana Nikitina (gdml-V09-06-07)
+- Added support for parameterisation of polycone and polyhedra in GDML schema.
+  Extended related classes accordingly in reader and writer.
+- Added warning in reader for multi-union structure not yet supported.
+
+7 November 2013 Gabriele Cosmo (gdml-V09-06-06)
+- Replaced deprecated calls to G4Sphere accessor methods.
+
+29 October 2013 Tatiana Nikitina
+- Added 'generic' Polycone and Polyhedra to GDML Reader and Writer.
+  Splitted definition of Polycone to ordinary and generic.
+- Added parameterisation for Ellipsoid to readear/writer and schema.
+- Added MultiUnion solid and 'generic' Polycone and Polyhedra to the schema
+  GDML schema updated to version 3.1.0.
+- Fix in G4GDMLReadParamvol::ParametersRead() for reading parameterised
+  Sphere, Orb, Torus and Para.
+
+27 August 2013 Gabriele Cosmo (gdml-V09-06-05, gdml-V09-06-04)
+- Added G4Ellipsoid among solids enabled for parameterisation in
+  G4GDMLParameterisation.
+
+5 June 2013 Gabriele Cosmo (gdml-V09-06-03)
+- Replaced use of 'pascal' with 'hep_pascal' to avoid conflicts on Windows.
+
+10 April 2013 Gabriele Cosmo (gdml-V09-06-02)
+- Removed TLS changes in G4GDMLWrite as not necessary.
+
+26 February 2013 Gabriele Cosmo (gdml-V09-06-01)
+- Removed unused data member in G4STRead.
+- Cleanup of MT changes in G4GDMLWrite.
 
 25 October 2012 Gabriele Cosmo (gdml-V09-05-05)
 - Added inclusion of headers to G4STRead.cc to make it self consistent.

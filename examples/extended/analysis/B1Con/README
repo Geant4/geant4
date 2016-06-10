@@ -1,0 +1,102 @@
+
+Example of Convergence Tester 
+
+          Koi, Tatsumi
+          SLAC National Accelerator Laboratory / PPA
+          tkoi@slac.stanford.eedu
+
+This example shows how to use convergece tester in Geant4.
+The aim of Convergence Tester
+After a Monte Carlo simulation, we get an answer. However how to estimate quality of the answer.
+The answer is usually given in a form of average value. 
+But sometimes the value is strongly affected by single or a few events in the full calculation.  
+In such case, we must concern about quality of the value.
+What we must remember is
+	Large number of history does not valid result of simulation.
+	Small Relative Error does not valid result of simulation
+Convergence tester provides statistical information 
+to assist establishing valid confidence intervals for Monte Carlo results for users.
+
+Geometry and Physics are same to exampleB1. Please see README.B1
+Note that in this example, the classes with the code added for
+the purpose of demonstration of the Convergence Tester start with a prefix
+B1Con instead of B1 and also the executable and the test macro names are changed
+in exampleB1Con and exampleB1Con.in. 
+
+Known problem:
+Computing time of T cannot be gotten properly in current MT migration of example of B1Con. Therefore  
+FOM (=1/(R^2T) where R is relative error and T is computing time) relates numbers are unusable.
+
+***********************************************************************************************************************
+Output example
+
+// Part I.A
+// Basic statistics values 
+
+G4ConvergenceTester Output Result of DOSE_TALLY
+       EFFICIENCY =         0.601
+             MEAN =   4.81721e-12
+              VAR =   2.15334e-23
+               SD =   4.64041e-12
+                R =     0.0304622
+            SHIFT =   2.22459e-13
+              VOV =   0.000166754
+              FOM =       1238.68
+
+// Part I.B
+// If the largeset scored events happen at next to the last event, 
+// then how much the event effects the statistics values of the calculation
+
+THE LARGEST SCORE =   1.07301e-11 and it happend at 487th event
+    Affected Mean =   4.82311e-12 and its ratio to orignal is 1.00123
+     Affected VAR =   2.15468e-23 and its ratio to orignal is 1.00062
+       Affected R =     0.0304192 and its ratio to orignal is 0.998587
+   Affected SHIFT =    2.1804e-13 and its ratio to orignal is 0.980133
+     Affected FOM =       1238.68 and its ratio to orignal is 1
+
+// Part I.C
+// Convergence tests results
+
+MEAN distribution is  RANDOM
+r follows 1/std::sqrt(N)
+r is monotonically decrease 
+r is less than 0.1. r = 0.0304622
+VOV follows 1/std::sqrt(N)
+VOV is monotonically decrease 
+FOM distribution is not RANDOM
+SLOPE is not large enough
+This result passes 6 / 8 Convergence Test.
+
+
+// Part II
+// Profile of statistics values in the history 
+
+G4ConvergenceTester Output History of DOSE_TALLY
+i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
+   1    62  4.94618e-12  2.04631e-23  4.52362e-12     0.115225   0.00313634      86.5745 -1.73435e-14     0.619048   0.00976801   0.00329797
+   2   124  4.69364e-12  2.10698e-23  4.59018e-12    0.0874712     0.001597      150.228  3.11143e-13          0.6   0.00533333   0.00225666
+   3   187  4.72161e-12  2.14009e-23  4.62612e-12    0.0714575   0.00101852      225.105   3.1009e-13     0.590426   0.00368986   0.00138916
+   4   249  4.95617e-12  2.13982e-23  4.62582e-12    0.0590299  0.000690138      329.865  9.71971e-14         0.62   0.00245161   0.00101898
+   5   312   4.8529e-12  2.13482e-23  4.62041e-12    0.0538155  0.000573301      396.887  1.95662e-13     0.607029   0.00206827  0.000818582
+   6   374  5.14255e-12  2.15736e-23  4.64474e-12     0.046641  0.000432121      528.379 -6.42963e-14     0.637333   0.00151743  0.000652145
+   7   437  5.03849e-12  2.13484e-23  4.62043e-12    0.0438173  0.000379317      598.673  2.54207e-14     0.636986   0.00130112  0.000614447
+   8   499  4.96962e-12   2.1429e-23  4.62914e-12    0.0416574  0.000329007      662.364  9.27708e-14         0.63    0.0011746  0.000557264
+   9   562  4.91513e-12  2.14709e-23  4.63367e-12    0.0397316  0.000285324       728.13  1.33544e-13     0.623446    0.0010728  0.000502991
+  10   624  4.82995e-12  2.13825e-23  4.62412e-12    0.0382954  0.000272664      783.766  2.19101e-13        0.616  0.000997403  0.000466792
+  11   687  4.79197e-12  2.13975e-23  4.62574e-12    0.0368022  0.000251788      848.661  2.48547e-13     0.606105  0.000944593  0.000407838
+  12   749  4.77183e-12  2.15116e-23  4.63807e-12    0.0354912  0.000227501      912.513   2.6728e-13     0.601333  0.000883962  0.000373986
+  13   812  4.76087e-12  2.14479e-23  4.63119e-12    0.0341162  0.000212259      987.548  2.70437e-13     0.597786  0.000827601  0.000334885
+  14   874  4.81359e-12  2.13296e-23   4.6184e-12    0.0324353    0.0001976      1092.56  2.14521e-13     0.603429  0.000751082  0.000299767
+  15   937  4.82018e-12  2.14558e-23  4.63204e-12    0.0313767  0.000181379      1167.52  2.18545e-13     0.601279  0.000706952  0.000276498
+  16   999  4.81721e-12  2.15334e-23  4.64041e-12    0.0304622  0.000166754      1238.68  2.22459e-13        0.601  0.000663894  0.000263125
+
+**************************************************************************************************************************
+
+Reference of this Convergence tests
+MCNP(TM) -A General Monte Carlo N-Particle Transport Code
+Version 4B
+Judith F. Briesmeister, Editor
+LA-12625-M, Issued: March 1997, UC 705 and UC 700
+CHAPTER 2. GEOMETRY, DATA, PHYSICS, AND MATHEMATICS
+       VI. ESTIMATION OF THE MONTE CARLO PRECISION
+

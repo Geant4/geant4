@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ASTARStopping.cc 76242 2013-11-08 11:09:40Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,6 +53,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+static const G4double fac = MeV*cm2/g;
+
 G4ASTARStopping::G4ASTARStopping()
 {
   currentMaterial = 0;
@@ -69,7 +71,7 @@ G4ASTARStopping::G4ASTARStopping()
 
 G4ASTARStopping::~G4ASTARStopping()
 {
-  for(size_t i=0; i<74; ++i) { delete sdata[i]; }
+  //for(size_t i=0; i<74; ++i) { delete sdata[i]; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -421,7 +423,6 @@ AddData(T0,e73, 73);
 void G4ASTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
 {
 sdata[idx] = new G4LPhysicsFreeVector(78, ekin[0]*MeV, ekin[77]*MeV);
-const G4double fac = MeV*cm2/g;
 for(size_t i=0; i<78; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); }
 sdata[idx]->SetSpline(true);
 }

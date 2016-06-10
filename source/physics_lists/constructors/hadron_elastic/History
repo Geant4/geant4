@@ -1,0 +1,42 @@
+$Id: History 75674 2013-11-05 09:00:42Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+     Hadronic physics-list/constructors/hadron_elastic History
+     ---------------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+04-Nov-2013, Tatsumi Koi    		(phys-ctor-helastic-V09-06-06)
+- Create G4IonElasticPhysics Elastic Scattering for GenericIon
+
+22-Aug-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-05)
+- G4HadronDElasticPhysics - DiffuseElastic model active above 10 MeV,
+    LHEP model - below 10.1 MeV 
+- G4HadronHElasticPhysics - cleanup
+
+08-Jun-2013, A. Dotti			(phys-ctor-helastic-V09-06-04)
+- Bug fix for MT: wasActivated flag becomes TLS
+- All private data member are now TLS if in doubt or transformed to 
+    local variables
+
+29-Mar-2013, Andrea Dotti		(phys-ctor-helastic-V09-06-03)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
+
+27-Feb-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-02)
+- G4ChargeExchangePhysics - removed obsolete constructor and member of 
+    the class to fixed warning from the clang compiler on MacOS
+
+08-Feb-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-01)
+- GNUmakefile fixed - G4LIB_BUILD_EXPAT is added
+
+10-Jan-2013, Gunter Folger              (phys-ctor-helastic-V09-06-00)
+- new directory structure introduced. 
+   constructors/hadron_elastic

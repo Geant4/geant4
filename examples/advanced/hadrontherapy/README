@@ -3,8 +3,8 @@
                      Text version of the Hadrontherapy README file
              =========================================================
 
-Last revsion: F.Romano, 3 November 2012;
-Released with the Geant4 9.6 version (December 2012)
+Last revsion: F.Romano, 7 November 2013;
+Released with the Geant4 10.0 version (December 2013)
 
 ------------------------------------------------------------------------------------------------
 ADVERTISEMENT: this is the text version of the README file of the 'basic' hadrontherapy, 
@@ -22,21 +22,19 @@ Institute in the framework of the MC-INFN Group
              =========================================================
 
  Code developed by:
- R. Calcagno(a), G.A.P. Cirrone(a)*, G.Cuttone(a), F.Romano(a,b)*, A.Varisano(a)
+ R. Calcagno(a), G.A.P. Cirrone(a)*, G.Cuttone(a), L. Pandola(a), F.Romano(a)*, A.Varisano(a)
  
  Past authors:
- F.Di Rosa(a), S.Guatelli(d), A.Lechner(e), S.E.Mazzaglia(a),  M.G.Pia(c), G.Russo(a), M.Russo(a)
+ F.Di Rosa(a), S.Guatelli(c), A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(b), G.Russo(a), M.Russo(a)
 
  (a) Laboratori Nazionali del Sud 
      of the INFN, Catania, Italy
 
- (b) Centro Studi e Ricerche e Museo Storico della Fisica E.Fermi, Roma, Italy
-
- (c) INFN Section of Genova, Italy
+ (b) INFN Section of Genova, Italy
  
- (d) University of Wallongong, Australia
+ (c) University of Wallongong, Australia
 
- (e) CERN, (CH)
+ (d) CERN, (CH)
 
   *Corresponding authors, email to: cirrone@lns.infn.it, francesco.romano@lns.infn.it
 -------------------------------------------------------------------------------------------------
@@ -47,9 +45,10 @@ Its first release was in 2004. At that time Hadrontherapy was only capable to si
 
 Today Hadrontontherapy, except that it is in continuous development, is more flexible and show many additional capabilities as respect the past.
 Its geometrical set-up, for example, is now completely interchangeable permitting a simple switch between different geometrical configurations, which all share the same phantom (sensible detector) with the related features.
-It is possible to do a simulation of a generic proton/ion transport beam line;
+It is possible to do a simulation of a generic proton/ion transport beam line. In this new release, a module for dose average LET computations has been also included.
+Deprecated ReadOutGeometry has been replaced by the use of Parallel World.
 
-The configuration are:
+The configurations are:
 
 	- Passive proton beam line, which is installed at the LNS-INFN facility in Catania for eye tumor treatment with protons at 62 MeV. It is simulated in PassiveProtonBeamLine.cc;
 
@@ -291,22 +290,26 @@ The General Particle Source (GPS, G4 class name: G4GeneralParticleSource) is use
 
 The G4GeneralParticleSource can be utilised by typing commands from the /gps command directory, or include the /gps commands in a g4macro file.
 
-HOW RUN HADRONTHERAPY
 
-Run the example in interactive mode                                      
+LET calculation
 
-> $G4WORDIR/bin/Linux-g++/Hadrontherapy
+Hadrontherapy application simulates and calculates the averaged dose LET.
+At run time, data needed to calculate LET are collected. At the end of simulation, LET mean values are calculated and stored into a file.
 
-In this case the main file (Hadrontherapy.cc) performs different operations depending on which environment variable is activated;
-For example, if the environment variable G4UI_USE_TCSH is activated, Hadrontherapy will start with the TCSH User Interface that has many useful functionalities. On the other hand, if this first variables is not defined, the program will continue searching for the G4UI_USE_QT variable and, finally, will open the standard G4UITerminal.
+The Let.out file will be produced at the end of a run, where you can
+find the dose average LET for each tracked particles (both primary and
+secondary ones) and the total mean LET. 
+The file is structured as follows:
+	- The first three columns contains the voxel indexes (first index "i" refers to the beam direction);
+	- The fourth and fifth columns contain respectively total mean dose LET and primary mean dose LET;
+	- The rest of columns contain LET Dose for each single ion (whose name is in the top row of the file).
 
-Run the example using macro files          
+To activate the LET computation (HadrontherapyLet.cc), you have to execute
+the following command:
 
-Hadrontherapy can be launched using a macro file:
+/analysis/computeLet
 
-> $G4WORDIR/bin/Linux-g++/Hadrontherapy macroFile.mac
 
-The defaultMacro.mac file is contained in the main directory of Hadrontherapy and is automatically read in case the user launch the executable without a parameter. Several macro files are inside the /macro folder.
 
 SIMULATION OUTPUT
 
@@ -317,6 +320,7 @@ The file contains four columns; the first three columns represent the voxel inde
 Alternatively, user can force store of data to a given filename, after any BeamOn command and before the program end, by the macro command /analysis/writeDoseFile <myfile.out>.
 
 Moreover, if the macro command /analysis/secondary <true> is given, before the BeamOn command, ordinated dose and fluence, for every secondary produced, is added to the file.
+If the macro command /analysis/computeLet is given, an the ascii file Let.out is written, with the dose average LET computations.
 
 User must take care that any change of the phantom geometry will clear all dose data.
 
@@ -351,11 +355,7 @@ What is in progress:
 - A module for the simulation of an active beam line will be provided.
 The Korean Group of the Proton therapy center, National Cancer Center is developing this.
 
-- Modules for LET and RBE (Relative Biological Effectiveness) calculation. The Catania Group in Collaboration with the Turin one is working on this. Both the two modules are already implemented (in a preliminary version) in an internal version of Hadrontherapy and can be provided, if requested. Please, contact us.
-
-What is requested from Users:
-
-- Dicom interface
+- A module for the RBE (Relative Biological Effectiveness) calculation will be also delivered. The Catania Group in Collaboration with the Turin one is working on this. This module is already implemented (in a preliminary version) in an internal version of Hadrontherapy and can be provided, if requested. Please, contact us.
 
 Please contact cirrone@lns.infn.it or francesco.romano@lns.infn.it for more details or suggestions and feedbacks on this document.
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2011-01-05 19:08:45 vnivanch Exp $
+$Id: History 73200 2013-08-22 08:16:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,50 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-08-13 V.Ivant (testem7-V09-06-12)
+- PhysListEmStandardNR - use G4UrbanMscModel instead of 
+    G4UrbanMscModel95
+     
+11-07-13 I.Hrivnacova (testem7-V09-06-11) 
+- In RunAction: use new analysis manager method SetH1Activation()   
+     
+18-06-13 mma (testem7-V09-06-10)
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep() .
+     
+07-06-13 mma (testem7-V09-06-09)
+- Cosmetic in SteppingAction.     
+     
+01-04-13 A.Dotti (testem7-V09-06-07,testem7-V09-06-08)
+- New G4VUserPhysicsList interface needed for MT
+     
+20-03-13 mma (testem7-V09-06-06)
+- PhysListEmStandard : use default G4UrbanMscModel
+
+13-02-13 I.Hrivnacova 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+23-01-13 V.Ivant (testem7-V09-06-05)
+15-01-13 V.Ivant (testem7-V09-06-04)
+- G4ScreenedNuclearRecoil - defined type and sub-type of the process
+- PhysListEmStandardNR - use standard electron ionisation instead 
+    of Penelope, use multiple scatteing for ions above 100 MeV/u
+- RunAction - delete analysys manager and all histograms the end 
+    of a run
+
+20-12-12 V.Ivant (testem7-V09-06-03)
+- G4ScreenedNuclearRecoil - removed unused obsolete header
+
+15-12-12 V.Ivant (testem7-V09-06-02)
+- PhysListEmStandardSS, PhysListEmStandardNR: updated according 
+    Option4 physics list models and parameters
+- c2_function - fixed variable shadowing
+
+14-12-12 A.Ribon (testem7-V09-06-01)
+- Removed obsolete class G4HadronQElasticPhysics.
+
+11-12-12 V.Ivant (testem7-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
+          
 20-11-12 I.Hrivnacova (testem7-V09-05-11)
 - Fixed typo in .README
 

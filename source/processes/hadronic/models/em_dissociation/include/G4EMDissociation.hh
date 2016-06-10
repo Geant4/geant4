@@ -65,8 +65,7 @@
 // Class Description - End
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-////////////////////////////////////////////////////////////////////////////////
-//
+
 #include "G4HadronicInteraction.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4HadProjectile.hh"
@@ -74,8 +73,8 @@
 #include "G4EMDissociationCrossSection.hh"
 #include "G4EMDissociationSpectrum.hh"
 #include "globals.hh"
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 class G4EMDissociation : public G4HadronicInteraction
 {
   public:
@@ -84,20 +83,17 @@ class G4EMDissociation : public G4HadronicInteraction
     G4EMDissociation (G4ExcitationHandler *);
     ~G4EMDissociation ();
     
-    const G4EMDissociation &operator=(G4EMDissociation &right);
+    const G4EMDissociation& operator=(G4EMDissociation &right);
 
-    virtual G4HadFinalState *ApplyYourself (const G4HadProjectile &,
-      G4Nucleus &);
-
-  private:
-    void PrintWelcomeMessage ();
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&, G4Nucleus&);
 
   private:
-    G4ExcitationHandler          *theExcitationHandler;
-    G4bool                       handlerDefinedInternally;
-    G4EMDissociationCrossSection *dissociationCrossSection;
-    G4EMDissociationSpectrum     *thePhotonSpectrum;
+    void PrintWelcomeMessage();
+
+  private:
+    G4ExcitationHandler* theExcitationHandler;
+    G4bool handlerDefinedInternally;
+    G4EMDissociationCrossSection* dissociationCrossSection;
+    G4EMDissociationSpectrum* thePhotonSpectrum;
 };
-////////////////////////////////////////////////////////////////////////////////
-//
 #endif

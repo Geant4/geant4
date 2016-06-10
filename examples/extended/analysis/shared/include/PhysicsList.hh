@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id$
+// $Id: PhysicsList.hh 68015 2013-03-13 13:27:27Z gcosmo $
 //
 // 
 
@@ -49,10 +49,10 @@ public:
   virtual ~PhysicsList();
 
   // Construct particle and physics
-  void ConstructParticle();
-  void ConstructProcess();
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
  
-  void SetCuts();
+  virtual void SetCuts();
    
 private:
 

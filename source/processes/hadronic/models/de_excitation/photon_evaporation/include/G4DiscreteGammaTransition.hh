@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DiscreteGammaTransition.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -114,8 +114,8 @@ private:
   G4double _excitation;
   G4double _gammaCreationTime;
   //JMQ 180410
-  G4int _A;
-  G4int _Z;
+//  G4int _A;
+//  G4int _Z;
   G4NuclearLevelManager * _levelManager;
   //JMQ 190410
   G4double _tolerance;

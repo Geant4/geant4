@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -63,8 +61,27 @@ namespace G4INCL {
     {};
   };
 
-  class RootFinder {
-  public:
+  namespace RootFinder {
+
+    class Solution {
+      public:
+        Solution() :
+          success(false),
+          x(0.),
+          y(0.)
+      {}
+        Solution( const G4double x0, const G4double y0) :
+          success(true),
+          x(x0),
+          y(y0)
+      {}
+        ~Solution() {}
+
+        G4bool success;
+        G4double x;
+        G4double y;
+    };
+
     /** \brief Numerically solve a one-dimensional equation.
      *
      * Numerically solves the equation f(x)==0. This implementation uses the
@@ -74,42 +91,10 @@ namespace G4INCL {
      *
      * \param f pointer to a RootFunctor
      * \param x0 initial value of the function argument
-     * \return true if a root was found
+     * \return a Solution object describing the root, if it was found
      */
-    static G4bool solve(RootFunctor const * const f, const G4double x0);
+    Solution solve(RootFunctor const * const f, const G4double x0);
 
-    /** \brief Get the solution of the last call to solve().
-     *
-     * \return the solution, as an (x,y) pair
-     */
-    static std::pair<G4double,G4double> const &getSolution() { return RootFinder::solution; }
-
-  private:
-    /// \brief The solution obtained in the last call to solve().
-    static std::pair<G4double,G4double> solution;
-
-    /** \brief Bracket the root of the function f.
-     *
-     * Tries to find a bracketing value for the function root.
-     *
-     * \param f pointer to a RootFunctor
-     * \param x0 starting value
-     * \return if the root could be bracketed, returns two values of x
-     *   bracketing the root, as a pair. If the bracketing failed, returns a
-     *   pair with first > second.
-     */
-    static std::pair<G4double,G4double> bracketRoot(RootFunctor const * const f, const G4double x0);
-
-    /// \brief Maximum number of iterations for convergence
-    static const G4int maxIterations=50;
-
-    /// \brief Tolerance on the y value
-    static const G4double toleranceY;
-
-  protected:
-    RootFinder() {};
-    ~RootFinder() {};
-    
-  };
+  }
 }
 #endif /* G4INCLROOTFINDER_HH_ */

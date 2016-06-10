@@ -32,6 +32,8 @@
 /// \file hadronic/Hadr02/src/G4UrQMD1_3Model.cc
 /// \brief Implementation of the G4UrQMD1_3Model class
 //
+// $Id: G4UrQMD1_3Model.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 ///////////////////////////////////////////////////////////////////////////////
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -63,6 +65,8 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //AND->
 #include "G4Version.hh"
@@ -173,7 +177,7 @@ const G4ParticleDefinition* anti_alp=
   G4int ZP1 = G4lrint(ZP);
   G4int AT1 = G4lrint(AT);
   G4int ZT1 = G4lrint(ZT);
-//    G4cout<<"------ap1--=="<<AP1<<"---zp1---=="<<ZP1<<"---id-=="<<id<< G4endl;
+//  G4cout<<"------ap1--=="<<AP1<<"---zp1---=="<<ZP1<<"---id-=="<<id<< G4endl;
 //
 // ****************************************************************************
 // The following is the parameters necessary to initiate Uinit() and UrQMD()
@@ -227,13 +231,15 @@ const G4ParticleDefinition* anti_alp=
         urqmdparams_.u_zp=1;
     }  else {
 
-      G4cout << " Sorry, No definition for particle for UrQMD::"<<id<< "found" << G4endl;
+    G4cout << " Sorry, No definition for particle for UrQMD::"
+	   <<id<< "found" << G4endl;
 
       //AND->
 #if G4VERSION_NUMBER>=950
       //New signature (9.5) for G4Exception
       //Using G4HadronicException
-      throw G4HadronicException(__FILE__,__LINE__,"Sorry, no definition for particle for UrQMD");
+      throw G4HadronicException(__FILE__,__LINE__,
+	    "Sorry, no definition for particle for UrQMD");
 #else
     G4Exception(" "); 
 #endif
@@ -269,7 +275,8 @@ const G4ParticleDefinition* anti_alp=
       
 //------------------------------------------------------------
 // identify impact parameter
-  urqmdparams_.u_imp=-(1.1 * std::pow(G4double(AT1),(1./3.))); //units are in fm for UrQMD;
+  urqmdparams_.u_imp=-(1.1 * std::pow(G4double(AT1),(1./3.))); 
+  //units are in fm for UrQMD;
 //------------------------------------------------------------
 ///////////////////////// initialise/////////////////////
 
@@ -313,7 +320,8 @@ G4cout <<"============================================"<<G4endl;
 #if G4VERSION_NUMBER>=950
 //New signature (9.5) for G4Exception
 //Using G4HadronicException instead of base class
-throw G4HadronicException(__FILE__,__LINE__,"Number of produced particle is very low");
+throw G4HadronicException(__FILE__,__LINE__,
+			  "Number of produced particle is very low");
 #else
 G4Exception(" ");  //stop
 #endif
@@ -336,7 +344,8 @@ G4int pid=pdgid_ (&isys_.ityp[i], &isys_.iso3[i]);
 
       if (pd)
       {
-        G4double px        = (coor_.px[i]+ffermi_.ffermpx[i])* GeV;  //units are in MeV/c for G4
+        G4double px        = (coor_.px[i]+ffermi_.ffermpx[i])* GeV;  
+	//units are in MeV/c for G4
         G4double py        = (coor_.py[i]+ffermi_.ffermpy[i])* GeV;
         G4double pz        = (coor_.pz[i]+ffermi_.ffermpz[i])* GeV;
 

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/UrQMDNeutronBuilder.cc
 /// \brief Implementation of the UrQMDNeutronBuilder class
 //
-// $Id$
+// $Id: UrQMDNeutronBuilder.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,6 +52,8 @@ UrQMDNeutronBuilder::UrQMDNeutronBuilder()
   fMin = 0*MeV;
   fMax = 100*TeV;
   fModel = new G4UrQMD1_3Model();
+  captureModel = new G4NeutronRadCapture();
+  fissionModel = new G4LFission();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,10 +75,16 @@ UrQMDNeutronBuilder::~UrQMDNeutronBuilder()
 void UrQMDNeutronBuilder::Build(G4HadronElasticProcess * )
 {}
 
-void UrQMDNeutronBuilder::Build(G4HadronFissionProcess * )
-{}
+void UrQMDNeutronBuilder::Build(G4HadronFissionProcess* aP)
+{
+  fissionModel->SetMinEnergy(0.0);
+  fissionModel->SetMaxEnergy(20.0*TeV);
+  aP->RegisterMe(fissionModel);
+}
 
-void UrQMDNeutronBuilder::Build(G4HadronCaptureProcess * )
-{}
+void UrQMDNeutronBuilder::Build(G4HadronCaptureProcess* aP)
+{
+  aP->RegisterMe(captureModel);
+}
 
 #endif //G4_USE_URQMD

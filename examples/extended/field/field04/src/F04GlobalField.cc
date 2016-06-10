@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04GlobalField.cc 77884 2013-11-29 08:41:11Z gcosmo $
+//
 /// \file field/field04/src/F04GlobalField.cc
 /// \brief Implementation of the F04GlobalField class
 //
-//
+
 #include <time.h>
 
 #include "Randomize.hh"
@@ -41,25 +43,33 @@
 #include "G4SystemOfUnits.hh"
 
 #include "F04GlobalField.hh"
-
-F04GlobalField* F04GlobalField::fObject = 0;
+#include "F04SimpleSolenoid.hh"
+#include "F04FocusSolenoid.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04GlobalField::F04GlobalField() : G4ElectroMagneticField(),
-                             fMinStep(0.01*mm), fDeltaChord(3.0*mm),
-                             fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
-                             fEpsMin(2.5e-7*mm), fEpsMax(0.05*mm),
-                             fEquation(0), fFieldManager(0),
-                             fFieldPropagator(0), fStepper(0), fChordFinder(0)
-//F04GlobalField::F04GlobalField() : G4MagneticField(),
-//                           fMinStep(0.01*mm), fDeltaChord(3.0*mm),
-//                           fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
-//                           fEpsMin(2.5e-7*mm), fEpsMax(0.05*mm),
-//                           fEquation(0), fFieldManager(0),
-//                           fFieldPropagator(0), fStepper(0), fChordFinder(0)
+G4ThreadLocal F04GlobalField* F04GlobalField::fObject = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04GlobalField::F04GlobalField(F04DetectorConstruction* det) 
+  : G4ElectroMagneticField(),
+    fMinStep(0.01*mm), fDeltaChord(3.0*mm),
+    fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
+    fEpsMin(2.5e-7*mm), fEpsMax(0.05*mm),
+    fEquation(0), fFieldManager(0),
+    fFieldPropagator(0), fStepper(0), fChordFinder(0),
+    fDetectorConstruction(det)
+//F04GlobalField::F04GlobalField(F04DetectorConstruction* det) 
+//    : G4MagneticField(),
+//    fMinStep(0.01*mm), fDeltaChord(3.0*mm),
+//    fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
+//    fEpsMin(2.5e-7*mm), fEpsMax(0.05*mm),
+//    fEquation(0), fFieldManager(0),
+//    fFieldPropagator(0), fStepper(0), fChordFinder(0),
+//    fDetectorConstruction(det)
 {
-  fFieldMessenger = new F04FieldMessenger(this);
+  fFieldMessenger = new F04FieldMessenger(this,det);
 
   fFields = new FieldList();
 
@@ -69,7 +79,7 @@ F04GlobalField::F04GlobalField() : G4ElectroMagneticField(),
 
   fObject = this;
 
-  UpdateField();
+  ConstructField();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,14 +99,12 @@ F04GlobalField::~F04GlobalField()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04GlobalField::UpdateField()
+void F04GlobalField::ConstructField()
 {
   fFirst = true;
 
   fNfp = 0;
   fFp = 0;
-
-  Clear();
 
   //  Construct equ. of motion of particles through B fields
 //  fEquation = new G4Mag_EqRhs(this);
@@ -154,10 +162,120 @@ void F04GlobalField::UpdateField()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void F04GlobalField::UpdateField()
+{
+  fFirst = true;
+
+  fNfp = 0;
+  fFp = 0;
+
+  Clear();
+
+  G4double l = 0.0;
+  G4double B1 = fDetectorConstruction->GetCaptureMgntB1();
+  G4double B2 = fDetectorConstruction->GetCaptureMgntB2();
+
+  G4LogicalVolume* logicCaptureMgnt = fDetectorConstruction->GetCaptureMgnt();
+  G4ThreeVector captureMgntCenter =
+                                 fDetectorConstruction->GetCaptureMgntCenter();
+
+  F04FocusSolenoid* focusSolenoid =
+           new F04FocusSolenoid(B1, B2, l, logicCaptureMgnt,captureMgntCenter);
+  focusSolenoid -> SetHalf(true);
+
+  G4double B = fDetectorConstruction->GetTransferMgntB();
+
+  G4LogicalVolume* logicTransferMgnt =
+                                      fDetectorConstruction->GetTransferMgnt();
+  G4ThreeVector transferMgntCenter =
+                                fDetectorConstruction->GetTransferMgntCenter();
+
+  F04SimpleSolenoid* simpleSolenoid =
+             new F04SimpleSolenoid(B, l, logicTransferMgnt,transferMgntCenter);
+
+  simpleSolenoid->SetColor("1,0,1");
+  simpleSolenoid->SetColor("0,1,1");
+  simpleSolenoid->SetMaxStep(1.5*mm);
+  simpleSolenoid->SetMaxStep(2.5*mm);
+
+  if (fEquation) delete fEquation;
+
+  //  Construct equ. of motion of particles through B fields
+//  fEquation = new G4Mag_EqRhs(this);
+  //  Construct equ. of motion of particles through e.m. fields
+//  fEquation = new G4EqMagElectricField(this);
+  //  Construct equ. of motion of particles including spin through B fields
+//  fEquation = new G4Mag_SpinEqRhs(this);
+  //  Construct equ. of motion of particles including spin through e.m. fields
+  fEquation = new G4EqEMFieldWithSpin(this);
+
+  //  Get transportation, field, and propagator managers
+  G4TransportationManager* transportManager =
+         G4TransportationManager::GetTransportationManager();
+
+  fFieldManager = GetGlobalFieldManager();
+
+  fFieldPropagator = transportManager->GetPropagatorInField();
+
+  //  Need to SetFieldChangesEnergy to account for a time varying electric
+  //  field (r.f. fields)
+  fFieldManager->SetFieldChangesEnergy(true);
+
+  //  Choose a stepper for integration of the equation of motion
+  SetStepper();
+
+  if (fChordFinder) delete fChordFinder;
+
+  //  Create a cord finder providing the (global field, min step length,
+  //  a pointer to the stepper)
+  fChordFinder = new G4ChordFinder((G4MagneticField*)this,fMinStep,fStepper);
+
+  // Set accuracy parameters
+  fChordFinder->SetDeltaChord( fDeltaChord );
+
+  fFieldManager->SetAccuraciesWithDeltaOneStep(fDeltaOneStep);
+
+  fFieldManager->SetDeltaIntersection(fDeltaIntersection);
+
+  fFieldPropagator->SetMinimumEpsilonStep(fEpsMin);
+  fFieldPropagator->SetMaximumEpsilonStep(fEpsMax);
+
+  G4cout << "Accuracy Parameters:" <<
+            " MinStep=" << fMinStep <<
+            " DeltaChord=" << fDeltaChord <<
+            " DeltaOneStep=" << fDeltaOneStep << G4endl;
+  G4cout << "                    " <<
+            " DeltaIntersection=" << fDeltaIntersection <<
+            " EpsMin=" << fEpsMin <<
+            " EpsMax=" << fEpsMax <<  G4endl;
+
+  fFieldManager->SetChordFinder(fChordFinder);
+
+  G4VPhysicalVolume* currentWorld = fDetectorConstruction->GetWorld();
+  if (fFields) {
+     if (fFields->size()>0) {
+        FieldList::iterator i;
+        for (i=fFields->begin(); i!=fFields->end(); ++i){
+            (*i)->Construct(currentWorld);
+        }
+     }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04GlobalField* F04GlobalField::GetObject(F04DetectorConstruction* det)
+{
+  if (!fObject) new F04GlobalField(det);
+  return fObject;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04GlobalField* F04GlobalField::GetObject()
 {
-  if (!fObject) new F04GlobalField();
-  return fObject;
+  if (fObject) return fObject;
+  return NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

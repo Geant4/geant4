@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLStoredQtViewer.cc 74995 2013-10-25 10:50:02Z gcosmo $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -49,6 +49,9 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   QGLWidget()
 {
 
+    // Indicates that the widget has no background, i.e. when the widget receives paint events, the background is not automatically repainted. Note: Unlike WA_OpaquePaintEvent, newly exposed areas are never filled with the background (e.g., after showing a window for the first time the user can see "through" it until the application processes the paint events). This flag is set or cleared by the widget's author.
+  QGLWidget::setAttribute (Qt::WA_NoSystemBackground);
+
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
   fHasToRepaint = false;
   fIsRepainting = false;
@@ -66,9 +69,11 @@ G4OpenGLStoredQtViewer::~G4OpenGLStoredQtViewer() {
 }
 
 void G4OpenGLStoredQtViewer::Initialise() {
+  makeCurrent();
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::Initialise 1\n");
 #endif
+  hide();
   fReadyToPaint = false;
   CreateMainWindow (this,QString(GetName()));
 
@@ -111,7 +116,6 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
       (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
-      (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
@@ -291,6 +295,10 @@ void G4OpenGLStoredQtViewer::paintGL()
     //    return ;
   }
   fIsRepainting = true;
+  if ((getWinWidth() == 0) && (getWinHeight() == 0)) {
+    return;
+  }
+
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ready:%d fHasTo:%d??\n",fReadyToPaint,fHasToRepaint);
 #endif

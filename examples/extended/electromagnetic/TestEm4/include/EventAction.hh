@@ -27,7 +27,7 @@
 /// \brief Definition of the EventAction class
 //
 //
-// $Id$
+// $Id: EventAction.hh 75839 2013-11-06 17:27:26Z gcosmo $
 //
 // 
 
@@ -40,15 +40,12 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class RunAction;
-class EventActionMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction(RunAction*);
+    EventAction();
    ~EventAction();
 
   public:
@@ -57,15 +54,9 @@ class EventAction : public G4UserEventAction
     
     void addEdep(G4double Edep)     {fTotalEnergyDeposit += Edep;};      
     G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};    
-    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
-    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         
   private:
-    RunAction* fRun;            
     G4double fTotalEnergyDeposit;   // Energy deposited in c6f6
-    G4String fDrawFlag;             // control the drawing of event
-    G4int                     fPrintModulo;          
-    EventActionMessenger*     fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

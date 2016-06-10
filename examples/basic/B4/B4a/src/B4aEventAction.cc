@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4aEventAction.cc 75604 2013-11-04 13:17:26Z gcosmo $
 // 
 /// \file B4aEventAction.cc
 /// \brief Implementation of the B4aEventAction class
@@ -34,7 +34,6 @@
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
-#include "G4GenericMessenger.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
@@ -44,42 +43,21 @@
 
 B4aEventAction::B4aEventAction()
  : G4UserEventAction(),
-   fMessenger(0),
    fEnergyAbs(0.),
    fEnergyGap(0.),
    fTrackLAbs(0.),
-   fTrackLGap(0.),
-   fPrintModulo(1)
-{
-  // Define /B4/event commands using generic messenger class
-  fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
-
-  // Define /B4/event/setPrintModulo command
-  G4GenericMessenger::Command& setPrintModulo 
-    = fMessenger->DeclareProperty("setPrintModulo", 
-                                  fPrintModulo, 
-                                 "Print events modulo n");
-  setPrintModulo.SetRange("value>0");                                
-}
+   fTrackLGap(0.)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4aEventAction::~B4aEventAction()
-{
-  delete fMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4aEventAction::BeginOfEventAction(const G4Event* evt)
+void B4aEventAction::BeginOfEventAction(const G4Event* /*event*/)
 {  
-
-  G4int eventID = evt->GetEventID();
-  if ( eventID % fPrintModulo == 0 )  { 
-    G4cout << "\n---> Begin of event: " << eventID << G4endl;
-    //CLHEP::HepRandom::showEngineStatus();
-  }
-
   // initialisation per event
   fEnergyAbs = 0.;
   fEnergyGap = 0.;
@@ -89,7 +67,7 @@ void B4aEventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4aEventAction::EndOfEventAction(const G4Event* evt)
+void B4aEventAction::EndOfEventAction(const G4Event* event)
 {
   // Accumulate statistics
   //
@@ -112,8 +90,9 @@ void B4aEventAction::EndOfEventAction(const G4Event* evt)
   
   // Print per event (modulo n)
   //
-  G4int eventID = evt->GetEventID();
-  if ( eventID % fPrintModulo == 0) {
+  G4int eventID = event->GetEventID();
+  G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
 
     G4cout

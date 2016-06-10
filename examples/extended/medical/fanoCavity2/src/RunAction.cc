@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 71035 2013-06-10 09:17:35Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,15 +48,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin, 
-                     HistoManager* histo)
-:fDetector(det),fKinematic(kin),fProcCounter(0),fHistoManager(histo)
-{ }
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+:fDetector(det),fKinematic(kin),fProcCounter(0),fHistoManager(0)
+{
+ fHistoManager = new HistoManager();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+ delete fHistoManager; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -173,7 +176,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //histograms
   //
-  fHistoManager->book();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }         
   
   // reset default formats
   G4cout.setf(mode,std::ios::floatfield);
@@ -354,7 +360,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   delete fProcCounter;
   
   // save histograms
-  fHistoManager->save();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }        
  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

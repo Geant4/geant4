@@ -25,7 +25,6 @@
 //
 //
 // $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
@@ -66,6 +65,9 @@ class G4StatDouble
       // Mean scaled to sum of weights
     G4double rms(G4double ext_sum_w, G4int ext_n);
       // RMS  scaled to sum of weights
+
+    void add(G4StatDouble*);
+      // merge 2 statistics
 
     inline G4int    n()       const { return m_n; }
     inline G4double sum_w()   const { return m_sum_w; }

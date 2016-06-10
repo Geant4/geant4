@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.400 2010-12-22 16:28:40 lgarnier Exp $
+svn log $Id: History 77473 2013-11-25 09:32:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,82 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th November 2013   Gabriele Cosmo  (config-V09-06-17)
+- Corrected settings for Linux-g++ and Linux-icc in the use of -fPIC in
+  multi-threaded mode.
+
+19th November 2013   Gabriele Cosmo  (config-V09-06-16)
+- Minor correction to Darwin scripts for Qt setup.
+
+11th November 2013   Gabriele Cosmo  (config-V09-06-15)
+- Updated Darwin-g++ and Darwin-clang configurations for Qt to allow for
+  correct detection of Qt5 directory structure.
+  Removed '-ansi -pedantic' compilation options, now obsolete.
+  Corrected include paths for X11FLAGS, to resolve compilation errors on
+  MacOSX 10.9 Mavericks.
+- Added paths for Qt5 to Linux-g++ configuration.
+- Removed obsolete Linux-egcs configuration script.
+
+9th November 2013   Andrea Dotti     (config-V09-06-14)
+- Removed compilation option "--stdlib=libstdc++" introduced in previous tags
+  for Darwin-g++, as giving errors in MacOSX 10.7 for unknown option.
+
+8th November 2013   Gabriele Cosmo   (config-V09-06-13)
+- binmake.gmk: removed 'high_energy' and 'low_energy' hadronic modules;
+  replaced 'lll_fission' with 'fission'.
+
+8th November 2013   Gabriele Cosmo   (config-V09-06-12)
+- Removed not necessary LD flag in Darwin configurations.
+
+8th November 2013   Gabriele Cosmo   (config-V09-06-11)
+- Added "-stdlib=libstdc++" compilation flag in Darwin-g++ and
+  Darwin-clang, allowing for resolving compilation issues on
+  MacOS 10.9 Mavericks.
+
+7th November 2013   Gabriele Cosmo   (config-V09-06-10)
+- Added geomconf.gmk script including geometry configuration flags for
+  enabling use of the USolids optional module.
+
+6th November 2013   Gabriele Cosmo   (config-V09-06-09)
+- binmake.gmk: added new include paths for processes/phonon and
+  processes/hadronic/models/abla.
+
+1st November 2013   Gabriele Cosmo   (config-V09-06-08)
+- binmake.gmk: added new include paths for geometry/solids/usolids module.
+- Removed obsolete compilation options in Darwin-g++ and Darwin-clang scripts.
+
+22nd October 2013   Gabriele Cosmo   (config-V09-06-07)
+- binmake.gmk: added new include paths for processes/biasing module.
+
+17th July 2013   Gabriele Cosmo   (config-V09-06-06)
+- binmake.gmk: added missing include path for analysis module.
+
+16th July 2013   Gabriele Cosmo   (config-V09-06-05)
+- binmake.gmk: added include paths for restructured analysis module.
+
+22nd April 2013   Gabriele Cosmo   (config-V09-06-04)
+- Added G4MULTITHREADED setup flags.
+
+12th March 2013   Gunter Folger    (config-V09-06-03)
+- Clean up of Bertini cascade, removing two obsolete directories:
+  cascade/evaporation and cascade/utils.
+
+11th January 2013 Gunter Folger    (config-V09-06-02)
+- Added includes for new structure of physics_lists.
+
+14th December 2012 Gabriele Cosmo  (config-V09-06-01)
+- Removed includes for BREPS module.
+
+13th December 2012 Gunter Folger  (config-V09-06-00)
+- Removed includes for CHIPS module.
+
+27th November 2012 Gabriele Cosmo (config-V09-05-14)
+- Added -Wno-variadic-macros -Wshadow compilation options to
+  Darwin-g++.gmk and Darwin-clang.gmk.
+
+19th October 2012 Gabriele Cosmo (config-V09-05-13)
+- Added -Wshadow compilation option to Linux-g++.gmk.
 
 4th October 2012 Gabriele Cosmo (config-V09-05-12, config-V09-05-11)
 - binmake.gmk: replaced "photolepton_hadron" module with "lepto_nuclear".

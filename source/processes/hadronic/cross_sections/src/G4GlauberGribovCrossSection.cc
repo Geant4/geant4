@@ -229,10 +229,12 @@ const G4double G4GlauberGribovCrossSection::fPionMinusBarCorrectionIn[93] = {
 
 G4GlauberGribovCrossSection::G4GlauberGribovCrossSection() 
  : G4VCrossSectionDataSet(Default_Name()),
-   fUpperLimit(100000*GeV), fLowerLimit(10.*MeV),// fLowerLimit(3*GeV),
+//   fUpperLimit(100000*GeV),
+   fLowerLimit(10.*MeV),// fLowerLimit(3*GeV),
    fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
    fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
-   fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
+   fDiffractionXsc(0.0)
+// , fHadronNucleonXsc(0.0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TrackingMessenger.cc 77241 2013-11-22 09:55:47Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -52,6 +52,9 @@
 #include "G4SteppingManager.hh"
 #include "G4TrackStatus.hh"
 #include "G4ios.hh"
+#include "G4TransportationManager.hh"
+#include "G4PropagatorInField.hh"
+#include "G4IdentityTrajectoryFilter.hh"
 
 ///////////////////////////////////////////////////////////////////
 G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
@@ -77,9 +80,10 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
   StoreTrajectoryCmd->SetGuidance(" 1 : Choose G4Trajectory as default.");
   StoreTrajectoryCmd->SetGuidance(" 2 : Choose G4SmoothTrajectory as default.");
   StoreTrajectoryCmd->SetGuidance(" 3 : Choose G4RichTrajectory as default.");
+  StoreTrajectoryCmd->SetGuidance(" 4 : Choose G4RichTrajectory with auxiliary points as default.");
   StoreTrajectoryCmd->SetParameterName("Store",true);
   StoreTrajectoryCmd->SetDefaultValue(0);
-  StoreTrajectoryCmd->SetRange("Store >=0 && Store <= 3"); 
+  StoreTrajectoryCmd->SetRange("Store >=0 && Store <= 4"); 
 
 
   VerboseCmd = new G4UIcmdWithAnInteger("/tracking/verbose",this);
@@ -131,8 +135,21 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
         G4UImanager::GetUIpointer()->ApplyCommand("/control/exit");
   }
 
+  static G4ThreadLocal G4IdentityTrajectoryFilter* auxiliaryPointsFilter = 0;
+  if(!auxiliaryPointsFilter) auxiliaryPointsFilter = new G4IdentityTrajectoryFilter;
   if( command == StoreTrajectoryCmd ){
-    trackingManager->SetStoreTrajectory(StoreTrajectoryCmd->ConvertToInt(newValues));
+    G4int trajType = StoreTrajectoryCmd->ConvertToInt(newValues);
+    if(trajType==2||trajType==4)
+    {
+      G4TransportationManager::GetTransportationManager()
+        ->GetPropagatorInField()->SetTrajectoryFilter(auxiliaryPointsFilter);
+    }
+    else
+    {
+      G4TransportationManager::GetTransportationManager()
+        ->GetPropagatorInField()->SetTrajectoryFilter(0);
+    }
+    trackingManager->SetStoreTrajectory(trajType);
   }
 }
 

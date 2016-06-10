@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4TwoVector.cc,v 1.2 2008-03-13 07:32:18 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4TwoVector.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4TwoVector.cc
 //
@@ -45,12 +44,12 @@ typedef G4TwoVector XXX; // ...
 // thin wrappers
 // ====================================================================
 namespace pyG4TwoVector {
-  
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isNear, isNear, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isParallel, isParallel, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isOrthogonal, isOrthogonal, 1, 2);
 
-};
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isNear, isNear, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isParallel, isParallel, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isOrthogonal, isOrthogonal, 1, 2)
+
+}
 
 using namespace pyG4TwoVector;
 

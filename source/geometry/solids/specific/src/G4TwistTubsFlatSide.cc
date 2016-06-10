@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TwistTubsFlatSide.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -309,8 +309,7 @@ G4int G4TwistTubsFlatSide::DistanceToSurface(const G4ThreeVector &gp,
 G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx, 
                                        G4bool withTol)
 {
-
-   static const G4double rtol
+   const G4double rtol
      = 0.5*G4GeometryTolerance::GetInstance()->GetRadialTolerance();
    
    G4int areacode = sInside;

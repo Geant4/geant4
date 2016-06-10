@@ -26,99 +26,111 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterSD.cc
 /// \brief Implementation of the ExN04CalorimeterSD class
 //
+// $Id: ExN04CalorimeterSD.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
+#include "G4ios.hh"
+#include "G4LogicalVolume.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Track.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 #include "ExN04CalorimeterSD.hh"
 #include "ExN04CalorimeterHit.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4VTouchable.hh"
-#include "G4TouchableHistory.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04CalorimeterSD::ExN04CalorimeterSD(G4String name)
-:G4VSensitiveDetector(name),
- numberOfCellsInZ(20),numberOfCellsInPhi(48)
+ : G4VSensitiveDetector(name), fnumberOfCellsInZ(20), fnumberOfCellsInPhi(48)
 {
   G4String HCname;
   collectionName.insert(HCname="calCollection");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04CalorimeterSD::~ExN04CalorimeterSD()
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  CalCollection = new ExN04CalorimeterHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
-  for(G4int j=0;j<numberOfCellsInZ;j++)
-  for(G4int k=0;k<numberOfCellsInPhi;k++)
-  {
-    CellID[j][k] = -1;
+  fCalCollection = new ExN04CalorimeterHitsCollection
+                       (SensitiveDetectorName, collectionName[0]);
+
+  for ( G4int j = 0; j < fnumberOfCellsInZ; j++) {
+    for(G4int k = 0; k < fnumberOfCellsInPhi; k++) {
+      fCellID[j][k] = -1;
+    }
   }
+
   verboseLevel = 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool ExN04CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 {
-  if(!ROhist) return false;
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  if(verboseLevel>1) G4cout << "Next step edep(MeV) = " << edep/MeV << G4endl;
-  if(edep==0.) return false;
+  if ( !ROhist ) return false;
+  G4double edep = aStep-> GetTotalEnergyDeposit();
+  if ( verboseLevel > 1 )
+    G4cout << "Next step edep(MeV) = " << edep/MeV << G4endl;
+  if ( edep == 0. ) return false;
 
-  G4VPhysicalVolume* physVol = ROhist->GetVolume();
+  G4VPhysicalVolume* physVol = ROhist-> GetVolume();
   //ROhist->MoveUpHistory();
   //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
-  G4int copyIDinZ = ROhist->GetReplicaNumber();
-  G4int copyIDinPhi = ROhist->GetReplicaNumber(1);
+  G4int copyIDinZ = ROhist-> GetReplicaNumber();
+  G4int copyIDinPhi = ROhist-> GetReplicaNumber(1);
 
-  if(CellID[copyIDinZ][copyIDinPhi]==-1)
-  {
-    ExN04CalorimeterHit* calHit
-      = new ExN04CalorimeterHit
-            (physVol->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
-    calHit->SetEdep( edep );
+  if ( fCellID[copyIDinZ][copyIDinPhi] == -1 ) {
+    ExN04CalorimeterHit* calHit =
+        new ExN04CalorimeterHit(physVol->GetLogicalVolume(),
+                                copyIDinZ, copyIDinPhi);
+    calHit-> SetEdep(edep);
     G4AffineTransform aTrans = ROhist->GetHistory()->GetTopTransform();
     aTrans.Invert();
-    calHit->SetPos(aTrans.NetTranslation());
-    calHit->SetRot(aTrans.NetRotation());
-    G4int icell = CalCollection->insert( calHit );
-    CellID[copyIDinZ][copyIDinPhi] = icell - 1;
-    if(verboseLevel>0)
-    { G4cout << " New Calorimeter Hit on CellID " 
-           << copyIDinZ << " " << copyIDinPhi << G4endl; }
-  }
-  else
-  { 
-    (*CalCollection)[CellID[copyIDinZ][copyIDinPhi]]->AddEdep(edep);
-    if(verboseLevel>0)
-    { G4cout << " Energy added to CellID " 
-           << copyIDinZ << " " << copyIDinPhi << G4endl; }
+    calHit-> SetPos(aTrans.NetTranslation());
+    calHit-> SetRot(aTrans.NetRotation());
+    G4int icell = fCalCollection->insert(calHit);
+    fCellID[copyIDinZ][copyIDinPhi] = icell - 1;
+    if(verboseLevel>0) {
+      G4cout << " New Calorimeter Hit on CellID "
+             << copyIDinZ << " " << copyIDinPhi << G4endl;
+    }
+  } else {
+    (*fCalCollection)[fCellID[copyIDinZ][copyIDinPhi]]-> AddEdep(edep);
+    if ( verboseLevel > 0 ) {
+      G4cout << " Energy added to CellID "
+             << copyIDinZ << " " << copyIDinPhi << G4endl;
+    }
   }
 
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04CalorimeterSD::EndOfEvent(G4HCofThisEvent*HCE)
 {
   static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection( HCID, CalCollection );
+  if ( HCID < 0 ) {
+    HCID = GetCollectionID(0);
+  }
+  HCE-> AddHitsCollection(HCID, fCalCollection );
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04CalorimeterSD::clear()
 {
-} 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04CalorimeterSD::DrawAll()
 {
-} 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04CalorimeterSD::PrintAll()
 {
-} 
-
+}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsCompound.cc 66870 2013-01-14 23:38:59Z adotti $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 

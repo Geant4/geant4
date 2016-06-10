@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ElementaryParticleCollider.hh 71940 2013-06-28 19:04:44Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
@@ -43,17 +43,29 @@
 // 20100726  M. Kelsey -- Move remaining std::vector<> buffers here
 // 20100804  M. Kelsey -- Add printFinalStateTables() function.
 // 20110923  M. Kelsey -- Add optional stream& to printFinalStateTables().
+// 20130129  M. Kelsey -- Add static arrays and interpolators for two-body
+//		angular distributions (addresses MT thread-local issue)
+// 20130131  D. Wright -- Use new *AngDst classes for gamma-N two-body
+// 20130220  M. Kelsey -- Replace two-body angular code with new *AngDst classes
+// 20130221  M. Kelsey -- Move two-body angular dist classes to factory
+// 20130306  M. Kelsey -- Move printFinalStateTables() to table factory
+// 20130307  M. Kelsey -- Reverse order of dimensions for rmn array
+// 20130422  M. Kelsey -- Move kinematics to G4CascadeFinalStateAlgorithm
+// 20130508  D. Wright -- Add muon capture, with absorption on quasideuterons
+// 20130620  Address Coverity complaint about missing copy actions
+// 20130628  Add function to split dibaryon into particle_kinds list
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
 #include "G4CascadeColliderBase.hh"
+#include "G4CascadeFinalStateGenerator.hh"
+#include "G4CascadeInterpolator.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"
 #include <iosfwd>
 #include <vector>
 
-class G4LorentzConvertor;
 class G4CollisionOutput;
 
 
@@ -66,59 +78,41 @@ public:
 	       G4CollisionOutput& output);
 
 private:
-  void initializeArrays();
-
   G4int generateMultiplicity(G4int is, G4double ekin) const;
 
   void generateOutgoingPartTypes(G4int is, G4int mult, G4double ekin);
 
-  void generateSCMfinalState(G4double ekin, G4double etot_scm, G4double pscm,
+  void generateSCMfinalState(G4double ekin, G4double etot_scm,
 			     G4InuclElementaryParticle* particle1,
-			     G4InuclElementaryParticle* particle2, 
-			     G4LorentzConvertor* toSCM); 
+			     G4InuclElementaryParticle* particle2); 
 
   void generateSCMpionAbsorption(G4double etot_scm,
 				 G4InuclElementaryParticle* particle1,
 				 G4InuclElementaryParticle* particle2); 
 
-  void generateMomModules(G4int mult, G4int is, G4double ekin,
-			  G4double etot_cm); 
+  void generateSCMmuonAbsorption(G4double etot_scm,
+				 G4InuclElementaryParticle* particle1,
+				 G4InuclElementaryParticle* particle2); 
 
-  // Samples the CM momentum for elastic and charge exchange scattering
-  //
-  G4LorentzVector
-  sampleCMmomentumFor2to2(G4int is, G4int kw, G4double ekin,
-			  G4double pscm) const; 
+  G4bool splitQuasiDeuteron(G4int qdtype); 	// Fill kinds with NN components
 
+  void fillOutgoingMasses();		// Fill mass arrays from particle types
 
-  // Samples cos(theta) in the CM for elastic and charge exchange scattering
-  //
-  G4double sampleCMcosFor2to2(G4double pscm, G4double pFrac,
-                              G4double pA, G4double pC, G4double pCos) const;
-
-
-  G4double getMomModuleFor2toMany(G4int is, G4int mult, G4int knd, 
-				  G4double ekin) const; 
-
-
-  G4bool satisfyTriangle(const std::vector<G4double>& modules) const; 
-	
-  G4LorentzVector
-  particleSCMmomentumFor2to3(G4int is, G4int knd, G4double ekin, 
-			     G4double pmod) const; 
-
-  void printFinalStateTables(std::ostream& os=G4cout) const;
+  // Utility class to generate final-state kinematics
+  G4CascadeFinalStateGenerator fsGenerator;
 
   // Internal buffers for lists of secondaries
   std::vector<G4InuclElementaryParticle> particles;
   std::vector<G4LorentzVector> scm_momentums;
   std::vector<G4double> modules;
+  std::vector<G4double> masses;
   std::vector<G4double> masses2;
   std::vector<G4int> particle_kinds;
 
-  // Parameter arrays
-  static const G4double rmn[14][10][2];    
-  static const G4double abn[4][4][4];
+private:
+  // Copying of modules is forbidden
+  G4ElementaryParticleCollider(const G4ElementaryParticleCollider&);
+  G4ElementaryParticleCollider& operator=(const G4ElementaryParticleCollider&);
 };
 
 #endif	/* G4ELEMENTARY_PARTICLE_COLLIDER_HH */

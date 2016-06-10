@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeIonisationXSHandler.cc 76882 2013-11-18 12:49:10Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -95,15 +95,17 @@ G4PenelopeIonisationXSHandler::~G4PenelopeIonisationXSHandler()
   std::map<const G4Material*,G4PhysicsFreeVector*>::iterator k;
   if (theDeltaTable)
     {
+      /*
       for (k=theDeltaTable->begin();k!=theDeltaTable->end();k++)	
-	delete k->second;
+ 	delete k->second;
+      */ 
       delete theDeltaTable;
       theDeltaTable = 0;
     }
-    
+  /*
   if (energyGrid)
     delete energyGrid;
-
+  */
   if (verboseLevel > 2)
     G4cout << "G4PenelopeIonisationXSHandler. Tables have been cleared" 
 	   << G4endl;
@@ -111,10 +113,10 @@ G4PenelopeIonisationXSHandler::~G4PenelopeIonisationXSHandler()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PenelopeCrossSection* 
+const G4PenelopeCrossSection*  
 G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDefinition* part,
 								const G4Material* mat,
-								G4double cut)
+								const G4double cut) const
 {
   if (part != G4Electron::Electron() && part != G4Positron::Positron())
     {
@@ -137,21 +139,10 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTableElectron->count(theKey)) //table already built	
 	return XSTableElectron->find(theKey)->second;
-      else
-	{
-	  BuildXSTable(mat,cut,part);
-	  if (XSTableElectron->count(theKey)) //now it should be ok!
-	    return XSTableElectron->find(theKey)->second;
-	  else
-	    {
-	      G4ExceptionDescription ed;
-	      ed << "Unable to build e- table for " << mat->GetName() << G4endl;
-	      G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
-			  "em0029",FatalException,ed);	   
-	    }
-	}
+      else	 
+        return NULL;	 
     }
-
+  
   if (part == G4Positron::Positron())
     {
       if (!XSTablePositron)
@@ -165,27 +156,22 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
       if (XSTablePositron->count(theKey)) //table already built	
 	return XSTablePositron->find(theKey)->second;
       else
-	{
-	  BuildXSTable(mat,cut,part);
-	  if (XSTablePositron->count(theKey)) //now it should be ok!
-	    return XSTablePositron->find(theKey)->second;
-	  else
-	    {
-	      G4ExceptionDescription ed;
-	      ed << "Unable to build e+ table for " << mat->GetName() << G4endl;
-	      G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
-			  "em0029",FatalException,ed);	   	   
-	    }
-	}
-    }
+        return NULL;  
+   }
   return NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double cut,
-					     const G4ParticleDefinition* part)
+						 const G4ParticleDefinition* part,
+						 G4bool isMaster)
 {
+  //Just to check
+  if (!isMaster)
+    G4Exception("G4PenelopeIonisationXSHandler::BuildXSTable()",
+                "em0100",FatalException,"Worker thread in this method");
+  
   //
   //This method fills the G4PenelopeCrossSection containers for electrons or positrons
   //and for the given material/cut couple. The calculation is done as sum over the 
@@ -196,7 +182,26 @@ void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double 
     {
       G4cout << "G4PenelopeIonisationXSHandler: going to build cross section table " << G4endl;
       G4cout << "for " << part->GetParticleName() << " in " << mat->GetName() << G4endl;
+      G4cout << "Cut= " << cut/keV << " keV" << G4endl;
     }
+
+  std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
+  //Check if the table already exists
+  if (part == G4Electron::Electron())
+    {
+      if (XSTableElectron->count(theKey)) //table already built	
+	return;
+    }
+  if (part == G4Positron::Positron())
+    {
+      if (XSTablePositron->count(theKey)) //table already built	
+	return;
+    }
+  
+  //check if the material has been built
+  if (!(theDeltaTable->count(mat)))
+    BuildDeltaTable(mat);
+
 
   //Tables have been already created (checked by GetCrossSectionTableForCouple)
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
@@ -267,9 +272,10 @@ void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double 
 	 }       
        XSEntry->AddCrossSectionPoint(bin,energy,XH0,XH1,XH2,XS0,XS1,XS2);
     }
+  //Do (only once) the final normalization
+  XSEntry->NormalizeShellCrossSections();
 
   //Insert in the appropriate table
-  std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
   if (part == G4Electron::Electron())      
     XSTableElectron->insert(std::make_pair(theKey,XSEntry));
   else if (part == G4Positron::Positron())
@@ -284,7 +290,7 @@ void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4PenelopeIonisationXSHandler::GetDensityCorrection(const G4Material* mat,
-							 G4double energy)
+							     const G4double energy) const
 {
   G4double result = 0;
   if (!theDeltaTable)
@@ -301,14 +307,10 @@ G4double G4PenelopeIonisationXSHandler::GetDensityCorrection(const G4Material* m
       return 0;
     }
   G4double logene = std::log(energy);
-
-  //check if the material has been built
-  if (!(theDeltaTable->count(mat)))
-    BuildDeltaTable(mat);
-
+ 
   if (theDeltaTable->count(mat))
     {
-      G4PhysicsFreeVector* vec = theDeltaTable->find(mat)->second;
+      const G4PhysicsFreeVector* vec = theDeltaTable->find(mat)->second;
       result = vec->Value(logene); //the table has delta vs. ln(E)      
     }
   else

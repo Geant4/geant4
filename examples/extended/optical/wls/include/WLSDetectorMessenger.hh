@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSDetectorMessenger.hh 77487 2013-11-25 10:15:04Z gcosmo $
+//
 /// \file optical/wls/include/WLSDetectorMessenger.hh
 /// \brief Definition of the WLSDetectorMessenger class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,17 +54,15 @@ class WLSDetectorMessenger : public G4UImessenger
   public:
 
     WLSDetectorMessenger(WLSDetectorConstruction* );
-    ~WLSDetectorMessenger();
+    virtual ~WLSDetectorMessenger();
  
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
 
-    WLSDetectorConstruction*   Detector;
+    WLSDetectorConstruction*   fDetector;
  
-    G4UIdirectory*          detDir;
-
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIdirectory*             fDetDir;
 
     G4UIcmdWithAString*        SetPhotonDetGeometryCmd;
     G4UIcmdWithAnInteger*      SetNumOfCladLayersCmd;

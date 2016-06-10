@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Polyhedra.cc 78188 2013-12-04 16:32:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -55,6 +55,8 @@
 // --------------------------------------------------------------------
 
 #include "G4Polyhedra.hh"
+
+#if !defined(G4GEOM_USE_UPOLYHEDRA)
 
 #include "G4PolyhedraSide.hh"
 #include "G4PolyPhiFace.hh"
@@ -176,7 +178,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   
   // Set original_parameters struct for consistency
   //
-  SetOriginalParameters();
+  SetOriginalParameters(rz);
    
   delete rz;
 }
@@ -1155,76 +1157,210 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
   }
 }
 
-//
-// CreateNURBS
-//
-G4NURBS *G4Polyhedra::CreateNURBS() const
-{
-  return 0;
-}
 
-
-//
-// G4PolyhedraHistorical stuff
-//
-G4PolyhedraHistorical::G4PolyhedraHistorical()
-  : Start_angle(0.), Opening_angle(0.), numSide(0), Num_z_planes(0),
-    Z_values(0), Rmin(0), Rmax(0)
+void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
 {
-}
+  G4int numPlanes = (G4int)numCorner;  
+  G4bool isConvertible=true;
+  G4double Zmax=rz->Bmax();
+  rz->StartWithZMin();
 
-G4PolyhedraHistorical::~G4PolyhedraHistorical()
-{
-  delete [] Z_values;
-  delete [] Rmin;
-  delete [] Rmax;
-}
+  // Prepare vectors for storage 
+  //
+  std::vector<G4double> Z;
+  std::vector<G4double> Rmin;
+  std::vector<G4double> Rmax;
 
-G4PolyhedraHistorical::
-G4PolyhedraHistorical( const G4PolyhedraHistorical& source )
-{
-  Start_angle   = source.Start_angle;
-  Opening_angle = source.Opening_angle;
-  numSide       = source.numSide;
-  Num_z_planes  = source.Num_z_planes;
-  
-  Z_values = new G4double[Num_z_planes];
-  Rmin     = new G4double[Num_z_planes];
-  Rmax     = new G4double[Num_z_planes];
-  
-  for( G4int i = 0; i < Num_z_planes; i++)
+  G4int countPlanes=1;
+  G4int icurr=0;
+  G4int icurl=0;
+
+  // first plane Z=Z[0]
+  //
+  Z.push_back(corners[0].z);
+  G4double Zprev=Z[0];
+  if (Zprev == corners[1].z)
   {
-    Z_values[i] = source.Z_values[i];
-    Rmin[i]     = source.Rmin[i];
-    Rmax[i]     = source.Rmax[i];
+    Rmin.push_back(corners[0].r);  
+    Rmax.push_back (corners[1].r);icurr=1; 
   }
-}
-
-G4PolyhedraHistorical&
-G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
-{
-  if ( &right == this ) return *this;
-
-  if (&right)
+  else if (Zprev == corners[numPlanes-1].z)
   {
-    Start_angle   = right.Start_angle;
-    Opening_angle = right.Opening_angle;
-    numSide       = right.numSide;
-    Num_z_planes  = right.Num_z_planes;
-  
-    delete [] Z_values;
-    delete [] Rmin;
-    delete [] Rmax;
-    Z_values = new G4double[Num_z_planes];
-    Rmin     = new G4double[Num_z_planes];
-    Rmax     = new G4double[Num_z_planes];
-  
-    for( G4int i = 0; i < Num_z_planes; i++)
+    Rmin.push_back(corners[numPlanes-1].r);  
+    Rmax.push_back (corners[0].r);
+    icurl=numPlanes-1;  
+  }
+  else
+  {
+    Rmin.push_back(corners[0].r);  
+    Rmax.push_back (corners[0].r);
+  }
+
+  // next planes until last
+  //
+  G4int inextr=0, inextl=0; 
+  for (G4int i=0; i < numPlanes-2; i++)
+  {
+    inextr=1+icurr;
+    inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
+
+    if((corners[inextr].z >= Zmax) & (corners[inextl].z >= Zmax))  { break; }
+
+    G4double Zleft = corners[inextl].z;
+    G4double Zright = corners[inextr].z;
+    if(Zright>Zleft)
     {
-      Z_values[i] = right.Z_values[i];
-      Rmin[i]     = right.Rmin[i];
-      Rmax[i]     = right.Rmax[i];
+      Z.push_back(Zleft);  
+      countPlanes++;
+      G4double difZr=corners[inextr].z - corners[icurr].z;
+      G4double difZl=corners[inextl].z - corners[icurl].z;
+
+      if(std::fabs(difZl) < kCarTolerance)
+      {
+        if(corners[inextl].r >= corners[icurl].r)
+        {    
+          Rmin.push_back(corners[icurl].r);
+          Rmax.push_back(Rmax[countPlanes-2]);
+          Rmax[countPlanes-2]=corners[icurl].r;
+        }
+        else
+        {
+          Rmin.push_back(corners[inextl].r);
+          Rmax.push_back(corners[icurl].r);
+        }
+      }
+      else if (difZl >= kCarTolerance)
+      {
+        Rmin.push_back(corners[inextl].r);
+        Rmax.push_back (corners[icurr].r + (Zleft-corners[icurr].z)/difZr
+                                 *(corners[inextr].r - corners[icurr].r));
+      }
+      else
+      {
+        isConvertible=false; break;
+      }
+      icurl=(icurl == 0)? numPlanes-1 : icurl-1;
     }
+    else if(std::fabs(Zright-Zleft)<kCarTolerance)  // Zright=Zleft
+    {
+      Z.push_back(Zleft);  
+      countPlanes++;
+      icurr++;
+
+      icurl=(icurl == 0)? numPlanes-1 : icurl-1;
+
+      Rmin.push_back(corners[inextl].r);  
+      Rmax.push_back (corners[inextr].r);
+    }
+    else  // Zright<Zleft
+    {
+      Z.push_back(Zright);  
+      countPlanes++;
+
+      G4double difZr=corners[inextr].z - corners[icurr].z;
+      G4double difZl=corners[inextl].z - corners[icurl].z;
+      if(std::fabs(difZr) < kCarTolerance)
+      {
+        if(corners[inextr].r >= corners[icurr].r)
+        {    
+          Rmin.push_back(corners[icurr].r);
+          Rmax.push_back(corners[inextr].r);
+        }
+        else
+        {
+          Rmin.push_back(corners[inextr].r);
+          Rmax.push_back(corners[icurr].r);
+          Rmax[countPlanes-2]=corners[inextr].r;
+        }
+        icurr++;
+      }           // plate
+      else if (difZr >= kCarTolerance)
+      {
+        if(std::fabs(difZl)<kCarTolerance)
+        {
+          Rmax.push_back(corners[inextr].r);
+          Rmin.push_back (corners[icurr].r); 
+        } 
+        else
+        {
+          Rmax.push_back(corners[inextr].r);
+          Rmin.push_back (corners[icurl].r+(Zright-corners[icurl].z)/difZl
+                                  * (corners[inextl].r - corners[icurl].r));
+        }
+        icurr++;
+      }
+      else
+      {
+        isConvertible=false; break;
+      }
+    }
+  }   // end for loop
+
+  // last plane Z=Zmax
+  //
+  Z.push_back(Zmax);
+  countPlanes++;
+  inextr=1+icurr;
+  inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
+ 
+  if(corners[inextr].z==corners[inextl].z)
+  {
+    Rmax.push_back(corners[inextr].r);
+    Rmin.push_back(corners[inextl].r);
   }
-  return *this;
+  else
+  {
+    Rmax.push_back(corners[inextr].r);
+    Rmin.push_back(corners[inextl].r);
+  }
+
+  // Set original parameters Rmin,Rmax,Z
+  //
+  if(isConvertible)
+  {
+   original_parameters = new G4PolyhedraHistorical;
+   original_parameters->numSide = numSide;
+   original_parameters->Z_values = new G4double[countPlanes];
+   original_parameters->Rmin = new G4double[countPlanes];
+   original_parameters->Rmax = new G4double[countPlanes];
+  
+   for(G4int j=0; j < countPlanes; j++)
+   {
+     original_parameters->Z_values[j] = Z[j];
+     original_parameters->Rmax[j] = Rmax[j];
+     original_parameters->Rmin[j] = Rmin[j];
+   }
+   original_parameters->Start_angle = startPhi;
+   original_parameters->Opening_angle = endPhi-startPhi;
+   original_parameters->Num_z_planes = countPlanes;
+ 
+  }
+  else  // Set parameters(r,z) with Rmin==0 as convention
+  {
+#ifdef G4SPECSDEBUG
+    std::ostringstream message;
+    message << "Polyhedra " << GetName() << G4endl
+      << "cannot be converted to Polyhedra with (Rmin,Rmaz,Z) parameters!";
+    G4Exception("G4Polyhedra::SetOriginalParameters()",
+                "GeomSolids0002", JustWarning, message);
+#endif
+    original_parameters = new G4PolyhedraHistorical;
+    original_parameters->numSide = numSide;
+    original_parameters->Z_values = new G4double[numPlanes];
+    original_parameters->Rmin = new G4double[numPlanes];
+    original_parameters->Rmax = new G4double[numPlanes];
+  
+    for(G4int j=0; j < numPlanes; j++)
+    {
+      original_parameters->Z_values[j] = corners[j].z;
+      original_parameters->Rmax[j] = corners[j].r;
+      original_parameters->Rmin[j] = 0.0;
+    }
+    original_parameters->Start_angle = startPhi;
+    original_parameters->Opening_angle = endPhi-startPhi;
+    original_parameters->Num_z_planes = numPlanes;
+  }
+  //return isConvertible;
 }
+
+#endif

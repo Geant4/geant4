@@ -26,28 +26,42 @@
 /// \file field/field02/include/F02SteppingVerbose.hh
 /// \brief Definition of the F02SteppingVerbose class
 //
-// $Id$
 //
+// $Id: F02SteppingVerbose.hh 76247 2013-11-08 11:18:52Z gcosmo $
+//
+//
+//---------------------------------------------------------------
+//
+// F01SteppingVerbose.hh
+//
+// Description:
+//   This class manages the vervose outputs in G4SteppingManager.
+//
+//
+// Contact:
+//   Questions and comments to this code should be sent to
+//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//
+//---------------------------------------------------------------
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02SteppingVerbose_h
 #define F02SteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
-/// This class manages the verbose outputs in G4SteppingManager. 
-/// 
-/// Contact: \n
-/// Questions and comments to this code should be sent to
-/// - Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-/// - Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class F02SteppingVerbose : public G4SteppingVerbose 
+class F02SteppingVerbose : public G4SteppingVerbose
 {
-  public:   
+  public:
 
     F02SteppingVerbose();
-    ~F02SteppingVerbose();
-      // Constructor/Destructor
+    virtual ~F02SteppingVerbose();
 
     virtual void StepInfo();
     virtual void TrackingStarted();

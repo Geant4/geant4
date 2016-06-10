@@ -23,22 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSEventActionMessenger.cc 70972 2013-06-07 16:12:12Z gcosmo $
+//
 /// \file eventgenerator/exgps/src/exGPSEventActionMessenger.cc
 /// \brief Implementation of the exGPSEventActionMessenger class
 //
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-// $Id$
-//
-// 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "exGPSEventActionMessenger.hh"
 #include "exGPSEventAction.hh"
@@ -47,11 +39,14 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSEventActionMessenger::exGPSEventActionMessenger(
-                                                                                                                exGPSEventAction* EvAct)
-:fEventAction(EvAct)
+                                                    exGPSEventAction* EvAct)
+:G4UImessenger(),
+ fEventAction(EvAct),
+ fDrawCmd(0),
+ fPrintCmd(0)    
 { 
   fDrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
   fDrawCmd->SetGuidance("Draw the tracks in the event");
@@ -68,7 +63,7 @@ exGPSEventActionMessenger::exGPSEventActionMessenger(
   fPrintCmd->AvailableForStates(G4State_Idle);     
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSEventActionMessenger::~exGPSEventActionMessenger()
 {
@@ -76,16 +71,16 @@ exGPSEventActionMessenger::~exGPSEventActionMessenger()
   delete fPrintCmd;   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exGPSEventActionMessenger::SetNewValue(G4UIcommand * command,
-                                                                                                                        G4String newValue)
+                                                           G4String newValue)
 { 
   if(command == fDrawCmd)
     {fEventAction->SetDrawFlag(newValue);}
        
   if(command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}              
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

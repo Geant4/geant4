@@ -26,12 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/HepMCG4PythiaMessenger.hh
 /// \brief Definition of the HepMCG4PythiaMessenger class
 //
-// ====================================================================
+// $Id: HepMCG4PythiaMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   HepMCG4GenericPythiaMessenger.hh
-//   $Id$
-//
-// ====================================================================
+
 #ifndef HEPMC_G4_PYTHIA_MESSENGER_H
 #define HEPMC_G4_PYTHIA_MESSENGER_H
 
@@ -59,7 +56,7 @@ private:
   G4UIcommand*             cpyrget;
   G4UIcommand*             cpyrset;
   G4UIcmdWithAString*      printRandomStatus;
-  
+
 public:
   HepMCG4PythiaMessenger(HepMCG4PythiaInterface* agen);
   ~HepMCG4PythiaMessenger();

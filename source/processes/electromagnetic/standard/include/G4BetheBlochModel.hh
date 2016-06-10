@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BetheBlochModel.hh 72939 2013-08-14 13:25:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,6 +80,9 @@ public:
   virtual ~G4BetheBlochModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+				const G4MaterialCutsCouple* couple);
 
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,

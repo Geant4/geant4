@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthTrackingAction class
 //
 //
-// $Id$
+// $Id: MCTruthTrackingAction.hh 73446 2013-08-27 11:32:59Z gcosmo $
 //
 //
 // --------------------------------------------------------------

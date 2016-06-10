@@ -23,12 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InuclSpecialFunctions.cc 68163 2013-03-15 20:11:44Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard pointless
 //		verbosity.
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20130308  M. Kelsey -- New function to compute INUCL-style random value
+// 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
+// 20130924  M. Kelsey -- Use G4Log, G4Exp, G4Pow for CPU speedup
 
 #include <cmath>
 
@@ -36,7 +39,37 @@
 #include "G4PhysicalConstants.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 #include "Randomize.hh"
+
+
+// Compute power series in random value, with powers-of-Ekin coeffciences
+
+G4double 
+G4InuclSpecialFunctions::randomInuclPowers(G4double ekin, 
+					   const G4double (&coeff)[4][4]) {
+  G4Pow* theG4Pow = G4Pow::GetInstance();
+
+  G4double S = G4UniformRand();		// Random fraction for expansion
+
+  G4double C, V;
+  G4double PQ=0., PR=0.;
+  for (G4int i=0; i<4; i++) {
+    V = 0.0;
+    for (G4int k=0; k<4; k++) {
+      C = coeff[i][k];
+      V += C * theG4Pow->powN(ekin, k);
+    }
+
+    PQ += V;
+    PR += V * theG4Pow->powN(S, i);
+  }
+
+  return std::sqrt(S) * (PR + (1-PQ)*(S*S*S*S));
+}
+
 
 
 G4double G4InuclSpecialFunctions::getAL(G4int A) {
@@ -77,7 +110,7 @@ G4double G4InuclSpecialFunctions::FermiEnergy(G4int A, G4int Z, G4int ntype) {
 }
 
 G4double G4InuclSpecialFunctions::G4cbrt(G4double x) {
-  return x==0 ? 0. : (x<0?-1.:1.)*std::exp(std::log(std::fabs(x))/3.);
+  return x==0 ? 0. : (x<0?-1.:1.)*G4Exp(G4Log(std::fabs(x))/3.);
 }
 
 G4double G4InuclSpecialFunctions::inuclRndm() { 
@@ -92,7 +125,7 @@ G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
   r2 = r2 > eps ? r2 : eps;
   r2 = r2 < 1.0 - eps ? r2 : 1.0 - eps; 
 
-  return sigma * std::sin(twopi * r1) * std::sqrt(-2.0 * std::log(r2)); 
+  return sigma * std::sin(twopi * r1) * std::sqrt(-2.0 * G4Log(r2)); 
 } 
 
 G4double G4InuclSpecialFunctions::randomPHI() { 
@@ -111,8 +144,14 @@ G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p,
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
 
-  static G4ThreeVector pvec;	// Buffers to avoid memory thrashing
-  static G4LorentzVector momr;
+  // Buffers to avoid memory thrashing
+  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = 0;
+  if (!pvec_G4MT_TLS_) pvec_G4MT_TLS_ = new G4ThreeVector;
+  G4ThreeVector &pvec = *pvec_G4MT_TLS_;
+
+  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = 0;
+  if (!momr_G4MT_TLS_) momr_G4MT_TLS_ = new G4LorentzVector;
+  G4LorentzVector &momr = *momr_G4MT_TLS_;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*ct);
   momr.setVectM(pvec, mass);
@@ -125,9 +164,15 @@ G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double mass) {
   std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double phi = randomPHI();
   G4double pt = p * COS_SIN.second;
-  
-  static G4ThreeVector pvec;	// Buffers to avoid memory thrashing
-  static G4LorentzVector momr;
+
+  // Buffers to avoid memory thrashing  
+  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = 0;
+  if (!pvec_G4MT_TLS_) pvec_G4MT_TLS_ = new G4ThreeVector;
+  G4ThreeVector &pvec = *pvec_G4MT_TLS_;
+
+  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = 0;
+  if (!momr_G4MT_TLS_) momr_G4MT_TLS_ = new G4LorentzVector;
+  G4LorentzVector &momr = *momr_G4MT_TLS_;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*COS_SIN.first);
   momr.setVectM(pvec, mass);

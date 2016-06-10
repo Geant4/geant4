@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisExecutive.icc 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // John Allison 24th January 1998.
@@ -47,6 +47,12 @@
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
 #include "G4GMocrenFile.hh"
+
+// FIXME : avoid mix with QT/WT driver (should be done by cmake??)
+#if defined(G4VIS_USE_OPENGLWT)
+  // do not want GL2P2 in WT case
+  #undef G4VIS_BUILD_OPENGL_GL2PS
+#endif
 
 // Needing external packages or libraries...
 

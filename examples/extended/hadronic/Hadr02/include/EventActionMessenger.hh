@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/EventActionMessenger.hh
 /// \brief Definition of the EventActionMessenger class
 //
-// $Id$
+// $Id: EventActionMessenger.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -59,7 +59,7 @@ public:
   EventActionMessenger(EventAction*);
   virtual ~EventActionMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
 

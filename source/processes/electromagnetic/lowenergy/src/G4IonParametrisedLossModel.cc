@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4IonParametrisedLossModel.cc 76243 2013-11-08 11:11:38Z gcosmo $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -159,30 +159,12 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
 
 G4IonParametrisedLossModel::~G4IonParametrisedLossModel() {
 
-  // Range vs energy table objects are deleted and the container is cleared
-  RangeEnergyTable::iterator iterRange = r.begin();
-  RangeEnergyTable::iterator iterRange_end = r.end();
-
-  for(;iterRange != iterRange_end; iterRange++) delete iterRange -> second;
-  r.clear();
-
-  // Energy vs range table objects are deleted and the container is cleared
-  EnergyRangeTable::iterator iterEnergy = E.begin();
-  EnergyRangeTable::iterator iterEnergy_end = E.end();
-
-  for(;iterEnergy != iterEnergy_end; iterEnergy++) delete iterEnergy -> second;
-  E.clear();
-
   // dE/dx table objects are deleted and the container is cleared
   LossTableList::iterator iterTables = lossTableList.begin();
   LossTableList::iterator iterTables_end = lossTableList.end();
 
   for(;iterTables != iterTables_end; iterTables++) delete *iterTables;
   lossTableList.clear();
-
-  // The Bragg ion and Bethe Bloch objects are deleted
-  delete betheBlochModel;
-  delete braggIonModel;
 }
 
 // #########################################################################
@@ -1090,7 +1072,6 @@ void G4IonParametrisedLossModel::BuildRangeVector(
                               new G4LPhysicsFreeVector(nmbBins+1,
                                                        lowerEnergy, 
                                                        upperEnergy);
-  energyRangeVector -> SetSpline(true);
 
   G4double dedxLow = ComputeDEDXPerVolume(material, 
                                           particle, 
@@ -1149,25 +1130,25 @@ void G4IonParametrisedLossModel::BuildRangeVector(
 #endif 
 
   }
-
-  G4bool b;
+  energyRangeVector -> SetSpline(true);
 
   G4double lowerRangeEdge = 
-                    energyRangeVector -> GetValue(lowerEnergy, b);
+                    energyRangeVector -> Value(lowerEnergy);
   G4double upperRangeEdge = 
-                    energyRangeVector -> GetValue(upperEnergy, b);
+                    energyRangeVector -> Value(upperEnergy);
 
   G4LPhysicsFreeVector* rangeEnergyVector
                       = new G4LPhysicsFreeVector(nmbBins+1,
                                                  lowerRangeEdge,
                                                  upperRangeEdge);
-  rangeEnergyVector -> SetSpline(true);
 
   for(size_t i = 0; i < nmbBins+1; i++) {
-      G4double energy = energyRangeVector -> GetLowEdgeEnergy(i);
+      G4double energy = energyRangeVector -> Energy(i);
       rangeEnergyVector -> 
-             PutValues(i, energyRangeVector -> GetValue(energy, b), energy);
+             PutValues(i, energyRangeVector -> Value(energy), energy);
   }
+
+  rangeEnergyVector -> SetSpline(true);
 
 #ifdef PRINT_DEBUG_TABLES
   G4cout << *energyLossVector 
@@ -1197,18 +1178,17 @@ G4double G4IonParametrisedLossModel::ComputeLossForStep(
   G4PhysicsVector* rangeEnergy = rangeCacheRangeEnergy;
 
   if(energyRange != 0 && rangeEnergy != 0) {
-     G4bool b;
 
-     G4double lowerEnEdge = energyRange -> GetLowEdgeEnergy( 0 );
-     G4double lowerRangeEdge = rangeEnergy -> GetLowEdgeEnergy( 0 );
+     G4double lowerEnEdge = energyRange -> Energy( 0 );
+     G4double lowerRangeEdge = rangeEnergy -> Energy( 0 );
 
      // Computing range for pre-step kinetic energy:
-     G4double range = energyRange -> GetValue(kineticEnergy, b);
+     G4double range = energyRange -> Value(kineticEnergy);
 
      // Energy below vector boundary:
      if(kineticEnergy < lowerEnEdge) {
 
-        range =  energyRange -> GetValue(lowerEnEdge, b);
+        range =  energyRange -> Value(lowerEnEdge);
         range *= std::sqrt(kineticEnergy / lowerEnEdge);
      }
 
@@ -1231,7 +1211,7 @@ G4double G4IonParametrisedLossModel::ComputeLossForStep(
      }
      else {
 
-        G4double energy = rangeEnergy -> GetValue(range - stepLength, b);
+        G4double energy = rangeEnergy -> Value(range - stepLength);
         loss = kineticEnergy - energy;      
      }
   }

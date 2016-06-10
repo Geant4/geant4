@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2010-11-09 21:51:07 gum Exp $
+$Id: History 74582 2013-10-15 12:06:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 Oct 13: V.Ivanchenko (xrays-V09-06-07)
+- G4SynchrotronRadiation added interface to G4VEmAngularDistribution,
+    the default G4DipBustGenerator; minor code cleanup
+
+12 Sept 13: P.Gumplinger (xrays-V09-06-06)
+- G4Scintillation - fix a bug changing incorrect GetMaxValue to GetMaxEnergy
+
+13 June 13: P.Gumplinger (xrays-V09-06-05)
+- G4Scintillation - added BuildPhysicsTable method which is doing initialisation
+  as before but at the moment when material list is fully defined.
+
+10 June 13: V.Ivanchenko (xrays-V09-06-04)
+- G4Cerenkov - added BuildPhysicsTable method which is doing initialisation
+    as before but at the moment when material list is fully defined;
+    it is assumed that the list of materials is not changed for the next runs;
+    internal table has NULL pointer to PhysicsVector if material properties 
+    are not defined for a given material, this pointer is check in when step
+    limitation is computed. 
+
+28 May 13: P.Gumplinger (xrays-V09-06-03)
+- G4Scintillation.cc: Fixed bug in G4Scintillation 
+  "ScintillationYieldByParticleType" mode to correctly produce photons for
+  nonlinear scintillators, accounting for variable particle step size in the
+  scintillator (dependent on G4 tracking and production cuts) and attempting
+  to best simulate photon density along the particle track. See, for example:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/418.html
+  Thanks to Zach Hartwig (Department of Nuclear Science and Engineeering - MIT)
+
+13 May 13: P. Gumplinger (xrays-V09-06-02)
+- G4Scintillation.cc give the YieldRatio priority in cases when the
+  ExcitationRatio is both 0.0 or 1.0; necessary because the defaults in
+  G4Scintillation.cc (1.0) and G4OpticalPhysics.cc (0.0) are inconsistent 
+
+21  Feb 13: V.Ivanchenko (xrays-V09-06-01)
+- G4VXTRenergyLoss, G4StrawTubeXTRadiator - use const declaration to
+    array of G4SandiaTable values
+
+18  Feb 13: V.Ivanchenko (xrays-V09-06-00)
+- G4SynchrotronRadiation, G4ForwardXrayTR - removed G4ThreadLocal 
+    declarations
 
 21 Sept 12: P.Gumplinger (xrays-V09-05-06)
 - Remove what has now become an annoying NOTE warning in the constructor of 

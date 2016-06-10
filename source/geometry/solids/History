@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2007-05-18 11:09:54 gcosmo Exp $
+$Id: History 75578 2013-11-04 12:03:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October, 29th, 2013,  G.Cosmo           -  geomsolids-V09-06-01
+- Include tags on top of geant4-09-06-ref-10: geom-specific-V09-06-22.
+- Added new 'usolids' module, including classes imported from the AIDA
+  Unified Solids Library (see https://aidasoft.web.cern.ch/USolids).
+
+December, 14th, 2012,   G.Cosmo         -  geomsolids-V09-06-00
+- Includes tags: geom-bool-V09-06-01, geom-csg-V09-06-01,
+                 geom-specific-V09-06-01, geom-solids-tests-V09-06-00.
+- Archived BREPS module.
+- Restored SVN id headers.
 
 June, 12th, 2012,   G.Cosmo             -  geomsolids-V09-05-00
 - Includes tags: geom-bool-V09-05-02, geom-csg-V09-05-04, breps-V09-05-01,

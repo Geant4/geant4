@@ -40,6 +40,7 @@
      theElasticData = new G4NeutronHPVector;
      theInelasticData = new G4NeutronHPVector;
     theIsotopeWiseData = 0;
+     theBuffer = NULL;
   }
   
   G4NeutronHPElementData::~G4NeutronHPElementData()

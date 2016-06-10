@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -42,7 +42,8 @@ class G4Step;
 class G4HumanPhantomSD : public G4VSensitiveDetector
 {
   public:
-      G4HumanPhantomSD(G4String);
+      G4HumanPhantomSD(const G4String& name, 
+                       const G4String& hitsCollectionName);
      ~G4HumanPhantomSD();
 
       void Initialize(G4HCofThisEvent*);

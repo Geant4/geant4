@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/EventMessenger.hh
 /// \brief Definition of the EventMessenger class
 //
-// $Id$
+// $Id: EventMessenger.hh 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,7 @@ class EventMessenger: public G4UImessenger
     EventMessenger(EventAction*);
    ~EventMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
     EventAction*          fEventAction;

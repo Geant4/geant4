@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4VNeutronHPEDis_h
 #define G4VNeutronHPEDis_h 1
@@ -46,7 +45,7 @@ class G4VNeutronHPEDis
   {
   }
   
-  virtual void Init(std::ifstream & theData) = 0;
+  virtual void Init(std::istream & theData) = 0;
   
   virtual G4double GetFractionalProbability(G4double anEnergy) = 0;
   

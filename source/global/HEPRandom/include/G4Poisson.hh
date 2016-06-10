@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Poisson.hh 76334 2013-11-08 14:37:37Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -44,7 +44,8 @@
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4Exp.hh"
 #include "Randomize.hh"
 
 inline G4long G4Poisson(G4double mean)
@@ -53,12 +54,14 @@ inline G4long G4Poisson(G4double mean)
   const G4int border = 16;
   G4double limit = 2e9;
 
-  if(mean <= border) {
+  if(mean <= border)
+  {
     G4double position = G4UniformRand();
-    G4double poissonValue = std::exp(-mean);
+    G4double poissonValue = G4Exp(-mean);
     G4double poissonSum = poissonValue;
 
-    while(poissonSum <= position) {
+    while(poissonSum <= position)
+    {
       number++ ;
       poissonValue *= mean/number;
       poissonSum += poissonValue;

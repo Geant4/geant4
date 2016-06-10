@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UImanager.cc,v 1.1 2006-08-08 05:20:57 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4UImanager.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4UImanager.cc
 //
@@ -46,11 +45,11 @@ namespace pyG4UImanager {
 
 // ApplyCommand
 G4int(G4UImanager::*f1_ApplyCommand)(const char*) = &G4UImanager::ApplyCommand;
-G4int(G4UImanager::*f2_ApplyCommand)(const G4String&) = 
+G4int(G4UImanager::*f2_ApplyCommand)(const G4String&) =
   &G4UImanager::ApplyCommand;
 
 // CreateHTML
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateHTML, CreateHTML, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateHTML, CreateHTML, 0, 1)
 
 
 //////////////////////////////////////////////
@@ -63,7 +62,7 @@ G4int ApplyUICommand_1(const G4String& cmdstr)
 
   G4int paramIndex= returnVal % 100;
   G4int commandStatus= returnVal - paramIndex;
- 
+
   switch(commandStatus) {
     case fCommandSucceeded:
       break;
@@ -74,7 +73,7 @@ G4int ApplyUICommand_1(const G4String& cmdstr)
       break;
 
     case fIllegalApplicationState:
-      G4cout << "illegal application state -- command refused" 
+      G4cout << "illegal application state -- command refused"
 	     << G4endl;
       break;
 
@@ -88,7 +87,7 @@ G4int ApplyUICommand_1(const G4String& cmdstr)
       break;
 
     case fParameterUnreadable:
-      G4cout << "Parameter is wrong type and/or is not omittable (index " 
+      G4cout << "Parameter is wrong type and/or is not omittable (index "
 	     << paramIndex << ")" << G4endl;
       break;
 
@@ -110,7 +109,7 @@ G4int ApplyUICommand_2(const std::string& cmdstr)
   return ApplyUICommand_1(cmdstr);
 }
 
-};
+}
 
 using namespace pyG4UImanager;
 

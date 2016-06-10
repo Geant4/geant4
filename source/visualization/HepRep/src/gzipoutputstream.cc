@@ -5,7 +5,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: GZIPOutputStream.cc,v 1.4 2005-06-02 21:28:45 duns Exp $
+ * @version $Id: GZIPOutputStream.cc 66373 2012-12-18 09:41:34Z gcosmo $
  */
 namespace cheprep {
 

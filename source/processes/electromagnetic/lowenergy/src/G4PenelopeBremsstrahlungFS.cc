@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeBremsstrahlungFS.cc 76988 2013-11-20 09:54:40Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -31,26 +31,28 @@
 // --------
 // 23 Nov 2010   L Pandola    First complete implementation
 // 02 May 2011   L.Pandola    Remove dependency on CLHEP::HepMatrix
-// 24 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 24 May 2011   L.Pandola    Renamed (make v2008 as default Penelope)
+// 03 Oct 2013   L.Pandola    Migration to MT
+// 30 Oct 2013   L.Pandola    Use G4Cache to avoid new/delete of the 
+//                             data vector on the fly in SampleGammaEnergy()
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4PenelopeBremsstrahlungFS.hh"
 #include "G4PhysicsFreeVector.hh"
-#include "G4PhysicsLogVector.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4Material.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PenelopeBremsstrahlungFS::G4PenelopeBremsstrahlungFS() : 
+G4PenelopeBremsstrahlungFS::G4PenelopeBremsstrahlungFS(G4int verbosity) : 
   theReducedXSTable(0),theEffectiveZSq(0),theSamplingTable(0),
-  thePBcut(0)
+  thePBcut(0),fVerbosity(verbosity)
 {
+  fCache.Put(0);
   G4double tempvector[nBinsX] = 
     {1.0e-12,0.025e0,0.05e0,0.075e0,0.1e0,0.15e0,0.2e0,0.25e0,
     0.3e0,0.35e0,0.4e0,0.45e0,0.5e0,0.55e0,0.6e0,0.65e0,0.7e0,
@@ -63,25 +65,24 @@ G4PenelopeBremsstrahlungFS::G4PenelopeBremsstrahlungFS() :
   for (size_t i=0;i<nBinsE;i++)
     theEGrid[i] = 0.;
 
-  theElementData = new std::map<G4int,G4DataVector*>;
-  theTempVec = new G4PhysicsFreeVector(nBinsX);
+  theElementData = new std::map<G4int,G4DataVector*>; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PenelopeBremsstrahlungFS::~G4PenelopeBremsstrahlungFS()
 {
-  ClearTables();
+  ClearTables(); 
+  
+  //The G4Physics*Vector pointers contained in the fCache are automatically deleted by 
+  //the G4Allocator, so there is no need to take care of them manually 
 
-  if (theTempVec)
-    delete theTempVec;
-
-  //Clear manually theElementData
-  std::map<G4int,G4DataVector*>::iterator i;
+  //Clear manually theElementData  
   if (theElementData)
-    {
+    {      
+      std::map<G4int,G4DataVector*>::iterator i;
       for (i=theElementData->begin(); i != theElementData->end(); i++)        
-	delete i->second;        
+	delete i->second;              
       delete theElementData;
       theElementData = 0;
     }
@@ -91,8 +92,13 @@ G4PenelopeBremsstrahlungFS::~G4PenelopeBremsstrahlungFS()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 
 
-void G4PenelopeBremsstrahlungFS::ClearTables()
+void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
 {  
+  //Just to check
+  if (!isMaster)
+    G4Exception("G4PenelopeBremsstrahlungFS::ClearTables()",
+		"em0100",FatalException,"Worker thread in this method"); 
+    
   std::map< std::pair<const G4Material*,G4double> ,G4PhysicsTable*>::iterator j;
 
   if (theReducedXSTable)
@@ -100,7 +106,7 @@ void G4PenelopeBremsstrahlungFS::ClearTables()
       for (j=theReducedXSTable->begin(); j != theReducedXSTable->end(); j++)
 	{
 	  G4PhysicsTable* tab = j->second;
-	  tab->clearAndDestroy();
+	  //tab->clearAndDestroy();
           delete tab;
 	}
       delete theReducedXSTable;
@@ -112,18 +118,19 @@ void G4PenelopeBremsstrahlungFS::ClearTables()
       for (j=theSamplingTable->begin(); j != theSamplingTable->end(); j++)
 	{
 	  G4PhysicsTable* tab = j->second;
-	  tab->clearAndDestroy();
+	  // tab->clearAndDestroy();
           delete tab;
 	}
       delete theSamplingTable;
       theSamplingTable = 0;
-    }
-
-  std::map< std::pair<const G4Material*,G4double> ,G4PhysicsFreeVector*>::iterator kk;
+    }  
   if (thePBcut)
     {
-      for (kk=thePBcut->begin(); kk != thePBcut->end(); kk++)	
+      /*
+	std::map< std::pair<const G4Material*,G4double> ,G4PhysicsFreeVector*>::iterator kk;
+	for (kk=thePBcut->begin(); kk != thePBcut->end(); kk++)	
 	delete kk->second;
+      */
       delete thePBcut;
       thePBcut = 0;      
     }
@@ -140,7 +147,7 @@ void G4PenelopeBremsstrahlungFS::ClearTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopeBremsstrahlungFS::GetEffectiveZSquared(const G4Material* material)
+G4double G4PenelopeBremsstrahlungFS::GetEffectiveZSquared(const G4Material* material) const
 {
   if (!theEffectiveZSq)
     {
@@ -168,7 +175,7 @@ G4double G4PenelopeBremsstrahlungFS::GetEffectiveZSquared(const G4Material* mate
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
-						    G4double cut)
+						    G4double cut,G4bool isMaster)
 {
   //Corresponds to subroutines EBRaW and EBRaR of PENELOPE
   /*
@@ -176,6 +183,36 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
     bremsstrahlung emission for the given material. Original data are read from 
     file. The table is normalized according to the Berger-Seltzer cross section.
   */
+
+  //Just to check
+  if (!isMaster)
+    G4Exception("G4PenelopeBremsstrahlungFS::BuildScaledXSTable()",
+		"em0100",FatalException,"Worker thread in this method");
+
+  if (fVerbosity > 2)
+    {
+      G4cout << "Entering in G4PenelopeBremsstrahlungFS::BuildScaledXSTable for " << 
+	material->GetName() << G4endl;
+      G4cout << "Threshold = " << cut/keV << " keV, isMaster= " << isMaster << 
+	G4endl;
+    }
+
+  //This method should be accessed by the master only
+  if (!theSamplingTable)    
+    theSamplingTable = 
+      new std::map< std::pair<const G4Material*,G4double> , G4PhysicsTable*>;
+  if (!thePBcut)
+    thePBcut = 
+      new std::map< std::pair<const G4Material*,G4double> , G4PhysicsFreeVector* >;
+  
+  //check if the container exists (if not, create it)
+  if (!theReducedXSTable)
+    theReducedXSTable = new std::map< std::pair<const G4Material*,G4double> ,
+    G4PhysicsTable*>;
+  if (!theEffectiveZSq)
+    theEffectiveZSq = new std::map<const G4Material*,G4double>;
+
+
 
  //*********************************************************************
   //Determine the equivalent atomic number <Z^2>
@@ -323,6 +360,10 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
   delete tempData;
   delete tempMatrix;
 
+  //Do here also the initialization of the energy sampling
+  if (!(theSamplingTable->count(theKey)))    
+    InitializeEnergySampling(material,cut);
+
   return;
 }
 
@@ -398,7 +439,7 @@ void G4PenelopeBremsstrahlungFS::ReadDataFile(G4int Z)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4PenelopeBremsstrahlungFS::GetMomentumIntegral(G4double* y,
-							   G4double xup,G4int momOrder)
+							   G4double xup,G4int momOrder) const
 //x is always the gridX
 {
   //Corresponds to the function RLMOM of Penelope
@@ -473,21 +514,12 @@ G4double G4PenelopeBremsstrahlungFS::GetMomentumIntegral(G4double* y,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4PenelopeBremsstrahlungFS::GetScaledXSTable(const G4Material* mat,
-							       G4double cut)
-{
-  //check if the container exists (if not, create it)
-  if (!theReducedXSTable)
-    theReducedXSTable = new std::map< std::pair<const G4Material*,G4double> ,
-    G4PhysicsTable*>;
-  if (!theEffectiveZSq)
-    theEffectiveZSq = new std::map<const G4Material*,G4double>;
-
+const G4PhysicsTable* G4PenelopeBremsstrahlungFS::GetScaledXSTable(const G4Material* mat,
+								   const G4double cut) const
+{ 
   //check if it already contains the entry
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-  if (!(theReducedXSTable->count(theKey))) //not found
-    BuildScaledXSTable(mat,cut);
-  
+ 
   if (!(theReducedXSTable->count(theKey)))
     {
       G4Exception("G4PenelopeBremsstrahlungFS::GetScaledXSTable()",
@@ -501,7 +533,12 @@ G4PhysicsTable* G4PenelopeBremsstrahlungFS::GetScaledXSTable(const G4Material* m
 
 void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* material,
 							    G4double cut)
-{  
+{   
+  if (fVerbosity > 2)
+    G4cout << "Entering in G4PenelopeBremsstrahlungFS::InitializeEnergySampling() for " << 
+      material->GetName() << G4endl;
+
+  //This method should be accessed by the master only
   std::pair<const G4Material*,G4double> theKey = std::make_pair(material,cut);
  
   G4PhysicsTable* thePhysicsTable = new G4PhysicsTable();
@@ -513,10 +550,12 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
   for (size_t i=0;i<nBinsE;i++)
     thePhysicsTable->push_back(new G4PhysicsFreeVector(nBinsX));
 
-  //Retrieve existing table using the method GetScaledXSTable()
-  //This will create the table ex-novo, if it does not exist for 
-  //some reason 
-  G4PhysicsTable* theTableReduced = GetScaledXSTable(material,cut);
+  //Retrieve the table. Must already exist at this point, because this
+  //method is invoked by GetScaledXSTable()
+  if (!(theReducedXSTable->count(theKey)))    
+    G4Exception("G4PenelopeBremsstrahlungFS::InitializeEnergySampling()",
+		"em2013",FatalException,"Unable to retrieve the cross section table");
+  G4PhysicsTable* theTableReduced = theReducedXSTable->find(theKey)->second;
 
   for (size_t ie=0;ie<nBinsE;ie++)
     {
@@ -569,33 +608,22 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4Material* mat, 
-							 G4double cut)
+							     const G4double cut) const
 {
-  if (!theSamplingTable)    
-    theSamplingTable = 
-      new std::map< std::pair<const G4Material*,G4double> , G4PhysicsTable*>;
-  if (!thePBcut)
-    thePBcut = 
-      new std::map< std::pair<const G4Material*,G4double> , G4PhysicsFreeVector* >;
-
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-  
-  if (!(theSamplingTable->count(theKey)))
+  if (!(theSamplingTable->count(theKey)) || !(thePBcut->count(theKey)))
     {
-      InitializeEnergySampling(mat,cut);
-      if (!(theSamplingTable->count(theKey)) || !(thePBcut->count(theKey)))
-	{
-	  G4ExceptionDescription ed;
-	  ed << "Unable to create the SamplingTable: " << 
-	    theSamplingTable->count(theKey) << " " << 
-	    thePBcut->count(theKey) << G4endl;
-	  G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
-		      "em2014",FatalException,ed);	  
-	}
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve the SamplingTable: " << 
+	theSamplingTable->count(theKey) << " " << 
+	thePBcut->count(theKey) << G4endl;
+      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
+		  "em2014",FatalException,ed);	  
     }
+    
 
-  G4PhysicsTable* theTableInte = theSamplingTable->find(theKey)->second;
-  G4PhysicsTable* theTableRed = theReducedXSTable->find(theKey)->second;
+  const G4PhysicsTable* theTableInte = theSamplingTable->find(theKey)->second;
+  const G4PhysicsTable* theTableRed = theReducedXSTable->find(theKey)->second;
 
   //Find the energy bin using bi-partition
   size_t eBin = 0;
@@ -627,16 +655,29 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
     }
 
   //Get the appropriate physics vector
-  G4PhysicsFreeVector* theVec1 = (G4PhysicsFreeVector*) (*theTableInte)[eBin];
+  const G4PhysicsFreeVector* theVec1 = (G4PhysicsFreeVector*) (*theTableInte)[eBin];
 
-  //use a "temporary" vector which contains the linear interpolation of the x spectra 
-  //in energy
+  //Use a "temporary" vector which contains the linear interpolation of the x spectra 
+  //in energy. The temporary vector is thread-local, so that there is no conflict. 
+  //This is achieved via G4Cache. The theTempVect is allocated only once per thread 
+  //(member variable), but it is overwritten at every call of this method 
+  //(because the interpolation factors change!)
+  G4PhysicsFreeVector* theTempVec = fCache.Get();
+  if (!theTempVec) //First time this thread gets the cache
+    {
+      theTempVec = new G4PhysicsFreeVector(nBinsX);
+      //The G4Physics*Vector pointers are automatically deleted by the G4Allocator,
+      //so there is no need to take care of it manually  
+      fCache.Put(theTempVec);
+      if (fVerbosity > 4)
+	G4cout << "Creating new instance of G4PhysicsFreeVector() on the worker" << G4endl;
+    }
 
   //theTempVect is allocated only once (member variable), but it is overwritten at 
   //every call of this method (because the interpolation factors change!)
   if (!firstOrLastBin)
     {  
-      G4PhysicsFreeVector* theVec2 = (G4PhysicsFreeVector*) (*theTableInte)[eBin+1];
+      const G4PhysicsFreeVector* theVec2 = (G4PhysicsFreeVector*) (*theTableInte)[eBin+1];
       for (size_t iloop=0;iloop<nBinsX;iloop++)
 	{
 	  G4double val = (*theVec1)[iloop]+(((*theVec2)[iloop]-(*theVec1)[iloop]))*
@@ -694,9 +735,9 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 		" , (*theTempVec)[nBinsX-1]=" << (*theTempVec)[nBinsX-1] << " and nBinsX = " << 
 		nBinsX << G4endl;
 	      ed << "Material: " << mat->GetName() << ", energy = " << energy/keV << " keV" << 
-		G4endl;
+		G4endl;	     
 	      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
-		      "em2015",FatalException,ed);	  
+			  "em2015",FatalException,ed);	  
 	    }
 	}
       else
@@ -717,8 +758,8 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
       G4double w1 = theXGrid[ibin];
       G4double w2 = theXGrid[ibin+1];            
 
-      G4PhysicsFreeVector* v1 = (G4PhysicsFreeVector*) (*theTableRed)[ibin];
-      G4PhysicsFreeVector* v2 = (G4PhysicsFreeVector*) (*theTableRed)[ibin+1];     
+      const G4PhysicsFreeVector* v1 = (G4PhysicsFreeVector*) (*theTableRed)[ibin];
+      const G4PhysicsFreeVector* v2 = (G4PhysicsFreeVector*) (*theTableRed)[ibin+1];     
       //Remember: the table theReducedXSTable has a fake first point in energy
       //so, it contains one more bin than nBinsE.
       G4double pdf1 = std::exp((*v1)[eBin+1]);
@@ -737,10 +778,20 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	w1 = wbcut;
       if (w2 < w1)
 	{
-	  G4cout << "Warning in G4PenelopeBremsstrahlungFS::SampleX()" << G4endl;
-	  G4cout << "Conflicting end-point values: w1=" << w1 << "; w2 = " << w2 << G4endl;
-	  G4cout << "wbcut = " << wbcut << " energy= " << energy/keV << " keV" << G4endl;
-	  G4cout << "cut = " << cut/keV << " keV" << G4endl;
+	  //This configuration can happen if initially wbcut > w2 > w1. Due to the previous 
+	  //statement, (w1 = wbcut), it becomes wbcut = w1 > w2. In this case, it is not a 
+	  //real problem. It becomes a problem if w2 < w1 before the w1 = wbcut statement. Issue 
+	  //a warning only in this specific case.
+	  if (w2 > wbcut)
+	    {
+	      G4ExceptionDescription ed;
+	      ed << "Warning in G4PenelopeBremsstrahlungFS::SampleX()" << G4endl;
+	      ed << "Conflicting end-point values: w1=" << w1 << "; w2 = " << w2 << G4endl;
+	      ed << "wbcut = " << wbcut << " energy= " << energy/keV << " keV" << G4endl;
+	      ed << "cut = " << cut/keV << " keV" << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()","em2015",
+			  JustWarning,ed);
+	    }
 	  return w1*energy;
 	}
   

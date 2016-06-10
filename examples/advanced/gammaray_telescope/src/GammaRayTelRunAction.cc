@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: GammaRayTelRunAction.cc 68794 2013-04-05 13:23:26Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -119,7 +119,7 @@ void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
   // If analysis is used, print out the histograms
 #ifdef G4ANALYSIS_USE
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-  analysis->EndOfRun(aRun->GetRunID());
+  analysis->EndOfRun();
 #endif
 }
 

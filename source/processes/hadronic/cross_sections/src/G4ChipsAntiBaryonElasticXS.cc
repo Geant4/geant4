@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ChipsAntiBaryonElasticXS.cc 70680 2013-06-04 07:51:03Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsAntiBaryonElasticXS for pA elastic cross sections
@@ -46,6 +46,7 @@
 #include "G4Nucleus.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4IonTable.hh"
 
 // factory
 #include "G4CrossSectionFactory.hh"
@@ -192,11 +193,11 @@ G4double G4ChipsAntiBaryonElasticXS::GetIsoCrossSection(const G4DynamicParticle*
 
 G4double G4ChipsAntiBaryonElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int pPDG)
 {
-  static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
-  static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
-  static std::vector <G4double> colP;  // Vector of last momenta for the reaction
-  static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
-  static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
+  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
+  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
+  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
   G4bool fCS = false;
@@ -270,7 +271,7 @@ G4double G4ChipsAntiBaryonElasticXS::CalculateCrossSection(G4bool CS,G4int F,G4i
                                              G4int PDG, G4int tgZ, G4int tgN, G4double pIU)
 {
   // *** Begin of Associative Memory DB for acceleration of the cross section calculations
-  static std::vector <G4double>  PIN;   // Vector of max initialized log(P) in the table
+  static G4ThreadLocal std::vector <G4double>  *PIN_G4MT_TLS_ = 0 ; if (!PIN_G4MT_TLS_) PIN_G4MT_TLS_ = new  std::vector <G4double>   ;  std::vector <G4double>  &PIN = *PIN_G4MT_TLS_;   // Vector of max initialized log(P) in the table
   // *** End of Static Definitions (Associative Memory Data Base) ***
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
@@ -876,7 +877,7 @@ G4double G4ChipsAntiBaryonElasticXS::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
   G4double pP2=pP*pP;                                 // squared momentum of the projectile
   if(tgZ || tgN>-1)                                   // ---> pipA
   {
-    G4double mt=G4ParticleTable::GetParticleTable()->FindIon(tgZ,tgZ+tgN,0,tgZ)->GetPDGMass()*.001; // Target mass in GeV
+    G4double mt=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(tgZ,tgZ+tgN,0)->GetPDGMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
     G4double mds=dmt*std::sqrt(pP2+mNuc2)+mNuc2+mt*mt;    // Mondelstam mds (@@ other AntiBar?)
     return dmt*dmt*pP2/mds;

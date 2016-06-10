@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomNestedParamDetectorConstruction.cc 76689 2013-11-14 08:43:45Z gcosmo $
+//
 /// \file medical/DICOM/src/DicomNestedParamDetectorConstruction.cc
 /// \brief Implementation of the DicomNestedParamDetectorConstruction class
 //
 // History:
-//        Pedro Arce  
+//        Pedro Arce
 //
 //*******************************************************
 
@@ -42,8 +44,11 @@
 #include "DicomNestedParamDetectorConstruction.hh"
 #include "DicomNestedPhantomParameterisation.hh"
 
+#include "G4VisAttributes.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomNestedParamDetectorConstruction::DicomNestedParamDetectorConstruction() : DicomDetectorConstruction()
+DicomNestedParamDetectorConstruction::DicomNestedParamDetectorConstruction()
+ : DicomDetectorConstruction()
 {
 }
 
@@ -56,49 +61,72 @@ DicomNestedParamDetectorConstruction::~DicomNestedParamDetectorConstruction()
 void DicomNestedParamDetectorConstruction::ConstructPhantom()
 {
 #ifdef G4VERBOSE
-  G4cout << "DicomNestedParamDetectorConstruction::ConstructPhantom " << G4endl;
+    G4cout << "DicomNestedParamDetectorConstruction::ConstructPhantom " 
+    << G4endl;
 #endif
 
-  //----- Replication of Water Phantom Volume.
-  //--- Y Slice
-  G4String yRepName("RepY");
-  G4VSolid* solYRep =
-    new G4Box(yRepName,fNVoxelX*fVoxelHalfDimX,fVoxelHalfDimY,fNVoxelZ*fVoxelHalfDimZ);
-  G4LogicalVolume* logYRep =
-    new G4LogicalVolume(solYRep,fAir,yRepName);
-  new G4PVReplica(yRepName,logYRep,fContainer_logic,kYAxis,fNVoxelY,fVoxelHalfDimY*2.);
 
-  //--- X Slice
-  G4String xRepName("RepX");
-  G4VSolid* solXRep =
-    new G4Box(xRepName,fVoxelHalfDimX,fVoxelHalfDimY,fNVoxelZ*fVoxelHalfDimZ);
-  G4LogicalVolume* logXRep =
-    new G4LogicalVolume(solXRep,fAir,xRepName);
-  new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNVoxelX,fVoxelHalfDimX*2.);
+    //----- Replication of Water Phantom Volume.
+    //--- Y Slice
+    G4String yRepName("RepY");
+    G4VSolid* solYRep = new G4Box(yRepName,fNVoxelX*fVoxelHalfDimX,
+                                  fVoxelHalfDimY,
+                  fNVoxelZ*fVoxelHalfDimZ);
+    G4LogicalVolume* logYRep = new G4LogicalVolume(solYRep,fAir,yRepName);
+    new G4PVReplica(yRepName,logYRep,fContainer_logic,kYAxis,
+    fNVoxelY,fVoxelHalfDimY*2.);
 
-  //----- Voxel solid and logical volumes
-  //--- Z Slice
-  G4VSolid* solVoxel = 
-    new G4Box("phantom",fVoxelHalfDimX,fVoxelHalfDimY,fVoxelHalfDimZ);
-  G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,fAir,"phantom");
+    logYRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::Invisible));
 
-  //
-  // Parameterisation for transformation of voxels.
-  //  (voxel size is fixed in this example. 
-  //    e.g. nested parameterisation handles material and transfomation of voxels.)
-  G4ThreeVector voxelSize(fVoxelHalfDimX,fVoxelHalfDimY,fVoxelHalfDimZ);
-  DicomNestedPhantomParameterisation* param
-    = new DicomNestedPhantomParameterisation(voxelSize,fMaterials);
+    //--- X Slice
+    G4String xRepName("RepX");
+    G4VSolid* solXRep = new G4Box(xRepName,fVoxelHalfDimX,fVoxelHalfDimY,
+                                  fNVoxelZ*fVoxelHalfDimZ);
+    G4LogicalVolume* logXRep = new G4LogicalVolume(solXRep,fAir,xRepName);
+    new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNVoxelX,fVoxelHalfDimX*2.);
 
-  new G4PVParameterised("phantom",    // their name
-                        logicVoxel, // their logical volume
-                        logXRep,      // Mother logical volume
-                        kZAxis,       // Are placed along this axis 
-                        //                          kUndefined,        // Are placed along this axis 
-                        fNVoxelZ,      // Number of cells
-                        param);       // Parameterisation.
-  
-  param->SetMaterialIndices( fMateIDs );
-  param->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
+    logXRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::Invisible));
+    
+    //----- Voxel solid and logical volumes
+    //--- Z Slice
+    G4VSolid* solVoxel = new G4Box("phantom",fVoxelHalfDimX,
+    fVoxelHalfDimY,fVoxelHalfDimZ);
+    G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,fAir,"phantom");
+
+    logicVoxel->
+    SetVisAttributes(new G4VisAttributes(G4VisAttributes::Invisible));
+
+    //
+    // Parameterisation for transformation of voxels.
+    //  (voxel size is fixed in this example.
+    //    e.g. nested parameterisation handles material 
+    //    and transfomation of voxels.)
+    G4ThreeVector voxelSize(fVoxelHalfDimX,fVoxelHalfDimY,fVoxelHalfDimZ);
+    DicomNestedPhantomParameterisation* param =
+    new DicomNestedPhantomParameterisation(voxelSize, fMaterials);
+
+    new G4PVParameterised("phantom",    // their name
+                          logicVoxel, // their logical volume
+                          logXRep,      // Mother logical volume
+                          kZAxis,       // Are placed along this axis
+                          //kUndefined,
+                          // Are placed along this axis
+                          fNVoxelZ,      // Number of cells
+                          param);       // Parameterisation.
+
+
+     
+
+    param->SetMaterialIndices( fMateIDs );
+    param->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
+
+    //phantom_phys->SetRegularStructureId(0);
+
+    // Z logical volume
+    SetScorer(logicVoxel);
 
 }
+
+
+
+

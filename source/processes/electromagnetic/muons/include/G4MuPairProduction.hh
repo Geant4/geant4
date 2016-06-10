@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuPairProduction.hh 72942 2013-08-14 13:37:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -70,7 +70,6 @@
 
 #include "globals.hh"
 #include "G4VEnergyLossProcess.hh"
-#include "G4VEmModel.hh"
 
 class G4MuPairProduction : public G4VEnergyLossProcess
 {
@@ -85,8 +84,9 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
 				    const G4Material*, G4double cut);
 
-  // Print out of the class parameters
   virtual void PrintInfo();
+
+  inline void SetLowestKineticEnergy(G4double e);
 
 protected:
 
@@ -98,13 +98,21 @@ private:
   G4MuPairProduction & operator=(const G4MuPairProduction &right);
   G4MuPairProduction(const G4MuPairProduction&);
 
+protected:
+
   const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
   G4double                    lowestKinEnergy;
   G4bool                      isInitialised;
 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4MuPairProduction::SetLowestKineticEnergy(G4double e) 
+{
+  lowestKinEnergy = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

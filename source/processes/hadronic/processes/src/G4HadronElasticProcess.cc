@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronElasticProcess.cc 66499 2012-12-19 09:16:35Z gcosmo $
 //
 // Geant4 Hadron Elastic Scattering Process 
 // 
@@ -113,6 +113,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   catch(G4HadronicException & aR)
     {
       G4ExceptionDescription ed;
+      aR.Report(ed);
       DumpState(track,"SampleZandA",ed); 
       ed << " PostStepDoIt failed on element selection" << G4endl;
       G4Exception("G4HadronElasticProcess::PostStepDoIt", "had003", 
@@ -126,6 +127,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   catch(G4HadronicException & aE)
     {
       G4ExceptionDescription ed;
+      aE.Report(ed);
       ed << "Target element "<< elm->GetName()<<"  Z= " 
 	 << targNucleus->GetZ_asInt() << "  A= " 
 	 << targNucleus->GetA_asInt() << G4endl;
@@ -159,6 +161,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   catch(G4HadronicException aR)
     {
       G4ExceptionDescription ed;
+      aR.Report(ed);
       ed << "Call for " << hadi->GetModelName() << G4endl;
       ed << "Target element "<< elm->GetName()<<"  Z= " 
 	 << targNucleus->GetZ_asInt() 

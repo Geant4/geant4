@@ -1,4 +1,4 @@
-$Id$
+$Id:$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28/10/13 I. Hrivnacova (exampleB1-V09-06-06)
+- Removed SetNumberOfThreads(4) from main (use Geant4 default)
+     
+26/10/13 mma (exampleB1-V09-06-05)
+- Use /run/printProgress. Cleanup in EventAction
+
+08/10/13 I. Hrivnacova (exampleB1-V09-06-04)
+- Removed B1EventInformation for keeping maximum simplicity
+- Improved documentation (added paragraph on Run::Merge())
+- Code clean-up
+     
+09/06/13 I. Hrivnacova (exampleB1-V09-06-03)
+- clarify local names in user actions
+     
+05/06/13 mma (exampleB1-V09-06-02)
+- add section about ACTION INITALIZATION to README and .README
+- update section DETECTOR RESPONSE
+
+05/05/13 I. Hrivnacova  (exampleB1-V09-06-01)
+- Migration for MT (by Makoto):
+  Added B1ActionInitialization, B1EventInformation and B1Run classes
+  and updated actions classes accordingly.
+  README files still need to be updated.
+
+15/01/13 I. Hrivnacova  (exampleB1-V09-06-00)
+- Tag for a test only (g4svn update with svn 1.7.x)
 
 13/11/12 I. Hrivnacova  (exampleB1-V09-05-03)
 - Use QBBC physics list instead of QGSP_BIC_EMY, which becomes

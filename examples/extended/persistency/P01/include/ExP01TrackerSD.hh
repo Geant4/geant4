@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01TrackerSD class
 //
 //
-// $Id$
+// $Id: ExP01TrackerSD.hh 71111 2013-06-11 10:51:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,9 +51,9 @@ class ExP01TrackerSD : public G4VSensitiveDetector
       ExP01TrackerSD(G4String);
      ~ExP01TrackerSD();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
+      virtual void Initialize(G4HCofThisEvent*);
+      virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+      virtual void EndOfEvent(G4HCofThisEvent*);
 
   private:
       ExP01TrackerHitsCollection* fTrackerCollection;

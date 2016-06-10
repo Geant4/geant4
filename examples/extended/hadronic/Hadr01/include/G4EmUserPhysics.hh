@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/G4EmUserPhysics.hh
 /// \brief Definition of the G4EmUserPhysics class
 //
-// $Id$
+// $Id: G4EmUserPhysics.hh 70761 2013-06-05 12:30:51Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,7 +62,7 @@ public:
   virtual void ConstructProcess();
 
 private:
-  G4int  verbose;
+  G4int  fVerbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

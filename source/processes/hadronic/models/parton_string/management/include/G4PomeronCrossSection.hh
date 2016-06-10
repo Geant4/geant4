@@ -26,7 +26,7 @@
 #ifndef G4PomeronCrossSection_h
 #define G4PomeronCrossSection_h 1
 //
-// $Id$
+// $Id: G4PomeronCrossSection.hh 67999 2013-03-13 11:14:32Z gcosmo $
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"

@@ -86,9 +86,7 @@ struct ReactionProduct4Mom
 G4HadFinalState *G4BinaryLightIonReaction::
 ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 {
-	static G4int eventcounter=0;
-	eventcounter++;
-	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number starts ######### "<<eventcounter<<G4endl;
+	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction starts ######### " << G4endl;
 	G4ping debug("debug_G4BinaryLightIonReaction");
 	pA=aTrack.GetDefinition()->GetBaryonNumber();
 	pZ=G4lrint(aTrack.GetDefinition()->GetPDGCharge()/eplus);
@@ -250,6 +248,8 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 
 
 		   DeExciteSpectatorNucleus(spectators, cascaders, theStatisticalExEnergy, momentum);
+		} else {
+		   delete spectators;
 		}
 	}
 	// Rotate to lab
@@ -299,7 +299,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 	      << aTrack.GetTotalEnergy() + m_nucl - Etot;
 #endif
 
-	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number ends ######### "<<eventcounter<<G4endl;
+	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number ends ######### " << G4endl;
 
 	return &theResult;
 }
@@ -428,10 +428,7 @@ G4ReactionProductVector * G4BinaryLightIonReaction::FuseNucleiAndPrompound(const
    G4double m_nucl=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(tZ,tA);
    G4LorentzVector aL(mom.t()+m_nucl, plop);
    aPreFrag.SetMomentum(aL);
-   G4ParticleDefinition * preFragDef;
-   preFragDef = G4ParticleTable::GetParticleTable()
-   ->FindIon(pZ+tZ,pA+tA,0,pZ+tZ);
-   aPreFrag.SetParticleDefinition(preFragDef);
+
 
    //      G4cout << "Fragment INFO "<< pA+tA <<" "<<pZ+tZ<<" "
    //             << aL <<" "<<preFragDef->GetParticleName()<<G4endl;
@@ -603,9 +600,6 @@ void G4BinaryLightIonReaction::DeExciteSpectatorNucleus(G4ReactionProductVector 
       G4double mFragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(spectatorZ,spectatorA);
       pFragment=G4LorentzVector(0,0,0,mFragment+std::max(0.,theStatisticalExEnergy) );
       aProRes.SetMomentum(pFragment);
-      G4ParticleDefinition * resDef;
-      resDef = G4ParticleTable::GetParticleTable()->FindIon(spectatorZ,spectatorA,0,spectatorZ);
-      aProRes.SetParticleDefinition(resDef);
 
       proFrag = theHandler->BreakItUp(aProRes);
 

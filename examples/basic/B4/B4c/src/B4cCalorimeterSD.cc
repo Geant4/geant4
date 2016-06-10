@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4cCalorimeterSD.cc 75215 2013-10-29 16:07:06Z gcosmo $
 //
 /// \file B4cCalorimeterSD.cc
 /// \brief Implementation of the B4cCalorimeterSD class
@@ -99,8 +99,10 @@ G4bool B4cCalorimeterSD::ProcessHits(G4Step* step,
   // Get hit accounting data for this cell
   B4cCalorHit* hit = (*fHitsCollection)[layerNumber];
   if ( ! hit ) {
-    G4cerr << "Cannot access hit " << layerNumber << G4endl;
-    exit(1);
+    G4ExceptionDescription msg;
+    msg << "Cannot access hit " << layerNumber; 
+    G4Exception("B4cCalorimeterSD::ProcessHits()",
+      "MyCode0004", FatalException, msg);
   }         
 
   // Get hit for total accounting

@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2011-01-03 14:55:59 lgarnier Exp $
+$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+15th November 2013  John Allison  (vistree-V09-06-01)
+- Some changes as suggested by PVS.
+
+2nd December 2012  John Allison  (vistree-V09-06-00)
+  o Removed NURBS.
 
 8th June 2012  John Allison (vistree-V09-05-02)
 - Shadow clean.

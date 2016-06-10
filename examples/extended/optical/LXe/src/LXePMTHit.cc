@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXePMTHit.cc 72250 2013-07-12 08:59:26Z gcosmo $
+//
 /// \file optical/LXe/src/LXePMTHit.cc
 /// \brief Implementation of the LXePMTHit class
 //
@@ -35,7 +37,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4Allocator<LXePMTHit> LXePMTHitAllocator;
+G4ThreadLocal G4Allocator<LXePMTHit>* LXePMTHitAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

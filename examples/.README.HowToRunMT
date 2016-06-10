@@ -1,0 +1,84 @@
+$Id$
+
+///\file ".README.HowToRunMT"
+///\brief Examples Tips How To Run MT README page
+
+/*! \page README_HowToRunMT Tips how to run an example in multi-threading mode
+
+\section HowToRunMT_s1 Run example in multi-threading mode
+
+No special steps are needed to build an example in multi-threading (MT) mode.
+The examples which has been migrated to multi-threading will automatically 
+run in MT when they are built against the Geant4 libraries built with MT mode
+activated, otherwise they will run in sequential mode.
+Not migrated examples will run in sequential mode even when built against
+Geant4 libraries built with MT mode activated.
+
+The examples which support MT can be easily recognized by the following lines
+of code in main ():
+\verbatim
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
+\endverbatim
+The compiler flag -DG4MULTITHREADED is automatically set when building applications
+using Geant4's CMake (via GEANT4_USE_FILE) and GNUmake systems, and is listed in 
+the flags reported by the --cflags option of the geant4-config program.
+
+\section HowToRunMT_s2  Set number of threads
+
+When the number of threads is not selected in the application, the default number
+(which is actually 2) will be used. Another number of threads can be set in several
+ways:
+
+- in the code
+\verbatim
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
+  ...
+\endverbatim
+
+- in a macro file via UI command added just before /run/initialize
+\verbatim
+/run/numberOfThreads 4
+\endverbatim
+
+- by setting the environment variable 
+\verbatim
+export G4FORCENUMBEROFTHREADS = 4  
+or
+setenv G4FORCENUMBEROFTHREADS 4
+\endverbatim
+
+The environment variable value is forced and it cannot be changed from a code 
+call or a macro. A warning is issued in such situation.
+
+\section HowToRunMT_s3  Output from threads
+
+In MT processing each worker produces its output and these messages are interlayed
+on the screen. The messeges from threads are preceded with a predefined string 
+G4WTi> where i is the thread number.  Users can change this default behaviour 
+and choose
+
+- to buffer the output from each thread at a time, so that the output of each 
+  thread is grouped and printed at the end of the job
+\verbatim
+/control/cout/useBuffer true|false
+\endverbatim
+
+- to limit the output from threads to one selected thread only: 
+\verbatim
+/control/cout/ignoreThreadsExcept 0
+\endverbatim
+
+- to redirect the output from threads in a file:
+\verbatim
+/control/cout/setCoutFile coutFileName
+/control/cout/setCerrFile cerrFileName
+\endverbatim
+
+*/

@@ -1,0 +1,97 @@
+$Id: History 76703 2013-11-14 10:29:11Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+    Hadronic physics-list/constructors/hadron_inelastic History
+    -----------------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+14-Nov-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-20)
+- Use G4NeutronInelasticXS for neutrons in the following physics lists
+  (besides QBBC and FTFP_BERT_TRV which already use it):
+  FTFP_BERT, FTF_BIC, QGSP_FTFP_BERT, QGSP_BERT, QGSP_BIC, QGS_BIC.
+
+08-Nov-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-19)
+- Removed low_energy and added fission to sources.cmake and GNUmakefile.
+
+07-Nov-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-18)
+- Removed low_energy and high_energy from sources.cmake and GNUmakefile.
+
+24-Sep-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-17)
+- Fix a possible null-pointer dereference in HadronPhysicsINCLXX.
+
+22-Jul-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-16)
+- Nothing is changed: simply re-propose the previous tag after
+  fixing an initialization problem in materials category.
+
+19-Jul-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-15)
+- Replaced LEP neutron capture (Gheisha cross section and G4LCapture model)
+  with G4NeutronCaptureXS (cross section) and G4NeutronRadCapture (model)
+  in all physics lists.
+- Removed LEP fission (Gheisha cross section and G4LFission model) in
+  all physics lists which do not make use of neutron_HP.
+  For the HP-based physics lists, used LEP fission only above 19.9 MeV.
+
+18-Jun-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-14)
+- Re-enable quasiElastic in the signature of the constructors
+  (but not in the implementation).
+
+17-Jun-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-13)
+- Fixed compilation warnings (unused QuasiElastic).
+
+12-Jun-2013, Gunter Folger              (phys-ctor-hinelastic-V09-06-12)
+- in G4HadronPhysicsINCLXX.cc initialise pointers to optinal parts of 
+   physics to 0 to protect deletion of uninitialised pointer.
+
+11-Jun-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-11)
+- Improved use of kaon cross sections in G4HadronPhysicsShielding. 
+
+09-Jun-2013, Andrea Dotti		(phys-ctor-hinelastic-V09-06-10)
+- Fix for MT, make private data members TLS. 
+
+29-Mar-2013, Andrea Dotti		(phys-ctor-hinelastic-V09-06-09)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
+
+19-Mar-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-08)
+- Fixed quasi-elastic treatment (on for QGS; off for FTF) of the
+  previous tag.
+
+19-Mar-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-07)
+- Replaced LEP with FTFP+BERT in all inelastic physics constructors.
+- Depends on phys-builders-V09-06-05.
+
+08-Mar-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-06)
+- Fix problem with overlapping model ranges.
+- Depends on phys-builders-V09-06-03.
+
+04-Mar-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-05)
+- Fix file/class name mismatch.
+
+04-Mar-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-04)
+- Parametrized the INCL++ physics constructor to avoid code duplication for
+  each INCL++-based physics list.
+
+27-Feb-2013, Vladimir Ivanchenko        (phys-ctor-hinelastic-V09-06-03)
+- G4HadronPhysicsFTFP_BERT, G4HadronPhysicsFTFP_BERT_HP - comment out
+    unused members of the class to fix warning from the clang compiler 
+    on MacOS
+
+22-Feb-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-02)
+- Modified constructor for QGSP_INCLXX to use PreCompound in nucleon-induced
+  reactions below 2 MeV.
+- Depends on tag phys-builders-V09-06-02.
+
+08-Feb-2013, Vladimir Ivanchenko        (phys-ctor-hinelastic-V09-06-01)
+- GNUmakefile fixed - G4LIB_BUILD_EXPAT is added
+
+10-Jan-2012, Gunter Folger              (phys-ctor-hinelastic-V09-06-00)
+- new directory structure introduced. 
+   constructors/hadron_inelastic classes

@@ -109,8 +109,10 @@ class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
    G4int minAtomicNumber;
    G4int maxAtomicNumber;
 
+   G4bool referencePrepared;
+
    // Some properties of reference particle (Fe) are stored for faster access
-   G4ParticleDefinition* referenceFe; 
+   ///////////////////////////G4ParticleDefinition* referenceFe; 
    G4int atomicNumberRefFe;
    G4int massNumberRefFe;
    G4double atomicNumberRefPow23Fe;
@@ -118,7 +120,7 @@ class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
    G4double massRefFe;
 
    // Some properties of reference particle (Ar) are stored for faster access
-   G4ParticleDefinition* referenceAr; 
+   ///////////////////////////G4ParticleDefinition* referenceAr; 
    G4int atomicNumberRefAr;
    G4int massNumberRefAr;
    G4double atomicNumberRefPow23Ar;

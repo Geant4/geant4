@@ -1,6 +1,5 @@
 $Id$
 -------------------------------------------------------------------
-$Id$
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -16,6 +15,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02/12/13 I. Hrivnacova (exbasic-V09-06-03)
+- Fixed gui.mac in B2, B4 and B5:
+  corrected wireframe parameter, removed run2.mac from gui 
+
+30/11/13 I. Hrivnacova (exbasic-V09-06-02)
+- Fixes in documentation 
+- Fixed B2a/gui.mac and obsolete comments in a few more macros
+
+09/11/13 I. Hrivnacova (exbasic-V09-06-01)
+- Added B5 in Cmake, GNUmake and README files;
+  fixed B2/README
+
+28/02/13 I. Hrivnacova (exbasic-V09-06-00)
+- When building materials with NistManager
+  do not set fromIsotopes argument (which was set to false), 
+  as since 9.6 all materials have to be built from isotopes.
+  Thanks to V. Ivantchenko for pointing at this.
 
 23/11/12 I. Hrivnacova (exbasic-V09-05-05)
 - Updated documentation: synchronized with DocBook

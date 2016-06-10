@@ -27,7 +27,7 @@
 /// \brief Implementation of the G02DetectorMessenger class
 //
 //
-// $Id$
+// $Id: G02DetectorMessenger.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02DetectorMessenger implementation
 //
@@ -44,7 +44,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G02DetectorMessenger::G02DetectorMessenger( G02DetectorConstruction* myDet )
-  : fTheDetector( myDet )
+  : G4UImessenger(),
+    fTheDetector( myDet ),
+    fTheDetectorDir(0),
+    fTheReadCommand(0),
+    fTheWriteCommand(0),
+    fTheStepCommand(0)
 { 
   fTheDetectorDir = new G4UIdirectory( "/mydet/" );
   fTheDetectorDir->SetGuidance("Detector control.");

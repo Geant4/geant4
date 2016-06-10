@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2010-10-30 07:45:38 kurasige Exp $
+$Id: History 71228 2013-06-12 12:53:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Jun. 11, 13 M.Asai (decay-V09-06-01)
+- Remove the modification in the previous tag, as it is no longer needed as all ions
+  are generated after GenericIon gets the collect process manager.
+
+- Jun. 9, 13 M.Asai (decay-V09-06-00)
+- Modify G4Decay::IsApplicable() to make it return false for all ions in the IonTable.
 
 - Jul. 5, 12 G.Cosmo (decay-V09-05-00)
 - Explicitly use inclusion of headers for system of units and physical

@@ -47,7 +47,7 @@ std::istream &operator >> (std::istream& strm, G4RadioactiveDecayMode& q)
   else if (a == "SpFission")
     {q = SpFission;}
   else
-    {q = ERROR;}
+    {q = RDM_ERROR;}
   return strm;
 }
 

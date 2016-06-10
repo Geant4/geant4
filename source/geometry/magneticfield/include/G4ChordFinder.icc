@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ChordFinder.icc 69699 2013-05-13 08:50:30Z gcosmo $
 //
 // G4ChordFinder inline implementations
 //
@@ -46,14 +46,6 @@ inline
 G4bool G4ChordFinder::AcceptableMissDist(G4double dChordStep) const
 { 
   return (dChordStep <= fDeltaChord) ;
-}
-
-inline
-void G4ChordFinder::SetChargeMomentumMass(G4double pCharge, // in e+ units
-                                          G4double pMomentum,
-                                          G4double pMass)
-{
-  fIntgrDriver-> SetChargeMomentumMass(pCharge, pMomentum, pMass);
 }
 
 inline

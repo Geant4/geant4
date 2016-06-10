@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeIonisationXSHandler.hh 74626 2013-10-17 07:00:59Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -70,23 +70,21 @@ public:
   virtual ~G4PenelopeIonisationXSHandler();
 
   //!Returns the density coeection for the material at the given energy
-  G4double GetDensityCorrection(const G4Material*,G4double energy);
-  
+  G4double GetDensityCorrection(const G4Material*,const G4double energy) const;
   //! Returns the table of cross sections for the given particle, given 
   //! material and given cut as a G4PenelopeCrossSection* pointer.
-  G4PenelopeCrossSection* GetCrossSectionTableForCouple(const G4ParticleDefinition*,
-							const G4Material*,G4double cut);
+  const G4PenelopeCrossSection* GetCrossSectionTableForCouple(const G4ParticleDefinition*,
+							      const G4Material*,const G4double cut) const;
   //!Setter for the verbosity level
   void SetVerboseLevel(G4int vl){verboseLevel = vl;};
+
+  //! This can be inkoved only by the master
+  void BuildXSTable(const G4Material*,G4double cut,
+		    const G4ParticleDefinition*,G4bool isMaster=true);
 
 private:
   G4PenelopeIonisationXSHandler & operator=(const G4PenelopeIonisationXSHandler &right);
   G4PenelopeIonisationXSHandler(const G4PenelopeIonisationXSHandler&);
-
- 
-  void BuildXSTable(const G4Material*,G4double cut,
-		    const G4ParticleDefinition*);
-
 
   void BuildDeltaTable(const G4Material*);
 

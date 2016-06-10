@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:12:47 bmorgan Exp $
+# $Id: sources.cmake 74050 2013-09-20 09:38:19Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -36,6 +36,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/management/include)
@@ -53,15 +54,20 @@ set(G4VIS_RAYTRACER_MODULE_HEADERS
     G4RTJpegMaker.hh
     G4RTMessenger.hh
     G4RTOutBitStream.hh
+    G4RTPrimaryGeneratorAction.hh
+    G4RTRun.hh
+    G4RTRunAction.hh
     G4RTSimpleScanner.hh
     G4RTSteppingAction.hh
     G4RTTrackingAction.hh
+    G4RTWorkerInitialization.hh
     G4RayTracer.hh
     G4RayTracerFeatures.hh
     G4RayTracerSceneHandler.hh
     G4RayTracerViewer.hh
     G4RayTrajectory.hh
     G4RayTrajectoryPoint.hh
+    G4TheMTRayTracer.hh
     G4TheRayTracer.hh
     G4VFigureFileMaker.hh
     G4VRTScanner.hh)
@@ -71,14 +77,19 @@ set(G4VIS_RAYTRACER_MODULE_SOURCES
     G4RTJpegMaker.cc
     G4RTMessenger.cc
     G4RTOutBitStream.cc
+    G4RTPrimaryGeneratorAction.cc
+    G4RTRun.cc
+    G4RTRunAction.cc
     G4RTSimpleScanner.cc
     G4RTSteppingAction.cc
     G4RTTrackingAction.cc
+    G4RTWorkerInitialization.cc
     G4RayTracer.cc
     G4RayTracerSceneHandler.cc
     G4RayTracerViewer.cc
     G4RayTrajectory.cc
     G4RayTrajectoryPoint.cc
+    G4TheMTRayTracer.cc
     G4TheRayTracer.cc
     G4VRTScanner.cc)
 

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm15/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.hh 73022 2013-08-15 09:09:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 #include "globals.hh"
 
 class DetectorConstruction;
-class PrimaryGeneratorAction;
 class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,14 +45,13 @@ class RunAction;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*, PrimaryGeneratorAction*, RunAction*);
+    SteppingAction(DetectorConstruction*, RunAction*);
    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
     
   private:
     DetectorConstruction*   fDetector;
-    PrimaryGeneratorAction* fPrimary;
     RunAction*              fRunAction;
 };
 

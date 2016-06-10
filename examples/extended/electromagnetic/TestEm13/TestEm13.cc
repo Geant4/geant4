@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm13/TestEm13.cc
 /// \brief Main program of the electromagnetic/TestEm13 example
 //
-// $Id$
+// $Id: TestEm13.cc 66241 2012-12-13 18:34:42Z gunter $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

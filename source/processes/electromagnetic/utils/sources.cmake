@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-10-26 09:45:09 gcosmo Exp $
+# $Id: sources.cmake 74376 2013-10-04 08:25:47Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -43,6 +43,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emutils
     HEADERS
+        G4AngleDirect.hh
         G4AtomicShell.hh
         G4AtomicShellEnumerator.hh
         G4DummyModel.hh
@@ -52,6 +53,8 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmConfigurator.hh
         G4EmCorrections.hh
         G4EmElementSelector.hh
+        G4EmManager.hh
+        G4EmManagerMessenger.hh
         G4EmModelManager.hh
         G4EmMultiModel.hh
         G4EmProcessOptions.hh
@@ -64,17 +67,16 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4LossTableManager.hh
         G4MscStepLimitType.hh
         G4VAtomDeexcitation.hh
-        G4VBremAngularDistribution.hh
         G4VEmAngularDistribution.hh
         G4VEmFluctuationModel.hh
         G4VEmModel.hh
         G4VEmProcess.hh
-        G4VEnergyLoss.hh
         G4VEnergyLossProcess.hh
         G4VMscModel.hh
         G4VMultipleScattering.hh
         G4ionEffectiveCharge.hh
     SOURCES
+        G4AngleDirect.cc
         G4AtomicShell.cc
         G4DummyModel.cc
         G4ElectronIonPair.cc
@@ -82,7 +84,9 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmCalculator.cc
         G4EmConfigurator.cc
         G4EmCorrections.cc
-        G4EmElementSelector.cc
+        G4EmElementSelector.cc 
+        G4EmManager.cc
+        G4EmManagerMessenger.cc
         G4EmModelManager.cc
         G4EmMultiModel.cc
         G4EmProcessOptions.cc
@@ -92,12 +96,10 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4LossTableBuilder.cc
         G4LossTableManager.cc
         G4VAtomDeexcitation.cc
-        G4VBremAngularDistribution.cc
         G4VEmAngularDistribution.cc
         G4VEmFluctuationModel.cc
         G4VEmModel.cc
         G4VEmProcess.cc
-        G4VEnergyLoss.cc
         G4VEnergyLossProcess.cc
         G4VMscModel.cc
         G4VMultipleScattering.cc

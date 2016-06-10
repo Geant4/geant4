@@ -24,22 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4HEPEvtParticle.hh 69010 2013-04-15 09:34:16Z gcosmo $
 //
 //
-
+// class desccription:
+//
+// This class is exclusively used by G4HEPEvtInterface.
+// It represents one particle in /HEPEVT/ list.
 
 #ifndef G4HEPEvtParticle_h
 #define G4HEPEvtParticle_h 1
 
 #include "globals.hh"
+#include "evtdefs.hh"
 #include "G4Allocator.hh"
 #include "G4PrimaryParticle.hh"
-
-// class desccription:
-//
-//  This class is exclusively used by G4HEPEvtInterface. This class represents
-// one particle in /HEPEVT/ list.
 
 class G4HEPEvtParticle 
 {
@@ -49,7 +48,7 @@ class G4HEPEvtParticle
 
       G4HEPEvtParticle();
       G4HEPEvtParticle(G4PrimaryParticle* pp,
-        G4int isthep, G4int jdahep1, G4int jdahep2);
+                       G4int isthep, G4int jdahep1, G4int jdahep2);
       ~G4HEPEvtParticle();
 
       G4HEPEvtParticle & operator=(const G4HEPEvtParticle &right);
@@ -77,24 +76,19 @@ class G4HEPEvtParticle
       { return JDAHEP2; }
 };
 
-#if defined G4EVENT_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
-#endif
+extern G4EVENT_DLL G4ThreadLocal G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator;
 
 inline void * G4HEPEvtParticle::operator new(size_t)
 {
-  void * aHEPEvtParticle;
-  aHEPEvtParticle = (void *) aHEPEvtParticleAllocator.MallocSingle();
-  return aHEPEvtParticle;
+  if (!aHEPEvtParticleAllocator)
+    aHEPEvtParticleAllocator = new G4Allocator<G4HEPEvtParticle>;
+  return (void *) aHEPEvtParticleAllocator->MallocSingle();
 }
 
 inline void G4HEPEvtParticle::operator delete(void * aHEPEvtParticle)
 {
-  aHEPEvtParticleAllocator.FreeSingle((G4HEPEvtParticle *) aHEPEvtParticle);
+  aHEPEvtParticleAllocator->FreeSingle((G4HEPEvtParticle *) aHEPEvtParticle);
 }
-
 
 #endif
 

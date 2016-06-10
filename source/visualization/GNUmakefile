@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.27 2010-09-30 09:29:34 gcosmo Exp $
+# $Id: GNUmakefile 68732 2013-04-05 09:44:10Z gcosmo $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -18,11 +18,6 @@ include $(G4INSTALL)/config/interactivity.gmk
 
 SUBDIRS := modeling
 SUBLIBS := G4modeling
-
-ifdef G4LIB_BUILD_ZLIB
-  SUBDIRS += externals/zlib
-  SUBLIBS += G4zlib
-endif
 
 # For Debug mode
 # CPPFLAGS += -DG4DEBUG_VIS_OGL

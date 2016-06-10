@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm15/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68315 2013-03-21 18:26:24Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fWorld(0), fBox(0), fMaterial(0)
+:G4VUserDetectorConstruction(),fWorld(0), fBox(0), fMaterial(0),fWMaterial(0),
+ fDetectorMessenger(0)
 {
   fBoxSize = 100*m;  fWorldSize = 1.2*fBoxSize;
   DefineMaterials();
@@ -171,40 +172,40 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // World
   //
   G4Box*
-  sWorld = new G4Box("World",                                        //name
+  sWorld = new G4Box("World",                                      //name
                    fWorldSize/2,fWorldSize/2,fWorldSize/2);        //dimensions
 
-  G4LogicalVolume*                                                                 
-  lWorld = new G4LogicalVolume(sWorld,                        //shape
-                               fWMaterial,                //material
-                              "World");                        //name
+  G4LogicalVolume*
+  lWorld = new G4LogicalVolume(sWorld,                   //shape
+                               fWMaterial,               //material
+                              "World");                  //name
 
-  fWorld = new G4PVPlacement(0,                                //no rotation
-                             G4ThreeVector(),                //at (0,0,0)
-                           lWorld,                        //logical volume
-                           "World",                        //name
-                           0,                                       //mother  volume
+  fWorld = new G4PVPlacement(0,                          //no rotation
+                             G4ThreeVector(),            //at (0,0,0)
+                           lWorld,                       //logical volume
+                           "World",                      //name
+                           0,                            //mother  volume
                            false,                        //no boolean operation
-                           0);                                //copy number
+                           0);                           //copy number
                                                       
   // Box
   //                           
   G4Box*
-  sBox = new G4Box("Container",                                //its name
-                   fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
+  sBox = new G4Box("Container",                           //its name
+                   fBoxSize/2,fBoxSize/2,fBoxSize/2);     //its dimensions
                    
   G4LogicalVolume*
   lBox = new G4LogicalVolume(sBox,                        //its shape
-                             fMaterial,                        //its material
-                             fMaterial->GetName());        //its name
+                             fMaterial,                   //its material
+                             fMaterial->GetName());       //its name
 
-  fBox = new G4PVPlacement(0,                                //no rotation
-                             G4ThreeVector(),                //at (0,0,0)
-                           lBox,                        //its logical volume                           
-                           fMaterial->GetName(),        //its name
+  fBox = new G4PVPlacement(0,                             //no rotation
+                             G4ThreeVector(),             //at (0,0,0)
+                           lBox,                          //its logical volume
+                           fMaterial->GetName(),          //its name
                            lWorld,                        //its mother  volume
-                           false,                        //no boolean operation
-                           0);                                //copy number
+                           false,                         //no boolean operation
+                           0);                            //copy number
                            
   PrintParameters();
   

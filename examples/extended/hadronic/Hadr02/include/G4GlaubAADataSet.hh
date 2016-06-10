@@ -36,6 +36,9 @@
 /// \file hadronic/Hadr02/include/G4GlaubAADataSet.hh
 /// \brief Definition of the G4GlaubAADataSet class
 //
+// $Id: G4GlaubAADataSet.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4GlaubAADataSet_h
 #define G4GlaubAADataSet_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,34 +63,33 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "G4VGlauberDataSet.hh"
-
 #include "globals.hh"
-
 #include <fstream>
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4GlaubAADataSet : public G4VGlauberDataSet
 {
-  public:
-    G4GlaubAADataSet ();
-    virtual ~G4GlaubAADataSet ();
-    G4GlaubAADataSet (const G4GlaubAADataSet &right);
+public:
 
-    const G4GlaubAADataSet& operator=(G4GlaubAADataSet &right);
+  G4GlaubAADataSet ();
+  virtual ~G4GlaubAADataSet ();
+  G4GlaubAADataSet (const G4GlaubAADataSet &right);
 
+  const G4GlaubAADataSet& operator=(G4GlaubAADataSet &right);
+   
+private:
+  G4int GetZP () const;
+  G4int GetZT () const;
+
+  virtual G4bool CreateGlauberData (const G4int AP1, const G4int AT1);
+
+  void DefineAZStabilityLine();
     
-  private:
-    G4int GetZP () const;
-    G4int GetZT () const;
-
-    virtual G4bool CreateGlauberData (const G4int AP1, const G4int AT1);
-
-    void DefineAZStabilityLine();
-    
-  public:
-    G4int stabZ[211];
+public:
+  G4int stabZ[211];
 };
-////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif

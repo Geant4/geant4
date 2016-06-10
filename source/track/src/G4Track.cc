@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Track.cc 77080 2013-11-21 10:33:55Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -47,9 +47,9 @@
 #include <iostream>
 #include <iomanip>
 
-G4Allocator<G4Track> aTrackAllocator;
+G4ThreadLocal G4Allocator<G4Track> *aTrackAllocator = 0;
 
-G4VelocityTable*  G4Track::velTable=0;
+G4ThreadLocal G4VelocityTable*  G4Track::velTable=0;
 
 ///////////////////////////////////////////////////////////
 G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
@@ -68,14 +68,15 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     fpStep(0),
     fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
+    fCreatorModelIndex(-1),
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
     is_OpticalPhoton(false),
     useGivenVelocity(false)
-{    
-  static G4bool isFirstTime = true;
-  static G4ParticleDefinition* fOpticalPhoton =0;
+{
+  static G4ThreadLocal G4bool isFirstTime = true;
+  static G4ThreadLocal G4ParticleDefinition* fOpticalPhoton =0;
   if ( isFirstTime ) {
     isFirstTime = false;
     // set  fOpticalPhoton
@@ -105,6 +106,7 @@ G4Track::G4Track()
     fpStep(0),
     fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
+    fCreatorModelIndex(-1),
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
@@ -112,6 +114,7 @@ G4Track::G4Track()
     useGivenVelocity(false)
 {
 }
+
 //////////////////
 G4Track::G4Track(const G4Track& right)
 //////////////////
@@ -127,6 +130,7 @@ G4Track::G4Track(const G4Track& right)
     fpStep(0),
     fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
+    fCreatorModelIndex(-1),
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
@@ -209,7 +213,7 @@ void G4Track::CopyTrackInfo(const G4Track& right)
 ///////////////////
 G4double G4Track::CalculateVelocity() const
 ///////////////////
-{ 
+{
   if (useGivenVelocity) return fVelocity;    
 
   G4double velocity = c_light ;
@@ -242,7 +246,7 @@ G4double G4Track::CalculateVelocity() const
 ///////////////////
 G4double G4Track::CalculateVelocityForOpticalPhoton() const
 ///////////////////
-{ 
+{
     
   G4double velocity = c_light ;
   
@@ -296,15 +300,14 @@ void G4Track::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int n
 ///////////////////
 G4double G4Track::GetMaxTOfVelocityTable()
 ///////////////////
-{ return G4VelocityTable::GetMaxTOfVelocityTable();}
+{ return G4VelocityTable::GetMaxTOfVelocityTable(); }
 
 ///////////////////
 G4double G4Track::GetMinTOfVelocityTable() 
 ///////////////////
-{ return G4VelocityTable::GetMinTOfVelocityTable();}
+{ return G4VelocityTable::GetMinTOfVelocityTable(); }
 
 ///////////////////
 G4int    G4Track::GetNbinOfVelocityTable() 
 ///////////////////
-{ return G4VelocityTable::GetNbinOfVelocityTable();}
-
+{ return G4VelocityTable::GetNbinOfVelocityTable(); }

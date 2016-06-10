@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2010-11-17 10:55:23 gcosmo Exp $
+$Id: History 77529 2013-11-25 13:11:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 22nd, 2013 Tatiana Nikitina G01-V09-06-00
+- Added test case for 'genericPolycone' and 'genericPolyhedra'.
+  Requires update to GDML schema 3.1.0 to avoid validation errors.
+
 October 19th, 2012 Ben Morgan
 - Simplify CMake syntax to find Geant4 with gdml support
 

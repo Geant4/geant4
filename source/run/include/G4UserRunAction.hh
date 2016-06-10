@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UserRunAction.hh 68845 2013-04-08 07:22:19Z gcosmo $
 //
 
 #ifndef G4UserRunAction_h
@@ -47,6 +47,7 @@ class G4Run;
 //  The user's concrete class derived from this class must be set to
 // G4RunManager via G4RunManager::SetUserAction() method.
 //
+#include "G4Types.hh"
 
 class G4UserRunAction
 {
@@ -58,6 +59,15 @@ class G4UserRunAction
     virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run* aRun);
     virtual void EndOfRunAction(const G4Run* aRun);
+
+  protected:
+    G4bool isMaster;
+
+  public:
+    inline void SetMaster(G4bool val=true)
+    { isMaster = val; }
+    inline G4bool IsMaster() const
+    { return isMaster; }
 };
 
 #endif

@@ -1,5 +1,4 @@
-$Id: History,v 1.147 2010-11-18 17:24:22 allison Exp $
-$Name: not supported by cvs2svn $ 
+$Id: History 78003 2013-12-02 08:26:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +16,53 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th November2013 M.Asai (tracking-V09-06-10)
+- G4VTrajectory::ShowTrajectory() : add missing \\n.
+
+28th November2013 M.Asai (tracking-V09-06-09)
+- G4SteppingManager::fTouchableHistory data member is cleared in the
+  destructor to avoid double-deletion in MT mode.
+
+21st November2013 J.Perl (tracking-V09-06-08)
+- G4TrackingManager : Add handling for StoreTrajectory new case 4
+
+21st November2013 M.Asai (tracking-V09-06-07)
+- G4TrackingMessenger : Move invokation with G4TransportationManager 
+  in G4VisCommandsSceneAdd.cc to this G4TrakingMessenger. 
+  Since G4TransportationManager is thread-local,
+  G4VisCommandsSceneAdd.cc cannot access to G4TransportationManager.
+
+3rd November2013 L.Desorgher (tracking-V09-06-06)
+-G4AdjointTrackingAction. Change order of initialization in constructor to 
+  avoid compilation warning.
+
+31th October2013 L.Desorgher (tracking-V09-06-05)
+-Create G4AdjointTrackingAction and modify G4AdjointSteppingAction in order to 
+treat the reverse tracking of an adjoint particle and tracking of its 
+equivalent forward particle in the same event.This is requested for the 
+migration of the ReverseMC to the MT mode.  
+
+29th August 2013 M.Asai (tracking-V09-06-04)
+- Add protection against null pointer for the process manager of
+  secondaries in case secondaries are generated at zero kinetic energy.
+
+11th April 2013 G.Cosmo (tracking-V09-06-03)
+- Cleanup of automatic changes for MT in classes: G4RichTrajectory,
+  G4RichTrajectoryPoint, G4SmoothTrajectory, G4SmoothTrajectoryPoint,
+  G4Trajectory, G4TrajectoryPoint.
+
+5th February 2013 Takashi Sasaki (tracking-V09-06-02)
+- Fix for the problem report #1397. More than two AtRest
+  processes are allowed. Needs checks for the results.
+
+11th January 2013  Gabriele Cosmo (tracking-V09-06-01)
+- Replace plain printout to cerr with G4Exception warning in
+  G4SteppingManager::InvokeAtRestDoItProcs().
+  Addressing problem report #1421.
+
+3rd December 2012  John Allison (tracking-V09-06-00)
+- Removed DrawTrajectory(G4int i_mode).
 
 26 October 2012 Laurent Desorgher (tracking-V09-05-04)
 - G4AdointSteppingAction.cc. Add test for adjoint particle reaching "out_of_the_world".

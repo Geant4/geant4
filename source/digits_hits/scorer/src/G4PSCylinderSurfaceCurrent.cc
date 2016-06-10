@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PSCylinderSurfaceCurrent.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4PSCylinderSurfaceCurrent
 #include "G4PSCylinderSurfaceCurrent.hh"

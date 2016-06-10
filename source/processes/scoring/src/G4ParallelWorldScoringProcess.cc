@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParallelWorldScoringProcess.cc 68733 2013-04-05 09:45:28Z gcosmo $
 //
 //
 
@@ -325,8 +325,8 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
             const G4Track& track, G4double  previousStepSize, G4double  currentMinimumStep,
             G4double& proposedSafety, G4GPILSelection* selection)
 {
-  static G4FieldTrack endTrack('0');
-  static ELimited eLimited;
+  static G4ThreadLocal G4FieldTrack *endTrack_G4MT_TLS_ = 0 ; if (!endTrack_G4MT_TLS_) endTrack_G4MT_TLS_ = new  G4FieldTrack ('0') ;  G4FieldTrack &endTrack = *endTrack_G4MT_TLS_;
+  static G4ThreadLocal ELimited *eLimited_G4MT_TLS_ = 0 ; if (!eLimited_G4MT_TLS_) eLimited_G4MT_TLS_ = new  ELimited  ;  ELimited &eLimited = *eLimited_G4MT_TLS_;
   
   *selection = NotCandidateForSelection;
   G4double returnedStep = DBL_MAX;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VEmProcess.hh 74376 2013-10-04 08:25:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -85,6 +85,7 @@ class G4VParticleChange;
 class G4PhysicsTable;
 class G4PhysicsVector;
 class G4EmBiasingManager;
+class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -127,8 +128,6 @@ public:
 
   // Build physics table during initialisation
   void BuildPhysicsTable(const G4ParticleDefinition&);
-
-  void PrintInfoDefinition();
 
   // Called before tracking of each new G4Track
   void StartTracking(G4Track*);
@@ -195,8 +194,9 @@ public:
   // Min kinetic energy for high energy table
   inline void SetMinKinEnergyPrim(G4double e);
 
-  // Cross section table pointer
-  inline const G4PhysicsTable* LambdaTable() const;
+  // Cross section table pointers
+  inline G4PhysicsTable* LambdaTable() const;
+  inline G4PhysicsTable* LambdaTablePrim() const;
 
   //------------------------------------------------------------------------
   // Define and access particle type 
@@ -222,14 +222,8 @@ public:
   // model will be selected for a given energy interval  
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
-  // Assign a model to a process - obsolete will be removed
-  void SetModel(G4VEmModel*, G4int index = 1);
-  
-  // return the assigned model - obsolete will be removed
-  G4VEmModel* Model(G4int index = 1);
-
   // return the assigned model
-  G4VEmModel* EmModel(G4int index = 1);
+  G4VEmModel* EmModel(G4int index = 1) const;
 
   // Assign a model to a process
   void SetEmModel(G4VEmModel*, G4int index = 1);
@@ -238,7 +232,7 @@ public:
   void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Access to models
-  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
+  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
   // access atom on which interaction happens
   const G4Element* GetCurrentElement() const;
@@ -306,6 +300,8 @@ private:
 
   void BuildLambdaTable();
 
+  void PrintInfoProcess(const G4ParticleDefinition&);
+
   void FindLambdaMax();
 
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
@@ -326,6 +322,7 @@ private:
 
   // ======== Parameters of the class fixed at construction =========
 
+  G4LossTableManager*          lManager;
   G4EmModelManager*            modelManager;
   G4EmBiasingManager*          biasManager;
   const G4ParticleDefinition*  theGamma;
@@ -345,6 +342,9 @@ private:
   G4PhysicsTable*              theLambdaTablePrim;
   std::vector<G4double>        theEnergyOfCrossSectionMax;
   std::vector<G4double>        theCrossSectionMax;
+
+  size_t                       idxLambda;
+  size_t                       idxLambdaPrim;
 
   const std::vector<G4double>* theCuts;
   const std::vector<G4double>* theCutsGamma;
@@ -396,7 +396,11 @@ private:
   G4bool                       biasFlag;
   G4bool                       weightFlag;
 
-  G4int                        warn;
+  G4int                        mainSecondaries;
+  G4int                        secID;  
+  G4int                        fluoID;  
+  G4int                        augerID;  
+  G4int                        biasID;  
 };
 
 // ======== Run time inline methods ================
@@ -433,6 +437,7 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
     fFactor = biasFactor*(*theDensityFactor)[currentCoupleIndex];
     if(!baseMaterial) { baseMaterial = currentMaterial; }
     mfpKinEnergy = DBL_MAX;
+    idxLambda = idxLambdaPrim = 0;
   }
 }
 
@@ -461,14 +466,14 @@ G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy,
 
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
-  return ((*theLambdaTable)[basedCoupleIndex])->Value(e);
+  return ((*theLambdaTable)[basedCoupleIndex])->Value(e, idxLambda);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e)
 {
-  return ((*theLambdaTablePrim)[basedCoupleIndex])->Value(e)/e;
+  return ((*theLambdaTablePrim)[basedCoupleIndex])->Value(e, idxLambdaPrim)/e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -594,9 +599,16 @@ inline G4double G4VEmProcess::CrossSectionBiasingFactor() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4PhysicsTable* G4VEmProcess::LambdaTable() const
+inline G4PhysicsTable* G4VEmProcess::LambdaTable() const
 {
   return theLambdaTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4PhysicsTable* G4VEmProcess::LambdaTablePrim() const
+{
+  return theLambdaTablePrim;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,8 +1,9 @@
 {
+gROOT -> Reset();
 TFile f("brachytherapy.root");
 
-TDirectory* dir = (TDirectory*)f.Get("ntuple");
-TTree* ntuple = (TTree*)dir->Get("EnergyDeposition");
+TDirectory* dir = (TDirectory*)f.Get("brachy_ntuple");
+TTree* ntuple = (TTree*)dir->Get("1");
 ntuple -> Print();   
  
 Int_t index;
@@ -29,6 +30,8 @@ for ( Int_t i=0; i<nevent; i++ ) {
 // the voxel size is 1 mm. The number of voxels is 300 along x, y, z
 
 // Plot the energy deposition in the phantom in 3D
+TCanvas* c1 = new TCanvas("c1", " ");
+
 TH3F* edepDDistribution3D = new TH3F("h30", "3Dedepxyz", 
 				     300, -150, 150, // binning, xmin, xmax, along x direction
 				     300, -150, 150, // binning, xmin, xmax, along y direction

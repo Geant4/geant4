@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPAntiBarionBuilder.cc $
+// $Id: G4FTFPAntiBarionBuilder.cc 67969 2013-03-13 09:44:42Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 //---------------------------------------------------------------------------

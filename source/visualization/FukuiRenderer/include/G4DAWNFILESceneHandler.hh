@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DAWNFILESceneHandler.hh 66870 2013-01-14 23:38:59Z adotti $
 //
 // Satoshi TANAKA
 
@@ -57,7 +57,6 @@ public:
 	//----- overriding base class methods
   void AddPrimitive (const G4Polyline& line);
   void AddPrimitive (const G4Polyhedron& p);
-  void AddPrimitive (const G4NURBS& nurb);
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);

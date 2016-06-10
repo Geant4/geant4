@@ -1,4 +1,4 @@
-# $Id: rndmSeed.mac,v 1.2 2007-06-13 10:36:39 maire Exp $
+# $Id: rndmSeed.mac 75839 2013-11-06 17:27:26Z gcosmo $
 #
 # This macro illustrates how to save and reset the random number seed
 #
@@ -6,7 +6,7 @@
 #
 /random/setSavingFlag 1
 #
-/testem/event/printModulo 1
+/run/printProgress 1
 #
 # run 0
 #

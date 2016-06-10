@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VRML1SceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // G4VRML1SceneHandler.hh
 // Yasuhide Sawada & Satoshi Tanaka
@@ -88,7 +88,6 @@ public:
 
 	void AddPrimitive(const G4Polyline&);
 	void AddPrimitive(const G4Polyhedron&);
-	void AddPrimitive(const G4NURBS&); 
 	void AddPrimitive(const G4Text&); 
 	void AddPrimitive(const G4Circle&);
 	void AddPrimitive(const G4Square&);

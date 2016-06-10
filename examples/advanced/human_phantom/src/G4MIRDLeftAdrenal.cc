@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -60,41 +60,35 @@ G4MIRDLeftAdrenal::~G4MIRDLeftAdrenal()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDLeftAdrenal::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
-						    const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
+						const G4String& colourName, G4bool wireFrame, G4bool)
 {
-  G4cout << "Construct "<< volumeName << G4endl;
+  G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
  
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
  
- G4double ax= 1.5 *cm; //a
- G4double by= 0.5 *cm; //b
- G4double cz= 5.0 *cm; //c
+  G4double ax= 1.5 *cm; //a
+  G4double by= 0.5 *cm; //b
+  G4double cz= 5.0 *cm; //c
  
- G4VSolid* leftAdrenal = new G4Ellipsoid("OneLeftAdrenal",ax, by, cz, 0. *cm, cz); 
+  G4VSolid* leftAdrenal = new G4Ellipsoid("OneLeftAdrenal",ax, by, cz, 0. *cm, cz); 
  
  
- G4LogicalVolume* logicLeftAdrenal = new G4LogicalVolume(leftAdrenal,
-						     soft,
-						     "logical" + volumeName,
-						     0, 0, 0);
+  G4LogicalVolume* logicLeftAdrenal = new G4LogicalVolume(leftAdrenal,
+							  soft,
+							  "logical" + volumeName,
+							  0, 0, 0);
 
-  G4VPhysicalVolume* physLeftAdrenal = new G4PVPlacement(0 ,G4ThreeVector(4.5*cm,  // xo
-								     6.5 *cm, //yo
-								     3. *cm),//zo
-  			       "physicalLeftAdrenal", logicLeftAdrenal,
-			       mother,
-			       false,
-			       0, true);
-
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicLeftAdrenal->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
+  G4VPhysicalVolume* physLeftAdrenal = new G4PVPlacement(0,G4ThreeVector(4.5*cm,  // xo
+									 6.5 *cm, //yo
+									 3. *cm),//zo
+							 "physicalLeftAdrenal", logicLeftAdrenal,
+							 mother,
+							 false,
+							 0, true);
 
   // Visualization Attributes
   //  G4VisAttributes* LeftAdrenalVisAtt = new G4VisAttributes(G4Colour(0.72,0.52,0.04));

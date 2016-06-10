@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.hh 73035 2013-08-15 09:27:10Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,14 +39,13 @@
 
 class DetectorConstruction;
 class RunAction;
-class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*,RunAction*,EventAction*);
+    TrackingAction(DetectorConstruction*,RunAction*);
    ~TrackingAction() {};
    
     virtual void  PreUserTrackingAction(const G4Track*);   
@@ -55,7 +54,6 @@ class TrackingAction : public G4UserTrackingAction {
   private:
     DetectorConstruction* fDetector;
     RunAction*            fRunAct;    
-    EventAction*          fEventAct;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm9/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-//
-// $Id$
+// $Id: DetectorConstruction.cc 67644 2013-02-28 14:57:35Z ihrivnac $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -75,7 +74,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-  : G4VUserDetectorConstruction()
+  : G4VUserDetectorConstruction(),
+    fCalMaterial(0),
+    fVertMaterial(0),
+    fAbsMaterial(0),
+    fWorldMaterial(0),
+    fYorkMaterial(0),
+    fLogicWorld(0),
+    fLogicCal(0),
+    fLogicA1(0),
+    fLogicA2(0),
+    fLogicA3(0),
+    fLogicA4(0),
+    fVertexRegion(0),
+    fMuonRegion(0),
+    fVertexDetectorCuts(0),
+    fMuonDetectorCuts(0),
+    fDetectorMessenger(0)
 {
   fDetectorMessenger = new DetectorMessenger(this);
 
@@ -339,7 +354,7 @@ void DetectorConstruction::SetEcalMaterial(const G4String& mat)
 {
   // search the material by its name
   G4Material* pttoMaterial = 
-    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
+    G4NistManager::Instance()->FindOrBuildMaterial(mat);
   if (pttoMaterial && pttoMaterial != fCalMaterial) {
     fCalMaterial = pttoMaterial;
     if(fLogicCal) {
@@ -355,7 +370,7 @@ void DetectorConstruction::SetAbsMaterial(const G4String& mat)
 {
   // search the material by its name
   G4Material* pttoMaterial = 
-    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
+    G4NistManager::Instance()->FindOrBuildMaterial(mat);
   if (pttoMaterial && pttoMaterial != fAbsMaterial) {
     fAbsMaterial = pttoMaterial;
     if(fLogicA1) {

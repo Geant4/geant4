@@ -27,7 +27,6 @@
 /// \brief Definition of the UrQMDAntiBarionBuilder class
 //
 // $Id: $ 
-// GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
@@ -67,8 +66,8 @@ public:
   virtual void Build(G4AntiHe3InelasticProcess * aP);
   virtual void Build(G4AntiAlphaInelasticProcess * aP);
     
-  void SetMinEnergy(G4double val) {fMin = val;}
-  void SetMaxEnergy(G4double val) {fMax = val;}
+  inline void SetMinEnergy(G4double val) {fMin = val;}
+  inline void SetMaxEnergy(G4double val) {fMax = val;}
 
 private:
 

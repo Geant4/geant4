@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2011-01-03 14:35:09 lgarnier Exp $
+$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,21 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+15th November 2013  John Allison (DAWN-V09-06-06)
+- Some changes as suggested by PVS.
+
+7th November 2013  Gabriele Cosmo  (DAWN-V09-06-05, DAWN-V09-06-04)
+- Replaced deprecated calls to solids accessor methods.
+
+29th January 2013  John Allison  (DAWN-V09-06-03)
+- Revert to DAWN-V09-06-00.
+
+12th January 2013  John Allison  (DAWN-V09-06-02)
+- Coverity fixes.
+
+2nd December 2012  John Allison  (DAWN-V09-06-00)
+  o Removed NURBS.
 
 20th July 2012  John Allison  (DAWN-V09-05-05)
 - Added print-once warnings for 2D.

@@ -23,17 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeAnnihilationModel.cc 74452 2013-10-07 15:08:00Z gcosmo $
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
 // 29 Oct 2008   L Pandola    Migration from process to model 
-// 15 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+// 15 Apr 2009   V Ivanchenko Cleanup initialisation and generation of 
+//                    secondaries:
 //                  - apply internal high-energy limit only in constructor 
 //                  - do not apply low-energy limit (default is 0)
 //                  - do not use G4ElementSelector
+// 02 Oct 2013   L.Pandola    Migration to MT
 
 #include "G4PenelopeAnnihilationModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -46,16 +48,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double G4PenelopeAnnihilationModel::fPielr2 = 0;
 
-G4PenelopeAnnihilationModel::G4PenelopeAnnihilationModel(const G4ParticleDefinition*,
+G4PenelopeAnnihilationModel::G4PenelopeAnnihilationModel(const G4ParticleDefinition* part,
                                              const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false)
+  :G4VEmModel(nam),fParticleChange(0),fParticle(0),isInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 0.0;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
- 
+
+  if (part)
+    SetParticle(part);
+
   //Calculate variable that will be used later on
   fPielr2 = pi*classic_electr_radius*classic_electr_radius;
 
@@ -76,23 +82,50 @@ G4PenelopeAnnihilationModel::~G4PenelopeAnnihilationModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeAnnihilationModel::Initialise(const G4ParticleDefinition*,
+void G4PenelopeAnnihilationModel::Initialise(const G4ParticleDefinition* part,
 					     const G4DataVector&)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeAnnihilationModel::Initialise()" << G4endl;
+  SetParticle(part);
 
-  if(verboseLevel > 0) {
-    G4cout << "Penelope Annihilation model is initialized " << G4endl
-	   << "Energy range: "
-	   << LowEnergyLimit() / keV << " keV - "
-	   << HighEnergyLimit() / GeV << " GeV"
-	   << G4endl;
-  }
+  if (IsMaster() && part == fParticle)
+    {
+
+      if(verboseLevel > 0) {
+	G4cout << "Penelope Annihilation model is initialized " << G4endl
+	       << "Energy range: "
+	       << LowEnergyLimit() / keV << " keV - "
+	       << HighEnergyLimit() / GeV << " GeV"
+	       << G4endl;
+      }
+    }
 
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void G4PenelopeAnnihilationModel::InitialiseLocal(const G4ParticleDefinition* part,
+						  G4VEmModel* masterModel)
+{
+  if (verboseLevel > 3)
+    G4cout << "Calling G4PenelopeAnnihilationModel::InitialiseLocal()" << G4endl;
+
+  //
+  //Check that particle matches: one might have multiple master models (e.g. 
+  //for e+ and e-).
+  //
+  if (part == fParticle)
+    {
+      //Get the const table pointers from the master to the workers
+      const G4PenelopeAnnihilationModel* theModel = 
+        static_cast<G4PenelopeAnnihilationModel*> (masterModel);
+ 
+      //Same verbosity for all workers, as the master
+      verboseLevel = theModel->verboseLevel;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -260,4 +293,13 @@ G4double G4PenelopeAnnihilationModel:: ComputeCrossSectionPerElectron(G4double e
   G4double crossSection = fPielr2*((gamma2+4.0*gamma+1.0)*std::log(gamma+f1)/f2
 			 - (gamma+3.0)/f1)/(gamma+1.0);
   return crossSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+
+void G4PenelopeAnnihilationModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!fParticle) {
+    fParticle = p;  
+  }
 }

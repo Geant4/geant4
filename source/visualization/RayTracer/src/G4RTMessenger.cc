@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RTMessenger.cc 74050 2013-09-20 09:38:19Z gcosmo $
 //
 //
 //
@@ -39,25 +39,24 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4TheRayTracer.hh"
 #include "G4RTSteppingAction.hh"
 #include "G4ThreeVector.hh"
 #include "G4VisManager.hh"
 #include "G4RayTracerViewer.hh"
+#include "G4TheRayTracer.hh"
 
 G4RTMessenger* G4RTMessenger::fpInstance = 0;
 
 G4RTMessenger* G4RTMessenger::GetInstance
-(G4TheRayTracer* p1,G4RTSteppingAction* p2)
+(G4TheRayTracer* p1)
 {
-  if (!fpInstance) fpInstance = new G4RTMessenger(p1, p2);
+  if (!fpInstance) fpInstance = new G4RTMessenger(p1);
   return fpInstance;
 }
 
-G4RTMessenger::G4RTMessenger(G4TheRayTracer* p1,G4RTSteppingAction* p2)
+G4RTMessenger::G4RTMessenger(G4TheRayTracer* p1)
 {
   theDefaultTracer = p1;
-  theSteppingAction = p2;
 
   rayDirectory = new G4UIdirectory("/vis/rayTracer/");
   rayDirectory->SetGuidance("RayTracer commands.");
@@ -176,7 +175,7 @@ G4String G4RTMessenger::GetCurrentValue(G4UIcommand * command)
   else if(command==distCmd)
   { currentValue = distCmd->ConvertToString(theTracer->GetDistortion()); }
   else if(command==transCmd)
-  { currentValue = transCmd->ConvertToString(theSteppingAction->GetIgnoreTransparency()); }
+  { currentValue = transCmd->ConvertToString(G4RTSteppingAction::GetIgnoreTransparency()); }
   else if(command==bkgColCmd)
   { currentValue = bkgColCmd->ConvertToString(theTracer->GetBackgroundColour()); }
   return currentValue;
@@ -232,7 +231,7 @@ void G4RTMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 		<< G4endl;
   }
   else if(command==transCmd)
-  { theSteppingAction->SetIgnoreTransparency(transCmd->GetNewBoolValue(newValue)); }
+  { G4RTSteppingAction::SetIgnoreTransparency(transCmd->GetNewBoolValue(newValue)); }
   else if(command==fileCmd)
   { theTracer->Trace(newValue); }
 }

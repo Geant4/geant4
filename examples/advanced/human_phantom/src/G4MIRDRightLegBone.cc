@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -56,13 +56,14 @@ G4MIRDRightLegBone::~G4MIRDRightLegBone()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDRightLegBone::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
-                                                      const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
+						 const G4String& colourName, G4bool wireFrame,G4bool)
 {
  
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
   
-  G4cout << "Construct " << volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
   
@@ -77,9 +78,9 @@ G4VPhysicalVolume* G4MIRDRightLegBone::Construct(const G4String& volumeName,G4VP
   G4double deltaphi = 360. * degree;
 
   G4Cons* leg_bone = new G4Cons("OneRightLegBone",  
-			   rmin1, rmax1, 
-			   rmin2, rmax2, dz/2., 
-			   startphi, deltaphi);
+				rmin1, rmax1, 
+				rmin2, rmax2, dz/2., 
+				startphi, deltaphi);
 
   //G4RotationMatrix* rm_relative = new G4RotationMatrix();
   //rm_relative -> rotateY(-12.5 * degree);
@@ -91,24 +92,19 @@ G4VPhysicalVolume* G4MIRDRightLegBone::Construct(const G4String& volumeName,G4VP
 
 
   G4LogicalVolume* logicRightLegBone = new G4LogicalVolume(leg_bone, skeleton,"logical" + volumeName,
-						      0, 0, 0);
+							   0, 0, 0);
 
 
   // Define rotation and position here!
   G4VPhysicalVolume* physRightLegBone = new G4PVPlacement(0,
-				G4ThreeVector(0.0 * cm, 0.0, 0.1*cm),
-      			       "physicalRightLegBone",
-  			       logicRightLegBone,
-			       mother,
-			       false,
-			       0, true);
+							  G4ThreeVector(0.0 * cm, 0.0, 0.1*cm),
+							  "physicalRightLegBone",
+							  logicRightLegBone,
+							  mother,
+							  false,
+							  0, true);
 
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicRightLegBone->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
+ 
 
   // Visualization Attributes
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();

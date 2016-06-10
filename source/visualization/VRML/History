@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2010-12-27 13:23:00 allison Exp $
+$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,21 @@ committal in the CVS repository !
 
 History file for visualization/VRML sub-category
 ------------------------------------------------
+
+15th November 2013  John Allison  (VRML-V09-06-05)
+- Some changes as suggested by PVS.
+
+7th November 2013  Gabriele Cosmo  (VRML-V09-06-04)
+- Replaced deprecated calls to solids accessor methods.
+
+29th January 2013  John Allison  (VRML-V09-06-03)
+- Revert to VRML-V09-06-00.
+
+14th January 2013  John Allison  (VRML-V09-06-01)
+- Coverity fixes.
+
+2nd December 2012  John Allison  (VRML-V09-06-00)
+- Remove NURBS.
 
 8th August 2012  John Allison  (VRML-V09-05-05)
 - G4VRML1/2SceneHandlerFunc.icc;

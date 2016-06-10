@@ -32,7 +32,7 @@
 //    *                                 *
 //    ***********************************
 //
-// $Id$
+// $Id: PurgMagSteppingAction.hh 72967 2013-08-14 14:57:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,8 +44,6 @@
 #include "G4PVParameterised.hh"
 #include "G4Tubs.hh"
 
-
-class PurgMagRunAction;
 class PurgMagDetectorConstruction;
 class PurgMagAnalysisManager;
 
@@ -54,13 +52,12 @@ class PurgMagAnalysisManager;
 class PurgMagSteppingAction : public G4UserSteppingAction
 {
 public:
-  PurgMagSteppingAction(PurgMagRunAction*,PurgMagDetectorConstruction*);
+  PurgMagSteppingAction(PurgMagDetectorConstruction*);
   ~PurgMagSteppingAction();
   
   void UserSteppingAction(const G4Step*);
   
 private:
-  PurgMagRunAction*            PurgMagRun;
   PurgMagDetectorConstruction* Detector; 
   
 };

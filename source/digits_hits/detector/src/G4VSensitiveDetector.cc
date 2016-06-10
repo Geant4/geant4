@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VSensitiveDetector.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
@@ -63,6 +63,16 @@ G4VSensitiveDetector::G4VSensitiveDetector(const G4VSensitiveDetector &right)
 
 G4VSensitiveDetector::~G4VSensitiveDetector()
 {
+}
+
+G4VSensitiveDetector* G4VSensitiveDetector::Clone() const
+{
+    G4ExceptionDescription msg;
+    msg << "Derived class does not implement cloning,\n"
+    << "but Clone method called.\n"
+    << "Cannot continue;";
+    G4Exception("G4VSensitiveDetector::Clone","Det0010",FatalException,msg);
+    return NULL;
 }
 
 const G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetector &right)

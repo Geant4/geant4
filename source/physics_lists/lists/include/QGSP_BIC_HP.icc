@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: QGSP_BIC_HP.icc 67969 2013-03-13 09:44:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@
 #include "G4HadronElasticPhysicsHP.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_BIC_HP.hh"
 
 template<class T> TQGSP_BIC_HP<T>::TQGSP_BIC_HP(G4int ver):  T()
 {
@@ -89,7 +89,7 @@ template<class T> TQGSP_BIC_HP<T>::TQGSP_BIC_HP(G4int ver):  T()
   this->RegisterPhysics( new G4HadronElasticPhysicsHP(ver) );
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsQGSP_BIC_HP(ver));
+  this->RegisterPhysics(  new G4HadronPhysicsQGSP_BIC_HP(ver));
 
   // Stopping Physics
   this->RegisterPhysics( new G4StoppingPhysics(ver) );

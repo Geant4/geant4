@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RTMessenger.hh 74050 2013-09-20 09:38:19Z gcosmo $
 //
 //
 
@@ -47,25 +47,22 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 class G4TheRayTracer;
-class G4RTSteppingAction;
 
 class G4RTMessenger : public G4UImessenger
 {
   public:
-    static G4RTMessenger* GetInstance
-    (G4TheRayTracer* p1,G4RTSteppingAction* p2);  // Singleton constructor.
+    static G4RTMessenger* GetInstance(G4TheRayTracer* p1);  // Singleton constructor.
     virtual ~G4RTMessenger();
     
     virtual G4String GetCurrentValue(G4UIcommand * command);
     virtual void SetNewValue(G4UIcommand * command,G4String newValue);
 
   private:
-    G4RTMessenger(G4TheRayTracer* p1,G4RTSteppingAction* p2);
+    G4RTMessenger(G4TheRayTracer* p1);
     static G4RTMessenger* fpInstance;
     G4TheRayTracer* theDefaultTracer;  // The first tracer to
 				       // instantiate this messenger.
     G4TheRayTracer* theTracer;         // The current tracer.
-    G4RTSteppingAction* theSteppingAction;
 
     G4UIdirectory* rayDirectory;
     G4UIcmdWithAnInteger* columnCmd;

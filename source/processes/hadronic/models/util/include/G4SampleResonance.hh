@@ -71,7 +71,7 @@ public:
 
 private:
 
-  static minMassMapType minMassCache;
+  static G4ThreadLocal minMassMapType *minMassCache_G4MT_TLS_;
 
 };
 

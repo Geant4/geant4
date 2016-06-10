@@ -27,7 +27,7 @@
 /// \brief Definition of the G04PhysicsList class
 //
 //
-// $Id$
+// $Id: G04PhysicsList.hh 69988 2013-05-21 12:36:24Z gcosmo $
 //
 //
 
@@ -48,9 +48,9 @@ class G04PhysicsList : public G4VUserPhysicsList
 
   protected:
 
-    void ConstructParticle();
-    void ConstructProcess();
-    void SetCuts();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+    virtual void SetCuts();
 };
 
 #endif

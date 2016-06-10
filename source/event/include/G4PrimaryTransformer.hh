@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PrimaryTransformer.hh 72252 2013-07-12 09:04:11Z gcosmo $
 //
 
 #ifndef G4PromaryTransformer_h 
@@ -61,6 +61,10 @@ class G4PrimaryTransformer
 
     G4ParticleDefinition* unknown;
     G4bool unknownParticleDefined;
+    G4ParticleDefinition* opticalphoton;
+    G4bool opticalphotonDefined;
+
+    G4int nWarn;
 
   public:
     inline void SetVerboseLevel(G4int vl)

@@ -23,14 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.cc 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4DNAMolecularMaterial.cc 70171 2013-05-24 13:34:18Z gcosmo $
 //
 #include "G4DNAMolecularMaterial.hh"
 #include "G4Material.hh"
 #include <utility>
 #include "G4StateManager.hh"
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 using namespace std;
+
+G4DNAMolecularMaterial* G4DNAMolecularMaterial::fInstance(0);
+//G4ThreadLocal G4DNAMolecularMaterial* G4DNAMolecularMaterial::fInstance(0);
+G4Mutex aMutex=G4MUTEX_INITIALIZER;
 
 
 bool CompareMaterial::operator() (const G4Material* mat1, const G4Material* mat2) const
@@ -58,8 +64,6 @@ bool CompareMaterial::operator() (const G4Material* mat1, const G4Material* mat2
     // only case baseMat1==0 && baseMat2 remains
     return mat1 < baseMat2;
 }
-
-G4DNAMolecularMaterial* G4DNAMolecularMaterial::fInstance(0);
 
 G4DNAMolecularMaterial* G4DNAMolecularMaterial::Instance()
 {
@@ -274,7 +278,11 @@ void G4DNAMolecularMaterial::InitializeNumMolPerVol()
 
 void G4DNAMolecularMaterial::Initialize()
 {
-    if(fIsInitialized) return;
+    G4AutoLock l(&aMutex);
+    if(fIsInitialized)
+    {
+        return;
+    }
 
     const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
 
@@ -371,7 +379,7 @@ const std::vector<double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(const
         if(fIsInitialized)
         {
             G4ExceptionDescription exceptionDescription;
-            exceptionDescription << "The pointer fpCompNumMolPerVolTable is not initialized will the singleton of G4DNAMolecularMaterial "
+            exceptionDescription << "The pointer fpCompNumMolPerVolTable is not initialized whereas the singleton of G4DNAMolecularMaterial "
                                  << "has already been initialized."<< G4endl;
             G4Exception("G4DNAMolecularMaterial::GetNumMolPerVolTableFor","G4DNAMolecularMaterial005",
                         FatalException,exceptionDescription);

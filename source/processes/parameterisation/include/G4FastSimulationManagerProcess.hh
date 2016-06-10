@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FastSimulationManagerProcess.hh 68056 2013-03-13 14:44:48Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -159,7 +159,6 @@ private:
   G4int                      fGhostNavigatorIndex;
   G4bool                         fIsGhostGeometry;
   G4double                           fGhostSafety;
-  G4bool                              fOnBoundary;
   G4FieldTrack                        fFieldTrack;
   
   

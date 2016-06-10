@@ -1,0 +1,41 @@
+# Definition of ctest for phonons extended example
+# This file is included by Geant4 ctest "external" tests defintion file
+# This can be found in:
+#     <geant4-source>/tests/ctest/CMakeLists.txt
+
+#Check if we are in a MT specific build
+set(_MTsuffix "")
+if(GEANT4_BUILD_MULTITHREADED)
+   set(_MTsuffix "-MT")
+endif()
+
+set(_causticRef ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/caustic.out)
+set(_timingRef ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/timing.out)
+
+#Check if specific OS references are available, if not use default
+if(EXISTS ${_causticRef}${_MTsuffix}-${CMAKE_SYSTEM_NAME})
+	  set(_causticRef ${_causticRef}${_MTsuffix}-${CMAKE_SYSTEM_NAME})
+else()
+	message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
+		    " caustic.out${_MTsuffix}-${CMAKE_SYSTEM_NAME} references, using default caustic.out")
+endif()
+
+if(EXISTS ${_timingRef}${_MTsuffix}-${CMAKE_SYSTEM_NAME})
+	  set(_timingRef ${_timingRef}${_MTsuffix}-${CMAKE_SYSTEM_NAME})
+else()
+	message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
+		    " timing.out${_MTsuffix}-${CMAKE_SYSTEM_NAME} references, using default timing.out")
+endif()
+
+
+GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon/XGeBox
+                        ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/run.in
+                POSTCMD ${CMAKE_COMMAND} -E compare_files timing.ssv ${_timingRef}
+                POSTCMD ${CMAKE_COMMAND} -E compare_files caustic.ssv ${_causticRef}
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
+                BUILD XGeBox PROJECT dmc
+                ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                            G4LATTICEDATA=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps
+		)

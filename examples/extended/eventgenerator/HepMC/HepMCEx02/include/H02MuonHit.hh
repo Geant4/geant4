@@ -26,28 +26,17 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02MuonHit.hh
 /// \brief Definition of the H02MuonHit class
 //
-// ====================================================================
+//   $Id: H02MuonHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   H02MuonHit.hh
-//   $Id$
-//
-// ====================================================================
 #ifndef H02_MUON_HIT_H
 #define H02_MUON_HIT_H
- 
+
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
 class H02MuonHit : public G4VHit {
-private:
-  G4int moduleID;
-  G4String pname;
-  G4ThreeVector momentum;
-  G4ThreeVector position;
-  G4double tof;
-
 public:
   H02MuonHit();
   H02MuonHit(G4int imod, G4String aname, const G4ThreeVector& pxyz,
@@ -57,7 +46,7 @@ public:
   H02MuonHit(const H02MuonHit& right);
   const H02MuonHit& operator=(const H02MuonHit& right);
   G4int operator==(const H02MuonHit& right) const;
-  
+
   void* operator new(size_t);
   void operator delete(void* aHit);
 
@@ -79,20 +68,24 @@ public:
 
   // methods...
   virtual void Draw();
-  virtual void Print();  
+  virtual void Print();
+
+private:
+  G4int moduleID;
+  G4String pname;
+  G4ThreeVector momentum;
+  G4ThreeVector position;
+  G4double tof;
 };
 
-// ====================================================================
-// inline functions
-// ====================================================================
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 inline void H02MuonHit::SetModuleID(G4int i) { moduleID=i; }
 inline G4int H02MuonHit::GetModuleID() const { return moduleID; }
 
 inline void H02MuonHit::SetParticle(G4String aname) { pname=aname; }
 inline G4String H02MuonHit::GetParticle() const { return pname; }
 
-inline void H02MuonHit::SetMomentum(const G4ThreeVector& pxyz) 
+inline void H02MuonHit::SetMomentum(const G4ThreeVector& pxyz)
 { momentum=pxyz; }
 inline G4ThreeVector H02MuonHit::GetMomentum() const { return momentum; }
 

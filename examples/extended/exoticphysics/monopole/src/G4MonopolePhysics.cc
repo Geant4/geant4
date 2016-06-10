@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysics.cc
 /// \brief Implementation of the G4MonopolePhysics class
 //
-// $Id$
+// $Id: G4MonopolePhysics.cc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,6 +49,7 @@
 #include "G4Monopole.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
 
 #include "G4StepLimiter.hh"
 #include "G4Transportation.hh"
@@ -60,13 +61,15 @@
 #include "G4hIonisation.hh"
 
 #include "G4PhysicsListHelper.hh"
+
 #include "G4BuilderType.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopolePhysics::G4MonopolePhysics(const G4String& nam)
-  : G4VPhysicsConstructor(nam)
+  : G4VPhysicsConstructor(nam),
+    fMessenger(0), fMpl(0)
 {
   fMagCharge = 1.0;
   //  fMagCharge = -1.0;
@@ -74,7 +77,6 @@ G4MonopolePhysics::G4MonopolePhysics(const G4String& nam)
   fElCharge  = 0.0;
   fMonopoleMass = 100.*GeV;
   fMessenger = new G4MonopolePhysicsMessenger(this);
-  fMpl = 0;
   SetPhysicsType(bUnknown);
 }
 
@@ -101,8 +103,7 @@ void G4MonopolePhysics::ConstructProcess()
   }
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
-  G4ProcessManager* pmanager = new G4ProcessManager(fMpl);
-  fMpl->SetProcessManager(pmanager);
+  G4ProcessManager* pmanager = fMpl->GetProcessManager();
   
   // defined monopole parameters and binning
 
@@ -112,10 +113,10 @@ void G4MonopolePhysics::ConstructProcess()
   G4double emax = std::max(10.*TeV, fMonopoleMass*100);
   G4int nbin = G4lrint(10*std::log10(emax/emin));
 
-  if(magn == 0.0) {
-    ph->RegisterProcess(new G4Transportation(), fMpl);
-  } else {
-    ph->RegisterProcess(new G4MonopoleTransportation(fMpl), fMpl);
+  // dedicated trasporation 
+  if(magn != 0.0) {
+    pmanager->RemoveProcess(0);
+    pmanager->AddProcess(new G4MonopoleTransportation(fMpl),-1, 0, 0);
   }
 
   if(fMpl->GetPDGCharge() != 0.0) {

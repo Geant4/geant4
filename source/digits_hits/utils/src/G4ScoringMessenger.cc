@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoringMessenger.cc 78057 2013-12-03 08:31:15Z gcosmo $
 //
 // ---------------------------------------------------------------------
 
@@ -310,7 +310,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete   mRotZCmd;
     delete   mRotDir;
     //
-    delete     chartCmd;
+    //delete     chartCmd;
     delete     dumpCmd;
     delete     drawCmd;
     delete     drawColumnCmd;
@@ -345,12 +345,12 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4int iColumn = StoI(next());
       G4String colorMapName = next();
       fSMan->DrawMesh(meshName,psName,iPlane,iColumn,colorMapName);
-  } else if(command==chartCmd ){
-      G4Tokenizer next(newVal);
-      G4String meshName = next();
-      G4String psName = next();
-      //G4bool   onFlag = StoB(next());
-      G4String scaleOption = next();
+//  } else if(command==chartCmd ){
+//      G4Tokenizer next(newVal);
+//      G4String meshName = next();
+//      G4String psName = next();
+//      //G4bool   onFlag = StoB(next());
+//      G4String scaleOption = next();
 //      fSMan->DrawChart(meshName,psName,onFlag,scaleOption);
 
   } else if(command==dumpQtyToFileCmd) { 

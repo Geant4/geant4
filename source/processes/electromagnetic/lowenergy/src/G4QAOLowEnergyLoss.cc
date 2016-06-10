@@ -330,7 +330,6 @@ G4double squaredPlasmonEnergy = 28.816 * 28.816  * 1e-6
   return  oscShellEnergy;
 }
 
-
 G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,
                                               G4int nbOfTheShell) const
 {
@@ -430,18 +429,18 @@ const G4int G4QAOLowEnergyLoss::materialAvailable[6] = {13,14,29,73,79,78};
   */
 const G4int G4QAOLowEnergyLoss::nbofShellForMaterial[6] = {3,3,4,6,6,6 };
               
-G4double G4QAOLowEnergyLoss::alShellEnergy[3]  ={ 2795e-6, 202e-6,  16.9e-6};
-G4double G4QAOLowEnergyLoss::alShellStrength[3]={ 0.1349, 0.6387, 0.2264};
-G4double G4QAOLowEnergyLoss::siShellEnergy[3]  ={ 3179e-6, 249e-6, 20.3e-6 };
-G4double G4QAOLowEnergyLoss::siShellStrength[3]={ 0.1222, 0.5972, 0.2806};
-G4double G4QAOLowEnergyLoss::cuShellEnergy[4]  ={ 16931e-6, 1930e-6, 199e-6, 39.6e-6};
-G4double G4QAOLowEnergyLoss::cuShellStrength[4]={ 0.0505, 0.2561, 0.4913, 0.2021};
-G4double G4QAOLowEnergyLoss::taShellEnergy[6]  ={ 88926e-6, 18012e-6, 3210e-6, 575e-6, 108.7e-6, 30.8e-6};
-G4double G4QAOLowEnergyLoss::taShellStrength[6]={ 0.0126, 0.0896, 0.2599, 0.3413, 0.2057, 0.0908};
-G4double G4QAOLowEnergyLoss::auShellEnergy[6]={ 96235e-6, 25918e-6, 4116e-6, 599e-6, 87.3e-6, 36.9e-6};
-G4double G4QAOLowEnergyLoss::auShellStrength[6]={ 0.0139, 0.0803, 0.2473, 0.423, 0.1124, 0.1231};
-G4double G4QAOLowEnergyLoss::ptShellEnergy[6]={ 95017e-6, 25590e-6, 4063e-6, 576e-6, 81.9e-6, 31.4e-6};
-G4double G4QAOLowEnergyLoss::ptShellStrength[6]={ 0.0129, 0.0745, 0.2295, 0.4627, 0.1324, 0.0879};
+const G4double G4QAOLowEnergyLoss::alShellEnergy[3]  ={ 2795e-6, 202e-6,  16.9e-6};
+const G4double G4QAOLowEnergyLoss::alShellStrength[3]={ 0.1349, 0.6387, 0.2264};
+const G4double G4QAOLowEnergyLoss::siShellEnergy[3]  ={ 3179e-6, 249e-6, 20.3e-6 };
+const G4double G4QAOLowEnergyLoss::siShellStrength[3]={ 0.1222, 0.5972, 0.2806};
+const G4double G4QAOLowEnergyLoss::cuShellEnergy[4]  ={ 16931e-6, 1930e-6, 199e-6, 39.6e-6};
+const G4double G4QAOLowEnergyLoss::cuShellStrength[4]={ 0.0505, 0.2561, 0.4913, 0.2021};
+const G4double G4QAOLowEnergyLoss::taShellEnergy[6]  ={ 88926e-6, 18012e-6, 3210e-6, 575e-6, 108.7e-6, 30.8e-6};
+const G4double G4QAOLowEnergyLoss::taShellStrength[6]={ 0.0126, 0.0896, 0.2599, 0.3413, 0.2057, 0.0908};
+const G4double G4QAOLowEnergyLoss::auShellEnergy[6]={ 96235e-6, 25918e-6, 4116e-6, 599e-6, 87.3e-6, 36.9e-6};
+const G4double G4QAOLowEnergyLoss::auShellStrength[6]={ 0.0139, 0.0803, 0.2473, 0.423, 0.1124, 0.1231};
+const G4double G4QAOLowEnergyLoss::ptShellEnergy[6]={ 95017e-6, 25590e-6, 4063e-6, 576e-6, 81.9e-6, 31.4e-6};
+const G4double G4QAOLowEnergyLoss::ptShellStrength[6]={ 0.0129, 0.0745, 0.2295, 0.4627, 0.1324, 0.0879};
 
 
 const G4double G4QAOLowEnergyLoss::L0[67][2] =
@@ -514,7 +513,6 @@ const G4double G4QAOLowEnergyLoss::L0[67][2] =
   {1000.00, 6.90474}
 };
 
-
 const G4double G4QAOLowEnergyLoss::L1[22][2] =
 {
   {0.00,       -0.000001},
@@ -541,7 +539,6 @@ const G4double G4QAOLowEnergyLoss::L1[22][2] =
   {20.00,	1.16752}
 };
 
-
 const G4double G4QAOLowEnergyLoss::L2[14][2] =
 {
   {0.00,	0.000001},
@@ -559,7 +556,6 @@ const G4double G4QAOLowEnergyLoss::L2[14][2] =
   {20.00,      -0.88409},	
   {40.00,      -1.13902}
 };
-
 
 const G4int G4QAOLowEnergyLoss::nbOfElectronPerSubShell[1540] = 
 {

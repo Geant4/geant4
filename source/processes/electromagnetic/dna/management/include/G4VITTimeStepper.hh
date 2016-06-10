@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITTimeStepper.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4VITTimeStepper.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -85,8 +85,8 @@ public:
     inline const G4ITReactionTable* GetReactionTable();
 
 protected :
-    static G4double fCurrentGlobalTime ;
-    static G4double fUserMinTimeStep   ;
+    static G4ThreadLocal G4double fCurrentGlobalTime ;
+    static G4ThreadLocal G4double fUserMinTimeStep   ;
 
     G4double fSampledMinTimeStep ;
     G4TrackVectorHandle fReactants;

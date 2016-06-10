@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/RunActionMessenger.hh
 /// \brief Definition of the RunActionMessenger class
 //
-// $Id$
+// $Id: RunActionMessenger.hh 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ public:
   RunActionMessenger(RunAction* );
   ~RunActionMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   

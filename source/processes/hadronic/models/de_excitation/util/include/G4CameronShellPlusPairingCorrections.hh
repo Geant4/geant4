@@ -23,66 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4CameronShellPlusPairingCorrections.hh 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #ifndef G4CameronShellPlusPairingCorrections_h
 #define G4CameronShellPlusPairingCorrections_h 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
 #include "globals.hh"
-
-//#define verbose 1
 
 class G4CameronShellPlusPairingCorrections
 {
-private:
-
-  // Dummy constructor
-  G4CameronShellPlusPairingCorrections();
-
-  static G4CameronShellPlusPairingCorrections* theInstance;
-	
 public:
-	
-  static G4CameronShellPlusPairingCorrections* GetInstance();
+
+  G4CameronShellPlusPairingCorrections();
 
   ~G4CameronShellPlusPairingCorrections();
   
-  G4double GetShellPlusPairingZ(const G4int Z) const 
+  inline
+  G4double GetShellPlusPairingZ(G4int Z) const 
   {
-    if (Z <= TableSize && Z > 1) return SPZTable[Z-1]*CLHEP::MeV;
-    else {
-#ifdef verbose
-      G4cerr << "G4CameronShellPlusPairingCorrections: out of table for Z = " << Z << G4endl;
-#endif
-      return 0.0;
-    }
+    G4double res = 0.0;
+    if (Z <= TableSize && Z > 1) { res = SPZTable[Z-1]; }
+    return res;
   }
   
-  G4double GetShellPlusPairingN(const G4int N) const 
+  inline
+  G4double GetShellPlusPairingN(G4int N) const 
   {
-    if (N <= TableSize && N > 0) return SPNTable[N-1]*CLHEP::MeV;
-    else {
-#ifdef verbose
-      G4cerr << "G4CameronShellPlusPairingCorrections: out of table for N = " << N << G4endl;
-#endif
-      return 0.0;
-    }
+    G4double res = 0.0;
+    if (N <= TableSize && N > 0) { res = SPNTable[N-1]; }
+    return res;
   }
-  
   
   enum  { TableSize = 200 };
   
 private:
   
-  static const G4double SPZTable[TableSize];
-  
-  static const G4double SPNTable[TableSize];
+  static G4double SPZTable[TableSize];
+  static G4double SPNTable[TableSize];
   
 };
 #endif

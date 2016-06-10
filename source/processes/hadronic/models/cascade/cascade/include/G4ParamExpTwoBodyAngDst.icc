@@ -1,0 +1,94 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4ParamExpTwoBodyAngDst.icc 71719 2013-06-21 00:01:54Z mkelsey $
+// Author:  Michael Kelsey (SLAC)
+// Date:    20 February 2013
+//
+// Description: implementation base for exponential parametrization of
+//               two-body angular distributions in Bertini-style cascade
+//
+// 20130227  Renamed from "Barashenkov" to "ParamExp" to fix misattribution.
+// 20130620  Fix Coverity #50296, recursive #include.
+// 20130924  M. Kelsey -- Use G4Log, G4Exp for CPU speedup
+
+#ifndef G4ParamExpTwoBodyAngDst_icc
+#define G4ParamExpTwoBodyAngDst_icc 1
+
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "Randomize.hh"
+#include <cfloat>
+
+
+template <G4int NKEBINS> G4double
+G4ParamExpTwoBodyAngDst<NKEBINS>::
+GetCosTheta(const G4double& ekin, const G4double& pcm) const
+{
+  if (verboseLevel>3) {
+    G4cout << theName << "::GetCosTheta: ekin " << ekin << " pcm " << pcm
+	   << G4endl;
+  }
+
+  // Get parameter values for interaction energy
+  G4double pA = interpolator.interpolate(ekin, smallScale);
+  G4double pC = interpolator.interpolate(ekin, largeScale);
+  G4double pCos = interpolator.interpolate(ekin, cosScale);
+  G4double pFrac = interpolator.interpolate(ekin, angleCut);
+
+  // Bound parameters by their physical ranges
+  pCos = std::max(-1., std::min(pCos,1.));
+  pFrac = std::max(0., std::min(pFrac,1.));
+
+  if (verboseLevel>3) {
+    G4cout << " pFrac " << pFrac << " pA " << pA << " pC " << pC
+	   << " pCos " << pCos << G4endl;
+  }
+
+  G4bool smallAngle = (G4UniformRand() < pFrac);	// 0 < theta < theta0
+
+  G4double term1 = 2.0 * pcm*pcm * (smallAngle ? pA : pC);
+
+  if (std::abs(term1) < 1e-7) return 1.0;	// No actual scattering here!
+  if (term1 > DBL_MAX_EXP) return 1.0;
+
+  G4double term2 = G4Exp(-2.0*term1);
+  G4double randScale = (G4Exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
+
+  G4double randVal;
+  if (smallAngle) randVal = (1.0 - randScale)*G4UniformRand() + randScale;
+  else randVal = randScale*G4UniformRand();
+
+  G4double costh = 1.0 + G4Log(randVal*(1.0 - term2) + term2)/term1;
+
+  if (verboseLevel>3) {
+    G4cout << " term1 " << term1 << " term2 " << term2 << " randVal "
+	   << randVal << " => costheta " << costh << G4endl;
+  }
+
+  return costh;
+}
+
+#endif	/* G4ParamExpTwoBodyAngDst_icc */

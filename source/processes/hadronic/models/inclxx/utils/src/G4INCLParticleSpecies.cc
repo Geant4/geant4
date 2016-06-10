@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -238,14 +236,15 @@ namespace G4INCL {
   }
 
   G4bool ParticleSpecies::parseElement(std::string const &s) {
-    for(theZ=1; theZ<ParticleTable::elementTableSize; ++theZ) {
-      std::string elementName = ParticleTable::getElementName(theZ);
-      // Normalize the element name
-      std::transform(elementName.begin(), elementName.end(), elementName.begin(), ::tolower);
-      if(s.compare(elementName)==0)
-        return true;
-    }
-    return parseIUPACElement(s);
+    theZ = ParticleTable::parseElement(s);
+
+    if(theZ<0)
+      theZ = ParticleTable::parseIUPACElement(s);
+
+    if(theZ<0)
+      return false;
+    else
+      return true;
   }
 
   G4bool ParticleSpecies::parseIUPACElement(std::string const &s) {

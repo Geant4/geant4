@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITType.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITType.hh 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -40,6 +40,7 @@
 #define G4ITTYPE_HH 1
 
 #include <cstddef>
+#include "G4Types.hh"
 
 /**
   * Tag the G4IT
@@ -83,16 +84,22 @@ inline G4ITType operator -(const G4ITType& left,const int& right) {
 class G4ITTypeManager
 {
 private:
-    static G4ITTypeManager* fgInstance ;
+    static /*G4ThreadLocal*/ G4ITTypeManager* fgInstance ;
+    static G4ThreadLocal G4ITTypeManager* fgInstance_local ;
     G4ITType fLastType;
     G4ITTypeManager();
     virtual ~G4ITTypeManager();
+
+    size_t fRessource;
 
 public :
     G4ITType NewType() ;
     size_t size() const;
     static G4ITTypeManager* Instance();
     static void DeleteInstance();
+
+    void ReserveRessource();
+    void ReleaseRessource();
 };
 
 #define ITDef(T)\

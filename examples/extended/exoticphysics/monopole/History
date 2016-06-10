@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2010-12-08 14:52:51 vnivanch Exp $
+$Id: History 78110 2013-12-03 14:57:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,32 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 December 13: I. Hrivnacova (monopole-V09-06-06)
+- Updated README for removing AIDA
+
+10 May 13: J.Apostolakis (monopole-V09-06-05)
+- G4MonopoleTransportation and G4MonopoleEquation: 
+      Adapted to use G4ChargeState to pass Magnetic & Electric Charge, 
+          and to changed signature of SetChargeMomentumMass. 
+
+19 February 13: V.Ivantchenko (monopole-V09-06-04)
+- G4MonopoleTransportation - removed local variable fVerboseLevel
+    and Get/Set methods; use instead verboseLevel variable from 
+    the base class
+
+13 February 13: I.Hrivnacova (monopole-V09-06-03)
+- Applied coding guidelines 
+  (virtual keyword, data members names and initialization)
+
+01 February 13: V.Ivant (monopole-V09-06-02)
+- G4MonopolePhysics - fixed warning at initialisation 
+
+31 January 13: V.Ivant (monopole-V09-06-01)
+- fixed initialisation after MT was introduced
+
+10 January 13: V.Ivant (monopole-V09-06-00)
+- fixed computation of monopole range
 
 20 September 12: I.Hrivnacova (monopole-V09-05-03)
 - Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: BrachyDetectorConstructionI.hh 69765 2013-05-14 10:11:22Z gcosmo $
 //
 //    ****************************************
 //    *                                      *
@@ -39,8 +39,12 @@
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 
+class G4Tubs;
+class G4Sphere;
+class G4LogicalVolume;
 class G4VPhysicalVolume;
 class BrachyMaterial;
+class G4VisAttributes;
 
 class BrachyDetectorConstructionI
 {
@@ -48,13 +52,24 @@ public:
   BrachyDetectorConstructionI();
   ~BrachyDetectorConstructionI();
   void  ConstructIodium(G4VPhysicalVolume*);// Construct iodium source
-
+  void  CleanIodium();
 private:
+  G4Tubs* defaultTub;
+  G4Tubs* capsule;
+  G4Sphere* capsuleTip;
+  G4Tubs* iodiumCore;
+  G4LogicalVolume* defaultTubLog;
+  G4LogicalVolume* capsuleLog;
+  G4LogicalVolume* capsuleTipLog;
+  G4LogicalVolume* iodiumCoreLog; 
+  G4VPhysicalVolume* defaultTubPhys; 
   G4VPhysicalVolume* capsulePhys;
   G4VPhysicalVolume* capsuleTipPhys1;
   G4VPhysicalVolume* capsuleTipPhys2;
   G4VPhysicalVolume* iodiumCorePhys;
-  G4VPhysicalVolume* markerPhys;
+  G4VisAttributes* simpleiodiumVisAtt;
+  G4VisAttributes* simpleCapsuleVisAtt;
+  G4VisAttributes* simpleCapsuleTipVisAtt;
 
   BrachyMaterial* pMaterial;   
 };

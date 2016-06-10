@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4hBremsstrahlung.hh 72943 2013-08-14 13:40:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,14 +54,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
-#include "G4VEnergyLossProcess.hh"
-#include "G4VEmModel.hh"
+#include "G4MuBremsstrahlung.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4ParticleDefinition;
-
-class G4hBremsstrahlung : public G4VEnergyLossProcess
+class G4hBremsstrahlung : public G4MuBremsstrahlung
 
 {
 public:
@@ -72,13 +69,6 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, 
-				    G4double cut);
-
-  // Print out of the class parameters
-  virtual void PrintInfo();
-
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
@@ -88,12 +78,6 @@ private:
 
   G4hBremsstrahlung & operator=(const G4hBremsstrahlung &right);
   G4hBremsstrahlung(const G4hBremsstrahlung&);
-
-  const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
-
-  G4double  lowestKinEnergy;
-  G4bool    isInitialised;
 
 };
 

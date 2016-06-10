@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.hh 73024 2013-08-15 09:11:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,6 @@
 #include "globals.hh"
 
 class G4Event;
-class DetectorConstruction;
 class PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +46,7 @@ class PrimaryGeneratorMessenger;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
+    PrimaryGeneratorAction();    
    ~PrimaryGeneratorAction();
 
   public:  
@@ -58,7 +57,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     
   private:
     G4ParticleGun*             fParticleGun;
-    DetectorConstruction*      fDetector;
     G4bool                     fRndmBeam;
     PrimaryGeneratorMessenger* fGunMessenger;     
 };

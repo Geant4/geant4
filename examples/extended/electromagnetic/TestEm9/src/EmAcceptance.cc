@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm9/src/EmAcceptance.cc
 /// \brief Implementation of the Emeptance class
 //
-//
-// $Id$
+// $Id: EmAcceptance.cc 68265 2013-03-20 10:33:20Z maire $
 //
 //
 
@@ -52,7 +51,8 @@ EmAcceptance::~EmAcceptance()
 void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
 {
   G4cout << G4endl;
-  G4cout << "<<<<<ACCEPTANCE>>>>> " << stat << " events for " << title << G4endl;
+  G4cout << "<<<<<ACCEPTANCE>>>>> " << stat << " events for " << title
+         << G4endl;
   fIsAccepted = true;
 }
 
@@ -76,7 +76,8 @@ void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
   G4double dde = avr - avr0;
   G4double de = dde*x/rms;
 
-  G4cout << title << ": " << avr << "  del"<< title << "= " << dde << " nrms= " << de << G4endl;
+  G4cout << title << ": " << avr << "  del"<< title << "= " << dde 
+         << " nrms= " << de << G4endl;
   if(std::fabs(de) > limit) fIsAccepted = false;
 }
 

@@ -84,6 +84,30 @@ G4GenericMessenger::DeclareProperty(const G4String& name, const G4AnyType& var, 
 }
 
 
+G4GenericMessenger::Command& G4GenericMessenger::DeclarePropertyWithUnit
+(const G4String& name, const G4String& defaultUnit, const G4AnyType& var, const G4String& doc) {
+  if(var.TypeInfo()!=typeid(float) && var.TypeInfo()!=typeid(double) && var.TypeInfo()!= typeid(G4ThreeVector))
+  { return DeclareProperty(name,var,doc); }
+  G4String fullpath = directory+name;
+  G4UIcommand* cmd;
+  if(var.TypeInfo()==typeid(float) || var.TypeInfo()==typeid(double))
+  {
+    cmd = new G4UIcmdWithADoubleAndUnit(fullpath.c_str(), this);
+    (static_cast<G4UIcmdWithADoubleAndUnit*>(cmd))->SetParameterName("value",false,false);
+    (static_cast<G4UIcmdWithADoubleAndUnit*>(cmd))->SetDefaultUnit(defaultUnit);
+  }
+  else
+  {
+    cmd = new G4UIcmdWith3VectorAndUnit(fullpath.c_str(), this);
+    (static_cast<G4UIcmdWith3VectorAndUnit*>(cmd))->SetParameterName("valueX","valueY","valueZ",false,false);
+    (static_cast<G4UIcmdWith3VectorAndUnit*>(cmd))->SetDefaultUnit(defaultUnit);
+  }
+
+  if(doc != "") cmd->SetGuidance(doc);
+  return properties[name] = Property(var, cmd);
+}
+
+
 G4GenericMessenger::Command&
 G4GenericMessenger::DeclareMethod(const G4String& name, const G4AnyMethod& fun, const G4String& doc) {
   G4String fullpath = directory+name;
@@ -95,6 +119,24 @@ G4GenericMessenger::DeclareMethod(const G4String& name, const G4AnyMethod& fun, 
   return methods[name] = Method(fun, object, cmd);
 }
 
+G4GenericMessenger::Command& G4GenericMessenger::DeclareMethodWithUnit
+ (const G4String& name, const G4String& defaultUnit, const G4AnyMethod& fun, const G4String& doc) {
+  G4String fullpath = directory+name;
+  if(fun.NArg()!=1) {
+    G4ExceptionDescription ed;
+    ed<<"G4GenericMessenger::DeclareMethodWithUnit() does not support a method that has more than\n"
+      <<"one arguments (or no argument). Please use G4GenericMessenger::DeclareMethod method for\n"
+      <<"your command <"<<fullpath<<">.";
+    G4Exception("G4GenericMessenger::DeclareMethodWithUnit()","Intercom70002",FatalException,ed);
+  }
+  G4UIcommand* cmd = new G4UIcmdWithADoubleAndUnit(fullpath.c_str(), this);
+  (static_cast<G4UIcmdWithADoubleAndUnit*>(cmd))->SetParameterName("value",false,false);
+  (static_cast<G4UIcmdWithADoubleAndUnit*>(cmd))->SetDefaultUnit(defaultUnit);
+  if(doc != "") cmd->SetGuidance(doc);
+  return methods[name] = Method(fun, object, cmd);
+}
+
+  
 G4String G4GenericMessenger::GetCurrentValue(G4UIcommand* command) {
   if ( properties.find(command->GetCommandName()) != properties.end()) {
     Property& p = properties[command->GetCommandName()];
@@ -141,10 +183,27 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
   // Change the type of command (unfortunatelly this is done a posteriory)
   // We need to delete the old command before creating the new one and therefore we need to recover the information
   // before the deletetion
+#ifdef G4MULTITHREADED
+  G4String cmdpath = command->GetCommandPath();
+  G4ExceptionDescription ed;
+  ed<<"G4GenericMessenger::Command::SetUnit() is thread-unsafe and should not be used\n"
+    <<"in multi-threaded mode. For your command <"<<cmdpath<<">, use\n"
+    <<" DeclarePropertyWithUnit(const G4String& name, const G4String& defaultUnit,\n"
+    <<"                         const G4AnyType& variable, const G4String& doc)\n"
+    <<"or\n"
+    <<" DeclareMethodWithUnit(const G4String& name, const G4String& defaultUnit,\n"
+    <<"                       const G4AnyType& variable, const G4String& doc)\n"
+    <<"to define a command with a unit <"<<unit<<">.";
+  if(spec!=UnitDefault) { ed<<"\nPlease use a default unit instead of unit category."; }
+  G4Exception("G4GenericMessenger::Command::SetUnit()","Intercom70001",FatalException,ed);
+  return *this;
+#else
   G4String cmdpath = command->GetCommandPath();
   G4UImessenger* messenger = command->GetMessenger();
   G4String range = command->GetRange();
   std::vector<G4String> guidance;
+  G4String par_name = command->GetParameter(0)->GetParameterName();
+  bool par_omitable = command->GetParameter(0)->IsOmittable();
   for (G4int i = 0; i < command->GetGuidanceEntries(); i++) guidance.push_back(command->GetGuidanceLine(i));
   // Before deleting the command we need to add a fake one to avoid deleting the directory entry and with its guidance
   G4UIcommand tmp((cmdpath+"_tmp").c_str(), messenger);
@@ -154,6 +213,7 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
     G4UIcmdWithADoubleAndUnit* cmd_t = new G4UIcmdWithADoubleAndUnit(cmdpath, messenger);
     if(spec == UnitDefault) cmd_t->SetDefaultUnit(unit);
     else if(spec == UnitCategory) cmd_t->SetUnitCategory(unit);
+    cmd_t->SetParameterName(par_name, par_omitable);
     command = cmd_t;
   }
   else if (*type == typeid(G4ThreeVector)) {
@@ -169,6 +229,7 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
   for (size_t i = 0; i < guidance.size(); i++) command->SetGuidance(guidance[i]);
   command->SetRange(range);
   return *this;
+#endif
 }
 
 G4GenericMessenger::Command& G4GenericMessenger::Command::SetParameterName(const G4String& name,G4bool omittable, G4bool currentAsDefault) {

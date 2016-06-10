@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EqEMFieldWithEDM.cc 71664 2013-06-20 08:36:05Z gcosmo $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -43,9 +43,9 @@
 #include "G4SystemOfUnits.hh"
 
 G4EqEMFieldWithEDM::G4EqEMFieldWithEDM(G4ElectroMagneticField *emField )
-      : G4EquationOfMotion( emField ), fElectroMagCof(0.), fMassCof(0.),
-        omegac(0.), anomaly(0.0011659208), eta(0.), pcharge(0.), E(0.),
-        gamma(0.), beta(0.)
+  : G4EquationOfMotion( emField ), charge(0.), mass(0.), magMoment(0.),
+    spin(0.), fElectroMagCof(0.), fMassCof(0.), omegac(0.),
+    anomaly(0.0011659208), eta(0.), beta(0.), gamma(0.)
 {
 }
 
@@ -54,21 +54,31 @@ G4EqEMFieldWithEDM::~G4EqEMFieldWithEDM()
 } 
 
 void  
-G4EqEMFieldWithEDM::SetChargeMomentumMass(G4double particleCharge, // e+ units
-                                            G4double MomentumXc,
-                                            G4double particleMass)
+G4EqEMFieldWithEDM::SetChargeMomentumMass(G4ChargeState particleCharge,
+                                          G4double MomentumXc,
+                                          G4double particleMass)
 {
-   fElectroMagCof =  eplus*particleCharge*c_light ;
-   fMassCof = particleMass*particleMass ;
+   charge   = particleCharge.GetCharge();
+   mass      = particleMass;
+   magMoment = particleCharge.GetMagneticDipoleMoment();
+   spin      = particleCharge.GetSpin();
 
-   omegac = (eplus/particleMass)*c_light;
+   fElectroMagCof =  eplus*charge*c_light;
+   fMassCof = mass*mass;
 
-   pcharge = particleCharge;
+   omegac = (eplus/mass)*c_light;
 
-   E = std::sqrt(sqr(MomentumXc)+sqr(particleMass));
+   G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
+
+   G4double g_BMT;
+   if ( spin != 0. ) g_BMT = (magMoment/muB)/spin;
+   else g_BMT = 2.;
+
+   anomaly = (g_BMT - 2.)/2.;
+
+   G4double E = std::sqrt(sqr(MomentumXc)+sqr(mass));
    beta  = MomentumXc/E;
-   gamma = E/particleMass;
-
+   gamma = E/mass;
 }
 
 void
@@ -144,15 +154,22 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
 
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
-   G4ThreeVector dSpin
-     = pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
-                               // from Jackson
-                               // -uce*Spin.cross(u.cross(EField)) )
-                               // but this form has one less operation
-                       - uce*(u*(Spin*EField) - EField*(Spin*u))
-                       + eta/2.*(Spin.cross(EField) - ude*(Spin.cross(u))
-                               // +Spin.cross(u.cross(Bfield))
-                       + (u*(Spin*BField) - BField*(Spin*u)) ) );
+   G4double pcharge;
+   if (charge == 0.) pcharge = 1.;
+   else pcharge = charge;
+
+   G4ThreeVector dSpin(0.,0.,0.);
+   if (Spin.mag2() != 0.) {
+      dSpin =
+         pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
+                                 // from Jackson
+                                 // -uce*Spin.cross(u.cross(EField)) )
+                                 // but this form has one less operation
+                         - uce*(u*(Spin*EField) - EField*(Spin*u))
+                         + eta/2.*(Spin.cross(EField) - ude*(Spin.cross(u))
+                                 // +Spin.cross(u.cross(Bfield))
+                         + (u*(Spin*BField) - BField*(Spin*u)) ) );
+   }
       
    dydx[ 9] = dSpin.x();
    dydx[10] = dSpin.y();

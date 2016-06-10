@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DNASancheExcitationModel.cc 70171 2013-05-24 13:34:18Z gcosmo $
 //
 
 // Created by Z. Francis

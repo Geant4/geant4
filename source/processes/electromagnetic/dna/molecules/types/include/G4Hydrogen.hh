@@ -50,7 +50,7 @@
 class G4Hydrogen : public G4MoleculeDefinition
 {
 private:
-    static G4Hydrogen* theInstance;
+    static /*G4ThreadLocal*/ G4Hydrogen* theInstance;
     G4Hydrogen() {}
     virtual ~G4Hydrogen() {}
 

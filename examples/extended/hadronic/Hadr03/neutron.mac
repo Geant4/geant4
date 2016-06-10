@@ -1,4 +1,4 @@
-# $Id: TestEm1.in,v 1.25 2008-09-12 16:32:25 maire Exp $
+# $Id$
 #
 # Macro file for "Hadr03.cc"
 # (can be run in batch, without graphic)
@@ -6,7 +6,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testhadr/det/setMat Boron10
+/testhadr/det/setIsotopeMat B10 5 10 2.46 g/cm3
 ###/testhadr/det/setMat G4_B
 /testhadr/det/setSize 1000 m
 #

@@ -44,7 +44,6 @@ fi
 # Used below should we be setup to be relocatable.
 scriptloc=`dirname $script`
 
-
 #-----------------------------------------------------------------------
 # Expansion and calculation of all needed variables
 #
@@ -52,7 +51,6 @@ prefix=@GEANT4_CONFIG_INSTALL_PREFIX@
 exec_prefix=@GEANT4_CONFIG_EXECPREFIX@
 libdir=@GEANT4_CONFIG_LIBDIR@
 includedirs="@GEANT4_CONFIG_INCLUDE_DIRS@"
-
 
 name="geant4"
 description="Geant4 toolkit for the simulation of the passage of particles through matter"
@@ -73,12 +71,20 @@ vis_libs="-lG4Tree \
 -lG4vis_management \
 -lG4modeling"
 
-
 #-----------------------------------------------------------------------
 # Core setup...
 #
-cflags=""
+cflags="@CMAKE_CXX_FLAGS@"
+feature_list=""
 
+# - multithreading
+have_multithreading="@G4_BUILTWITH_MULTITHREADING@"
+feature_list="${feature_list} multithreading[${have_multithreading}]"
+if test "x${have_multithreading}" = "xyes" ; then
+  cflags="${cflags} -DG4MULTITHREADED"
+fi
+
+# - Includes and Libs
 for g4incdir in ${includedirs} ; do
   cflags="${cflags} -I${g4incdir}"
 done
@@ -106,7 +112,6 @@ libs="-lG4interfaces \
 #-----------------------------------------------------------------------
 # - Extra optional features that were enabled.
 # - ALL
-feature_list=""
 geant4_uses_opengl="no"
 geant4_uses_x11="no"
 
@@ -136,6 +141,13 @@ feature_list="${feature_list} gdml[${have_gdml}]"
 
 if test "x${have_gdml}" = "xyes" ; then
   cflags="${cflags} @G4_XERCESC_CFLAGS@"
+fi
+
+# - USolids
+have_usolids="@G4_BUILTWITH_USOLIDS@"
+feature_list="${feature_list} usolids[${have_usolids}]"
+if test "x${have_usolids}" = "xyes" ; then
+  cflags="-DG4GEOM_USE_USOLIDS ${cflags}"
 fi
 
 # - G3toG4
@@ -211,6 +223,181 @@ if test "x${geant4_uses_x11}" = "xyes" ; then
 fi
 
 #-----------------------------------------------------------------------
+# Datasets
+# - List creation for sh compatibility, see:
+#    https://wiki.ubuntu.com/DashAsBinSh
+dataset_url="@GEANT4_DATASETS_URL@"
+dataset_timeout="@GEANT4_INSTALL_DATA_TIMEOUT@"
+dataset_list=$(awk 'BEGIN { split( "@GEANT4_CONFIG_DATASET_DESCRIPTIONS@", array, ";"); for (i=1;i<=length(array);i++) { print array[i]; } }')
+
+#-----------------------------------------------------------------------
+# function print_datasets
+#          print dataset information with one line per dataset and each
+#          line in the format
+#            <NAME> <ENVVARNAME> <PATH>
+print_datasets()
+{
+  for ds in ${dataset_list} ; do
+    dataset_name=$(echo $ds | cut -d "|" -f1)
+    dataset_envvar=$(echo $ds | cut -d "|" -f2)
+    dataset_path=$(echo $ds | cut -d "|" -f3)
+    echo ${dataset_name} ${dataset_envvar} ${dataset_path}
+  done
+  exit 0
+}
+
+#-----------------------------------------------------------------------
+# function check_datasets
+#          Check whether datasets exist as directories at the expected
+#          location. Print dataset name, path and install status
+#
+check_datasets()
+{
+  for ds in ${dataset_list} ; do
+    dataset_name=$(echo $ds | cut -d "|" -f1)
+    dataset_path=$(echo $ds | cut -d "|" -f3)
+    dataset_status="NOTFOUND"
+    if test -d ${dataset_path} ; then
+      dataset_status="INSTALLED"
+    fi
+    echo ${dataset_name} ${dataset_status} ${dataset_path}
+  done
+}
+
+#-----------------------------------------------------------------------
+# function install_datasets
+#          Download and install datasets if they are not already installed
+#
+install_datasets()
+{
+  G4CURL=$(which curl)
+  if test "x${G4CURL}" = "x" ; then
+    echo "- error: no curl executable found"
+    exit 1
+  fi
+
+  if test ! -x "${G4CURL}" ; then
+    echo "- error: curl '${G4CURL}' is not executable"
+    exit 1
+  fi
+
+  G4OPENSSL=$(which openssl)
+  if test "x${G4OPENSSL}" = "x" ; then
+    echo "- error: no openssl executable found"
+    exit 1
+  fi
+
+  if test ! -x "${G4OPENSSL}" ; then
+    echo "- error: openssl '${G4OPENSSL}' is not executable"
+    exit 1
+  fi
+
+  G4TAR=$(which tar)
+  if test "x${G4TAR}" = "x" ; then
+    echo "- error: no tar executable found"
+    exit 1
+  fi
+
+  if test ! -x "${G4TAR}" ; then
+    echo "- error: tar '${G4TAR}' is not executable"
+    exit 1
+  fi
+
+  datasets_to_install=''
+  for ds in ${dataset_list} ; do
+    dataset_path=$(echo $ds | cut -d "|" -f3)
+    if test ! -d ${dataset_path} ; then
+      datasets_to_install="${datasets_to_install} ${ds}"
+    fi
+  done
+
+  dataset_install="ok"
+  if test "x${datasets_to_install}" != "x" ; then
+    # - Create download cache
+    g4downloaddir=$(mktemp -d -t g4dlcXXXXXXXXXX)
+    if test -d ${g4downloaddir} ; then
+      echo "+ created download cache"
+    else
+      echo "- error : failed to create '${g4downloaddir}'"
+      dataset_install="fail"
+      break
+    fi
+
+    # - Download/install loop
+    for ds in ${datasets_to_install} ; do
+      # Create base path (repetitive)
+      dataset_path=$(echo $ds | cut -d "|" -f3)
+      mkdir -p $(dirname ${dataset_path})
+      if [ "$?" != "0" ] || [ ! -w $(dirname ${dataset_path}) ] ; then
+        echo "- error : failed to create base directory '$(dirname ${dataset_path})'"
+        dataset_install="fail"
+        break
+      fi
+
+      # - Download bundle to cache
+      dataset_file=$(echo $ds | cut -d "|" -f4)
+      echo "+ downloading ${dataset_file}"
+      ${G4CURL} -f -m ${dataset_timeout} -o ${g4downloaddir}/${dataset_file} ${dataset_url}/${dataset_file}
+      curl_status="$?"
+      if [ "$curl_status" != "0" ] ; then
+        echo "- download of '${dataset_file}' failed : CURL error $?"
+        dataset_install="fail"
+        break
+      fi
+
+      # Validate bundle hash (basic)
+      dataset_md5=$(echo $ds | cut -d "|" -f5)
+      actual_md5=$(${G4OPENSSL} dgst -md5 ${g4downloaddir}/${dataset_file} | cut -d" " -f2)
+      echo "+ checking md5 of ${dataset_file}"
+      if [ "${actual_md5}" != "${dataset_md5}" ] ; then
+        echo "- md5 mismatch for '${dataset_file}' : ${actual_md5}(actual) != ${dataset_md5}(expected)"
+        dataset_install="fail"
+        break
+      fi
+
+      # Unpack bundle
+      echo "+ untar ${dataset_file}"
+      ${G4TAR} -C ${g4downloaddir} -xf ${g4downloaddir}/${dataset_file} 
+      tar_status="$?"
+      if [ "$tar_status" != "0" ] ; then
+        echo "- untar of '${dataset_file}' failed : tar error $?"
+        dataset_install="fail"
+        break
+      fi
+
+      # Install bundle
+      echo "+ installing $(basename ${dataset_path})"
+      cp -R ${g4downloaddir}/$(basename ${dataset_path}) $(dirname ${dataset_path})
+      cp_status="$?"
+      if [ "$cp_status" != "0" ] ; then
+        echo "- copy of '$(basename ${dataset_path})' failed : cp error $?"
+        # Extra task - remove anything copied...
+        rm -Rf ${dataset_path}
+        dataset_install="fail"
+        break
+      fi
+    done
+
+    # - Clean up download cache
+    rm -Rf ${g4downloaddir}
+    if test -d ${g4downloaddir} ; then
+      echo "- failed to remove '${g4downloaddir}'"
+    else
+      echo "+ cleaned download cache"
+    fi
+  fi
+
+  if [ "${dataset_install}" = "ok" ] ; then
+    echo "+ all datasets installed"
+    exit 0
+  else
+    echo "- dataset installation failed"
+    exit 1
+  fi
+  exit 1
+}
+
+#-----------------------------------------------------------------------
 # function help
 #          print help on available command line arguments and enabled
 #          and disabled features of the toolkit
@@ -225,13 +412,24 @@ Usage: geant4-config [OPTION...]
   --cflags                output all preprocessor
                           and compiler flags
 
-  --libs-without-gui      output linker flags without 
+  --libs-without-gui      output linker flags without
                           GUI components
   --cflags-without-gui    output preprocessor and compiler
                           flags without GUI components
 
   --has-feature FEATURE   output yes if FEATURE is supported,
                           or no if not supported
+
+  --datasets              output dataset name, environment variable
+                          and path, with one line per dataset
+
+  --check-datasets        output dataset name, installation status and
+                          expected installation location, with one line
+                          per dataset
+
+  --install-datasets      download and install any missing datasets,
+                          requires a network connection and for the dataset
+                          path to be user writable
 
 Known Features:
 EOF
@@ -307,14 +505,20 @@ while test $# -gt 0 ; do
       shift
 
       case "$1" in
+        multithreading)
+          echo ${have_multithreading}
+          ;;
         clhep)
-          echo ${have_gdml}
+          echo ${have_clhep}
           ;;
         expat)
           echo ${have_expat}
           ;;
         gdml)
           echo ${have_gdml}
+          ;;
+        usolids)
+          echo ${have_usolids}
           ;;
         qt)
           echo ${have_qt}
@@ -335,6 +539,18 @@ while test $# -gt 0 ; do
           echo "no"
           ;;
       esac
+      ;;
+
+    --datasets)
+      print_datasets
+      ;;
+
+    --check-datasets)
+      check_datasets
+      ;;
+
+    --install-datasets)
+      install_datasets
       ;;
 
     -?)

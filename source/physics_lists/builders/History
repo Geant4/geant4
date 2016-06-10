@@ -1,0 +1,70 @@
+ $Id: History 66704 2013-01-10 18:20:17Z gunter $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                  Hadronic physics-list/builders History
+                  --------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+07-Nov-2013, Alberto Ribon		(phys-builders-V09-06-13)
+- Removed low_energy and high_energy from sources.cmake and GNUmakefile.
+
+05-Nov-2013, Michael Kelsey		(phys-builders-V09-06-12)
+- Retagged after previous tag was rejected.  No changes required.
+
+05-Nov-2013, Alberto Ribon              (phys-builders-V09-06-11)
+- Removed G4LEPPiKBuilder, G4LEPPionBuilder, G4LEPNeutronBuilder,
+  G4LEPProtonBuilder, and G4MiscBuilder.
+
+30-Oct-2013, Alberto Ribon              (phys-builders-V09-06-10)
+- Coverity fixes (removed variables that are not needed) in the
+  following classes: G4QGSBuilder, G4QGSPPiKBuilder, 
+  G4QGSPNeutronBuilder, G4QGSPPionBuilder, and G4QGSPProtonBuilder.
+
+04-Oct-2013, Davide Mancusi             (phys-builders-V09-06-09)
+- INCLXX neutron builder now uses G4NeutronInelasticXS.
+
+22-Jul-2013, Alberto Ribon              (phys-builders-V09-06-08)
+- Nothing is changed: simply re-propose the previous tag after
+  fixing an initialization problem in materials category.
+
+19-Jul-2013, Alberto Ribon              (phys-builders-V09-06-07)
+- Introduced a boolean parameter to the constructor of the class
+  G4NeutronBuilder to switch on the fission process. The default
+  is fission off, but for the HP-based physics lists it is activated.
+
+21-Mar-2013, Alberto Ribon              (phys-builders-V09-06-06)
+- Fixed warning message in G4FTFBinaryKaonBuilder and G4HyperonFTFPBuilder.
+
+19-Mar-2013, Alberto Ribon              (phys-builders-V09-06-05)
+- Added a new method to the builders: G4FTFBinaryNeutronBuilder,
+                                      G4FTFBinaryProtonBuilder.
+
+19-Mar-2013, Alberto Ribon              (phys-builders-V09-06-04)
+- Added the new builders: G4FTFPPionBuilder, G4FTFPKaonBuilder,
+                          G4QGSBinaryPionBuilder, G4QGSBinaryKaonBuilder.
+- Added a new method to the builders: G4FTFBinaryPionBuilder,
+                                      G4FTFBinaryKaonBuilder.
+
+08-Mar-2013, Davide Mancusi             (phys-builders-V09-06-03)
+- Fix problem with overlapping model ranges.
+- Depends on phys-ctor-hinelastic-V09-06-06.
+
+22-Feb-2013, Davide Mancusi             (phys-builders-V09-06-02)
+- Modified INCLXX proton and neutron builders to use PreCompound below 2 MeV.
+
+08-Feb-2013, Vladimir Ivanchenko        (phys-builders-V09-06-01)
+- GNUmakefile fixed - G4LIB_BUILD_EXPAT is added
+
+10-Jan-2013, Gunter Folger              (phys-builders-V09-06-00)
+- new directory structure introduced. 
+   builders directory only keeps hadronic builders, hadronic constructors moved to 
+   constructors/hadron_inelastic

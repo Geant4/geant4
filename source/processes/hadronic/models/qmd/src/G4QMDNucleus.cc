@@ -37,14 +37,18 @@ G4QMDNucleus::G4QMDNucleus()
 {
    G4QMDParameters* parameters = G4QMDParameters::GetInstance();
    hbc = parameters->Get_hbc();
+   
+   jj = 0; // will be calcualted in CalEnergyAndAngularMomentumInCM;
+   potentialEnergy = 0.0; // will be set through set method 
+   excitationEnergy = 0.0;
 }
 
 
 
-G4QMDNucleus::~G4QMDNucleus()
-{
-   ;
-}
+//G4QMDNucleus::~G4QMDNucleus()
+//{
+//   ;
+//}
 
 
 G4LorentzVector G4QMDNucleus::Get4Momentum()
@@ -207,10 +211,10 @@ void G4QMDNucleus::CalEnergyAndAngularMomentumInCM()
       totalMass += GetParticipant( i )->GetMass();
    }
 
-   kineticEnergyPerNucleon = ( std::accumulate ( es.begin() , es.end() , 0.0 ) - totalMass )/n;
+   //G4double kineticEnergyPerNucleon = ( std::accumulate ( es.begin() , es.end() , 0.0 ) - totalMass )/n;
 
 // Total (not per nucleion ) Binding Energy 
-   bindingEnergy =  ( std::accumulate ( es.begin() , es.end() , 0.0 ) -totalMass ) + potentialEnergy;
+   G4double bindingEnergy =  ( std::accumulate ( es.begin() , es.end() , 0.0 ) -totalMass ) + potentialEnergy;
 
    //G4cout << "KineticEnergyPerNucleon in GeV " << kineticEnergyPerNucleon << G4endl;
    //G4cout << "KineticEnergySum in GeV " << std::accumulate ( es.begin() , es.end() , 0.0 ) - totalMass << G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4dDetectorConstruction.cc 77601 2013-11-26 17:08:44Z gcosmo $
 //
 /// \file B4dDetectorConstruction.cc
 /// \brief Implementation of the B4dDetectorConstruction class
@@ -37,7 +37,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
 #include "G4SDManager.hh"
 #include "G4SDChargedFilter.hh"
@@ -49,41 +50,26 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4GenericMessenger.hh"
-
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#include <stdio.h>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal 
+G4GlobalMagFieldMessenger* B4dDetectorConstruction::fMagFieldMessenger = 0; 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4dDetectorConstruction::B4dDetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fMessenger(0),
-   fMagField(0),
    fCheckOverlaps(true)
 {
-  // Define /B4/det commands using generic messenger class
-  fMessenger 
-    = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
-
-  // Define /B4/det/setMagField command
-  G4GenericMessenger::Command& setMagFieldCmd
-    = fMessenger->DeclareMethod("setMagField", 
-                                &B4dDetectorConstruction::SetMagField, 
-                                "Define magnetic field value (in X direction");
-  setMagFieldCmd.SetUnitCategory("Magnetic flux density");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4dDetectorConstruction::~B4dDetectorConstruction()
 { 
-  delete fMagField;
-  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,7 +81,6 @@ G4VPhysicalVolume* B4dDetectorConstruction::Construct()
   
   // Define volumes
   return DefineVolumes();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,8 +89,7 @@ void B4dDetectorConstruction::DefineMaterials()
 { 
   // Lead material defined using NIST Manager
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
-  nistManager->FindOrBuildMaterial("G4_Pb", fromIsotopes);
+  nistManager->FindOrBuildMaterial("G4_Pb");
   
   // Liquid argon material
   G4double a;  // mass of a mole;
@@ -143,9 +127,10 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
   G4Material* gapMaterial = G4Material::GetMaterial("liquidArgon");
   
   if ( ! defaultMaterial || ! absorberMaterial || ! gapMaterial ) {
-    G4cerr << "Cannot retrieve materials already defined. " << G4endl;
-    G4cerr << "Exiting application " << G4endl;
-    exit(1);
+    G4ExceptionDescription msg;
+    msg << "Cannot retrieve materials already defined."; 
+    G4Exception("B4DetectorConstruction::DefineVolumes()",
+      "MyCode0001", FatalException, msg);
   }  
    
   //     
@@ -227,7 +212,7 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
     = new G4LogicalVolume(
                  absorberS,        // its solid
                  absorberMaterial, // its material
-                 "Abso");          // its name
+                 "AbsoLV");          // its name
                                    
    new G4PVPlacement(
                  0,                // no rotation
@@ -250,7 +235,7 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
     = new G4LogicalVolume(
                  gapS,             // its solid
                  gapMaterial,      // its material
-                 "Gap");      // its name
+                 "GapLV");      // its name
                                    
   new G4PVPlacement(
                  0,                // no rotation
@@ -272,43 +257,6 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
          << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " 
          << "\n------------------------------------------------------------\n";
   
-  
-  // 
-  // Scorers
-  //
-
-  // declare Absorber as a MultiFunctionalDetector scorer
-  //  
-  G4MultiFunctionalDetector* absDetector 
-    = new G4MultiFunctionalDetector("Absorber");
-
-  G4VPrimitiveScorer* primitive;
-  G4SDChargedFilter* charged = new G4SDChargedFilter("chargedFilter");
-  primitive = new G4PSEnergyDeposit("Edep");
-  absDetector->RegisterPrimitive(primitive);
-
-  primitive = new G4PSTrackLength("TrackLength");
-  primitive ->SetFilter(charged);
-  absDetector->RegisterPrimitive(primitive);  
-
-  G4SDManager::GetSDMpointer()->AddNewDetector(absDetector);
-  absorberLV->SetSensitiveDetector(absDetector);
-  
-  // declare Gap as a MultiFunctionalDetector scorer
-  //  
-  G4MultiFunctionalDetector* gapDetector 
-    = new G4MultiFunctionalDetector("Gap");
-
-  primitive = new G4PSEnergyDeposit("Edep");
-  gapDetector->RegisterPrimitive(primitive);
-  
-  primitive = new G4PSTrackLength("TrackLength");
-  primitive ->SetFilter(charged);
-  gapDetector->RegisterPrimitive(primitive);  
-  
-  G4SDManager::GetSDMpointer()->AddNewDetector(gapDetector);
-  gapLV->SetSensitiveDetector(gapDetector);  
-
   //                                        
   // Visualization attributes
   //
@@ -326,25 +274,55 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4dDetectorConstruction::SetMagField(G4double fieldValue)
+void B4dDetectorConstruction::ConstructSDandField()
 {
-  // Apply a global uniform magnetic field along X axis
-  G4FieldManager* fieldManager
-    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+  // 
+  // Scorers
+  //
 
-  // Delete the existing magnetic field
-  if ( fMagField )  delete fMagField; 
+  // declare Absorber as a MultiFunctionalDetector scorer
+  //  
+  G4MultiFunctionalDetector* absDetector 
+    = new G4MultiFunctionalDetector("Absorber");
 
-  if ( fieldValue != 0. ) {
-    // create a new one if not null
-    fMagField 
-      = new G4UniformMagField(G4ThreeVector(fieldValue, 0., 0.));
-      
-    fieldManager->SetDetectorField(fMagField);
-    fieldManager->CreateChordFinder(fMagField);
-  } 
-  else {
-    fMagField = 0;
-    fieldManager->SetDetectorField(fMagField);
-  }
+  G4VPrimitiveScorer* primitive;
+  primitive = new G4PSEnergyDeposit("Edep");
+  absDetector->RegisterPrimitive(primitive);
+
+  primitive = new G4PSTrackLength("TrackLength");
+  G4SDChargedFilter* charged = new G4SDChargedFilter("chargedFilter");
+  primitive ->SetFilter(charged);
+  absDetector->RegisterPrimitive(primitive);  
+
+  SetSensitiveDetector("AbsoLV",absDetector);
+  
+  // declare Gap as a MultiFunctionalDetector scorer
+  //  
+  G4MultiFunctionalDetector* gapDetector 
+    = new G4MultiFunctionalDetector("Gap");
+
+  primitive = new G4PSEnergyDeposit("Edep");
+  gapDetector->RegisterPrimitive(primitive);
+  
+  primitive = new G4PSTrackLength("TrackLength");
+  primitive ->SetFilter(charged);
+  gapDetector->RegisterPrimitive(primitive);  
+  
+  SetSensitiveDetector("GapLV",gapDetector);  
+
+  // 
+  // Magnetic field
+  //
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
+  
+  // Register the field messenger for deleting
+  G4AutoDelete::Register(fMagFieldMessenger);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

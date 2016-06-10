@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4InteractionCode.hh 67999 2013-03-13 11:14:32Z gcosmo $
 //
 #ifndef G4InteractionCode_h
 #define G4InteractionCode_h 1

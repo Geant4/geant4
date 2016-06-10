@@ -58,7 +58,6 @@ GammaKnifeDetectorConstruction::GammaKnifeDetectorConstruction()
 
 GammaKnifeDetectorConstruction::~GammaKnifeDetectorConstruction()
 {
-  // if (phantomROGeometry) delete phantomROGeometry;  
   delete detectorMessenger;
 }
 
@@ -543,7 +542,9 @@ void GammaKnifeDetectorConstruction::SetHelmetSize(G4int size)
             UpdateHelmet();
             break;
         default:
-      G4Exception("GammaKnifeDetectorConstruction::SetHelmetSize()", "GammaKnife001", FatalException, "Error: Invalid helmet size.");
+      G4Exception("GammaKnifeDetectorConstruction::SetHelmetSize()", 
+		  "GammaKnife001", FatalException, 
+		  "Error: Invalid helmet size.");
             return;
         }
     }

@@ -1,0 +1,41 @@
+$Id: History 70477 2013-05-31 08:35:08Z ahoward $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 29, 2013, I. Hrivnacova
+- Added GNUmakefile, .README
+
+Nov 28, 2013, M. Verderi -  GB01-V09-06-05
+- correct README
+
+Nov 28, 2013, M. Verderi -  GB01-V09-06-04
+- remove gui
+- add README
+
+Nov 28, 2013, G. Cosmo -  GB01-V09-06-03, GB01-V09-06-02
+- Removed unused data member in GB01BOptrMultiParticleChangeCrossSection.
+
+Nov 27, 2013, M. Verderi -  biasingGB01-V09-06-01
+- improve GB01BOptrMultiParticleChangeCrossSection operator,
+  showing how to apply biasing under some conditions.
+  And save some random number shooting.
+- add test.
+
+Nov 8, 2013 M. Verderi - biasingGB01-V09-06-00
+- Creation
+

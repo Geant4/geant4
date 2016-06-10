@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2010-12-22 09:14:54 kurasige Exp $
+$Id: History 75600 2013-11-04 13:03:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Oct. 30th, 2013   M.Kelsey (procman-V09-06-07)
+- Add fPhonon to G4VProcess::GetProcessTypeName() [should have done it below]
+
+- Oct. 28th, 2013   M.Kelsey (procman-V09-06-06)
+- Add fPhonon to G4ProcessType.hh for new phonon processes.
+
+- Sep. 14th, 2013   M.Asai (procman-V09-06-05)
+- Now G4VProcess::SubtractNumberOfInteractionLengthLeft() is inlined.
+
+- Sep. 14th, 2013   M.Asai (procman-V09-06-04)
+- Remove unused and obsolete intermediate layer classes
+  G4IVContinuousDiscreteProcess and G4IVRestDiscreteProcess.
+
+- Sep. 6th, 2013   M.Asai (procman-V09-06-03)
+- Change G4VProcess::SetMasterProcess() to be a virtual method so that
+  a process that owns another process (e.g. a wrapper process) could
+  properly invoke this method of the owned (wrapped) process.
+
+- Jul. 16th, 2013   A. Dotti (procman-V09-06-02)
+- Adding worker initialization virtual method for MT:
+  G4VProcess::{Build,Prepare}WorkerPhysicsTable(const G4ParticleDefinition&)
+  called by kernel to initialize worker threads. By default methods
+  forward call to {Build,Prepare}PhysicsTable methods
+
+- Jul. 15th, 2013    A.Dotti (procman-V09-06-01)
+- Adding shadow master-thread pointer to G4VProcess and
+  setter and getter methods. Needed for a general design 
+  of sharing  of tables (EM & HAD) for MT
+
+- Jun. 12th, 2013    G.Cosmo (procman-V09-06-00)
+- Corrected name for G4Upsilon meson.
 
 - Jul. 10th, 2012    G.Cosmo (procman-V09-05-02)
 - Explicitly use inclusion of headers for system of units and physical

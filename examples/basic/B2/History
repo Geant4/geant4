@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2010-06-06 04:05:29 perl Exp $
+$Id: History 78054 2013-12-03 08:26:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,68 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 December 2013 Ivana Hrivnacova 
+- Fixed gui.mac:
+  corrected wireframe parameter, removed run2.mac from gui 
+
+30/11/13 I. Hrivnacova
+- Fixed B2a/gui.mac
+
+28/11/13 I. Hrivnacova (exampleB2-V09-06-12)
+- Clean-up macros (fixed B2a/gui.mac, removed obsolete comments)
+
+26/11/13 I. Hrivnacova (exampleB2-V09-06-11)
+- Fixed deleting fMagFieldMessenger with use of G4AutoDelete utility
+
+12/11/13 I. Hrivnacova (exampleB2-V09-06-10)
+- Avoid long lines 
+
+29/10/13 I. Hrivnacova (exampleB2-V09-06-09)
+- Using G4RunManager::SetPrintProgress()
+- Removed SetNumberOfThreads(4) from main (use Geant4 default)
+- Fixed deleting fMagFieldMessenger in DetectorConstruction
+- Updated README
+
+10/09/13 I. Hrivnacova (exampleB2-V09-06-08)
+- Removed "tcsh" selection from G4UIExecutive in exampleB2b.cc
+  (unwantedly introduced with previous update)
+
+04/09/13 I. Hrivnacova (exampleB2-V09-06-07)
+- Magnetic field classes (B2MagneticField, B2FieldMessenger) replaced
+  with use of new G4GlobalMagFieldMessenger class.
+
+27/08/13 G.Cosmo (exampleB2-V09-06-06)
+- Added G4Ellipsoid among solids enabled for parameterisation in B2b.
+
+14/08/13 P. Gumplinger (exampleB2-V09-06-05)
+- Removed static comment in B2MagneticField.hh for GetGlobalFieldManager.
+
+26/06/13 G. Cosmo (exampleB2-V09-06-04)
+- Fixed use of G4Random instead of HepRandom in B2b.
+
+04/06/13 I. Hrivnacova (exampleB2-V09-06-03)
+- Fixed reference to B2ActionInitialization in README and .README
+
+04/06/13 P. Gumplinger (exampleB2-V09-06-02)
+- add section about ACTION INITALIZATION to README and .README
+
+10/05/13 I. Hrivnacova (exampleB2-V09-06-01)
+- Minor fixes in documentation
+- Added initialization of base class in constructors where missing
+  
+09/05/13 M. Asai
+- Migration to multi-threading
+
+28/02/13 I. Hrivnacova
+- When building materials with NistManager
+  do not set fromIsotopes argument (which was set to false), 
+  as since 9.6 all materials have to be built from isotopes.
+  Thanks to V. Ivantchenko for pointing at this.
+
+02/02/13 V.Ivanchenko (exampleB2-V09-06-00)
+- Renamed G4StepLimiterBuilder by G4StepLimiterPhysics
+- minor fix of GNUmakefile
 
 18/09/12 I. Hrivnacova
 - Updated vis.mac (on suggestions by John Al.):

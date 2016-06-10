@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GMocrenMessenger.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -81,7 +81,6 @@ private:
   G4UIcmdWithABool* useSolidsCommand;
 
   G4bool invisibles;
-  G4UIcmdWithABool* writeInvisiblesCommand;
 
   G4String kgMocrenVolumeName;
   G4UIcmdWithAString* kSetgMocrenVolumeNameCommand;

@@ -27,7 +27,7 @@
 /// \brief Definition of the G02ChamberParameterisation class
 //
 //
-// $Id$
+// $Id: G02ChamberParameterisation.hh 73394 2013-08-27 09:23:26Z gcosmo $
 //
 // Class G02ChamberParameterisation
 //
@@ -53,6 +53,7 @@ class G4Trap;
 class G4Cons;
 class G4Orb;
 class G4Sphere;
+class G4Ellipsoid;
 class G4Torus;
 class G4Para;
 class G4Hype;
@@ -75,7 +76,7 @@ class G02ChamberParameterisation : public G4VPVParameterisation
                             G4double lengthInitial,
                             G4double lengthFinal );
 
-    virtual ~G02ChamberParameterisation();
+   ~G02ChamberParameterisation();
    
     void ComputeTransformation (const G4int copyNo,
                                 G4VPhysicalVolume* physVol) const;
@@ -90,6 +91,7 @@ class G02ChamberParameterisation : public G4VPVParameterisation
     void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}

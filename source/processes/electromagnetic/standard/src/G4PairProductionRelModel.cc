@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PairProductionRelModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,21 +58,22 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4Log.hh"
 
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LossTableManager.hh"
+#include "G4Exp.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
-
-const G4double G4PairProductionRelModel::facFel = log(184.15);
-const G4double G4PairProductionRelModel::facFinel = log(1194.); // 1440.
+const G4double G4PairProductionRelModel::facFel = G4Log(184.15);
+const G4double G4PairProductionRelModel::facFinel = G4Log(1194.); // 1440.
 
 const G4double G4PairProductionRelModel::preS1 = 1./(184.15*184.15);
-const G4double G4PairProductionRelModel::logTwo = log(2.);
+const G4double G4PairProductionRelModel::logTwo = G4Log(2.);
 
 const G4double G4PairProductionRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
 						 0.5917, 0.7628, 0.8983, 0.9801 };
@@ -81,6 +82,9 @@ const G4double G4PairProductionRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
 const G4double G4PairProductionRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71};
 const G4double G4PairProductionRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924};
 
+static const G4double xsfactor = 
+  4*fine_structure_const*classic_electr_radius*classic_electr_radius;
+static const G4double Egsmall=2.*MeV;
 
 
 G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
@@ -113,7 +117,15 @@ void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
 					  const G4DataVector& cuts)
 {
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
-  InitialiseElementSelectors(p, cuts);
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PairProductionRelModel::InitialiseLocal(const G4ParticleDefinition*,
+					       G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -234,7 +246,7 @@ G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplusEnergy)
   if (sprime>1) 
     xiLPM = 1.;
   else if (sprime>sqrt(2.)*s1) {
-    G4double h  = log(sprime)/logTS1;
+    G4double h  = G4Log(sprime)/logTS1;
     xiLPM = 1+h-0.08*(1-h)*(1-sqr(1-h))/logTS1;
   }
 
@@ -257,11 +269,11 @@ G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplusEnergy)
   else if (s0<1.9516) {
     // intermediate suppression
     // using eq.77 approxim. valid s0<2.      
-    phiLPM = 1.-exp(-6.*s0*(1.+(3.-pi)*s0)
+    phiLPM = 1.-G4Exp(-6.*s0*(1.+(3.-pi)*s0)
 		+s3/(0.623+0.795*s0+0.658*s2));
     if (s0<0.415827397755) {
       // using eq.77 approxim. valid 0.07<s<2
-      G4double psiLPM = 1-exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
+      G4double psiLPM = 1-G4Exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
       gLPM = 3*psiLPM-2*phiLPM;
     }
     else {
@@ -290,9 +302,8 @@ G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*
 						     G4double gammaEnergy, G4double Z,
 						     G4double, G4double, G4double)
 {
-  //  static const G4double gammaEnergyLimit = 1.5*MeV;
   G4double crossSection = 0.0 ;
-  if ( Z < 0.9 ) return crossSection;
+  //  if ( Z < 0.9 ) return crossSection;
   if ( gammaEnergy <= 2.0*electron_mass_c2 ) return crossSection;
 
   SetCurrentElement(Z);
@@ -301,7 +312,7 @@ G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*
   crossSection=ComputeXSectionPerAtom(gammaEnergy,Z);
 
   G4double xi = Finel/(Fel - fCoulomb); // inelastic contribution
-  crossSection*=4.*Z*(Z+xi)*fine_structure_const*classic_electr_radius*classic_electr_radius;
+  crossSection *= xsfactor*Z*(Z+xi);
 
   return crossSection;
 }
@@ -337,10 +348,11 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   if(epsil0 > 1.0) { return; }
 
   // do it fast if GammaEnergy < 2. MeV
-  static const G4double Egsmall=2.*MeV;
+  SetupForMaterial(theGamma, aMaterial, GammaEnergy);
 
   // select randomly one element constituing the material
-  const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
+  const G4Element* anElement = 
+    SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
 
   if (GammaEnergy < Egsmall) {
 
@@ -351,11 +363,11 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     // Extract Coulomb factor for this Element
     G4double FZ = 8.*(anElement->GetIonisation()->GetlogZ3());
-    if (GammaEnergy > 50.*MeV) FZ += 8.*(anElement->GetfCoulomb());
+    if (GammaEnergy > 50.*MeV) { FZ += 8.*(anElement->GetfCoulomb()); }
 
     // limits of the screening variable
     G4double screenfac = 136.*epsil0/(anElement->GetIonisation()->GetZ3());
-    G4double screenmax = exp ((42.24 - FZ)/8.368) - 0.952 ;
+    G4double screenmax = G4Exp ((42.24 - FZ)/8.368) - 0.952 ;
     G4double screenmin = min(4.*screenfac,screenmax);
 
     // limits of the energy sampling
@@ -375,11 +387,12 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     do {
       if ( NormF1/(NormF1+NormF2) > G4UniformRand() ) {
-	epsil = 0.5 - epsilrange*pow(G4UniformRand(), 0.333333);
+	epsil = 0.5 - epsilrange*nist->GetZ13(G4UniformRand());
 	screenvar = screenfac/(epsil*(1-epsil));
 	if (fLPMflag && GammaEnergy>100.*GeV) {
 	  CalcLPMFunctions(GammaEnergy,GammaEnergy*epsil);
-	  greject = xiLPM*((gLPM+2.*phiLPM)*Phi1(screenvar) - gLPM*Phi2(screenvar) - phiLPM*FZ)/F10;
+	  greject = xiLPM*((gLPM+2.*phiLPM)*Phi1(screenvar) - 
+			   gLPM*Phi2(screenvar) - phiLPM*FZ)/F10;
 	}
 	else {
 	  greject = (ScreenFunction1(screenvar) - FZ)/F10;
@@ -390,7 +403,8 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 	screenvar = screenfac/(epsil*(1-epsil));
 	if (fLPMflag && GammaEnergy>100.*GeV) {
 	  CalcLPMFunctions(GammaEnergy,GammaEnergy*epsil);
-	  greject = xiLPM*((0.5*gLPM+phiLPM)*Phi1(screenvar) + 0.5*gLPM*Phi2(screenvar) - 0.5*(gLPM+phiLPM)*FZ)/F20;
+	  greject = xiLPM*((0.5*gLPM+phiLPM)*Phi1(screenvar) + 
+			   0.5*gLPM*Phi2(screenvar) - 0.5*(gLPM+phiLPM)*FZ)/F20;
 	}
 	else {
 	  greject = (ScreenFunction2(screenvar) - FZ)/F20;
@@ -425,10 +439,12 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
   G4double u;
-  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
+  static const G4double a1 = 0.625; 
+  static const G4double a2 = 3.*a1;
+  static const G4double  d = 27. ;
 
-  if (9./(9.+d) >G4UniformRand()) u= - log(G4UniformRand()*G4UniformRand())/a1;
-  else                            u= - log(G4UniformRand()*G4UniformRand())/a2;
+  if (9./(9.+d) >G4UniformRand()) u= - G4Log(G4UniformRand()*G4UniformRand())/a1;
+  else                            u= - G4Log(G4UniformRand()*G4UniformRand())/a2;
 
   G4double TetEl = u*electron_mass_c2/ElectTotEnergy;
   G4double TetPo = u*electron_mass_c2/PositTotEnergy;

@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2010-08-24 07:42:53 gcosmo Exp $
+$Id: History 78053 2013-12-03 08:25:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,56 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 02, 2013
+- More fixes in gui.mac:
+  Let execute vis.mac first to make the command in added menus available;
+  corrected wireframe parameter
+
+November 29, 2013 - I. Hrivnacova
+- Fixed gui.mac (commented out command specific to B2 example)
+
+November 28, 2013 - M.Asai - fieldex03-V09-06-07
+- Fix F03PrimaryGeneratorAction to avoid race condition problem.
+
+November 28, 2013 - M.Asai - fieldex03-V09-06-06
+- Fix F03PhysicsList to avoid race condition problem.
+
+November 26, 2013 - I.Hrivnacova - fieldex03-V09-06-05
+- Fixed ConstructSDandField():
+  Moved setting the SD and field manager to logical volume outside the tests
+- Do not test (fAbsorberThickness > 0.) in ConstructCalorimeter()
+  as setting 0 is not allowed in set command  
+
+November 25, 2013 - I.Hrivnacova - fieldex03-V09-06-04
+- Put back cleaning volumes and solid stores in ConstructGeometry()
+
+November 22, 2013 - P.Gumplinger - fieldex03-V09-06-03
+- add gui.mac back in and removed fWorldChanged
+
+November 21, 2013 - I.Hrivnacova - fieldex03-V09-06-02
+- Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild 
+  when geometry changes
+- Remove DetectorConstruction::Update and corresponding UI command that
+  is not needed anymore
+- Set "ToBeBroadcasted == false" for UI commands that modify detector 
+  since these should be executed only by master     
+- Fixed main (do not call gui.mac which does not exist)
+- In F03FieldSetup: 
+  - Do not declare fLocalFieldManager thread-local
+    as the F03FieldSetup is already thread-local object
+  - Code clean-up  
+
+November 12, 2013 P.Gumplinger - fieldex03-V09-06-01
+- migration to MT and code cleanup
+
+July 29, 2013 P.Gumplinger - fieldex03-V09-06-00
+- fix MAC/clang32 compilation warnings
+
+February 14, 2013 - I.Hrivnacova
+-----------------------------
+- Applied coding guidelines (data members initialization);
+  tagged in examples/field
 
 October 17, 2012 - I.Hrivnacova - fieldex03-V09-05-00
 -----------------------------

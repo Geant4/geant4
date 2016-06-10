@@ -45,30 +45,23 @@
 
 // forward declarations
 class G4Run;
-class UltraAnalysisManager;
-class UltraRunActionMessenger;
 
 class UltraRunAction : public G4UserRunAction
 {
   public:
 
-    UltraRunAction();
-    ~UltraRunAction();
+  UltraRunAction();
+  ~UltraRunAction();
+  
+public:
+  
+  void BeginOfRunAction(const G4Run* aRun);
+  void EndOfRunAction(const G4Run* aRun);  
 
-  public:
-
-    void BeginOfRunAction(const G4Run* aRun);
-    void EndOfRunAction(const G4Run* aRun);
-
-    G4int GetRunNumb(){return runID;} ;
-
-    void MySetRunID(G4int);
-
-  private:
-    UltraRunActionMessenger*     theRunActMessenger ;
-
-    G4int saveRndm;
-    G4int runID;
+private:  
+  G4int saveRndm;
+  G4int luxury;
+  G4int seed;
    
 };
 

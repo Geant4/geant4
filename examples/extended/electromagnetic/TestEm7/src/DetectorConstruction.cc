@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68263 2013-03-20 10:16:46Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +58,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
+: G4VUserDetectorConstruction(),
+  fWorldMaterial(0),fAbsorMaterial(0),fMagField(0),fLAbsor(0),
+  fDetectorMessenger(0)
 {
   // default parameter values
   fAbsorSizeX = fAbsorSizeYZ = 20*cm;
@@ -160,41 +163,41 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // World
   //
   G4Box*
-  sWorld = new G4Box("World",                                        //name
-                   fWorldSizeX/2,fWorldSizeYZ/2,fWorldSizeYZ/2);        //dimensions
+  sWorld = new G4Box("World",                                      //name
+                   fWorldSizeX/2,fWorldSizeYZ/2,fWorldSizeYZ/2);   //dimensions
 
-  G4LogicalVolume*                                                                 
+  G4LogicalVolume*
   lWorld = new G4LogicalVolume(sWorld,                        //shape
                                fWorldMaterial,                //material
-                              "World");                        //name
+                              "World");                       //name
 
   G4VPhysicalVolume*                                   
-  pWorld = new G4PVPlacement(0,                                //no rotation
-                             G4ThreeVector(),                //at (0,0,0)
-                           lWorld,                        //logical volume
-                           "World",                        //name
-                           0,                                       //mother  volume
-                           false,                        //no boolean operation
-                           0);                                //copy number
+  pWorld = new G4PVPlacement(0,                           //no rotation
+                             G4ThreeVector(),             //at (0,0,0)
+                             lWorld,                      //logical volume
+                             "World",                     //name
+                             0,                           //mother  volume
+                             false,                       //no boolean operation
+                             0);                          //copy number
   //                           
   // Absorber
   //                           
   G4Box*
-  sAbsor = new G4Box("Absorber",                                //name
-                   fAbsorSizeX/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);        //dimensions
+  sAbsor = new G4Box("Absorber",                                 //name
+                   fAbsorSizeX/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2); //dimensions
                                                                  
-  fLAbsor = new G4LogicalVolume(sAbsor,                        //shape
-                               fAbsorMaterial,                //material
+  fLAbsor = new G4LogicalVolume(sAbsor,                   //shape
+                               fAbsorMaterial,            //material
                               "Absorber");                //name
   
                               
-           new G4PVPlacement(0,                                //no rotation
-                             G4ThreeVector(),                //at (0,0,0)
-                           fLAbsor,                        //logical volume
-                           "Absorber",                        //name
-                           lWorld,                               //mother  volume
-                           false,                        //no boolean operation
-                           0);                                //copy number
+           new G4PVPlacement(0,                          //no rotation
+                             G4ThreeVector(),            //at (0,0,0)
+                            fLAbsor,                     //logical volume
+                            "Absorber",                  //name
+                            lWorld,                      //mother  volume
+                            false,                       //no boolean operation
+                            0);                          //copy number
   //
   // Tallies (optional)
   //
@@ -202,17 +205,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
     for (G4int j=1; j<=fTallyNumber; j++) {
             
        G4Box* sTally = new G4Box("Tally",
-                      fTallySize[j].x()/2,fTallySize[j].y()/2,fTallySize[j].z()/2);
+                   fTallySize[j].x()/2,fTallySize[j].y()/2,fTallySize[j].z()/2);
                       
        fLTally[j] = new G4LogicalVolume(sTally,fTallyMaterial[j],"Tally");
            
        new G4PVPlacement(0,                        //no rotation
-                           fTallyPosition[j],        //position
-                         fLTally[j],                //logical volume
-                         "Tally",                //name
-                         fLAbsor,                       //mother  volume
-                         false,                        //no boolean operation
-                         j);                        //copy number
+                         fTallyPosition[j],        //position
+                         fLTally[j],               //logical volume
+                         "Tally",                  //name
+                         fLAbsor,                  //mother  volume
+                         false,                    //no boolean operation
+                         j);                       //copy number
        
       fTallyMass[j] = fTallySize[j].x()*fTallySize[j].y()*fTallySize[j].z()
                *(fTallyMaterial[j]->GetDensity());
@@ -242,7 +245,7 @@ void DetectorConstruction::PrintParameters()
     for (G4int j=1; j<=fTallyNumber; j++) {
       G4cout << "fTally " << j << ": "
              << fTallyMaterial[j]->GetName()
-             << ",  mass = " << G4BestUnit(fTallyMass[j],"Mass")                           
+             << ",  mass = " << G4BestUnit(fTallyMass[j],"Mass")
              << " size = "   << G4BestUnit(fTallySize[j],"Length")           
              << " position = " << G4BestUnit(fTallyPosition[j],"Length")
              << G4endl;
@@ -296,7 +299,7 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   
   if (fieldValue!=0.)                        // create a new one if non nul
     {
-      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
+      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
       fieldMgr->SetDetectorField(fMagField);
       fieldMgr->CreateChordFinder(fMagField);
     }

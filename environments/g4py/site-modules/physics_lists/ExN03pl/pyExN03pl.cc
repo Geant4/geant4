@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyExN03pl.cc,v 1.3 2006-06-29 15:30:07 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyExN03pl.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyExN03pl.cc
 //
@@ -56,7 +55,7 @@ PhysicsList* Construct()
   return pl;
 }
 
-};
+}
 
 using namespace pyExN03pl;
 
@@ -73,5 +72,5 @@ BOOST_PYTHON_MODULE(ExN03pl) {
   // ---
   def("Construct", Construct,
       return_value_policy<reference_existing_object>());
-  
+
 }

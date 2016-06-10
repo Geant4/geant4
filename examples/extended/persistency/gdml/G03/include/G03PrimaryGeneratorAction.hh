@@ -27,7 +27,7 @@
 /// \brief Definition of the G03PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: G03PrimaryGeneratorAction.hh 69987 2013-05-21 12:33:52Z gcosmo $
 //
 // Class G03PrimaryGeneratorAction
 //
@@ -57,7 +57,7 @@ class G03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     // Used by Geant4 to generate the primary particles of the event
     //
-    void GeneratePrimaries(G4Event* anEvent);
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
 

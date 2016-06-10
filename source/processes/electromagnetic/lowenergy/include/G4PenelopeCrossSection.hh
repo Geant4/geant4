@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeCrossSection.hh 74626 2013-10-17 07:00:59Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -81,31 +81,33 @@ public:
   ~G4PenelopeCrossSection();
 
   //! Returns total cross section at the given energy
-  G4double GetTotalCrossSection(G4double energy);
+  G4double GetTotalCrossSection(G4double energy) const;
   //! Returns hard cross section at the given energy
-  G4double GetHardCrossSection(G4double energy);
+  G4double GetHardCrossSection(G4double energy) const;
   //! Returns the total stopping power due to soft collisions
-  G4double GetSoftStoppingPower(G4double energy);
+  G4double GetSoftStoppingPower(G4double energy) const;
   //! Returns the hard cross section for the given shell (per molecule)
-  G4double GetShellCrossSection(size_t shellID,G4double energy);
+  G4double GetShellCrossSection(size_t shellID,G4double energy) const;
   //! Returns the hard cross section for the given shell (normalized to 1)
-  G4double GetNormalizedShellCrossSection(size_t shellID,G4double energy);
+  G4double GetNormalizedShellCrossSection(size_t shellID,G4double energy) const;
 
-  size_t GetNumberOfShells(){return numberOfShells;};
+  size_t GetNumberOfShells() const {return numberOfShells;};
 
+  //!
+  //! Public interface for the master thread
+  //! 
   void AddCrossSectionPoint(size_t binNumber, 
                             G4double energy,G4double XH0, G4double XH1, 
 			    G4double XH2,
 			    G4double XS0, G4double XS1, G4double XS2);
-
   void AddShellCrossSectionPoint(size_t binNumber,
 			         size_t shellID,G4double energy,G4double xs);
+  void NormalizeShellCrossSections();
 
 private:
   G4PenelopeCrossSection & operator=(const G4PenelopeCrossSection &right);
   G4PenelopeCrossSection(const G4PenelopeCrossSection&);
-  void NormalizeShellCrossSections();
-
+  
   G4bool isNormalized;
 
   size_t numberOfEnergyPoints;

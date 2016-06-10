@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeIonisationModel.cc 75573 2013-11-04 11:48:15Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -40,7 +40,7 @@
 // 09 Mar 2012   L Pandola  Moved the management and calculation of
 //                          cross sections to a separate class. Use a different method to 
 //                          get normalized shell cross sections
-//                          
+// 07 Oct 2013   L. Pandola Migration to MT                        
 //
 
 #include "G4PenelopeIonisationModel.hh"
@@ -55,7 +55,6 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4AtomicDeexcitation.hh"
 #include "G4PenelopeOscillatorManager.hh"
 #include "G4PenelopeOscillator.hh"
 #include "G4PenelopeCrossSection.hh"
@@ -63,23 +62,28 @@
 #include "G4PhysicsLogVector.hh" 
 #include "G4LossTableManager.hh"
 #include "G4PenelopeIonisationXSHandler.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+namespace { G4Mutex  PenelopeIonisationModelMutex = G4MUTEX_INITIALIZER; }
  
- 
-G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*,
+G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition* part,
 						     const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+  :G4VEmModel(nam),fParticleChange(0),fParticle(0),isInitialised(false),
    fAtomDeexcitation(0),kineticEnergy1(0.*eV),
    cosThetaPrimary(1.0),energySecondary(0.*eV),
    cosThetaSecondary(0.0),targetOscillator(-1),
-   theCrossSectionHandler(0)
+   theCrossSectionHandler(0),fLocalTable(false)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   nBins = 200;
+
+  if (part)
+    SetParticle(part);
+
   //
   oscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
   //
@@ -100,14 +104,17 @@ G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*
  
 G4PenelopeIonisationModel::~G4PenelopeIonisationModel()
 {
-  if (theCrossSectionHandler)
-    delete theCrossSectionHandler;
+  if (IsMaster() || fLocalTable)
+    {
+      if (theCrossSectionHandler)
+	delete theCrossSectionHandler;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition*,
-					   const G4DataVector&)
+void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition* particle,
+					   const G4DataVector& theCuts)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeIonisationModel::Initialise()" << G4endl;
@@ -122,36 +129,91 @@ void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition*,
       G4cout << "any fluorescence/Auger emission." << G4endl;
       G4cout << "Please make sure this is intended" << G4endl;
     }
+  SetParticle(particle);
 
-  //Set the number of bins for the tables. 20 points per decade
-  nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
-  nBins = std::max(nBins,(size_t)100);
-
-   //Clear and re-build the tables
-  if (theCrossSectionHandler)
+  //Only the master model creates/manages the tables. All workers get the 
+  //pointer to the table, and use it as readonly
+  if (IsMaster() && particle == fParticle)
     {
-      delete theCrossSectionHandler;
-      theCrossSectionHandler = 0;
-    }
-  theCrossSectionHandler = new G4PenelopeIonisationXSHandler(nBins);
-  theCrossSectionHandler->SetVerboseLevel(verboseLevel);
 
-  if (verboseLevel > 2) {
-    G4cout << "Penelope Ionisation model v2008 is initialized " << G4endl
-	   << "Energy range: "
-           << LowEnergyLimit() / keV << " keV - "
-           << HighEnergyLimit() / GeV << " GeV. Using " 
-	   << nBins << " bins." 
-           << G4endl;
-  }
+      //Set the number of bins for the tables. 20 points per decade
+      nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
+      nBins = std::max(nBins,(size_t)100);
+      
+      //Clear and re-build the tables
+      if (theCrossSectionHandler)
+	{
+	  delete theCrossSectionHandler;
+	  theCrossSectionHandler = 0;
+	}
+      theCrossSectionHandler = new G4PenelopeIonisationXSHandler(nBins);
+      theCrossSectionHandler->SetVerboseLevel(verboseLevel);
+
+      //Build tables for all materials
+      G4ProductionCutsTable* theCoupleTable = 
+	G4ProductionCutsTable::GetProductionCutsTable();      
+      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+	{
+	  const G4Material* theMat = 
+	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+	  //Forces the building of the cross section tables
+	  theCrossSectionHandler->BuildXSTable(theMat,theCuts.at(i),particle,
+					       IsMaster());
+	 
+	}
+
+      if (verboseLevel > 2) {
+	G4cout << "Penelope Ionisation model v2008 is initialized " << G4endl
+	       << "Energy range: "
+	       << LowEnergyLimit() / keV << " keV - "
+	       << HighEnergyLimit() / GeV << " GeV. Using " 
+	       << nBins << " bins." 
+	       << G4endl;
+      }
+    }
  
-  if(isInitialised) return;
+  if(isInitialised) 
+    return;
   fParticleChange = GetParticleChangeForLoss();
   isInitialised = true;
+
+  return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
+void G4PenelopeIonisationModel::InitialiseLocal(const G4ParticleDefinition* part,
+						 G4VEmModel *masterModel)
+{
+  if (verboseLevel > 3)
+    G4cout << "Calling  G4PenelopeIonisationModel::InitialiseLocal()" << G4endl;
+ 
+  //
+  //Check that particle matches: one might have multiple master models (e.g. 
+  //for e+ and e-).
+  //
+  if (part == fParticle)
+    {
+      //Get the const table pointers from the master to the workers
+      const G4PenelopeIonisationModel* theModel = 
+	static_cast<G4PenelopeIonisationModel*> (masterModel);
+      
+      //Copy pointers to the data tables
+      theCrossSectionHandler = theModel->theCrossSectionHandler;
+      
+      //copy data
+      nBins = theModel->nBins;
+      
+      //Same verbosity for all workers, as the master
+      verboseLevel = theModel->verboseLevel;
+    }
+
+  return;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4PenelopeIonisationModel::CrossSectionPerVolume(const G4Material* material,
 							  const G4ParticleDefinition* 
 							  theParticle,
@@ -183,10 +245,41 @@ G4double G4PenelopeIonisationModel::CrossSectionPerVolume(const G4Material* mate
   G4double totalCross = 0.0;
   G4double crossPerMolecule = 0.;
 
-  G4PenelopeCrossSection* theXS = 
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!theCrossSectionHandler)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;
+      theCrossSectionHandler = new G4PenelopeIonisationXSHandler(nBins);	
+    }
+  
+  const G4PenelopeCrossSection* theXS = 
     theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,
 							  material,
 							  cutEnergy);
+  if (!theXS)
+    {
+      //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+      //not filled up. This can happen in a UnitTest or via G4EmCalculator
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve the cross section table for " << theParticle->GetParticleName() << 
+       " in " << material->GetName() << ", cut = " << cutEnergy/keV << " keV " << G4endl;
+      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+      G4Exception("G4PenelopeIonisationModel::CrossSectionPerVolume()",
+		  "em2038",JustWarning,ed);
+      //protect file reading via autolock
+      G4AutoLock lock(&PenelopeIonisationModelMutex);
+      theCrossSectionHandler->BuildXSTable(material,cutEnergy,theParticle);
+      lock.unlock();
+      //now it should be ok
+      theXS = 
+	theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,
+							  material,
+							  cutEnergy);
+    }
+
 
   if (theXS)
     crossPerMolecule = theXS->GetHardCrossSection(energy);
@@ -261,11 +354,42 @@ G4double G4PenelopeIonisationModel::ComputeDEDXPerVolume(const G4Material* mater
   if (verboseLevel > 3)
     G4cout << "Calling ComputeDEDX() of G4PenelopeIonisationModel" << G4endl;
  
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!theCrossSectionHandler)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;
+      theCrossSectionHandler = new G4PenelopeIonisationXSHandler(nBins);	
+    }
 
-  G4PenelopeCrossSection* theXS = 
+  const G4PenelopeCrossSection* theXS = 
     theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,material,
 							  cutEnergy);
-  G4double sPowerPerMolecule = 0.0;
+  
+  if (!theXS)
+    {
+      //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+      //not filled up. This can happen in a UnitTest or via G4EmCalculator
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve the cross section table for " << theParticle->GetParticleName() <<
+       " in " << material->GetName() << ", cut = " << cutEnergy/keV << " keV " << G4endl;
+      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+      G4Exception("G4PenelopeIonisationModel::ComputeDEDXPerVolume()",
+		  "em2038",JustWarning,ed);
+      //protect file reading via autolock
+      G4AutoLock lock(&PenelopeIonisationModelMutex);
+      theCrossSectionHandler->BuildXSTable(material,cutEnergy,theParticle);
+      lock.unlock();
+      //now it should be ok
+      theXS = 
+	theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,
+							  material,
+							  cutEnergy);
+    }
+
+ G4double sPowerPerMolecule = 0.0;
   if (theXS)
     sPowerPerMolecule = theXS->GetSoftStoppingPower(kineticEnergy);
 
@@ -350,7 +474,7 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
   }
 
   const G4Material* material = couple->GetMaterial();
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(material); 
+  const G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(material); 
 
   G4ParticleMomentum particleDirection0 = aDynamicParticle->GetMomentumDirection();
  
@@ -552,7 +676,7 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
 
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
   size_t numberOfOscillators = theTable->size();
-  G4PenelopeCrossSection* theXS = 
+  const G4PenelopeCrossSection* theXS = 
     theCrossSectionHandler->GetCrossSectionTableForCouple(G4Electron::Electron(),mat,
 							  cutEnergy);
   G4double delta = theCrossSectionHandler->GetDensityCorrection(mat,kineticEnergy);
@@ -765,8 +889,9 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
  
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
   size_t numberOfOscillators = theTable->size();
-  G4PenelopeCrossSection* theXS = theCrossSectionHandler->GetCrossSectionTableForCouple(G4Positron::Positron(),mat,
-								cutEnergy);
+  const G4PenelopeCrossSection* theXS = 
+    theCrossSectionHandler->GetCrossSectionTableForCouple(G4Positron::Positron(),mat,
+							  cutEnergy);
   G4double delta = theCrossSectionHandler->GetDensityCorrection(mat,kineticEnergy);
 
   // Selection of the active oscillator
@@ -949,3 +1074,11 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
   return;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+
+void G4PenelopeIonisationModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!fParticle) {
+    fParticle = p;  
+  }
+}

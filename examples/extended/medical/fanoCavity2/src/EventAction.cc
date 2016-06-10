@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 68999 2013-04-15 09:23:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,14 +35,13 @@
 
 #include "RunAction.hh"
 #include "EventActionMessenger.hh"
-#include "HistoManager.hh"
 
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run, HistoManager* histo)
-:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fHistoManager(histo)
+EventAction::EventAction(RunAction* run)
+:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }

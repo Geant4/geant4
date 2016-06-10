@@ -29,14 +29,17 @@
 //
 // $Id: $
 // 
-
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 #include "G4UImanager.hh"
 #include "G4ScoringManager.hh"
 
 #include "RE03DetectorConstruction.hh"
-#include "QGS_BIC.hh"
-#include "RE03PrimaryGeneratorAction.hh"
+#include "FTFP_BERT.hh" 
+#include "RE03ActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -55,7 +58,12 @@ int main(int argc,char** argv)
 {
  // Construct the run manager
  //
+#ifdef G4MULTITHREADED
+ G4MTRunManager * runManager = new G4MTRunManager;
+ runManager->SetNumberOfThreads(4);
+#else
  G4RunManager * runManager = new G4RunManager;
+#endif
 
  // Activate UI-command base scorer
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
@@ -71,13 +79,13 @@ int main(int argc,char** argv)
  G4VUserDetectorConstruction* detector = new RE03DetectorConstruction;
  runManager->SetUserInitialization(detector);
  //
- G4VUserPhysicsList* physics = new QGS_BIC;
+ G4VUserPhysicsList* physics = new FTFP_BERT;
  runManager->SetUserInitialization(physics);
     
- // Set user action classes
+ // Set user action classes through Worker Initialization
  //
- G4VUserPrimaryGeneratorAction* gen_action = new RE03PrimaryGeneratorAction;
- runManager->SetUserAction(gen_action);
+ RE03ActionInitialization* actions = new RE03ActionInitialization;
+ runManager->SetUserInitialization(actions);
   
 #ifdef G4VIS_USE
  // Visualization manager

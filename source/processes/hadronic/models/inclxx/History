@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.36 2010/11/16 16:30:55 gcosmo Exp $
+$Id: History 78007 2013-12-02 08:32:53Z gcosmo $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,225 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+29 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-47, -48)
+---------------------------------------------------------------
+- Fix: energy conservation systematically fails because the G4HadProjectile
+  mass is wrong. Work around this.
+
+27 November 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-46)
+---------------------------------------------------------------
+- Fix in G4INCLBinaryCollisionAvatar for compilation error in MT mode
+  on the icc compiler.
+
+19 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-44, -45)
+---------------------------------------------------------------
+- Resample interaction if four-momentum conservation is violated.
+
+18 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-42, -43)
+---------------------------------------------------------------
+- Don't panic on reactions induced by di-protons.
+
+15 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-41)
+---------------------------------------------------------------
+- Fix borked case in for loop.
+
+14 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-40)
+---------------------------------------------------------------
+- Fix bug in phase-space decay of exotic clusters.
+
+12 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-39)
+---------------------------------------------------------------
+- Fix bug in forced pion emission at the end of cascade.
+
+12 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-38)
+---------------------------------------------------------------
+- Fix run-time crash in test69 on Windows.
+
+12 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-37)
+---------------------------------------------------------------
+- Fix compile error on VC9 -- might be related with some Win crashes in test69?
+
+6 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-36)
+---------------------------------------------------------------
+- INCL++ v5.1.14
+  o Silence a compilation warning.
+  o Fix a bug affecting very light targets.
+  o Tag as v5.1.14.
+
+2 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-35)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc18
+  o Fix a TLS policy violation that caused violation of MT-vs-SEQ
+    reproducibility.
+
+31 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-32, -33, -34)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc17
+  o A handful of minor fixes.
+  o Prepare the G4INCLXXInterface to handle different de-excitation models
+    through the SetDeExcitation method().
+  o Fix a TLS violation in G4INCLCrossSections.cc.
+
+25 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-31)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc13
+  o Mostly cosmetic changes, some code refactoring.
+
+21 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-30)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc11
+  o Fix compilation errors on Mac.
+
+21 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-29)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc10
+  o More optimisation.
+
+15 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-28)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc8
+  o Further optimisation and reduction of memory churn.
+
+4 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-27)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc7
+  o Largely reduced memory churn.
+
+26 September 2013 - Davide Mancusi (hadr-inclxx-V09-06-26)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc6
+  o Get rid of calls to G4ParticleTable::GetIonTable(), too!
+
+24 September 2013 - Davide Mancusi (hadr-inclxx-V09-06-25)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc5
+  o Get rid of obsolete calls to G4ParticleTable::GetIon().
+
+19 September 2013 - Davide Mancusi (hadr-inclxx-V09-06-23, -24)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc4
+  o Slightly faster, and probably gentler as far as memory thrashing is
+  concerned
+  o A handful of bug fixes
+
+26 August 2013 - Davide Mancusi (hadr-inclxx-V09-06-22)
+-----------------------------------------------------------
+- INCL++ v5.1.13.4
+  o Fixes crash in very low-energy (~1 MeV) p+He4
+  reactions -- really.
+- Restore granular dependencies and include_directories
+  fix by G. Cosmo.
+
+24 July 2013 - Davide Mancusi (hadr-inclxx-V09-06-21)
+-----------------------------------------------------------
+- INCL++ v5.1.13.3
+  o Fixes crash in very low-energy (~1 MeV) p+He4 reactions
+    and in light-ion-induced reactions.
+
+16 July 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-20)
+-----------------------------------------------------------
+-  Correction to CMake scripts for granular build.
+
+20 June 2013 - Davide Mancusi (hadr-inclxx-V09-06-19)
+-----------------------------------------------------------
+- Fix compilation warning.
+
+19 June 2013 - Davide Mancusi (hadr-inclxx-V09-06-18)
+-----------------------------------------------------------
+- INCL++ v5.1.13.2
+  o Minor fixes.
+
+7 June 2013 - Vladimir Ivanchenko (hadr-inclxx-V09-06-17)
+-----------------------------------------------------------
+- G4INCLXXInterface - do not delete Binarycascade objects, because 
+    all hadronic models are deleted by model store. This is a fix 
+    of outstanding problem for Geant4 MT
+
+6 June 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-16)
+-----------------------------------------------------------
+- Replaced defines in G4INCLLogger by adding prefix "INCL_" to avoid
+  clashes with specific macros defined in Windows system:
+  INCL_FATAL(x), INCL_ERROR(x), INCL_WARN(x), INCL_INFO(x),
+  INCL_DEBUG(x), INCL_DATABLOCK(x).
+  Adapted code accordingly.
+- Avoid dynamic initialisation of thread-local variables for porting
+  on Windows in G4INCLParticleTable.cc.
+
+22 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-15)
+-----------------------------------------------------------
+- INCL++ v5.1.13.1
+  o Fixes a bug that caused very long CPU times in benchmarks.
+
+21 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-14)
+-----------------------------------------------------------
+- INCL++ v5.1.13
+  o Experimental support for neutron skins.
+  o Experimental support for fuzzy r-p correlations.
+  o Debug output controlled by G4INCL_DEBUG_VERBOSITY envvar.
+  o Rely on BIC for pion-nucleon and nucleon-nucleon reactions.
+
+17 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-13)
+-----------------------------------------------------------
+- INCL++ v5.1.12.3
+  o Fix a crash for light targets.
+
+16 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-11)
+-----------------------------------------------------------
+- Fix clang compiler warning about unused functions.
+
+15 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-10)
+-----------------------------------------------------------
+- INCL++ v5.1.12.1
+  o More adjustments in the nucleus-nucleus sector.
+
+26 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-09)
+-----------------------------------------------------------
+- Fix another compilation error for G4-MT.
+
+15 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-08)
+-----------------------------------------------------------
+- Fix compilation errors for G4-MT.
+
+13 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-07)
+-----------------------------------------------------------
+- INCL++ v5.1.11
+  o Several adjustments in the nucleus-nucleus sector. Fixes a big bug which
+    involved light targets.
+  o Some code refactoring.
+
+12 March 2013 - Dennis Wright (hadr-inclxx-V09-06-06)
+-----------------------------------------------------
+- fixed MacOS Clang compiler warnings: unused private variables in classes
+  G4INCLRecombinationChannel, G4INCLElasticChannel, G4INCLPionNucleonChannel,
+  G4INCLDeltaDecayChannel, G4INCLDeltaProductionChannel,
+  G4INCLInteractionAvatar
+
+1 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-05)
+-----------------------------------------------------------
+- Fix a compilation warning
+
+25 February 2013 - Davide Mancusi (hadr-inclxx-V09-06-04)
+-----------------------------------------------------------
+- Fix some compilation warnings and errors
+
+22 February 2013 - Davide Mancusi (hadr-inclxx-V09-06-03)
+-----------------------------------------------------------
+- Use PreCompound only for incident nucleons
+
+22 February 2013 - Davide Mancusi (hadr-inclxx-V09-06-02)
+-----------------------------------------------------------
+- INCL++ v5.1.10
+  o Relies on PreCompound for reactions below 1 AMeV (configurable via the
+    G4INCLXXInterfaceMessenger)
+  o Adapted some of the MT modifications -- the code should still be
+    thread-safe
+  o Some code refactoring
+
+8 January 2013 - Davide Mancusi (hadr-inclxx-V09-06-01)
+-----------------------------------------------------------
+- INCL++ v5.1.9
+  o Removes calls to abort() and exit()
 
 29 November 2012 - Gabriele Cosmo (hadr-inclxx-V09-05-31)
 -----------------------------------------------------------

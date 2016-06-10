@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G3toG4RotationMatrix.cc 67982 2013-03-13 10:36:03Z gcosmo $
 
 #include "G3toG4RotationMatrix.hh"
 

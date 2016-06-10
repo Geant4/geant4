@@ -1,0 +1,93 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UPolycone.icc
+//
+// Implementation of inline methods of UPolycone
+//
+// 19.04.13 Marek Gayer
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
+
+inline
+double UPolycone::GetStartPhi() const
+{
+  return startPhi;
+}
+
+inline
+double UPolycone::GetEndPhi() const
+{
+  return endPhi;
+}
+
+inline
+bool UPolycone::IsOpen() const
+{
+  return phiIsOpen;
+}
+
+inline
+bool UPolycone::IsGeneric() const
+{
+  return false;
+}
+
+inline
+int UPolycone::GetNumRZCorner() const
+{
+  return numCorner;
+}
+
+inline
+UPolyconeSideRZ UPolycone::GetCorner(int index) const
+{
+  return corners[index];
+}
+
+inline
+UPolyconeHistorical* UPolycone::GetOriginalParameters() const
+{
+  return fOriginalParameters;
+}
+
+inline
+void UPolycone::SetOriginalParameters(UPolyconeHistorical* pars)
+{
+  if (!pars)
+    // UException("UPolycone::SetOriginalParameters()", "GeomSolids0002",
+    //            FatalException, "NULL pointer to parameters!");
+    *fOriginalParameters = *pars;
+  fCubicVolume = 0.;
+  fpPolyhedron = 0;
+}
+
+inline
+void UPolycone::SetOriginalParameters()
+{
+  int numPlanes = (int)numCorner / 2;
+
+  fOriginalParameters = new UPolyconeHistorical;
+
+  fOriginalParameters->fZValues.resize(numPlanes);
+  fOriginalParameters->Rmin.resize(numPlanes);
+  fOriginalParameters->Rmax.resize(numPlanes);
+
+  for (int j = 0; j < numPlanes; j++)
+  {
+    fOriginalParameters->fZValues[j] = corners[numPlanes + j].z;
+    fOriginalParameters->Rmax[j] = corners[numPlanes + j].r;
+    fOriginalParameters->Rmin[j] = corners[numPlanes - 1 - j].r;
+  }
+
+  fOriginalParameters->fStartAngle = startPhi;
+  fOriginalParameters->fOpeningAngle = endPhi - startPhi;
+  fOriginalParameters->fNumZPlanes = numPlanes;
+}

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeData.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100507  M. Kelsey -- Use template arguments to dimension const-refs
 //		to arrays,for use in passing to functions as dimensioned.

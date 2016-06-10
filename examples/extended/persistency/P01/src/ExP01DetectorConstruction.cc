@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01DetectorConstruction class
 //
 //
-// $Id$
+// $Id: ExP01DetectorConstruction.cc 71791 2013-06-24 14:08:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,24 +56,25 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 ExP01DetectorConstruction::ExP01DetectorConstruction()
-:solidWorld(0),  logicWorld(0),  physiWorld(0),
- solidTarget(0), logicTarget(0), physiTarget(0), 
- solidTracker(0),logicTracker(0),physiTracker(0), 
- solidChamber(0),logicChamber(0),physiChamber(0), 
- TargetMater(0), ChamberMater(0),fpMagField(0),
- fWorldLength(0.),  fTargetLength(0.), fTrackerLength(0.),
- NbOfChambers(0) ,  ChamberWidth(0.),  ChamberSpacing(0.)
+:G4VUserDetectorConstruction(),
+ fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
+ fSolidTarget(0), fLogicTarget(0), fPhysiTarget(0), 
+ fSolidTracker(0), fLogicTracker(0), fPhysiTracker(0), 
+ fSolidChamber(0), fLogicChamber(0), fPhysiChamber(0), 
+ fTargetMater(0), fChamberMater(0), fPMagField(0), fDetectorMessenger(0),
+ fWorldLength(0.), fTargetLength(0.), fTrackerLength(0.),
+ fNbOfChambers(0), fChamberWidth(0.), fChamberSpacing(0.)
 {
-  fpMagField = new ExP01MagneticField();
-  detectorMessenger = new ExP01DetectorMessenger(this);
+  fPMagField = new ExP01MagneticField();
+  fDetectorMessenger = new ExP01DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 ExP01DetectorConstruction::~ExP01DetectorConstruction()
 {
-  delete fpMagField;
-  delete detectorMessenger;             
+  delete fPMagField;
+  delete fDetectorMessenger;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,7 +102,7 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   //Xenon gas
   G4Material* Xenon = 
   new G4Material("XenonGas", z=54., a=131.29*g/mole, density= 5.458*mg/cm3,
-                 kStateGas, temperature= 293.15*kelvin, pressure= 1*atmosphere);
+   kStateGas, temperature= 293.15*kelvin, pressure= 1*atmosphere);
 
   // Print all the materials defined.
   //
@@ -110,15 +111,15 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   
-  NbOfChambers = 5;
-  ChamberWidth = 20*cm;
-  ChamberSpacing = 80*cm;
+  fNbOfChambers = 5;
+  fChamberWidth = 20*cm;
+  fChamberSpacing = 80*cm;
   
-  fTrackerLength = (NbOfChambers+1)*ChamberSpacing; // Full length of Tracker
+  fTrackerLength = (fNbOfChambers+1)*fChamberSpacing; // Full length of Tracker
   fTargetLength  = 5.0 * cm;                        // Full length of Target
   
-  TargetMater  = Pb;
-  ChamberMater = Xenon;
+  fTargetMater  = Pb;
+  fChamberMater = Xenon;
   
   fWorldLength= 1.2 *(fTargetLength+fTrackerLength);
    
@@ -133,14 +134,14 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
 
   G4double HalfWorldLength = 0.5*fWorldLength;
   
- solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
- logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
+ fSolidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
+ fLogicWorld= new G4LogicalVolume( fSolidWorld, Air, "World", 0, 0, 0);
   
   //  Must place the World Physical volume unrotated at (0,0,0).
   // 
-  physiWorld = new G4PVPlacement(0,               // no rotation
+  fPhysiWorld = new G4PVPlacement(0,               // no rotation
                                  G4ThreeVector(), // at (0,0,0)
-                                 logicWorld,      // its logical volume
+                                 fLogicWorld,      // its logical volume
                                  "World",         // its name
                                  0,               // its mother  volume
                                  false,           // no boolean operations
@@ -152,18 +153,18 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   
   G4ThreeVector positionTarget = G4ThreeVector(0,0,-(targetSize+trackerSize));
    
-  solidTarget = new G4Box("target",targetSize,targetSize,targetSize);
-  logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"Target",0,0,0);
-  physiTarget = new G4PVPlacement(0,               // no rotation
+  fSolidTarget = new G4Box("target",targetSize,targetSize,targetSize);
+  fLogicTarget = new G4LogicalVolume(fSolidTarget,fTargetMater,"Target",0,0,0);
+  fPhysiTarget = new G4PVPlacement(0,               // no rotation
                                   positionTarget,  // at (x,y,z)
-                                  logicTarget,     // its logical volume                                  
+                                  fLogicTarget,     // its logical volume
                                   "Target",        // its name
-                                  logicWorld,      // its mother  volume
+                                  fLogicWorld,      // its mother  volume
                                   false,           // no boolean operations
                                   0);              // copy number 
 
   G4cout << "Target is " << fTargetLength/cm << " cm of " 
-         << TargetMater->GetName() << G4endl;
+         << fTargetMater->GetName() << G4endl;
 
   //------------------------------ 
   // Tracker
@@ -171,13 +172,13 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   
   G4ThreeVector positionTracker = G4ThreeVector(0,0,0);
   
-  solidTracker = new G4Box("tracker",trackerSize,trackerSize,trackerSize);
-  logicTracker = new G4LogicalVolume(solidTracker , Air, "Tracker",0,0,0);  
-  physiTracker = new G4PVPlacement(0,              // no rotation
+  fSolidTracker = new G4Box("tracker",trackerSize,trackerSize,trackerSize);
+  fLogicTracker = new G4LogicalVolume(fSolidTracker , Air, "Tracker",0,0,0);  
+  fPhysiTracker = new G4PVPlacement(0,              // no rotation
                                   positionTracker, // at (x,y,z)
-                                  logicTracker,    // its logical volume                                  
+                                  fLogicTracker,    // its logical volume
                                   "Tracker",       // its name
-                                  logicWorld,      // its mother  volume
+                                  fLogicWorld,      // its mother  volume
                                   false,           // no boolean operations
                                   0);              // copy number 
 
@@ -188,35 +189,35 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   // An example of Parameterised volumes
   // dummy values for G4Box -- modified by parameterised volume
 
-  solidChamber = new G4Box("chamber", 100*cm, 100*cm, 10*cm); 
-  logicChamber = new G4LogicalVolume(solidChamber,ChamberMater,"Chamber",0,0,0);
+  fSolidChamber = new G4Box("chamber", 100*cm, 100*cm, 10*cm); 
+  fLogicChamber = new G4LogicalVolume(fSolidChamber, fChamberMater,"Chamber",0,0,0);
   
-  G4double firstPosition = -trackerSize + 0.5*ChamberWidth;
+  G4double firstPosition = -trackerSize + 0.5*fChamberWidth;
   G4double firstLength = fTrackerLength/10;
   G4double lastLength  = fTrackerLength;
    
   G4VPVParameterisation* chamberParam = new ExP01ChamberParameterisation(  
-                           NbOfChambers,          // NoChambers 
+                           fNbOfChambers,          // NoChambers 
                            firstPosition,         // Z of center of first 
-                           ChamberSpacing,        // Z spacing of centers
-                           ChamberWidth,          // Width Chamber 
+                           fChamberSpacing,        // Z spacing of centers
+                           fChamberWidth,          // Width Chamber 
                            firstLength,           // lengthInitial 
                            lastLength);           // lengthFinal
                            
   // dummy value : kZAxis -- modified by parameterised volume
   //
-  physiChamber = new G4PVParameterised(
+  fPhysiChamber = new G4PVParameterised(
                             "Chamber",       // their name
-                            logicChamber,    // their logical volume
-                            logicTracker,    // Mother logical volume
+                            fLogicChamber,    // their logical volume
+                            fLogicTracker,    // Mother logical volume
                             kZAxis,          // Are placed along this axis 
-                            NbOfChambers,    // Number of chambers
+                            fNbOfChambers,    // Number of chambers
                             chamberParam);   // The parametrisation
 
-  G4cout << "There are " << NbOfChambers << " chambers in the tracker region. "
-         << "The chambers are " << ChamberWidth/mm << " mm of " 
-         << ChamberMater->GetName() << "\n The distance between chamber is "
-         << ChamberSpacing/cm << " cm" << G4endl;
+  G4cout << "There are " << fNbOfChambers << " chambers in the tracker region. "
+         << "The chambers are " << fChamberWidth/mm << " mm of " 
+         << fChamberMater->GetName() << "\n The distance between chamber is "
+         << fChamberSpacing/cm << " cm" << G4endl;
          
   //------------------------------------------------ 
   // Sensitive detectors
@@ -227,17 +228,17 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   G4String trackerChamberSDname = "ExP01/TrackerChamberSD";
   ExP01TrackerSD* aTrackerSD = new ExP01TrackerSD( trackerChamberSDname );
   SDman->AddNewDetector( aTrackerSD );
-  logicChamber->SetSensitiveDetector( aTrackerSD );
+  fLogicChamber->SetSensitiveDetector( aTrackerSD );
 
 //--------- Visualization attributes -------------------------------
 
   G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  logicWorld  ->SetVisAttributes(BoxVisAtt);  
-  logicTarget ->SetVisAttributes(BoxVisAtt);
-  logicTracker->SetVisAttributes(BoxVisAtt);
+  fLogicWorld  ->SetVisAttributes(BoxVisAtt);  
+  fLogicTarget ->SetVisAttributes(BoxVisAtt);
+  fLogicTracker->SetVisAttributes(BoxVisAtt);
   
   G4VisAttributes* ChamberVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  logicChamber->SetVisAttributes(ChamberVisAtt);
+  fLogicChamber->SetVisAttributes(ChamberVisAtt);
   
 //--------- example of User Limits -------------------------------
 
@@ -247,8 +248,8 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
     
   // Sets a max Step length in the tracker region, with G4StepLimiter
   //
-  G4double maxStep = 0.5*ChamberWidth; 
-  logicTracker->SetUserLimits(new G4UserLimits(maxStep));
+  G4double maxStep = 0.5*fChamberWidth; 
+  fLogicTracker->SetUserLimits(new G4UserLimits(maxStep));
   
   // Set additional contraints on the track, with G4UserSpecialCuts
   //
@@ -256,7 +257,7 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
   // logicTracker->SetUserLimits(new G4UserLimits(maxStep,maxLength,maxTime,
   //                                               minEkin));
   
-  return physiWorld;
+  return fPhysiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -266,8 +267,8 @@ void ExP01DetectorConstruction::setTargetMaterial(G4String materialName)
   // search the material by its name 
   G4Material* pttoMaterial = G4Material::GetMaterial(materialName);  
   if (pttoMaterial)
-     {TargetMater = pttoMaterial;
-      logicTarget->SetMaterial(pttoMaterial); 
+     {fTargetMater = pttoMaterial;
+      fLogicTarget->SetMaterial(pttoMaterial); 
       G4cout << "\n----> The target is " << fTargetLength/cm << " cm of "
              << materialName << G4endl;
      }             
@@ -280,9 +281,9 @@ void ExP01DetectorConstruction::setChamberMaterial(G4String materialName)
   // search the material by its name 
   G4Material* pttoMaterial = G4Material::GetMaterial(materialName);  
   if (pttoMaterial)
-     {ChamberMater = pttoMaterial;
-      logicChamber->SetMaterial(pttoMaterial); 
-      G4cout << "\n----> The chambers are " << ChamberWidth/cm << " cm of "
+     {fChamberMater = pttoMaterial;
+      fLogicChamber->SetMaterial(pttoMaterial); 
+      G4cout << "\n----> The chambers are " << fChamberWidth/cm << " cm of "
              << materialName << G4endl;
      }             
 }
@@ -291,7 +292,7 @@ void ExP01DetectorConstruction::setChamberMaterial(G4String materialName)
  
 void ExP01DetectorConstruction::SetMagField(G4double fieldValue)
 {
-  fpMagField->SetFieldValue(fieldValue);
+  fPMagField->SetFieldValue(fieldValue);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

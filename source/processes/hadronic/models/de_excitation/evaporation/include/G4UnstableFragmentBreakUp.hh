@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UnstableFragmentBreakUp.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -85,9 +85,9 @@ private:
 
   G4int verbose;
 
-  static G4int Zfr[6];
-  static G4int Afr[6];
-  static G4double masses[6];
+  G4int Zfr[6];
+  G4int Afr[6];
+  G4double masses[6];
 
   G4NistManager* fNistManager;
 };

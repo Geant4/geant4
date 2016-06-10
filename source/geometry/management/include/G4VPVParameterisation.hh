@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPVParameterisation.hh 73434 2013-08-27 11:06:16Z gcosmo $
 //
 // class G4VPVParamterisation
 //
@@ -51,7 +51,7 @@ class G4VTouchable;
 class G4VSolid;
 class G4Material;
 
-// CSG Entities which may be parameterised/replicated
+// Entities which may be parameterised/replicated
 //
 class G4Box;
 class G4Tubs;
@@ -60,6 +60,7 @@ class G4Trap;
 class G4Cons;
 class G4Sphere;
 class G4Orb;
+class G4Ellipsoid;
 class G4Torus;
 class G4Para;
 class G4Polycone;
@@ -116,6 +117,10 @@ class G4VPVParameterisation
                                    const G4VPhysicalVolume *) const {}
 
     virtual void ComputeDimensions(G4Orb &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Ellipsoid &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 

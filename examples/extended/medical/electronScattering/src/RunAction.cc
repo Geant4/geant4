@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 69009 2013-04-15 09:33:05Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,29 +47,37 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
-                     HistoManager* histo)
-:fDetector(det), fPrimary(kin), fHistoManager(histo)
-{ }
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+:fDetector(det), fPrimary(kin), fHistoManager(0)
+{
+ fHistoManager = new HistoManager(); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+ delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
-  fHistoManager->book();
   
   InitFluence();  
 
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
+  
+  //histograms
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,16 +112,22 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   // normalize histograms
   //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
   G4double fac = 1./(double(TotNbofEvents));
-  fHistoManager->Normalize(1,fac);
-  fHistoManager->Normalize(2,fac);
-  fHistoManager->Normalize(3,fac);
+  analysisManager->ScaleH1(1,fac);
+  analysisManager->ScaleH1(2,fac);
+  analysisManager->ScaleH1(3,fac);
+  analysisManager->ScaleH1(5,fac);
+  analysisManager->ScaleH1(6,fac);
   
   ComputeFluenceError();
   PrintFluence(TotNbofEvents);
 
   // save histograms
-  fHistoManager->save();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }  
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -125,14 +139,14 @@ void RunAction::InitFluence()
 {
   // create Fluence histo in any case
   //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   G4int ih = 4;
-  if (!fHistoManager->HistoExist(ih))
-    fHistoManager->SetHisto(ih, 120, 0*mm, 240*mm, "mm");
+  analysisManager->SetH1(ih, 120, 0*mm, 240*mm, "mm");
     
   //construct vectors for fluence distribution
   //
-  fNbBins = fHistoManager->GetNbins(ih);
-  fDr = fHistoManager->GetBinWidth(ih);
+  fNbBins = analysisManager->GetH1Nbins(ih);
+  fDr = analysisManager->GetH1Width(ih);
   fluence.resize(fNbBins, 0.); 
   fluence1.resize(fNbBins, 0.);   
   fluence2.resize(fNbBins, 0.);
@@ -198,7 +212,8 @@ void RunAction::ComputeFluenceError()
      fluence1[bin] = ratio;
      fluence2[bin] = error;
      rmean += fDr;
-     fHistoManager->FillHisto(4,rmean,ratio);
+     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();     
+     analysisManager->FillH1(4,rmean,ratio);
   }
 }
 
@@ -208,7 +223,8 @@ void RunAction::ComputeFluenceError()
 
 void RunAction::PrintFluence(G4int TotEvents)
 {
-  G4String name = fHistoManager->GetFileName(); 
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();   
+  G4String name = analysisManager->GetFileName(); 
   G4String fileName = name + ".ascii";
   std::ofstream File(fileName, std::ios::out);
   

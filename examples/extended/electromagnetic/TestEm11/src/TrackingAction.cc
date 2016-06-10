@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.cc 74997 2013-10-25 10:52:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,15 +34,16 @@
 #include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run)
-:fDetector(det),fRunAction(run)
+TrackingAction::TrackingAction(DetectorConstruction* det)
+:G4UserTrackingAction(),fDetector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,12 +53,15 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  G4int trackID = track->GetTrackID();
  
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+ Run* run 
+   = static_cast<Run*>(
+       G4RunManager::GetRunManager()->GetNonConstCurrentRun());
         
  //track length of primary particle or charged secondaries
  //
  G4double tracklen = track->GetTrackLength();
  if (trackID == 1) {
-    fRunAction->AddTrackLength(tracklen);
+    run->AddTrackLength(tracklen);
     analysisManager->FillH1(3, tracklen);
  } else if (track->GetDefinition()->GetPDGCharge() != 0.)
     analysisManager->FillH1(6, tracklen);
@@ -66,7 +70,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //
  if (trackID == 1) {
    G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
-   fRunAction->AddProjRange(x);
+   run->AddProjRange(x);
    analysisManager->FillH1(5, x);
  }
             
@@ -75,7 +79,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  if (trackID == 1) {
    G4int nbOfSteps = track->GetCurrentStepNumber();
    G4double stepSize = tracklen/nbOfSteps;
-   fRunAction->AddStepSize(nbOfSteps,stepSize);
+   run->AddStepSize(nbOfSteps,stepSize);
  }
             
  //status of primary particle : absorbed, transmited, reflected ?
@@ -86,7 +90,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     if (track->GetMomentumDirection().x() > 0.) status = 1;
     else                                        status = 2;
   }
-  fRunAction->AddTrackStatus(status);
+  run->AddTrackStatus(status);
  }   
 }
 

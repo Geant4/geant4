@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 070618 Comment out unused private member leaking by T. Koi
 //
@@ -58,17 +57,17 @@ class G4NeutronHPPartial
     nData = std::max(n1,n2);
   }  
   
-  void InitInterpolation(G4int i, std::ifstream & aDataFile)
+  void InitInterpolation(G4int i, std::istream & aDataFile)
   {
     data[i].InitInterpolation(aDataFile);
   }
   
-  void InitInterpolation(std::ifstream & aDataFile)
+  void InitInterpolation(std::istream & aDataFile)
   {
     theManager.Init(aDataFile);
   }
   
-  void Init(std::ifstream & aDataFile)
+  void Init(std::istream & aDataFile)
   {
     G4int i;
     G4double e;
@@ -81,7 +80,7 @@ class G4NeutronHPPartial
     }  
   }
   
-  void InitData(G4int i, std::ifstream & aDataFile, G4double unit=1.)
+  void InitData(G4int i, std::istream & aDataFile, G4double unit=1.)
   {
     G4int ii;
     G4double eg, pg;

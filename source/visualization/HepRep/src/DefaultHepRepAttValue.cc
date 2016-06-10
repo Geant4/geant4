@@ -18,47 +18,79 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepAttValue.cc,v 1.10 2005-06-02 21:28:45 duns Exp $
+ * @version $Id: DefaultHepRepAttValue.cc 68043 2013-03-13 14:27:49Z gcosmo $
  */
 namespace cheprep {
 
 std::string DefaultHepRepAttValue::labelStrings[LABELSTRINGS_LEN];
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, string aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_STRING), stringValue(aValue), showLabelValue(aShowLabel) {
-
+  : name(aName)
+  , type(HepRepConstants::TYPE_STRING)
+  , stringValue(aValue)
+  , longValue(0)
+  , doubleValue(0.)
+  , booleanValue(false)
+  , showLabelValue(aShowLabel)
+  {
     init();
-}
+  }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, int64 aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_LONG), longValue(aValue), showLabelValue(aShowLabel) {
-
+  : name(aName)
+  , type(HepRepConstants::TYPE_LONG)
+  , longValue(aValue)
+  , doubleValue(0.)
+  , booleanValue(false)
+  , showLabelValue(aShowLabel)
+  {
     init();
-}
+  }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, int aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_INT), longValue(aValue), showLabelValue(aShowLabel) {
-
+  : name(aName)
+  , type(HepRepConstants::TYPE_INT)
+  , longValue(aValue)
+  , doubleValue(0.)
+  , booleanValue(false)
+  , showLabelValue(aShowLabel)
+  {
     init();
-}
+  }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, double aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_DOUBLE), doubleValue(aValue), showLabelValue(aShowLabel) {
-
+  : name(aName)
+  , type(HepRepConstants::TYPE_DOUBLE)
+  , longValue(0)
+  , doubleValue(aValue)
+  , booleanValue(false)
+  , showLabelValue(aShowLabel)
+  {
     init();
-}
+  }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, bool aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_BOOLEAN), booleanValue(aValue), showLabelValue(aShowLabel) {
-
+  : name(aName)
+  , type(HepRepConstants::TYPE_BOOLEAN)
+  , longValue(0)
+  , doubleValue(0.)
+  , booleanValue(aValue)
+  , showLabelValue(aShowLabel)
+  {
     init();
-}
+  }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, vector<double> aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_COLOR), colorValue(aValue), showLabelValue(aShowLabel) {
-
+  : name(aName)
+  , type(HepRepConstants::TYPE_COLOR)
+  , longValue(0)
+  , doubleValue(0.)
+  , booleanValue(false)
+  , colorValue(aValue)
+  , showLabelValue(aShowLabel)
+  {
     init();
-}
+  }
 
 DefaultHepRepAttValue::~DefaultHepRepAttValue() {
 }
@@ -71,14 +103,22 @@ void DefaultHepRepAttValue::init() {
 }
 
 HepRepAttValue* DefaultHepRepAttValue::copy() {
+  // Coverity issues warnings here.  It looks to me (JA) that "return" is
+  // missing on severeal lines.
     switch(type) {
-        case HepRepConstants::TYPE_COLOR: new DefaultHepRepAttValue(name, colorValue, showLabelValue);
-        case HepRepConstants::TYPE_STRING: new DefaultHepRepAttValue(name, stringValue, showLabelValue);
-        case HepRepConstants::TYPE_LONG: new DefaultHepRepAttValue(name, longValue, showLabelValue);
-        case HepRepConstants::TYPE_INT: new DefaultHepRepAttValue(name, (int)longValue, showLabelValue);
-        case HepRepConstants::TYPE_DOUBLE: new DefaultHepRepAttValue(name, doubleValue, showLabelValue);
-        case HepRepConstants::TYPE_BOOLEAN: new DefaultHepRepAttValue(name, booleanValue, showLabelValue);
-        default: return new DefaultHepRepAttValue(name, "Unknown type stored in HepRepAttDef", showLabelValue);
+//      case HepRepConstants::TYPE_COLOR: new DefaultHepRepAttValue(name, colorValue, showLabelValue);
+//      case HepRepConstants::TYPE_STRING: new DefaultHepRepAttValue(name, stringValue, showLabelValue);
+//      case HepRepConstants::TYPE_LONG: new DefaultHepRepAttValue(name, longValue, showLabelValue);
+//      case HepRepConstants::TYPE_INT: new DefaultHepRepAttValue(name, (int)longValue, showLabelValue);
+//      case HepRepConstants::TYPE_DOUBLE: new DefaultHepRepAttValue(name, doubleValue, showLabelValue);
+//      case HepRepConstants::TYPE_BOOLEAN: new DefaultHepRepAttValue(name, booleanValue, showLabelValue);
+      case HepRepConstants::TYPE_COLOR: return new DefaultHepRepAttValue(name, colorValue, showLabelValue);
+      case HepRepConstants::TYPE_STRING: return new DefaultHepRepAttValue(name, stringValue, showLabelValue);
+      case HepRepConstants::TYPE_LONG: return new DefaultHepRepAttValue(name, longValue, showLabelValue);
+      case HepRepConstants::TYPE_INT: return new DefaultHepRepAttValue(name, (int)longValue, showLabelValue);
+      case HepRepConstants::TYPE_DOUBLE: return new DefaultHepRepAttValue(name, doubleValue, showLabelValue);
+      case HepRepConstants::TYPE_BOOLEAN: return new DefaultHepRepAttValue(name, booleanValue, showLabelValue);
+      default: return new DefaultHepRepAttValue(name, "Unknown type stored in HepRepAttDef", showLabelValue);
     }
 }
 

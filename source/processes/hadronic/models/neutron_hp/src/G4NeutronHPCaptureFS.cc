@@ -34,6 +34,7 @@
 // 110430 Temporary solution in the case of being MF6 final state in Capture reaction (MT102)
 //
 #include "G4NeutronHPCaptureFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
@@ -41,7 +42,7 @@
 #include "G4Nucleus.hh"
 #include "G4PhotonEvaporation.hh"
 #include "G4Fragment.hh"
-#include "G4ParticleTable.hh" 
+#include "G4IonTable.hh" 
 #include "G4NeutronHPDataUsed.hh"
 
   G4HadFinalState * G4NeutronHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
@@ -108,8 +109,9 @@
         
         // T. K. comment out below line
         //theOne->SetDefinition( G4Gamma::Gamma() );
-        G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
-        if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
+        G4IonTable* theTable = G4IonTable::GetIonTable();
+        //if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
+        if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0 ) );
 
         //if ( (*i)->GetExcitationEnergy() > 0 )
         if ( (*it)->GetExcitationEnergy() > 1.0e-2*eV )
@@ -130,18 +132,13 @@
       delete products;
     }
 
-
-
 // add them to the final state
 
     G4int nPhotons = 0;
     if(thePhotons!=0) nPhotons=thePhotons->size();
 
-
-    //110527TKDB  Unused codes, Detected by gcc4.6 compiler 
-    //G4int nParticles = nPhotons;
-    //if(1==nPhotons) nParticles = 2;
-
+///*
+   if ( DoNotAdjustFinalState() ) {
 //Make at least one photon  
 //101203 TK
     if ( nPhotons == 0 )
@@ -162,11 +159,16 @@
     if ( nPhotons == 1 && thePhotons->operator[](0)->GetDefinition()->GetBaryonNumber() == 0 )
     {
        G4ThreeVector direction = thePhotons->operator[](0)->GetMomentum().unit();
-       G4double Q = G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ))->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass()
-         - G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ))->GetPDGMass();
+
+       //G4double Q = G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ))->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass()
+       //  - G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ))->GetPDGMass();
+       G4double Q = G4IonTable::GetIonTable()->GetIonMass(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0) + G4Neutron::Neutron()->GetPDGMass()
+         - G4IonTable::GetIonTable()->GetIonMass(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
+
        thePhotons->operator[](0)->SetMomentum( Q*direction );
     } 
 //
+    }
 
     // back to lab system
     for(i=0; i<nPhotons; i++)
@@ -179,8 +181,10 @@
     if ( nPhotons == 1 && thePhotons->operator[](0)->GetDefinition()->GetBaryonNumber() == 0 )
     {
        G4DynamicParticle * theOne = new G4DynamicParticle;
-       G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-                                        ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+       //G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+       //                                 ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+       G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
+                                        ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
        theOne->SetDefinition(aRecoil);
        // Now energy; 
        // Can be done slightly better @
@@ -213,8 +217,10 @@
 
 //101203TK
     G4bool residual = false;
-    G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-                                   ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+    //G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+    //                               ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+    G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
+                                   ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
     for ( G4int j = 0 ; j != theResult.GetNumberOfSecondaries() ; j++ )
     {
        if ( theResult.GetSecondary(j)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
@@ -325,32 +331,19 @@
 
      G4String element_name = theNames.GetName( static_cast<G4int>(Z)-1 );
      G4String filenameMF6 = dirName+"/FSMF6/"+sZ+"_"+sA+sM+"_"+element_name;
-     std::ifstream dummyIFS(filenameMF6, std::ios::in);
-     if ( dummyIFS.good() == true ) hasExactMF6=true;
-
-     //TK110430 Just for checking 
-     //ENDF-VII.0 no case (check done at 110430 
-     /*
-     if ( hasExactMF6 == true ) 
-     {
-        G4String filename = dirName+"FS/"+sZ+"_"+sA+"_"+element_name;
-        std::ifstream dummyIFS(filename, std::ios::in);
-        if ( dummyIFS.good() == true ) 
-        {
-           G4cout << "TKDB Capture Both FS and FSMF6 are exist for Z = " << sZ << ", A = " << sA << G4endl;;
-        }
-     }
-     */
+     //std::ifstream dummyIFS(filenameMF6, std::ios::in);
+     //if ( dummyIFS.good() == true ) hasExactMF6=true;
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filenameMF6,theData);
 
      //TK110430 Only use MF6MT102 which has exactly same A and Z 
      //Even _nat_ do not select and there is no _nat_ case in ENDF-VII.0 
-     if ( hasExactMF6 == true )
-     { 
-        std::ifstream theData(filenameMF6, std::ios::in);
-        theMF6FinalState.Init(theData);
-        theData.close();
-         return;
-     }
+   if ( theData.good() == true ) { 
+      hasExactMF6=true;
+      theMF6FinalState.Init(theData);
+      //theData.close();
+      return;
+   }
      //TK110430 END
 
 
@@ -369,8 +362,10 @@
       hasXsec = false;
       return;
     }
-    std::ifstream theData(filename, std::ios::in);
-    
+   //std::ifstream theData(filename, std::ios::in);
+   //std::istringstream theData(std::ios::in);
+   theData.clear();
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
     hasFSData = theFinalStatePhotons.InitMean(theData); 
     if(hasFSData)
     {
@@ -378,5 +373,5 @@
       theFinalStatePhotons.InitAngular(theData); 
       theFinalStatePhotons.InitEnergies(theData); 
     }
-    theData.close();
+    //theData.close();
   }

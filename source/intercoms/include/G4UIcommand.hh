@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIcommand.hh 77563 2013-11-26 09:03:18Z gcosmo $
 //
 //
 
@@ -53,9 +53,14 @@ class G4UIcommand
   public:
       G4UIcommand();
   public: // with description
-      G4UIcommand(const char * theCommandPath, G4UImessenger * theMessenger);
+      G4UIcommand(const char * theCommandPath, G4UImessenger * theMessenger,
+                  G4bool tBB = true);
       //  Constructor. The command string with full path directory
       // and the pointer to the messenger must be given.
+      // If tBB is set to false, this command won't be sent to worker threads.
+      // This tBB parameter could be changed with SetToBeBroadcasted() method
+      // except for G4UIdirectory.
+
   public:
       virtual ~G4UIcommand();
 
@@ -169,6 +174,25 @@ class G4UIcommand
       else
       { return commandGuidance[0]; }
       }
+
+  protected:
+    G4bool toBeBroadcasted;
+    G4bool toBeFlushed;
+    G4bool workerThreadOnly;
+
+  public:
+    inline void SetToBeBroadcasted(G4bool val)
+    { toBeBroadcasted = val; }
+    inline G4bool ToBeBroadcasted() const
+    { return toBeBroadcasted; }
+    inline void SetToBeFlushed(G4bool val)
+    { toBeFlushed = val; }
+    inline G4bool ToBeFlushed() const
+    { return toBeFlushed; }
+    inline void SetWorkerThreadOnly(G4bool val=true)
+    { workerThreadOnly = val; }
+    inline G4bool IsWorkerThreadOnly() const
+    { return workerThreadOnly; }
 
   protected:
     G4int CheckNewValue(const char* newValue);

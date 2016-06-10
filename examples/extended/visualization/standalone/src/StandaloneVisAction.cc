@@ -27,7 +27,7 @@
 /// \brief Implementation of the StandaloneVisAction class
 //
 //
-// $Id$
+// $Id: StandaloneVisAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
 
 #include "StandaloneVisAction.hh"
 
@@ -37,6 +37,8 @@
 #include "G4Box.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StandaloneVisAction::Draw() {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
@@ -68,3 +70,5 @@ void StandaloneVisAction::Draw() {
     delete pSubtracted;
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

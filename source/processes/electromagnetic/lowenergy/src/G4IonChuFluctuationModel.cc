@@ -164,7 +164,7 @@ G4double G4IonChuFluctuationModel::ChuFluctuationModel(const G4Material* materia
   G4double zeff = (material->GetElectronDensity())/
                   (material->GetTotNbOfAtomsPerVolume()) ;
 
-  static G4double a[96][4] = {
+  static const G4double a[96][4] = {
  {-0.3291, -0.8312,  0.2460, -1.0220},
  {-0.5615, -0.5898,  0.5205, -0.7258},
  {-0.5280, -0.4981,  0.5519, -0.5865},

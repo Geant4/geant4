@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2005-11-22 01:50:12 tkoi Exp $
+# $Id: GNUmakefile 77301 2013-11-22 11:09:07Z gcosmo $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -35,7 +35,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
-            -I$(G4BASE)/materials/include
+            -I$(G4BASE)/materials/include \
+            -I$(G4BASE)/intercoms/include 
            
 include $(G4INSTALL)/config/common.gmk
 

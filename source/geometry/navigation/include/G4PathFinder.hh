@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PathFinder.hh 69058 2013-04-17 09:08:25Z gcosmo $
 // 
 // class G4PathFinder 
 //
@@ -103,10 +103,6 @@ class G4PathFinder
    inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const; 
 
    // -----------------------------------------------------------------
-
-   inline void SetChargeMomentumMass( G4double charge,     // in e+ units
-                                      G4double momentum,   // in Geant4 units
-                                      G4double pMass );  
 
    inline G4bool   IsParticleLooping() const;
 
@@ -265,7 +261,7 @@ class G4PathFinder
 
    G4double kCarTolerance;
 
-   static G4PathFinder* fpPathFinder;
+   static G4ThreadLocal G4PathFinder* fpPathFinder;
 };
 
 // ********************************************************************

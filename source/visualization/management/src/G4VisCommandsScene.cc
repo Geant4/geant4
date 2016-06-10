@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsScene.cc 75567 2013-11-04 11:35:11Z gcosmo $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -320,6 +320,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
       }
     } else {
       pScene->SetRefreshAtEndOfEvent(true);
+      pScene->SetMaxNumberOfKeptEvents(maxNumberOfKeptEvents);
       pSceneHandler->SetMarkForClearingTransientStore(true);
     }
   }

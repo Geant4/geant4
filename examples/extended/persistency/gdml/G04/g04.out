@@ -1,0 +1,763 @@
+
+Usage: gdml_det <intput_gdml_file:mandatory>
+
+G4GDML: Reading '/ec/G4-builds/release/slc6-gcc47-RelWithDebInfo/09-06-ref-11_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
+G4GDML: Reading definitions...
+G4GDML: Reading materials...
+G4GDML: Reading solids...
+G4GDML: Reading structure...
+G4GDML: Reading setup...
+G4GDML: Reading '/ec/G4-builds/release/slc6-gcc47-RelWithDebInfo/09-06-ref-11_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
+Stripping off GDML names of materials, solids and volumes ...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Found 1 volume(s) with auxiliary information.
+
+Volume Boxvol has the following list of auxiliary information: 
+
+--> Type: SensDet Value: Tracker
+--> Type: Color Value: Blue
+
+Volume Boxvol has the following list of auxiliary information: 
+
+Attaching sensitive detector Tracker to volume Boxvol
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+/run/verbose 2
+/run/beamOn 20
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0s Real=0s Sys=0s
+/gun/direction 0 0 -1
+/run/beamOn 20
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 1 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -676      0.1      133     1e+03        0 1.33e+03  1.33e+03   Boxvol_PV Transportation
+    2      498      0.1      250     1e+03        0 1.18e+03  2.51e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      700     1e+03        0 4.52e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -614      0.1      0.1     1e+03        0 1.39e+03  1.39e+03   Boxvol_PV Transportation
+    2      614      0.1      0.1     1e+03        0 1.23e+03  2.61e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      0.1      0.1     1e+03        0 4.39e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -535      147      0.1     1e+03        0 1.47e+03  1.47e+03   Boxvol_PV Transportation
+    2      579      258      0.1     1e+03        0 1.12e+03  2.59e+03    World_PV Transportation
+Processing hits ....
+    3    5e+03      700      0.1     1e+03        0 4.44e+03  7.03e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0s Real=0.01s Sys=0s
+/tracking/verbose 0
+/gun/direction 0.3 0.2 1
+/run/beamOn 20
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 2 starts.
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0s Real=0s Sys=0s
+/gun/direction 0.3 -0.2 1
+/run/beamOn 20
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 3 starts.
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0s Real=0s Sys=0s
+/gun/direction -0.3 0.2 0.6
+/run/beamOn 20
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 4 starts.
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Processing hits ....
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0s Real=0s Sys=0s
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.011 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)

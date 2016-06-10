@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TauPlus.cc 69015 2013-04-15 09:46:48Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -78,9 +78,9 @@ G4TauPlus* G4TauPlus::Definition()
              false,           "tau"
               );
    // Bohr Magnetron
-   G4double muB =  0.5*eplus*hbar_Planck/(1.77699*GeV/c_squared) ;
+   G4double muB =  0.5*eplus*hbar_Planck/(anInstance->GetPDGMass()/c_squared) ;
    
-   anInstance->SetPDGMagneticMoment( muB * 2.* 1.00116);
+   anInstance->SetPDGMagneticMoment( muB * 1.00118);
 
   //create Decay Table 
   G4DecayTable* table = new G4DecayTable();

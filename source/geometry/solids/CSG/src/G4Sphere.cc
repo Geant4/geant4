@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Sphere.cc 76263 2013-11-08 11:41:52Z gcosmo $
 //
 // class G4Sphere
 //
@@ -56,6 +56,8 @@
 
 #include "G4Sphere.hh"
 
+#if !defined(G4GEOM_USE_USPHERE)
+
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
@@ -69,8 +71,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 
 using namespace CLHEP;
 
@@ -91,14 +91,17 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4CSGSolid(pName), fEpsilon(2.e-11),
+  : G4CSGSolid(pName), fEpsilon(2.e-11), fSPhi(0.0),
     fFullPhiSphere(true), fFullThetaSphere(true)
 {
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+
+  halfCarTolerance = 0.5*kCarTolerance;
+  halfAngTolerance = 0.5*kAngTolerance;
 
   // Check radii and set radial tolerances
 
-  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   if ( (pRmin >= pRmax) || (pRmax < 1.1*kRadTolerance) || (pRmin < 0) )
   {
     std::ostringstream message;
@@ -130,7 +133,8 @@ G4Sphere::G4Sphere( __void__& a )
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
     ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
     tanSTheta(0.), tanSTheta2(0.), tanETheta(0.), tanETheta2(0.), eTheta(0.),
-    fFullPhiSphere(false), fFullThetaSphere(false), fFullSphere(true)
+    fFullPhiSphere(false), fFullThetaSphere(false), fFullSphere(true),
+    halfCarTolerance(0.), halfAngTolerance(0.)
 {
 }
 
@@ -162,7 +166,9 @@ G4Sphere::G4Sphere(const G4Sphere& rhs)
     tanSTheta(rhs.tanSTheta), tanSTheta2(rhs.tanSTheta2),
     tanETheta(rhs.tanETheta), tanETheta2(rhs.tanETheta2), eTheta(rhs.eTheta),
     fFullPhiSphere(rhs.fFullPhiSphere), fFullThetaSphere(rhs.fFullThetaSphere),
-    fFullSphere(rhs.fFullSphere)
+    fFullSphere(rhs.fFullSphere),
+    halfCarTolerance(rhs.halfCarTolerance),
+    halfAngTolerance(rhs.halfAngTolerance)
 {
 }
 
@@ -197,6 +203,8 @@ G4Sphere& G4Sphere::operator = (const G4Sphere& rhs)
    tanETheta = rhs.tanETheta; tanETheta2 = rhs.tanETheta2;
    eTheta = rhs.eTheta; fFullPhiSphere = rhs.fFullPhiSphere;
    fFullThetaSphere = rhs.fFullThetaSphere; fFullSphere = rhs.fFullSphere;
+   halfCarTolerance = rhs.halfCarTolerance;
+   halfAngTolerance = rhs.halfAngTolerance;
 
    return *this;
 }
@@ -467,7 +475,7 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
   G4double rho,rho2,rad2,tolRMin,tolRMax;
   G4double pPhi,pTheta;
   EInside in = kOutside;
-  static const G4double halfAngTolerance = kAngTolerance*0.5;
+
   const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
   const G4double halfRminTolerance = fRminTolerance*0.5;
   const G4double Rmax_minus = fRmax - halfRmaxTolerance;
@@ -568,9 +576,6 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   G4double distSTheta = kInfinity, distETheta = kInfinity;
   G4ThreeVector nR, nPs, nPe, nTs, nTe, nZ(0.,0.,1.);
   G4ThreeVector norm, sumnorm(0.,0.,0.);
-
-  static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
   rho2 = p.x()*p.x()+p.y()*p.y();
   radius = std::sqrt(rho2+p.z()*p.z());
@@ -872,8 +877,6 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   G4double tolSTheta=0., tolETheta=0. ;
   const G4double dRmax = 100.*fRmax;
 
-  static const G4double halfCarTolerance = kCarTolerance*0.5;
-  static const G4double halfAngTolerance = kAngTolerance*0.5;
   const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
   const G4double halfRminTolerance = fRminTolerance*0.5;
   const G4double tolORMin2 = (fRmin>halfRminTolerance)
@@ -1904,8 +1907,6 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   G4double sphi= kInfinity,stheta= kInfinity;
   ESide side=kNull,sidephi=kNull,sidetheta=kNull;  
 
-  static const G4double halfCarTolerance = kCarTolerance*0.5;
-  static const G4double halfAngTolerance = kAngTolerance*0.5;
   const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
   const G4double halfRminTolerance = fRminTolerance*0.5;
   const G4double Rmax_plus  = fRmax + halfRmaxTolerance;
@@ -3184,7 +3185,4 @@ G4Polyhedron* G4Sphere::CreatePolyhedron () const
   return new G4PolyhedronSphere (fRmin, fRmax, fSPhi, fDPhi, fSTheta, fDTheta);
 }
 
-G4NURBS* G4Sphere::CreateNURBS () const
-{
-  return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
-}
+#endif

@@ -26,6 +26,11 @@
 /// \file persistency/P01/src/RootIO.cc
 /// \brief Implementation of the RootIO class
 //
+// $Id: RootIO.cc 71791 2013-06-24 14:08:28Z gcosmo $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include <sstream>
 
 #include "RootIO.hh"
@@ -37,9 +42,13 @@
 #include "G4Event.hh"
 //
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 static RootIO* instance = 0;
 
-RootIO::RootIO():Nevents(0)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RootIO::RootIO():fNevents(0)
 {
   // initialize ROOT
   TSystem ts;
@@ -49,11 +58,15 @@ RootIO::RootIO():Nevents(0)
   ROOT::Cintex::Cintex::Enable();
   //gDebug = 1;
 
-  fo = new TFile("hits.root","RECREATE");
+  fFile = new TFile("hits.root","RECREATE");
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RootIO::~RootIO()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RootIO* RootIO::GetInstance()
 {
@@ -64,23 +77,29 @@ RootIO* RootIO::GetInstance()
   return instance;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RootIO::Write(std::vector<ExP01TrackerHit*>* hcont)
 {
-  Nevents++;
+  fNevents++;
 
   std::ostringstream os;
-  os << Nevents;
+  os << fNevents;
   std::string stevt = "Event_" + os.str(); 
   const char* chevt = stevt.c_str();
 
   std::cout << "writing " << stevt << std::endl;
 
 
-  fo->WriteObject(hcont, chevt);
+  fFile->WriteObject(hcont, chevt);
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RootIO::Close()
 {
-  fo->Close();
+  fFile->Close();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

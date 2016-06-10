@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10CalorimeterSD class
 //
 //
-// $Id$
+// $Id: Em10CalorimeterSD.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 
 

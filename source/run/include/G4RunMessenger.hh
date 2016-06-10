@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RunMessenger.hh 77649 2013-11-27 08:39:54Z gcosmo $
 //
 // 
 //	GEANT 4 class header file 
@@ -35,8 +35,9 @@
 //      Implemented commands are following;
 //
 //  Commands : 
-//    BeamOn *              Start a Run.
-//    Verbose *             Set the Verbose level of G4RunManager.
+//    beamOn *              Start a Run.
+//    verbose *             Set the Verbose level of G4RunManager.
+//    printProgress *       Set the frequency of printing out the progress of a run.
 //    dumpRegion *          Dump information of a region.
 //    dumpCouples *         Dump information of material-cuts-couples.
 //    optimizeGeometry *    Set the optimization flag of closing geometry.
@@ -83,6 +84,9 @@ class G4RunMessenger: public G4UImessenger
     G4UIdirectory *             runDirectory;
     G4UIcommand *               beamOnCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
+    G4UIcmdWithAnInteger *      printProgCmd;
+    G4UIcmdWithAnInteger *      nThreadsCmd;
+    G4UIcmdWithAnInteger *      evModCmd;
     G4UIcmdWithAString *        dumpRegCmd;
     G4UIcmdWithoutParameter *   dumpCoupleCmd;
     G4UIcmdWithABool *          optCmd;
@@ -92,8 +96,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   abortEventCmd;
     G4UIcmdWithoutParameter *   initCmd;
     G4UIcmdWithoutParameter *   geomCmd;
+    G4UIcmdWithABool*           geomRebCmd;
     G4UIcmdWithoutParameter *   physCmd;
-    G4UIcmdWithoutParameter *   cutCmd;
     G4UIcmdWithAnInteger *      randEvtCmd;
 
     G4UIdirectory *             randomDirectory;
@@ -103,11 +107,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   saveThisRunCmd;
     G4UIcmdWithoutParameter *   saveThisEventCmd;
     G4UIcmdWithAString *        restoreRandCmd;
+    G4UIcmdWithABool *          saveEachEventCmd;
     
-    G4UIcmdWithAString *        randDirOld;
-    G4UIcmdWithAnInteger *      storeRandOld;
-    G4UIcmdWithAString *        restoreRandOld;  
-
     G4UIcmdWithoutParameter *   constScoreCmd;
 
     G4MaterialScanner *         materialScanner;

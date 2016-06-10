@@ -24,51 +24,49 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FTFAnnihilation.hh 74627 2013-10-17 07:04:38Z gcosmo $
 
 #ifndef G4FTFAnnihilation_h
 #define G4FTFAnnihilation_h 1
+
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
 //      ---------------- G4FTFAnnihilation       --------------
 //             by Vladimir Uzhinsky, November 2010.
 //          Annihilation used by Fritiof (FTF) model
-//	          Takes a projectile and a target
-//	        Produces strings (excited hadrons)
+//              Takes a projectile and a target
+//              Produces strings (excited hadrons)
 // ------------------------------------------------------------
 
 #include "globals.hh"
-class G4VSplitableHadron;
-class G4ExcitedString;
 #include "G4FTFParameters.hh"
 #include "G4ThreeVector.hh"
 
-class G4FTFAnnihilation 
-{
+class G4VSplitableHadron;
+class G4ExcitedString;
+
+
+class G4FTFAnnihilation {
 
   public:
+    G4FTFAnnihilation();
+    virtual ~G4FTFAnnihilation();
 
-      G4FTFAnnihilation();
-      virtual ~G4FTFAnnihilation();
-
-      virtual G4bool         Annihilate (G4VSplitableHadron *aPartner, 
-                                         G4VSplitableHadron * bPartner,
-                                         G4VSplitableHadron *& AdditionalString,
-                                         G4FTFParameters *theParameters) const;
+    virtual G4bool Annihilate( G4VSplitableHadron* aPartner, 
+                               G4VSplitableHadron* bPartner,
+                               G4VSplitableHadron*& AdditionalString, 
+                               G4FTFParameters* theParameters ) const;
 
   private:
+    G4FTFAnnihilation( const G4FTFAnnihilation& right );      
+    const G4FTFAnnihilation& operator=( const G4FTFAnnihilation& right );
+    int operator==( const G4FTFAnnihilation& right ) const;
+    int operator!=( const G4FTFAnnihilation& right ) const;
 
-      G4FTFAnnihilation(const G4FTFAnnihilation &right);
-      
-      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
-      G4double ChooseX(G4double Alpha, G4double Beta) const;
-
-      void UnpackBaryon(G4int IdPDG, G4int &Q1, G4int &Q2, G4int &Q3) const;
-
-      const G4FTFAnnihilation & operator=(const G4FTFAnnihilation &right);
-      int operator==(const G4FTFAnnihilation &right) const;
-      int operator!=(const G4FTFAnnihilation &right) const;
+    G4ThreeVector GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const;
+    G4double ChooseX( G4double Alpha, G4double Beta ) const;
+    void UnpackBaryon( G4int IdPDG, G4int& Q1, G4int& Q2, G4int& Q3 ) const;
 
 };
 

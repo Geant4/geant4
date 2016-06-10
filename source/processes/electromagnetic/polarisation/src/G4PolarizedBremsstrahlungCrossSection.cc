@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PolarizedBremsstrahlungCrossSection.cc 77295 2013-11-22 11:02:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //

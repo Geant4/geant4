@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: DetectorMessenger.hh 68726 2013-04-05 09:35:20Z gcosmo $
 //
 /// \file DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
@@ -51,7 +51,7 @@ class DetectorMessenger: public G4UImessenger
 {
   public:
     DetectorMessenger(DetectorConstruction* );
-    virtual ~DetectorMessenger();
+   ~DetectorMessenger();
     
     virtual void SetNewValue(G4UIcommand* command, G4String newValue);
     

@@ -24,24 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleTable.icc 73711 2013-09-09 09:57:29Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
 //      implement new version for using STL map instaed of RW PtrHashedDictionary
 //                                       28 ct., 99  H.Kurashige
 
-inline 
- const G4ShortLivedTable*  G4ParticleTable::GetShortLivedTable()
-{
-  return fShortLivedTable;
-}
-
-inline 
- G4IonTable*  G4ParticleTable::GetIonTable()
-{
-  return fIonTable;
-}
 
 inline  
  void G4ParticleTable::SetVerboseLevel(G4int value )
@@ -55,23 +44,6 @@ inline
   return verboseLevel; 
 }
 
-inline 
- G4ParticleTable::G4PTblDictionary* G4ParticleTable::GetDictionary()
-{
-  return fDictionary;
-}
-
-inline 
- G4ParticleTable::G4PTblDicIterator* G4ParticleTable::GetIterator()
-{
-  return fIterator;
-}
-
-inline 
- const G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDictionary()
-{
-  return fEncodingDictionary;
-}
 
 inline 
  const G4String& G4ParticleTable::GetKey(const G4ParticleDefinition *particle) const
@@ -86,7 +58,7 @@ inline
 }
 
 inline 
- G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String& particle_name) 
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String& particle_name)
 {
   G4int pcode = FindParticle(particle_name) -> GetAntiPDGEncoding();
   return FindParticle(pcode);
@@ -100,28 +72,9 @@ inline
 }
 
 inline 
- G4bool  G4ParticleTable::contains(const G4String& particle_name)
-{
-  G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
-  return (it != fDictionary->end());
-}
-
-inline 
- G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle)
+ G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle) const
 {
  return contains(GetKey(particle));
-}
-
-inline 
- G4int G4ParticleTable::entries() const
-{
-  return fDictionary->size();
-}
-
-inline 
- G4int G4ParticleTable::size() const
-{
-  return fDictionary->size();
 }
 
 inline
@@ -136,3 +89,14 @@ inline
   return readyToUse;
 }
 
+inline
+ G4ParticleDefinition* G4ParticleTable::GetGenericIon() const
+{
+  return genericIon;
+}
+
+inline 
+ void G4ParticleTable::SetGenericIon(G4ParticleDefinition* gi)
+{
+  genericIon = gi;
+}

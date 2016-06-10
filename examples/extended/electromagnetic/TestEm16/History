@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2010-11-09 20:56:00 asaim Exp $
+$Id: History 74596 2013-10-16 06:57:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,26 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-10-13 V.Ivant (testem16-V09-06-05)
+- updated vis.mac
+
+11-07-13 I.Hrivnacova (testem16-V09-06-04) 
+- In HistoManager: use new analysis manager method SetH1Activation();
+  replaced tabulations   
+
+21-06-13 mma (testem16-V09-06-03)
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep()
+
+07-06-13 mma (testem16-V09-06-02)
+- Cosmetic in SteppingAction.
      
+18-03-13 mma (testem16-V09-06-01) 
+- Applied coding guidelines (long line)
+     
+13-02-13 I.Hrivnacova (testem16-V09-06-00) 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
 16-10-12 mma (testem16-V09-05-03)
 -use G4AnalysisManager
 - coding convention: virtual

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VDivisionParameterisation.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // class G4VDivisionParameterisation Implementation file
 //
@@ -40,7 +40,7 @@
 #include "G4ReflectedSolid.hh"
 #include "G4GeometryTolerance.hh"
 
-G4int G4VDivisionParameterisation::verbose = 5;
+G4ThreadLocal G4int G4VDivisionParameterisation::verbose = 5;
 
 //--------------------------------------------------------------------------
 G4VDivisionParameterisation::

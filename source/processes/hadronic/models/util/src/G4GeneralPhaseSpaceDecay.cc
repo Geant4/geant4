@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-//
-// $Id: G4GeneralSpaceDecay.cc,v 1.0 1998/05/21
+// $Id: G4GeneralPhaseSpaceDecay.cc 67984 2013-03-13 10:44:01Z gcosmo $
 // ----------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -71,9 +70,9 @@ G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
   
   //   Set the parent particle (resonance) mass to the (default) PDG vale
-  if (parent != NULL)
+  if (G4MT_parent != NULL)
   {
-      parentmass = parent->GetPDGMass();
+      parentmass = G4MT_parent->GetPDGMass();
   } else {
 	  parentmass=0.;
   }
@@ -128,8 +127,8 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay::DecayIt ";
   G4DecayProducts * products = NULL;
  
-  if (parent == NULL) FillParent();  
-  if (daughters == NULL) FillDaughters();
+  if (G4MT_parent == NULL) FillParent();  
+  if (G4MT_daughters == NULL) FillDaughters();
   
   switch (numberOfDaughters){
   case 0:
@@ -167,14 +166,14 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::OneBodyDecayIt()
 
   //create parent G4DynamicParticle at rest
   G4ParticleMomentum dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle(parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle(G4MT_parent, dummy, 0.0);
 
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   //create daughter G4DynamicParticle at rest
-  G4DynamicParticle * daughterparticle = new G4DynamicParticle(daughters[0], dummy, 0.0);
+  G4DynamicParticle * daughterparticle = new G4DynamicParticle(G4MT_daughters[0], dummy, 0.0);
   products->PushProducts(daughterparticle);
 
   if (GetVerboseLevel()>1) 
@@ -198,15 +197,15 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::TwoBodyDecayIt()
      daughtermass[0]= *(theDaughterMasses);
      daughtermass[1] = *(theDaughterMasses+1);
   } else {   
-     daughtermass[0] = daughters[0]->GetPDGMass();
-     daughtermass[1] = daughters[1]->GetPDGMass();
+     daughtermass[0] = G4MT_daughters[0]->GetPDGMass();
+     daughtermass[1] = G4MT_daughters[1]->GetPDGMass();
   }
   
 //  G4double sumofdaughtermass =  daughtermass[0] + daughtermass[1];
 
   //create parent G4DynamicParticle at rest
   G4ParticleMomentum dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
 
   //create G4Decayproducts  @@GF why dummy parentparticle?
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -221,10 +220,10 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::TwoBodyDecayIt()
 
   //create daughter G4DynamicParticle
   G4double Etotal= std::sqrt(daughtermass[0]*daughtermass[0] + daughtermomentum*daughtermomentum); 
-  G4DynamicParticle * daughterparticle = new G4DynamicParticle( daughters[0],Etotal, direction*daughtermomentum);
+  G4DynamicParticle * daughterparticle = new G4DynamicParticle( G4MT_daughters[0],Etotal, direction*daughtermomentum);
   products->PushProducts(daughterparticle);
   Etotal= std::sqrt(daughtermass[1]*daughtermass[1] + daughtermomentum*daughtermomentum);
-  daughterparticle = new G4DynamicParticle( daughters[1],Etotal, direction*(-1.0*daughtermomentum));
+  daughterparticle = new G4DynamicParticle( G4MT_daughters[1],Etotal, direction*(-1.0*daughtermomentum));
   products->PushProducts(daughterparticle);
 
   if (GetVerboseLevel()>1) 
@@ -250,14 +249,14 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
      { 
          daughtermass[index]= *(theDaughterMasses+index);
      } else {   
-         daughtermass[index] = daughters[index]->GetPDGMass();
+         daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
      }   
      sumofdaughtermass += daughtermass[index];
     }
   
   //create parent G4DynamicParticle at rest
   G4ParticleMomentum dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
 
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -321,7 +320,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
   G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4double Etotal=std::sqrt( daughtermass[0]*daughtermass[0] + daughtermomentum[0]*daughtermomentum[0]);
   G4DynamicParticle * daughterparticle 
-         = new G4DynamicParticle( daughters[0], Etotal, direction0*daughtermomentum[0]);
+         = new G4DynamicParticle( G4MT_daughters[0], Etotal, direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
 
   costhetan = (daughtermomentum[1]*daughtermomentum[1]-daughtermomentum[2]*daughtermomentum[2]-daughtermomentum[0]*daughtermomentum[0])/(2.0*daughtermomentum[2]*daughtermomentum[0]);
@@ -334,12 +333,12 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
   direction2.setY( sinthetan*cosphin*costheta*sinphi + sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi); 
   direction2.setZ( -sinthetan*cosphin*sintheta + costhetan*costheta);
   Etotal=std::sqrt( daughtermass[2]*daughtermass[2] + daughtermomentum[2]*daughtermomentum[2]/direction2.mag2());
-  daughterparticle = new G4DynamicParticle( daughters[2],Etotal, direction2*(daughtermomentum[2]/direction2.mag()));
+  daughterparticle = new G4DynamicParticle( G4MT_daughters[2],Etotal, direction2*(daughtermomentum[2]/direction2.mag()));
   products->PushProducts(daughterparticle);
   G4ThreeVector mom=(direction0*daughtermomentum[0] + direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0);
   Etotal= std::sqrt( daughtermass[1]*daughtermass[1] + mom.mag2() );
   daughterparticle = 
-       new G4DynamicParticle(daughters[1], Etotal, mom);
+       new G4DynamicParticle(G4MT_daughters[1], Etotal, mom);
   products->PushProducts(daughterparticle);
 
   if (GetVerboseLevel()>1) {
@@ -370,7 +369,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
   G4double *daughtermass = new G4double[numberOfDaughters]; 
   G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<numberOfDaughters; index++){
-    daughtermass[index] = daughters[index]->GetPDGMass();
+    daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
   
@@ -482,8 +481,8 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
   direction.setZ(costheta);
   direction.setY(sintheta*std::sin(phi));
   direction.setX(sintheta*std::cos(phi));
-  daughterparticle[index1] = new G4DynamicParticle( daughters[index1], direction*daughtermomentum[index1] );
-  daughterparticle[index1+1] = new G4DynamicParticle( daughters[index1+1], direction*(-1.0*daughtermomentum[index1]) );
+  daughterparticle[index1] = new G4DynamicParticle( G4MT_daughters[index1], direction*daughtermomentum[index1] );
+  daughterparticle[index1+1] = new G4DynamicParticle( G4MT_daughters[index1+1], direction*(-1.0*daughtermomentum[index1]) );
 
   for (index1 = numberOfDaughters -3;  index1 >= 0; index1--) {
     //calculate momentum direction
@@ -509,13 +508,13 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
       daughterparticle[index2]->Set4Momentum(p4);
     }
     //create daughter G4DynamicParticle 
-    daughterparticle[index1]= new G4DynamicParticle( daughters[index1], direction*(-1.0*daughtermomentum[index1]));
+    daughterparticle[index1]= new G4DynamicParticle( G4MT_daughters[index1], direction*(-1.0*daughtermomentum[index1]));
   }
 
   //create G4Decayproducts
   G4DynamicParticle *parentparticle; 
   direction.setX(1.0);  direction.setY(0.0); direction.setZ(0.0);
-  parentparticle = new G4DynamicParticle( parent, direction, 0.0);
+  parentparticle = new G4DynamicParticle( G4MT_parent, direction, 0.0);
   products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
   for (index1 = 0; index1<numberOfDaughters; index1++) {

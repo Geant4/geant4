@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpBoundaryProcess.hh 73616 2013-09-02 10:18:24Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -52,6 +52,8 @@
 //                           optical reflectance for a variety of surface
 //                           treatments - Thanks to Martin Janecek and
 //                           William Moses (Lawrence Berkeley National Lab.)
+//              2013-06-01 - add the capability of simulating the transmission
+//                           of a dichronic filter
 //
 // Author:      Peter Gumplinger
 //              adopted from work by Werner Keil - April 2/96
@@ -123,7 +125,8 @@ enum G4OpBoundaryProcessStatus {  Undefined,
                                   GroundTiOAirReflection,
                                   GroundTyvekAirReflection,
                                   GroundVM2000AirReflection,
-                                  GroundVM2000GlueReflection };
+                                  GroundVM2000GlueReflection,
+                                  Dichroic };
 
 class G4OpBoundaryProcess : public G4VDiscreteProcess
 {
@@ -179,13 +182,14 @@ private:
 	G4ThreeVector GetFacetNormal(const G4ThreeVector& Momentum,
 				     const G4ThreeVector&  Normal) const;
 
-	void DielectricMetal();
-	void DielectricDielectric();
+        void DielectricMetal();
+        void DielectricDielectric();
         void DielectricLUT();
+        void DielectricDichroic();
 
-	void ChooseReflection();
-	void DoAbsorption();
-	void DoReflection();
+        void ChooseReflection();
+        void DoAbsorption();
+        void DoReflection();
 
         G4double GetIncidentAngle();
         // Returns the incident angle of optical photon
@@ -200,6 +204,9 @@ private:
         void CalculateReflectivity(void);
 
         void BoundaryProcessVerbose(void) const;
+
+        // Invoke SD for post step point if the photon is 'detected'
+        G4bool InvokeSD(const G4Step* step);
 
 private:
 
@@ -243,6 +250,8 @@ private:
 
         G4double kCarTolerance;
 
+        size_t idx, idy;
+        G4Physics2DVector* DichroicVector;
 };
 
 ////////////////////

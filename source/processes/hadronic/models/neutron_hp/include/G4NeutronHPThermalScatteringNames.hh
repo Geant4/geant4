@@ -55,6 +55,10 @@ class G4NeutronHPThermalScatteringNames
       G4String GetTS_NDL_Name( G4String nameG4Element ) { return  names.find ( nameG4Element )->second; };
       G4String GetTS_NDL_Name( G4String material , G4String element ) { return  nist_names.find ( std::pair< G4String , G4String > ( material , element ) )->second; };
       //G4String GetTS_G4E_Name( G4int i ) { return  names[i]->first; };
+
+      //For user prepared thermal files 
+                    //Name of G4Element , Name of NDL file
+      void AddThermalElement ( G4String , G4String );
    
    private:
 

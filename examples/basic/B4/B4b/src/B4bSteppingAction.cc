@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4bSteppingAction.cc 69223 2013-04-23 12:36:10Z gcosmo $
 // 
 /// \file B4bSteppingAction.cc
 /// \brief Implementation of the B4bSteppingAction class
@@ -69,12 +69,15 @@ void B4bSteppingAction::UserSteppingAction(const G4Step* step)
     stepLength = step->GetStepLength();
   }
       
+  B4bRunData* runData = static_cast<B4bRunData*>
+    (G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   if ( volume == fDetConstruction->GetAbsorberPV() ) {
-    B4bRunData::GetInstance()->Add(kAbs, edep, stepLength);
+    runData->Add(kAbs, edep, stepLength);
   }
   
   if ( volume == fDetConstruction->GetGapPV() ) {
-    B4bRunData::GetInstance()->Add(kGap, edep, stepLength);
+    runData->Add(kGap, edep, stepLength);
   }
 }
 

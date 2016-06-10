@@ -27,7 +27,7 @@
 /// \brief Definition of the DetectorMessenger class
 //
 //
-// $Id$
+// $Id: DetectorMessenger.hh 77256 2013-11-22 10:10:23Z gcosmo $
 //
 // 
 
@@ -53,12 +53,12 @@ class DetectorMessenger: public G4UImessenger
 {
   public:
     DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+    virtual ~DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    DetectorConstruction* Detector;
+    DetectorConstruction* fDetector;
     
     G4UIdirectory*             fN03Dir;
     G4UIdirectory*             fDetDir;
@@ -68,7 +68,6 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fGapThickCmd;
     G4UIcmdWithADoubleAndUnit* fSizeYZCmd;
     G4UIcmdWithAnInteger*      fNbLayersCmd;    
-    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

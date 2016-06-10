@@ -90,6 +90,7 @@ void G4KM_OpticalEqRhs::EvaluateRhsGivenB(const G4double y[], const G4double *,
   dydx[5] = yMod == 0 ? 0 : -deriv*y[2]/yMod*c_light;
 }
 
-
-
-
+// Here by design, but it is unnecessary for nuclear fields
+void G4KM_OpticalEqRhs::SetChargeMomentumMass(G4ChargeState,G4double ,G4double )
+{ 
+}

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PreCompoundEmissionFactory.cc 68028 2013-03-13 13:48:15Z gcosmo $
 //
 
 #include "G4PreCompoundEmissionFactory.hh"

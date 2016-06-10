@@ -35,3 +35,16 @@ This example demonstrates how to compute total cross section from the direct eva
 mean free path ( see below, item Physics), how to identify nuclear reactions, how to plot 
 energy spectrum of secondary particles.	
 
+Hadr04
+------
+
+This example is focused on neutronHP physics, especially neutron transport, 
+including thermal scattering.
+See A.R. Garcia, E. Mendoza, D. Cano-Ott presentation at G4 Hadronic group 
+meeting (04/2013) and note on G4NeutronHP package
+
+Hadr05
+------
+
+This example demonstrates the usage of G4GenericPhysicsList to build 
+the concrente physics list at the run time.

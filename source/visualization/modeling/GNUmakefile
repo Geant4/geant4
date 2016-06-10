@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.12 2009-11-04 12:44:39 allison Exp $
+# $Id: GNUmakefile 73609 2013-09-02 10:10:30Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for modeling library.  John Allison, 31/12/1997.
 # --------------------------------------------------------------
@@ -23,6 +23,7 @@ CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
+CPPFLAGS += -I$(G4BASE)/geometry/magneticfield/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/Boolean/include

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Ions.hh 69557 2013-05-08 12:01:40Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -34,7 +34,7 @@
 //      Hisaya Kurashige, 27 June 1998
 // ----------------------------------------------------------------
 //      Add excitation energy         17 Aug. 1999 H.Kurashige
-//
+//      Add isomer level              30 Apr. H.Kurashige
 
 
 #ifndef G4Ions_h
@@ -75,7 +75,8 @@ class G4Ions : public G4ParticleDefinition
        G4DecayTable        *decaytable,  G4bool              shortlived,
        const G4String&     subType ="",
        G4int               anti_encoding =0,
-       G4double            excitation = 0.0
+       G4double            excitation = 0.0, 
+       G4int               isomer = 0
    );
 
  public:
@@ -87,10 +88,20 @@ class G4Ions : public G4ParticleDefinition
    // Get excitation energy of nucleus
    G4double GetExcitationEnergy() const ; 
   
+  // Get Isomer level (=0 for ground state)
+  G4int GetIsomerLevel() const; 
+   
   private:
-   G4double theExcitationEnergy; 
+  G4double theExcitationEnergy; 
+  G4int    theIsomerLevel;
 
 };
+
+inline
+ G4Ions* G4Ions::IonsDefinition()
+{
+  return this;
+}
 
 inline
  G4Ions* G4Ions::Ions() 
@@ -104,6 +115,12 @@ inline
   return theExcitationEnergy;
 }
 
+inline
+ G4int G4Ions::GetIsomerLevel() const
+{
+  return theIsomerLevel;
+}
+    
 #endif
 
 

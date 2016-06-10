@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LPhysicsFreeVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // 
 // Modified:
 //    19 Jun. 2009, V.Ivanchenko : removed hidden bin 
+//    19 Jun. 2009, V.Ivanchenko : removed FindBinLocation 
 //
 // --------------------------------------------------------------------
 
@@ -89,26 +90,3 @@ void G4LPhysicsFreeVector::DumpValues()
 }
 
 // --------------------------------------------------------------------
-
-size_t G4LPhysicsFreeVector::FindBinLocation(G4double theEnergy) const
-{
-   G4int n1 = 0;
-   G4int n2 = numberOfNodes/2;
-   G4int n3 = numberOfNodes - 1;
-   while (n1 != n3 - 1)
-   {
-      if (theEnergy > binVector[n2])
-         { n1 = n2; }
-      else
-         { n3 = n2; }
-      n2 = n1 + (n3 - n1 + 1)/2;
-   }
-#ifdef G4VERBOSE
-   if (verboseLevel > 1)
-   {
-     G4cout << "G4LPhysicsFreeVector::FindBinLocation:  returning "
-            << n1 << G4endl;
-   }
-#endif
-   return (size_t)n1;
-}

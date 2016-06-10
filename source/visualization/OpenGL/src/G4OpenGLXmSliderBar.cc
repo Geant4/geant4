@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLXmSliderBar.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent
 
@@ -46,6 +46,8 @@ G4OpenGLXmSliderBar::G4OpenGLXmSliderBar (const char* n,
 					  G4double min,
 					  unsigned char o,
 					  unsigned char d) 
+: sliderbar(0)
+, parent(0)
 {
   name = n;
   callback = c;

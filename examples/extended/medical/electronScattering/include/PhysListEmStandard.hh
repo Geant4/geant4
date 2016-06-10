@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/PhysListEmStandard.hh
 /// \brief Definition of the PhysListEmStandard class
 //
-// $Id$
+// $Id: PhysListEmStandard.hh 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,16 +43,16 @@ class PhysListEmStandard : public G4VPhysicsConstructor
 {
 public: 
   PhysListEmStandard(const G4String& name = "standard");
-  virtual ~PhysListEmStandard();
+ ~PhysListEmStandard();
 
 public: 
   // This method is dummy for physics
-  void ConstructParticle() {};
+  virtual void ConstructParticle() {};
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  void ConstructProcess();
+  virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

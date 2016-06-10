@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProductionCutsTable.cc 71792 2013-06-24 14:11:27Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -382,9 +382,9 @@ void G4ProductionCutsTable::DumpCouples() const
            << "     used in the geometry : ";
     if(aCouple->IsUsed()) G4cout << "Yes";
     else                  G4cout << "No ";
-    G4cout << "     recalculation needed : ";
-    if(aCouple->IsRecalcNeeded()) G4cout << "Yes";
-    else                          G4cout << "No ";
+////    G4cout << "     recalculation needed : ";
+////    if(aCouple->IsRecalcNeeded()) G4cout << "Yes";
+////    else                          G4cout << "No ";
     G4cout << G4endl;
     G4cout << " Material : " << aCouple->GetMaterial()->GetName() << G4endl;
     G4cout << " Range cuts        : " 
@@ -394,14 +394,14 @@ void G4ProductionCutsTable::DumpCouples() const
            << " proton " << G4BestUnit(aCut->GetProductionCut("proton"),"Length")
            << G4endl;
     G4cout << " Energy thresholds : " ;
-    if(aCouple->IsRecalcNeeded()) {
-      G4cout << " is not ready to print";
-    } else {
+////    if(aCouple->IsRecalcNeeded()) {
+////      G4cout << " is not ready to print";
+////    } else {
       G4cout << " gamma  " << G4BestUnit((*(energyCutTable[0]))[aCouple->GetIndex()],"Energy")
              << "    e-  " << G4BestUnit((*(energyCutTable[1]))[aCouple->GetIndex()],"Energy")
              << "    e+  " << G4BestUnit((*(energyCutTable[2]))[aCouple->GetIndex()],"Energy") 
 	     << " proton " << G4BestUnit((*(energyCutTable[3]))[aCouple->GetIndex()],"Energy");
-    }
+////    }
     G4cout << G4endl;
 
     if(aCouple->IsUsed()) {

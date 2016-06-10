@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id$
+// $Id: TrackingAction.cc 76464 2013-11-11 10:22:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,19 +35,19 @@
 #include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
+#include "G4RunManager.hh"
 #include "G4Track.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA,
-                               EventAction* EA)
-:fDetector(DET), fRunAction(RA), fEventAction(EA)
+TrackingAction::TrackingAction(DetectorConstruction* DET, EventAction* EA)
+:G4UserTrackingAction(),fDetector(DET), fEventAction(EA)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,6 +68,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
 
   G4ThreeVector position = aTrack->GetPosition();
   G4ThreeVector vertex   = aTrack->GetVertexPosition();  
@@ -110,7 +113,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     G4double eleak = aTrack->GetKineticEnergy();
     if ((aTrack->GetDefinition() == G4Positron::Positron()) && (trackID > 1))
       eleak += 2*electron_mass_c2;
-    fRunAction->AddEnergyLeak(eleak,index);  
+    run->AddEnergyLeak(eleak,index);  
   }
 
   //space angle distribution at exit : dN/dOmega
@@ -170,11 +173,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     if (direction.x() != 0.0) {
       G4double tet = std::atan(direction.y()/std::fabs(direction.x()));
       analysisManager->FillH1(id,tet);
-      if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
+      if (transmit && (flag == 2)) run->AddMscProjTheta(tet);
 
       tet = std::atan(direction.z()/std::fabs(direction.x()));
       analysisManager->FillH1(id,tet);
-      if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
+      if (transmit && (flag == 2)) run->AddMscProjTheta(tet);
     }
   }
 

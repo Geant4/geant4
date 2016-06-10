@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-11-15 08:24:43 gcosmo Exp $
+# $Id: sources.cmake 75171 2013-10-29 09:24:43Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -78,11 +78,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4hIonEffChargeSquare.hh
         G4hNuclearStoppingModel.hh
         G4hParametrisedLossModel.hh
-        G4hQAOModel.hh
-        G4hSRIM2000p.hh
-        G4hZiegler1977He.hh
-        G4hZiegler1977Nuclear.hh
-        G4hZiegler1977p.hh
         G4hZiegler1985Nuclear.hh
         G4hZiegler1985p.hh
         G4IonChuFluctuationModel.hh
@@ -110,6 +105,12 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
         G4LowEPComptonModel.hh
+        G4MicroElecCrossSectionDataSet.hh
+        G4MicroElecElastic.hh
+        G4MicroElecElasticModel.hh
+        G4MicroElecInelastic.hh
+        G4MicroElecInelasticModel.hh
+        G4MicroElecSiStructure.hh
         G4MuElecCrossSectionDataSet.hh
         G4MuElecElastic.hh
         G4MuElecElasticModel.hh
@@ -137,8 +138,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4PhotoElectricAngularGeneratorSauterGavrila.hh
         G4PhotoElectricAngularGeneratorSimple.hh
         G4QAOLowEnergyLoss.hh
-        G4RangeNoTest.hh
-        G4RangeTest.hh
         G4RayleighAngularGenerator.hh
         G4RayleighScattering.hh
         G4SemiLogInterpolation.hh
@@ -152,19 +151,13 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VecpssrKModel.hh
         G4VecpssrLiModel.hh
         G4VecpssrMiModel.hh
-        G4VeLowEnergyLoss.hh
         G4VEMDataSet.hh
         G4VEnergySpectrum.hh
         G4VhElectronicStoppingPower.hh
-        G4VhEnergyLossModel.hh
         G4VhNuclearStoppingPower.hh
         G4VhShellCrossSection.hh
         G4VIonDEDXScalingAlgorithm.hh
-        G4VLowEnergyDiscretePhotonProcess.hh
         G4VLowEnergyModel.hh
-        G4VLowEnergyTestableDiscreteProcess.hh
-        G4VPhotoElectricAngularDistribution.hh
-        G4VRangeTest.hh
     SOURCES
         G4AtomicDeexcitation.cc
         G4AtomicTransitionManager.cc
@@ -200,11 +193,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4hIonEffChargeSquare.cc
         G4hNuclearStoppingModel.cc
         G4hParametrisedLossModel.cc
-        G4hQAOModel.cc
-        G4hSRIM2000p.cc
-        G4hZiegler1977He.cc
-        G4hZiegler1977Nuclear.cc
-        G4hZiegler1977p.cc
         G4hZiegler1985Nuclear.cc
         G4hZiegler1985p.cc
         G4IonChuFluctuationModel.cc
@@ -231,6 +219,12 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
         G4LowEPComptonModel.cc
+        G4MicroElecCrossSectionDataSet.cc
+        G4MicroElecElastic.cc
+        G4MicroElecElasticModel.cc
+        G4MicroElecInelastic.cc
+        G4MicroElecInelasticModel.cc
+        G4MicroElecSiStructure.cc
         G4MuElecCrossSectionDataSet.cc
         G4MuElecElastic.cc
         G4MuElecElasticModel.cc
@@ -258,7 +252,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4PhotoElectricAngularGeneratorSauterGavrila.cc
         G4PhotoElectricAngularGeneratorSimple.cc
         G4QAOLowEnergyLoss.cc
-        G4RangeTest.cc
         G4RayleighAngularGenerator.cc
         G4RayleighScattering.cc
         G4SemiLogInterpolation.cc
@@ -271,15 +264,12 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VecpssrKModel.cc
         G4VecpssrLiModel.cc
         G4VecpssrMiModel.cc
-        G4VeLowEnergyLoss.cc
         G4VEMDataSet.cc
         G4VhElectronicStoppingPower.cc
         G4VhNuclearStoppingPower.cc
         G4VhShellCrossSection.cc
         G4VIonDEDXScalingAlgorithm.cc
-        G4VLowEnergyDiscretePhotonProcess.cc
         G4VLowEnergyModel.cc
-        G4VPhotoElectricAngularDistribution.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

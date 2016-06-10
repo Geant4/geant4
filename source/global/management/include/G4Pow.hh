@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Pow.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -37,7 +37,8 @@
 // check is performed inside these methods for performance reasons.
 // For factorial integer argument should be in the interval 0-170
 // Computations with double arguments are fast for the interval
-// 0.5-255.5, standard library is used in the opposite case
+// 0.002-511.5 for all functions except exponent, which is computed 
+// for the interval 0-84.4, standard library is used in the opposite case
 
 // Author: Vladimir Ivanchenko
 //
@@ -48,6 +49,8 @@
 #define G4Pow_h 1
 
 #include "globals.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 #include "G4DataVector.hh"
 
 class G4Pow
@@ -59,70 +62,86 @@ class G4Pow
 
     // Fast computation of Z^1/3
     //
-    inline G4double Z13(G4int Z);
-    inline G4double A13(G4double A);
+    inline G4double Z13(G4int Z) const;
+    inline G4double A13(G4double A) const;
 
     // Fast computation of Z^2/3
     //
-    inline G4double Z23(G4int Z);
-    inline G4double A23(G4double A);
+    inline G4double Z23(G4int Z) const;
+    inline G4double A23(G4double A) const;
 
     // Fast computation of log(Z)
     //
-    inline G4double logZ(G4int Z);
-    inline G4double logA(G4double A);
+    inline G4double logZ(G4int Z) const;
+    inline G4double logA(G4double A) const;
+    inline G4double logX(G4double x) const;
 
     // Fast computation of log10(Z)
     //
-    inline G4double log10Z(G4int Z);
-    inline G4double log10A(G4double A);
+    inline G4double log10Z(G4int Z) const;
+    inline G4double log10A(G4double A) const;
+
+    // Fast computation of exp(X)
+    //
+    inline G4double expA(G4double A) const;
 
     // Fast computation of pow(Z,X)
     //
-    inline G4double powZ(G4int Z, G4double y);
-    inline G4double powA(G4double A, G4double y);
-           G4double powN(G4double x, G4int n);
+    inline G4double powZ(G4int Z, G4double y) const;
+    inline G4double powA(G4double A, G4double y) const;
+           G4double powN(G4double x, G4int n) const;
 
     // Fast factorial
     //
-    inline G4double factorial(G4int Z);
-    inline G4double logfactorial(G4int Z);
+    inline G4double factorial(G4int Z) const;
+    inline G4double logfactorial(G4int Z) const;
 
   private:
 
     G4Pow();
    ~G4Pow();
 
+    inline G4double logBase(G4double x) const;
+
   private:
 
-    static G4Pow* fInstance;
+    static G4Pow* fpInstance;
 
-    G4double onethird;
+    const G4double onethird;
+    const G4int    max2;
 
+    G4double maxA;
+    G4double maxA2;
+    G4double maxAexp;
+
+    G4DataVector ener;
+    G4DataVector logen;
     G4DataVector pz13;
     G4DataVector lz;
+    G4DataVector lz2;
+    G4DataVector fexp;
     G4DataVector fact;
     G4DataVector logfact;
 };
 
 // -------------------------------------------------------------------
 
-inline G4double G4Pow::Z13(G4int Z)
+inline G4double G4Pow::Z13(G4int Z) const
 {
   return pz13[Z];
 }
 
-inline G4double G4Pow::A13(G4double A)
+inline G4double G4Pow::A13(G4double A) const
 {
-  const G4double minA = 0.5000001; 
-  const G4double maxA = 255.5; 
-
   G4double res;
-  if((A >= minA) && (A <= maxA))
+  G4double a = A;
+  if(1.0 > A) { a = 1.0/A; }
+  if(a <= maxA)
   {
-    G4int i = G4int(A + 0.5);
-    G4double x = (1.0 - A/G4double(i))*onethird;
+    G4int i = G4int(a + 0.5);
+    G4double x = (a/G4double(i) - 1.0)*onethird;
     res = pz13[i]*(1.0 + x - x*x*(1.0 - 1.66666666*x));
+    if(1.0 > A) { res = 1.0/res; }
   }
   else
   {
@@ -131,68 +150,127 @@ inline G4double G4Pow::A13(G4double A)
   return res;
 }
 
-inline G4double G4Pow::Z23(G4int Z)
+inline G4double G4Pow::Z23(G4int Z) const
 {
   G4double x = Z13(Z);
   return x*x;
 }
 
-inline G4double G4Pow::A23(G4double A)
+inline G4double G4Pow::A23(G4double A) const
 {
   G4double x = A13(A);
   return x*x;
 }
 
-inline G4double G4Pow::logZ(G4int Z)
+inline G4double G4Pow::logZ(G4int Z) const
 {
   return lz[Z];
 }
 
-inline G4double G4Pow::logA(G4double A)
+inline G4double G4Pow::logBase(G4double a) const
 {
-  const G4double minA = 0.5000001; 
-  const G4double maxA = 255.5; 
-
   G4double res;
-  if((A >= minA) && (A <= maxA))
+  if(a <= maxA2) 
   {
-    G4int i = G4int(A + 0.5);
-    G4double x = 1.0 - A/G4double(i);
-    res = lz[i] + x*(1.0 - 0.5*x + onethird*x*x);
+    G4int i = G4int(max2*(a - 1) + 0.5);
+    if(i > max2) { i = max2; }
+    G4double x = a/(G4double(i)/max2 + 1) - 1;
+    res = lz2[i] + x*(1.0 - (0.5 - onethird*x)*x);
+  }
+  else if(a <= maxA)
+  {
+    G4int i = G4int(a + 0.5);
+    G4double x = a/G4double(i) - 1;
+    res = lz[i] + x*(1.0 - (0.5 - onethird*x)*x);
   }
   else
   {
-    res = std::log(A);
+    res = G4Log(a);
   }
   return res;
 }
 
-inline G4double G4Pow::log10Z(G4int Z)
+inline G4double G4Pow::logA(G4double A) const
+{
+  G4double res;
+  if(1.0 <= A) { res = logBase(A); }
+  else         { res = -logBase(1./A); }
+  return res;
+}
+
+inline G4double G4Pow::logX(G4double x) const
+{
+  G4double res = 0.0;
+  G4double a = x;
+  if(1.0 > x) { a = 1.0/x; }
+
+  if(a <= maxA) 
+  {
+    res = logBase(a);
+  }
+  else if(a <= ener[2])
+  {
+    res = logen[1] + logBase(a/ener[1]);
+  }
+  else if(a <= ener[3])
+  {
+    res = logen[2] + logBase(a/ener[2]);
+  }
+  else
+  {
+    res = G4Log(a);
+  }
+
+  if(1.0 > x) { res = -res; }
+  return res;
+}
+
+inline G4double G4Pow::log10Z(G4int Z) const
 {
   return lz[Z]/lz[10];
 }
 
-inline G4double G4Pow::log10A(G4double A)
+inline G4double G4Pow::log10A(G4double A) const
 {
-  return logA(A)/lz[10];
+  return logX(A)/lz[10];
 }
 
-inline G4double G4Pow::powZ(G4int Z, G4double y)
+inline G4double G4Pow::expA(G4double A) const
 {
-  return std::exp(y*lz[Z]);
+  G4double res;
+  G4double a = A;
+  if(0.0 > A) { a = -A; }
+
+  if(a <= maxAexp)
+  {
+    G4int i = G4int(2*a + 0.5);
+    G4double x = a - i*0.5;
+    res = fexp[i]*(1.0 + x*(1.0 + 0.5*(1.0 + onethird*x)*x));
+  }
+  else
+  {
+    res = G4Exp(a);
+  }
+  if(0.0 > A) { res = 1.0/res; }
+  return res;
 }
 
-inline G4double G4Pow::powA(G4double A, G4double y)
+inline G4double G4Pow::powZ(G4int Z, G4double y) const
 {
-  return std::exp(y*logA(A));
+  return expA(y*lz[Z]);
 }
 
-inline G4double G4Pow::factorial(G4int Z)
+inline G4double G4Pow::powA(G4double A, G4double y) const
+{
+  return expA(y*logX(A));
+}
+
+inline G4double G4Pow::factorial(G4int Z) const
 {
   return fact[Z];
 }
 
-inline G4double G4Pow::logfactorial(G4int Z)
+inline G4double G4Pow::logfactorial(G4int Z) const
 {
   return logfact[Z];
 }
@@ -200,4 +278,3 @@ inline G4double G4Pow::logfactorial(G4int Z)
 // -------------------------------------------------------------------
 
 #endif
-

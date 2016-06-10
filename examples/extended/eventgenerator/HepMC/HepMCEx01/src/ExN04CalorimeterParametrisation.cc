@@ -26,37 +26,44 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterParametrisation.cc
 /// \brief Implementation of the ExN04CalorimeterParametrisation class
 //
+// $Id: ExN04CalorimeterParametrisation.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
-#include "ExN04CalorimeterParametrisation.hh"
-
-#include "G4VPhysicalVolume.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4VPhysicalVolume.hh"
+#include "ExN04CalorimeterParametrisation.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04CalorimeterParametrisation::ExN04CalorimeterParametrisation()
 {
 #include "ExN04DetectorParameterDef.icc"
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04CalorimeterParametrisation::~ExN04CalorimeterParametrisation()
-{;}
-
-void ExN04CalorimeterParametrisation::ComputeTransformation
-(const G4int,G4VPhysicalVolume *physVol) const
 {
-  G4ThreeVector origin;
-  physVol->SetTranslation(origin);
 }
 
-void ExN04CalorimeterParametrisation::ComputeDimensions
-(G4Tubs & calorimeterLayer, const G4int copyNo, const G4VPhysicalVolume*) const
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void ExN04CalorimeterParametrisation::ComputeTransformation
+    (const G4int, G4VPhysicalVolume* physVol) const
 {
-  G4double innerRad = caloTubs_rmin
-              + copyNo*(absorber_thick+scinti_thick);
+  G4ThreeVector origin;
+  physVol-> SetTranslation(origin);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void ExN04CalorimeterParametrisation::ComputeDimensions
+     (G4Tubs& calorimeterLayer, const G4int copyNo,
+                                const G4VPhysicalVolume*) const
+{
+  G4double innerRad = fcaloTubs_rmin +
+                      copyNo * (fabsorber_thick + fscinti_thick);
   calorimeterLayer.SetInnerRadius(innerRad);
-  calorimeterLayer.SetOuterRadius(innerRad+absorber_thick);
-  calorimeterLayer.SetZHalfLength(caloTubs_dz);
-  calorimeterLayer.SetStartPhiAngle(caloTubs_sphi);
-  calorimeterLayer.SetDeltaPhiAngle(caloTubs_dphi);
+  calorimeterLayer.SetOuterRadius(innerRad + fabsorber_thick);
+  calorimeterLayer.SetZHalfLength(fcaloTubs_dz);
+  calorimeterLayer.SetStartPhiAngle(fcaloTubs_sphi);
+  calorimeterLayer.SetDeltaPhiAngle(fcaloTubs_dphi);
 }

@@ -26,7 +26,7 @@
 /// \file medical/GammaTherapy/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id$
+// $Id: PhysicsListMessenger.hh 67994 2013-03-13 11:05:39Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

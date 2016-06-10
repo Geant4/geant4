@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PairingCorrection.hh 69585 2013-05-08 14:17:58Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #ifndef G4PairingCorrection_h
 #define G4PairingCorrection_h 1
@@ -35,13 +38,11 @@
 #include "globals.hh"
 #include "G4CookPairingCorrections.hh"
 #include "G4CameronGilbertPairingCorrections.hh"
-//#include "G4CameronTruranHilfPairingCorrections.hh"
 
 class G4PairingCorrection
 {
 private:
   
-  // Dummy constructor
   G4PairingCorrection();
   
   static G4PairingCorrection* theInstance;
@@ -58,10 +59,8 @@ public:
 
 private:
 
-  
-  G4CookPairingCorrections* theCookPairingCorrections;
-  //  G4CameronTruranHilfPairingCorrections* theCameronTruranHilfPairingCorrections;
-  G4CameronGilbertPairingCorrections* theCameronGilbertPairingCorrections;
+  G4CookPairingCorrections theCookPairingCorrections;
+  G4CameronGilbertPairingCorrections theCameronGilbertPairingCorrections;
 
 };
 #endif

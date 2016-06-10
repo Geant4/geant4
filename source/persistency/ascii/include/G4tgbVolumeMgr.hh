@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbVolumeMgr.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgbVolume
@@ -137,7 +137,7 @@ class G4tgbVolumeMgr
 
   private:
 
-    static G4tgbVolumeMgr* theInstance;
+    static G4ThreadLocal G4tgbVolumeMgr* theInstance;
 
     G4mssvol theVolumeList;
       // Map of G4tgbVolume's: G4String is the G4tgbVolume name,

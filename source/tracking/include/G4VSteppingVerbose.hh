@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VSteppingVerbose.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //---------------------------------------------------------------
 //
@@ -76,9 +76,9 @@ public:
   virtual ~G4VSteppingVerbose();
   //
 protected:  
-  static G4VSteppingVerbose* fInstance;// pointer to the instance 
-  static G4int Silent; //flag for verbosity
-  static G4int SilentStepInfo; //another flag for verbosity
+  static G4ThreadLocal G4VSteppingVerbose* fInstance;// pointer to the instance 
+  static G4ThreadLocal G4int Silent; //flag for verbosity
+  static G4ThreadLocal G4int SilentStepInfo; //another flag for verbosity
 public:   // with description
 // static methods to set/get the object's pointer 
   static void SetInstance(G4VSteppingVerbose* Instance);

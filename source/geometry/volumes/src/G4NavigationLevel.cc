@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NavigationLevel.cc 67974 2013-03-13 10:17:37Z gcosmo $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                    
@@ -32,7 +32,7 @@
 
 #include "G4NavigationLevel.hh"
 
-G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
+G4ThreadLocal G4Allocator<G4NavigationLevel> *aNavigationLevelAllocator = 0;
 
 G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
                                 const G4AffineTransform& afTransform,
@@ -72,7 +72,7 @@ G4NavigationLevel::~G4NavigationLevel()
 }
 
 G4NavigationLevel& G4NavigationLevel::operator=(const G4NavigationLevel &right)
-{ 
+{
   if ( &right != this )
   {
     right.fLevelRep->AddAReference(); 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GDMLReadParamvol.hh 77528 2013-11-25 13:06:36Z gcosmo $
 //
 //
 // class G4GDMLReadParamvol
@@ -75,11 +75,16 @@ class G4GDMLReadParamvol : public G4GDMLReadSetup
                                  G4GDMLParameterisation::PARAMETER&);
    void Torus_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);
+   void Ellipsoid_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
    void Para_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);
    void Hype_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);
-
+   void Polycone_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void Polyhedra_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
    void ParameterisedRead(const xercesc::DOMElement* const);
 
    void ParametersRead(const xercesc::DOMElement* const);

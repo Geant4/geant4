@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuPairProduction.cc 72942 2013-08-14 13:37:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,12 +71,10 @@
 
 #include "G4MuPairProduction.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
+#include "G4VEmModel.hh"
 #include "G4MuPairProductionModel.hh"
-#include "G4UniversalFluctuation.hh"
+#include "G4ElementData.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -85,7 +83,6 @@ using namespace std;
 G4MuPairProduction::G4MuPairProduction(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
-    theBaseParticle(0),
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
 {
@@ -126,7 +123,10 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
 
     theParticle = part;
 
-    if (!EmModel()) { SetEmModel(new G4MuPairProductionModel()); }
+    if (!EmModel()) { SetEmModel(new G4MuPairProductionModel(part)); }
+
+    G4double limit = part->GetPDGMass()*8;
+    if(limit > lowestKinEnergy) { lowestKinEnergy = limit; }
 
     G4VEmFluctuationModel* fm = 0;
     EmModel()->SetLowEnergyLimit(MinKinEnergy());
@@ -138,7 +138,22 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuPairProduction::PrintInfo()
-{}
+{
+  G4ElementData* ed = EmModel()->GetElementData();
+  if(ed) {
+    for(G4int Z=1; Z<93; ++Z) {
+      G4Physics2DVector* pv = ed->GetElement2DData(Z);
+      if(pv) {
+        G4cout << "      Sampling table " << pv->GetLengthY()
+	       << "x" << pv->GetLengthX() << "; from "
+	       << exp(pv->GetY(0))/GeV << " GeV to " 
+	       << exp(pv->GetY(pv->GetLengthY()-1))/TeV 
+	       << " TeV " << G4endl;
+	break;
+      }
+    }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

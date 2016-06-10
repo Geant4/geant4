@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/TestEm12.cc
 /// \brief Main program of the electromagnetic/TestEm12 example
 //
-// $Id$
+// $Id: TestEm12.cc 73024 2013-08-15 09:11:40Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,6 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -73,17 +72,16 @@ int main(int argc,char** argv) {
    PrimaryGeneratorAction* kin;
   runManager->SetUserInitialization(det  = new DetectorConstruction);
   runManager->SetUserInitialization(phys = new PhysicsList);
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
+  runManager->SetUserAction(kin = new PrimaryGeneratorAction());
     
   //set user action classes
-  HistoManager* histo = new HistoManager();
   RunAction*   run;
   EventAction* event;
   
-  runManager->SetUserAction(run   = new RunAction(det,phys,kin,histo)); 
-  runManager->SetUserAction(event = new EventAction(run,histo));
-  runManager->SetUserAction(new TrackingAction(det,run,kin,histo));  
-  runManager->SetUserAction(new SteppingAction(det,run,event,histo));
+  runManager->SetUserAction(run   = new RunAction(det,phys,kin)); 
+  runManager->SetUserAction(event = new EventAction(run));
+  runManager->SetUserAction(new TrackingAction(run,kin));  
+  runManager->SetUserAction(new SteppingAction(run,event));
 
   //get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -115,10 +113,9 @@ int main(int argc,char** argv) {
 
   //job termination
   //
-  delete histo;
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

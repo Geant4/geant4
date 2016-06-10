@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BraggModel.hh 74790 2013-10-22 07:31:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -151,7 +151,6 @@ private:
   // hide assignment operator
   G4BraggModel & operator=(const  G4BraggModel &right);
   G4BraggModel(const  G4BraggModel&);
-
 
   G4EmCorrections*            corr;
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Field.hh 68055 2013-03-13 14:43:28Z gcosmo $
 //
 //
 // class G4Field
@@ -60,6 +60,7 @@
 #define G4FIELD_HH
 
 #include "G4Types.hh"
+#include "globals.hh"
 
 class G4Field
 {
@@ -96,8 +97,11 @@ class G4Field
 
       G4bool   IsGravityActive() const { return fGravityActive;}
        //  Does this field include gravity?
-      inline void SetGravityActive( G4bool OnOffFlag ); 
-  private: 
+      inline void SetGravityActive( G4bool OnOffFlag );
+    
+    virtual G4Field* Clone() const;
+      //Implements cloning, needed by G4 MT
+  private:
       G4bool  fGravityActive;
 };
 

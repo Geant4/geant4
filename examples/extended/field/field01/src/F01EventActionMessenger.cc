@@ -27,58 +27,55 @@
 /// \brief Implementation of the F01EventActionMessenger class
 //
 //
-// $Id$
+// $Id: F01EventActionMessenger.cc 76248 2013-11-08 11:19:52Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F01EventActionMessenger.hh"
 
 #include "F01EventAction.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01EventActionMessenger::F01EventActionMessenger(F01EventAction* evAct)
  : G4UImessenger(),
    fEventAction(evAct),
    fSetVerboseCmd(0),
-   fPrintCmd(0)   
-{ 
+   fPrintCmd(0)
+{
   fSetVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
-  fSetVerboseCmd->SetGuidance("Set verbose level ." );
+  fSetVerboseCmd->SetGuidance("Set verbose level .");
   fSetVerboseCmd->SetParameterName("level",true);
   fSetVerboseCmd->SetDefaultValue(0);
-  
+
   fPrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
   fPrintCmd->SetGuidance("Print events modulo n");
   fPrintCmd->SetParameterName("EventNb",false);
   fPrintCmd->SetRange("EventNb>0");
-  fPrintCmd->AvailableForStates(G4State_Idle);     
+  fPrintCmd->AvailableForStates(G4State_Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01EventActionMessenger::~F01EventActionMessenger()
 {
   delete fSetVerboseCmd;
-  delete fPrintCmd;    
+  delete fPrintCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F01EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
+void F01EventActionMessenger::SetNewValue(G4UIcommand * command,
+                                          G4String newValue)
+{
   if(command == fSetVerboseCmd)
     {fEventAction->SetEventVerbose(fSetVerboseCmd->GetNewIntValue(newValue));}
-    
+ 
   if(command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}               
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

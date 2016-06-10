@@ -86,6 +86,8 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       G4double GetNuclearRadius();
       G4double GetNuclearRadius(const G4double maxRelativeDensity);
       G4double GetOuterRadius();
+      G4double AddExcitationEnergy(G4double);
+      G4double GetExcitationEnergy();
       G4double CoulombBarrier();
       void DoLorentzBoost(const G4LorentzVector & theBoost);
       void DoLorentzBoost(const G4ThreeVector & theBeta);
@@ -107,6 +109,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   G4VNuclearDensity * theDensity;
   G4FermiMomentum theFermi;  
   const G4double nucleondistance;
+  G4double excitationEnergy;
   
   std::vector<G4ThreeVector> places;		// For selecting locations
   std::vector<G4ThreeVector> momentum;		// For selecting nucleon motion
@@ -123,6 +126,16 @@ inline G4int G4Fancy3DNucleus::GetCharge()
 inline G4int G4Fancy3DNucleus::GetMassNumber()
 {
 	return myA;
+}
+inline G4double G4Fancy3DNucleus::AddExcitationEnergy(G4double anE)
+{
+   excitationEnergy +=anE;
+   return excitationEnergy;
+}
+
+inline G4double G4Fancy3DNucleus::GetExcitationEnergy()
+{
+   return excitationEnergy;
 }
 
 #endif

@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
@@ -146,7 +147,7 @@ void PhysicsList::ConstructProcess()
 #include "G4hMultipleScattering.hh"
 #include "G4BraggIonGasModel.hh"
 #include "G4BetheBlochIonGasModel.hh"
-#include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4IonFluctuations.hh"
 #include "G4UniversalFluctuation.hh"
@@ -319,12 +320,12 @@ void PhysicsList::ConstructEM()
 
   // ---> STANDARD EM processes are inactivated below 1 MeV
   
-  mod =  new G4UrbanMscModel93();
+  mod =  new G4UrbanMscModel();
   mod->SetActivationLowEnergyLimit(1*MeV);
   em_config->SetExtraEmModel("e-","msc",mod,"Target");
   
   mod = new G4MollerBhabhaModel();
-  mod->SetActivationLowEnergyLimit(0.99*MeV);
+  mod->SetActivationLowEnergyLimit(1*MeV);
   em_config->SetExtraEmModel("e-","eIoni",mod,"Target",0.0,100*TeV, new G4UniversalFluctuation());
 
   // ---> DNA processes activated

@@ -23,20 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
-#include "DetectorConstruction.hh"
-#include "G4Event.hh"
-#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,14 +42,13 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
 
-  PrimaryGeneratorAction(DetectorConstruction*);    
+  PrimaryGeneratorAction();    
   ~PrimaryGeneratorAction();
   
   void GeneratePrimaries(G4Event*);
 
 private:
 
-  G4ParticleGun*           particleGun;
-  DetectorConstruction*    Detector;
+  G4ParticleGun*           fParticleGun;
 };
 #endif

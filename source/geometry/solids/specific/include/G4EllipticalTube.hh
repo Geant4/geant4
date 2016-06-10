@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EllipticalTube.hh 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -142,6 +142,8 @@ class G4EllipticalTube : public G4VSolid
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface.
+
+    G4double halfTol;
 
     G4double fCubicVolume;
     G4double fSurfaceArea;

@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomRunAction.hh 74809 2013-10-22 09:49:26Z gcosmo $
+//
 /// \file medical/DICOM/include/DicomRunAction.hh
 /// \brief Definition of the DicomRunAction class
 //
-// $Id$
-// 
 
 #ifndef DicomRunAction_h
 #define DicomRunAction_h 1
@@ -37,32 +37,38 @@
 #include <vector>
 
 class G4Run;
+class DicomRun;
 
 class DicomRunAction : public G4UserRunAction
 {
 public:
-  // constructor and destructor
-  DicomRunAction();
-  virtual ~DicomRunAction();
+    // constructor and destructor
+    DicomRunAction();
+    virtual ~DicomRunAction();
+
+    static DicomRunAction* Instance();
 
 public:
-  // virtual method from G4UserRunAction.
-  virtual G4Run* GenerateRun();
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void EndOfRunAction(const G4Run*);
+    // virtual method from G4UserRunAction.
+    virtual G4Run* GenerateRun();
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
+
+    DicomRun* GetDicomRun() const { return dcmrun; }
 
 public:
-  void PrintHeader(std::ostream *out);
-  std::string FillString(const std::string &name, char c, G4int n, G4bool back=true);
+    void PrintHeader(std::ostream *out);
+    std::string FillString(const std::string &name, char c, G4int n, G4bool back=true);
 
 private:
-  // Data member 
-  // - vector of MultiFunctionalDetecor names.
-  std::vector<G4String> fSDName;  
-  G4int fFieldName;
-  G4int fFieldValue;
+    static DicomRunAction* fgInstance;
+    DicomRun* dcmrun;
 
-
+    // Data member
+    // - vector of MultiFunctionalDetecor names.
+    std::vector<G4String> fSDName;
+    G4int fFieldValue;
+    
 };
 
 //

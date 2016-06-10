@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -55,13 +53,12 @@ namespace G4INCL {
   class RecombinationChannel : public IChannel {
 
   public:
-    RecombinationChannel(Nucleus *n, Particle *p1, Particle *p2);
+    RecombinationChannel(Particle *p1, Particle *p2);
     virtual ~RecombinationChannel();
 
     FinalState* getFinalState();
 
   private:
-    Nucleus *theNucleus;
     Particle *theNucleon, *theDelta;
   };
 

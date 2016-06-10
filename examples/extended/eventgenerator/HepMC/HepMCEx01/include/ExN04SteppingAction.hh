@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04SteppingAction.hh
 /// \brief Definition of the ExN04SteppingAction class
 //
+// $Id: ExN04SteppingAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #ifndef ExN04SteppingAction_H
 #define ExN04SteppingAction_H 1
@@ -33,14 +35,12 @@
 #include "globals.hh"
 #include "G4UserSteppingAction.hh"
 
-class ExN04SteppingAction : public G4UserSteppingAction
-{
-  public:
-    ExN04SteppingAction();
-    virtual ~ExN04SteppingAction();
+class ExN04SteppingAction : public G4UserSteppingAction {
+public:
+  ExN04SteppingAction();
+  virtual ~ExN04SteppingAction();
 
-    virtual void UserSteppingAction(const G4Step*);
+  virtual void UserSteppingAction(const G4Step*);
 };
 
 #endif
-

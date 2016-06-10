@@ -7,6 +7,18 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
+30.07.2013 - A.Dotti: tag iort_therapy-V09-06-05
+               fix last compilation warning from clang32
+
+28/29.07.2013 - P.Gumplinger: tag iort_therapy-V09-06-03/iort_therapy-V09-06-04
+               fix new compilation warning
+26.07.2013 - P.Gumplinger: tag iort_therapy-V09-06-02
+               fix clang32 compilation warnings
+04.02.2013 - G.Folger; tag iort_therapy-V09-06-01
+               IORTPhysicsList.cc: Update for renamed physics builders
+	       GNUmakefile: correct G4INSTALL
+14.12.2012 - A.Ribon; tag iort_therapy-V09-06-00
+               Removed G4HadronQElasticPhysics, and replaced G4QStoppingPhysics
 29.11.2012 - G.Cosmo; tag iort_therapy-V09-05-14, iort_therapy-V09-05-13
                More fixes for variable shadowing related to use of ROOT.
 28.11.2012 - G.Cosmo; tag iort_therapy-V09-05-12
@@ -20,7 +32,7 @@ carlo.casarino@polooncologicocefalu.it
 01.11.2012 - F.Romano;  Tag: iort_therapy-V09-05-08
                Warning in main solved
 01.11.2012 - G.Folger;  Tag: iort_therapy-V09-05-07
-               Updated iort_therapy to include ,ctime> for use of time()
+               Updated iort_therapy to include <ctime> for use of time()
 26.10.2012 - F.Romano;  Tag: iort_therapy-V09-05-06
                Updated some files: general review of the example
 26.10.2012 - L.Pandola;  Tag: iort_therapy-V09-05-05

@@ -44,6 +44,7 @@
 // 110430 add Reaction Q value and break up flag (MF3::QI and LR)
 //
 #include "G4NeutronHPInelasticCompFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
@@ -52,7 +53,7 @@
 #include "G4Alpha.hh"
 #include "G4Electron.hh"
 #include "G4NeutronHPDataUsed.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 {
@@ -102,13 +103,15 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4String
   }
   //theBaseA = A;
   //theBaseZ = G4int(Z+.5);
-  std::ifstream theData(filename, std::ios::in);
-  if(!theData)
+   //std::ifstream theData(filename, std::ios::in);
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
+  if(!theData) //"!" is a operator of ios
   {
     hasAnyData = false;
     hasFSData = false; 
     hasXsec = false;
-    theData.close();
+    //theData.close();
     return;
   }
   // here we go
@@ -177,7 +180,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4String
       throw G4HadronicException(__FILE__, __LINE__, "Data-type unknown to G4NeutronHPInelasticCompFS");
     }
   }
-  theData.close();
+  //theData.close();
 }
 
 G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
@@ -524,7 +527,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       G4LorentzVector proj_in_LAB = incidentParticle->Get4Momentum();
 
       G4DynamicParticle* proj = new G4DynamicParticle( G4Neutron::Neutron() , proj_in_LAB.boost( boostToTargetRest ) ); 
-      G4DynamicParticle* targ = new G4DynamicParticle( G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , totalPhotonEnergy )  , G4ThreeVector(0) );
+      G4DynamicParticle* targ = new G4DynamicParticle( G4IonTable::GetIonTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , totalPhotonEnergy )  , G4ThreeVector(0) );
       G4DynamicParticle* hadron = new G4DynamicParticle( aHadron.GetDefinition() , G4ThreeVector(0) );  // will be fill momentum
 
       two_body_reaction ( proj , targ , hadron , mu );
@@ -622,7 +625,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
  
  	aHadron.Lorentz(aHadron, theTarget);
         G4ReactionProduct theResidual;   
-        theResidual.SetDefinition(G4ParticleTable::GetParticleTable()
+        theResidual.SetDefinition(G4IonTable::GetIonTable()
 	                          ->GetIon(static_cast<G4int>(residualZ), static_cast<G4int>(residualA), 0));  
         theResidual.SetKineticEnergy(aHadron.GetKineticEnergy()*aHadron.GetMass()/theResidual.GetMass());
 
@@ -659,7 +662,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       if(needsSeparateRecoil && residualZ!=0)
       {
         G4ReactionProduct theResidual;   
-        theResidual.SetDefinition(G4ParticleTable::GetParticleTable()
+        theResidual.SetDefinition(G4IonTable::GetIonTable()
 	                          ->GetIon(static_cast<G4int>(residualZ), static_cast<G4int>(residualA), 0));  
         G4double resiualKineticEnergy  = theResidual.GetMass()*theResidual.GetMass();
                  resiualKineticEnergy += totalMomentum*totalMomentum;
@@ -698,7 +701,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     }
 
 //080721 
-   G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
+   G4ParticleDefinition* targ_pd = G4IonTable::GetIonTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
    G4LorentzVector targ_4p_lab ( theTarget.GetMomentum() , std::sqrt( targ_pd->GetPDGMass()*targ_pd->GetPDGMass() + theTarget.GetMomentum().mag2() ) );
    G4LorentzVector proj_4p_lab = theTrack.Get4Momentum();
    G4LorentzVector init_4p_lab = proj_4p_lab + targ_4p_lab;
@@ -735,7 +738,7 @@ void G4NeutronHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G4
 // mu in CM system 
 
    //Valid only for neutron incidence
-   G4DynamicParticle* residual = new G4DynamicParticle ( G4ParticleTable::GetParticleTable()->GetIon ( (G4int)( targ->GetDefinition()->GetPDGCharge() - hadron->GetDefinition()->GetPDGCharge() ) , (G4int)(targ->GetDefinition()->GetBaryonNumber() - hadron->GetDefinition()->GetBaryonNumber()+1) , 0 ) , G4ThreeVector(0) ); 
+   G4DynamicParticle* residual = new G4DynamicParticle ( G4IonTable::GetIonTable()->GetIon ( (G4int)( targ->GetDefinition()->GetPDGCharge() - hadron->GetDefinition()->GetPDGCharge() ) , (G4int)(targ->GetDefinition()->GetBaryonNumber() - hadron->GetDefinition()->GetBaryonNumber()+1) , 0 ) , G4ThreeVector(0) ); 
 
    G4double Q = proj->GetDefinition()->GetPDGMass() + targ->GetDefinition()->GetPDGMass() 
 	      - ( hadron->GetDefinition()->GetPDGMass() + residual->GetDefinition()->GetPDGMass() );

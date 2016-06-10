@@ -13,7 +13,29 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+29-Jul-2013 Hisaya Kurashige            had-im_r-V09-06-05
+- remove inclusion of G4ShortLivedTable.hh in G4ResonaceNames.cc
 
+12-Jul-2013 Gunter Folger               hadr-im_r-V09-06-04
+- correct typo 
+
+12-Jul-2013 Gunter Folger               hadr-im_r-V09-06-03
+- fixes for coverity.
+
+11-Jul-2013 Gunter Folger               hadr-im_r-V09-06-02
+- Changes for MT: make static arrays const to avoid having these thread local.
+
+08-Jan-2013 Gunter Folger               hadr-im_r-V09-06-01
+- Bugfix in G4MesonAbsorption, bug 1416; loss of optimisation shortcut.
+- Bugfix in G4CollisionMesonBaryonElastic::IsInCharge, bug 1415, method 
+   always returned false, effectively blocking meson-baryon elastic. 
+   Expect to change distributions. 
+
+21-Nov-2012 Gunter Folger               hadr-im_r-V09-06-00
+- Bugfix in G4Scatterer::GetTimeToInteraction(), bug 1334.
+   One shortcut in calculation of time was missed, as only one of teh two
+   particles was checked. Physics unchanged, but small performance gain
+   of few percent.
 
 12-Oct-2012 Gabriele Cosmo               hadr-im_r-V09-05-08
 - Explicitly inclusion of headers for system of units and physical

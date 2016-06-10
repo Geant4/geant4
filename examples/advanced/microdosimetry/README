@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.9 2010-10-08 10:01:35 sincerti Exp $
+$Id: README 73136 2013-08-19 14:28:09Z sincerti $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,16 +11,30 @@ $Id: README,v 1.9 2010-10-08 10:01:35 sincerti Exp $
 
                            CORRESPONDING AUTHOR 
 
-S. Incerti (a, *), V. Ivanchenko.
+S. Incerti (a, *), V. Ivanchenko (b), M. Karamitros (a)
 a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
-* e-mail:incerti@cenbg.in2p3.fr
+b. G4AI Ltd, UK
+* e-mail:incerti@cenbg.in2p3.fr 
 
 ---->0. INTRODUCTION.                                                    
                                                                        
 The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
 Geant4 standard EM models are used in the World volume while Geant4-DNA models
 are used in a Target volume, declared as a Region.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publication:
+Med. Phys. 37 (2010) 4692-4708
+
+We also suggest these other references related to this example:
+Nucl. Instrum. and Meth. B 273 (2012) 95-97
+Prog. Nucl. Sci. Tec. 2 (2011) 898-903
 
 ---->1. GEOMETRY SET-UP.
  
@@ -33,27 +47,26 @@ Make sure G4LEDATA points to the low energy electromagnetic libraries.
 
 The variable G4ANALYSIS_USE must be set to 1.
 
-In order to generate histograms, at least one of the AIDA implementations should be 
- available.
-  
-The code should be compiled with gmake.
+The code can be compiled with cmake.
+
+It works in MT mode.
 
 ---->3. HOW TO RUN THE EXAMPLE                                         
 
 In interactive mode, run:
 
-> $G4WORDIR/bin/$G4SYSTEM/Microdosimetry
+./microdosimetry
 
 The macro microdosimetry.mac is executed by default. 
 
 To get visualization, make sure to uncomment the #/control/execute vis.mac
- line in the macro.
+ line in the macro (not recommended).
 
 ---->4. PHYSICS
 
 This example shows:
 - how to use the Geant4-DNA processes, 
-- how to affect them a name
+- how to affect them a number
 - how to combine them with Standard EM Physics.
 
 A simple electron capture process is also provided in order to kill electrons 
@@ -67,6 +80,9 @@ The output results consists in a microdosimetry.root file, containing for each s
 - the type of particle for the current step
 - the type of process for the current step
 - the track position of the current step (in nanometers)
+- the energy deposit along the current step (in eV)
+- the step length (in nm)
+- the total enery loss along the current step (in eV)
 
 This file can be easily analyzed using for example the provided ROOT macro 
 file plot.C; to do so :

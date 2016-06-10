@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4IonisParamMat.hh 68070 2013-03-13 15:03:06Z gcosmo $
 //
 
 // class description

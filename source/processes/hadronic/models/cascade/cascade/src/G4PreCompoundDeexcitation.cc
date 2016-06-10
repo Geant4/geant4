@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PreCompoundDeexcitation.cc 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
@@ -38,6 +38,9 @@
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110803  M. Kelsey -- Add post-deexcitation diagnostic messages
 // 20120120  V. Ivanchenko -- Pre-compound model and its handler should not be deleted here
+// 20130621  Replace collide() interface with deExcite() using G4Fragment ref
+// 20130622  Inherit from G4CascadeDeexciteBase, add verbosity interface
+//		to pass to PreCompound
 
 #include "G4PreCompoundDeexcitation.hh"
 #include "globals.hh"
@@ -54,64 +57,31 @@ using namespace G4InuclParticleNames;
 // Constructor and destructor
 
 G4PreCompoundDeexcitation::G4PreCompoundDeexcitation() 
-  : G4VCascadeDeexcitation("G4PreCompoundDeexcitation"),
+  : G4CascadeDeexciteBase("G4PreCompoundDeexcitation"),
     theExcitationHandler(new G4ExcitationHandler),
     theDeExcitation(new G4PreCompoundModel(theExcitationHandler)) {}
 
 G4PreCompoundDeexcitation::~G4PreCompoundDeexcitation() {
-  // we need to delete here because G4PreComp does NOT delete it
-  // all objects following G4HadronicInteraction interface are
-  // deleted 
+  // Per V.I. -- do not delete locally; handled in hadronic registry
   //delete theExcitationHandler;
   //delete theDeExcitation;
 }
 
-// Main processing
-
-void G4PreCompoundDeexcitation::collide(G4InuclParticle* /*bullet*/, 
-			  	        G4InuclParticle* target,
-				        G4CollisionOutput& globalOutput) {
-  if (verboseLevel)
-    G4cout << " >>> G4PreCompoundDeexcitation::collide" << G4endl;
-  
-  // Ensure that input state is sensible
-  G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
-  if (!ntarget) {
-    G4cerr << " G4PreCompoundDeexcitation ERROR:  residual fragment must be G4InuclNuclei"
-	   << G4endl;
-    return;
-  }
-
-  // NOTE:  Should not get this case, as G4IntraNucleiCascade should catch it
-  if (ntarget->getA() == 1) {		// Just a nucleon; move to output list
-    G4int type = (ntarget->getZ() == 0) ? neutron : proton;
-    G4InuclElementaryParticle ptarget(target->getMomentum(), type, 
-				      G4InuclParticle::PreCompound);
-
-    globalOutput.addOutgoingParticle(ptarget);
-    return;
-  }
-
-  G4Fragment frag(*ntarget);
-
-  output.reset();		// Use temporary buffer for conservation checks
-  deExcite(&frag, output);
-  validateOutput(0, target, output);
-
-  globalOutput.add(output);	// Return results
+void G4PreCompoundDeexcitation::setVerboseLevel(G4int verbose) {
+  G4CascadeDeexciteBase::setVerboseLevel(verbose);
+  theDeExcitation->SetVerboseLevel(verbose);
+  // NOTE: G4ExcitationHandler doesn't have verbosity
 }
 
-void G4PreCompoundDeexcitation::deExcite(G4Fragment* fragment,
+
+// Main processing
+
+void G4PreCompoundDeexcitation::deExcite(const G4Fragment& fragment,
 					 G4CollisionOutput& globalOutput) {
   if (verboseLevel)
     G4cout << " >>> G4PreCompoundDeexcitation::deExcite" << G4endl;
 
-  if (!fragment) {
-    if (verboseLevel > 1) G4cerr << " NULL pointer fragment" << G4endl;
-    return;
-  }
-
-  if (verboseLevel > 1) G4cout << *fragment << G4endl;
+  if (verboseLevel > 1) G4cout << fragment << G4endl;
 
   G4ReactionProductVector* precompoundProducts = 0;
 
@@ -119,10 +89,12 @@ void G4PreCompoundDeexcitation::deExcite(G4Fragment* fragment,
   //        handle properly the case of Z=0 (neutron blob) 
   if (explosion(fragment) && theExcitationHandler) {
     if (verboseLevel) G4cout << " calling BreakItUp" << G4endl;
-    precompoundProducts = theExcitationHandler->BreakItUp(*fragment);
+    precompoundProducts = theExcitationHandler->BreakItUp(fragment);
   } else {
     if (verboseLevel) G4cout << " calling DeExcite" << G4endl;
-    precompoundProducts = theDeExcitation->DeExcite(*fragment);
+    // NOTE:  DeExcite() interface takes a *non-const* reference
+    precompoundProducts =
+      theDeExcitation->DeExcite(const_cast<G4Fragment&>(fragment));
   }
 
   // Transfer output of de-excitation back into Bertini objects

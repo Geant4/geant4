@@ -23,22 +23,20 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find ROOT (required package)
 #
-find_package(ROOT QUIET)
-if(NOT ROOT_FOUND)
-  message(STATUS "G4 Examples: ROOT package not found. --> P01 example disabled")  
-  return()
-endif()
+find_package(ROOT REQUIRED)
+
+#----------------------------------------------------------------------------
+# P01 requires GCCXML 
+#
 if(NOT GCCXML)
-   message(STATUS "G4 Examples: GCCXML not found. --> P01 example disabled")
-   return()
+   message(FATAL_ERROR "P01 requires GCCXML")
 endif() 
 
 #----------------------------------------------------------------------------
 # P01 requires shared libraries
 #
-if(BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS )
-  message(STATUS "G4 Examples: Building only Static Libraires. --> P01 example disabled")
-  return()
+if(NOT Geant4_shared_FOUND)
+  message(FATAL_ERROR "P01 must use shared libraries")
 endif()
 
 #----------------------------------------------------------------------------
@@ -53,7 +51,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Generate dictionaries, add ROOT libraries properties
 #
-REFLEX_GENERATE_DICTIONARY(ExP01Classes include/ExP01Classes.hh SELECTION xml/selection.xml)
+REFLEX_GENERATE_DICTIONARY(ExP01Classes include/ExP01Classes.hh SELECTION xml/selection.xml) # OPTIONS --gccxmlopt="--gccxml-compiler g++")
 add_library(ExP01ClassesDict SHARED ${sources} ExP01Classes.cpp)
 set(libsuffix .so)
 set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})

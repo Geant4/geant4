@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeBremsstrahlungFS.hh 75573 2013-11-04 11:48:15Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -32,6 +32,11 @@
 // 20 Oct 2010   L. Pandola   1st implementation. 
 // 02 May 2011   L. Pandola   Remove dependency on CLHEP::HepMatrix
 // 24 May 2011   L. Pandola   Renamed (make default Penelope)
+// 03 Oct 2013   L. Pandola   Migration to MT
+// 07 Oct 2013   L. Pandola   Add verbosity and ismaster flag for the 
+//                             master-only methods
+// 30 Oct 2013   L. Pandola   Add a G4Cache of temporary vectors as 
+//                             private member. 
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +50,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
+#include "G4Cache.hh"
 #include <map>
 
 class G4PhysicsFreeVector;
@@ -55,21 +61,30 @@ class G4PhysicsTable;
 class G4PenelopeBremsstrahlungFS 
 {
 public:
-  
-  G4PenelopeBremsstrahlungFS();
+  //! Only master models are supposed to create instances
+  G4PenelopeBremsstrahlungFS(G4int verbosity=0);
   ~G4PenelopeBremsstrahlungFS();
  
-  G4double GetEffectiveZSquared(const G4Material* mat);
-  void ClearTables();
-  size_t GetNBinsX(){return nBinsX;};
- 
-
-  //utilities
+  //!
+  //! Master and workers (do not touch tables)
+  //! All of them are const
+  //!
+  G4double GetEffectiveZSquared(const G4Material* mat) const;
+  size_t GetNBinsX() const {return nBinsX;};
   G4double GetMomentumIntegral(G4double* y,			   
-			       G4double up,G4int momOrder);
+			       G4double up,G4int momOrder) const;
+  const G4PhysicsTable* GetScaledXSTable(const G4Material*,
+					 const G4double cut) const;
+  G4double SampleGammaEnergy(G4double energy,
+			     const G4Material*, const G4double cut) const;
 
-  G4PhysicsTable* GetScaledXSTable(const G4Material*,G4double cut);
-  G4double SampleGammaEnergy(G4double energy,const G4Material*, G4double cut);
+  //! Reserved for the master model: they build and handle tables
+  void ClearTables(G4bool isMaster=true);
+  void BuildScaledXSTable(const G4Material* material,G4double cut,
+			  G4bool isMaster);
+
+  void SetVerbosity(G4int ver){fVerbosity=ver;};
+  G4int GetVerbosity(){return fVerbosity;};
 
 private:
   //assignment operator
@@ -78,12 +93,11 @@ private:
   G4PenelopeBremsstrahlungFS(const G4PenelopeBremsstrahlungFS&);
   
   //Differential cross section tables
-  //Table contains G4PhysicsVectors of log(XS(E,x)) vs. log(E) for a grid of 32 values in 
-  //x (= reduced photon energy)
+  //Table contains G4PhysicsVectors of log(XS(E,x)) vs. log(E) 
+  //for a grid of 32 values in x (= reduced photon energy)
   std::map< std::pair<const G4Material*,G4double> , 
 	    G4PhysicsTable*> *theReducedXSTable; 
 
-  void BuildScaledXSTable(const G4Material* material,G4double cut);
   std::map<const G4Material*,G4double> *theEffectiveZSq;
   
 
@@ -114,8 +128,11 @@ private:
  
   //temporary vector. Used as member variable to avoid to book/release the 
   //memory on the fly. This vector is over-written at every call of 
-  //SampleGammaEnergy()
-  G4PhysicsFreeVector* theTempVec; 
+  //SampleGammaEnergy(). It is thread-local (each thread has its own) 
+  //and managed by G4Cache
+  G4Cache<G4PhysicsFreeVector*> fCache;
+
+  G4int fVerbosity;
 
 };
 

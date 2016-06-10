@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: globals.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 //
 // Global Constants and typedefs
@@ -67,8 +67,8 @@
 #include "templates.hh"
 
 // Includes Physical Constants and System of Units
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
+// #include "G4PhysicalConstants.hh"
+// #include "G4SystemOfUnits.hh"
 
 // Global error function
 #include "G4ExceptionSeverity.hh"

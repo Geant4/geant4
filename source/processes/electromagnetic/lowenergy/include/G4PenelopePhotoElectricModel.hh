@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopePhotoElectricModel.hh 75573 2013-11-04 11:48:15Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -32,6 +32,7 @@
 // 08 Jan 2010   L. Pandola   1st implementation. 
 // 25 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L. Pandola   Migrated to the new AtomDeexcitation interface
+// 18 Sep 2013   L. Pandola   Migrated to the MT paradigm
 //
 // -------------------------------------------------------------------
 //
@@ -66,6 +67,8 @@ public:
   virtual ~G4PenelopePhotoElectricModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+                               G4VEmModel *masterModel);
 
   virtual G4double ComputeCrossSectionPerAtom(
 					      const G4ParticleDefinition*,
@@ -91,10 +94,13 @@ public:
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
+  const G4ParticleDefinition* fParticle;
 
 private:
   G4PenelopePhotoElectricModel & operator=(const G4PenelopePhotoElectricModel &right);
   G4PenelopePhotoElectricModel(const G4PenelopePhotoElectricModel&);
+
+  void SetParticle(const G4ParticleDefinition*);
 
   G4double SampleElectronDirection(G4double energy);
 
@@ -119,6 +125,8 @@ private:
   size_t SelectRandomShell(G4int Z,G4double energy);
   G4String WriteTargetShell(size_t shellID);
 
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
 
 };
 

@@ -42,7 +42,7 @@ class G4KaonZeroLInelasticProcess : public G4HadronInelasticProcess
 {
   public:
     
-    G4KaonZeroLInelasticProcess(const G4String& processName = "KaonZeroLInelastic");
+    G4KaonZeroLInelasticProcess(const G4String& processName = "kaon0LInelastic");
     
     ~G4KaonZeroLInelasticProcess() {}
 

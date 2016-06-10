@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2010-12-03 14:55:09 gcosmo Exp $
+$Id: History 73985 2013-09-18 15:55:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-09-13 V.Ivant (testem6-V09-06-04)
+- fixed tag format
+
+17-09-13 V.Ivant (testem6-V09-05-04)
+- TestEm6.in - added cross section factor to gamma->mu+mu- process
+     
+05-09-13 mma (testem6-V09-06-03)
+- PhysicsList: restore G4GammaConversionToMuons
+     
+19-06-13 mma (testem6-V09-06-02)
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep()
+     
+07-06-13 mma (testem6-V09-06-01)
+- Cosmetic in SteppingAction.
+
+13-02-13 I.Hrivnacova (testem6-V09-06-00) 
+- Applied coding guidelines (virtual keyword, data members initialization)
 
 12-10-12 V.Ivant (testem6-V09-05-03)
 - Migration to the updated analysis tool and inplicit units

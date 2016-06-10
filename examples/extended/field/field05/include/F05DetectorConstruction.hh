@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F05DetectorConstruction.hh 75672 2013-11-05 08:47:41Z gcosmo $
+//
 /// \file field/field05/include/F05DetectorConstruction.hh
 /// \brief Definition of the F05DetectorConstruction class
 //
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,13 +38,13 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-class F05Field;
-
 class G4Material;
  
 class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+
+class F05Field;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,24 +53,25 @@ class F05DetectorConstruction : public G4VUserDetectorConstruction
   public:
  
     F05DetectorConstruction();
-   ~F05DetectorConstruction();
+    virtual ~F05DetectorConstruction();
 
   public:
  
-     G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
   private:
  
-     G4Material*        Vacuum;
+     G4Material*        fVacuum;
 
-     G4double           WorldSizeXY;
-     G4double           WorldSizeZ;
+     G4double           fWorldSizeXY;
+     G4double           fWorldSizeZ;
 
-     G4Box*             solidWorld;    //pointer to the solid World
-     G4LogicalVolume*   logicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* physiWorld;    //pointer to the physical World
+     G4Box*             fSolidWorld;    //pointer to the solid World
+     G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
+     G4VPhysicalVolume* fPhysiWorld;    //pointer to the physical World
 
-     F05Field* field;
+     static G4ThreadLocal F05Field* fField;
 
   private:
  

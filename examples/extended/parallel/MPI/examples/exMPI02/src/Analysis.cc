@@ -22,100 +22,92 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: Analysis.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file Analysis.cc
 /// @brief Define histograms
 
-#include "Analysis.hh"
-#include "G4SystemOfUnits.hh"
-
-// ROOT headers
-#include "TROOT.h"
 #include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TROOT.h"
+#include "G4SystemOfUnits.hh"
+#include "Analysis.hh"
 
-Analysis* Analysis::myanalysis = NULL;
+G4ThreadLocal G4int Analysis::fincidentFlag = false;
 
-// --------------------------------------------------------------------------
-Analysis::Analysis()
-{
-  // ROOT style
-  gROOT-> Reset();
-
-  // define histograms
-  incident_map = new TH2D("incident map", "Incident Distributuon",
-                          50, -5., 5.,
-                          50, -5., 5.);
-  incident_map-> GetXaxis()-> SetTitle("X (cm)");
-  incident_map-> GetYaxis()-> SetTitle("Y (cm)");
-  incident_map-> SetStats(0);
-
-  incident_x_hist = new TH1D("incident x", "Incident X", 100, -5., 5.);
-  incident_x_hist-> GetXaxis()-> SetTitle("X (cm)");
-  incident_x_hist-> SetFillColor(kRed);
-
-  dose_map = new TH2D("dose map", "Dose Distribution", 
-                      500, 0., 50.,
-                      200, -10., 10.);
-  dose_map-> GetXaxis()-> SetTitle("Z (cm)");
-  dose_map-> GetYaxis()-> SetTitle("X (cm)");
-  dose_map-> SetStats(0);
-
-  dose_hist = new TH1D("dose", "Dose Distribution", 500, 0., 50.);
-  dose_hist-> GetXaxis()-> SetTitle("Z (cm)");
-  dose_hist-> GetYaxis()-> SetTitle("Dose (GeV)");
-  dose_hist-> SetFillColor(kBlue);
-  dose_hist-> SetStats(0);
-
-}
-
-// --------------------------------------------------------------------------
-Analysis::~Analysis()
-{
-  delete incident_map;
-  delete incident_x_hist;
-  delete dose_map;
-  delete dose_hist;
-
-  myanalysis = NULL;
-}
-
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 Analysis* Analysis::GetAnalysis()
 {
-  if ( myanalysis == NULL ) {
-    myanalysis = new Analysis();
-  }
-
-  return myanalysis;
+  static Analysis the_analysis;
+  return &the_analysis;
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+Analysis::Analysis()
+{
+  // define histograms
+  fincident_map = new TH2D("incident map", "Incident Distributuon",
+                            50, -5., 5.,
+                            50, -5., 5.);
+  fincident_map-> GetXaxis()-> SetTitle("X (cm)");
+  fincident_map-> GetYaxis()-> SetTitle("Y (cm)");
+  fincident_map-> SetStats(0);
+
+  fincident_x_hist = new TH1D("incident x", "Incident X", 100, -5., 5.);
+  fincident_x_hist-> GetXaxis()-> SetTitle("X (cm)");
+  fincident_x_hist-> SetFillColor(kRed);
+
+  fdose_map = new TH2D("dose map", "Dose Distribution",
+                       500, 0., 50.,
+                       200, -10., 10.);
+  fdose_map-> GetXaxis()-> SetTitle("Z (cm)");
+  fdose_map-> GetYaxis()-> SetTitle("X (cm)");
+  fdose_map-> SetStats(0);
+
+  fdose_hist = new TH1D("dose", "Dose Distribution", 500, 0., 50.);
+  fdose_hist-> GetXaxis()-> SetTitle("Z (cm)");
+  fdose_hist-> GetYaxis()-> SetTitle("Dose (GeV)");
+  fdose_hist-> SetFillColor(kBlue);
+  fdose_hist-> SetStats(0);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+Analysis::~Analysis()
+{
+  delete fincident_map;
+  delete fincident_x_hist;
+  delete fdose_map;
+  delete fdose_hist;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::Update()
 {
   return;
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::Clear()
 {
-  incident_map-> Reset();
-  incident_x_hist-> Reset();
-  dose_map-> Reset();
-  dose_hist-> Reset();
+  fincident_map-> Reset();
+  fincident_x_hist-> Reset();
+  fdose_map-> Reset();
+  fdose_hist-> Reset();
 
   return;
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::Save(const G4String& fname)
 {
-  TFile* file = new TFile(fname.c_str(),
-                          "RECREATE", "Geant4 ROOT analysis");
-  incident_map-> Write();
-  incident_x_hist-> Write();
-  dose_map-> Write();
-  dose_hist-> Write();
+  TFile* file = new TFile(fname.c_str(), "RECREATE", "Geant4 ROOT analysis");
+
+  fincident_map-> Write();
+  fincident_x_hist-> Write();
+  fdose_map-> Write();
+  fdose_hist-> Write();
 
   file-> Close();
 
@@ -124,29 +116,28 @@ void Analysis::Save(const G4String& fname)
   return;
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::FillIncident(const G4ThreeVector& p)
 {
-  if ( ! incidentFlag ) {
-    incident_map-> Fill(p.x()/cm, p.y()/cm);
-    incident_x_hist-> Fill(p.x()/cm);
+  if ( ! fincidentFlag ) {
+    fincident_map-> Fill(p.x()/cm, p.y()/cm);
+    fincident_x_hist-> Fill(p.x()/cm);
 
-    incidentFlag = true;
+    fincidentFlag = true;
   }
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::FillDose(const G4ThreeVector& p, G4double dedx)
 {
   const G4double Z0 = 25.*cm;
   const G4double dxy = 10.*mm;
 
-  if(std::abs(p.y()) < dxy ) {
-    dose_map-> Fill((p.z()+Z0)/cm, p.x()/cm, dedx/GeV);
-    
-    if(std::abs(p.x()) < dxy) {
-      dose_hist-> Fill((p.z()+Z0)/cm, dedx/GeV);
+  if ( std::abs(p.y()) < dxy ) {
+    fdose_map-> Fill((p.z()+Z0)/cm, p.x()/cm, dedx/GeV);
+
+    if ( std::abs(p.x()) < dxy ) {
+      fdose_hist-> Fill((p.z()+Z0)/cm, dedx/GeV);
     }
   }
 }
-

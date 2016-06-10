@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ReflectionFactory.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // 
 // Class G4ReflectionFactory Implementation
@@ -62,7 +62,7 @@
 #include "G4VPVDivisionFactory.hh"
 #include "G4GeometryTolerance.hh"
 
-G4ReflectionFactory* G4ReflectionFactory::fInstance = 0;
+G4ThreadLocal G4ReflectionFactory* G4ReflectionFactory::fInstance = 0;
 const G4String  G4ReflectionFactory::fDefaultNameExtension = "_refl";
 const G4Scale3D G4ReflectionFactory::fScale = G4ScaleZ3D(-1.0);
 

@@ -93,6 +93,15 @@ This present example, electronScattering2, was the Geant4 code used for this pub
  Flux is corrected for ring area just before output (as PSCellFlux assumes the area is the complete
  area of the face of the cylinder, not the area of the one ring).
 
+ Because the geometry may need to be updated after various /primfoil commands,
+ ElectronBenchmarkDetector is written in such a way that the sensitive detector can have its scorer ring
+ logical volume updated after geometry changes. After any geometry change, ConstructSDandField is again
+ called, setting the sensitive detector to use the logical volume of the updated scorer ring.
+ The same sensitive detector is reused, but the manner in which the sensitive detector pointer
+ is stored for this reuse is complicated by the fact that this example may be run in multi-threaded mode
+ (in which each worker thread has its own sensitive detector).
+ We therefore store the sensitive detector pointer in a G4Cache rather than in a direct pointer.
+
 
  6- MACROS
 
@@ -132,4 +141,19 @@ This present example, electronScattering2, was the Geant4 code used for this pub
   The first column gives the CellFlux for all particles.
   The second column gives the CellFlux counting only electrons.
   The third column gives the population for all particles.
-  The fourth column gives the populatin counting only electrons.
+  The fourth column gives the population counting only electrons.
+
+
+9 - MULTITHREADING
+
+  This example supports multi-threading.
+  To run in multi-threaded mode, build your Geant4 with the cmake option:
+  -DGEANT4_BUILD_MULTITHREADED=ON
+  and then set the desired number of threads by inserting the /run/numberOfThreads command
+  into your macro file just before /run/initialize, as in:
+  /run/numberOfThreads 8
+  You may also find the output more readable if you use the following command to make output from
+  each thread be collected together:
+  /control/cout/useBuffer
+  The visualization macro, /macros/vis.mac demonstrates use of the above two commands.
+  Output from the multiple worker threads is merged by the Merge method at the end of ElectronRun.cc

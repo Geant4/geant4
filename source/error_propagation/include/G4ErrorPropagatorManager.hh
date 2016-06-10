@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ErrorPropagatorManager.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 // Class Description:
 //
@@ -147,7 +147,7 @@ class G4ErrorPropagatorManager
  
  private:
 
-  static G4ErrorPropagatorManager* theG4ErrorPropagatorManager;
+  static G4ThreadLocal G4ErrorPropagatorManager* theG4ErrorPropagatorManager;
 
   G4ErrorRunManagerHelper* theG4ErrorRunManagerHelper;
 

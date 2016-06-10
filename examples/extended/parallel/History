@@ -10,5 +10,23 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03 December 2013, I. Hrivnacova (exparallel-V09-06-04)
+- Fixed file descriptions (for Doxygen)
+
+10 November 2013, I. Hrivnacova (exparallel-V09-06-03)
+- Fixed README and CMake files 
+
+08 November 2013, I. Hrivnacova (exparallel-V09-06-02)
+- Moved ParN02, ParN04 and info in a new TopC directory,
+  and removed ParN02tbb (its is still kept in the branch 
+  ParN02tbb_08_11_2013)
+
+27 August 2013, G. Cosmo (exparallel-V09-06-01)
+- Added G4Ellipsoid among solids enabled for parameterisation
+  in examples ParN02, ParN02tbb, ParN04 and MPI/exMPI02.
+
+25 June 2013, I. Hrivnacova (exparallel-V09-06-00)
+- Added ParN02tbb example and updated CMakeLists.txt.
+
 16 November 2012, I. Hrivnacova (exparallel-V09-05-00)
 - Added CMakeLists.txt file in the top directory

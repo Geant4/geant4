@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXePMTSD.cc 73915 2013-09-17 07:32:26Z gcosmo $
+//
 /// \file optical/LXe/src/LXePMTSD.cc
 /// \brief Implementation of the LXePMTSD class
 //
@@ -54,6 +56,17 @@ LXePMTSD::LXePMTSD(G4String name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXePMTSD::~LXePMTSD() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXePMTSD::SetPmtPositions(const std::vector<G4ThreeVector>& positions)
+{
+  for (G4int i=0; i<G4int(positions.size()); ++i) {
+    if(fPMTPositionsX)fPMTPositionsX->push_back(positions[i].x());
+    if(fPMTPositionsY)fPMTPositionsY->push_back(positions[i].y());
+    if(fPMTPositionsZ)fPMTPositionsZ->push_back(positions[i].z());
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

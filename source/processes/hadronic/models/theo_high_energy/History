@@ -14,6 +14,31 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16-July-2013   G. Cosmo       hadr-theo-HE-V09-06-05
+-  Correction to CMake scripts for granular build.
+
+04-June-2013   A. Ribon       had-theo-HE-V09-06-04
+-  Fix access to ions via the IonTable class and GetIon method
+   in G4QuasiElasticChannel.cc
+
+29-January-2013   V. Uzhinsky had-theo-HE-V09-06-03
+-  A new attempt to implement NuclNucl interactions
+
+8-January-2013   V. Uzhinsky had-theo-HE-V09-06-02
+-  A new attempt to implement NuclNucl interactions
+
+17-December-2012 V. Uzhinsky had-theo-HE-V09-06-01
+-  An interface for a manipulation with nucleus-nucleus interactions was
+   introduced. Alberto's comments are removed.
+
+13-December-2012 A.Ribon    had-theo-HE-V09-06-00
+-  Removed G4ProjectileDiffractiveChannel (which depends on CHIPS),
+   and temporary commenting Uz. changes in the tag below.
+
+20-November-2012 V. Uzhinsky had-theo-HE-V09-05-05
+-  An interface for a manipulation with nucleus-nucleus interactions was
+   introduced, especially for treating remnants of projectile nuclei.
+
 17-July-2012, G.Folger      had-theo-HE-V09-05-04
 -  coverity fixes in G4TheoFSGenerator.cc
 

@@ -24,46 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FieldTrack.icc 69699 2013-05-13 08:50:30Z gcosmo $
 //
 // -------------------------------------------------------------------
-
-// Implementation methods for the embedded class G4ChargeState
-//                                ----------------------------
-inline G4FieldTrack::
-G4ChargeState::G4ChargeState(G4double charge,
-			     G4double magnetic_dipole_moment,  
-			     G4double electric_dipole_moment,  
-			     G4double magnetic_charge)
-{
-   fCharge= charge;
-   fMagn_dipole= magnetic_dipole_moment;
-   fElec_dipole= electric_dipole_moment;
-   fMagneticCharge= magnetic_charge;    
-}  
-
-inline G4FieldTrack::
-G4ChargeState::G4ChargeState( 
-  const G4FieldTrack::G4ChargeState& right )
-{ 
-  fCharge= right.fCharge;
-  fMagn_dipole= right.fMagn_dipole; 
-  fElec_dipole= right.fElec_dipole;
-  fMagneticCharge= right.fMagneticCharge;
-}
-
-inline G4FieldTrack::G4ChargeState& G4FieldTrack::
-G4ChargeState::operator = ( const G4FieldTrack::G4ChargeState& right )
-{ 
-  if (&right == this) return *this;
-
-  fCharge= right.fCharge;
-  fMagn_dipole= right.fMagn_dipole; 
-  fElec_dipole= right.fElec_dipole;
-  fMagneticCharge= right.fMagneticCharge;
-
-  return *this;
-}
 
 inline void
 G4FieldTrack::InitialiseSpin( const G4ThreeVector& Spin )
@@ -73,20 +36,6 @@ G4FieldTrack::InitialiseSpin( const G4ThreeVector& Spin )
   fSpin = Spin;
   // New Member ??  G4bool fHasSpin; 
   // fHasSpin = (fSpin != ZeroVec); 
-}
-
-inline void G4FieldTrack::
-G4ChargeState::SetChargeAndMoments(G4double charge, 
-				   G4double magnetic_dipole_moment,  
-				   G4double electric_dipole_moment,
-				   G4double magnetic_charge )
-   //  Revise the charge and potentially all moments.
-   //   By default do not change mdm, edm, mag charge. 
-{
-   fCharge= charge;
-   if( magnetic_dipole_moment < DBL_MAX) fMagn_dipole= magnetic_dipole_moment;
-   if( electric_dipole_moment < DBL_MAX) fElec_dipole= electric_dipole_moment;
-   if( magnetic_charge < DBL_MAX)        fMagneticCharge= magnetic_charge;    
 }
 
 inline
@@ -301,7 +250,7 @@ void G4FieldTrack::LoadFromArray(const G4double valArrIn[ncompSVEC], G4int noVar
   G4int i;
 
   // Fill the variables not integrated with zero -- so it's clear !!
-  static G4double valArr[ncompSVEC];
+  static G4ThreadLocal G4double valArr[ncompSVEC];
   for( i=0; i<noVarsIntegrated; i++){
      valArr[i]= valArrIn[i];
   }

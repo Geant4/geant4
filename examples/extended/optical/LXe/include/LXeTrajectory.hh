@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeTrajectory.hh 72349 2013-07-16 12:13:16Z gcosmo $
+//
 /// \file optical/LXe/include/LXeTrajectory.hh
 /// \brief Definition of the LXeTrajectory class
 //
@@ -50,7 +52,6 @@ class LXeTrajectory : public G4Trajectory
     virtual ~LXeTrajectory();
  
     virtual void DrawTrajectory() const;
-    virtual void DrawTrajectory(G4int i_mode=0) const;
  
     inline void* operator new(size_t);
     inline void  operator delete(void*);
@@ -69,18 +70,18 @@ class LXeTrajectory : public G4Trajectory
     G4ParticleDefinition* fParticleDefinition;
 };
 
-extern G4Allocator<LXeTrajectory> LXeTrajectoryAllocator;
+extern G4ThreadLocal G4Allocator<LXeTrajectory>* LXeTrajectoryAllocator;
 
 inline void* LXeTrajectory::operator new(size_t)
 {
-  void* aTrajectory;
-  aTrajectory = (void*)LXeTrajectoryAllocator.MallocSingle();
-  return aTrajectory;
+  if(!LXeTrajectoryAllocator)
+      LXeTrajectoryAllocator = new G4Allocator<LXeTrajectory>;
+  return (void*)LXeTrajectoryAllocator->MallocSingle();
 }
 
 inline void LXeTrajectory::operator delete(void* aTrajectory)
 {
-  LXeTrajectoryAllocator.FreeSingle((LXeTrajectory*)aTrajectory);
+  LXeTrajectoryAllocator->FreeSingle((LXeTrajectory*)aTrajectory);
 }
 
 #endif

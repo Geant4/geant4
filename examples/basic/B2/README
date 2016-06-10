@@ -1,4 +1,4 @@
-$Id$
+$Id: README 78001 2013-12-02 08:24:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,11 +20,12 @@ $Id$
      (in B2bDetectorConstruction), see also B2bChamberParameterisation class.
 
      In addition, a global, uniform, and transverse magnetic field can be 
-     applied (see B2MagneticField and B2aDetectorMessenger, 
-     B2bDetectorMessenger classes) and set via interactive commands. 
+     applied using G4GlobalMagFieldMessenger, instantiated in 
+     B2[a,b]DetectorConstruction::ConstructSDandField with a non zero field value,
+     or via interactive commands. 
      For example:
 
-     /B2/det/setField 0.2 tesla
+     /globalField/setValue 0.2 0 0 tesla
  
      An instance of the B2TrackerSD class is created and associated with each 
      logical chamber volume (in B2a) and with the one G4LogicalVolume associated 
@@ -52,7 +53,23 @@ $Id$
 	         /process/(in)activate processName
      allows the user to activate/inactivate the processes one by one.
 
- 3- PRIMARY GENERATOR
+ 3- ACTION INITALIZATION
+
+   A newly introduced class, B2ActionInitialization,
+   instantiates and registers to Geant4 kernel all user action classes.
+   
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B2ActionInitialization::Build() 
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+   A run action class is instantiated both thread-local 
+   and global that's why its instance has is created also in the method
+      B2ActionInitialization::BuildForMaster() 
+   which is invoked only in multi-threading mode.
+
+ 4- PRIMARY GENERATOR
 
      The primary generator action class employs the G4ParticleGun. 
      The primary kinematics consists of a single particle which hits the target 
@@ -60,7 +77,7 @@ $Id$
      and its energy can be changed via the G4 built-in commands of 
      the G4ParticleGun class. 
   
- 4- RUNS and EVENTS
+ 5- RUNS and EVENTS
  
      A run is a set of events.
  
@@ -81,7 +98,7 @@ $Id$
      G4RunManager is also informed how to SetRandomNumberStore for storing 
      initial random number seeds per run or per event.         
 
- 5- USER LIMITS
+ 6- USER LIMITS
  
     This example also illustrates how to introduce tracking constraints
     like maximum step length, minimum kinetic energy etc. via the G4UserLimits
@@ -94,7 +111,7 @@ $Id$
 
     /B2/det/stepMax 1.0 mm
 
- 6- DETECTOR RESPONSE
+ 7- DETECTOR RESPONSE
  
      A HIT is a step per step record of all the information needed to
      simulate and analyse the detector response.

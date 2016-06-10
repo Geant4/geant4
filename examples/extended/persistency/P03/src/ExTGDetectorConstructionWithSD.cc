@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: ExTGDetectorConstructionWithSD.cc 76943 2013-11-19 09:57:34Z gcosmo $
 //
-/// \file ExTGDetectorConstructionWithSD.cc
+/// \file persistency/P03/src/ExTGDetectorConstructionWithSD.cc
 /// \brief Implementation of the ExTGDetectorConstructionWithSD class
 
  
@@ -66,27 +66,29 @@ G4VPhysicalVolume* ExTGDetectorConstructionWithSD::Construct()
   //------------------------------------------------ 
   G4VPhysicalVolume* physiWorld = volmgr->ReadAndConstructDetector();
 
+  return physiWorld;
+}
+
+void ExTGDetectorConstructionWithSD::ConstructSDandField()
+{
   //------------------------------------------------ 
   // Sensitive detectors
   //------------------------------------------------ 
 
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-
   G4String trackerChamberSDname = "ExTextGeom/TrackerChamberSD";
   ExTGTrackerSD* aTrackerSD = new ExTGTrackerSD( trackerChamberSDname );
-  SDman->AddNewDetector( aTrackerSD );
   G4LogicalVolume * logicChamber =
     G4tgbVolumeMgr::GetInstance()->FindG4LogVol("Chamber",0);
   if(logicChamber)
   {
-    logicChamber->SetSensitiveDetector( aTrackerSD );
+    SetSensitiveDetector("Chamber", aTrackerSD );
   }
   else
   {
     G4Exception("ExTGDetectorConstructionWithSD::Construct()",
                 "InvalidGeometry", JustWarning,
-                "Volume does not exists in geometry: Chamber.");
+                "Volume does not exists in geometry: Chamber");
   }
 
-  return physiWorld;
+
 }

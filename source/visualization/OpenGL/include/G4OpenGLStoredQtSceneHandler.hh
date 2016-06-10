@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4OpenGLStoredSceneHandler.hh,v 1.32 2010-11-10 17:10:49 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Laurent Garnier  27th October 2011

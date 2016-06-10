@@ -26,28 +26,23 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the ExN04PrimaryGeneratorMessenger class
 //
-// ====================================================================
+// $Id: ExN04PrimaryGeneratorMessenger.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   ExN04PrimaryGeneratorMessenger.cc
-//   $Id$
-//
-// ====================================================================
+
 #include "G4UIcommand.hh"
-#include "G4UIparameter.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIdirectory.hh"
-
+#include "G4UIparameter.hh"
 #include "ExN04PrimaryGeneratorMessenger.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 
-////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04PrimaryGeneratorMessenger::ExN04PrimaryGeneratorMessenger
-                            (ExN04PrimaryGeneratorAction* genaction)
+                                (ExN04PrimaryGeneratorAction* genaction)
   : primaryAction(genaction)
-////////////////////////////////////////////////////////////////////
 {
   mydetdir = new G4UIdirectory("/mydet/");
   mydetdir-> SetGuidance("ExN04 detector control commands.");
@@ -62,39 +57,33 @@ ExN04PrimaryGeneratorMessenger::ExN04PrimaryGeneratorMessenger
   select-> SetDefaultValue("particleGun");
 }
 
-/////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04PrimaryGeneratorMessenger::~ExN04PrimaryGeneratorMessenger()
-/////////////////////////////////////////////////////////////////
 {
   delete select;
-
   delete mydetdir;
   delete dir;
-}  
+}
 
-//////////////////////////////////////////////////////////////////////
-void ExN04PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void ExN04PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                               G4String newValues)
-//////////////////////////////////////////////////////////////////////
 {
-  if ( command==select) {
+  if ( command == select ) {
     primaryAction-> SetGenerator(newValues);
-    G4cout << "current generator type: " 
+    G4cout << "current generator type: "
             << primaryAction-> GetGeneratorName() << G4endl;
-  } else {
   }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4String ExN04PrimaryGeneratorMessenger::GetCurrentValue(G4UIcommand* command)
-//////////////////////////////////////////////////////////////////////////////
 {
   G4String cv, st;
-  if (command == select) {
-    cv= primaryAction-> GetGeneratorName();
-  } 
+  if ( command == select ) {
+    cv = primaryAction-> GetGeneratorName();
+  }
 
  return cv;
 }
-

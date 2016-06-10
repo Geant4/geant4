@@ -14,6 +14,172 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 November 2013 Vladimir Ivanchenko (hadr-deex-V09-06-27)
+----------------------------------------------------------
+- G4LevelReader, G4NuclearLevelManager - partial return back of tag
+    24 for ReadDataItem method but with attempt to get compile at
+    all platforms
+
+15 November 2013 Vladimir Ivanchenko (hadr-deex-V09-06-26)
+----------------------------------------------------------
+- G4NuclearLevelManager - fixed trivial Coverity warning
+- G4NeutronRadcapture - fixed run time memory leak
+
+28 October 2013 Vladimir Ivanchenko (hadr-deex-V09-06-25)
+----------------------------------------------------------
+- G4LevelReader, G4NuclearLevelManager - attempt to fix compillation 
+    problem at Windows VC12 
+
+24 October 2013 Vladimir Ivanchenko (hadr-deex-V09-06-24)
+----------------------------------------------------------
+- G4NeutronRadCapture, G4ExcitationHandler - changed max isomer level 
+    number to 8 (before was 9) due to limitations of PDG encoding
+
+22 October 2013 Vladimir Ivanchenko (hadr-deex-V09-06-23)
+----------------------------------------------------------
+- G4NeutronRadCapture - added isomere production according to the updated 
+    MT interface; added time propagation (correct time for delaied capture)
+- G4EvaporationChannel, G4ProtonEvaporationProbability, G4F20GEMProbability,
+  G4GEMChannel, G4GEMProbability, G4O17GEMProbability, G4ContinuumGammaTransition,
+  G4DiscreteGammaTransition - use G4Log and G4Exp
+
+21 October 2013 Gunter Folger      (hadr-deex-V09-06-22)
+----------------------------------------------------------
+-  fix trivial compilation issues detected on Visual C++ 18 
+    from Visual studio 12:
+	- fermi_breakup/src/G4FermiFragmentsPool.cc use G4endl to 
+	   end line
+	- photon_evaporation/src/{G4NuclearLevelManager,G4LevelReader}.cc
+	   check pointer !=0, and don't try to convert basic_istream to bool.
+		    
+31 August 2013 Vladimir Ivanchenko (hadr-deex-V09-06-21)
+----------------------------------------------------------
+31 August 2013 Vladimir Ivanchenko (hadr-deex-V09-06-20)
+----------------------------------------------------------
+- G4ContinuumGammaTransition - fixed bug in previous tag
+
+31 August 2013 Vladimir Ivanchenko (hadr-deex-V09-06-19)
+----------------------------------------------------------
+- G4ContinuumGammaTransition - use G4Uniformrand and a simple algorithm 
+    to sample continues gamma transition instead of G4RandGeneralTmp;
+    number of bins for sampling - 100 instead of 200
+- G4RandGeneralTmp - deleted
+
+19 June 2013 Vladimir Ivanchenko (hadr-deex-V09-06-18)
+----------------------------------------------------------
+- G4Evaporation - fixed trivial Coverity report
+
+05 June 2013 Alberto Ribon      (hadr-deex-V09-06-17)
+----------------------------------------------------------
+- G4CompetitiveFission : removed a wrong use of static which caused
+    reproducibility violations.
+
+28 May 2013 Vladimir Ivanchenko (hadr-deex-V09-06-16)
+----------------------------------------------------------
+- G4Evaporation - return back old algorithm to decay light exotic
+    fragments to fix non-reproducibility
+- G4ExcitationHandler - improved comments
+
+22 May 2013 Vladimir Ivanchenko (hadr-deex-V09-06-15)
+----------------------------------------------------------
+- G4PhotonEvaporation - correctly propagate time limit to discrete
+    de-excitation
+
+10 May 2013 Vladimir Ivanchenko (hadr-deex-V09-06-14)
+----------------------------------------------------------
+- G4ExcitationHandler - removed debug printout
+
+08 May 2013 Vladimir Ivanchenko (hadr-deex-V09-06-13)
+----------------------------------------------------------
+- G4ExcitationHandler - added check if an ion exist in isotope table
+- G4Evaporation - added check if ground state residual isotope is in 
+    the ion table
+- G4PhotonEvaporation - change time limit to 1 microsecond to be 
+    coherent with the Geant4 isomere table
+
+06 May 2013 Vladimir Ivanchenko (hadr-deex-V09-06-12)
+----------------------------------------------------------
+- G4ExcitationHandler - used new methods from particle cathegory to
+    find isomere via level index
+
+24 April 2013 Vladimir Ivanchenko (hadr-deex-V09-06-11)
+----------------------------------------------------------
+- G4ShellCorrection, G4PairingCorrection - fixed Coverity defects
+
+22 April 2013 Vladimir Ivanchenko (hadr-deex-V09-06-10)
+----------------------------------------------------------
+- G4ExcitationHandler - (J.M.Quesada) fixed typo in the 
+    SetMaxAForFermiBreakUp method
+
+22 March 2013 Vladimir Ivanchenko (hadr-deex-V09-06-09)
+----------------------------------------------------------
+- G4WilsonAblationModel - fixed typo
+
+22 March 2013 Vladimir Ivanchenko (hadr-deex-V09-06-08)
+----------------------------------------------------------
+- G4Evaporation, G4EvaporationProbability, G4CompetitiveFission,
+  G4FissionBarrier, G4GEMProbability, G4StatMFMacroNucleon,
+  G4StatMFMacroTetraNucleon, G4StatMFMacroTriNucleon,
+  G4ContinuumGammaDeexcitation, G4ContinuumGammaTransition,
+  G4E1Probability, G4E1SingleProbability1, G4PairingCorrection,
+  G4TritonCoulombBarrier - make "const G4double" -> "static const G4double"
+    a little performance improvement is expected, improved readability
+- G4WilsonAblationModel - added warning that the model is not well validated
+
+21 March 2013 Vladimir Ivanchenko (hadr-deex-V09-06-07)
+----------------------------------------------------------
+- G4StatMFParameters, G4FermiFragmentsPool, G4PairingCorrection,
+  G4ShellCorrection are now singletons initilized once and shared 
+    between threads
+- G4CameronGilbertPairingCorrections, G4CameronGilbertShellCorrections,
+  G4CameronShellPlusPairingCorrections, G4CookPairingCorrections,
+  G4CameronTruranHilfPairingCorrections, G4CookShellCorrections,
+  G4CameronTruranHilfShellCorrections  become simple classes (not 
+    singletons anymore), which are keeping static data initialized once
+- G4EvaporationLevelDensityParameter, G4FissionBarrier are modified
+    accordingly 
+
+12 March 2013  Dennis Wright (hadr-deex-V09-06-06)
+--------------------------------------------------
+- fixed MacOS clang compiler warnings: unused private variables _A, _Z
+  removed these from G4DiscreteGammaTransition
+
+8 March 2013 Vladimir Ivanchenko (hadr-deex-V09-06-05)
+----------------------------------------------------------
+- G4UnstableFragmentBreakUp - fixed initialisation
+
+1 March 2013 Andrea Dotti (hadr-deex-V09-06-04)
+----------------------------------------------------------
+- G4RandGeneralTmp.hh - prepared modification for G4MT.
+  No effect (#ifdef protection) for sequential build.
+- G4ExcitationHandler - cleaned up logic to create an excited isomer
+
+14 February 2013 Vladimir Ivanchenko (hadr-deex-V09-06-03)
+----------------------------------------------------------
+- G4StatMFMicroPartition - fixed compillation at Windows
+
+14 February 2013 Vladimir Ivanchenko (hadr-deex-V09-06-02)
+----------------------------------------------------------
+- G4UnstableFragmentBreakUp - removed static and G4ThreadLocal
+- G4StatMF, G4StatMFMicroCanonical, G4StatMFMicroManager, 
+  G4StatMFMicroPartition - use integer Z and A
+- G4VEvaporationChannel - added virtual method GetLifeTime,
+    enumerator G4EvaporationChannelType, which is defined in 
+    constructor of the class; by default 
+    G4EvaporationChannelType = fDelayedEmission
+
+12 February 2013 Vladimir Ivanchenko (hadr-deex-V09-06-01)
+----------------------------------------------------------
+- G4ExcitationHandler - fixed typo in access method name: 
+    GetPhotonEvaporation instead of wrong SetPhotonEvaporation
+
+24 January 2013 Vladimir Ivanchenko (hadr-deex-V09-06-00)
+----------------------------------------------------------
+- G4ExcitationHandler - if FermiBreakUp returns unchanged 
+    fragment then the fragment is decayed by Evaporation instead of
+    PhotonEvaporation to avoid production of non-physical isotopes
+    like (4H)
+
 21 September 2012 Gabriele Cosmo (hadr-deex-V09-05-11)
 ------------------------------------------------------
 - Explicitly use inclusion of headers for system of units and physical

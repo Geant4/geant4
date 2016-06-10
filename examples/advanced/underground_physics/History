@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.23 2010-11-18 17:43:36 allison Exp $
+$Id: History 76281 2013-11-08 12:55:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,44 @@ $Id: History,v 1.23 2010-11-18 17:43:36 allison Exp $
 
                       Category History file
                       ---------------------
+
+07.11.2013 - L. Pandola (DMX-V09-06-08)
+	     Remove dependency from the deprecated LEP and HEP 	
+	     models from Geisha
+
+30.07.2013 - A. Dotti (DMX-V09-06-07)
+             Fixing compilation warnings for clang32:
+             unused private data members
+
+31.05.2013 - L. Pandola (DMX-V09-06-06)
+	     Migrate analysis from the AIDA-based local singleton 
+	     class to the g4analysis tools (no AIDA dependency 
+	     any longer). Clean-up of README and CMakeLists.txt.
+	     Some cosmetics in the code.
+ 
+18.04.2013 - L. Pandola (DMX-V09-06-05)
+	     In DMXMinEkineCuts.cc, migrate calculation of the range 
+             from G4EnergyLossTable (obsolete class) to 
+             G4LossTableManager. This should hopefully fix the problems 
+	     observed in DMX-V09-06-04. Other minor cosmetics.
+
+16.04.2013 - L. Pandola (DMX-V09-06-04)
+	   - Trying to understand the origin of the crashes which 
+	     caused the rejection of DMX-V09-06-03
+
+21.03.2013 - L. Pandola (DMX-V09-06-03)
+	   - Fix compiler warnings (appearing only for some compilers)
+
+13.03.2013 - A. Dotti (DMX-V09-06-02)
+           - New SetEmModel interface used in physics list
+
+18.12.2012 - M.Kelsey (DMX-V09-06-01)
+	   - Migrate hadron-stopping processes
+
+31.10.2012 - A.Howard (DMX-V09-06-00)
+	   - Fixed missing G4SystemOfUnits.hh header
+	   - Fixed Bug 1386 so that auger, fluorescence and PIXE are now
+	     switched on by default
 
 31.10.2012 - L.Pandola (DMX-V09-05-03)
 	   - Fix the CMakeLists.txt file (AIDA optional dependency)

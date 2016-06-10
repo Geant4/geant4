@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ModelColourMap.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Generic variable->G4Colour map, where "variable" is the template
 // parameter.

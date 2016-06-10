@@ -27,9 +27,9 @@
 /// \brief Definition of the Em10DetectorConstruction class
 //
 //
-// $Id$
+// $Id: Em10DetectorConstruction.hh 73033 2013-08-15 09:24:45Z gcosmo $
 //
-// 
+//
 
 #ifndef Em10DetectorConstruction_h
 #define Em10DetectorConstruction_h 1
@@ -54,24 +54,23 @@ class Em10Materials;
 class Em10DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
+
     Em10DetectorConstruction();
    ~Em10DetectorConstruction();
 
   public:
-       
-     
-     void SetAbsorberMaterial (G4String);     
-     void SetAbsorberThickness(G4double);     
-     void SetAbsorberRadius(G4double);                
+
+     void SetAbsorberMaterial (G4String);
+     void SetAbsorberThickness(G4double);
+     void SetAbsorberRadius(G4double);
      void SetAbsorberZpos(G4double);
 
-     void SetRadiatorMaterial (G4String);     
+     void SetRadiatorMaterial (G4String);
      void SetRadiatorThickness(G4double);
  
-     void SetGasGapThickness(G4double);     
-   
-     void SetFoilNumber (G4int    i)  {fFoilNumber = i;  };     
+     void SetGasGapThickness(G4double);
+ 
+     void SetFoilNumber (G4int    i)  {fFoilNumber = i;  };
 
      void SetWorldMaterial(G4String);
      void SetWorldSizeZ(G4double);
@@ -80,54 +79,51 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
 
 
      void SetMagField(G4double);
-     
+
      G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
-     
+
   public:
-  
-     void PrintGeometryParameters(); 
-                    
+
+     void PrintGeometryParameters();
+
      G4Material* GetWorldMaterial()    {return fWorldMaterial;};
-     G4double GetWorldSizeZ()          {return fWorldSizeZ;}; 
+     G4double GetWorldSizeZ()          {return fWorldSizeZ;};
      G4double GetWorldSizeR()          {return fWorldSizeR;};
-     
-     G4double GetAbsorberZpos()        {return fAbsorberZ;}; 
+ 
+     G4double GetAbsorberZpos()        {return fAbsorberZ;};
 
      G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};
-     G4double    GetAbsorberThickness() {return fAbsorberThickness;};      
+     G4double    GetAbsorberThickness() {return fAbsorberThickness;};
      G4double GetAbsorberRadius()       {return fAbsorberRadius;};
-     
-     const G4VPhysicalVolume* GetphysiWorld() {return fPhysicsWorld;};           
+ 
+     const G4VPhysicalVolume* GetphysiWorld() {return fPhysicsWorld;};
      const G4VPhysicalVolume* GetAbsorber()   {return fPhysicsAbsorber;};
      G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;};
 
      G4LogicalVolume* GetLogicalRadiator()    {return fLogicRadiator;};
-     G4double         GetFoilThick()          {return fRadThickness;};      
-     G4double         GetGasThick()           {return fGasGap;};      
-     G4int            GetFoilNumber()         {return fFoilNumber;};      
+     G4double         GetFoilThick()          {return fRadThickness;};
+     G4double         GetGasThick()           {return fGasGap;};
+     G4int            GetFoilNumber()         {return fFoilNumber;};
      G4Material* GetFoilMaterial()  {return fFoilMat;};
      G4Material* GetGasMaterial()  {return fGasMat;};
-      
+ 
 private:
-    
-  G4VPhysicalVolume* ConstructDetectorXTR(); 
 
-    
-  G4VPhysicalVolume* SimpleSetUpALICE();     
-  G4VPhysicalVolume* SetUpALICE06();     
-  G4VPhysicalVolume* SetUpBari05();     
-  G4VPhysicalVolume* SetUpHarris73(); 
-  G4VPhysicalVolume* SetUpWatase86(); 
-  G4VPhysicalVolume* SetUpBarr90(); 
+  G4VPhysicalVolume* ConstructDetectorXTR();
 
+  G4VPhysicalVolume* SimpleSetUpALICE();
+  G4VPhysicalVolume* SetUpALICE06();
+  G4VPhysicalVolume* SetUpBari05();
+  G4VPhysicalVolume* SetUpHarris73();
+  G4VPhysicalVolume* SetUpWatase86();
+  G4VPhysicalVolume* SetUpBarr90();
 
+  void TestOld();
 
-  void TestOld();    
-                
 private:
-     
+
   G4bool             fWorldChanged;
   G4Material*        fAbsorberMaterial;
   G4double           fAbsorberThickness;
@@ -147,27 +143,27 @@ private:
   G4double           fAbsorberZ;
   //  G4double           zstartAbs , zendAbs;
   G4String           fSetUp;
-     
+ 
   G4Material*        fWorldMaterial;
   G4double           fWorldSizeR;
   G4double           fWorldSizeZ;
-            
-  G4Box*             fSolidWorld;    //pointer to the solid World 
+
+  G4Box*             fSolidWorld;    //pointer to the solid World
   G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
   G4VPhysicalVolume* fPhysicsWorld;    //pointer to the physical World
 
   // TR radiator volumes and dimensions
-          
-  G4Box*             fSolidRadSlice;   // pointer to the solid  z-slice 
-  G4LogicalVolume*   fLogicRadSlice;   // pointer to the logical z-slide
-  G4VPhysicalVolume* fPhysicRadSlice;  // pointer to the physical z-slide
+ 
+//  G4Box*             fSolidRadSlice;   // pointer to the solid  z-slice
+//  G4LogicalVolume*   fLogicRadSlice;   // pointer to the logical z-slide
+//  G4VPhysicalVolume* fPhysicRadSlice;  // pointer to the physical z-slide
 
-  G4Box*             fSolidRadRing;    // pointer to the solid  R-slice 
-  G4LogicalVolume*   fLogicRadRing;    // pointer to the logical R-slide
-  G4VPhysicalVolume* fPhysicRadRing;   // pointer to the physical R-slide
+//  G4Box*             fSolidRadRing;    // pointer to the solid  R-slice
+//  G4LogicalVolume*   fLogicRadRing;    // pointer to the logical R-slide
+//  G4VPhysicalVolume* fPhysicRadRing;   // pointer to the physical R-slide
 
   G4Box*             fSolidRadiator;
-  G4LogicalVolume*   fLogicRadiator; 
+  G4LogicalVolume*   fLogicRadiator;
   G4VPhysicalVolume* fPhysicsRadiator;
 
   G4Material* fRadiatorMat;        // pointer to the mixed TR radiator material
@@ -202,24 +198,17 @@ private:
   G4Box*             fSolidAbsorber; //pointer to the solid Absorber
   G4LogicalVolume*   fLogicAbsorber; //pointer to the logical Absorber
   G4VPhysicalVolume* fPhysicsAbsorber; //pointer to the physical Absorber
-     
+ 
   G4UniformMagField* fMagField;      //pointer to the magnetic field
 
   // G4double fElectronCut, fGammaCut, fPositronCut;
-       
+ 
   Em10DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
   Em10CalorimeterSD*     fCalorimeterSD;  //pointer to the sensitive detector
   G4Region*             fRegGasDet;
   G4Region*             fRadRegion;
-  Em10Materials*        fMat;  
+  Em10Materials*        fMat;
 
 };
 
 #endif
-
-
-
-
-
-
-

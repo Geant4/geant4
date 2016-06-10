@@ -138,27 +138,27 @@ G4double G4teoCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 
   else if(fM1Shell == shell) 
     { 
-      res = ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
+      res = ecpssrShellMi->CalculateM1CrossSection(Z, mass, incidentEnergy);
     }
 
   else if(fM2Shell == shell) 
     { 
-      res = ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
+      res = ecpssrShellMi->CalculateM2CrossSection(Z, mass, incidentEnergy);
     }
 
   else if(fM3Shell == shell) 
     { 
-      res = ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
+      res = ecpssrShellMi->CalculateM3CrossSection(Z, mass, incidentEnergy);
     }
 
   else if(fM4Shell == shell) 
     { 
-      res = ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
+      res = ecpssrShellMi->CalculateM4CrossSection(Z, mass, incidentEnergy);
     }
 
   else if(fM5Shell == shell) 
     { 
-      res = ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
+      res = ecpssrShellMi->CalculateM5CrossSection(Z, mass, incidentEnergy);
     }
   return res;
 }

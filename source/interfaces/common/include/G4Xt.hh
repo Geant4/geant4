@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Xt.hh 70601 2013-06-03 11:20:53Z gcosmo $
 //
 //  To unify X11 event treatment between 
 // G4/interfaces Xt sessions and G4/visualizations Xt drivers.
@@ -58,7 +58,9 @@ public:
   void FlushAndWaitExecution();
   virtual ~G4Xt();                     
 private:
-  G4Xt (int,char**,char*);                     
+  G4Xt (const G4Xt&);
+  G4Xt (int,char**,char*);
+  G4Xt& operator= (const G4Xt&);
   static G4Xt* instance; // Pointer to single instance.
 };
 

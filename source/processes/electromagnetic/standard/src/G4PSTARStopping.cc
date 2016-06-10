@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PSTARStopping.cc 76242 2013-11-08 11:09:40Z gcosmo $
 
 //---------------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@ G4PSTARStopping::G4PSTARStopping()
 
 G4PSTARStopping::~G4PSTARStopping()
 {
-  for(size_t i=0; i<74; ++i) { delete sdata[i]; }
+  //for(size_t i=0; i<74; ++i) { delete sdata[i]; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -487,7 +487,7 @@ void G4PSTARStopping::Initialise()
 void G4PSTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
 {
   sdata[idx] = new G4LPhysicsFreeVector(60, ekin[0]*MeV, ekin[59]*MeV);
-  const G4double fac = MeV*cm2/g;
+  static const G4double fac = MeV*cm2/g;
   for(size_t i=0; i<60; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); }
   sdata[idx]->SetSpline(true);
 }

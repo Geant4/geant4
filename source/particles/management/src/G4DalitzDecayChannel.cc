@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DalitzDecayChannel.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -108,18 +108,18 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) G4cout << "G4DalitzDecayChannel::DecayIt ";
 #endif 
-  if (parent == 0) FillParent();  
-  if (daughters == 0) FillDaughters();
+  if (G4MT_parent == 0) FillParent();  
+  if (G4MT_daughters == 0) FillDaughters();
 
   // parent mass
-  G4double parentmass = parent->GetPDGMass();
+  G4double parentmass = G4MT_parent->GetPDGMass();
  
  //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
  
   //daughters'mass
-  G4double leptonmass = daughters[idLepton]->GetPDGMass(); 
+  G4double leptonmass = G4MT_daughters[idLepton]->GetPDGMass(); 
 
  // Generate t ( = std::exp(x):mass Square of (l+ l-) system) 
   G4double xmin  = 2.0*std::log(2.0*leptonmass);
@@ -151,7 +151,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
 
   //create G4DynamicParticle for gamma 
   G4DynamicParticle * gammaparticle
-      = new G4DynamicParticle(daughters[idGamma] , gdirection, Pgamma);
+      = new G4DynamicParticle(G4MT_daughters[idGamma] , gdirection, Pgamma);
 
   // calcurate beta of (l+ l-)system
   G4double beta = Pgamma/(parentmass-Pgamma);
@@ -166,10 +166,10 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   G4ThreeVector ldirection(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
   //create G4DynamicParticle for leptons  in the rest frame of (l+ l-)system
   G4DynamicParticle * leptonparticle 
-    = new G4DynamicParticle(daughters[idLepton] , 
+    = new G4DynamicParticle(G4MT_daughters[idLepton] , 
 			    ldirection, Elepton-leptonmass );
   G4DynamicParticle * antileptonparticle 
-    = new G4DynamicParticle(daughters[idAntiLepton] , 
+    = new G4DynamicParticle(G4MT_daughters[idAntiLepton] , 
 			    -1.0*ldirection, Elepton-leptonmass );
   //boost leptons in the rest frame of the parent 
   G4LorentzVector p4 = leptonparticle->Get4Momentum();

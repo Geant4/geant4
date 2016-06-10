@@ -30,7 +30,7 @@
 
 #include "G4VBasicShell.hh"
 
-typedef void* (*Func_t)(void *);  // for thead function
+typedef void* (*Func_t)(void *);  // for thread function
 
 class G4MPImanager;
 class G4VUIshell;
@@ -46,14 +46,14 @@ public:
   virtual G4int ReceiveG4cerr(const G4String& cerrString);
 
 protected:
-  G4MPImanager* g4MPI;
+  G4MPImanager* g4mpi_;
 
   // MPI node info (cache)
-  G4bool isMaster;
-  G4bool isSlave;
-  G4int rank;
+  G4bool is_master_;
+  G4bool is_slave_;
+  G4int rank_;
 
-  G4int ExecCommand(G4String acommand);
+  G4int ExecCommand(const G4String& acommand);
   G4String TruncateCommand(const G4String& command) const;
   G4String BypassCommand(const G4String& command) const;
 

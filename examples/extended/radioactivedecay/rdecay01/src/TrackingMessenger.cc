@@ -26,7 +26,7 @@
 /// \file radioactivedecay/rdecay01/src/TrackingMessenger.cc
 /// \brief Implementation of the TrackingMessenger class
 //
-// $Id$
+// $Id: TrackingMessenger.cc 68030 2013-03-13 13:51:27Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
-:fTrackingAction(trackA)
+:G4UImessenger(),
+ fTrackingAction(trackA),fTrackingCmd(0)
 {
   fTrackingCmd = new G4UIcmdWithABool("/rdecay01/fullChain",this);
   fTrackingCmd->SetGuidance("allow full decay chain");

@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2011-01-05 18:49:50 vnivanch Exp $
+$Id: History 77657 2013-11-27 08:54:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,54 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-4 Spetember 2012, Ivana Hrivnacova (exampleES2-V09-05-05)
+26 November 2013  Andrea Dotti     (exampleES2-V09-06-12)
+- Bug fixing for MT:
+	- Moving DefineMaterials in constructor of detector construction
+	- Adding SetToBeBroadcasted(false) explicitly to UI commands when needed
+        - Using G4RunManager::ReinitializeGeometry() to trigger geometry-rebuild
+          when changing geometry
+
+20 November 2013  Ivana Hrivnacova (exampleES2-V09-06-11)
+- Fixed typo in previous commit
+
+18 November 2013  Ivana Hrivnacova (exampleES2-V09-06-10)
+- Propagated changes from README in .README
+- In ElectronRun::RecordEvent: call base class to increment numberOfEvent
+
+17 November 2013  Joseph Perl (exampleES2-V09-06-09)
+- Improve README.
+
+12 November 2013  Joseph Perl (exampleES2-V09-06-08)
+- Adjust creation of scorers to fix problem in sequential mode.
+- Also apply some general cleanup.
+
+6 November 2013  Ivana Hrivnacova (exampleES2-V09-06-07)
+- Updated CMake file for added macro.
+
+4 November 2013  Joseph Perl (exampleES2-V09-06-06)
+- Remove spurious directory called "tags". not sure how this got added
+
+4 November 2013  Joseph Perl (exampleES2-V09-06-05)
+- Support multi-threading
+- Add electronScattering2.in for ctest
+
+21 August 2013  V.Ivanchenko (exampleES2-V09-06-04)
+- PhysListEmStandard - removed G4UrbanMscModel95 - use default
+    model
+
+05 June 2013  Ivana Hrivnacova (exampleES2-V09-06-03)
+- Apply coding guidelines (initialization of data members)
+
+28 May 2013  Joseph Perl (exampleES2-V09-06-02)
+- Apply coding guidelines
+
+01 April 2013, Andrea Dotti (exampleES2-V09-06-01)
+- new API for G4MT physics list
+
+19 February 2012, Ivana Hrivnacova (exampleES2-V09-06-00)
+- Used SetEmModel method in physics builders
+
+4 September 2012, Ivana Hrivnacova (exampleES2-V09-05-05)
  - Added CMakeLists.txt:
  - Added .README  
    

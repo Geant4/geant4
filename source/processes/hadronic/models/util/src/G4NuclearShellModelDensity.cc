@@ -30,8 +30,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4int anA, G4int aZ) 
-: theA(anA), theZ(aZ)
+G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4int anA, G4int /*aZ*/) 
+: theA(anA)//, theZ(aZ)
 {
         const G4double r0sq=0.8133*fermi*fermi;
 	theRsquare= r0sq * std::pow(G4double(theA), 2./3. );

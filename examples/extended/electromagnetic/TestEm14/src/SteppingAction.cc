@@ -26,21 +26,20 @@
 /// \file electromagnetic/TestEm14/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 73021 2013-08-15 09:08:39Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(PrimaryGeneratorAction* prim, RunAction* RuAct)
-:fPrimary(prim),fRunAction(RuAct)
+SteppingAction::SteppingAction(RunAction* RuAct)
+:G4UserSteppingAction(),fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +81,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   //secondaries
   //
-  const G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+  const std::vector<const G4Track*>* secondary 
+                                    = aStep->GetSecondaryInCurrentStep();    
   for (size_t lp=0; lp<(*secondary).size(); lp++) {
     G4double charge = (*secondary)[lp]->GetDefinition()->GetPDGCharge();
     if (charge != 0.) { id = 3; } else { id = 5; }

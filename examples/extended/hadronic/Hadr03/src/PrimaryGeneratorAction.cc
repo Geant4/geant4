@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 70759 2013-06-05 12:26:43Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:fDetector(det)                                               
+:G4VUserPrimaryGeneratorAction(),
+ fParticleGun(0), fDetector(det)                                               
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle

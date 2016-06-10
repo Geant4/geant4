@@ -37,58 +37,43 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id$
+// $Id: BrachyPrimaryGeneratorAction.cc 74021 2013-09-19 13:41:54Z gcosmo $
 //
+
 #include "globals.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
-#include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4IonTable.hh"
-#include "G4UImanager.hh"
+#include "G4GeneralParticleSource.hh"
 #include "G4RunManager.hh"
-#include "BrachyFactory.hh"
-#include "BrachyFactoryLeipzig.hh"
-#include "BrachyFactoryIr.hh"
-#include "BrachyFactoryI.hh"
-#include "BrachyPrimaryGeneratorMessenger.hh"
+#include "G4SystemOfUnits.hh"
+#include "BrachyAnalysisManager.hh"
 
-BrachyPrimaryGeneratorAction::BrachyPrimaryGeneratorAction()
+BrachyPrimaryGeneratorAction::BrachyPrimaryGeneratorAction(BrachyAnalysisManager* analysis_manager)
 {
-
- primaryMessenger = new BrachyPrimaryGeneratorMessenger(this);
- // Default source: iridium source 
- factory = new BrachyFactoryIr();
+// Use the GPS to generate primary particles,
+// Particle type, energy position, direction are specified in the 
+// the macro file primary.mac 
+ gun = new G4GeneralParticleSource();
+ analysis = analysis_manager;
 }
 
 BrachyPrimaryGeneratorAction::~BrachyPrimaryGeneratorAction()
 {
- delete factory;
- delete primaryMessenger;
+delete gun;
 }
 
 void BrachyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  factory -> CreatePrimaryGeneratorAction(anEvent);
+  gun -> GeneratePrimaryVertex(anEvent);
+
+#ifdef ANALYSIS_USE
+ if (gun -> GetParticleDefinition()-> GetParticleName()== "gamma")
+ { 
+ G4double energy = gun -> GetParticleEnergy();
+ analysis -> FillPrimaryParticleHistogram(energy);
+}
+#endif 
 }
 
-void BrachyPrimaryGeneratorAction::SwitchEnergy(G4String sourceChoice)
-{
-  G4int flag = 0;
 
-  // Switch the energy spectrum of the photons delivered by the radiative source	
-  if (sourceChoice == "Iodium")
-    {
-      flag=1;
-      if (factory) delete factory;
-    }
-  switch(flag)
-    {
-    case 1:
-      factory = new BrachyFactoryI;
-      break;
-    default:   
-      factory = new BrachyFactoryIr; 
-    }      
-}

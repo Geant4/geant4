@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4CrossSectionDataSetRegistry.cc 73791 2013-09-12 07:55:48Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4CrossSectionFactory.hh"
+#include "G4CrossSectionFactoryRegistry.hh"
 
 // Neeed for running with 'static' libraries to pull the references of the 
 // declared factories
@@ -67,14 +68,16 @@ G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonElasticXS);
 G4_REFERENCE_XS_FACTORY(G4NucleonNuclearCrossSection);
 G4_REFERENCE_XS_FACTORY(G4GlauberGribovCrossSection);
 G4_REFERENCE_XS_FACTORY(G4GGNuclNuclCrossSection);
+G4_REFERENCE_XS_FACTORY(G4ElectroNuclearCrossSection);
+G4_REFERENCE_XS_FACTORY(G4PhotoNuclearCrossSection);
 
 
-G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
+G4ThreadLocal G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
 
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::Instance()
 {
   if(0 == theInstance) {
-    static G4CrossSectionDataSetRegistry manager;
+    static G4ThreadLocal G4CrossSectionDataSetRegistry *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4CrossSectionDataSetRegistry  ;  G4CrossSectionDataSetRegistry &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;
@@ -129,10 +132,10 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
   }
 }
 
-void G4CrossSectionDataSetRegistry::AddFactory(G4String name, G4VBaseXSFactory* factory)
-{
-  factories[name] = factory;
-}
+//void G4CrossSectionDataSetRegistry::AddFactory(G4String name, G4VBaseXSFactory* factory)
+//{
+//  factories[name] = factory;
+//}
 
 G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name, G4bool warning)
 {
@@ -148,18 +151,11 @@ G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(co
     }
   // check if factory exists...
   //
-  if (factories.find(name)!=factories.end())
-    {
-      return factories[name]->Instantiate();
-    }
-  else
-    {
-        if(warning)
-        {
-         G4ExceptionDescription ED;
-         ED << "Factory for ["<< name << "] cross section data set not found." << G4endl;
-         G4Exception("G4CrossSectionDataSetRegistry::GetCrossSectionDataSet", "CrossSection001", FatalException, ED);
-        }
-      return 0;
-    }
+    G4CrossSectionFactoryRegistry* factories = G4CrossSectionFactoryRegistry::Instance();
+    //This thorws if factory is not found, add second parameter to false to avoid this
+    G4VBaseXSFactory* factory = factories->GetFactory(name, warning );
+    if ( factory )
+        return factory->Instantiate();
+    else
+        return static_cast<G4VCrossSectionDataSet*>(0);
 }

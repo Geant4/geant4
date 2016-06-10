@@ -1,12 +1,19 @@
 /control/verbose 1
+/tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
+#### Define the geometry of the I-125 source
 /source/switch Iodium
-/primary/energy Iodium 
+###### Generation of primary field
+#### Generate gamma deriving from radioactive decay
+/control/execute iodine_source_primary.mac
+#### ... or generate radioactive decay of iodine
+#/control/execute iodine_decay.mac
+#
 #
 # Scoring mesh is used to calculate
 #  the energy deposition in the phantom
-/score/create/boxMesh boxMesh_1
+/score/create/boxMesh boxMesh_2
 #
 # the voxels are 1 mm wide.
 /score/mesh/boxSize 15. 15. 15. cm
@@ -17,9 +24,9 @@
 /score/close
 #
 /score/list                                             
-/run/beamOn  10000
+/run/beamOn  1000
 #
 # Dump scores to a file
 #
-/score/dumpQuantityToFile boxMesh_1 eDep EnergyDeposition.out
+/score/dumpQuantityToFile boxMesh_2 eDep EnergyDeposition_iodine.out
 #

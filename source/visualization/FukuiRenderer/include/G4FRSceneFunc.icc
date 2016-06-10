@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FRSceneFunc.icc 77479 2013-11-25 10:01:22Z gcosmo $
 //
 
 #include <CLHEP/Units/PhysicalConstants.h>
@@ -90,25 +90,6 @@ void G4FRSCENEHANDLER::AddPrimitive (const G4Polyline& polyline)
      SendStr( FR_END_POLYLINE );
 
 } // G4FRSCENEHANDLER::AddPrimitive (polyline)
-
-
-//----- Add nurbes
-void G4FRSCENEHANDLER::AddPrimitive (const G4NURBS&)
-{
-		//----- 
-#if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cout << "***** AddPrimitive( G4NURBS )\n";
-#endif
-
-		//----- Initialize DAWN IF NECESSARY
-	FRBeginModeling();
-	
-	///////////////////////////////////////////////
-	// DAWN does not support NUBS visualizaition //
-	///////////////////////////////////////////////
-}
-
 
 
 //----- Add text
@@ -567,11 +548,11 @@ G4FRSCENEHANDLER::AddSolid( const G4Tubs& tubes )
 	}
 
 		//----- parameters
-	const G4double  R    = tubes.GetRMax() ;     // outside radius
-	const G4double  r    = tubes.GetRMin() ;     // inside radius
-	const G4double  dz   = tubes.GetDz  () ;     // half length in z
-  	const G4double  sphi = tubes.GetSPhi() ;     // starting angle
-  	const G4double  dphi = tubes.GetDPhi() ;     // angle width
+	const G4double  R    = tubes.GetOuterRadius() ;  // outside radius
+	const G4double  r    = tubes.GetInnerRadius() ;  // inside radius
+	const G4double  dz   = tubes.GetZHalfLength() ;  // half length in z
+  	const G4double  sphi = tubes.GetStartPhiAngle() ;  // starting angle
+  	const G4double  dphi = tubes.GetDeltaPhiAngle() ;  // angle width
 
 		//----- send coordinates to Fukui Renderer
 	SendTransformedCoordinates();
@@ -610,13 +591,13 @@ G4FRSCENEHANDLER::AddSolid( const G4Cons& cons )
 	}
 
 		//----- parameters
-	const G4double  r1    = cons.GetRmin1() ; // inside radius  at -dz
-	const G4double  R1    = cons.GetRmax1() ; // outside radius at -dz
-	const G4double  r2    = cons.GetRmin2() ; // inside radius  at +dz
-	const G4double  R2    = cons.GetRmax2() ; // outside radius at +dz
-	const G4double  dz    = cons.GetDz  ()  ; // half length in z
-  	const G4double  sphi  = cons.GetSPhi()  ; // starting angle
-  	const G4double  dphi  = cons.GetDPhi()  ; // angle width
+	const G4double  r1    = cons.GetInnerRadiusMinusZ() ; // inside radius  at -dz
+	const G4double  R1    = cons.GetOuterRadiusMinusZ() ; // outside radius at -dz
+	const G4double  r2    = cons.GetInnerRadiusPlusZ() ; // inside radius  at +dz
+	const G4double  R2    = cons.GetOuterRadiusPlusZ() ; // outside radius at +dz
+	const G4double  dz    = cons.GetZHalfLength  ()  ; // half length in z
+  	const G4double  sphi  = cons.GetStartPhiAngle()  ; // starting angle
+  	const G4double  dphi  = cons.GetDeltaPhiAngle()  ; // angle width
 
 		//----- send coordinates to Fukui Renderer
 	SendTransformedCoordinates();
@@ -695,12 +676,12 @@ void G4FRSCENEHANDLER::AddSolid ( const G4Sphere& sphere )
 	}
 
 		//----- parameters
-//	const G4double  rmin    = sphere.GetRmin();
-	const G4double  rmax    = sphere.GetRmax();
-//  	const G4double  sphi    = sphere.GetSPhi();
-  	const G4double  dphi    = sphere.GetDPhi();
-//	const G4double  stheta  = sphere.GetSTheta();
-	const G4double  dtheta  = sphere.GetDTheta();
+//	const G4double  rmin    = sphere.GetInnerRadius();
+	const G4double  rmax    = sphere.GetOuterRadius();
+//  	const G4double  sphi    = sphere.GetStartPhiAngle();
+  	const G4double  dphi    = sphere.GetDeltaPhiAngle();
+//	const G4double  stheta  = sphere.GetStartThetaAngle();
+	const G4double  dtheta  = sphere.GetDeltaThetaAngle();
 
 		//----- send coordinates to Fukui Renderer
 	SendTransformedCoordinates();
@@ -964,11 +945,12 @@ G4FRSCENEHANDLER::SendVisAttributes ( const G4VisAttributes*  pAV )
   } else {
         // Send attributes. Status is "success".
     status = true ;
+    const G4Color& color = pAV->GetColor();
     SendStrDouble3( FR_COLOR_RGB, 
-		    pAV->GetColor().GetRed  (), 
-		    pAV->GetColor().GetGreen(), 
-		    pAV->GetColor().GetBlue () ); 
-    if ( pAV->GetColor().GetAlpha() < ALPHA_MIN ) {
+		    color.GetRed  (), 
+		    color.GetGreen(), 
+		    color.GetBlue () ); 
+    if ( color.GetAlpha() < ALPHA_MIN ) {
       SendStr( FR_FORCE_WIREFRAME_ON ) ;
     } 
     else if ( pAV->IsForceDrawingStyle () &&

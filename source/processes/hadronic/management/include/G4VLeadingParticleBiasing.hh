@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VLeadingParticleBiasing.hh 67989 2013-03-13 10:54:03Z gcosmo $
 //
 // --------------------------------------------------------------------
 #ifndef G4VLeadingParticleBiasing_h

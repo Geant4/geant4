@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # CMakeLists.txt
 # Module : G4gl2ps
-# Package: Geant4.src.G4visualization..G4gl2ps
+# Package: Geant4.src.G4visualization.G4gl2ps
 #
 # CMakeLists.txt for single level library that may be build global or granular
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010-09-29 19:14:00 bmorgan Exp $
+# $Id: CMakeLists.txt 68732 2013-04-05 09:44:10Z gcosmo $
 #
 #------------------------------------------------------------------------------
 

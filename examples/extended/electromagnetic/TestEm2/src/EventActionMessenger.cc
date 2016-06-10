@@ -27,7 +27,7 @@
 /// \brief Implementation of the EventActionMessenger class
 //
 //
-// $Id$
+// $Id: EventActionMessenger.cc 76259 2013-11-08 11:37:28Z gcosmo $
 //
 // 
 
@@ -44,18 +44,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:fEventAction(EvAct)
+:G4UImessenger(),fEventAction(EvAct),
+ fEventDir(0),          
+ fPrintCmd(0)
 {
   fEventDir = new G4UIdirectory("/testem/event/");
   fEventDir->SetGuidance("event control");
-  
-  fDrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
-  fDrawCmd->SetGuidance("Draw the tracks in the event");
-  fDrawCmd->SetGuidance("  Choice : none, charged, all");
-  fDrawCmd->SetParameterName("choice",true);
-  fDrawCmd->SetDefaultValue("all");
-  fDrawCmd->SetCandidates("none charged all");
-  fDrawCmd->AvailableForStates(G4State_Idle);
   
   fPrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
   fPrintCmd->SetGuidance("Print events modulo n");
@@ -68,7 +62,6 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete fDrawCmd;
   delete fPrintCmd;
   delete fEventDir;     
 }
@@ -78,9 +71,6 @@ EventActionMessenger::~EventActionMessenger()
 void EventActionMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
-  if(command == fDrawCmd)
-    {fEventAction->SetDrawFlag(newValue);}
-    
   if(command == fPrintCmd)
     {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}    
    

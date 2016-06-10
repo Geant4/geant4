@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/EventActionMessenger.hh
 /// \brief Definition of the EventActionMessenger class
 //
-// $Id$
+// $Id: EventActionMessenger.hh 76259 2013-11-08 11:37:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,18 +46,17 @@ class G4UIcmdWithAnInteger;
 
 class EventActionMessenger: public G4UImessenger
 {
-  public:
-    EventActionMessenger(EventAction*);
-   ~EventActionMessenger();
+public:
+  EventActionMessenger(EventAction*);
+  virtual ~EventActionMessenger();
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    EventAction*          fEventAction;
+private:
+  EventAction*          fEventAction;
     
-    G4UIdirectory*        fEventDir;          
-    G4UIcmdWithAString*   fDrawCmd;
-    G4UIcmdWithAnInteger* fPrintCmd;
+  G4UIdirectory*        fEventDir;          
+  G4UIcmdWithAnInteger* fPrintCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

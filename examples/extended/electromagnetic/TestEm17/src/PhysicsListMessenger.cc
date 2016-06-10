@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id$
+// $Id: PhysicsListMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:fPhysicsList(pPhys)
+:G4UImessenger(),fPhysicsList(pPhys),
+ fGammaCutCmd(0),
+ fElectCutCmd(0),
+ fProtoCutCmd(0),    
+ fAllCutCmd(0),    
+ fListCmd(0)
 {   
   fGammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
   fGammaCutCmd->SetGuidance("Set gamma cut.");

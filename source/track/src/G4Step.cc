@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Step.cc 68795 2013-04-05 13:24:46Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -159,7 +159,7 @@ G4Step& G4Step::operator=(const G4Step & right)
 G4ThreeVector G4Step::GetDeltaMomentum() const
 /////////////////
 { 
-  static G4bool isFirstTime = true;
+  static G4ThreadLocal G4bool isFirstTime = true;
   if (isFirstTime) {
     isFirstTime = false;
 #ifdef G4VERBOSE
@@ -176,7 +176,7 @@ G4ThreeVector G4Step::GetDeltaMomentum() const
 G4double G4Step::GetDeltaEnergy() const
 /////////////////
 { 
-  static G4bool isFirstTime = true;
+  static G4ThreadLocal G4bool isFirstTime = true;
   if (isFirstTime) {
     isFirstTime = false;
 #ifdef G4VERBOSE

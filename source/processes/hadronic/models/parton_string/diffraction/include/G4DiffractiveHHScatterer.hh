@@ -24,50 +24,42 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DiffractiveHHScatterer.hh 74627 2013-10-17 07:04:38Z gcosmo $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1
+
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
 //      ---------------- G4DiffractiveExcitation --------------
 //             by Gunter Folger, October 1998.
 //      diffractive Excitation used by strings models
-//	Take a projectile and a target
-//	excite the projectile and target
+//      Take a projectile and a target
+//      excite the projectile and target
 // ------------------------------------------------------------
 
 #include "globals.hh"
-class G4DiffractiveExcitation;
-class G4LundStringFragmentation;
-class G4KineticTrack;
 #include "G4KineticTrackVector.hh"
 #include "G4FTFParameters.hh"
 #include "G4ExcitedString.hh"
 
-class G4DiffractiveHHScatterer
-{
-public:
+class G4DiffractiveExcitation;
+class G4LundStringFragmentation;
+class G4KineticTrack;
 
-   G4DiffractiveHHScatterer();
-   virtual ~G4DiffractiveHHScatterer();
 
-//   G4KineticTrackVector * Scatter(const G4KineticTrack & aTrack, const G4KineticTrack & bTrack);
+class G4DiffractiveHHScatterer {
 
-   virtual void CreateStrings() const;
-/*
-                                        (G4VSplitableHadron * aHadron, 
-                                         G4bool isProjectile,
-                                         G4ExcitedString * FirstString, 
-                                         G4ExcitedString * SecondString,
-                                         G4FTFParameters *theParameters) const;
-*/
-private:
+  public:
+    G4DiffractiveHHScatterer();
+    virtual ~G4DiffractiveHHScatterer();
+    virtual void CreateStrings() const;
 
-const G4DiffractiveExcitation * theExcitation;
-G4LundStringFragmentation * theStringFragmentation;
-G4FTFParameters  *theParameters;
+  private:
+    const G4DiffractiveExcitation* theExcitation;
+    G4LundStringFragmentation* theStringFragmentation;
+
 };
 
 #endif

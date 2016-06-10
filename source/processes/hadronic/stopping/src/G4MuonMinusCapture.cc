@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuonMinusCapture.cc 74377 2013-10-04 08:29:54Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -43,7 +43,8 @@
 //  20121003  K. Genser -- Changed the constructor argument type
 //                         Used two argument base constructor
 //  20121016  K. Genser -- Reverting to use one argument base c'tor
-//
+//  20121002  K. Genser -- Replaced G4MuMinusCapturePrecompound with
+//                         G4CascadeInterface (Bertini)
 //------------------------------------------------------------------------
 
 #include "G4MuonMinusCapture.hh"
@@ -51,7 +52,7 @@
 #include "G4MuonMinusBoundDecay.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4MuonMinus.hh"
-#include "G4MuMinusCapturePrecompound.hh"
+#include "G4CascadeInterface.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,7 +61,7 @@ G4MuonMinusCapture::G4MuonMinusCapture(G4HadronicInteraction* hiptr)
 {
   SetBoundDecay(new G4MuonMinusBoundDecay()); // Owned by InteractionRegistry
   if (!hiptr) {
-    hiptr = new G4MuMinusCapturePrecompound(); // Owned by InteractionRegistry
+    hiptr = new G4CascadeInterface(); // Owned by InteractionRegistry
   }
   RegisterMe(hiptr);
 }
@@ -83,7 +84,7 @@ void G4MuonMinusCapture::ProcessDescription(std::ostream& outFile) const
 {
   outFile << "Stopping of mu- using default element selector, EM cascade"
           << " sampling and bound decay sampling.\n"
-	  << "Native PreCompound model is used for nuclear capture\n"; 
+	  << "Bertini model is used for nuclear capture\n"; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

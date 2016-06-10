@@ -207,12 +207,12 @@ class G4NeutronHPVector
   }
   void Dump();
   
-  inline void InitInterpolation(std::ifstream & aDataFile)
+  inline void InitInterpolation(std::istream & aDataFile)
   {
     theManager.Init(aDataFile);
   }
   
-  void Init(std::ifstream & aDataFile, G4int total, G4double ux=1., G4double uy=1.)
+  void Init(std::istream & aDataFile, G4int total, G4double ux=1., G4double uy=1.)
   {
     G4double x,y;
     for (G4int i=0;i<total;i++)
@@ -228,7 +228,7 @@ class G4NeutronHPVector
     }
   }
   
-  void Init(std::ifstream & aDataFile,G4double ux=1., G4double uy=1.)
+  void Init(std::istream & aDataFile,G4double ux=1., G4double uy=1.)
   {
     G4int total;
     aDataFile >> total;

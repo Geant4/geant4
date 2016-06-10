@@ -47,8 +47,12 @@
 #include "IORTMatrix.hh"
 
 /////////////////////////////////////////////////////////////////////////////
+#ifdef G4ANALYSIS_USE_ROOT
 IORTAnalysisFileMessenger::IORTAnalysisFileMessenger(IORTAnalysisManager* amgr)
 :AnalysisManager(amgr)
+#else
+IORTAnalysisFileMessenger::IORTAnalysisFileMessenger()
+#endif
 {  
   secondaryCmd = new G4UIcmdWithABool("/analysis/secondary",this);
   secondaryCmd -> SetParameterName("secondary", true);

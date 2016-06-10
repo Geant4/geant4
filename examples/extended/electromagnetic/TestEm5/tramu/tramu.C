@@ -2,7 +2,7 @@
    gROOT->Reset();
 
    // Draw histograms fill by Geant4 TestEm5 simulation
-   TFile f1("./local.root");
+   TFile f1("./opt3.root");
    TH1D* h1 = (TH1D*) f1.Get("10");
    h1->SetTitle("1 TeV muon in 3 m iron : kinetic energy at exit (GeV)");
    h1->GetXaxis()->SetTitle("Ekine (GeV)");

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4HEPEvtInterface.cc 70215 2013-05-27 07:27:49Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -40,11 +40,13 @@
 #include "G4HEPEvtParticle.hh"
 #include "G4Event.hh"
 
-G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
+G4HEPEvtInterface::G4HEPEvtInterface(const char* evfile, G4int vl)
+:vLevel(vl)
 {
-  inputFile.open(evfile);
-  if (inputFile) {
+  inputFile.open((char*)evfile);
+  if (inputFile.is_open()) {
     fileName = evfile;
+    if(vl>0) G4cout << "G4HEPEvtInterface - " << fileName << " is open." << G4endl;
   }
   else {
     G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
@@ -55,12 +57,12 @@ G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
   particle_time = 0.0;
 
 }
-
+/*************************************
 G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
 {
   const char* fn = evfile.data();
   inputFile.open((char*)fn);
-  if (inputFile) {
+  if (inputFile.is_open()) {
     fileName = evfile;
   }
   else {
@@ -71,14 +73,20 @@ G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
   particle_position = zero;
   particle_time = 0.0;
 }
-
+**************************************/
 G4HEPEvtInterface::~G4HEPEvtInterface()
 {;}
 
 void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
 {
-  G4int NHEP;  // number of entries
-  inputFile >> NHEP;
+  G4int NHEP = 0;  // number of entries
+  if (inputFile.is_open()) {
+    inputFile >> NHEP;
+  }
+  else {
+    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
+    "G4HEPEvtInterface:: cannot open file.");
+  }
   if( inputFile.eof() ) 
   {
     G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0202",
@@ -86,6 +94,11 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
     return;
   }
 
+  if(vLevel > 0)
+  {
+    G4cout << "G4HEPEvtInterface - reading " << NHEP << " HEPEvt particles from "
+           << fileName << "." << G4endl;
+  }
   for( G4int IHEP=0; IHEP<NHEP; IHEP++ )
   {
     G4int ISTHEP;   // status code
@@ -99,6 +112,17 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
 
     inputFile >> ISTHEP >> IDHEP >> JDAHEP1 >> JDAHEP2
        >> PHEP1 >> PHEP2 >> PHEP3 >> PHEP5;
+    if( inputFile.eof() ) 
+    {
+      G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0202",
+        FatalException,"Unexpected End-Of-File : HEPEvt input file");
+    }
+    if(vLevel > 1)
+    {
+      G4cout << " " << ISTHEP << " " << IDHEP << " " << JDAHEP1 << " " << JDAHEP2
+             << " " << PHEP1 << " " << PHEP2 << " " << PHEP3 << " " << PHEP5
+             << G4endl;
+    }
 
     // create G4PrimaryParticle object
     G4PrimaryParticle* particle 

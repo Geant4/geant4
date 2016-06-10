@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AttDefT.hh 66376 2012-12-18 09:42:59Z gcosmo $
 //
 // Templated G4AttDef. Generates type key for given template parameter.
 //

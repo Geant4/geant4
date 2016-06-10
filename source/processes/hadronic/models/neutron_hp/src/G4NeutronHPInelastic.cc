@@ -32,7 +32,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id$
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard (and T. Koi)
 // 081203 limit maximum trial for creating final states add protection for 1H isotope case by T. Koi
@@ -48,7 +47,12 @@
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
 
-    G4int istatus = system("echo $G4NEUTRONHPDATA");
+    G4int istatus; 
+#if defined WIN32-VC
+    istatus = system("echo %G4NEUTRONHPDATA%");
+#else
+    istatus = system("echo $G4NEUTRONHPDATA");
+#endif
     if ( istatus < 0 )
     {
       G4cout << "Warning! system(\"echo $G4NEUTRONHPDATA\") returns error value at G4NeutronHPInelastic" << G4endl;
@@ -324,4 +328,13 @@ void G4NeutronHPInelastic::addChannelForNewElement()
    }
 
    numEle = (G4int)G4Element::GetNumberOfElements();
+}
+
+G4int G4NeutronHPInelastic::GetVerboseLevel() const
+{
+   return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+}
+void G4NeutronHPInelastic::SetVerboseLevel( G4int newValue ) 
+{
+   G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
 }

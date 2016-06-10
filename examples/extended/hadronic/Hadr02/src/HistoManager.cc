@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -169,17 +169,20 @@ void HistoManager::BookHisto()
   fHisto->Add1D("7","Log10 Energy (GeV) of pi0",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("8","Log10 Energy (GeV) of charged kaons",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("9","Log10 Energy (GeV) of neutral kaons",fNBinsE,-4.,6.,1.0);
-  fHisto->Add1D("10","Log10 Energy (GeV) of deuterons and tritons",fNBinsE,-5.,5.,1.0);
+  fHisto->Add1D("10","Log10 Energy (GeV) of deuterons and tritons",
+                fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("11","Log10 Energy (GeV) of He3 and alpha",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("12","Log10 Energy (GeV) of Generic Ions",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("13","Log10 Energy (GeV) of muons",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("14","Log10 Energy (GeV) of pi+",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("15","Log10 Energy (GeV) of pi-",fNBinsE,-4.,6.,1.0);
-  fHisto->Add1D("16","X Section (mb) of Secondary Fragments Z with E>1 GeV (mb)",25,0.5,25.5,1.0);
+  fHisto->Add1D("16","X Section (mb) of Secondary Fragments Z with E>1 GeV (mb)"
+                ,25,0.5,25.5,1.0);
   fHisto->Add1D("17","Secondary Fragment A E>1 GeV",50,0.5,50.5,1.0);
   fHisto->Add1D("18","Secondary Fragment Z E<1 GeV",25,0.5,25.5,1.0);
   fHisto->Add1D("19","Secondary Fragment A E<1 GeV",50,0.5,50.5,1.0);
-  fHisto->Add1D("20","X Section (mb) of Secondary Fragments Z (mb) ",25,0.5,25.5,1.0);
+  fHisto->Add1D("20","X Section (mb) of Secondary Fragments Z (mb) ",
+                25,0.5,25.5,1.0);
   fHisto->Add1D("21","Secondary Fragment A ",50,0.5,50.5,1.0);
 }
 
@@ -235,23 +238,39 @@ void HistoManager::EndOfRun()
                                  << fPrimaryDef->GetParticleName() <<G4endl;
   G4cout                         << "Beam Energy(GeV)                     " 
                                  << fPrimaryKineticEnergy/GeV <<G4endl;
-  G4cout                         << "Number of events                     " << fNevt <<G4endl;
-  G4cout << std::setprecision(4) << "Average energy deposit (GeV)         " << fEdepSum/GeV 
+  G4cout                         << "Number of events                     " 
+         << fNevt <<G4endl;
+  G4cout << std::setprecision(4) << "Average energy deposit (GeV)         " 
+ << fEdepSum/GeV 
          << "   RMS(GeV) " << fEdepSum2/GeV << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps              " << xs << G4endl;
-  G4cout << std::setprecision(4) << "Average number of gamma              " << xg << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e-                 " << xe << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e+                 " << xp << G4endl;
-  G4cout << std::setprecision(4) << "Average number of neutrons           " << xn << G4endl;
-  G4cout << std::setprecision(4) << "Average number of protons            " << xpn << G4endl;
-  G4cout << std::setprecision(4) << "Average number of antiprotons        " << xap << G4endl;
-  G4cout << std::setprecision(4) << "Average number of pi+ & pi-          " << xpc << G4endl;
-  G4cout << std::setprecision(4) << "Average number of pi0                " << xp0 << G4endl;
-  G4cout << std::setprecision(4) << "Average number of kaons              " << xpk << G4endl;
-  G4cout << std::setprecision(4) << "Average number of muons              " << xpm << G4endl;
-  G4cout << std::setprecision(4) << "Average number of deuterons+tritons  " << xid << G4endl;
-  G4cout << std::setprecision(4) << "Average number of He3+alpha          " << xia << G4endl;
-  G4cout << std::setprecision(4) << "Average number of ions               " << xio << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps              " 
+ << xs << G4endl;
+  G4cout << std::setprecision(4) << "Average number of gamma              " 
+ << xg << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e-                 " 
+ << xe << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e+                 " 
+ << xp << G4endl;
+  G4cout << std::setprecision(4) << "Average number of neutrons           " 
+ << xn << G4endl;
+  G4cout << std::setprecision(4) << "Average number of protons            " 
+ << xpn << G4endl;
+  G4cout << std::setprecision(4) << "Average number of antiprotons        " 
+ << xap << G4endl;
+  G4cout << std::setprecision(4) << "Average number of pi+ & pi-          " 
+ << xpc << G4endl;
+  G4cout << std::setprecision(4) << "Average number of pi0                " 
+ << xp0 << G4endl;
+  G4cout << std::setprecision(4) << "Average number of kaons              " 
+ << xpk << G4endl;
+  G4cout << std::setprecision(4) << "Average number of muons              " 
+ << xpm << G4endl;
+  G4cout << std::setprecision(4) << "Average number of deuterons+tritons  " 
+ << xid << G4endl;
+  G4cout << std::setprecision(4) << "Average number of He3+alpha          " 
+ << xia << G4endl;
+  G4cout << std::setprecision(4) << "Average number of ions               " 
+ << xio << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
@@ -348,10 +367,12 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     } else if ( pd == G4PionZero::PionZero()) {
       fNpi0++;
       fHisto->Fill(7,e,1.0);
-    } else if ( pd == G4KaonPlus::KaonPlus() || pd == G4KaonMinus::KaonMinus()) {
+    } else if ( pd == G4KaonPlus::KaonPlus() || 
+pd == G4KaonMinus::KaonMinus()) {
       fNkaons++;
       fHisto->Fill(8,e,1.0);
-    } else if ( pd == G4KaonZeroShort::KaonZeroShort() || pd == G4KaonZeroLong::KaonZeroLong()) {
+    } else if ( pd == G4KaonZeroShort::KaonZeroShort() || 
+pd == G4KaonZeroLong::KaonZeroLong()) {
       fNkaons++;
       fHisto->Fill(9,e,1.0);
     } else if ( pd == G4Deuteron::Deuteron() || pd == G4Triton::Triton()) {
@@ -374,7 +395,8 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       }
       fHisto->Fill(20,Z,1.0);
       fHisto->Fill(21,A,1.0);
-    } else if ( pd == G4MuonPlus::MuonPlus() || pd == G4MuonMinus::MuonMinus()) {
+    } else if ( pd == G4MuonPlus::MuonPlus() || 
+pd == G4MuonMinus::MuonMinus()) {
       fNmuons++;
       fHisto->Fill(13,e,1.0);    
     }

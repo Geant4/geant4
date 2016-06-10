@@ -23,22 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXe.cc 77782 2013-11-28 08:12:12Z gcosmo $
+//
 /// \file optical/LXe/LXe.cc
 /// \brief Main program of the optical/LXe example
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "G4String.hh"
 
-#include "LXeDetectorConstruction.hh"
 #include "LXePhysicsList.hh"
-#include "LXePrimaryGeneratorAction.hh"
-#include "LXeEventAction.hh"
-#include "LXeStackingAction.hh"
-#include "LXeSteppingAction.hh"
-#include "LXeTrackingAction.hh"
-#include "LXeRunAction.hh"
-#include "LXeSteppingVerbose.hh"
+#include "LXeDetectorConstruction.hh"
+
+#include "LXeActionInitialization.hh"
 
 #include "LXeRecorderBase.hh"
 
@@ -50,29 +54,29 @@
 #include "G4UIExecutive.hh"
 #endif
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int main(int argc, char** argv)
 {
-  G4VSteppingVerbose::SetInstance(new LXeSteppingVerbose);
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+#else
+  G4RunManager * runManager = new G4RunManager;
+#endif
 
-  G4RunManager* runManager = new G4RunManager;
+  runManager->SetUserInitialization(new LXeDetectorConstruction());
+  runManager->SetUserInitialization(new LXePhysicsList());
 
-  runManager->SetUserInitialization(new LXeDetectorConstruction);
-  runManager->SetUserInitialization(new LXePhysicsList);
+  LXeRecorderBase* recorder = NULL; //No recording is done in this example
+
+  runManager->SetUserInitialization(new LXeActionInitialization(recorder));
 
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 #endif
-
-  LXeRecorderBase* recorder = NULL;//No recording is done in this example
-
-  runManager->SetUserAction(new LXePrimaryGeneratorAction);
-  runManager->SetUserAction(new LXeStackingAction);
-
-  runManager->SetUserAction(new LXeRunAction(recorder));
-  runManager->SetUserAction(new LXeEventAction(recorder));
-  runManager->SetUserAction(new LXeTrackingAction(recorder));
-  runManager->SetUserAction(new LXeSteppingAction(recorder));
 
   // runManager->Initialize();
  
@@ -85,6 +89,8 @@ int main(int argc, char** argv)
 #ifdef G4VIS_USE
     UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
+    if (ui->IsGUI())
+       UImanager->ApplyCommand("/control/execute gui.mac");
     ui->SessionStart();
     delete ui;
 #endif
@@ -95,7 +101,7 @@ int main(int argc, char** argv)
     UImanager->ApplyCommand(command+filename);
   }
 
-  if(recorder)delete recorder;
+//  if(recorder)delete recorder;
 
 #ifdef G4VIS_USE
   delete visManager;
@@ -105,3 +111,5 @@ int main(int argc, char** argv)
   delete runManager;
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

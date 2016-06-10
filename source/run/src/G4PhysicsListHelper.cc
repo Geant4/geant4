@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsListHelper.cc 74308 2013-10-03 06:39:14Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include <fstream>
 
 ////////////////////////////////////////////////////////
-G4PhysicsListHelper* G4PhysicsListHelper::pPLHelper = 0;
+G4ThreadLocal G4PhysicsListHelper* G4PhysicsListHelper::pPLHelper = 0;
  
 ////////////////////////////////////////////////////////
 G4PhysicsListHelper::G4PhysicsListHelper()
@@ -59,7 +59,7 @@ G4PhysicsListHelper::G4PhysicsListHelper()
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
-  theParticleIterator = theParticleTable->GetIterator();
+  aParticleIterator = theParticleTable->GetIterator();
 
   ReadOrdingParameterTable();
 
@@ -88,8 +88,10 @@ G4PhysicsListHelper::~G4PhysicsListHelper()
 ////////////////////////////////////////////////////////
 G4PhysicsListHelper* G4PhysicsListHelper::GetPhysicsListHelper()  
 {
-  static G4PhysicsListHelper thePLHelper;
-  if (pPLHelper == 0) pPLHelper = &thePLHelper;
+  if (!pPLHelper)
+  {
+    pPLHelper = new G4PhysicsListHelper;
+  }
   return pPLHelper;
 }
 
@@ -106,9 +108,9 @@ void G4PhysicsListHelper::CheckParticleList() const
   bool isEmProc   = false;
 
   // loop over all particles in G4ParticleTable
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String name = particle->GetParticleName();
     // check if any EM process exists
     if (!isEmProc) {
@@ -231,9 +233,9 @@ void G4PhysicsListHelper::AddTransportation()
   }
  
   // loop over all particles in G4ParticleTable
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     // Add transportation process for all particles 
     if ( pmanager == 0) {
@@ -250,6 +252,9 @@ void G4PhysicsListHelper::AddTransportation()
 		  "No process manager");
       continue;
     } 
+    // Molecule use different type transportation
+    if(particle->GetParticleType() == "Molecule") continue; 
+
     // add transportation with ordering = ( -1, "first", "first" )
     pmanager ->AddProcess(theTransportationProcess);
     pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxAlongStep);
@@ -920,8 +925,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processType     = 1;
   tmp.processSubType  = 61;
   tmp.ordering[0]     = -1;
-  tmp.ordering[1]     = -1; 
-  tmp.ordering[2]     = -1;
+  tmp.ordering[1]     = 0; 
+  tmp.ordering[2]     = 0;
   tmp.isDuplicable =  false;
   theTable->push_back(tmp);
   sizeOfTable +=1;

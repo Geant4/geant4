@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NavigationLogger.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4NavigationLogger Implementation
@@ -103,7 +103,7 @@ G4NavigationLogger::PreComputeStepLog(const G4VPhysicalVolume* motherPhysical,
     //
     if ( fVerbose > 1 )
     {
-      static G4int precVerf= 20;  // Precision 
+      static G4ThreadLocal G4int precVerf= 20;  // Precision 
       G4int oldprec = G4cout.precision(precVerf);
       G4cout << " - Information on mother / key daughters ..." << G4endl;
       G4cout << "  Type   " << std::setw(12) << "Solid-Name"   << " " 
@@ -223,7 +223,7 @@ G4NavigationLogger::AlongComputeStepLog(const G4VSolid* sampleSolid,
     //
     if ( fVerbose > 1 )
     {
-      static G4int precVerf= 20;  // Precision 
+      static G4ThreadLocal G4int precVerf= 20;  // Precision 
       G4int oldprec = G4cout.precision(precVerf);
       G4cout << "Daughter "
              << std::setw(12)         << sampleSolid->GetName() << " "
@@ -272,7 +272,7 @@ G4NavigationLogger::PostComputeStepLog(const G4VSolid* motherSolid,
   }
   if ( fVerbose > 1 )
   {
-    static G4int precVerf= 20;  // Precision 
+    static G4ThreadLocal G4int precVerf= 20;  // Precision 
     G4int oldprec = G4cout.precision(precVerf);
     G4cout << "  Mother " << std::setw(12) << motherSolid->GetName() << " "
            << std::setw(4+precVerf)       << localPoint   << " "

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PSSphereSurfaceFlux.cc 76272 2013-11-08 11:53:00Z gcosmo $
 //
 // G4PSSphereSurfaceFlux
 #include "G4PSSphereSurfaceFlux.hh"
@@ -131,7 +131,7 @@ G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 			      +localdir.z()*localpos1.z())
 	/std::sqrt(localdirL2)/std::sqrt(localR2);
 
-      G4double radi   = sphereSolid->GetInsideRadius();
+      G4double radi   = sphereSolid->GetInnerRadius();
       G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
       G4double stth   = sphereSolid->GetStartThetaAngle()/radian;
       G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
@@ -168,7 +168,7 @@ G4int G4PSSphereSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSo
     //G4double InsideRadius2 = 
     //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
     //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
-    G4double InsideRadius = sphereSolid->GetInsideRadius();
+    G4double InsideRadius = sphereSolid->GetInnerRadius();
     if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
 	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_In;
@@ -186,7 +186,7 @@ G4int G4PSSphereSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSo
     //G4double InsideRadius2 = 
     //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
     //if(std::facb(localR2 - InsideRadius2) ) < kCarTolerance ){
-    G4double InsideRadius = sphereSolid->GetInsideRadius();
+    G4double InsideRadius = sphereSolid->GetInnerRadius();
     if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
 	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_Out;

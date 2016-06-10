@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F05DetectorConstruction.cc 75672 2013-11-05 08:47:41Z gcosmo $
+//
 /// \file field/field05/src/F05DetectorConstruction.cc
 /// \brief Implementation of the F05DetectorConstruction class
 //
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,25 +54,32 @@
 
 #include "F05Field.hh"
 
-#include "G4RunManager.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+
+//#include "G4RepleteEofM.hh"
+#include "G4EqEMFieldWithSpin.hh"
+
+#include "G4ClassicalRK4.hh"
+#include "G4MagIntegratorStepper.hh"
+#include "G4ChordFinder.hh"
+#include "G4PropagatorInField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05DetectorConstruction::F05DetectorConstruction()
- : Vacuum(0), field(0)
+ : fVacuum(0), fWorldSizeXY(0), fWorldSizeZ(0), 
+   fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0)
 {
   // materials
   DefineMaterials();
-
-  // ensure the global field is initialized
-  field = new F05Field();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05DetectorConstruction::~F05DetectorConstruction()
 {
-  delete field;
+  if (fField) delete fField;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +88,7 @@ void F05DetectorConstruction::DefineMaterials()
 {
   G4NistManager* nistMan = G4NistManager::Instance();
 
-  Vacuum = nistMan->FindOrBuildMaterial("G4_Galactic");
+  fVacuum = nistMan->FindOrBuildMaterial("G4_Galactic");
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -91,42 +97,96 @@ void F05DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* F05DetectorConstruction::Construct()
 {
-  //     
+  //
   // World
   //
 
-  WorldSizeXY = 20.0*m;
-  WorldSizeZ  =  1.0*mm;
+  fWorldSizeXY = 20.0*m;
+  fWorldSizeZ  =  1.0*mm;
 
-  solidWorld = new G4Box("World",                            //its name
-                   WorldSizeXY/2,WorldSizeXY/2,WorldSizeZ/2);//its size
-                         
-  logicWorld = new G4LogicalVolume(solidWorld,          //its solid
-                                   Vacuum,              //its material
-                                   "World");            //its name
-                                   
-  physiWorld = new G4PVPlacement(0,                     //no rotation
-                                 G4ThreeVector(),       //at (0,0,0)
-                                 logicWorld,            //its logical volume
-                                 "World",               //its name
-                                 0,                     //its mother  volume
-                                 false,                 //no boolean operation
-                                 0);                    //copy number
+  fSolidWorld = new G4Box("World",                               //its name
+                   fWorldSizeXY/2,fWorldSizeXY/2,fWorldSizeZ/2); //its size
+ 
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,        //its solid
+                                    fVacuum,            //its material
+                                    "World");           //its name
+ 
+  fPhysiWorld = new G4PVPlacement(0,                    //no rotation
+                                  G4ThreeVector(),      //at (0,0,0)
+                                  fLogicWorld,          //its logical volume
+                                  "World",              //its name
+                                  0,                    //its mother  volume
+                                  false,                //no boolean operation
+                                  0);                   //copy number
   
   G4UserLimits* stepLimit;
-  stepLimit = new  G4UserLimits(5*mm);
+  stepLimit = new G4UserLimits(5*mm);
 
-  logicWorld->SetUserLimits(stepLimit);
+  fLogicWorld->SetUserLimits(stepLimit);
  
-  //                                        
+  //
   // Visualization attributes
   //
-  // logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+  // fLogicWorld->SetVisAttributes (G4VisAttributes::Invisible);
 
   //
   //always return the physical World
   //
-  return physiWorld;
+  return fPhysiWorld;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal F05Field* F05DetectorConstruction::fField = 0;
+
+void F05DetectorConstruction::ConstructSDandField()
+
+{
+  if (!fField) {
+
+     fField = new F05Field();
+
+//     G4RepleteEofM* equation = new G4RepleteEofM(fField);
+     G4EqEMFieldWithSpin* equation = new G4EqEMFieldWithSpin(fField);
+//     equation->SetBField();
+//     equation->SetEField();
+//     equation->SetSpin();
+
+     G4FieldManager* fieldManager
+      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+     fieldManager->SetDetectorField(fField);
+
+     G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,12);
+
+     G4double minStep           = 0.01*mm;
+
+     G4ChordFinder* chordFinder =
+                    new G4ChordFinder((G4MagneticField*)fField,minStep,stepper);
+
+     // Set accuracy parameters
+     G4double deltaChord        = 3.0*mm;
+     chordFinder->SetDeltaChord( deltaChord );
+
+     G4double deltaOneStep      = 0.01*mm;
+     fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+
+     G4double deltaIntersection = 0.1*mm;
+     fieldManager->SetDeltaIntersection(deltaIntersection);
+
+     G4TransportationManager* transportManager =
+                           G4TransportationManager::GetTransportationManager();
+
+     G4PropagatorInField* fieldPropagator =
+                                      transportManager->GetPropagatorInField();
+
+     G4double epsMin            = 2.5e-7*mm;
+     G4double epsMax            = 0.05*mm;
+
+     fieldPropagator->SetMinimumEpsilonStep(epsMin);
+     fieldPropagator->SetMaximumEpsilonStep(epsMax);
+
+     fieldManager->SetChordFinder(chordFinder);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

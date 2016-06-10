@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EquationOfMotion.hh 71664 2013-06-20 08:36:05Z gcosmo $
 //
 //
 // class G4EquationOfMotion
@@ -44,6 +44,8 @@
 #include "G4Types.hh"      // "globals.hh"
 #include "G4Field.hh"   // required in inline method implementations
 
+#include "G4ChargeState.hh"
+
 class G4EquationOfMotion 
 {
   public:  // with description
@@ -61,7 +63,7 @@ class G4EquationOfMotion
        // This is the _only_ function a subclass must define.
        // The other two functions use Rhs_givenB.
 
-     virtual void SetChargeMomentumMass(G4double particleCharge, // in e+ units
+     virtual void SetChargeMomentumMass(G4ChargeState particleCharge,
                                         G4double MomentumXc,
                                         G4double MassXc2) = 0;
        // Set the charge, momentum and mass of the current particle
@@ -90,8 +92,8 @@ class G4EquationOfMotion
      void           SetFieldObj(G4Field* pField);
 
   private:
-     // static const int G4maximum_number_of_field_components = 16;
-     enum { G4maximum_number_of_field_components = 16 } ;
+     // const int G4maximum_number_of_field_components = 24;
+     enum { G4maximum_number_of_field_components = 24 } ;
 
      G4Field *itsField;
 

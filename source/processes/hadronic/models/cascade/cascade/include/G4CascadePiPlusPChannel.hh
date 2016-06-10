@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadePiPlusPChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
 
 #ifndef G4_CASCADE_PIPLUSP_CHANNEL_HH
 #define G4_CASCADE_PIPLUSP_CHANNEL_HH
@@ -34,7 +34,7 @@
 
 struct G4CascadePiPlusPChannelData {
   typedef G4CascadeData<30,2,7,15,24,5,6,7,8> data_t;
-  static data_t data;
+  static const data_t data;
 };
 
 typedef G4CascadeFunctions<G4CascadePiPlusPChannelData,G4PionNucSampler> G4CascadePiPlusPChannel;

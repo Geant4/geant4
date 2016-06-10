@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: P6DPhysicsList.cc 78019 2013-12-02 15:52:19Z gcosmo $
 // 
 /// \file eventgenerator/pythia/decayer6/src/P6DPhysicsList.cc
 /// \brief Implementation of the P6DPhysicsList class
@@ -38,6 +38,9 @@
 #include "G4BosonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+
+#include "G4Decay.hh"
+#include "G4Pythia6Decayer.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -158,7 +161,7 @@ void P6DPhysicsList::ConstructEM()
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3" )     {
+               particleName == "He3" )     {
       //alpha 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
@@ -169,8 +172,8 @@ void P6DPhysicsList::ConstructEM()
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);     
       
       } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+                 (particle->GetPDGCharge() != 0.0) && 
+                 (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,        -1, 2, 2);        
@@ -179,9 +182,6 @@ void P6DPhysicsList::ConstructEM()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Decay.hh"
-#include "G4Pythia6Decayer.hh"
 
 void P6DPhysicsList::ConstructDecay()
 {

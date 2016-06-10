@@ -23,22 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4CameronTruranHilfShellCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4CameronTruranHilfShellCorrections.hh"
-
+#include <CLHEP/Units/SystemOfUnits.h>
 
 // Data comes from:
 // J.W. Truran, A.G.W. Cameron, and E. Hilf, 
 // Proc. Int. Conf. on the Properties of Nuclei Far From the Beta-Stability,
 // Leysin, Switzerland, August 31 - September 4, 1970, Vol.1, p. 275
 // S(Z)
-const G4double G4CameronTruranHilfShellCorrections::ShellZTable
-[G4CameronTruranHilfShellCorrections::ZTableSize] = { // 93 from Z = 10 to Z = 102
+G4double G4CameronTruranHilfShellCorrections::ShellZTable[] = 
+{ // 93 from Z = 10 to Z = 102
  2.349, 1.936, 1.596, 1.061, 0.341,-0.040, 0.565, 1.065, 1.536,
  1.972, 1.855, 2.043, 1.931, 1.652, 1.347, 0.973, 0.579, 0.159,
 -0.487,-0.192, 0.443, 0.932, 1.387, 1.810, 1.969, 2.067, 2.064,
@@ -52,8 +54,8 @@ const G4double G4CameronTruranHilfShellCorrections::ShellZTable
 -2.846,-3.499,-3.042  
 };
 // S(N)
-const G4double G4CameronTruranHilfShellCorrections::ShellNTable
-[G4CameronTruranHilfShellCorrections::NTableSize] = { // 146 from N = 10 to N = 155
+G4double G4CameronTruranHilfShellCorrections::ShellNTable[] = 
+{ // 146 from N = 10 to N = 155
  2.439, 1.829, 1.419, 0.746,-0.082,-0.832,-0.960,-1.006,-1.045,
 -1.114,-0.900,-0.081, 0.334, 0.064,-0.639,-1.363,-2.138,-2.987,
 -4.042,-4.001,-3.582,-3.120,-2.677,-2.259,-1.778,-1.315,-0.944,
@@ -73,20 +75,11 @@ const G4double G4CameronTruranHilfShellCorrections::ShellNTable
  2.621, 3.096
 };
 
-G4CameronTruranHilfShellCorrections* G4CameronTruranHilfShellCorrections::theInstance = 0;
-
-
 G4CameronTruranHilfShellCorrections::G4CameronTruranHilfShellCorrections()
-{;}
+{
+  for(size_t i=0; i<ZTableSize; ++i) { ShellZTable[i] *= CLHEP::MeV; }
+  for(size_t i=0; i<NTableSize; ++i) { ShellNTable[i] *= CLHEP::MeV; }
+}
 
 G4CameronTruranHilfShellCorrections::~G4CameronTruranHilfShellCorrections()
-{;}
-
-G4CameronTruranHilfShellCorrections* G4CameronTruranHilfShellCorrections::GetInstance()
-{
-  if (!theInstance)  { 
-    static G4CameronTruranHilfShellCorrections theCorrections;
-    theInstance = &theCorrections; 
-  }
-  return theInstance;
-}
+{}

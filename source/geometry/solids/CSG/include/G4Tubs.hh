@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Tubs.hh 76263 2013-11-08 11:41:52Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -65,9 +65,17 @@
 // 19.07.96 J.Allison: G4GraphicsScene - see G4Box
 // 22.07.96 J.Allison: Changed SendPolyhedronTo to CreatePolyhedron
 // --------------------------------------------------------------------
-
 #ifndef G4TUBS_HH
 #define G4TUBS_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UTUBS 1
+#endif
+
+#if defined(G4GEOM_USE_UTUBS)
+  #define G4UTubs G4Tubs
+  #include "G4UTubs.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -143,7 +151,6 @@ class G4Tubs : public G4CSGSolid
 
     void                DescribeYourselfTo ( G4VGraphicsScene& scene ) const;
     G4Polyhedron*       CreatePolyhedron   () const;
-    G4NURBS*            CreateNURBS        () const;
 
   public:  // without description
 
@@ -218,8 +225,14 @@ class G4Tubs : public G4CSGSolid
     G4bool fPhiFullTube;
       //
       // Flag for identification of section or full tube
+
+    G4double halfCarTolerance, halfRadTolerance, halfAngTolerance;
+      //
+      // Cached half tolerance values
 };
 
 #include "G4Tubs.icc"
+
+#endif
 
 #endif

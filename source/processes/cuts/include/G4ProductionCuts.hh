@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProductionCuts.hh 70369 2013-05-29 14:59:24Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -114,11 +114,11 @@ class G4ProductionCuts
   G4bool                          isModified;
 
   private:
-  static const G4ParticleDefinition* gammaDef;
-  static const G4ParticleDefinition* electDef;
-  static const G4ParticleDefinition* positDef;
+  static G4ThreadLocal G4ParticleDefinition* gammaDef;
+  static G4ThreadLocal G4ParticleDefinition* electDef;
+  static G4ThreadLocal G4ParticleDefinition* positDef;
 
-  static const G4ParticleDefinition* protonDef; // for proton
+  static G4ThreadLocal G4ParticleDefinition* protonDef; // for proton
 
 };
 

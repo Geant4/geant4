@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
+$Id: README 73919 2013-09-17 07:38:47Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -53,7 +53,22 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
 	==========================================================================
 	
  	    
- 2- An event : PrimaryGeneratorAction
+ 2- Action Initialization
+ ------------------------------------
+
+   A newly introduced class, ActionInitialization, 
+   instantiates and registers to Geant4 kernel all user action classes 
+   which are defined thread-local and a run action class
+   which is defined both thread-local and global.
+   
+   The thread-local action classes are defined in 
+     ActionInitialization::Build() 
+   and  the global run action class is defined in 
+     ActionInitialization::BuildForMaster().
+   Note that ActionInitialization::Build() is also used to 
+   instatiate user action clasess in sequential mode.
+
+ 3- An event : PrimaryGeneratorAction
  ------------------------------------
  
  The primary kinematic consists of a single particle which hits the
@@ -62,7 +77,7 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
  be changed via the G4 build-in commands of ParticleGun class.
  	
 
- 3- Histograms
+ 4- Histograms
  ------------- 
 
  AnaEx01 can produce 4 histograms :
@@ -72,10 +87,14 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
   histo 3 : total track length of charged particles in absorber per event 	
   histo 4 : total track length of charged particles in gap per event 
  
- And 1 Ntuple :
-  one row per event : EnergyAbs EnergyGap TrackLAbs TrackLGap
+ And 2 Ntuples :
+ - ntuple 1:
+   - one row per event : EnergyAbs EnergyGap
+ - ntuple 1:
+   - one row per event : TrackLAbs TrackLGap
   
- These histos are booked in HistoManager and filled from EventAction.
+ These histos and ntuples are booked in HistoManager and filled from 
+ EventAction.
  
  One can control the name of the histograms file and its format:
  default name     : AnaEx01   

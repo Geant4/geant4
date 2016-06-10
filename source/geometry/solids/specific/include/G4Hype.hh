@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Hype.hh 72937 2013-08-14 13:20:38Z gcosmo $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -122,7 +122,6 @@ class G4Hype : public G4VSolid
   void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
   G4VisExtent   GetExtent          () const;
   G4Polyhedron* CreatePolyhedron   () const;
-  G4NURBS*      CreateNURBS        () const;
   G4Polyhedron* GetPolyhedron      () const;
 
  public:  // without description
@@ -196,6 +195,8 @@ class G4Hype : public G4VSolid
   
   G4double fCubicVolume;
   G4double fSurfaceArea;
+
+  G4double fHalfTol;
 
   mutable G4Polyhedron* fpPolyhedron;
 

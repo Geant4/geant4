@@ -105,7 +105,6 @@ private:
   float fDeviceWidth;
   float fDeviceHeight;
   int fPageNumber;
-  long fPagePos;
   float fMarkerSize;
   FILE* fFile;
   char* fFileName;

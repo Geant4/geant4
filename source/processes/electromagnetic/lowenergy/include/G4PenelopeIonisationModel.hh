@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeIonisationModel.hh 75573 2013-11-04 11:48:15Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -33,6 +33,7 @@
 // 25 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
 // 09 Mar 2012   L. Pandola   Moved the management and calculation of 
 //                            cross sections to a separate class
+// 07 Oct 2013   L. Pandola   Migration to MT
 //
 // -------------------------------------------------------------------
 //
@@ -72,6 +73,8 @@ public:
   virtual ~G4PenelopeIonisationModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel*);
 
   //*This is a dummy method. Never inkoved by the tracking, it just issues 
   //*a warning if one tries to get Cross Sections per Atom via the 
@@ -109,12 +112,14 @@ public:
 
 protected:
   G4ParticleChangeForLoss* fParticleChange;
+  const G4ParticleDefinition* fParticle;
 
 private:
  
   G4PenelopeIonisationModel & operator=(const G4PenelopeIonisationModel &right);
   G4PenelopeIonisationModel(const G4PenelopeIonisationModel&);
 
+  void SetParticle(const G4ParticleDefinition*);
 
   void SampleFinalStateElectron(const G4Material*,G4double cutEnergy,G4double kineticEnergy);
   void SampleFinalStatePositron(const G4Material*,G4double cutEnergy,G4double kineticEnergy);
@@ -139,6 +144,9 @@ private:
   G4PenelopeIonisationXSHandler* theCrossSectionHandler;
 
   size_t nBins;
+
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
 
 };
 

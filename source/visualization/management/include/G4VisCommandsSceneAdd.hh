@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsSceneAdd.hh 73609 2013-09-02 10:10:30Z gcosmo $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -35,6 +35,7 @@
 
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 #include "G4Transform3D.hh"
 #include "G4VisAttributes.hh"
@@ -266,7 +267,6 @@ private:
     ~G4Logo();
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
   private:
-    G4double fHeight;
     G4VisAttributes fVisAtts;
     G4Polyhedron *fpG, *fp4;
   };
@@ -295,6 +295,18 @@ private:
     G4Text::Layout fLayout;
   };
   G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddMagneticField: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddMagneticField ();
+  virtual ~G4VisCommandSceneAddMagneticField ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddMagneticField (const G4VisCommandSceneAddMagneticField&);
+  G4VisCommandSceneAddMagneticField& operator = (const G4VisCommandSceneAddMagneticField&);
+  G4UIcmdWithAnInteger* fpCommand;
 };
 
 class G4VisCommandSceneAddPSHits: public G4VVisCommandScene {

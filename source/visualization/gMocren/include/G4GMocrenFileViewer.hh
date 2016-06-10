@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GMocrenFileViewer.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura : release for the gMocrenFile driver
@@ -60,7 +60,6 @@ public:
 
 private:
   G4GMocrenFileSceneHandler& kSceneHandler; // Reference to Graphics Scene for this view.
-  G4GMocrenMessenger & kMessenger;
 
   char  kG4GddViewer[32] ;
   char  kG4GddViewerInvocation[64] ;

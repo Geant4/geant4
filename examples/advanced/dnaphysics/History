@@ -5,6 +5,44 @@
                        Package History file
                        --------------------
 
+03 October 2013 - tag dnaphysics-V09-06-10 - S. Incerti
+- Updated CMakeLists.txt
+
+30 September 2013 - tag dnaphysics-V09-06-09 - I. Hrivnacova
+- Updated for changes in analysis:
+  (removal of G4AnalysisManager::Create(isMaster))
+
+19 August 2013 - tag dnaphysics-V09-06-08 - S. Incerti
+- Updated README
+
+6 August 2013 - tag dnaphysics-V09-06-07 - S. Incerti
+- Removed unused variable in RunAction
+
+1 August 2013 - tag dnaphysics-V09-06-06 - A.Dotti
+- Bug fix for compilation warning with clang32 - second iteration
+
+30 July 2013 - tag dnaphysics-V09-06-05 - A.Dotti
+- Bug fix for compilation warning with clang32
+
+10 June 2013 - tag dnaphysics-V09-06-04 - S. Incerti 
+- Withdraw RunAction from ActionInitialization for master
+
+28 May 2013 - tag dnaphysics-V09-06-03 - S. Incerti 
+- changed modified density
+- removed standard process tagging in SteppingAction
+- updated plot.C
+
+22 May 2013 - tag dnaphysics-V09-06-02 - M. Karamitros 
+- Migrated to MT
+
+13 April 2013 - tag dnaphysics-V09-06-01 - S. Incerti
+- Removed unused electron capture process
+- Changed process naming scheme as in the "microdosimetry" 
+advanced example 
+
+15 February 2013 - tag dnaphysics-V09-06-00 - S. Incerti
+- Changed default water definition 
+
 3 November 2012 - tag dnaphysics-V09-05-07 - S. Incerti
 - Removed shadowing in SteppingAction 
 

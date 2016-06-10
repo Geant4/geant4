@@ -26,10 +26,7 @@
 /// \file electromagnetic/TestEm1/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-
-//
-// $Id$
-//
+// $Id: DetectorConstruction.cc 77289 2013-11-22 10:53:37Z gcosmo $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,10 +50,11 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4RunManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fPBox(0), fLBox(0), fMaterial(0), fMagField(0)
+:G4VUserDetectorConstruction(),fPBox(0), fLBox(0), fMaterial(0)
 {
   fBoxSize = 10*m;
   DefineMaterials();
@@ -148,6 +146,22 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
 
+  
+  G4Material* argonGas =   
+  new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
+                 kStateGas, 273.15*kelvin, 1*atmosphere);
+                       
+ G4Material* butane =
+ new G4Material("Isobutane",density= 2.42*mg/cm3, ncomponents=2,
+                 kStateGas,273.15*kelvin, 1*atmosphere);
+ butane->AddElement(C, natoms=4);
+ butane->AddElement(H, natoms=10);
+ 
+ G4Material* ArButane =
+ new G4Material("ArgonButane", density= 1.835*mg/cm3, ncomponents=2,
+                 kStateGas,273.15*kelvin,1.*atmosphere);
+ ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
+ ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -163,20 +177,20 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4SolidStore::GetInstance()->Clean();
 
   G4Box*
-  sBox = new G4Box("Container",                                //its name
-                   fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
+  sBox = new G4Box("Container",                         //its name
+                   fBoxSize/2,fBoxSize/2,fBoxSize/2);   //its dimensions
 
-  fLBox = new G4LogicalVolume(sBox,                        //its shape
-                             fMaterial,                        //its material
-                             fMaterial->GetName());        //its name
+  fLBox = new G4LogicalVolume(sBox,                     //its shape
+                             fMaterial,                 //its material
+                             fMaterial->GetName());     //its name
 
-  fPBox = new G4PVPlacement(0,                                //no rotation
-                             G4ThreeVector(),                //at (0,0,0)
-                           fLBox,                        //its logical volume                           
+  fPBox = new G4PVPlacement(0,                          //no rotation
+                           G4ThreeVector(),             //at (0,0,0)
+                           fLBox,                       //its logical volume
                            fMaterial->GetName(),        //its name
-                           0,                                //its mother  volume
-                           false,                        //no boolean operation
-                           0);                                //copy number
+                           0,                           //its mother  volume
+                           false,                       //no boolean operation
+                           0);                          //copy number
                            
   PrintParameters();
   
@@ -202,11 +216,14 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   G4Material* pttoMaterial = 
      G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   
-  if (pttoMaterial) { fMaterial = pttoMaterial;
+  if (pttoMaterial) {
+      fMaterial = pttoMaterial;
+      if ( fLBox ) fLBox->SetMaterial(fMaterial);
     } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;
-  }              
+  }
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -214,41 +231,29 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   fBoxSize = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
 
-void DetectorConstruction::SetMagField(G4double fieldValue)
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
+
+void DetectorConstruction::ConstructSDandField()
 {
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if (fMagField) delete fMagField;        //delete the existing magn field
-
-  if (fieldValue!=0.)                        // create a new one if non nul
-    {
-      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-      fieldMgr->SetDetectorField(fMagField);
-      fieldMgr->CreateChordFinder(fMagField);
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+        
     }
-   else
-    {
-      fMagField = 0;
-      fieldMgr->SetDetectorField(fMagField);
-    }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

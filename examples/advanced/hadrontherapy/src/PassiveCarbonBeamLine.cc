@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 // **************************************************************************************
 //
 // HADRONTHERAPY:  a Geant4-based application for proton/ion-therapy studies
@@ -35,6 +60,8 @@
 #include "G4SystemOfUnits.hh"
 
 
+
+
 /////////////////////////////////////////////////////////////////////////////
 PassiveCarbonBeamLine::PassiveCarbonBeamLine():
 physicalTreatmentRoom(0), hadrontherapyDetectorConstruction(0),
@@ -50,6 +77,20 @@ physiFinalCollimator(0)
 	// Messenger to change parameters of the passiveProtonBeamLine geometry
 	//passiveMessenger = new PassiveProtonBeamLineMessenger(this);
 	
+//***************************** PW ***************************************
+
+  static G4String ROGeometryName = "DetectorROGeometry";
+  RO = new HadrontherapyDetectorROGeometry(ROGeometryName);
+  
+  
+
+  G4cout << "Going to register Parallel world...";
+  RegisterParallelWorld(RO);
+  G4cout << "... done" << G4endl;
+//***************************** PW ***************************************
+
+
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -68,8 +109,21 @@ G4VPhysicalVolume* PassiveCarbonBeamLine::Construct()
 	// Construct the whole CarbonPassive Beam Line 
 	ConstructPassiveCarbonBeamLine();
 	
+	
+//***************************** PW ***************************************
+  if (!hadrontherapyDetectorConstruction)
+
+//***************************** PW ***************************************
+	
 	// HadrontherapyDetectorConstruction builds ONLY the phantom and the detector with its associated ROGeometry
 	hadrontherapyDetectorConstruction = new HadrontherapyDetectorConstruction(physicalTreatmentRoom); 
+	
+//***************************** PW ***************************************
+
+ hadrontherapyDetectorConstruction->InitializeDetectorROGeometry(RO,hadrontherapyDetectorConstruction->GetDetectorToWorldPosition());
+
+//***************************** PW ***************************************
+	
 	
 	return physicalTreatmentRoom;
 }
@@ -251,6 +305,13 @@ void PassiveCarbonBeamLine::SetDefaultDimensions()
 	G4Material* brass = new G4Material("Brass", d, nComponents);  
 	brass -> AddElement(zincNist, fractionmass = 30 *perCent);
 	brass -> AddElement(copperNist, fractionmass = 70 *perCent);
+	
+//***************************** PW ***************************************
+
+// DetectorROGeometry Material
+  new G4Material("dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+
+//***************************** PW ***************************************
 	
 	
 	// MATERIAL ASSIGNMENT

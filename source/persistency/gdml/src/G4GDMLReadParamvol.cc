@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GDMLReadParamvol.cc 77913 2013-11-29 10:59:07Z gcosmo $
 //
 // class G4GDMLReadParamvol Implementation
 //
@@ -32,7 +32,7 @@
 // -------------------------------------------------------------------------
 
 #include "G4GDMLReadParamvol.hh"
-
+#include "G4GDMLReadSolids.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVParameterised.hh"
 #include "G4PVPlacement.hh"
@@ -452,6 +452,54 @@ Torus_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
+Ellipsoid_dimensionsRead( const xercesc::DOMElement* const element,
+                     G4GDMLParameterisation::PARAMETER& parameter )
+{
+   G4double lunit = 1.0;
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Ellipsoid_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
+      if (attName=="ax")
+        { parameter.dimension[0] = eval.Evaluate(attValue); } else
+      if (attName=="by")
+        { parameter.dimension[1] = eval.Evaluate(attValue); } else
+      if (attName=="cz")
+        { parameter.dimension[2] = eval.Evaluate(attValue); } else
+      if (attName=="zcut1")
+        { parameter.dimension[3] = eval.Evaluate(attValue); } else
+      if (attName=="zcut2")
+        { parameter.dimension[4] = eval.Evaluate(attValue); }
+   }
+
+   parameter.dimension[0] *= lunit;
+   parameter.dimension[1] *= lunit;
+   parameter.dimension[2] *= lunit;
+   parameter.dimension[3] *= lunit;
+   parameter.dimension[4] *= lunit;
+}
+
+void G4GDMLReadParamvol::
 Para_dimensionsRead( const xercesc::DOMElement* const element,
                      G4GDMLParameterisation::PARAMETER& parameter )
 {
@@ -559,8 +607,156 @@ Hype_dimensionsRead( const xercesc::DOMElement* const element,
 }
 
 void G4GDMLReadParamvol::
-ParametersRead(const xercesc::DOMElement* const element) {
+Polycone_dimensionsRead( const xercesc::DOMElement* const element,
+                         G4GDMLParameterisation::PARAMETER& parameter )
+{
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
 
+   std::vector<zplaneType> zplaneList;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Polycone_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+    
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
+      if (attName=="aunit")
+        { aunit = eval.Evaluate(attValue); } else
+      if (attName=="startPhi")
+        { parameter.dimension[0] = eval.Evaluate(attValue); } else
+      if (attName=="openPhi")
+        { parameter.dimension[1] = eval.Evaluate(attValue); } else
+      if (attName=="numRZ")
+        { parameter.dimension[2] = eval.Evaluate(attValue); }
+   }
+
+   parameter.dimension[0] *= aunit;
+   parameter.dimension[1] *= aunit; 
+
+   for (xercesc::DOMNode* iter = element->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) { continue; }
+ 
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+         G4Exception("G4GDMLReadParamVol::Polycone_dimensionsRead()",
+                     "InvalidRead", FatalException, "No child found!");
+         return;
+      }
+      const G4String tag = Transcode(child->getTagName());
+ 
+      if (tag=="zplane") { zplaneList.push_back(ZplaneRead(child)); }
+   }
+
+   G4int numZPlanes = zplaneList.size();
+   for (G4int i=0; i<numZPlanes; i++)
+   {  
+      parameter.dimension[3+i*3]  = zplaneList[i].rmin*lunit;
+      parameter.dimension[4+i*3] = zplaneList[i].rmax*lunit;
+      parameter.dimension[5+i*3] = zplaneList[i].z*lunit;
+   }
+}
+
+void G4GDMLReadParamvol::
+Polyhedra_dimensionsRead( const xercesc::DOMElement* const element,
+                     G4GDMLParameterisation::PARAMETER& parameter )
+{
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
+
+   std::vector<zplaneType> zplaneList;
+
+   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadParamvol::Polycone_dimensionsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+    
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
+      if (attName=="aunit")
+        { aunit = eval.Evaluate(attValue); } else
+      if (attName=="startPhi")
+        { parameter.dimension[0] = eval.Evaluate(attValue); } else
+      if (attName=="openPhi")
+        { parameter.dimension[1] = eval.Evaluate(attValue); } else
+      if (attName=="numRZ")
+        { parameter.dimension[2] = eval.Evaluate(attValue); } else
+      if (attName=="numSide")
+        { parameter.dimension[3] = eval.Evaluate(attValue); }
+   }
+
+   parameter.dimension[0] *= aunit;
+   parameter.dimension[1] *= aunit; 
+ 
+   for (xercesc::DOMNode* iter = element->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) { continue; }
+ 
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+         G4Exception("G4GDMLReadParamvo::PolyhedraRead()",
+                     "InvalidRead", FatalException, "No child found!");
+         return;
+      }
+      const G4String tag = Transcode(child->getTagName());
+ 
+      if (tag=="zplane") { zplaneList.push_back(ZplaneRead(child)); }
+   }
+
+   G4int numZPlanes = zplaneList.size();
+   for (G4int i=0; i<numZPlanes; i++)
+   { 
+      parameter.dimension[4+i*3]  = zplaneList[i].rmin*lunit;
+      parameter.dimension[5+i*3] = zplaneList[i].rmax*lunit;
+      parameter.dimension[6+i*3] = zplaneList[i].z*lunit;
+   }
+}
+
+void G4GDMLReadParamvol::
+ParametersRead(const xercesc::DOMElement* const element)
+{
    G4ThreeVector rotation(0.0,0.0,0.0);
    G4ThreeVector position(0.0,0.0,0.0);
 
@@ -591,10 +787,13 @@ ParametersRead(const xercesc::DOMElement* const element) {
       if (tag=="trap_dimensions") { Trap_dimensionsRead(child,parameter); } else
       if (tag=="tube_dimensions") { Tube_dimensionsRead(child,parameter); } else
       if (tag=="cone_dimensions") { Cone_dimensionsRead(child,parameter); } else
-      if (tag=="sphere_dimensions") { Cone_dimensionsRead(child,parameter); } else
-      if (tag=="orb_dimensions") { Cone_dimensionsRead(child,parameter); } else
-      if (tag=="torus_dimensions") { Cone_dimensionsRead(child,parameter); } else
-      if (tag=="para_dimensions") { Cone_dimensionsRead(child,parameter); } else
+      if (tag=="sphere_dimensions") { Sphere_dimensionsRead(child,parameter); } else
+      if (tag=="orb_dimensions") { Orb_dimensionsRead(child,parameter); } else
+      if (tag=="torus_dimensions") { Torus_dimensionsRead(child,parameter); } else
+      if (tag=="ellipsoid_dimensions") { Ellipsoid_dimensionsRead(child,parameter); } else
+      if (tag=="para_dimensions") { Para_dimensionsRead(child,parameter); } else
+      if (tag=="polycone_dimensions") { Polycone_dimensionsRead(child,parameter); } else
+      if (tag=="polyhedra_dimensions") { Polyhedra_dimensionsRead(child,parameter); } else
       if (tag=="hype_dimensions") { Hype_dimensionsRead(child,parameter); }
       else
       {
@@ -696,7 +895,6 @@ ParamvolRead(const xercesc::DOMElement* const element, G4LogicalVolume* mother)
    G4String volumeref;
 
    parameterisation = new G4GDMLParameterisation();
-
    for (xercesc::DOMNode* iter = element->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
    {

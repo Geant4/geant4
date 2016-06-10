@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Em10TrackingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+//
 /// \file electromagnetic/TestEm10/src/Em10TrackingAction.cc
 /// \brief Implementation of the Em10TrackingAction class
 //
@@ -36,6 +38,7 @@
  #include "G4SystemOfUnits.hh"
 
  Em10TrackingAction::Em10TrackingAction() 
+ : G4UserTrackingAction()
  { }
 
  void Em10TrackingAction::PreUserTrackingAction(const G4Track* aTrack)

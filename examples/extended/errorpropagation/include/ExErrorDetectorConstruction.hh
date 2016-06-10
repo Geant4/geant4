@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ExErrorDetectorConstruction.hh 68019 2013-03-13 13:32:43Z gcosmo $
+//
 /// \file errorpropagation/include/ExErrorDetectorConstruction.hh
 /// \brief Definition of the ExErrorDetectorConstruction class
 //
@@ -62,7 +64,7 @@ public:
   ExErrorDetectorConstruction();
   ~ExErrorDetectorConstruction();
   
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
   
   void SetMagField(G4double);
 

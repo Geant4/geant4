@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSPrimaryGeneratorMessenger.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSPrimaryGeneratorMessenger.hh
 /// \brief Definition of the WLSPrimaryGeneratorMessenger class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -49,18 +48,18 @@ class WLSPrimaryGeneratorMessenger : public G4UImessenger
   public:
 
     WLSPrimaryGeneratorMessenger(WLSPrimaryGeneratorAction*);
-    ~WLSPrimaryGeneratorMessenger();
+    virtual ~WLSPrimaryGeneratorMessenger();
  
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
  
   private:
 
-    WLSPrimaryGeneratorAction*   action;
+    WLSPrimaryGeneratorAction*   fAction;
 
-    G4UIdirectory*               gunDir;
+    G4UIdirectory*               fGunDir;
 
-    G4UIcmdWithADoubleAndUnit*   SetPolarizationCmd;
-    G4UIcmdWithADoubleAndUnit*   SetDecayTimeConstantCmd;
+    G4UIcmdWithADoubleAndUnit*   fSetPolarizationCmd;
+    G4UIcmdWithADoubleAndUnit*   fSetDecayTimeConstantCmd;
 };
 
 #endif

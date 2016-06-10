@@ -1,4 +1,4 @@
-# $Id: sandia.mac,v 1.10 2010-05-20 13:02:41 maire Exp $
+# $Id: sandia.mac 76258 2013-11-08 11:36:51Z gcosmo $
 #
 # limit the step size from histo 8
 #
@@ -25,10 +25,10 @@
 /gun/particle e-
 /gun/energy 1000 keV
 #
-/analysis/setFileName sandia/Ta.1000keV.opt3
+/analysis/setFileName sandia/Ta_1000keV_opt3
 ###/analysis/h1/set 8 100 0.  1.0 none	#normalized Edep profile
 /analysis/h1/set 8 100 0.  0.5 none	#for Ta
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/UrQMD.hh
 /// \brief Definition of the UrQMD class
 //
-// $Id$
+// $Id: UrQMD.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -68,7 +68,8 @@ TUrQMD<T>::TUrQMD(G4int) : T()
 {
   G4ExceptionDescription de;
   de<<"Support for UrQMD not enabled"<<G4endl;
-  G4Exception(__FILE__,"UrQMD-01",FatalException,de,"Code should be compiled with G4_USE_URQMD environment variable set.");
+  G4Exception(__FILE__,"UrQMD-01",FatalException,de,
+    "Code should be compiled with G4_USE_URQMD environment variable set.");
 }
 
 template<class T>

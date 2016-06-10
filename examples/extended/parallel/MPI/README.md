@@ -110,7 +110,7 @@ MPI runtime Environment
 -----------------------
 1. Make hosts/cluster configuration of your MPI environment.
 2. Launch MPI runtime environment, typically executing
-   `lamboot` (LAM) / `mpdboot` (MPICH2).
+   `lamboot` (LAM) / `mpdboot` (MPICH2) / `mpd` (Intel).
 
 How to run
 ----------
@@ -180,7 +180,7 @@ A simple application.
 
 - Geometry : chamber / calorimeter
 - Primary : particle gun (200 MeV electron as default)
-- Physics List : standard EM
+- Physics List : FTFP_BERT
 
 **Features:**
 - Particles are transported in a geometry without any scoring.

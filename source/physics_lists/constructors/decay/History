@@ -1,0 +1,28 @@
+$Id: History 76273 2013-11-08 11:55:50Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+    Hadronic physics-list/constructors/decay History
+    -----------------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+07-Nov-2013, Alberto Ribon 		(phys-ctor-decay-V09-06-03)
+- Removed low_energy and high_energy from sources.cmake and GNUmakefile.
+
+09-Jun-2013, Andrea Dotti 		(phys-ctor-decay-V09-06-02)
+- Bug fixes for MT: wasActivated flag becomes TLS
+
+29-Mar-2013, Andrea Dotti		(phys-ctor-decay-V09-06-01)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
+
+10-Jan-2013, Gunter Folger              (phys-ctor-decay-V09-06-00)
+- new directory structure introduced. 
+   constructors/decay classes

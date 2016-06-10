@@ -23,32 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$ 
-// Translation of INCL4.2/ABLA V3 
+// ABLAXX statistical de-excitation model
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
-// Alain Boudard, CEA (contact person INCL/ABLA)
+// Davide Mancusi, CEA (contact person INCL/ABLA)
 // Aatos Heikkinen, HIP (project coordination)
+//
+#define ABLAXX_IN_GEANT4_MODE 1
+
+#include "globals.hh"
 
 #ifndef G4AblaVirtualData_hh
 #define G4AblaVirtualData_hh 1
 
+#ifdef ABLAXX_IN_GEANT4_MODE
 #include "globals.hh"
+#else
+#include "G4INCLGeant4Compat.hh"
+#include "G4INCLConfig.hh"
+#endif
+
 
 /**
- * An interface to data used by INCL and ABLA. This interface allows
+ * An interface to data used by ABLA. This interface allows
  * us to abstract the actual source of data. Currently the data is
- * read from datafiles by using class G4InclAblaDataFile.  @see
- * G4InclAblaDataFile
+ * read from datafiles by using class G4AblaDataFile.  @see
+ * G4AblaDataFile
  */
 
 class G4AblaVirtualData {
 protected:
 
   /**
-   * Constructor
+   * Constructor, destructor
    */
+#ifdef ABLAXX_IN_GEANT4_MODE
   G4AblaVirtualData();
+#else
+  G4AblaVirtualData(G4INCL::Config *);
+#endif
+  virtual ~G4AblaVirtualData();
 
 public:
   /**
@@ -98,8 +112,8 @@ public:
 	
 private:
 
-  static const G4int alphaRows = 155;
-  static const G4int alphaCols = 100;
+  static const G4int alphaRows = 154;
+  static const G4int alphaCols = 99;
 
   static const G4int paceRows = 500;
   static const G4int paceCols = 500;

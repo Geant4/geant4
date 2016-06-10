@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: GammaRayTelEventAction.cc 68794 2013-04-05 13:23:26Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -201,7 +201,6 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 #endif
 	  
 	    }
-	  // Here we call the analysis manager function for visualization
 #ifdef G4ANALYSIS_USE
 	  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
 	  analysis->EndOfEvent(n_hit);

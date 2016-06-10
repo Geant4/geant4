@@ -25,7 +25,7 @@
 //
 #ifndef G4CASCADE_CHECK_BALANCE_HH
 #define G4CASCADE_CHECK_BALANCE_HH
-// $Id$
+// $Id: G4CascadeCheckBalance.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.
@@ -46,6 +46,8 @@
 // 20110328  M. Kelsey -- Add default ctor and explicit limit setting
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 // 20121002  M. Kelsey -- Add strangeness check (useful for Omega- beam)
+// 20130620  Address Coverity complaint about missing copy actions
+// 20130621  Add interface to take G4Fragment input instead of G4InuclNuclei.
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -82,13 +84,12 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
+  // This is for use with G4VCascadeDeexcitation modules
+  void collide(const G4Fragment& fragment, G4CollisionOutput& output);
+
   // This is for use with G4EPCollider internal checks
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       const std::vector<G4InuclElementaryParticle>& particles);
-
-  // This is for use with G4Fissioner internal checks
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       const std::vector<G4InuclNuclei>& fragments);
 
   // This is for use with G4NucleiModel internal checks
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
@@ -98,6 +99,14 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output,
 	       const std::vector<G4CascadParticle>& cparticles);
+
+  // This is for use with G4BigBanger internal checks
+  void collide(const G4Fragment& target,
+	       const std::vector<G4InuclElementaryParticle>& particles);
+
+  // This is for use with G4Fissioner internal checks
+  void collide(const G4Fragment& target,
+	       const std::vector<G4InuclNuclei>& fragments);
 
   // Checks on conservation laws (kinematics, baryon number, charge, hyperons)
   G4bool energyOkay() const;
@@ -160,6 +169,11 @@ private:
   G4int finalStrange;
 
   G4CollisionOutput tempOutput;		// Buffer for direct-list interfaces
+
+private:
+  // Copying of modules is forbidden
+  G4CascadeCheckBalance(const G4CascadeCheckBalance&);
+  G4CascadeCheckBalance& operator=(const G4CascadeCheckBalance&);
 };
 
 #endif	/* G4CASCADE_CHECK_BALANCE_HH */

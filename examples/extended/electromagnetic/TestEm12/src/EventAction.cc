@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 69108 2013-04-18 13:10:10Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,8 +41,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run, HistoManager* histo)
-:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fHistoManager(histo)
+EventAction::EventAction(RunAction* run)
+:G4UserEventAction(),
+ fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }
@@ -76,7 +77,8 @@ void EventAction::EndOfEventAction(const G4Event*)
   //
   if (fTotalEdep > 0.) {
     fRunAct->AddEdep(fTotalEdep);
-    fHistoManager->FillHisto(2,fTotalEdep);
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    analysisManager->FillH1(2,fTotalEdep);
   }  
 }
 

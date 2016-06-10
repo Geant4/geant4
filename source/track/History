@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2010-11-10 08:42:47 kurasige Exp $
+$Id: History 77080 2013-11-21 10:33:55Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -17,6 +17,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Nov. 21, 2013 H.Kurashige (track-V09-06-04)
+- Fix Coverity deficts in G4Track constructors
+
+- September 26, 2013 M.Asai (track-V09-06-03)
+- Fix compilation warning caused by the previous tag.
+
+- September 26, 2013 M.Asai (track-V09-06-02)
+- Introduce CreatorModelIndex to G4Track and its access methods.
+
+- April 10, 2013 G.Cosmo (track-V09-06-01)
+- Cleanup of automatic changes for MT in classes in G4Track.
+- Moved constructor and destructor of G4VelocityTable singleton to private.
+
+- April 4, 2013 V.Ivanchenko (track-V09-06-00)
+- G4ParticleChange - fixed bug #1451 - neutron do not change velocity 
+    after elastic scattering; little clean up useful for MT
+- G4ParticleChangeForEloss, G4ParticleChangeForGamma - clean up 
+    computation of velocity (a little performance improvement expected) 
 
 - November 8, 2012 I.Hrivnacova (track-V09-05-20)
 - Fixed G4Track: added initialisation of useGivenVelocity where missing

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4hPairProduction.cc 72943 2013-08-14 13:40:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -46,26 +46,15 @@
 
 #include "G4hPairProduction.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "G4hPairProductionModel.hh"
-#include "G4UniversalFluctuation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
 G4hPairProduction::G4hPairProduction(const G4String& name)
-  : G4VEnergyLossProcess(name),
-    theParticle(0),
-    theBaseParticle(0),
-    lowestKinEnergy(1.*GeV),
-    isInitialised(false)
-{
-  SetProcessSubType(fPairProdByCharged);
-  SetSecondaryParticle(G4Positron::Positron());
-  SetIonisation(false);
-}
+  : G4MuPairProduction(name)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -81,15 +70,6 @@ G4bool G4hPairProduction::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hPairProduction::MinPrimaryEnergy(const G4ParticleDefinition*,
-					     const G4Material*,
-					     G4double)
-{
-  return lowestKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4hPairProduction::InitialiseEnergyLossProcess(
                          const G4ParticleDefinition* part,
 			 const G4ParticleDefinition*)
@@ -98,7 +78,10 @@ void G4hPairProduction::InitialiseEnergyLossProcess(
     isInitialised = true;
 
     theParticle = part;
-    if (!EmModel()) { SetEmModel(new G4hPairProductionModel()); }
+    if (!EmModel()) { SetEmModel(new G4hPairProductionModel(part)); }
+
+    G4double limit = part->GetPDGMass()*8;
+    if(limit > lowestKinEnergy) { lowestKinEnergy = limit; }
 
     G4VEmFluctuationModel* fm = 0;
     EmModel()->SetLowEnergyLimit(MinKinEnergy());
@@ -106,11 +89,6 @@ void G4hPairProduction::InitialiseEnergyLossProcess(
     AddEmModel(1, EmModel(), fm);
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hPairProduction::PrintInfo()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

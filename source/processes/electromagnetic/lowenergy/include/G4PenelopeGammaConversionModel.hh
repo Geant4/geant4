@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeGammaConversionModel.hh 75573 2013-11-04 11:48:15Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -31,6 +31,7 @@
 // -----------
 // 13 Jan 2010   L. Pandola  First implementation
 // 24 May 2011   L. Pandola  Renamed (make v2008 as default Penelope)
+// 18 Sep 2013   L. Pandola  Migration to MT paradigm
 //
 // -------------------------------------------------------------------
 //
@@ -64,7 +65,7 @@ public:
   virtual ~G4PenelopeGammaConversionModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
+  virtual void InitialiseLocal(const G4ParticleDefinition*, G4VEmModel*); 
   virtual G4double ComputeCrossSectionPerAtom(
 					      const G4ParticleDefinition*,
 					      G4double kinEnergy,
@@ -84,12 +85,14 @@ public:
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
+  const G4ParticleDefinition* fParticle;
 
 private:
   G4PenelopeGammaConversionModel & operator=(const 
 					       G4PenelopeGammaConversionModel &right);
   G4PenelopeGammaConversionModel(const G4PenelopeGammaConversionModel&);
 
+  void SetParticle(const G4ParticleDefinition*);
 
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
@@ -115,10 +118,13 @@ private:
 
   std::pair<G4double,G4double> GetScreeningFunctions(G4double);	
 
-
   G4int verboseLevel;
   G4bool isInitialised;
+
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
 };
 
-#endif
 
+
+#endif

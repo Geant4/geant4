@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eBremsstrahlungRelModel.cc 75582 2013-11-04 12:13:01Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,17 +71,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4double G4eBremsstrahlungRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
-						  0.5917, 0.7628, 0.8983, 0.9801 };
-const G4double G4eBremsstrahlungRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
-					    0.1813, 0.1569, 0.1112, 0.0506 };
-const G4double G4eBremsstrahlungRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71} ;
-const G4double G4eBremsstrahlungRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924} ;
+const G4double 
+G4eBremsstrahlungRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
+				   0.5917, 0.7628, 0.8983, 0.9801 };
+const G4double 
+G4eBremsstrahlungRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
+				   0.1813, 0.1569, 0.1112, 0.0506 };
+const G4double 
+G4eBremsstrahlungRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71};
+const G4double 
+G4eBremsstrahlungRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924};
 
 using namespace std;
 
-G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
-						     const G4String& nam)
+G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(
+       const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
     particle(0),
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
@@ -94,8 +98,8 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   fParticleChange = 0;
   theGamma = G4Gamma::Gamma();
 
-  lowKinEnergy = 0.1*GeV;
-  SetLowEnergyLimit(lowKinEnergy);  
+  lowestKinEnergy = 1.0*MeV;
+  SetLowEnergyLimit(lowestKinEnergy);  
 
   nist = G4NistManager::Instance();  
 
@@ -117,11 +121,11 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 
 void G4eBremsstrahlungRelModel::InitialiseConstants()
 {
-  facFel = log(184.15);
-  facFinel = log(1194.);
+  facFel = G4Log(184.15);
+  facFinel = G4Log(1194.);
 
   preS1 = 1./(184.15*184.15);
-  logTwo = log(2.);
+  logTwo = G4Log(2.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -162,8 +166,7 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
 
   // define critical gamma energies (important for integration/dicing)
   klpm=totalEnergy*totalEnergy/lpmEnergy;
-  kp=sqrt(densityCorr);
-    
+  kp=sqrt(densityCorr);    
 }
 
 
@@ -174,15 +177,31 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p) { SetParticle(p); }
 
-  lowKinEnergy  = LowEnergyLimit();
-
   currentZ = 0.;
 
-  InitialiseElementSelectors(p, cuts);
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
 
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForLoss();
   isInitialised = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eBremsstrahlungRelModel::InitialiseLocal(const G4ParticleDefinition*,
+						G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4eBremsstrahlungRelModel::MinPrimaryEnergy(const G4Material*,
+					    const G4ParticleDefinition*,
+					    G4double cut)
+{
+  return std::max(lowestKinEnergy, cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -194,7 +213,7 @@ G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
                                                    G4double cutEnergy)
 {
   if(!particle) { SetParticle(p); }
-  if(kineticEnergy < lowKinEnergy) { return 0.0; }
+  if(kineticEnergy < LowEnergyLimit()) { return 0.0; }
   G4double cut = std::min(cutEnergy, kineticEnergy);
   if(cut == 0.0) { return 0.0; }
 
@@ -265,7 +284,7 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
 					      G4double maxEnergy)
 {
   if(!particle) { SetParticle(p); }
-  if(kineticEnergy < lowKinEnergy) { return 0.0; }
+  if(kineticEnergy < LowEnergyLimit()) { return 0.0; }
   G4double cut  = std::min(cutEnergy, kineticEnergy);
   G4double tmax = std::min(maxEnergy, kineticEnergy);
 
@@ -291,8 +310,8 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double cut)
   G4double cross = 0.0;
 
   // number of intervals and integration step 
-  G4double vcut = log(cut/totalEnergy);
-  G4double vmax = log(kinEnergy/totalEnergy);
+  G4double vcut = G4Log(cut/totalEnergy);
+  G4double vmax = G4Log(kinEnergy/totalEnergy);
   G4int n = (G4int)(0.45*(vmax - vcut)) + 4;
   //  n=1; //  integration test 
   G4double delta = (vmax - vcut)/G4double(n);
@@ -305,7 +324,7 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double cut)
 
     for(G4int i=0; i<8; i++) {
 
-      G4double eg = exp(e0 + xgi[i]*delta)*totalEnergy;
+      G4double eg = G4Exp(e0 + xgi[i]*delta)*totalEnergy;
 
       if(totalEnergy > energyThresholdLPM) {
 	xs = ComputeRelDXSectionPerAtom(eg);
@@ -323,6 +342,7 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double cut)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
 {
   // *** calculate lpm variable s & sprime ***
@@ -338,14 +358,14 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
   if (sprime>1) 
     xiLPM = 1.;
   else if (sprime>sqrt(2.)*s1) {
-    G4double h  = log(sprime)/logTS1;
+    G4double h  = G4Log(sprime)/logTS1;
     xiLPM = 1+h-0.08*(1-h)*(1-sqr(1-h))/logTS1;
   }
 
   G4double s0 = sprime/sqrt(xiLPM); 
 
-  // *** merging with density effect***  should be only necessary in region "close to" kp, e.g. k<100*kp
-  // using Ter-Mikaelian eq. (20.9)
+  // *** merging with density effect***  should be only necessary in region 
+  // "close to" kp, e.g. k<100*kp using Ter-Mikaelian eq. (20.9)
   G4double k2 = k*k;
   s0 *= (1 + (densityCorr/k2) );
 
@@ -353,7 +373,7 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
   // Klein eq. (75)
   xiLPM = 1.;
   if (s0<=s1) xiLPM = 2.;
-  else if ( (s1<s0) && (s0<=1) ) xiLPM = 1. + log(s0)/logS1;
+  else if ( (s1<s0) && (s0<=1) ) { xiLPM = 1. + G4Log(s0)/logS1; }
   
 
   // *** calculate supression functions phi and G ***
@@ -371,11 +391,11 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
   else if (s0<1.9516) {
     // intermediate suppression
     // using eq.77 approxim. valid s<2.      
-    phiLPM = 1.-exp(-6.*s0*(1.+(3.-pi)*s0)
+    phiLPM = 1.-G4Exp(-6.*s0*(1.+(3.-pi)*s0)
 		+s3/(0.623+0.795*s0+0.658*s2));
     if (s0<0.415827397755) {
       // using eq.77 approxim. valid 0.07<s<2
-      G4double psiLPM = 1-exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
+      G4double psiLPM = 1-G4Exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
       gLPM = 3*psiLPM-2*phiLPM;
     }
     else {
@@ -468,7 +488,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 				      G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  if(kineticEnergy < lowKinEnergy) { return; }
+  if(kineticEnergy < LowEnergyLimit()) { return; }
   G4double cut  = std::min(cutEnergy, kineticEnergy);
   G4double emax = std::min(maxEnergy, kineticEnergy);
   if(cut >= emax) { return; }
@@ -487,12 +507,12 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   G4bool highe = true;
   if(totalEnergy < energyThresholdLPM) { highe = false; }
  
-  G4double xmin = log(cut*cut + densityCorr);
-  G4double xmax = log(emax*emax  + densityCorr);
+  G4double xmin = G4Log(cut*cut + densityCorr);
+  G4double xmax = G4Log(emax*emax  + densityCorr);
   G4double gammaEnergy, f, x; 
 
   do {
-    x = exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
+    x = G4Exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
     if(x < 0.0) { x = 0.0; }
     gammaEnergy = sqrt(x);
     if(highe) { f = ComputeRelDXSectionPerAtom(gammaEnergy); }

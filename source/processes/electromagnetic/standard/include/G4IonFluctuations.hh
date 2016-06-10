@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4IonFluctuations.hh 73339 2013-08-26 06:54:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +56,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4UniversalFluctuation.hh"
 
+class G4Pow;
+
 class G4IonFluctuations : public G4VEmFluctuationModel
 {
 
@@ -66,17 +68,17 @@ public:
   virtual ~G4IonFluctuations();
 
   // Sample fluctuations
-  G4double SampleFluctuations(const G4Material*,
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
                               const G4DynamicParticle*,
-			      G4double& tmax,
-			      G4double& length,
-			      G4double& meanLoss);
+			      G4double tmax,
+			      G4double length,
+			      G4double meanLoss);
 
   // Compute dispertion 
   G4double Dispersion(const G4Material*,
 		      const G4DynamicParticle*,
-		      G4double& tmax,
-		      G4double& length);
+		      G4double tmax,
+		      G4double length);
 
   // Initialisation prerun
   void InitialiseMe(const G4ParticleDefinition*);
@@ -95,6 +97,8 @@ private:
 
   G4UniversalFluctuation      uniFluct;
   const G4ParticleDefinition* particle;
+
+  G4Pow*   g4pow; 
 
   G4double particleMass;
   G4double charge;

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,7 +51,7 @@
 class G4NeutronBuilder
 {
   public: 
-    G4NeutronBuilder();
+    G4NeutronBuilder(G4bool fissionFlag = false);
     virtual ~G4NeutronBuilder();
 
   public: 
@@ -67,7 +66,7 @@ class G4NeutronBuilder
     std::vector<G4VNeutronBuilder *> theModelCollections;
 
     G4bool wasActivated;
-
+    G4bool isFissionActivated;
 };
 
 // 2002 by J.P. Wellisch

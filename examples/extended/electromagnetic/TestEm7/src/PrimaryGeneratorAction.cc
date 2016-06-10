@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:fDetector(det)                                               
+:G4VUserPrimaryGeneratorAction(),                                              
+ fParticleGun(0),
+ fDetector(det),
+ fRndmBeam(0),
+ fEbeamCumul(0),       
+ fGunMessenger(0)
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
@@ -54,9 +59,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleEnergy(160*MeV);  
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-    
-  fRndmBeam   = 0.;
-  fEbeamCumul = 0.;
     
   //create a messenger for this class
   fGunMessenger = new PrimaryGeneratorMessenger(this);  

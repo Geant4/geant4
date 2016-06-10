@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HepRepSceneHandler.cc 71534 2013-06-17 16:07:53Z gcosmo $
 //
 
 /**
@@ -40,6 +40,7 @@
 #include <iomanip>
 #include <fstream>
 #include <cmath>
+#include <cassert>
 
 //HepRep
 #include "HEPREP/HepRep.h"
@@ -58,7 +59,6 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Text.hh"
-#include "G4NURBS.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VisAttributes.hh"
 #include "G4VSolid.hh"
@@ -92,6 +92,7 @@ G4int G4HepRepSceneHandler::sceneIdCount = 0;
 
 G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name)
         : G4VSceneHandler (system, sceneIdCount++, name),
+          out                   (0),
           geometryLayer         ("Geometry"),
           eventLayer            ("Event"),
           calHitLayer           ("CalHit"),
@@ -140,7 +141,8 @@ G4HepRepSceneHandler::~G4HepRepSceneHandler () {
     delete factory;
     factory = NULL;
 
-    dynamic_cast<G4HepRep*>(GetGraphicsSystem())->removeSceneHandler();
+    G4HepRep* pHepRepSystem = dynamic_cast<G4HepRep*>(GetGraphicsSystem());
+    if (pHepRepSystem) pHepRepSystem->removeSceneHandler();
 }
 
 
@@ -206,35 +208,6 @@ void G4HepRepSceneHandler::open(G4String name) {
                 int dot = name.length() - extension.length();
                 baseName = (dot >= 0) ? name.substr(0, dot) : "";
 
-#ifndef G4LIB_USE_ZLIB               
-                if (writeGZ) {
-                    cerr << endl;
-                    cerr << "WARNING: the .gz output file you are creating will be a plain file," << endl;
-                    cerr << "       since compression support (ZLIB) was not compiled into the Geant4." << endl;
-                    cerr << "       To avoid confusion with real gz files, the output filename has been" << endl;
-                    cerr << "       extended with the name '.no-gz'." << endl;
-                    cerr << "       A plain heprep or bheprep file can be fairly large." << endl; 
-                }
-                if (writeZip) {
-                    cerr << endl;
-                    cerr << "WARNING: the .zip output file you are creating will not be compressed," << endl;
-                    cerr << "       since compression support (ZLIB) was not compiled into the Geant4." << endl;
-                    cerr << "       A zip file containing non-compressed heprep or bheprep files can" << endl;
-                    cerr << "       be fairly large." << endl;
-                }
-                if (writeGZ || writeZip) {
-                    cerr << "SOLUTION: To add compression support using ZLIB, you need to:" << endl;
-                    cerr << "       1. Define G4LIB_USE_ZLIB and recompile the visualization category." << endl;
-                    cerr << "       2. Optionally define G4_LIB_BUILD_ZLIB if your system does not have" << endl;
-                    cerr << "          zlib installed (e.g. WIN32-VC)." << endl;
-                    cerr << "       3. Relink your application code." << endl;  
-                    cerr << endl;
-                }
-                if (writeGZ) {
-                    extension = extension + ".no-gz";
-                    writeGZ = false;
-                }
-#endif // G4LIB_USE_ZLIB
             } else {
                 // Default for no extension  
                 extension = ".heprep.zip";
@@ -423,7 +396,7 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
         char eventFormat[128];
         sprintf(eventFormat, "%s%d%s%s", "event-%0", eventNumberWidth, "d", (writeBinary ? ".bheprep" : ".heprep"));
         sprintf(eventName, eventFormat, eventNumber);
-        writer->write(_heprep, G4String(eventName));
+        if (writer) writer->write(_heprep, G4String(eventName));
 
         eventNumber++;
     }
@@ -1006,29 +979,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
 
-void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
-#ifdef PDEBUG
-    cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << endl;
-#endif
-    if (dontWrite()) return;
-
-    /*** You may need this
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4NURBS&)",
-	   "vis-HepRep1007", JustWarning,
-	   "2D NURBS not implemented.  Ignored.");
-      }
-      return;
-    }
-    ***/
-
-    cout << "G4HepRepSceneHandler::AddPrimitive G4NURBS : not yet implemented. " << endl;
-}
-
 void G4HepRepSceneHandler::AddPrimitive (const G4Scale& scale) { 
     if (dontWrite()) return;
     G4VSceneHandler::AddPrimitive(scale); 
@@ -1486,6 +1436,7 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* typ
     } else {
       G4PhysicalVolumeModel* pPVModel =
 	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+      assert(pPVModel);  // To keep Coverity happy.
       G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
       G4int currentDepth = pPVModel->GetCurrentDepth();
       G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();

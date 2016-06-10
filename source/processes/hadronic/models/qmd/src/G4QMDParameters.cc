@@ -30,7 +30,7 @@
 #include "G4QMDParameters.hh"
 #include "G4PhysicalConstants.hh"
 
-G4QMDParameters* G4QMDParameters::parameters = NULL;
+G4ThreadLocal G4QMDParameters* G4QMDParameters::parameters = NULL;
 
 G4QMDParameters::G4QMDParameters()
 {

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id$
+// $Id: PhysicsListMessenger.cc 68192 2013-03-18 14:50:18Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
-:fPhysList(physL)
+:G4UImessenger(),fPhysList(physL),
+ fPhysDir(0),    
+ fGammaToMuPairFacCmd(0),
+ fAnnihiToMuPairFacCmd(0),
+ fAnnihiToHadronFacCmd(0)
 {
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");
@@ -95,7 +99,7 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                           
   if( command == fAnnihiToHadronFacCmd)
    { fPhysList->SetAnnihiToHadronFac(
-                          fAnnihiToHadronFacCmd->GetNewDoubleValue(newValue));}                             
+                          fAnnihiToHadronFacCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

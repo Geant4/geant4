@@ -64,7 +64,7 @@ G4ConcreteNNTwoBodyResonance::G4ConcreteNNTwoBodyResonance(const G4ParticleDefin
 
 G4ConcreteNNTwoBodyResonance::~G4ConcreteNNTwoBodyResonance()
 { 
-  delete crossSectionSource;
+  if (crossSectionSource) delete crossSectionSource;
 }
 
 G4bool G4ConcreteNNTwoBodyResonance::IsInCharge(const G4KineticTrack& trk1, 
@@ -75,3 +75,26 @@ G4bool G4ConcreteNNTwoBodyResonance::IsInCharge(const G4KineticTrack& trk1,
   return false;
 }
 
+G4ConcreteNNTwoBodyResonance::G4ConcreteNNTwoBodyResonance(void *, void *, void *, void *, void *, void *, void *)
+    : crossSectionSource(0), thePrimary1(0), thePrimary2(0)
+{}
+
+void G4ConcreteNNTwoBodyResonance::establish_G4MT_TLS_G4ConcreteNNTwoBodyResonance(const G4ParticleDefinition* aPrimary,
+					   const G4ParticleDefinition* bPrimary,
+					   const G4ParticleDefinition* aSecondary,
+					   const G4ParticleDefinition* bSecondary,
+		                           const G4VXResonanceTable& sigmaTable){establish_G4MT_TLS_G4VScatteringCollision(); thePrimary1=aPrimary; thePrimary2=bPrimary;
+  theOutGoing.push_back(aSecondary);
+  theOutGoing.push_back(bSecondary);
+
+  crossSectionSource = new G4XResonance(aPrimary, bPrimary, 
+					aSecondary->GetPDGiIsospin(), 
+					aSecondary->GetPDGiSpin(),
+					aSecondary->GetPDGMass(),
+					bSecondary->GetPDGiIsospin(), 
+					bSecondary->GetPDGiSpin(),
+					bSecondary->GetPDGMass(),
+					aSecondary->GetParticleName(),
+					bSecondary->GetParticleName(),
+					sigmaTable);
+}

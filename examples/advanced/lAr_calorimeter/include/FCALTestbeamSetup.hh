@@ -98,7 +98,7 @@ private:
   G4double ConcWallSizeX, ConcWallSizeY, ConcWallSizeZ; 
   G4double ConcWallPosX, ConcWallPosY, ConcWallAPosZ, ConcWallBPosZ;
   G4double ConcWallInsSizeX, ConcWallInsSizeY, ConcWallInsSizeZ;
-  G4double ConcWallInsPosX, ConcWallInsPosY, ConcWallInsPosZ;
+  G4double ConcWallInsPosZ;
 
   G4double MuCntrSIzeX, MuCntrSIzeY, MuCntrSIzeZ;
   G4double MuCntrPosX, MuCntrPosY, MuCntrPosZ;

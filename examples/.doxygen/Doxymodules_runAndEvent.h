@@ -1,4 +1,4 @@
-// $Id: Doxymodules_runAndEvent.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_runAndEvent.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_runAndEvent.h
@@ -16,20 +16,15 @@
  *  @{
  */
 
-  class RE01BosonPhysics {};
+  class RE01ActionInitialization {};
   class RE01CalorimeterHit {};
   class RE01CalorimeterParametrisation {};
   class RE01CalorimeterROGeometry {};
   class RE01CalorimeterSD {};
-  class RE01DecayPhysics {};
   class RE01DetectorConstruction {};
   class RE01DetectorParameterDef {};
-  class RE01DummySD {};
   class RE01EventAction {};
   class RE01Field {};
-  class RE01HadronPhysics {};
-  class RE01IonPhysics {};
-  class RE01LeptonPhysics {};
   class RE01PhysicsList {};
   class RE01PrimaryGeneratorAction {};
   class RE01PrimaryGeneratorMessenger {};
@@ -43,6 +38,7 @@
   class RE01TrackInformation {};
   class RE01TrackingAction {};
   class RE01Trajectory {};
+  class RE01UnknownDecayPhysics {};
 
 /** @} */
 
@@ -52,15 +48,10 @@
  *  @{
  */
 
+  class RE02ActionInitialization {};
   class RE02DetectorConstruction {};
-  class RE02EMPhysics {};
   class RE02EventAction {};
-  class RE02GeneralPhysics {};
-  class RE02HadronPhysics {};
-  class RE02IonPhysics {};
-  class RE02MuonPhysics {};
   class RE02NestedPhantomParameterisation {};
-  class RE02PhysicsList {};
   class RE02PrimaryGeneratorAction {};
   class RE02PSCellFlux {};
   class RE02PSEnergyDeposit {};
@@ -79,8 +70,8 @@
  *  @{
  */
 
+  class RE03ActionInitialization {};
   class RE03DetectorConstruction {};
-  class RE03PhysicsList {};
   class RE03PrimaryGeneratorAction {};
   class RE03UserScoreWriter {};
 
@@ -92,6 +83,7 @@
  *  @{
  */
 
+  class RE04ActionInitialization {};
   class RE04DetectorConstruction {};
   class RE04EventAction {};
   class RE04ParallelWorldConstruction {};
@@ -105,5 +97,56 @@
 
 /** @} */
 
+/** @defgroup extended_runAndEvent_RE05 RE05
+ *  RunAndEvent example RE05
+ *  @ingroup extended_runAndEvent
+ *  @{
+ */
+
+  class RE05ActionInitialization {};
+  class RE05CalorimeterHit {};
+  class RE05CalorimeterParametrisation {};
+  class RE05CalorimeterROGeometry {};
+  class RE05CalorimeterSD {};
+  class RE05DetectorConstruction {};
+  class RE05DetectorParameterDef {};
+  class RE05DummySD {};
+  class RE05EventAction {};
+  class RE05Field {};
+  class RE05MuonHit {};
+  class RE05MuonSD {};
+  class RE05PrimaryGeneratorAction {};
+  class RE05PrimaryGeneratorMessenger {};
+  class RE05RunAction {};
+  class RE05StackingAction {};
+  class RE05StackingActionMessenger {};
+  class RE05SteppingAction {};
+  class RE05SteppingVerbose {};
+  class RE05TrackerHit {};
+  class RE05TrackerParametrisation {};
+  class RE05TrackerSD {};
+  class RE05TrackingAction {};
+  class RE05WorkerInitialization {};
+
+/** @} */
+
+/** @defgroup extended_runAndEvent_RE06 RE06
+ *  RunAndEvent example RE06
+ *  @ingroup extended_runAndEvent
+ *  @{
+ */
+
+  class RE06ActionInitialization {};
+  class RE06DetectorConstruction {};
+  class RE06DetectorMessenger {};
+  class RE06ParallelWorld {};
+  class RE06PhysicsList {};
+  class RE06PrimaryGeneratorAction {};
+  class RE06RunAction {};
+  class RE06Run {};
+  class RE06SteppingVerbose {};
+  class RE06WorkerInitialization {};
+
+/** @} */
 
 /** @} */

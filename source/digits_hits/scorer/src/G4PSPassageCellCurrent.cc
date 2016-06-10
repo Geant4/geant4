@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PSPassageCellCurrent.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4PSPassageCellCurrent
 #include "G4PSPassageCellCurrent.hh"

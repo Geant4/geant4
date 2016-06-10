@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -59,7 +57,7 @@ namespace G4INCL {
      * \param p list of modified and created particles
      * \param n the nucleus
      */
-    static G4bool isBlocked(ParticleList const p, Nucleus const * const n);
+    static G4bool isBlocked(ParticleList const &p, Nucleus const * const n);
 
     /** \brief Check CDPP blocking.
      *
@@ -69,27 +67,27 @@ namespace G4INCL {
      * \param p list of created particles
      * \param n the nucleus
      */
-    static G4bool isCDPPBlocked(ParticleList const p, Nucleus const * const n);
+    static G4bool isCDPPBlocked(ParticleList const &p, Nucleus const * const n);
 
     /**
      * Get the Pauli blocker algorithm.
      */
-    static IPauli const * getBlocker() { return thePauliBlocker; }
+    static IPauli * getBlocker() { return thePauliBlocker; }
 
     /**
      * Get the CDPP blocker algorithm.
      */
-    static IPauli const * getCDPP() { return theCDPP; }
+    static IPauli * getCDPP() { return theCDPP; }
 
     /**
      * Set the Pauli blocker algorithm.
      */
-    static void setBlocker(IPauli const * const);
+    static void setBlocker(IPauli * const);
 
     /**
      * Set the CDPP blocker algorithm.
      */
-    static void setCDPP(IPauli const * const);
+    static void setCDPP(IPauli * const);
 
     /**
      * Delete blockers
@@ -106,8 +104,8 @@ namespace G4INCL {
     ~Pauli() {}
 
   private:
-    static IPauli const * thePauliBlocker;
-    static IPauli const * theCDPP;
+    static G4ThreadLocal IPauli * thePauliBlocker;
+    static G4ThreadLocal IPauli * theCDPP;
   };
 
 }

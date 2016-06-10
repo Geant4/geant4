@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04Materials.cc 68021 2013-03-13 13:36:07Z gcosmo $
+//
 /// \file field/field04/src/F04Materials.cc
 /// \brief Implementation of the F04Materials class
 //
-//
+
 #include "F04Materials.hh"
 #include "G4SystemOfUnits.hh"
 

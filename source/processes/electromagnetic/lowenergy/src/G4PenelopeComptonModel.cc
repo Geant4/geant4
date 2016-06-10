@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeComptonModel.cc 75180 2013-10-29 10:11:24Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -37,6 +37,7 @@
 //                          above threshold
 // 24 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
+// 09 Oct 2013   L Pandola  Migration to MT
 //
 #include "G4PenelopeComptonModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -58,9 +59,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
+G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition* part,
 					       const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),fAtomDeexcitation(0),
+  :G4VEmModel(nam),fParticleChange(0),fParticle(0),
+   isInitialised(false),fAtomDeexcitation(0),
    oscManager(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
@@ -70,6 +72,9 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   //
   oscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
 
+  if (part)
+    SetParticle(part);
+ 
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -91,7 +96,7 @@ G4PenelopeComptonModel::~G4PenelopeComptonModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition*,
+void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
 					  const G4DataVector&)
 {
   if (verboseLevel > 3)
@@ -108,20 +113,51 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition*,
       G4cout << "Please make sure this is intended" << G4endl;
     }
 
+  SetParticle(part);
 
-  if (verboseLevel > 0) 
+  if (IsMaster() && part == fParticle) 
     {
-      G4cout << "Penelope Compton model v2008 is initialized " << G4endl
-	     << "Energy range: "
-	     << LowEnergyLimit() / keV << " keV - "
-	     << HighEnergyLimit() / GeV << " GeV";  
-    }
-  
+
+      if (verboseLevel > 0) 
+	{
+	  G4cout << "Penelope Compton model v2008 is initialized " << G4endl
+		 << "Energy range: "
+		 << LowEnergyLimit() / keV << " keV - "
+		 << HighEnergyLimit() / GeV << " GeV";  
+	}
+    }      
+
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true; 
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeComptonModel::InitialiseLocal(const G4ParticleDefinition* part,
+                                                     G4VEmModel *masterModel)
+{
+  if (verboseLevel > 3)
+    G4cout << "Calling  G4PenelopeComptonModel::InitialiseLocal()" << G4endl;
+ 
+  //
+  //Check that particle matches: one might have multiple master models (e.g. 
+  //for e+ and e-).
+  //
+  if (part == fParticle)
+    {
+      //Get the const table pointers from the master to the workers
+      const G4PenelopeComptonModel* theModel = 
+        static_cast<G4PenelopeComptonModel*> (masterModel);
+      
+      //Same verbosity for all workers, as the master
+      verboseLevel = theModel->verboseLevel;
+    }
+
+  return;
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -673,8 +709,8 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta,G4do
   G4double ionEnergy = osc->GetIonisationEnergy();
   G4double harFunc = osc->GetHartreeFactor(); 
 
-  const G4double k2 = std::sqrt(2.);
-  const G4double k1 = 1./k2; 
+  static const G4double k2 = std::sqrt(2.);
+  static const G4double k1 = 1./k2; 
 
   if (energy < ionEnergy)
     return 0;
@@ -731,14 +767,14 @@ G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4P
   const G4int npoints=10;
   const G4int ncallsmax=20000;
   const G4int nst=256;
-  static G4double Abscissas[10] = {7.652651133497334e-02,2.2778585114164508e-01,3.7370608871541956e-01,
-				   5.1086700195082710e-01,6.3605368072651503e-01,7.4633190646015079e-01,
-				   8.3911697182221882e-01,9.1223442825132591e-01,9.6397192727791379e-01,
-				   9.9312859918509492e-01};
-  static G4double Weights[10] = {1.5275338713072585e-01,1.4917298647260375e-01,1.4209610931838205e-01,
-				 1.3168863844917663e-01,1.1819453196151842e-01,1.0193011981724044e-01,
-				 8.3276741576704749e-02,6.2672048334109064e-02,4.0601429800386941e-02,
-				 1.7614007139152118e-02};
+  static const G4double Abscissas[10] = {7.652651133497334e-02,2.2778585114164508e-01,3.7370608871541956e-01,
+				  5.1086700195082710e-01,6.3605368072651503e-01,7.4633190646015079e-01,
+				  8.3911697182221882e-01,9.1223442825132591e-01,9.6397192727791379e-01,
+				  9.9312859918509492e-01};
+  static const G4double Weights[10] = {1.5275338713072585e-01,1.4917298647260375e-01,1.4209610931838205e-01,
+				1.3168863844917663e-01,1.1819453196151842e-01,1.0193011981724044e-01,
+				8.3276741576704749e-02,6.2672048334109064e-02,4.0601429800386941e-02,
+				1.7614007139152118e-02};
 
   G4double MaxError = 1e-5;
   //Error control
@@ -891,3 +927,11 @@ G4double G4PenelopeComptonModel::KleinNishinaCrossSection(G4double energy,
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+
+void G4PenelopeComptonModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!fParticle) {
+    fParticle = p;  
+  }
+}

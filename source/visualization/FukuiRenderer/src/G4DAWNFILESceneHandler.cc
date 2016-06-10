@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DAWNFILESceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeXiZeroPChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -498,7 +498,7 @@ namespace {
       0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01} };
 }
 
-G4CascadeXiZeroPChannelData::data_t
+const G4CascadeXiZeroPChannelData::data_t
 G4CascadeXiZeroPChannelData::data(x0p2bfs, x0p3bfs, x0p4bfs,
 				  x0p5bfs, x0p6bfs, x0p7bfs,
 				  x0pCrossSections, xi0*pro, "XiZeroP");

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ExGflashHitsCollection.hh 70923 2013-06-07 13:10:39Z gcosmo $
+//
 /// \file parameterisations/gflash/include/ExGflashHitsCollection.hh
 /// \brief Definition of the ExGflashHitsCollection class
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PAIPhotonModel.cc 76879 2013-11-18 12:44:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,8 @@
 // 17.08.04 V.Grichine, bug fixed for Tkin<=0 in SampleSecondary
 // 16.08.04 V.Grichine, bug fixed in massRatio for DEDX, CrossSection, SampleSecondary
 // 11.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 12.06.13 V. Grichine Bug fixed in SampleSecondaries for scaled Tkin (fMass -> proton_mass_c2)
+//
 //
 
 #include "G4PAIPhotonModel.hh"
@@ -51,8 +53,11 @@
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4EmCalculator.hh"
+#include "G4ProductionCuts.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4MaterialTable.hh"
+
 #include "G4SandiaTable.hh"
 #include "G4PAIxSection.hh"
 
@@ -86,6 +91,7 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
   fTaulim(8.4146e-3)
 {
   fVerbose  = 0;
+  fGamma    = G4Gamma::Gamma();
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
 
@@ -107,6 +113,8 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
 
   fSandiaIntervalNumber = 0;
   fMatIndex = 0;
+  fCutCouple = 0;
+  fMaterial = 0;
 
   fParticleChange = 0;
 
@@ -120,33 +128,21 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
 
 G4PAIPhotonModel::~G4PAIPhotonModel()
 {
-  if(fProtonEnergyVector) delete fProtonEnergyVector;
-  if(fdEdxVector)         delete fdEdxVector ;
-  if ( fLambdaVector)     delete fLambdaVector;
-  if ( fdNdxCutVector)    delete fdNdxCutVector;
+  //  if(fdEdxVector)         delete fdEdxVector;
+  //  if ( fLambdaVector)     delete fLambdaVector;
+  // if ( fdNdxCutVector)    delete fdNdxCutVector;
 
   if( fPAItransferTable )
   {
-        fPAItransferTable->clearAndDestroy();
-        delete fPAItransferTable ;
+        delete fPAItransferTable;
   }
   if( fPAIphotonTable )
   {
-        fPAIphotonTable->clearAndDestroy();
-        delete fPAIphotonTable ;
+        delete fPAIphotonTable;
   }
   if( fPAIplasmonTable )
   {
-        fPAIplasmonTable->clearAndDestroy();
-        delete fPAIplasmonTable ;
-  }
-  if(fSandiaPhotoAbsCof)
-  {
-    for(G4int i=0;i<fSandiaIntervalNumber;i++)
-    {
-        delete[] fSandiaPhotoAbsCof[i];
-    }
-    delete[] fSandiaPhotoAbsCof;
+        delete fPAIplasmonTable;
   }
 }
 
@@ -167,7 +163,7 @@ void G4PAIPhotonModel::SetParticle(const G4ParticleDefinition* p)
 ////////////////////////////////////////////////////////////////////////////
 
 void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
-                                   const G4DataVector&)
+				  const G4DataVector&)
 {
   //  G4cout<<"G4PAIPhotonModel::Initialise for "<<p->GetParticleName()<<G4endl;
   if(isInitialised) { return; }
@@ -177,102 +173,171 @@ void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
 
   fParticleChange = GetParticleChangeForLoss();
 
-  const G4ProductionCutsTable* theCoupleTable =
-        G4ProductionCutsTable::GetProductionCutsTable();
+  //const G4ProductionCutsTable* theCoupleTable =
+  //      G4ProductionCutsTable::GetProductionCutsTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  size_t numOfMat   = G4Material::GetNumberOfMaterials();
+  size_t numRegions = fPAIRegionVector.size();
 
-  for(size_t iReg = 0; iReg < fPAIRegionVector.size();++iReg) // region loop
+  for(size_t iReg = 0; iReg < numRegions; ++iReg) // region loop
   {
     const G4Region* curReg = fPAIRegionVector[iReg];
+    G4Region* reg = const_cast<G4Region*>(curReg); 
 
-    vector<G4Material*>::const_iterator matIter = curReg->GetMaterialIterator();
-    size_t jMat; 
-    size_t numOfMat = curReg->GetNumberOfMaterials();
-
-    //  for(size_t jMat = 0; jMat < curReg->GetNumberOfMaterials();++jMat){}
-    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    size_t numberOfMat = G4Material::GetNumberOfMaterials();
-
-    for(jMat = 0 ; jMat < numOfMat; ++jMat) // region material loop
+    for(size_t jMat = 0; jMat < numOfMat; ++jMat) // material loop
     {
-      const G4MaterialCutsCouple* matCouple = theCoupleTable->
-      GetMaterialCutsCouple( *matIter, curReg->GetProductionCuts() );
-      fMaterialCutsCoupleVector.push_back(matCouple);
+      G4Material* material = (*theMaterialTable)[jMat];
+      const G4MaterialCutsCouple* couple = reg->FindCouple(material);
 
-      size_t iMatGlob;
-      for(iMatGlob = 0 ; iMatGlob < numberOfMat ; iMatGlob++ )
-      {
-        if( *matIter == (*theMaterialTable)[iMatGlob]) break ;
+      //	theCoupleTable->GetMaterialCutsCouple( material, 
+      //	 curReg->GetProductionCuts() );
+
+      if(couple) {
+	//G4cout << "Reg <" <<curReg->GetName() << ">  mat <" 
+	//       << material->GetName() << ">  fCouple= " 
+	//       << couple<<"  " << p->GetParticleName() <<G4endl;
+
+	fMaterialCutsCoupleVector.push_back(couple);
+
+	fMatIndex = jMat;
+	fMaterial = material;
+
+	// ComputeSandiaPhotoAbsCof();
+        fSandia.Initialize(material);
+	BuildPAIonisationTable();
+	/*
+        if( fSandiaPhotoAbsCof ) // delete SANDIA cofs've been used for pai-xsc
+        {
+          for( G4int i = 0;i < fSandiaIntervalNumber;i++)
+          {
+            delete[] fSandiaPhotoAbsCof[i];
+          }
+          delete[] fSandiaPhotoAbsCof;
+          fSandiaPhotoAbsCof = 0;
+        }
+	*/
+	fPAIxscBank.push_back(fPAItransferTable);
+	fPAIphotonBank.push_back(fPAIphotonTable);
+	fPAIplasmonBank.push_back(fPAIplasmonTable);
+	fPAIdEdxBank.push_back(fPAIdEdxTable);
+	fdEdxTable.push_back(fdEdxVector);
+
+	BuildLambdaVector(couple);
+
+	fdNdxCutTable.push_back(fdNdxCutVector);
+	fdNdxCutPhotonTable.push_back(fdNdxCutPhotonVector);
+	fdNdxCutPlasmonTable.push_back(fdNdxCutPlasmonVector);
+	fLambdaTable.push_back(fLambdaVector);
       }
-      fMatIndex = iMatGlob;
-
-      ComputeSandiaPhotoAbsCof();
-      BuildPAIonisationTable();
-
-      fPAIxscBank.push_back(fPAItransferTable);
-      fPAIphotonBank.push_back(fPAIphotonTable);
-      fPAIplasmonBank.push_back(fPAIplasmonTable);
-      fPAIdEdxBank.push_back(fPAIdEdxTable);
-      fdEdxTable.push_back(fdEdxVector);
-
-      BuildLambdaVector(matCouple);
-
-      fdNdxCutTable.push_back(fdNdxCutVector);
-      fdNdxCutPhotonTable.push_back(fdNdxCutPhotonVector);
-      fdNdxCutPlasmonTable.push_back(fdNdxCutPlasmonVector);
-      fLambdaTable.push_back(fLambdaVector);
-
-
-      matIter++;
     }
   }
 }
 
 //////////////////////////////////////////////////////////////////
 
-void G4PAIPhotonModel::InitialiseMe(const G4ParticleDefinition*)
-{}
+void G4PAIPhotonModel::InitTest(const G4ParticleDefinition* p, G4MaterialCutsCouple* couple, 
+				G4double phE, G4double eTkin)
+{
+  //  G4cout<<"G4PAIPhotonModel::InitTest for "<<p->GetParticleName()<<G4endl;
+  if(isInitialised) { return; }
+  isInitialised = true;
+
+  if( !fParticle ) SetParticle(p);
+
+  fParticleChange = GetParticleChangeForLoss();
+
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+
+  size_t jMat, numOfMat   = G4Material::GetNumberOfMaterials();
+
+
+  // const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
+
+  if( couple ) 
+  {
+    const G4Material* material = couple->GetMaterial();
+
+    fMaterialCutsCoupleVector.push_back(couple);
+
+    for( jMat = 0; jMat < numOfMat; ++jMat ) // material loop
+    {
+      if( material->GetName() == (*theMaterialTable)[jMat]->GetName() ) break;
+    }
+    fMatIndex = jMat;
+    G4Material* mat = (*theMaterialTable)[jMat];
+	fMaterial = mat;
+
+
+    // ComputeSandiaPhotoAbsCof();
+        fSandia.Initialize(mat);
+	BuildPAIonisationTable();
+	/*
+        if( fSandiaPhotoAbsCof ) // delete SANDIA cofs've been used for pai-xsc
+        {
+          for( G4int i = 0;i < fSandiaIntervalNumber;i++)
+          {
+            delete[] fSandiaPhotoAbsCof[i];
+          }
+          delete[] fSandiaPhotoAbsCof;
+          fSandiaPhotoAbsCof = 0;
+        }
+	*/
+	fPAIxscBank.push_back(fPAItransferTable);
+	fPAIphotonBank.push_back(fPAIphotonTable);
+	fPAIplasmonBank.push_back(fPAIplasmonTable);
+	fPAIdEdxBank.push_back(fPAIdEdxTable);
+	fdEdxTable.push_back(fdEdxVector);
+
+	BuildLambdaVector(couple,phE,eTkin);
+
+	fdNdxCutTable.push_back(fdNdxCutVector);
+	fdNdxCutPhotonTable.push_back(fdNdxCutPhotonVector);
+	fdNdxCutPlasmonTable.push_back(fdNdxCutPlasmonVector);
+	fLambdaTable.push_back(fLambdaVector);
+  }    
+}
 
 //////////////////////////////////////////////////////////////////
 
 void G4PAIPhotonModel::ComputeSandiaPhotoAbsCof()
 {
-  G4int i, j, numberOfElements ;
+  G4int i, j, numberOfElements;
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4SandiaTable thisMaterialSandiaTable(fMatIndex) ;
+  G4SandiaTable thisMaterialSandiaTable(fMatIndex);
   numberOfElements = (*theMaterialTable)[fMatIndex]->
                                               GetNumberOfElements();
-  G4int* thisMaterialZ = new G4int[numberOfElements] ;
+  G4int* thisMaterialZ = new G4int[numberOfElements];
 
   for(i=0;i<numberOfElements;i++)  
   {
     thisMaterialZ[i] = 
-    (G4int)(*theMaterialTable)[fMatIndex]->GetElement(i)->GetZ() ;
+    (G4int)(*theMaterialTable)[fMatIndex]->GetElement(i)->GetZ();
   }  
   fSandiaIntervalNumber = thisMaterialSandiaTable.SandiaIntervals
-                           (thisMaterialZ,numberOfElements) ;
+                           (thisMaterialZ,numberOfElements);
 
   fSandiaIntervalNumber = thisMaterialSandiaTable.SandiaMixing
                            ( thisMaterialZ ,
                              (*theMaterialTable)[fMatIndex]->GetFractionVector() ,
-        		     numberOfElements,fSandiaIntervalNumber) ;
+        		     numberOfElements,fSandiaIntervalNumber);
    
-  fSandiaPhotoAbsCof = new G4double*[fSandiaIntervalNumber] ;
+  fSandiaPhotoAbsCof = new G4double*[fSandiaIntervalNumber];
 
-  for(i=0;i<fSandiaIntervalNumber;i++)  fSandiaPhotoAbsCof[i] = new G4double[5] ;
+  for(i=0;i<fSandiaIntervalNumber;i++)  fSandiaPhotoAbsCof[i] = new G4double[5];
    
-  for( i = 0 ; i < fSandiaIntervalNumber ; i++ )
+  for( i = 0; i < fSandiaIntervalNumber; i++ )
   {
-    fSandiaPhotoAbsCof[i][0] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,0) ; 
+    fSandiaPhotoAbsCof[i][0] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,0); 
 
-    for( j = 1; j < 5 ; j++ )
+    for( j = 1; j < 5; j++ )
     {
       fSandiaPhotoAbsCof[i][j] = thisMaterialSandiaTable.
 	                              GetPhotoAbsorpCof(i+1,j)*
-                 (*theMaterialTable)[fMatIndex]->GetDensity() ;
+                 (*theMaterialTable)[fMatIndex]->GetDensity();
     }
   }
-  delete[] thisMaterialZ ;
+  delete[] thisMaterialZ;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -284,21 +349,21 @@ void G4PAIPhotonModel::ComputeSandiaPhotoAbsCof()
 void
 G4PAIPhotonModel::BuildPAIonisationTable()
 {
-  G4double LowEdgeEnergy , ionloss ;
-  G4double /*massRatio,*/ tau, Tmax, Tmin, Tkin, deltaLow, /*gamma,*/ bg2 ;
+  G4double LowEdgeEnergy , ionloss;
+  G4double /*massRatio,*/ tau, Tmax, Tmin, Tkin, deltaLow, /*gamma,*/ bg2;
   /*
   if( fPAItransferTable )
   {
-     fPAItransferTable->clearAndDestroy() ;
-     delete fPAItransferTable ;
+     fPAItransferTable->clearAndDestroy();
+     delete fPAItransferTable;
   }
   */
   fPAItransferTable = new G4PhysicsTable(fTotBin);
   /*
   if( fPAIratioTable )
   {
-     fPAIratioTable->clearAndDestroy() ;
-     delete fPAIratioTable ;
+     fPAIratioTable->clearAndDestroy();
+     delete fPAIratioTable;
   }
   */
   fPAIphotonTable = new G4PhysicsTable(fTotBin);
@@ -306,89 +371,93 @@ G4PAIPhotonModel::BuildPAIonisationTable()
   /*
   if( fPAIdEdxTable )
   {
-     fPAIdEdxTable->clearAndDestroy() ;
-     delete fPAIdEdxTable ;
+     fPAIdEdxTable->clearAndDestroy();
+     delete fPAIdEdxTable;
   }
   */
   fPAIdEdxTable = new G4PhysicsTable(fTotBin);
 
-  //  if(fdEdxVector) delete fdEdxVector ;
+  //  if(fdEdxVector) delete fdEdxVector;
   fdEdxVector = new G4PhysicsLogVector( fLowestKineticEnergy,
 					 fHighestKineticEnergy,
-					 fTotBin               ) ;
-  Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
-  deltaLow = 100.*eV; // 0.5*eV ;
+					 fTotBin               );
+  // Tmin     = fSandiaPhotoAbsCof[0][0];      // low energy Sandia interval
+  Tmin = fSandia.GetSandiaMatTablePAI(0,0);      // low energy Sandia interval
+  deltaLow = 100.*eV; // 0.5*eV;
 
-  for (G4int i = 0 ; i <= fTotBin ; i++)  //The loop for the kinetic energy
+  for (G4int i = 0; i <= fTotBin; i++)  //The loop for the kinetic energy
   {
-    LowEdgeEnergy = fProtonEnergyVector->GetLowEdgeEnergy(i) ;
-    tau = LowEdgeEnergy/proton_mass_c2 ;
-    //    if(tau < 0.01)  tau = 0.01 ;
-    //gamma = tau +1. ;
-    // G4cout<<"gamma = "<<gamma<<endl ;
-    bg2 = tau*(tau + 2. ) ;
-    //massRatio = electron_mass_c2/proton_mass_c2 ;
+    LowEdgeEnergy = fProtonEnergyVector->GetLowEdgeEnergy(i);
+    tau = LowEdgeEnergy/proton_mass_c2;
+    //    if(tau < 0.01)  tau = 0.01;
+    //gamma = tau +1.;
+    // G4cout<<"gamma = "<<gamma<<endl;
+    bg2 = tau*(tau + 2. );
+    //massRatio = electron_mass_c2/proton_mass_c2;
     Tmax = MaxSecondaryEnergy(fParticle, LowEdgeEnergy); 
     // G4cout<<"proton Tkin = "<<LowEdgeEnergy/MeV<<" MeV"
     // <<" Tmax = "<<Tmax/MeV<<" MeV"<<G4endl;
-    // Tkin = DeltaCutInKineticEnergyNow ;
+    // Tkin = DeltaCutInKineticEnergyNow;
 
     // if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
-    Tkin = Tmax ;
+    Tkin = Tmax;
     if ( Tkin < Tmin + deltaLow )  // low energy safety
     {
-      Tkin = Tmin + deltaLow ;
+      Tkin = Tmin + deltaLow;
     }
+    fPAIxSection.Initialize(fMaterial, Tkin, bg2, 
+			    &fSandia);
+    /*
     G4PAIxSection protonPAI( fMatIndex,
                              Tkin,
                              bg2,
                              fSandiaPhotoAbsCof,
-                             fSandiaIntervalNumber  ) ;
+                             fSandiaIntervalNumber  );
 
-
-    // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
-    // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
-    // G4cout<<"protonPAI.GetSplineSize() = "<<
-    //    protonPAI.GetSplineSize()<<G4endl<<G4endl ;
+    */
+    // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl;
+    // G4cout<<"n1 = "<<fPAIxSection.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl;
+    // G4cout<<"fPAIxSection.GetSplineSize() = "<<
+    //    fPAIxSection.GetSplineSize()<<G4endl<<G4endl;
 
     G4PhysicsFreeVector* transferVector = new
-                             G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
+                             G4PhysicsFreeVector(fPAIxSection.GetSplineSize());
     G4PhysicsFreeVector* photonVector = new
-                             G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
+                             G4PhysicsFreeVector(fPAIxSection.GetSplineSize());
     G4PhysicsFreeVector* plasmonVector = new
-                             G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
+                             G4PhysicsFreeVector(fPAIxSection.GetSplineSize());
     G4PhysicsFreeVector* dEdxVector = new
-                             G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
+                             G4PhysicsFreeVector(fPAIxSection.GetSplineSize());
 
-    for( G4int k = 0 ; k < protonPAI.GetSplineSize() ; k++ )
+    for( G4int k = 0; k < fPAIxSection.GetSplineSize(); k++ )
     {
       transferVector->PutValue( k ,
-                                protonPAI.GetSplineEnergy(k+1),
-                                protonPAI.GetIntegralPAIxSection(k+1) ) ;
+                                fPAIxSection.GetSplineEnergy(k+1),
+                                fPAIxSection.GetIntegralPAIxSection(k+1) );
       photonVector->PutValue( k ,
-                                protonPAI.GetSplineEnergy(k+1),
-                                protonPAI.GetIntegralCerenkov(k+1) ) ;
+                                fPAIxSection.GetSplineEnergy(k+1),
+                                fPAIxSection.GetIntegralCerenkov(k+1) );
       plasmonVector->PutValue( k ,
-                                protonPAI.GetSplineEnergy(k+1),
-                                protonPAI.GetIntegralPlasmon(k+1) ) ;
+                                fPAIxSection.GetSplineEnergy(k+1),
+                                fPAIxSection.GetIntegralPlasmon(k+1) );
       dEdxVector->PutValue( k ,
-                                protonPAI.GetSplineEnergy(k+1),
-                                protonPAI.GetIntegralPAIdEdx(k+1) ) ;
+                                fPAIxSection.GetSplineEnergy(k+1),
+                                fPAIxSection.GetIntegralPAIdEdx(k+1) );
     }
-    ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
-    if ( ionloss <= 0.)  ionloss = DBL_MIN ;
-    fdEdxVector->PutValue(i,ionloss) ;
+    ionloss = fPAIxSection.GetMeanEnergyLoss();   //  total <dE/dx>
+    if ( ionloss <= 0.)  ionloss = DBL_MIN;
+    fdEdxVector->PutValue(i,ionloss);
 
-    fPAItransferTable->insertAt(i,transferVector) ;
-    fPAIphotonTable->insertAt(i,photonVector) ;
-    fPAIplasmonTable->insertAt(i,plasmonVector) ;
-    fPAIdEdxTable->insertAt(i,dEdxVector) ;
+    fPAItransferTable->insertAt(i,transferVector);
+    fPAIphotonTable->insertAt(i,photonVector);
+    fPAIplasmonTable->insertAt(i,plasmonVector);
+    fPAIdEdxTable->insertAt(i,dEdxVector);
 
   }                                        // end of Tkin loop
   //  theLossTable->insert(fdEdxVector);
   // end of material loop
-  // G4cout<<"G4PAIonisation::BuildPAIonisationTable() have been called"<<G4endl ;
-  // G4cout<<"G4PAIonisation::BuildLossTable() have been called"<<G4endl ;
+  // G4cout<<"G4PAIonisation::BuildPAIonisationTable() have been called"<<G4endl;
+  // G4cout<<"G4PAIonisation::BuildLossTable() have been called"<<G4endl;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -400,27 +469,32 @@ G4PAIPhotonModel::BuildPAIonisationTable()
 void
 G4PAIPhotonModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
 {
-  G4int i ;
-  G4double dNdxCut,dNdxPhotonCut,dNdxPlasmonCut, lambda;
+  G4int i;
+  G4double dNdxCut,dNdxPhotonCut,dNdxPlasmonCut, lambda, deltaCutInKineticEnergyNow, photonCutInKineticEnergyNow;
   G4double kCarTolerance = G4GeometryTolerance::GetInstance()
                            ->GetSurfaceTolerance();
 
-  const G4ProductionCutsTable* theCoupleTable=
+  G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
+
+  // G4EmCalculator converter;
+
+  // const G4Material* material = matCutsCouple->GetMaterial();
+
+  // G4double rangeGamma    = matCutsCouple->GetProductionCuts()->GetProductionCut(0); 
+  // G4double rangeElectron = matCutsCouple->GetProductionCuts()->GetProductionCut(1); 
 
   size_t numOfCouples = theCoupleTable->GetTableSize();
   size_t jMatCC;
 
-  for (jMatCC = 0 ; jMatCC < numOfCouples ; jMatCC++ )
+  for (jMatCC = 0; jMatCC < numOfCouples; jMatCC++ )
   {
     if( matCutsCouple == theCoupleTable->GetMaterialCutsCouple(jMatCC) ) break;
   }
   if( jMatCC == numOfCouples && jMatCC > 0 ) jMatCC--;
 
-  const vector<G4double>*  deltaCutInKineticEnergy = theCoupleTable->
-                                GetEnergyCutsVector(idxG4ElectronCut);
-  const vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->
-                                GetEnergyCutsVector(idxG4GammaCut);
+  const vector<G4double>*  deltaCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
+  const vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
 
   if (fLambdaVector)         delete fLambdaVector;
   if (fdNdxCutVector)        delete fdNdxCutVector;
@@ -440,8 +514,14 @@ G4PAIPhotonModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
 					  fHighestKineticEnergy,
 					  fTotBin                );
 
-  G4double deltaCutInKineticEnergyNow  = (*deltaCutInKineticEnergy)[jMatCC];
-  G4double photonCutInKineticEnergyNow = (*photonCutInKineticEnergy)[jMatCC];
+  deltaCutInKineticEnergyNow  = (*deltaCutInKineticEnergy)[jMatCC];
+  photonCutInKineticEnergyNow = (*photonCutInKineticEnergy)[jMatCC];
+
+  // deltaCutInKineticEnergyNow  = theCoupleTable->ConvertRangeToEnergy(fElectron,material,rangeElectron);
+  // photonCutInKineticEnergyNow = theCoupleTable->ConvertRangeToEnergy(fGamma,material,rangeGamma);
+
+  // photonCutInKineticEnergyNow = converter.GetKinEnergy(rangeGamma, fGamma,material);
+  // deltaCutInKineticEnergyNow  = converter.GetKinEnergy(rangeElectron, fElectron,material);
 
   if(fVerbose > 0)
   {
@@ -450,7 +530,84 @@ G4PAIPhotonModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
     G4cout<<"PAIPhotonModel photonCutInKineticEnergyNow = "
 	  <<photonCutInKineticEnergyNow/keV<<" keV"<<G4endl;
   }
-  for ( i = 0 ; i <= fTotBin ; i++ )
+  for ( i = 0; i <= fTotBin; i++ )
+  {
+    dNdxPhotonCut  = GetdNdxPhotonCut(i,photonCutInKineticEnergyNow);
+    dNdxPlasmonCut = GetdNdxPlasmonCut(i,deltaCutInKineticEnergyNow);
+
+    dNdxCut        =  dNdxPhotonCut + dNdxPlasmonCut;
+    lambda         = dNdxCut <= DBL_MIN ? DBL_MAX: 1.0/dNdxCut;
+
+    if (lambda <= 1000*kCarTolerance) lambda = 1000*kCarTolerance; // Mmm ???
+
+    fLambdaVector->PutValue(i, lambda);
+
+    fdNdxCutVector->PutValue(i, dNdxCut);
+    fdNdxCutPhotonVector->PutValue(i, dNdxPhotonCut);
+    fdNdxCutPlasmonVector->PutValue(i, dNdxPlasmonCut);
+  }
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Build mean free path tables for the delta ray production process
+//     tables are built for MATERIALS
+//
+
+void
+G4PAIPhotonModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple, G4double photEnergy, G4double eTkin)
+{
+  G4int i;
+  G4double dNdxCut,dNdxPhotonCut,dNdxPlasmonCut, lambda, deltaCutInKineticEnergyNow, photonCutInKineticEnergyNow;
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
+                           ->GetSurfaceTolerance();
+
+  G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+
+
+  //  const G4Material* material = matCutsCouple->GetMaterial();
+
+
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+  size_t jMatCC;
+
+  for (jMatCC = 0; jMatCC < numOfCouples; jMatCC++ )
+  {
+    if( matCutsCouple == theCoupleTable->GetMaterialCutsCouple(jMatCC) ) break;
+  }
+  if( jMatCC == numOfCouples && jMatCC > 0 ) jMatCC--;
+
+  if (fLambdaVector)         delete fLambdaVector;
+  if (fdNdxCutVector)        delete fdNdxCutVector;
+  if (fdNdxCutPhotonVector)  delete fdNdxCutPhotonVector;
+  if (fdNdxCutPlasmonVector) delete fdNdxCutPlasmonVector;
+
+  fLambdaVector = new G4PhysicsLogVector( fLowestKineticEnergy,
+					  fHighestKineticEnergy,
+					  fTotBin                );
+  fdNdxCutVector = new G4PhysicsLogVector( fLowestKineticEnergy,
+					  fHighestKineticEnergy,
+					  fTotBin                );
+  fdNdxCutPhotonVector = new G4PhysicsLogVector( fLowestKineticEnergy,
+					  fHighestKineticEnergy,
+					  fTotBin                );
+  fdNdxCutPlasmonVector = new G4PhysicsLogVector( fLowestKineticEnergy,
+					  fHighestKineticEnergy,
+					  fTotBin                );
+
+
+  photonCutInKineticEnergyNow = photEnergy;
+  deltaCutInKineticEnergyNow  = eTkin;
+
+  if(fVerbose > 0)
+  {
+    G4cout<<"PAIPhotonModel deltaCutInKineticEnergyNow = "
+	  <<deltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
+    G4cout<<"PAIPhotonModel photonCutInKineticEnergyNow = "
+	  <<photonCutInKineticEnergyNow/keV<<" keV"<<G4endl;
+  }
+  for ( i = 0; i <= fTotBin; i++ )
   {
     dNdxPhotonCut  = GetdNdxPhotonCut(i,photonCutInKineticEnergyNow);
     dNdxPlasmonCut = GetdNdxPlasmonCut(i,deltaCutInKineticEnergyNow);
@@ -480,36 +637,37 @@ G4PAIPhotonModel::GetdNdxCut( G4int iPlace, G4double transferCut)
   // G4cout<<"iPlace = "<<iPlace<<"; "<<"transferCut = "<<transferCut<<G4endl;
   // G4cout<<"size = "<<G4int((*fPAItransferTable)(iPlace)->GetVectorLength())
   //           <<G4endl;  
-  for( iTransfer = 0 ; 
-       iTransfer < G4int((*fPAItransferTable)(iPlace)->GetVectorLength()) ; 
+  for( iTransfer = 0; 
+       iTransfer < G4int((*fPAItransferTable)(iPlace)->GetVectorLength()); 
        iTransfer++)
   {
     if(transferCut <= (*fPAItransferTable)(iPlace)->GetLowEdgeEnergy(iTransfer))
     {
-      break ;
+      break;
     }
   }  
   if ( iTransfer >= G4int((*fPAItransferTable)(iPlace)->GetVectorLength()) )
   {
-      iTransfer = (*fPAItransferTable)(iPlace)->GetVectorLength() - 1 ;
+      iTransfer = (*fPAItransferTable)(iPlace)->GetVectorLength() - 1;
   }
-  y1 = (*(*fPAItransferTable)(iPlace))(iTransfer-1) ;
-  y2 = (*(*fPAItransferTable)(iPlace))(iTransfer) ;
+  if (iTransfer == 0) return (*(*fPAItransferTable)(iPlace))(iTransfer);
+  y1 = (*(*fPAItransferTable)(iPlace))(iTransfer-1);
+  y2 = (*(*fPAItransferTable)(iPlace))(iTransfer);
   // G4cout<<"y1 = "<<y1<<"; "<<"y2 = "<<y2<<G4endl;
-  x1 = (*fPAItransferTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
-  x2 = (*fPAItransferTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+  x1 = (*fPAItransferTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1);
+  x2 = (*fPAItransferTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
   // G4cout<<"x1 = "<<x1<<"; "<<"x2 = "<<x2<<G4endl;
 
-  if ( y1 == y2 )    dNdxCut = y2 ;
+  if ( y1 == y2 )    dNdxCut = y2;
   else
   {
-    //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    //    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*0.5 ;
-    else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
+    //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand();
+    //    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand();
+    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*0.5;
+    else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1);      
   }
   //  G4cout<<""<<dNdxCut<<G4endl;
-  return dNdxCut ;
+  return dNdxCut;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -524,36 +682,37 @@ G4PAIPhotonModel::GetdNdxPhotonCut( G4int iPlace, G4double transferCut)
   // G4cout<<"iPlace = "<<iPlace<<"; "<<"transferCut = "<<transferCut<<G4endl;
   // G4cout<<"size = "<<G4int((*fPAIphotonTable)(iPlace)->GetVectorLength())
   //           <<G4endl;  
-  for( iTransfer = 0 ; 
-       iTransfer < G4int((*fPAIphotonTable)(iPlace)->GetVectorLength()) ; 
+  for( iTransfer = 0; 
+       iTransfer < G4int((*fPAIphotonTable)(iPlace)->GetVectorLength()); 
        iTransfer++)
   {
     if(transferCut <= (*fPAIphotonTable)(iPlace)->GetLowEdgeEnergy(iTransfer))
     {
-      break ;
+      break;
     }
   }  
   if ( iTransfer >= G4int((*fPAIphotonTable)(iPlace)->GetVectorLength()) )
   {
-      iTransfer = (*fPAIphotonTable)(iPlace)->GetVectorLength() - 1 ;
+      iTransfer = (*fPAIphotonTable)(iPlace)->GetVectorLength() - 1;
   }
-  y1 = (*(*fPAIphotonTable)(iPlace))(iTransfer-1) ;
-  y2 = (*(*fPAIphotonTable)(iPlace))(iTransfer) ;
+  if (iTransfer == 0) return (*(*fPAIphotonTable)(iPlace))(iTransfer);
+  y1 = (*(*fPAIphotonTable)(iPlace))(iTransfer-1);
+  y2 = (*(*fPAIphotonTable)(iPlace))(iTransfer);
   // G4cout<<"y1 = "<<y1<<"; "<<"y2 = "<<y2<<G4endl;
-  x1 = (*fPAIphotonTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
-  x2 = (*fPAIphotonTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+  x1 = (*fPAIphotonTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1);
+  x2 = (*fPAIphotonTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
   // G4cout<<"x1 = "<<x1<<"; "<<"x2 = "<<x2<<G4endl;
 
-  if ( y1 == y2 )    dNdxCut = y2 ;
+  if ( y1 == y2 )    dNdxCut = y2;
   else
   {
-    //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    //    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*0.5 ;
-    else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
+    //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand();
+    //    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand();
+    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*0.5;
+    else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1);      
   }
   //  G4cout<<""<<dNdxPhotonCut<<G4endl;
-  return dNdxCut ;
+  return dNdxCut;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -569,36 +728,37 @@ G4PAIPhotonModel::GetdNdxPlasmonCut( G4int iPlace, G4double transferCut)
   // G4cout<<"iPlace = "<<iPlace<<"; "<<"transferCut = "<<transferCut<<G4endl;
   // G4cout<<"size = "<<G4int((*fPAIPlasmonTable)(iPlace)->GetVectorLength())
   //           <<G4endl;  
-  for( iTransfer = 0 ; 
-       iTransfer < G4int((*fPAIplasmonTable)(iPlace)->GetVectorLength()) ; 
+  for( iTransfer = 0; 
+       iTransfer < G4int((*fPAIplasmonTable)(iPlace)->GetVectorLength()); 
        iTransfer++)
   {
     if(transferCut <= (*fPAIplasmonTable)(iPlace)->GetLowEdgeEnergy(iTransfer))
     {
-      break ;
+      break;
     }
   }  
   if ( iTransfer >= G4int((*fPAIplasmonTable)(iPlace)->GetVectorLength()) )
   {
-      iTransfer = (*fPAIplasmonTable)(iPlace)->GetVectorLength() - 1 ;
+      iTransfer = (*fPAIplasmonTable)(iPlace)->GetVectorLength() - 1;
   }
-  y1 = (*(*fPAIplasmonTable)(iPlace))(iTransfer-1) ;
-  y2 = (*(*fPAIplasmonTable)(iPlace))(iTransfer) ;
+  if (iTransfer == 0) return (*(*fPAIplasmonTable)(iPlace))(iTransfer);
+  y1 = (*(*fPAIplasmonTable)(iPlace))(iTransfer-1);
+  y2 = (*(*fPAIplasmonTable)(iPlace))(iTransfer);
   // G4cout<<"y1 = "<<y1<<"; "<<"y2 = "<<y2<<G4endl;
-  x1 = (*fPAIplasmonTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
-  x2 = (*fPAIplasmonTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+  x1 = (*fPAIplasmonTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1);
+  x2 = (*fPAIplasmonTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
   // G4cout<<"x1 = "<<x1<<"; "<<"x2 = "<<x2<<G4endl;
 
-  if ( y1 == y2 )    dNdxCut = y2 ;
+  if ( y1 == y2 )    dNdxCut = y2;
   else
   {
-    //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    //    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*0.5 ;
-    else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
+    //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand();
+    //    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand();
+    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*0.5;
+    else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1);      
   }
   //  G4cout<<""<<dNdxPlasmonCut<<G4endl;
-  return dNdxCut ;
+  return dNdxCut;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -613,36 +773,37 @@ G4PAIPhotonModel::GetdEdxCut( G4int iPlace, G4double transferCut)
   // G4cout<<"iPlace = "<<iPlace<<"; "<<"transferCut = "<<transferCut<<G4endl;
   // G4cout<<"size = "<<G4int((*fPAIdEdxTable)(iPlace)->GetVectorLength())
   //           <<G4endl;  
-  for( iTransfer = 0 ; 
-       iTransfer < G4int((*fPAIdEdxTable)(iPlace)->GetVectorLength()) ; 
+  for( iTransfer = 0; 
+       iTransfer < G4int((*fPAIdEdxTable)(iPlace)->GetVectorLength()); 
        iTransfer++)
   {
     if(transferCut <= (*fPAIdEdxTable)(iPlace)->GetLowEdgeEnergy(iTransfer))
     {
-      break ;
+      break;
     }
   }  
   if ( iTransfer >= G4int((*fPAIdEdxTable)(iPlace)->GetVectorLength()) )
   {
-      iTransfer = (*fPAIdEdxTable)(iPlace)->GetVectorLength() - 1 ;
+      iTransfer = (*fPAIdEdxTable)(iPlace)->GetVectorLength() - 1;
   }
-  y1 = (*(*fPAIdEdxTable)(iPlace))(iTransfer-1) ;
-  y2 = (*(*fPAIdEdxTable)(iPlace))(iTransfer) ;
+  if (iTransfer == 0) return (*(*fPAIdEdxTable)(iPlace))(iTransfer);
+  y1 = (*(*fPAIdEdxTable)(iPlace))(iTransfer-1);
+  y2 = (*(*fPAIdEdxTable)(iPlace))(iTransfer);
   // G4cout<<"y1 = "<<y1<<"; "<<"y2 = "<<y2<<G4endl;
-  x1 = (*fPAIdEdxTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
-  x2 = (*fPAIdEdxTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+  x1 = (*fPAIdEdxTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1);
+  x2 = (*fPAIdEdxTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
   // G4cout<<"x1 = "<<x1<<"; "<<"x2 = "<<x2<<G4endl;
 
-  if ( y1 == y2 )    dEdxCut = y2 ;
+  if ( y1 == y2 )    dEdxCut = y2;
   else
   {
-    //  if ( x1 == x2  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    //    if ( std::abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( std::abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*0.5 ;
-    else             dEdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
+    //  if ( x1 == x2  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand();
+    //    if ( std::abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand();
+    if ( std::abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*0.5;
+    else             dEdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1);      
   }
   //  G4cout<<""<<dEdxCut<<G4endl;
-  return dEdxCut ;
+  return dEdxCut;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -665,27 +826,38 @@ G4double G4PAIPhotonModel::ComputeDEDXPerVolume(const G4Material*,
   G4double dEdx         = 0.;
   const G4MaterialCutsCouple* matCC = CurrentCouple();
 
-  for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
+  for( jMat = 0;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
   if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
-
+  /*
+  G4cout << "G4PAIPhotonModel::ComputeDEDXPerVolume: jMat= " << jMat 
+  	 << " jMax= " << fMaterialCutsCoupleVector.size()
+         << " matCC: " << matCC;
+  if(matCC) G4cout << " mat: " << matCC->GetMaterial()->GetName();
+  G4cout << G4endl;
+  G4cout << fPAIdEdxTable << " " << fdEdxVector << " " 
+	 << fProtonEnergyVector << G4endl;
+  */
   fPAIdEdxTable = fPAIdEdxBank[jMat];
   fdEdxVector = fdEdxTable[jMat];
-  for(iTkin = 0 ; iTkin <= fTotBin ; iTkin++)
+  for(iTkin = 0; iTkin <= fTotBin; iTkin++)
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break ;    
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break;    
   }
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
-  dEdx = charge2*( (*fdEdxVector)(iPlace) - GetdEdxCut(iPlace,cut) ) ;  
+  else if(iPlace > fTotBin) iPlace = fTotBin;
+  dEdx = charge2*( (*fdEdxVector)(iPlace) - GetdEdxCut(iPlace,cut) );  
 
   if( dEdx < 0.) dEdx = 0.;
   return dEdx;
 }
 
-/////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//
+// Return xsc for mean interaction length
 
 G4double G4PAIPhotonModel::CrossSectionPerVolume( const G4Material*,
 						  const G4ParticleDefinition* p,
@@ -710,7 +882,7 @@ G4double G4PAIPhotonModel::CrossSectionPerVolume( const G4Material*,
 
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  for (jMatCC = 0 ; jMatCC < numOfCouples ; jMatCC++ )
+  for (jMatCC = 0; jMatCC < numOfCouples; jMatCC++ )
   {
     if( matCC == theCoupleTable->GetMaterialCutsCouple(jMatCC) ) break;
   }
@@ -719,9 +891,9 @@ G4double G4PAIPhotonModel::CrossSectionPerVolume( const G4Material*,
   const vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->
                                 GetEnergyCutsVector(idxG4GammaCut);
 
-  G4double photonCut = (*photonCutInKineticEnergy)[jMatCC] ;
+  G4double photonCut = (*photonCutInKineticEnergy)[jMatCC];
 
-  for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
+  for( jMat = 0;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
@@ -731,9 +903,82 @@ G4double G4PAIPhotonModel::CrossSectionPerVolume( const G4Material*,
   fPAIphotonTable   = fPAIphotonBank[jMat];
   fPAIplasmonTable  = fPAIplasmonBank[jMat];
 
-  for(iTkin = 0 ; iTkin <= fTotBin ; iTkin++)
+  for(iTkin = 0; iTkin <= fTotBin; iTkin++)
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break ;    
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break;    
+  }
+  iPlace = iTkin - 1;
+  if(iPlace < 0) iPlace = 0;
+
+  // G4cout<<"iPlace = "<<iPlace<<"; tmax = "
+  // <<tmax<<"; cutEnergy = "<<cutEnergy<<G4endl;  
+  photon1 = GetdNdxPhotonCut(iPlace,tmax);  
+  photon2 = GetdNdxPhotonCut(iPlace,photonCut); 
+ 
+  plasmon1 = GetdNdxPlasmonCut(iPlace,tmax);  
+  plasmon2 = GetdNdxPlasmonCut(iPlace,cutEnergy); 
+ 
+  cross1 = photon1 + plasmon1;    
+  // G4cout<<"cross1 = "<<cross1<<G4endl;  
+  cross2 = photon2 + plasmon2;    
+  // G4cout<<"cross2 = "<<cross2<<G4endl;  
+  cross  = (cross2 - cross1)*charge2;
+  // G4cout<<"cross = "<<cross<<G4endl;  
+
+  if( cross < 0. ) cross = 0.;
+  return cross;
+}
+//////////////////////////////////////////////////////////////////////
+//
+// Return xsc for mean interaction length in test
+
+G4double G4PAIPhotonModel::GetXscPerVolume( const G4Material*,
+					    const G4ParticleDefinition* p,
+						  G4double kineticEnergy,
+						  G4double photonCut,
+						  G4double cutEnergy,
+						  G4double maxEnergy  ) 
+{
+  G4int iTkin,iPlace;
+  size_t jMat, jMatCC;
+  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
+  if(cutEnergy >= tmax) return 0.0;
+  G4double particleMass = p->GetPDGMass();
+  G4double scaledTkin   = kineticEnergy*proton_mass_c2/particleMass;
+  G4double charge       = p->GetPDGCharge();
+  G4double charge2      = charge*charge, cross, cross1, cross2;
+  G4double photon1, photon2, plasmon1, plasmon2;
+
+  const G4MaterialCutsCouple* matCC = CurrentCouple();
+
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  for (jMatCC = 0; jMatCC < numOfCouples; jMatCC++ )
+  {
+    if( matCC == theCoupleTable->GetMaterialCutsCouple(jMatCC) ) break;
+  }
+  if( jMatCC == numOfCouples && jMatCC > 0 ) jMatCC--;
+
+  // const vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->
+  //                               GetEnergyCutsVector(idxG4GammaCut);
+  // G4double photonCut = (*photonCutInKineticEnergy)[jMatCC];
+
+  for( jMat = 0;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
+  {
+    if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
+  }
+  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+
+  fPAItransferTable = fPAIxscBank[jMat];
+  fPAIphotonTable   = fPAIphotonBank[jMat];
+  fPAIplasmonTable  = fPAIplasmonBank[jMat];
+
+  for(iTkin = 0; iTkin <= fTotBin; iTkin++)
+  {
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break;    
   }
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
@@ -770,7 +1015,7 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 					 G4double maxEnergy)
 {
   size_t jMat;
-  for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
+  for( jMat = 0;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
@@ -784,7 +1029,7 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   fdNdxCutPhotonVector  = fdNdxCutPhotonTable[jMat];
   fdNdxCutPlasmonVector = fdNdxCutPlasmonTable[jMat];
 
-  G4double tmax = min(MaxSecondaryKinEnergy(dp), maxEnergy);
+  G4double tmax = std::min(MaxSecondaryEnergy(dp->GetDefinition(),dp->GetKineticEnergy()), maxEnergy);
   if( tmin >= tmax && fVerbose > 0) 
   {
     G4cout<<"G4PAIPhotonModel::SampleSecondary: tmin >= tmax "<<G4endl;
@@ -793,38 +1038,198 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4ThreeVector direction = dp->GetMomentumDirection();
   G4double particleMass  = dp->GetMass();
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double scaledTkin    = kineticEnergy*fMass/particleMass;
+  G4double scaledTkin    = kineticEnergy*proton_mass_c2/particleMass; // fMass
   G4double totalEnergy   = kineticEnergy + particleMass;
   G4double pSquare       = kineticEnergy*(totalEnergy+particleMass);
 
   G4int iTkin;
   for(iTkin=0;iTkin<=fTotBin;iTkin++)
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break;
   }
-  G4int iPlace = iTkin - 1 ;
+  G4int iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
 
-  G4double dNdxPhotonCut  = (*fdNdxCutPhotonVector)(iPlace) ;  
-  G4double dNdxPlasmonCut = (*fdNdxCutPlasmonVector)(iPlace) ;  
+  G4double dNdxPhotonCut  = (*fdNdxCutPhotonVector)(iPlace);  
+  G4double dNdxPlasmonCut = (*fdNdxCutPlasmonVector)(iPlace);  
   G4double dNdxCut        = dNdxPhotonCut  + dNdxPlasmonCut;
  
   G4double ratio;
   if (dNdxCut > 0.) ratio = dNdxPhotonCut/dNdxCut;
-  else              ratio = 0.;
+  else              return; // ratio = 0.;
 
   if(ratio < G4UniformRand() ) // secondary e-
   {
     G4double deltaTkin     = GetPostStepTransfer(fPAIplasmonTable, fdNdxCutPlasmonVector,
                                                  iPlace, scaledTkin);
 
-//  G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
+//  G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl; 
  
     if( deltaTkin <= 0. ) 
     {
       G4cout<<"G4PAIPhotonModel::SampleSecondary e- deltaTkin = "<<deltaTkin<<G4endl;
     }
     if( deltaTkin <= 0.) return;
+
+    if( deltaTkin >= kineticEnergy ) // stop primary
+    {
+      deltaTkin = kineticEnergy;
+      kineticEnergy = 0.0;
+    }
+    G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
+    G4double totalMomentum      = sqrt(pSquare);
+    G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
+                                /(deltaTotalMomentum * totalMomentum);
+
+    if( costheta > 0.99999 ) costheta = 0.99999;
+    G4double sintheta = 0.0;
+    G4double sin2 = 1. - costheta*costheta;
+    if( sin2 > 0.) sintheta = sqrt(sin2);
+
+    //  direction of the delta electron
+  
+    G4double phi = twopi*G4UniformRand(); 
+    G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
+
+    G4ThreeVector deltaDirection(dirx,diry,dirz);
+    deltaDirection.rotateUz(direction);
+
+    if( kineticEnergy > 0.) // primary change
+    {
+      kineticEnergy -= deltaTkin;
+      G4ThreeVector dir = totalMomentum*direction - deltaTotalMomentum*deltaDirection;
+      direction = dir.unit();
+      fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+      fParticleChange->SetProposedMomentumDirection(direction);
+    }
+    else // stop primary
+    {
+      fParticleChange->ProposeTrackStatus(fStopAndKill);
+      fParticleChange->SetProposedKineticEnergy(0.0);
+    }
+
+   // create G4DynamicParticle object for e- delta ray
+ 
+    G4DynamicParticle* deltaRay = new G4DynamicParticle;
+    deltaRay->SetDefinition(G4Electron::Electron());
+    deltaRay->SetKineticEnergy( deltaTkin );
+    deltaRay->SetMomentumDirection(deltaDirection); 
+    vdp->push_back(deltaRay);
+
+  }
+  else    // secondary 'Cherenkov' photon
+  { 
+    G4double deltaTkin     = GetPostStepTransfer(fPAIphotonTable, fdNdxCutPhotonVector,
+                                                 iPlace,scaledTkin);
+
+    //  G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl; 
+
+    if( deltaTkin <= 0. )
+    {
+      G4cout<<"G4PAIPhotonModel::SampleSecondary gamma deltaTkin = "<<deltaTkin<<G4endl;
+    }
+    if( deltaTkin <= 0.) return;
+
+    if( deltaTkin >= kineticEnergy ) // stop primary
+    {
+      deltaTkin = kineticEnergy;
+      kineticEnergy = 0.0;
+    }
+    G4double costheta = 0.; // G4UniformRand(); // VG: ??? for start only
+    G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
+
+    //  direction of the 'Cherenkov' photon  
+    G4double phi = twopi*G4UniformRand(); 
+    G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
+
+    G4ThreeVector deltaDirection(dirx,diry,dirz);
+    deltaDirection.rotateUz(direction);
+
+    if( kineticEnergy > 0.) // primary change
+    {
+      kineticEnergy -= deltaTkin;
+      fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+    }
+    else // stop primary
+    {
+      fParticleChange->ProposeTrackStatus(fStopAndKill);
+      fParticleChange->SetProposedKineticEnergy(0.0);
+    }
+    // create G4DynamicParticle object for photon ray
+ 
+    G4DynamicParticle* photonRay = new G4DynamicParticle;
+    photonRay->SetDefinition( G4Gamma::Gamma() );
+    photonRay->SetKineticEnergy( deltaTkin );
+    photonRay->SetMomentumDirection(deltaDirection); 
+
+    vdp->push_back(photonRay);
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// test function for losses more than cut
+
+G4double G4PAIPhotonModel::TestSecondaries( G4MaterialCutsCouple* matCC,  G4DynamicParticle* dp,
+					 G4double tmin,
+					 G4double maxEnergy)
+{
+  size_t jMat;
+  for( jMat = 0;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
+  {
+    if( matCC->GetMaterial()->GetName() == fMaterialCutsCoupleVector[jMat]->GetMaterial()->GetName() ) break;
+  }
+  if( jMat == fMaterialCutsCoupleVector.size() && jMat > 0 ) jMat--;
+
+  fPAItransferTable = fPAIxscBank[jMat];
+  fPAIphotonTable   = fPAIphotonBank[jMat];
+  fPAIplasmonTable  = fPAIplasmonBank[jMat];
+
+  fdNdxCutVector        = fdNdxCutTable[jMat];
+  fdNdxCutPhotonVector  = fdNdxCutPhotonTable[jMat];
+  fdNdxCutPlasmonVector = fdNdxCutPlasmonTable[jMat];
+
+  G4double tmax = std::min(MaxSecondaryEnergy(dp->GetDefinition(),dp->GetKineticEnergy()), maxEnergy);
+  if( tmin >= tmax && fVerbose > 0) 
+  {
+    G4cout<<"G4PAIPhotonModel::TestSecondaries: tmin >= tmax "<<G4endl;
+  }
+
+  G4ThreeVector direction = dp->GetMomentumDirection();
+  G4double particleMass  = dp->GetMass();
+  G4double kineticEnergy = dp->GetKineticEnergy();
+  G4double scaledTkin    = kineticEnergy*proton_mass_c2/particleMass; // fMass
+  G4double totalEnergy   = kineticEnergy + particleMass;
+  G4double pSquare       = kineticEnergy*(totalEnergy+particleMass);
+
+  G4int iTkin;
+  for(iTkin=0;iTkin<=fTotBin;iTkin++)
+  {
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break;
+  }
+  G4int iPlace = iTkin - 1;
+  if(iPlace < 0) iPlace = 0;
+
+  G4double dNdxPhotonCut  = (*fdNdxCutPhotonVector)(iPlace);  
+  G4double dNdxPlasmonCut = (*fdNdxCutPlasmonVector)(iPlace);  
+  G4double dNdxCut        = dNdxPhotonCut  + dNdxPlasmonCut;
+ 
+  G4double ratio, deltaTkin;
+  if (dNdxCut > 0.) ratio = dNdxPhotonCut/dNdxCut;
+  else              ratio = 0.;
+
+  if(ratio < G4UniformRand() ) // secondary e-
+  {
+    deltaTkin     = GetPostStepTransfer(fPAIplasmonTable, fdNdxCutPlasmonVector,
+                                                 iPlace, scaledTkin);
+
+//  G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl; 
+ 
+    if( deltaTkin <= 0. ) 
+    {
+      G4cout<<"G4PAIPhotonModel::SampleSecondary e- deltaTkin = "<<deltaTkin<<G4endl;
+    }
+    if( deltaTkin <= 0.) return 0.;
 
     G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
     G4double totalMomentum      = sqrt(pSquare);
@@ -857,21 +1262,20 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     deltaRay->SetDefinition(G4Electron::Electron());
     deltaRay->SetKineticEnergy( deltaTkin );
     deltaRay->SetMomentumDirection(deltaDirection); 
-    vdp->push_back(deltaRay);
 
   }
   else    // secondary 'Cherenkov' photon
   { 
-    G4double deltaTkin     = GetPostStepTransfer(fPAIphotonTable, fdNdxCutPhotonVector,
+    deltaTkin     = GetPostStepTransfer(fPAIphotonTable, fdNdxCutPhotonVector,
                                                  iPlace,scaledTkin);
 
-    //  G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
+    //  G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl; 
 
     if( deltaTkin <= 0. )
     {
       G4cout<<"G4PAIPhotonModel::SampleSecondary gamma deltaTkin = "<<deltaTkin<<G4endl;
     }
-    if( deltaTkin <= 0.) return;
+    if( deltaTkin <= 0.) return 0.;
 
     G4double costheta = 0.; // G4UniformRand(); // VG: ??? for start only
     G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
@@ -893,10 +1297,10 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     photonRay->SetKineticEnergy( deltaTkin );
     photonRay->SetMomentumDirection(deltaDirection); 
 
-    vdp->push_back(photonRay);
   }
-
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+
+  return deltaTkin;
 }
 
 
@@ -910,51 +1314,51 @@ G4PAIPhotonModel::GetPostStepTransfer( G4PhysicsTable* pTable,
 				       G4PhysicsLogVector* pVector,
                                        G4int iPlace, G4double scaledTkin )
 {  
-  // G4cout<<"G4PAIPhotonModel::GetPostStepTransfer"<<G4endl ;
+  // G4cout<<"G4PAIPhotonModel::GetPostStepTransfer"<<G4endl;
 
   G4int iTkin = iPlace+1, iTransfer;
-  G4double transfer = 0.0, position, dNdxCut1, dNdxCut2, E1, E2, W1, W2, W ;
+  G4double transfer = 0.0, position, dNdxCut1, dNdxCut2, E1, E2, W1, W2, W;
 
-  dNdxCut1 = (*pVector)(iPlace) ;  
+  dNdxCut1 = (*pVector)(iPlace);  
 
-  //  G4cout<<"iPlace = "<<iPlace<<endl ;
+  //  G4cout<<"iPlace = "<<iPlace<<endl;
 
   if(iTkin == fTotBin) // Fermi plato, try from left
   {
-      position = dNdxCut1*G4UniformRand() ;
+      position = dNdxCut1*G4UniformRand();
 
       for( iTransfer = 0;
  iTransfer < G4int((*pTable)(iPlace)->GetVectorLength()); iTransfer++ )
       {
-        if(position >= (*(*pTable)(iPlace))(iTransfer)) break ;
+        if(position >= (*(*pTable)(iPlace))(iTransfer)) break;
       }
       transfer = GetEnergyTransfer(pTable,iPlace,position,iTransfer);
   }
   else
   {
-    dNdxCut2 = (*pVector)(iPlace+1) ;  
+    dNdxCut2 = (*pVector)(iPlace+1);  
     if(iTkin == 0) // Tkin is too small, trying from right only
     {
-      position = dNdxCut2*G4UniformRand() ;
+      position = dNdxCut2*G4UniformRand();
 
       for( iTransfer = 0;
   iTransfer < G4int((*pTable)(iPlace+1)->GetVectorLength()); iTransfer++ )
       {
-        if(position >= (*(*pTable)(iPlace+1))(iTransfer)) break ;
+        if(position >= (*(*pTable)(iPlace+1))(iTransfer)) break;
       }
       transfer = GetEnergyTransfer(pTable,iPlace+1,position,iTransfer);
     } 
     else // general case: Tkin between two vectors of the material
     {
-      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
-      W  = 1.0/(E2 - E1) ;
-      W1 = (E2 - scaledTkin)*W ;
-      W2 = (scaledTkin - E1)*W ;
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1); 
+      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)    ;
+      W  = 1.0/(E2 - E1);
+      W1 = (E2 - scaledTkin)*W;
+      W2 = (scaledTkin - E1)*W;
 
-      position = ( dNdxCut1*W1 + dNdxCut2*W2 )*G4UniformRand() ;
+      position = ( dNdxCut1*W1 + dNdxCut2*W2 )*G4UniformRand();
 
-        // G4cout<<position<<"\t" ;
+        // G4cout<<position<<"\t";
 
       G4int iTrMax1, iTrMax2, iTrMax;
 
@@ -968,14 +1372,14 @@ G4PAIPhotonModel::GetPostStepTransfer( G4PhysicsTable* pTable,
       {
           if( position >=
           ( (*(*pTable)(iPlace))(iTransfer)*W1 +
-            (*(*pTable)(iPlace+1))(iTransfer)*W2) ) break ;
+            (*(*pTable)(iPlace+1))(iTransfer)*W2) ) break;
       }
       transfer = GetEnergyTransfer(pTable, iPlace, position, iTransfer);
     }
   } 
-  //  G4cout<<"PAIPhotonModel PostStepTransfer = "<<transfer/keV<<" keV"<<G4endl ; 
-  if(transfer < 0.0 ) transfer = 0.0 ;
-  return transfer ;
+  //  G4cout<<"PAIPhotonModel PostStepTransfer = "<<transfer/keV<<" keV"<<G4endl; 
+  if( transfer < 0.0 ) transfer = 0.0;
+  return transfer;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1001,7 +1405,7 @@ G4PAIPhotonModel::GetEnergyTransfer( G4PhysicsTable* pTable, G4int iPlace,
     if ( iTransfer >= iTransferMax)  iTransfer = iTransferMax - 1;
     
     y1 = (*(*pTable)(iPlace))(iTransfer-1);
-    y2 = (*(*fPAItransferTable)(iPlace))(iTransfer);
+    y2 = (*(*pTable)(iPlace))(iTransfer);
 
     x1 = (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1);
     x2 = (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
@@ -1023,21 +1427,19 @@ G4PAIPhotonModel::GetEnergyTransfer( G4PhysicsTable* pTable, G4int iPlace,
 //
 // Works like AlongStepDoIt method of process family
 
-
-
-
-G4double G4PAIPhotonModel::SampleFluctuations( const G4Material* material,
-                                         const G4DynamicParticle* aParticle,
-				               G4double&,
-					       G4double& step,
-                                               G4double&)
+G4double 
+G4PAIPhotonModel::SampleFluctuations( const G4MaterialCutsCouple* matCC,
+				      const G4DynamicParticle* aParticle,
+				      G4double,
+				      G4double step,
+				      G4double eloss)
 {
-  size_t jMat;
-  for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
+  size_t jMat = 0;
+  for(;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
-    if( material == fMaterialCutsCoupleVector[jMat]->GetMaterial() ) break;
+    if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
-  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+  if(jMat == fMaterialCutsCoupleVector.size()) { return eloss; }
 
   fPAItransferTable = fPAIxscBank[jMat];
   fPAIphotonTable = fPAIphotonBank[jMat];
@@ -1047,40 +1449,40 @@ G4double G4PAIPhotonModel::SampleFluctuations( const G4Material* material,
   fdNdxCutPhotonVector   = fdNdxCutPhotonTable[jMat];
   fdNdxCutPlasmonVector   = fdNdxCutPlasmonTable[jMat];
 
-  G4int iTkin, iPlace  ;
+  G4int iTkin, iPlace ;
 
-  // G4cout<<"G4PAIPhotonModel::SampleFluctuations"<<G4endl ;
+  // G4cout<<"G4PAIPhotonModel::SampleFluctuations"<<G4endl;
 
-  G4double loss, photonLoss, plasmonLoss, charge2 ;
+  G4double loss, photonLoss, plasmonLoss, charge2;
  
 
-  G4double Tkin       = aParticle->GetKineticEnergy() ;
-  G4double MassRatio  = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
-  G4double charge     = aParticle->GetDefinition()->GetPDGCharge() ;
-  charge2             = charge*charge ;
-  G4double scaledTkin = Tkin*MassRatio ;
+  G4double Tkin       = aParticle->GetKineticEnergy();
+  G4double MassRatio  = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass();
+  G4double charge     = aParticle->GetDefinition()->GetPDGCharge();
+  charge2             = charge*charge;
+  G4double scaledTkin = Tkin*MassRatio;
   G4double cof        = step*charge2;
 
   for( iTkin = 0; iTkin <= fTotBin; iTkin++)
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))   break ;
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))   break;
   }
-  iPlace = iTkin - 1 ; 
+  iPlace = iTkin - 1; 
   if( iPlace < 0 ) iPlace = 0;
 
   photonLoss = GetAlongStepTransfer(fPAIphotonTable,fdNdxCutPhotonVector,
 iPlace,scaledTkin,step,cof);
 
-  //  G4cout<<"PAIPhotonModel AlongStepPhotonLoss = "<<photonLoss/keV<<" keV"<<G4endl ; 
+  //  G4cout<<"PAIPhotonModel AlongStepPhotonLoss = "<<photonLoss/keV<<" keV"<<G4endl; 
 
   plasmonLoss = GetAlongStepTransfer(fPAIplasmonTable,fdNdxCutPlasmonVector,
 iPlace,scaledTkin,step,cof);
 
-  //  G4cout<<"PAIPhotonModel AlongStepPlasmonLoss = "<<plasmonLoss/keV<<" keV"<<G4endl ; 
+  //  G4cout<<"PAIPhotonModel AlongStepPlasmonLoss = "<<plasmonLoss/keV<<" keV"<<G4endl; 
 
   loss = photonLoss + plasmonLoss;
 
-  //  G4cout<<"PAIPhotonModel AlongStepLoss = "<<loss/keV<<" keV"<<G4endl ; 
+  //  G4cout<<"PAIPhotonModel AlongStepLoss = "<<loss/keV<<" keV"<<G4endl; 
 
   return loss;
 }
@@ -1098,65 +1500,65 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
 {  
   G4int iTkin = iPlace + 1, iTransfer;
   G4double loss = 0., position, E1, E2, W1, W2, W, dNdxCut1, dNdxCut2, meanNumber;
-  G4double lambda, stepDelta, stepSum=0. ;
+  G4double lambda, stepDelta, stepSum=0.;
   G4long numOfCollisions=0;
   G4bool numb = true;
 
-  dNdxCut1 = (*pVector)(iPlace) ;  
+  dNdxCut1 = (*pVector)(iPlace);  
 
-  //  G4cout<<"iPlace = "<<iPlace<<endl ;
+  //  G4cout<<"iPlace = "<<iPlace<<endl;
 
   if(iTkin == fTotBin) // Fermi plato, try from left
   {
     meanNumber = ((*(*pTable)(iPlace))(0) - dNdxCut1)*cof;
-    if(meanNumber < 0.) meanNumber = 0. ;
-    //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+    if(meanNumber < 0.) meanNumber = 0.;
+    //  numOfCollisions = RandPoisson::shoot(meanNumber);
     if( meanNumber > 0.) lambda = step/meanNumber;
     else                 lambda = DBL_MAX;
     while(numb)
     {
-      stepDelta = CLHEP::RandExponential::shoot(lambda);
+      stepDelta = G4RandExponential::shoot(lambda);
       stepSum += stepDelta;
       if(stepSum >= step) break;
       numOfCollisions++;
     }   
     
-    //     G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+    //     G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl;
 
     while(numOfCollisions)
     {
       position = dNdxCut1+
-                 ((*(*pTable)(iPlace))(0) - dNdxCut1)*G4UniformRand() ;
+                 ((*(*pTable)(iPlace))(0) - dNdxCut1)*G4UniformRand();
 
       for( iTransfer = 0;
    iTransfer < G4int((*pTable)(iPlace)->GetVectorLength()); iTransfer++ )
       {
-        if(position >= (*(*pTable)(iPlace))(iTransfer)) break ;
+        if(position >= (*(*pTable)(iPlace))(iTransfer)) break;
       }
       loss += GetEnergyTransfer(pTable,iPlace,position,iTransfer);
-      numOfCollisions-- ;
+      numOfCollisions--;
     }
   }
   else
   {
-    dNdxCut2 = (*pVector)(iPlace+1) ; 
+    dNdxCut2 = (*pVector)(iPlace+1); 
  
     if(iTkin == 0) // Tkin is too small, trying from right only
     {
       meanNumber = ((*(*pTable)(iPlace+1))(0) - dNdxCut2)*cof;
-      if( meanNumber < 0. ) meanNumber = 0. ;
-      //  numOfCollisions = CLHEP::RandPoisson::shoot(meanNumber) ;
+      if( meanNumber < 0. ) meanNumber = 0.;
+      //  numOfCollisions = G4RandPoisson::shoot(meanNumber);
       if( meanNumber > 0.) lambda = step/meanNumber;
       else                 lambda = DBL_MAX;
       while(numb)
       {
-        stepDelta = CLHEP::RandExponential::shoot(lambda);
+        stepDelta = G4RandExponential::shoot(lambda);
         stepSum += stepDelta;
         if(stepSum >= step) break;
         numOfCollisions++;
       }   
 
-      //  G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+      //  G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl;
 
       while(numOfCollisions)
       {
@@ -1166,40 +1568,40 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
         for( iTransfer = 0;
    iTransfer < G4int((*pTable)(iPlace+1)->GetVectorLength()); iTransfer++ )
         {
-          if(position >= (*(*pTable)(iPlace+1))(iTransfer)) break ;
+          if(position >= (*(*pTable)(iPlace+1))(iTransfer)) break;
         }
         loss += GetEnergyTransfer(pTable,iPlace+1,position,iTransfer);
-        numOfCollisions-- ;
+        numOfCollisions--;
       }
     } 
     else // general case: Tkin between two vectors of the material
     {
-      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
-       W = 1.0/(E2 - E1) ;
-      W1 = (E2 - scaledTkin)*W ;
-      W2 = (scaledTkin - E1)*W ;
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1); 
+      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)    ;
+       W = 1.0/(E2 - E1);
+      W1 = (E2 - scaledTkin)*W;
+      W2 = (scaledTkin - E1)*W;
 
       // G4cout<<"(*(*pTable)(iPlace))(0) = "<<
-      //   (*(*pTable)(iPlace))(0)<<G4endl ;
+      //   (*(*pTable)(iPlace))(0)<<G4endl;
       // G4cout<<"(*(*pTable)(iPlace+1))(0) = "<<
-      //     (*(*pTable)(iPlace+1))(0)<<G4endl ;
+      //     (*(*pTable)(iPlace+1))(0)<<G4endl;
 
       meanNumber=( ((*(*pTable)(iPlace))(0)-dNdxCut1)*W1 + 
 		   ((*(*pTable)(iPlace+1))(0)-dNdxCut2)*W2 )*cof;
       if(meanNumber<0.0) meanNumber = 0.0;
-      //  numOfCollisions = CLHEP::RandPoisson::shoot(meanNumber) ;
+      //  numOfCollisions = G4RandPoisson::shoot(meanNumber);
       if( meanNumber > 0.) lambda = step/meanNumber;
       else                 lambda = DBL_MAX;
       while(numb)
       {
-        stepDelta = CLHEP::RandExponential::shoot(lambda);
+        stepDelta = G4RandExponential::shoot(lambda);
         stepSum += stepDelta;
         if(stepSum >= step) break;
         numOfCollisions++;
       }   
 
-      //  G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
+      //  G4cout<<"numOfCollisions = "<<numOfCollisions<<endl;
 
       while(numOfCollisions)
       {
@@ -1208,7 +1610,7 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
                     
                      ( (*(*pTable)(iPlace+1))(0) - dNdxCut2)*W2 )*G4UniformRand();
 
-        // G4cout<<position<<"\t" ;
+        // G4cout<<position<<"\t";
 
         for( iTransfer = 0;
     iTransfer < G4int((*pTable)(iPlace)->GetVectorLength()); iTransfer++ )
@@ -1217,17 +1619,17 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
           ( (*(*pTable)(iPlace))(iTransfer)*W1 + 
             (*(*pTable)(iPlace+1))(iTransfer)*W2) )
           {
-	      break ;
+	      break;
 	  }
         }
-	// loss += (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ; 
+	// loss += (*pTable)(iPlace)->GetLowEdgeEnergy(iTransfer); 
         loss += GetEnergyTransfer(pTable,iPlace,position,iTransfer);
-        numOfCollisions-- ;    
+        numOfCollisions--;    
       }
     }
   } 
 
-  return loss ;
+  return loss;
 
 }
 
@@ -1238,12 +1640,24 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
 
 
 G4double G4PAIPhotonModel::Dispersion( const G4Material* material, 
-                                 const G4DynamicParticle* aParticle,
- 				       G4double& tmax, 
-			               G4double& step       )
+				       const G4DynamicParticle* aParticle,
+ 				       G4double tmax, 
+			               G4double step       )
 {
+  G4double particleMass  = aParticle->GetMass();
+  G4double electronDensity = material->GetElectronDensity();
+  G4double kineticEnergy = aParticle->GetKineticEnergy();
+  G4double q = aParticle->GetCharge()/eplus;
+  G4double etot = kineticEnergy + particleMass;
+  G4double beta2 = kineticEnergy*(kineticEnergy + 2.0*particleMass)/(etot*etot);
+  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * step
+                 * electronDensity * q * q;
+
+  return siga;
+
+  /*
   G4double loss, sumLoss=0., sumLoss2=0., sigma2, meanLoss=0.;
-  for(G4int i = 0 ; i < fMeanNumber; i++)
+  for(G4int i = 0; i < fMeanNumber; i++)
   {
     loss      = SampleFluctuations(material,aParticle,tmax,step,meanLoss);
     sumLoss  += loss;
@@ -1252,6 +1666,7 @@ G4double G4PAIPhotonModel::Dispersion( const G4Material* material,
   meanLoss = sumLoss/fMeanNumber;
   sigma2   = meanLoss*meanLoss + (sumLoss2-2*sumLoss*meanLoss)/fMeanNumber;
   return sigma2;
+  */
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1261,7 +1676,8 @@ G4double G4PAIPhotonModel::MaxSecondaryEnergy( const G4ParticleDefinition* p,
 {
   G4double tmax = kinEnergy;
   if(p == fElectron) tmax *= 0.5;
-  else if(p != fPositron) { 
+  else if(p != fPositron) 
+ { 
     G4double mass = p->GetPDGMass();
     G4double ratio= electron_mass_c2/mass;
     G4double gamma= kinEnergy/mass + 1.0;

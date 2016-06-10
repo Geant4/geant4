@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc 76464 2013-11-11 10:22:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,7 +81,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList(),
+ fMessenger(0),fEmPhysicsList(0)
 {
   fMessenger = new PhysicsListMessenger(this); 
    
@@ -291,7 +292,11 @@ void PhysicsList::SetCuts()
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
-
+  
+  // fixe lower limit for cut
+  ///G4ProductionCutsTable::GetProductionCutsTable()
+  ///                                      ->SetEnergyRange(10*eV, 1*GeV);
+  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(fCutForGamma, "gamma");

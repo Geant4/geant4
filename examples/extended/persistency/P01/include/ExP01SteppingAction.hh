@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01SteppingAction class
 //
 //
-// $Id$
+// $Id: ExP01SteppingAction.hh 71111 2013-06-11 10:51:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +47,7 @@ class ExP01SteppingAction : public G4UserSteppingAction
     ExP01SteppingAction();
    ~ExP01SteppingAction(){};
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

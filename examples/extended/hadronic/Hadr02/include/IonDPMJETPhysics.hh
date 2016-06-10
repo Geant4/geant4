@@ -26,8 +26,8 @@
 /// \file hadronic/Hadr02/include/IonDPMJETPhysics.hh
 /// \brief Definition of the IonDPMJETPhysics class
 //
-// $Id$
-// GRAS tag $Name: gras-02-05-02 $
+// $Id: IonDPMJETPhysics.hh 77665 2013-11-27 10:15:08Z gcosmo $
+// GRAS tag Name: gras-02-05-02
 //
 //---------------------------------------------------------------------------
 //
@@ -71,7 +71,7 @@ public:
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type
-  void ConstructProcess();
+  virtual void ConstructProcess();
 
 private:
 
@@ -83,9 +83,11 @@ private:
   G4VCrossSectionDataSet* fShen;
   G4VCrossSectionDataSet* fIonH;
   G4BinaryLightIonReaction*  fIonBC;
+#ifdef G4_USE_DPMJET
   G4DPMJET2_5Model*          fDPM;
   G4DPMJET2_5CrossSection*   fDpmXS;
   G4bool                  fUseDPMJETXS;
+#endif
 };
 
 #endif

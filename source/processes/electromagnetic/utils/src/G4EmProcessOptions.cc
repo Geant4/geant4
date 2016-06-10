@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmProcessOptions.cc 74376 2013-10-04 08:25:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,6 +61,7 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4VAtomDeexcitation.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -188,18 +189,21 @@ void G4EmProcessOptions::SetBuildCSDARange(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
+void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name, 
+				    G4bool worker)
 {
   G4bool all = false;
   if("all" == name) { all = true; }
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
+
+  if(worker && !G4Threading::IsWorkerThread()) { return; }
 
   if(all) { 
     theManager->SetVerbose(val);
     return;
   }
 
+  const std::vector<G4VEnergyLossProcess*>& v =
+        theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); ++itr) {
     G4VEnergyLossProcess* p = *itr;

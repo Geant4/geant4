@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommands.cc 75567 2013-11-04 11:35:11Z gcosmo $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -279,7 +279,10 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-
+  
+  G4VVisManager* keepConcreteInstance = fpVisManager->GetConcreteInstance();
+  fpVisManager->Enable();
+  
   // Event by event refreshing...
   reviewing  = true;
   G4bool currentRefreshAtEndOfEvent = pScene->GetRefreshAtEndOfEvent();
@@ -299,6 +302,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 	  first = false;
 	  G4cout <<
   "  Useful commands might be:"
+  "\n    \"/vis/scene/add/trajectories\" if not already added."
   "\n    \"/vis/viewer/...\" to change the view (zoom, set/viewpoint,...)."
   "\n    \"/vis/oglx/printEPS\" to get hard copy."
   "\n    \"/vis/open\" to get alternative viewer."
@@ -347,6 +351,8 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   pScene->SetRefreshAtEndOfEvent(currentRefreshAtEndOfEvent);
   reviewing  = false;
 
+  if (keepConcreteInstance) fpVisManager->Enable();
+  else fpVisManager->Disable();
   UImanager->SetVerboseLevel(keepVerbose);
 }
 

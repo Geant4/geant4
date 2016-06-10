@@ -27,24 +27,23 @@
 /// \brief Definition of the F01FieldSetup class
 //
 //
-// $Id$
+// $Id: F01FieldSetup.hh 77115 2013-11-21 15:06:37Z gcosmo $
 //
 //
-//    A class for control of the Magnetic Field of the detector.
+//  A class for control of the Magnetic Field of the detector.
 //  The field is assumed to be uniform.
-// 
-//  $ Id:  $
-
+//
 // Should this be a:
 //    i) messenger
-//   ii) user class that creates the field       ? 
+//   ii) user class that creates the field       ?
 //  iii) simply a derived class of Uniform field ?  <== I have chosen this now.
 //   iv) a field manager that creates/updates field    (Prefered?)
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-#ifndef F01FieldSetup_H
-#define F01FieldSetup_H
+#ifndef F01FieldSetup_h
+#define F01FieldSetup_h 1
 
 #include "G4MagneticField.hh"
 #include "G4UniformMagField.hh"
@@ -58,40 +57,39 @@ class F01FieldMessenger;
 class F01FieldSetup
 {
 public:
-  F01FieldSetup(G4ThreeVector) ;  //  The value of the field
-  F01FieldSetup() ;               //  A zero field
+  F01FieldSetup(G4ThreeVector);  //  The value of the field
+  F01FieldSetup();               //  A zero field
 
-  ~F01FieldSetup() ;  
-      
-  
-  void SetStepperType( G4int i) { fStepperType = i ; }
+  virtual ~F01FieldSetup();
+
+  void SetStepperType( G4int i ) { fStepperType = i; }
 
   void SetStepper();
 
-  void SetMinStep(G4double s) { fMinStep = s ; }
+  void SetMinStep(G4double s) { fMinStep = s; }
 
   void InitialiseAll();    //  Set parameters and call method below
   void CreateStepperAndChordFinder();
 
-  void SetFieldValue(G4ThreeVector fieldVector) ;
-  void SetFieldValue(G4double      fieldValue) ;
+  void SetFieldValue(G4ThreeVector fieldVector);
+  void SetFieldValue(G4double      fieldValue);
   G4ThreeVector GetConstantFieldValue();
 
 protected:
 
-      // Find the global Field Manager
+  // Find the global Field Manager
 
-  G4FieldManager*         GetGlobalFieldManager() ;   // static 
+  G4FieldManager*         GetGlobalFieldManager();
 
-  G4FieldManager*         fFieldManager ;
-  G4ChordFinder*          fChordFinder ;
-  G4Mag_UsualEqRhs*       fEquation ; 
-  G4MagneticField*        fMagneticField ; 
+  G4FieldManager*         fFieldManager;
+  G4ChordFinder*          fChordFinder;
+  G4Mag_UsualEqRhs*       fEquation;
+  G4MagneticField*        fMagneticField;
 
-  G4MagIntegratorStepper* fStepper ;
-  G4int                   fStepperType ;
+  G4MagIntegratorStepper* fStepper;
+  G4int                   fStepperType;
 
-  G4double                fMinStep ;
+  G4double                fMinStep;
  
   F01FieldMessenger*      fFieldMessenger;
 

@@ -23,33 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSPhotonDetHit.cc 70825 2013-06-06 08:29:26Z gcosmo $
+//
 /// \file optical/wls/src/WLSPhotonDetHit.cc
 /// \brief Implementation of the WLSPhotonDetHit class
 //
 //
-//
-
 #include "WLSPhotonDetHit.hh"
 
-G4Allocator<WLSPhotonDetHit> WLSPhotonDetHitAllocator;
+G4ThreadLocal G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator=0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSPhotonDetHit::WLSPhotonDetHit()
 {
-  posExit     = G4ThreeVector(0., 0., 0.);
-  posArrive   = G4ThreeVector(0., 0., 0.);
-  arrivalTime = 0.;
+  fArrivalTime = 0.;
+  fPosArrive   = G4ThreeVector(0., 0., 0.);
+  fPosExit     = G4ThreeVector(0., 0., 0.);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSPhotonDetHit::WLSPhotonDetHit(G4ThreeVector pExit,
                                  G4ThreeVector pArrive,
                                  G4double pTime)
 {
-  posExit     = pExit;
-  posArrive   = pArrive;
-  arrivalTime = pTime;
+  fPosExit     = pExit;
+  fPosArrive   = pArrive;
+  fArrivalTime = pTime;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSPhotonDetHit::~WLSPhotonDetHit() { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit &right)
   : G4VHit()
@@ -57,22 +65,22 @@ WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit &right)
   *this = right;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit &right)
 {
-  posExit     = right.posExit;
-  posArrive   = right.posArrive;
-  arrivalTime = right.arrivalTime;
+  fPosExit     = right.fPosExit;
+  fPosArrive   = right.fPosArrive;
+  fArrivalTime = right.fArrivalTime;
 
   return *this;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
 {
-  return posExit     == right.posExit    &&
-         posArrive   == right.posArrive  &&
-         arrivalTime == right.arrivalTime;  
+  return fPosExit     == right.fPosExit    &&
+         fPosArrive   == right.fPosArrive  &&
+         fArrivalTime == right.fArrivalTime;  
 }
-
-void WLSPhotonDetHit::Draw(){ }
-
-void WLSPhotonDetHit::Print(){ }

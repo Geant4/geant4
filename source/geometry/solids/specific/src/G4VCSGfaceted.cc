@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id$
+// $Id: G4VCSGfaceted.cc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -54,8 +54,6 @@
 
 #include "G4Polyhedron.hh"   
 #include "G4VGraphicsScene.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 //

@@ -27,7 +27,7 @@
 /// \brief Definition of the TrackingAction class
 //
 //
-// $Id$
+// $Id: TrackingAction.hh 68734 2013-04-05 09:47:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -40,22 +40,20 @@
 #include "globals.hh"
 
 class PrimaryGeneratorAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(PrimaryGeneratorAction*, HistoManager*);
+    TrackingAction(PrimaryGeneratorAction*);
    ~TrackingAction() {};
    
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
+    virtual void  PreUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
     
   private:
     PrimaryGeneratorAction* fPrimary;
-    HistoManager*  fHistoManager;
 
    // parameters for generator action #3
     G4ThreeVector fNewUz;

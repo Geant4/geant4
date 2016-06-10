@@ -24,22 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TouchableHistory.icc 67974 2013-03-13 10:17:37Z gcosmo $
 //
 // 
 // class G4TouchableHistory inline implementation
 // ----------------------------------------------------------------------
 
-#if defined G4GEOM_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
-#endif
+extern G4GEOM_DLL G4ThreadLocal G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator;
 
 inline
 void  G4TouchableHistory::UpdateYourself( G4VPhysicalVolume*   pPhysVol,
                                     const G4NavigationHistory* pHistory ) 
-{
+{ 
   fhistory = *pHistory;  
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
   if( pPhysVol == 0 )
@@ -56,38 +52,38 @@ void  G4TouchableHistory::UpdateYourself( G4VPhysicalVolume*   pPhysVol,
 
 inline
 G4int G4TouchableHistory::CalculateHistoryIndex( G4int stackDepth ) const
-{
+{ 
   return (fhistory.GetDepth()-stackDepth); // was -1
 }
 
 inline
 G4VPhysicalVolume* G4TouchableHistory::GetVolume( G4int depth ) const
-{
+{ 
   return fhistory.GetVolume(CalculateHistoryIndex(depth));
 }
 
 inline
 G4VSolid* G4TouchableHistory::GetSolid( G4int depth ) const
-{
+{ 
   return fhistory.GetVolume(CalculateHistoryIndex(depth))
                             ->GetLogicalVolume()->GetSolid();
 }
 
 inline
 G4int G4TouchableHistory::GetReplicaNumber( G4int depth ) const
-{
+{ 
   return fhistory.GetReplicaNo(CalculateHistoryIndex(depth));
 }
 
 inline
 G4int G4TouchableHistory::GetHistoryDepth()  const
-{
+{ 
   return  fhistory.GetDepth();
 }
 
 inline
 G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
-{
+{ 
   G4int maxLevelsMove = fhistory.GetDepth();
   G4int minLevelsMove = 0;              // Cannot redescend today!
                                         // Soon it will be possible
@@ -108,7 +104,7 @@ G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
 
 inline
 const G4NavigationHistory* G4TouchableHistory::GetHistory() const
-{
+{ 
   return &fhistory;
 }
 
@@ -117,13 +113,20 @@ const G4NavigationHistory* G4TouchableHistory::GetHistory() const
 //
 inline
 void* G4TouchableHistory::operator new(size_t)
-{
-  return (void *) aTouchableHistoryAllocator.MallocSingle();
+{ 
+  // Once the Navigator calls InitializeAllocator,
+  // the if block below can be removed.
+  //
+  if (!aTouchableHistoryAllocator)
+  {
+     aTouchableHistoryAllocator = new G4Allocator<G4TouchableHistory>;
+  }
+  return (void *) aTouchableHistoryAllocator->MallocSingle();
 }
 
 inline
 void G4TouchableHistory::operator delete(void *aTH)
-{
-  aTouchableHistoryAllocator.FreeSingle((G4TouchableHistory *) aTH);
+{  
+  aTouchableHistoryAllocator->FreeSingle((G4TouchableHistory *) aTH);
 }
 

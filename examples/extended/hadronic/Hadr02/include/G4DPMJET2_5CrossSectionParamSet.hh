@@ -36,6 +36,9 @@
 /// \file hadronic/Hadr02/include/G4DPMJET2_5CrossSectionParamSet.hh
 /// \brief Definition of the G4DPMJET2_5CrossSectionParamSet class
 //
+// $Id: G4DPMJET2_5CrossSectionParamSet.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4DPMJET2_5CrossSectionParamSet_h
 #define G4DPMJET2_5CrossSectionParamSet_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,23 +64,26 @@
 //
 #include "globals.hh"
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 class G4DPMJET2_5CrossSectionParamSet
 {
-  public:
-    G4DPMJET2_5CrossSectionParamSet () {c[0]=0.0; c[1]=0.0; c[2]=0.0;}
-    G4DPMJET2_5CrossSectionParamSet (const G4double c0, const G4double c1,
-      const G4double c2) {c[0]=c0; c[1]=c1; c[2]=c2;}
-    ~G4DPMJET2_5CrossSectionParamSet () {};
+public:
+  G4DPMJET2_5CrossSectionParamSet () {c[0]=0.0; c[1]=0.0; c[2]=0.0;}
+  G4DPMJET2_5CrossSectionParamSet (const G4double c0, const G4double c1,
+				   const G4double c2) 
+  {c[0]=c0; c[1]=c1; c[2]=c2;}
+
+  ~G4DPMJET2_5CrossSectionParamSet () {};
     
-    G4double operator[](const G4int i) const {return c[i];}
-    G4DPMJET2_5CrossSectionParamSet &operator=(G4DPMJET2_5CrossSectionParamSet &right);
-    G4DPMJET2_5CrossSectionParamSet operator=(G4DPMJET2_5CrossSectionParamSet right)
-      {c[0] = right.c[0]; c[1] = right.c[1]; c[2] = right.c[2]; return *this;};
+  G4double operator[](const G4int i) const {return c[i];}
+  G4DPMJET2_5CrossSectionParamSet &operator=
+    (G4DPMJET2_5CrossSectionParamSet &right);
+  G4DPMJET2_5CrossSectionParamSet operator=
+    (G4DPMJET2_5CrossSectionParamSet right)
+  {c[0] = right.c[0]; c[1] = right.c[1]; c[2] = right.c[2]; return *this;};
   
-  protected:
-    G4double c[3];
+protected:
+  G4double c[3];
 };
 #endif

@@ -15,6 +15,7 @@
  *  @{
  */
 
+  class G3toG4ActionInitialization {};
   class G3toG4DetectorConstruction {};
 
 /** @} */

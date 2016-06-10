@@ -22,35 +22,39 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: DetectorConstruction.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file DetectorConstruction.hh
 /// @brief Define geometry
 
-#include "DetectorConstruction.hh"
-#include "VoxelParam.hh"
-#include "G4NistManager.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
+#include "G4NistManager.hh"
 #include "G4PVParameterised.hh"
-#include "VoxelSD.hh"
-#include "G4VisAttributes.hh"
+#include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4VisAttributes.hh"
+#include "DetectorConstruction.hh"
+#include "VoxelParam.hh"
+#include "VoxelSD.hh"
 
 typedef G4LogicalVolume G4LV;
 typedef G4PVPlacement G4PVP;
 typedef G4VisAttributes G4VA;
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DetectorConstruction::DetectorConstruction()
+  : flv_voxel(NULL)
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DetectorConstruction::~DetectorConstruction()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   G4NistManager* nistManager = G4NistManager::Instance();
@@ -58,32 +62,32 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // world volume
   const G4double DXYZ_WORLD = 200.*cm;
-  G4Box* sld_world = new G4Box("world", 
+  G4Box* sld_world = new G4Box("world",
                                DXYZ_WORLD/2., DXYZ_WORLD/2., DXYZ_WORLD/2.);
 
   G4Material* vacuum = nistManager-> FindOrBuildMaterial("G4_Galactic");
   G4LV* lv_world = new G4LogicalVolume(sld_world, vacuum, "world");
-  G4PVP* world = new G4PVPlacement(0, G4ThreeVector(), "AREA", 
+  G4PVP* world = new G4PVPlacement(0, G4ThreeVector(), "AREA",
                                    lv_world, 0, false, 0);
   // vis. attributes
   va = new G4VA(G4Color(1.,1.,1.));
   va-> SetVisibility(false);
   lv_world-> SetVisAttributes(va);
-  
+
   // water phantom
   const G4double DXY_PHANTOM = 20.*cm;
   const G4double DZ_PHANTOM = 50.*cm;
 
-  G4Box* sld_phantom = new G4Box("phantom", 
+  G4Box* sld_phantom = new G4Box("phantom",
                                  DXY_PHANTOM/2., DXY_PHANTOM/2., DZ_PHANTOM/2.);
 
   G4Material* water = nistManager-> FindOrBuildMaterial("G4_WATER");
-  G4LV* lv_phantom = new G4LogicalVolume(sld_phantom, 
+  G4LV* lv_phantom = new G4LogicalVolume(sld_phantom,
                                          water, "phantom");
 
   va = new G4VA(G4Color(0.,1.,1.));
   lv_phantom-> SetVisAttributes(va);
-  
+
   new G4PVP(0, G4ThreeVector(), lv_phantom, "phantom", lv_world, false, 0);
 
   // voxel planes
@@ -99,23 +103,27 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   for (G4int iz =0; iz < 500; iz++) {
     G4double z0 = -DZ_PHANTOM/2. + (iz+0.5)*DZ_VXP;
-    new G4PVP(0, G4ThreeVector(0.,0.,z0), 
-              lv_vxp, "vxplane", lv_phantom,
-              false, 1000+iz);
+    new G4PVP(0, G4ThreeVector(0.,0.,z0),
+              lv_vxp, "vxplane", lv_phantom, false, 1000+iz);
   }
 
   // voxel parameterized
   G4Box* sld_voxel = new G4Box("voxel",1.,1.,1.); // dummy
-  G4LV* lv_voxel = new G4LV(sld_voxel, water, "voxel");
-  lv_voxel-> SetSensitiveDetector(new VoxelSD("voxel"));
+  flv_voxel = new G4LV(sld_voxel, water, "voxel");
 
   va = new G4VA(G4Color(0.,1.,1.));
   va-> SetVisibility(false);
-  lv_voxel-> SetVisAttributes(va);
+  flv_voxel-> SetVisAttributes(va);
 
   const G4int nvoxels = 100*100;
-  new G4PVParameterised("voxle", lv_voxel, lv_vxp,
-                        kUndefined, nvoxels, new VoxelParam());
+  new G4PVParameterised("voxle", flv_voxel, lv_vxp, kUndefined, nvoxels,
+                        new VoxelParam());
 
   return world;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DetectorConstruction::ConstructSDandField()
+{
+  flv_voxel-> SetSensitiveDetector(new VoxelSD("voxel"));
 }

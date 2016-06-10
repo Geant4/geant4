@@ -62,7 +62,7 @@ public:
 
 private:
 
-  G4Element *elH, *elD, *elHe, *elLi, *elBe, *elC, *elN, *elNi;
+  G4Element *elH, *elD, *elHe, *elLi, *elBe, *elC, *elN;
   G4Element *elNe, *elAl, *elFe, *elCu, *elW, *elPb, *elU, *elO;
   G4Element *elCa, *elNa, *elSi;
 

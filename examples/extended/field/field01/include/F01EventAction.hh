@@ -27,43 +27,44 @@
 /// \brief Definition of the F01EventAction class
 //
 //
-// $Id$
+// $Id: F01EventAction.hh 76248 2013-11-08 11:19:52Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01EventAction_h
 #define F01EventAction_h 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4UserEventAction.hh"
 
 class F01RunAction;
 class F01EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01EventAction : public G4UserEventAction
 {
   public:
     F01EventAction(F01RunAction* F01RA);
-    ~F01EventAction();
+    virtual ~F01EventAction();
 
   public:
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
-    void SetEventVerbose(G4int level);
-    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
-        
+    void SetEventVerbose(G4int level) {fVerboseLevel = level;}
+    void SetPrintModulo(G4int val)    {fPrintModulo = val;}
+
   private:
     G4int    fCalorimeterCollID;
+
     F01EventActionMessenger*  fEventMessenger;
     F01RunAction* fRunAction;
+
     G4int fVerboseLevel;
-    G4int fPrintModulo;             
+    G4int fPrintModulo;
 };
 
 #endif

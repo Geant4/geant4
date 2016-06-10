@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68459 2013-03-27 18:45:08Z maire $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fWall(0), fCavity(0)
+:fWallMaterial(0),fWall(0),fCavityMaterial(0),fCavity(0),fDetectorMessenger(0)
 {
   // default parameter values
   fCavityThickness = 2*mm;
@@ -160,7 +160,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   sCavity = new G4Tubs("Cavity",        
                        0.,fCavityRadius,0.5*fCavityThickness,0.,twopi);
                  
-  G4LogicalVolume*                                                                 
+  G4LogicalVolume* 
   lCavity = new G4LogicalVolume(sCavity,                //shape
                                 fCavityMaterial,        //material
                                 "Cavity");              //name
@@ -191,7 +191,7 @@ void DetectorConstruction::PrintParameters()
          << G4BestUnit(fWallMaterial->GetDensity(),"Volumic Mass") << " )\n";
   G4cout << "     The Cavity is " << G4BestUnit(fCavityThickness,"Length")
          << " of " << fCavityMaterial->GetName() << " ( " 
-         << G4BestUnit(fCavityMaterial->GetDensity(),"Volumic Mass") << " )";                  
+         << G4BestUnit(fCavityMaterial->GetDensity(),"Volumic Mass") << " )";
   G4cout << "\n---------------------------------------------------------\n";
   G4cout << G4endl;
 }

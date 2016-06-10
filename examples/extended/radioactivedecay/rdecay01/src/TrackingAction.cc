@@ -27,10 +27,10 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id$
+// $Id: TrackingAction.cc 71485 2013-06-17 08:14:54Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 #include "RunAction.hh"
@@ -46,9 +46,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(RunAction* RA, EventAction* EA)
-:fRun(RA),fEvent(EA)
+:G4UserTrackingAction(),
+ fRun(RA),fEvent(EA),fTrackMessenger(0),
+ fFullChain(false)
+ 
 {
-  fullChain = false;
   fTrackMessenger = new TrackingMessenger(this);   
 }
 
@@ -71,7 +73,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4double Ekin = track->GetKineticEnergy();
   G4int ID      = track->GetTrackID();
   
-  G4bool condition = false;  
+  G4bool condition = false;
 
   //count particles
   //
@@ -89,11 +91,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   else if (fCharge > 2.) ih = 5;
   if (ih) G4AnalysisManager::Instance()->FillH1(ih, Ekin);
   
-  //fullChain: stop ion and print decay chain
+  //fFullChain: stop ion and print decay chain
   //
   if (fCharge > 2.) {
     G4Track* tr = (G4Track*) track;
-    if (fullChain) tr->SetTrackStatus(fStopButAlive);
+    if (fFullChain) tr->SetTrackStatus(fStopButAlive);
     if (ID == 1) fEvent->AddDecayChain(name);
       else       fEvent->AddDecayChain(" ---> " + name); 
   }
@@ -122,19 +124,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
       
   //energy and momentum balance (from secondaries)
   //
-  G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();
+  const std::vector<const G4Track*>* secondaries 
+                              = track->GetStep()->GetSecondaryInCurrentStep();
   size_t nbtrk = (*secondaries).size();
   if (nbtrk) {
     //there are secondaries --> it is a decay
-    //
-    //force 'single' decay
-    if ((!fullChain)&&(ID > 1)) G4RunManager::GetRunManager()->AbortEvent();
     //
     //balance    
     G4double EkinTot = 0.;
     G4ThreeVector Pbalance = - track->GetMomentum();
     for (size_t itr=0; itr<nbtrk; itr++) {
-       G4Track* trk = (*secondaries)[itr];
+       const G4Track* trk = (*secondaries)[itr];
        EkinTot += trk->GetKineticEnergy();
        //exclude gamma desexcitation from momentum balance
        if (trk->GetDefinition() != G4Gamma::Gamma())         

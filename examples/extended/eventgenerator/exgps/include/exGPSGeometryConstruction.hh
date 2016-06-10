@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSGeometryConstruction.hh 71234 2013-06-12 13:19:12Z gcosmo $
+//
 /// \file eventgenerator/exgps/include/exGPSGeometryConstruction.hh
 /// \brief Definition of the exGPSGeometryConstruction class
 //
+
 #ifndef exGPSGeometryConstruction1_h
 #define exGPSGeometryConstruction1_h 1
 //
@@ -41,14 +44,12 @@ class exGPSGeometryConstruction : public G4VUserDetectorConstruction
     exGPSGeometryConstruction ();
     virtual ~exGPSGeometryConstruction ();
 
-  public:
-    virtual G4VPhysicalVolume *Construct ();
+    virtual G4VPhysicalVolume* Construct ();
 
   private:
-
-  G4VPhysicalVolume * fUniverse_phys ;
-  G4VPhysicalVolume * fAl_phys ;
-  G4VPhysicalVolume * fSphere_phys;
+    G4VPhysicalVolume* fUniverse_phys ;
+    G4VPhysicalVolume* fAl_phys ;
+    G4VPhysicalVolume* fSphere_phys;
 
 };
 ////////////////////////////////////////////////////////////////////////////////

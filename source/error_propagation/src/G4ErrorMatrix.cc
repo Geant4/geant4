@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorMatrix.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -647,8 +647,8 @@ void G4ErrorMatrix::invert(G4int &ierr)
   if(ncol != nrow)
      { error("G4ErrorMatrix::invert: G4ErrorMatrix is not NxN"); }
 
-  static G4int max_array = 20;
-  static G4int *ir = new G4int [max_array+1];
+  static G4ThreadLocal G4int max_array = 20;
+  static G4ThreadLocal G4int *ir  = 0 ; if (!ir) ir= new G4int [max_array+1];
 
   if (ncol > max_array)
   {
@@ -775,8 +775,8 @@ void G4ErrorMatrix::invert(G4int &ierr)
 
 G4double G4ErrorMatrix::determinant() const
 {
-  static G4int max_array = 20;
-  static G4int *ir = new G4int [max_array+1];
+  static G4ThreadLocal G4int max_array = 20;
+  static G4ThreadLocal G4int *ir  = 0 ; if (!ir) ir= new G4int [max_array+1];
   if(ncol != nrow)
     { error("G4ErrorMatrix::determinant: G4ErrorMatrix is not NxN"); }
   if (ncol > max_array)

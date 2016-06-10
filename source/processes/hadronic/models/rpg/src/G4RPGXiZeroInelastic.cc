@@ -147,11 +147,11 @@ G4RPGXiZeroInelastic::Cascade(G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
     quasiElastic = true;
     return;
   }
-  static G4bool first = true;
+  static G4ThreadLocal G4bool first = true;
   const G4int numMul = 1200;
   const G4int numSec = 60;
-  static G4double protmul[numMul], protnorm[numSec]; // proton constants
-  static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
+  static G4ThreadLocal G4double protmul[numMul], protnorm[numSec]; // proton constants
+  static G4ThreadLocal G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
 
   // np = number of pi+, nneg = number of pi-, nz = number of pi0
   G4int counter, nt=0, np=0, nneg=0, nz=0;

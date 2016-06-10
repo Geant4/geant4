@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -48,7 +46,7 @@
 
 namespace G4INCL {
 
-  long Particle::nextID = 1;
+  G4ThreadLocal long Particle::nextID = 1;
 
   Particle::Particle()
     : theZ(0), theA(0),
@@ -64,6 +62,8 @@ namespace G4INCL {
     nCollisions(0),
     nDecays(0),
     thePotentialEnergy(0.0),
+    rpCorrelated(false),
+    uncorrelatedMomentum(0.),
     theHelicity(0.0),
     emissionTime(0.0),
     outOfWell(false),
@@ -74,7 +74,7 @@ namespace G4INCL {
   }
 
   Particle::Particle(ParticleType t, G4double energy,
-      ThreeVector momentum, ThreeVector position)
+      ThreeVector const &momentum, ThreeVector const &position)
     : theEnergy(energy),
     thePropagationEnergy(&theEnergy),
     theFrozenEnergy(theEnergy),
@@ -83,28 +83,34 @@ namespace G4INCL {
     theFrozenMomentum(theMomentum),
     thePosition(position),
     nCollisions(0), nDecays(0),
-      thePotentialEnergy(0.), theHelicity(0.0),
+      thePotentialEnergy(0.),
+      rpCorrelated(false),
+      uncorrelatedMomentum(theMomentum.mag()),
+      theHelicity(0.0),
       emissionTime(0.0), outOfWell(false)
   {
     theParticipantType = TargetSpectator;
     ID = nextID;
     nextID++;
     if(theEnergy <= 0.0) {
-      WARN("Particle with energy " << theEnergy << " created." << std::endl);
+      INCL_WARN("Particle with energy " << theEnergy << " created." << std::endl);
     }
     setType(t);
     setMass(getInvariantMass());
   }
 
   Particle::Particle(ParticleType t,
-      ThreeVector momentum, ThreeVector position)
+      ThreeVector const &momentum, ThreeVector const &position)
     : thePropagationEnergy(&theEnergy),
     theMomentum(momentum),
     thePropagationMomentum(&theMomentum),
     theFrozenMomentum(theMomentum),
     thePosition(position),
     nCollisions(0), nDecays(0),
-      thePotentialEnergy(0.), theHelicity(0.0),
+      thePotentialEnergy(0.),
+      rpCorrelated(false),
+      uncorrelatedMomentum(theMomentum.mag()),
+      theHelicity(0.0),
       emissionTime(0.0), outOfWell(false)
   {
     theParticipantType = TargetSpectator;
@@ -112,7 +118,7 @@ namespace G4INCL {
     nextID++;
     setType(t);
     if( isResonance() ) {
-      ERROR("Cannot create resonance without specifying its momentum four-vector." << std::endl);
+      INCL_ERROR("Cannot create resonance without specifying its momentum four-vector." << std::endl);
     }
     G4double energy = std::sqrt(theMomentum.mag2() + theMass*theMass);
     theEnergy = energy;
@@ -123,7 +129,7 @@ namespace G4INCL {
     const G4double p2 = theMomentum.mag2();
     G4double newp2 = theEnergy*theEnergy - theMass*theMass;
     if( newp2<0.0 ) {
-      ERROR("Particle has E^2 < m^2." << std::endl << print());
+      INCL_ERROR("Particle has E^2 < m^2." << std::endl << print());
       newp2 = 0.0;
       theEnergy = theMass;
     }

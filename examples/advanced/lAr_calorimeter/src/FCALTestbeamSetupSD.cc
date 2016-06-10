@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: FCALTestbeamSetupSD.cc 68716 2013-04-05 09:13:43Z gcosmo $
 //
 // 
 
@@ -94,32 +94,32 @@ G4bool FCALTestbeamSetupSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   if(strcmp(physVol->GetName(),"ScintS3Physical")==0) {  
     EBeamS3 = EBeamS3 + edep;}
 
-  if(strcmp(physVol->GetName(),"HoleScintPhysical")==0){ EHoleScint =+ edep;}
+  if(strcmp(physVol->GetName(),"HoleScintPhysical")==0){ EHoleScint += edep;}
   if(strcmp(physVol->GetName(),"HoleCntrScintPhysical")==0){
     EBeamHole = EBeamHole + edep;}
 
-  if(strcmp(physVol->GetName(),"MWPCPhysical")==0) { EBeamDead =+ edep;};
-  if(strcmp(physVol->GetName(),"HoleCntrPbPhysical")==0) { EBeamDead =+ edep;};
-  if(strcmp(physVol->GetName(),"HoleCntrAlPhysical")==0) { EBeamDead =+ edep;};
-  if(strcmp(physVol->GetName(),"LeadWallPhysical")==0) { EBeamDead =+ edep;};
-  if(strcmp(physVol->GetName(),"IronWallPhysical")==0) { EBeamDead =+ edep;};
+  if(strcmp(physVol->GetName(),"MWPCPhysical")==0) { EBeamDead += edep;};
+  if(strcmp(physVol->GetName(),"HoleCntrPbPhysical")==0) { EBeamDead += edep;};
+  if(strcmp(physVol->GetName(),"HoleCntrAlPhysical")==0) { EBeamDead += edep;};
+  if(strcmp(physVol->GetName(),"LeadWallPhysical")==0) { EBeamDead += edep;};
+  if(strcmp(physVol->GetName(),"IronWallPhysical")==0) { EBeamDead += edep;};
 
   if(strcmp(physVol->GetName(),"BigScintPhysical")==0) {
     TailCatcherID = physVol->GetCopyNo();
-    if(TailCatcherID > 0)  ETailVis[TailCatcherID] =+ edep;
+    if(TailCatcherID > 0)  ETailVis[TailCatcherID] += edep;
   }
   if(strcmp(physVol->GetName(),"SmallScintPhysical")==0) {
     TailCatcherID = physVol->GetCopyNo();
-    if(TailCatcherID > 0)  ETailVis[TailCatcherID + 3] =+ edep;
+    if(TailCatcherID > 0)  ETailVis[TailCatcherID + 3] += edep;
   }
   
   if(strcmp(physVol->GetName(),"BigIronPhysical")==0) {
     TailCatcherID = physVol->GetCopyNo();
-    if(TailCatcherID > 0)  ETailDep[TailCatcherID] =+ edep;
+    if(TailCatcherID > 0)  ETailDep[TailCatcherID] += edep;
   }
   if(strcmp(physVol->GetName(),"SmallIronPhysical")==0) {
     TailCatcherID = physVol->GetCopyNo();
-    if(TailCatcherID > 0)  ETailDep[TailCatcherID+2] =+ edep;
+    if(TailCatcherID > 0)  ETailDep[TailCatcherID+2] += edep;
   }
 
   return true;

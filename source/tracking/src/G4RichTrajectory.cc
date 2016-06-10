@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RichTrajectory.cc 69003 2013-04-15 09:25:23Z gcosmo $
 //
 // ---------------------------------------------------------------
 //
@@ -57,14 +57,15 @@
 
 #include <sstream>
 
-G4Allocator<G4RichTrajectory> aRichTrajectoryAllocator;
+G4ThreadLocal G4Allocator<G4RichTrajectory> *aRichTrajectoryAllocator = 0;
 
 G4RichTrajectory::G4RichTrajectory():
   fpRichPointsContainer(0),
   fpCreatorProcess(0),
   fpEndingProcess(0),
   fFinalKineticEnergy(0.)
-{}
+{
+}
 
 G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
   G4Trajectory(aTrack)  // Note: this initialises the base class data
@@ -152,6 +153,20 @@ void G4RichTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
   }
   delete (*seco->fpRichPointsContainer)[0];
   seco->fpRichPointsContainer->clear();
+}
+
+void G4RichTrajectory::ShowTrajectory(std::ostream& os) const
+{
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::ShowTrajectory(os);
+  // ... or override with your own code here.
+}
+
+void G4RichTrajectory::DrawTrajectory() const
+{
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory();
+  // ... or override with your own code here.
 }
 
 const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const

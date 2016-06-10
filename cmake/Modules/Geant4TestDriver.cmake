@@ -1,4 +1,4 @@
-#---------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Geant4 test driver
 #   Script arguments: 
 #     CMD command to be executed for the test
@@ -16,7 +16,9 @@ if(DBG)
   message(STATUS "ENV=${ENV}")
 endif()
 
-#---Message arguments---------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+# Message arguments
+#
 if(CMD)
   string(REPLACE "#" ";" _cmd ${CMD})
   if(DBG)
@@ -49,16 +51,18 @@ else()
 endif()
 
 if(TIM)
-  math(EXPR _timeout "${TIM} - 5")
+  math(EXPR _timeout "${TIM} - 120")
 else()
-  math(EXPR _timeout "1500 - 5")
+  math(EXPR _timeout "1500 - 120")
 endif()
 
 if(CWD)
   set(_cwd WORKING_DIRECTORY ${CWD})
 endif()
 
-#---Set environment --------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+# Environment settings
+#
 if(ENV)
   string(REPLACE "@" "=" _env ${ENV})
   string(REPLACE "#" ";" _env ${_env})
@@ -73,7 +77,9 @@ if(ENV)
   endforeach()
 endif()
 
-#---Execute pre-command-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+# Execute pre command
+#
 if(PRE)
   execute_process(COMMAND ${_pre} ${_cwd} RESULT_VARIABLE _rc)
   if(_rc)
@@ -81,8 +87,10 @@ if(PRE)
   endif()
 endif()
 
+#-----------------------------------------------------------------------
+# Execute test
+#
 if(CMD)
-  #---Execute the actual test ------------------------------------------------------------------------
   execute_process(COMMAND ${_cmd} ${_out} ${_err} ${_cwd} TIMEOUT ${_timeout} RESULT_VARIABLE _rc)
   message("G4Test rc: ${_rc}")
   if(_errvar)
@@ -97,23 +105,21 @@ if(CMD)
       file(WRITE ${TST}.out ${_outvar})
     endif()
   endif()
-  #---Return error is test returned an error code of write somthing to the stderr---------------------
+
+  # - FATAL_ERROR if the test returned an error code or wrote anything to
+  # the stderr
   if(_errvar OR _rc)
     message(FATAL_ERROR "Test failed!!!")
   endif()
 endif()
 
-
-#---Execute post-command-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+# Execute post test command
+#
 if(POST)
   execute_process(COMMAND ${_post} ${_cwd} RESULT_VARIABLE _rc)
   if(_rc)
     message(FATAL_ERROR "post-command error code : ${_rc}")
   endif()
 endif()
-
-
-
-
-
 

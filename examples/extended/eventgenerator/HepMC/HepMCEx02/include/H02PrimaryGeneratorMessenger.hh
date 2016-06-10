@@ -26,12 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02PrimaryGeneratorMessenger.hh
 /// \brief Definition of the H02PrimaryGeneratorMessenger class
 //
-// ====================================================================
+//   $Id: H02PrimaryGeneratorMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   H02PrimaryGeneratorMessenger.hh
-//   $Id$
-//
-// ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_MESSENGER_H
 #define H02_PRIMARY_GENERATOR_MESSENGER_H
 
@@ -47,19 +43,19 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 
 class H02PrimaryGeneratorMessenger : public G4UImessenger {
+public:
+  H02PrimaryGeneratorMessenger(H02PrimaryGeneratorAction* genaction);
+  ~H02PrimaryGeneratorMessenger();
+
+  void SetNewValue(G4UIcommand* command, G4String newValues);
+  G4String GetCurrentValue(G4UIcommand* command);
+
 private:
   H02PrimaryGeneratorAction* primaryAction;
 
   G4UIdirectory* dir;
   G4UIcmdWithAString* select;
 
-public:
-  H02PrimaryGeneratorMessenger(H02PrimaryGeneratorAction* genaction);
-  ~H02PrimaryGeneratorMessenger();
-  
-  void SetNewValue(G4UIcommand* command, G4String newValues);
-  G4String GetCurrentValue(G4UIcommand* command);  
 };
-
 
 #endif

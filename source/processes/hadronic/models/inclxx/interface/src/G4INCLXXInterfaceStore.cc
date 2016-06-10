@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -44,19 +42,22 @@
  */
 
 #include "G4INCLXXInterfaceMessenger.hh"
+#include "G4SystemOfUnits.hh"
 
-G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
+G4ThreadLocal G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
 
 G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
-  dumpInput(false),
   accurateProjectile(true),
   theMaxClusterMassDefault(8),
   theMaxClusterMass(theMaxClusterMassDefault),
   theMaxProjMassINCL(18),
+  cascadeMinEnergyPerNucleon(1.*MeV),
+  conservationTolerance(5*MeV),
   theINCLModel(NULL),
   nWarnings(0),
   maxWarnings(50)
 {
+  constructINCLXXVersionName();
   theINCLXXInterfaceMessenger = new G4INCLXXInterfaceMessenger(this);
 }
 
@@ -64,6 +65,93 @@ G4INCLXXInterfaceStore::~G4INCLXXInterfaceStore() {
   delete theINCLXXInterfaceMessenger;
   delete theINCLModel;
 }
+
+G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::GetInstance() {
+  if(!theInstance)
+    theInstance = new G4INCLXXInterfaceStore;
+  return theInstance;
+}
+
+void G4INCLXXInterfaceStore::DeleteInstance() {
+  delete theInstance;
+  theInstance = NULL;
+}
+
+G4INCL::INCL *G4INCLXXInterfaceStore::GetINCLModel() {
+  if(!theINCLModel) {
+    G4INCL::Config *theConfig = new G4INCL::Config;
+    theConfig->setClusterMaxMass(theMaxClusterMass);
+    theINCLModel = new G4INCL::INCL(theConfig);
+    // ownership of the Config object is taken over by the INCL model engine
+  }
+  return theINCLModel;
+}
+
+void G4INCLXXInterfaceStore::constructINCLXXVersionName() {
+  const std::string versionID = G4INCL_VERSION_ID;
+  const size_t lastDash = versionID.find_last_of("-");
+  versionName = "INCL++ " + versionID.substr(0,lastDash);
+}
+
+const std::string &G4INCLXXInterfaceStore::getINCLXXVersionName() {
+  return versionName;
+}
+
+
+
+void G4INCLXXInterfaceStore::SetAccurateProjectile(const G4bool b) {
+  if(accurateProjectile!=b) {
+    // Parameter is changed, emit a big warning message
+    std::stringstream ss;
+    ss << "Switching from "
+      << (accurateProjectile ? "\"accurate projectile\" mode to \"accurate target\"" : "\"accurate target\" mode to \"accurate projectile\"")
+      << " mode."
+      << G4endl
+      << "Do this ONLY if you fully understand what it does!";
+    EmitBigWarning(ss.str());
+  }
+
+  // No need to delete the model for this parameter
+
+  accurateProjectile=b;
+}
+
+void G4INCLXXInterfaceStore::SetMaxClusterMass(const G4int aMass) {
+  if(theMaxClusterMass!=aMass) {
+    // Parameter is changed, emit a big warning message
+    std::stringstream ss;
+    ss << "Changing maximum cluster mass from "
+      << theMaxClusterMass
+      << " to "
+      << aMass
+      << "."
+      << G4endl
+      << "Do this ONLY if you fully understand what this setting does!";
+    EmitBigWarning(ss.str());
+  }
+
+  // We must delete the model object to make sure that we use the new
+  // parameter
+  DeleteModel();
+
+  theMaxClusterMass=aMass;
+}
+
+
+
+
+G4bool G4INCLXXInterfaceStore::GetAccurateProjectile() const { return accurateProjectile; }
+
+G4double G4INCLXXInterfaceStore::GetCascadeMinEnergyPerNucleon() const { return cascadeMinEnergyPerNucleon; }
+
+G4int G4INCLXXInterfaceStore::GetMaxClusterMass() const { return theMaxClusterMass; }
+
+G4double G4INCLXXInterfaceStore::GetConservationTolerance() const { return conservationTolerance; }
+
+
+
+
+G4int G4INCLXXInterfaceStore::GetMaxProjMassINCL() const { return theMaxProjMassINCL; }
 
 void G4INCLXXInterfaceStore::EmitWarning(const G4String &message) {
   if(++nWarnings<=maxWarnings) {
@@ -86,5 +174,28 @@ void G4INCLXXInterfaceStore::EmitBigWarning(const G4String &message) const {
     << "================================================================================"
     << G4endl
     << G4endl;
+}
+
+void G4INCLXXInterfaceStore::SetCascadeMinEnergyPerNucleon(const G4double anEnergy) {
+  if(cascadeMinEnergyPerNucleon!=anEnergy) {
+    // Parameter is changed, emit a big warning message
+    std::stringstream ss;
+    ss << "Changing minimim cascade energy from "
+      << cascadeMinEnergyPerNucleon / MeV
+      << " to "
+      << anEnergy / MeV
+      << " MeV."
+      << G4endl
+      << "Do this ONLY if you fully understand what this setting does!";
+    EmitBigWarning(ss.str());
+  }
+
+  // No need to delete the model object
+
+  cascadeMinEnergyPerNucleon=anEnergy;
+}
+
+void G4INCLXXInterfaceStore::SetConservationTolerance(const G4double aTolerance) {
+  conservationTolerance = aTolerance;
 }
 

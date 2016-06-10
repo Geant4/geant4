@@ -26,38 +26,34 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackerSD.hh
 /// \brief Definition of the ExN04TrackerSD class
 //
+// $Id: ExN04TrackerSD.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #ifndef ExN04TrackerSD_h
 #define ExN04TrackerSD_h 1
 
 #include "G4VSensitiveDetector.hh"
 #include "ExN04TrackerHit.hh"
+
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-class ExN04TrackerSD : public G4VSensitiveDetector
-{
+class ExN04TrackerSD : public G4VSensitiveDetector {
+public:
+  ExN04TrackerSD(G4String name);
+  ~ExN04TrackerSD();
 
-  public:
-      ExN04TrackerSD(G4String name);
-      ~ExN04TrackerSD();
+  void Initialize(G4HCofThisEvent*HCE);
+  G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+  void EndOfEvent(G4HCofThisEvent*HCE);
+  void clear();
+  void DrawAll();
+  void PrintAll();
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
-      void clear();
-      void DrawAll();
-      void PrintAll();
+private:
+  ExN04TrackerHitsCollection *trackerCollection;
 
-  private:
-      ExN04TrackerHitsCollection *trackerCollection;
-
-  public:
 };
 
-
-
-
 #endif
-

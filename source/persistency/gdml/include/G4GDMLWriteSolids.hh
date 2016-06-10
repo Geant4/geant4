@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GDMLWriteSolids.hh 76271 2013-11-08 11:51:39Z gcosmo $
 //
 //
 // class G4GDMLWriteSolids
@@ -56,6 +56,7 @@ class G4Orb;
 class G4Para;
 class G4Paraboloid;
 class G4Polycone;
+class G4GenericPolycone;
 class G4Polyhedra;
 class G4Sphere;
 class G4TessellatedSolid;
@@ -97,6 +98,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void ParaWrite(xercesc::DOMElement*, const G4Para* const);
    void ParaboloidWrite(xercesc::DOMElement*, const G4Paraboloid* const);
    void PolyconeWrite(xercesc::DOMElement*, const G4Polycone* const);
+   void GenericPolyconeWrite(xercesc::DOMElement*, const G4GenericPolycone* const);
    void PolyhedraWrite(xercesc::DOMElement*, const G4Polyhedra* const);
    void SphereWrite(xercesc::DOMElement*, const G4Sphere* const);
    void TessellatedWrite(xercesc::DOMElement*, const G4TessellatedSolid* const);
@@ -113,6 +115,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void TwistedtubsWrite(xercesc::DOMElement*, const G4TwistedTubs* const);
    void ZplaneWrite(xercesc::DOMElement*, const G4double&,
                     const G4double&, const G4double&);
+   void RZPointWrite(xercesc::DOMElement*, const G4double&,const G4double&);
    void OpticalSurfaceWrite(xercesc::DOMElement*,
                     const G4OpticalSurface* const);
 

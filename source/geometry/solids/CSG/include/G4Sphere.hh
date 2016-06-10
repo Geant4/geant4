@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Sphere.hh 76263 2013-11-08 11:41:52Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -68,6 +68,15 @@
 
 #ifndef G4Sphere_HH
 #define G4Sphere_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_USPHERE 1
+#endif
+
+#if defined(G4GEOM_USE_USPHERE)
+  #define G4USphere G4Sphere
+  #include "G4USphere.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 #include "G4CSGSolid.hh"
@@ -152,7 +161,6 @@ class G4Sphere : public G4CSGSolid
     G4VisExtent   GetExtent          () const;    
     void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
-    G4NURBS*      CreateNURBS() const;
   
   public:  // without description
    
@@ -239,8 +247,14 @@ class G4Sphere : public G4CSGSolid
     G4bool fFullPhiSphere, fFullThetaSphere, fFullSphere;
       //
       // Flags for identification of section, shell or full sphere
+
+    G4double halfCarTolerance, halfAngTolerance;
+      //
+      // Cached half tolerance values
 };
 
 #include "G4Sphere.icc"
+
+#endif
 
 #endif

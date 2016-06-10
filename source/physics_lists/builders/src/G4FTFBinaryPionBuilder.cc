@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryPionBuilder.cc 62122 2012-10-01 09:33:38Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4FTFBinaryPionBuilder.cc 68750 2013-04-05 10:19:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,6 +51,7 @@ G4FTFBinaryPionBuilder(G4bool quasiElastic)
 {
   thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
   theMin = 4*GeV;
+  theMax = 100*TeV;
   theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
@@ -72,7 +72,7 @@ G4FTFBinaryPionBuilder(G4bool quasiElastic)
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
 }
 
 G4FTFBinaryPionBuilder:: ~G4FTFBinaryPionBuilder()
@@ -91,6 +91,7 @@ void G4FTFBinaryPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->AddDataSet(thePiData);
   aP->RegisterMe(theModel);
 }
@@ -99,6 +100,7 @@ void G4FTFBinaryPionBuilder::
 Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->AddDataSet(thePiData);
   aP->RegisterMe(theModel);
 }

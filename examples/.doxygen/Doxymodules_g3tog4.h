@@ -1,4 +1,4 @@
-// $Id: Doxymodules_g3tog4.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_g3tog4.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_g3tog4.h
@@ -15,6 +15,7 @@
  *  @{
  */
 
+  class G3toG4ActionInitialization {};
   class G3toG4DetectorConstruction {};
 
 /** @} */

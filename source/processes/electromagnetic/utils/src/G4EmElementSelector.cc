@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmElementSelector.cc 76333 2013-11-08 14:31:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 
 #include "G4EmElementSelector.hh"
 #include "G4VEmModel.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,44 +57,43 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
 					 G4int bins, 
 					 G4double emin, 
 					 G4double emax,
-					 G4bool spline):
+					 G4bool):
   model(mod), material(mat), nbins(bins), cutEnergy(-1.0), 
   lowEnergy(emin), highEnergy(emax)
 {
   G4int n = material->GetNumberOfElements();
   nElmMinusOne = n - 1;
   theElementVector = material->GetElementVector();
-  element = (*theElementVector)[0];
+  //  element = (*theElementVector)[0];
   if(nElmMinusOne > 0) {
     xSections.reserve(n);
     G4PhysicsLogVector* v0 = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
     xSections.push_back(v0);
-    v0->SetSpline(spline);
+    v0->SetSpline(false);
     for(G4int i=1; i<n; ++i) {
       G4PhysicsLogVector* v = new G4PhysicsLogVector(*v0);
       xSections.push_back(v);
     }
   }
-  //G4cout << "G4EmElementSelector for " << mat->GetName() << " n= " << n << G4endl;
+  /*  
+  G4cout << "G4EmElementSelector for " << mat->GetName() << " n= " << n
+	 << " nbins= " << nbins << "  Emin= " << lowEnergy 
+	 << " Emax= " << highEnergy << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmElementSelector::~G4EmElementSelector()
-{
-  if(nElmMinusOne > 0) {
-    for(G4int i=0; i<=nElmMinusOne; ++i) {
-      delete xSections[i];
-    }
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmElementSelector::Initialise(const G4ParticleDefinition* part, 
 				     G4double cut)
 {
-  //G4cout << "G4EmElementSelector initialise for " << material->GetName() << G4endl;
+  //G4cout << "G4EmElementSelector initialise for " << material->GetName()
+  //  << G4endl;
   if(0 == nElmMinusOne || cut == cutEnergy) { return; }
 
   cutEnergy = cut;
@@ -139,7 +139,8 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
       }
     }
   }
-  //G4cout << "======== G4EmElementSelector for the " << model->GetName();
+  //G4cout << "======== G4EmElementSelector for the " << model->GetName() 
+  //    << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

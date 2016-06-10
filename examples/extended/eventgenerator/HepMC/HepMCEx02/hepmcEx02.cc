@@ -27,8 +27,7 @@
 /// \brief Main program of the eventgenerator/HepMC/HepMCEx02 example
 //
 //
-// $Id$
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: HepMCEx02.cc 73446 2013-08-27 11:32:59Z gcosmo $
 //
 // 
 // --------------------------------------------------------------

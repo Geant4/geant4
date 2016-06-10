@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeDetectorConstruction.hh 77486 2013-11-25 10:14:16Z gcosmo $
+//
 /// \file optical/LXe/include/LXeDetectorConstruction.hh
 /// \brief Definition of the LXeDetectorConstruction class
 //
@@ -34,15 +36,19 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Box;
 class G4Tubs;
-class LXePMTSD;
-class LXeScintSD;
+class LXeMainVolume;
 class G4Sphere;
 
 #include "G4Material.hh"
 #include "LXeDetectorMessenger.hh"
 #include "G4VisAttributes.hh"
 #include "G4RotationMatrix.hh"
+
+#include "LXeScintSD.hh"
+#include "LXePMTSD.hh"
+
 #include "G4VUserDetectorConstruction.hh"
+#include "G4Cache.hh"
 
 class LXeDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -52,6 +58,7 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     virtual ~LXeDetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
     //Functions to modify the geometry
     void SetDimensions(G4ThreeVector );
@@ -63,33 +70,29 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     void SetDefaults();
 
     //Get values
+    G4int GetNX(){return fNx;}
+    G4int GetNY(){return fNy;}
+    G4int GetNZ(){return fNz;}
     G4double GetScintX(){return fScint_x;}
     G4double GetScintY(){return fScint_y;}
     G4double GetScintZ(){return fScint_z;}
     G4double GetHousingThickness(){return fD_mtl;}
-    G4int GetNX(){return fNx;}
-    G4int GetNY(){return fNy;}
-    G4int GetNZ(){return fNz;}
     G4double GetPMTRadius(){return fOuterRadius_pmt;}
     G4double GetSlabZ(){return fSlab_z;}
  
-    //rebuild the geometry based on changes. must be called
-    void UpdateGeometry();
-    G4bool GetUpdated(){return fUpdated;}
-
-    void SetSphereOn(G4bool b){fSphereOn=b; fUpdated=true;}
+    void SetSphereOn(G4bool );
     static G4bool GetSphereOn(){return fSphereOn;}
 
-    void SetHousingReflectivity(G4double r){fRefl=r; fUpdated=true;}
+    void SetHousingReflectivity(G4double );
     G4double GetHousingReflectivity(){return fRefl;}
 
-    void SetWLSSlabOn(G4bool b){fWLSslab=b; fUpdated=true;}
+    void SetWLSSlabOn(G4bool b);
     G4bool GetWLSSlabOn(){return fWLSslab;}
 
-    void SetMainVolumeOn(G4bool b){fMainVolume=b; fUpdated=true;}
-    G4bool GetMainVolumeOn(){return fMainVolume;}
+    void SetMainVolumeOn(G4bool b);
+    G4bool GetMainVolumeOn(){return fMainVolumeOn;}
 
-    void SetNFibers(G4int n){fNfibers=n; fUpdated=true;}
+    void SetNFibers(G4int n);
     G4int GetNFibers(){return fNfibers;}
 
     void SetMainScintYield(G4double );
@@ -102,8 +105,6 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
 
     LXeDetectorMessenger* fDetectorMessenger;
 
-    G4bool fUpdated;
- 
     G4Box* fExperimentalHall_box;
     G4LogicalVolume* fExperimentalHall_log;
     G4VPhysicalVolume* fExperimentalHall_phys;
@@ -136,11 +137,17 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     static G4bool fSphereOn;
     G4double fRefl;
     G4bool fWLSslab;
-    G4bool fMainVolume;
+    G4bool fMainVolumeOn;
     G4double fSlab_z;
+
+    LXeMainVolume* fMainVolume;
 
     G4MaterialPropertiesTable* fLXe_mt;
     G4MaterialPropertiesTable* fMPTPStyrene;
+
+    //Sensitive Detectors
+    G4Cache<LXeScintSD*> fScint_SD;
+    G4Cache<LXePMTSD*> fPmt_SD;
 
 };
 

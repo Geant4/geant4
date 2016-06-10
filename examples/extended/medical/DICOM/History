@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2010-12-23 11:34:22 chauvie Exp $
+$Id: History 78105 2013-12-03 14:46:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,81 @@ $Id: History,v 1.31 2010-12-23 11:34:22 chauvie Exp $
 
                       ---------------------
 
+03.12.2013 - Ivana Hrivnacova (DICOM-V09-06-09)
+           - Updated README and .README to match (Pedro Arce)
+
+18.11.2014 - Ivana Hrivnacova (DICOM-V09-06-08)
+           - Fixed DicomPhantomZSliceMerged.hh file description 
+             (for Doxygen)
+
+13.11.2014 - Jonathan Mdsen (DICOM-V09-06-07)
+           - Updated README and .README
+           - Fixed some comments
+
+04.11.2013 - Dennis Wright  (DICOM-V09-06-06)
+           - replaced LEP model for alphas by extending Binary cascade to
+             zero energy
+           - updated sample output files to reflect this
+
+23.10.2013 - Gabriele Cosmo (DICOM-V09-06-05)
+	   - Fixed compilation warnings.
+
+15.10.2013 - Jonathan Madsen (DICOM-V09-06-04)
+	   - Modified DICOM to enable multithreading
+	     - Adapted scorers
+	     - Added ActionInitialization class
+	     - Modified RunAction to handle master and daughter threads
+
+09.10.2013 - Ivana Hrivnacova (DICOM-V09-06-03)
+           Fixed file description (DicomPhantomZSliceMerged.hh)
+
+28.08.2013 - Gabriele Cosmo (DICOM-V09-06-02)
+           Added G4Ellipsoid to solids enabled for parameterisation in
+           DicomNestedPhantomParameterisation.
+
+29.07.2013 - Peter Gumplinger (DICOM-V09-06-01)
+           Fixed MAC/clang32 compilation warnings in DicomRunAction and
+           DiconIntersectVolume classes
+
+18.07.2013 - Jonathan Madsen
+           Missing documentation update from 18.12.2012:
+             Improvements and bug-fixes ->
+             DicomHandler had some bugs when using DCM files
+               other than examples provided
+             Added DicomPhantomZSliceMerged class to handle 
+               inconsistencies in DCM file meta-data
+             DicomPhantomZSliceHeader class is extended to hold density
+               and material ID data and the printing of data
+               to files instead of DicomHandler
+           Removed additions on 16.07.2013 pending further discussion
+           Reverted DICOM example to 18.12.2012 update with some very
+             minor tweaks
+           Kept share folder with additional anonymous DCM files
+             and additional data files (SixSlice.dat, AltData.dat). Rename
+             these files with Data.dat to use
+           Kept CMakeLists.txt to copy over extra data file and anonymous
+             DCM files
+      
+16.07.2013 - Jonathan Madsen
+           Many modifications to the DICOM example. 
+           Added more anonymous DICOM files.
+           Added more script configurations. 
+           Added DicomCommandLineOptions, DicomHelpers, DicomTypeConversion,
+             DicomOption as part of a command line processing package.
+           Modified CMakeLists.txt to configure extra files. 
+           Added capability to use different data files for DICOM set,
+             CT2Density file, ColourMap file.
+           Added Statistical Analysis and Statistical Manager classes
+           Miscellaneous improvements. 
+           DICOM.cc now has a large list of runtime configuration options 
+             via command line. 
+           Options set at command line are set to override environment
+             variables.
+
+15.02.2013 - Ivana Hrivnacova (DICOM-V09-06-00)
+           Applied coding guidelines (virtual keyword, data members
+           names and initialization)
+           
 07.11.2012 - Gabriele Cosmo (DICOM-V09-05-10)
            Fixed compilation warnings for shadowing of variables and unused
            return flag from system calls.

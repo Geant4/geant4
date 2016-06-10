@@ -11,8 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010-11-29 18:01:57 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: sources.cmake 68733 2013-04-05 09:45:28Z gcosmo $
 #
 #------------------------------------------------------------------------------
 

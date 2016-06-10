@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FPEDetection.hh 70818 2013-06-06 08:10:15Z gcosmo $
 //
 // 
 // -*- C++ -*-
@@ -48,9 +48,51 @@
   #include <features.h>
   #include <fenv.h>
   #include <csignal>
+// for G4StackBacktrace()
+  #include <execinfo.h>
+  #include <cxxabi.h>
 
   struct sigaction termaction, oldaction;
 
+  static void G4StackBackTrace()
+  {
+
+     //   from http://linux.die.net/man/3/backtrace_symbols_fd
+     #define BSIZE 50
+     void * buffer[ BSIZE ];
+     int nptrs = backtrace( buffer, BSIZE );
+       //std::cerr << "nptrs=" << nptrs << std::endl;
+     char ** strings = backtrace_symbols( buffer, nptrs );
+     if ( strings == NULL ) {
+       perror( "backtrace_symbols" );
+       return;
+     }
+     std::cerr << std::endl<< "Call Stack:" << std::endl;
+     for ( int j = 0; j < nptrs; j++ ){
+         //printf("%s\n", strings[j]);
+         std::cerr  << nptrs-j-1 <<": ";
+	    //std::cerr  << strings[j] << std::endl;
+       char * mangled_start = strchr( strings[j],  '(' ) + 1;
+       if (mangled_start) *(mangled_start-1) = '\0'; 
+       char * mangled_end   = strchr( mangled_start,'+' );
+       if ( mangled_end ) *mangled_end = '\0';
+         //std::cerr << "mangled .. " << mangled_start << ", len:" << strlen(mangled_start)<< std::endl;
+       int status = 0;
+       char *realname=0;       
+       if ( mangled_end && strlen(mangled_start)  ) 
+              realname = abi::__cxa_demangle( mangled_start, 0, 0, &status );
+       if ( realname ) {
+	 std::cerr << strings[j]<< " : " << realname  << std::endl;
+	 free( realname );
+       } else {
+	 std::cerr << strings[j] << std::endl;
+       }
+     }
+     free( strings );
+     // c++filt can demangle: http://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
+     //-------------------------------------------------------------
+
+  }
   static void TerminationSignalHandler(int sig, siginfo_t* sinfo, void* /* context */)
   {
     std::cerr << "ERROR: " << sig;
@@ -92,7 +134,7 @@
     }
 
     std::cerr << " - " << message << std::endl;
-    
+    G4StackBackTrace();
     ::abort();
   }
 

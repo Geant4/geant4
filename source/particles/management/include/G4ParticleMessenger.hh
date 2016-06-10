@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleMessenger.hh 69557 2013-05-08 12:01:40Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -70,6 +70,7 @@
 //    25 Nov. 1998, H. Kurashige   : add /particle/find
 //    08 Jun. 2008, H. Kurashige   : add /particle/verbose
 //    30 Jul. 2009, H. Kurashige   : add /particle/createAllIon
+//    1  May. 2013, H. Kurashige   : add /particle/createAllIsomer
 //---------------------------------------------------------------
 
 #ifndef G4ParticleMessenger_h
@@ -108,7 +109,8 @@ class G4ParticleMessenger: public G4UImessenger
     G4UIcmdWithAString *        listCmd;
     G4UIcmdWithAString *        selectCmd;
     G4UIcmdWithAnInteger *      findCmd;
-    G4UIcmdWithoutParameter *   createAllCmd;
+    G4UIcmdWithoutParameter *   createAllIonCmd;
+    G4UIcmdWithoutParameter *   createAllIsomerCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
 
     G4ParticleTable* theParticleTable;

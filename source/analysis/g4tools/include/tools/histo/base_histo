@@ -1,0 +1,659 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_base_histo
+#define tools_histo_base_histo
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include "histo_data"
+
+#include <cmath>
+#include <map> //for annotations
+
+namespace tools {
+namespace histo {
+
+//TC is for a coordinate.
+//TN is for a number of entries.
+//TW is for a weight.
+//TH is for a height.
+
+template <class TC,class TN,class TW,class TH>
+class base_histo {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::base_histo");
+    return s_v;
+  }
+public:
+  typedef typename axis<TC>::bn_t bn_t;
+  typedef unsigned int dim_t;
+protected:
+  virtual TH get_bin_height(int) const = 0;  //histo/profile
+protected:
+  void base_from_data(const histo_data<TC,TN,TW>& a_from) {
+    m_title = a_from.m_title;
+    m_dimension = a_from.m_dimension;
+    m_bin_number = a_from.m_bin_number;
+    // Arrays :
+    m_bin_entries = a_from.m_bin_entries;
+    m_bin_Sw = a_from.m_bin_Sw;
+    m_bin_Sw2 = a_from.m_bin_Sw2;
+    m_bin_Sxw = a_from.m_bin_Sxw;
+    m_bin_Sx2w = a_from.m_bin_Sx2w;
+    m_axes = a_from.m_axes;
+    m_annotations = a_from.m_annotations;
+  }
+  histo_data<TC,TN,TW> base_get_data() const {
+    histo_data<TC,TN,TW> hd;
+    hd.m_title = m_title;
+    hd.m_dimension = m_dimension;
+    hd.m_bin_number = m_bin_number;
+    // Arrays :
+    hd.m_bin_entries = m_bin_entries;
+    hd.m_bin_Sw = m_bin_Sw;
+    hd.m_bin_Sw2 = m_bin_Sw2;
+    hd.m_bin_Sxw = m_bin_Sxw;
+    hd.m_bin_Sx2w = m_bin_Sx2w;
+    hd.m_axes = m_axes;
+    hd.m_annotations = m_annotations;
+    return hd;
+  }
+protected:
+  base_histo()
+  :m_dimension(0)
+  ,m_bin_number(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+protected:
+  virtual ~base_histo(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  base_histo(const base_histo& a_from)
+  :m_title(a_from.m_title)
+  ,m_dimension(a_from.m_dimension)
+  ,m_bin_number(a_from.m_bin_number)
+  // Arrays :
+  ,m_bin_entries(a_from.m_bin_entries)
+  ,m_bin_Sw(a_from.m_bin_Sw)
+  ,m_bin_Sw2(a_from.m_bin_Sw2)
+  ,m_bin_Sxw(a_from.m_bin_Sxw)
+  ,m_bin_Sx2w(a_from.m_bin_Sx2w)
+  ,m_axes(a_from.m_axes)
+  ,m_annotations(a_from.m_annotations)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  base_histo& operator=(const base_histo& a_from) {
+    m_title = a_from.m_title;
+    m_dimension = a_from.m_dimension;
+    m_bin_number = a_from.m_bin_number;
+    // Arrays :
+    m_bin_entries = a_from.m_bin_entries;
+    m_bin_Sw = a_from.m_bin_Sw;
+    m_bin_Sw2 = a_from.m_bin_Sw2;
+    m_bin_Sxw = a_from.m_bin_Sxw;
+    m_bin_Sx2w = a_from.m_bin_Sx2w;
+    m_axes = a_from.m_axes;
+    m_annotations = a_from.m_annotations;
+    return *this;
+  }
+
+public:
+  const std::string& title() const {return m_title;}
+  std::string title() {return m_title;}
+  bool set_title(const std::string& a_title){m_title = a_title;return true;}
+  dim_t dimension() const {return m_dimension;}
+
+  TN entries() const { return get_entries();}
+  TN all_entries() const {
+    TN number = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      number += m_bin_entries[ibin];
+    }
+    return number;
+  }
+  TN extra_entries() const {
+    TN number = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(is_out(ibin)) {
+        number += m_bin_entries[ibin];
+      }
+    }
+    return number;
+  }
+  TW equivalent_bin_entries() const {
+    TW sw = 0;
+    TW sw2 = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        sw += m_bin_Sw[ibin];
+        sw2 += m_bin_Sw2[ibin];
+      }
+    }
+    if(sw2==0) return 0;
+    return (sw * sw)/sw2;
+  }
+  
+  TH sum_bin_heights() const {
+    TH sh = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        sh += get_bin_height(ibin);
+      }
+    }
+    return sh;
+  }
+
+  TH sum_all_bin_heights() const {
+    TH sh = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      sh += get_bin_height(ibin);
+    }
+    return sh;
+  }
+
+  TH sum_extra_bin_heights() const {
+    TH sh = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(is_out(ibin)) {
+        sh += get_bin_height(ibin);
+      }
+    }
+    return sh;
+  }
+
+  TH min_bin_height() const {
+    TH value = 0;
+    bool first = true;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        TH vbin = get_bin_height(ibin);
+        if(first) {
+          first = false;
+          value = vbin;
+        } else {
+          if(vbin<=value) value = vbin;
+        }
+      }
+    }
+    return value;
+  }
+  
+  TH max_bin_height() const {
+    TH value = 0;
+    bool first = true;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        TH vbin = get_bin_height(ibin);
+        if(first) {
+          first = false;
+          value = vbin;
+        } else {
+          if(vbin>=value) value = vbin;
+        }
+      }
+    }
+    return value;
+  }
+
+protected:
+  enum {AxisX=0,AxisY=1,AxisZ=2};
+
+  bool configure(dim_t a_dim,
+                 const std::vector<bn_t>& aNumbers,
+                 const std::vector<TC>& aMins,
+                 const std::vector<TC>& aMaxs) {
+    // Clear :
+    m_bin_entries.clear();
+    m_bin_Sw.clear();
+    m_bin_Sw2.clear();
+    m_bin_Sxw.clear();
+    m_bin_Sx2w.clear();
+    m_axes.clear();
+    m_bin_number = 0;
+    m_dimension = 0;
+    m_annotations.clear();
+    
+    // Some checks :
+    if(!a_dim) return false;
+    m_axes.resize(a_dim);
+    // Setup axes :
+    for(dim_t iaxis=0;iaxis<a_dim;iaxis++) { 
+      if(!m_axes[iaxis].configure(aNumbers[iaxis],aMins[iaxis],aMaxs[iaxis])) {
+        // do not do :
+        //   m_axes.clear()
+        // so that :
+        //   b1::axis(),b2::axis_[x,y]()
+        // do not crash in case of a bad booking.
+        //m_axes.clear();
+        return false;
+      }
+    }
+  
+    m_dimension = a_dim;
+
+    base_allocate(); //set m_bin_number.
+
+    return true;
+  }
+
+  bool configure(dim_t a_dim,const std::vector< std::vector<TC> >& aEdges) {
+    // Clear :
+    m_bin_entries.clear();
+    m_bin_Sw.clear();
+    m_bin_Sw2.clear();
+    m_bin_Sxw.clear();
+    m_bin_Sx2w.clear();
+    m_axes.clear();
+    m_bin_number = 0;
+    m_dimension = 0;
+    m_annotations.clear();
+
+    // Some checks :
+    if(!a_dim) return false;
+    m_axes.resize(a_dim);
+    // Setup axes :
+    for(dim_t iaxis=0;iaxis<a_dim;iaxis++) { 
+      if(!m_axes[iaxis].configure(aEdges[iaxis])) {
+        //m_axes.clear();
+        return false;
+      }
+    }
+  
+    m_dimension = a_dim;
+
+    base_allocate(); //set m_bin_number.
+
+    return true;
+  }
+
+  void base_reset() {
+    // Reset content (different of clear that deallocate all internal things).
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      m_bin_entries[ibin] = 0;
+      m_bin_Sw[ibin] = 0;
+      m_bin_Sw2[ibin] = 0;
+      for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+        m_bin_Sxw[ibin][iaxis] = 0;
+        m_bin_Sx2w[ibin][iaxis] = 0;
+      }
+    }
+    //profile not done here.
+  }
+
+protected:
+  void base_allocate() {
+    dim_t iaxis;
+    // Add two bins for the [under,out]flow data.
+    bn_t n_bin = 1;
+    for(iaxis=0;iaxis<m_dimension;iaxis++) {
+      n_bin *= (m_axes[iaxis].bins() + 2);
+    }
+  
+    m_bin_entries.resize(n_bin,0);
+    m_bin_Sw.resize(n_bin,0);
+    m_bin_Sw2.resize(n_bin,0);
+
+    std::vector<TC> empty;
+    empty.resize(m_dimension,0);
+    m_bin_Sxw.resize(n_bin,empty);
+    m_bin_Sx2w.resize(n_bin,empty);
+    
+    m_bin_number = n_bin; // All bins : [in-range, underflow, outflow] bins.
+  
+    m_axes[0].m_offset = 1;
+    for(iaxis=1;iaxis<m_dimension;iaxis++) {
+      m_axes[iaxis].m_offset = 
+        m_axes[iaxis-1].m_offset * (m_axes[iaxis-1].bins()+2);
+    }
+    
+  }
+
+public:
+  // for BatchLab::Rio::TH::streamTH1 :
+  TN get_entries() const {
+    TN number = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        number += m_bin_entries[ibin];
+      }
+    }
+    return number;
+  }
+  TW get_Sw() const {
+    TW sw = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        sw += m_bin_Sw[ibin];
+      }
+    }
+    return sw;
+  }
+
+  TW get_Sw2() const {
+    TW sw2 = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        sw2 += m_bin_Sw2[ibin];
+      }
+    }
+    return sw2;
+  }
+
+  bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=m_dimension) return false;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        a_value += m_bin_Sxw[ibin][a_axis];
+      }
+    }
+    return true;
+  }
+
+  bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=m_dimension) return false;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        a_value += m_bin_Sx2w[ibin][a_axis];
+      }
+    }
+    return true;
+  }
+
+  TN get_all_entries() const {
+    TN number = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      number += m_bin_entries[ibin];
+    }
+    return number;
+  }
+
+  void get_indices(bn_t aOffset,std::vector<int>& aIs) const {
+    int offset = aOffset;
+   {for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
+      aIs[iaxis] = offset/m_axes[iaxis].m_offset;
+      offset -= aIs[iaxis] * m_axes[iaxis].m_offset;
+    }}
+    for(unsigned int iaxis=0;iaxis<m_dimension;iaxis++) {
+      if(aIs[iaxis]==0) {
+        aIs[iaxis] = axis<TC>::UNDERFLOW_BIN;
+      } else if(aIs[iaxis]==int(m_axes[iaxis].m_number_of_bins+1)) {
+        aIs[iaxis] = axis<TC>::OVERFLOW_BIN;
+      } else {
+        aIs[iaxis]--;
+      }
+    }
+  }
+
+  bool is_out(bn_t aOffset) const {
+    int offset = aOffset;
+    int index;
+    for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
+      index = offset/m_axes[iaxis].m_offset;
+      if(index==0) return true;
+      if(index==(int(m_axes[iaxis].m_number_of_bins)+1)) return true;
+      offset -= index * m_axes[iaxis].m_offset;
+    }
+    return false;
+  }
+
+  bool get_offset(const std::vector<int>& aIs,bn_t& a_offset) const {
+    // aIs[iaxis] is given in in-range indexing :
+    //  - [0,n[iaxis]-1] for in-range bins
+    //  - UNDERFLOW_BIN for the iaxis underflow bin
+    //  - OVERFLOW_BIN for the iaxis overflow bin
+    a_offset = 0;
+    if(!m_dimension) return false;
+    bn_t ibin;
+    for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) { 
+      if(!m_axes[iaxis].in_range_to_absolute_index(aIs[iaxis],ibin)) {
+        a_offset = 0;
+        return false;
+      }
+      a_offset += ibin * m_axes[iaxis].m_offset;
+    }
+    return true;
+  }
+
+  // to access data from methods :
+  const std::vector<TN>& bins_entries() const {return m_bin_entries;}
+  const std::vector<TW>& bins_sum_w() const {return m_bin_Sw;}
+  const std::vector<TW>& bins_sum_w2() const {return m_bin_Sw2;}
+  const std::vector< std::vector<TC> >& bins_sum_xw() const {return m_bin_Sxw;}
+  const std::vector< std::vector<TC> >& bins_sum_x2w() const {return m_bin_Sx2w;}
+
+public:
+  const axis<TC>& get_axis(int aIndex) const {return m_axes[aIndex];}
+  bn_t get_bins() const {return m_bin_number;}
+  const std::string& get_title() const {return m_title;}
+  dim_t get_dimension() const {return m_dimension;}
+  bool is_valid() const {return (m_dimension?true:false);}
+
+public: //annotations :
+  typedef std::map<std::string,std::string> annotations_t;
+  const annotations_t& annotations() const {return m_annotations;}
+  annotations_t annotations() {return m_annotations;}
+
+  void add_annotation(const std::string& a_key,const std::string& a_value) {
+    m_annotations[a_key] = a_value; //override if a_key already exists.
+  }
+  bool annotation(const std::string& a_key,std::string& a_value) const {
+    annotations_t::const_iterator it = m_annotations.find(a_key);
+    if(it==m_annotations.end()) {a_value.clear();return false;}
+    a_value = (*it).second;
+    return true;
+  }
+
+protected:
+  bool is_compatible(const base_histo& a_histo){
+    if(m_dimension!=a_histo.m_dimension) return false;
+    for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) { 
+      if(!m_axes[iaxis].is_compatible(a_histo.m_axes[iaxis])) return false;
+    }
+    return true;
+  }
+
+  void base_add(const base_histo& a_histo){
+    // The only histogram operation that makes sense.
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      m_bin_entries[ibin] += a_histo.m_bin_entries[ibin];      
+      m_bin_Sw[ibin] += a_histo.m_bin_Sw[ibin];      
+      m_bin_Sw2[ibin] += a_histo.m_bin_Sw2[ibin];      
+      for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+        m_bin_Sxw[ibin][iaxis] += a_histo.m_bin_Sxw[ibin][iaxis];
+        m_bin_Sx2w[ibin][iaxis] += a_histo.m_bin_Sx2w[ibin][iaxis];
+      }
+    }
+  }
+
+  void base_subtract(const base_histo& a_histo) {
+    //ill-defined operation. We keep that because of the "ill-defined past".
+    // We build a new histo with one entry in each bin.
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      m_bin_entries[ibin] = 1;
+
+      m_bin_Sw[ibin] -= a_histo.m_bin_Sw[ibin];      
+      // Yes, it is a += in the below.
+      m_bin_Sw2[ibin] += a_histo.m_bin_Sw2[ibin];
+      for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+        m_bin_Sxw[ibin][iaxis] -= a_histo.m_bin_Sxw[ibin][iaxis];
+        m_bin_Sx2w[ibin][iaxis] -= a_histo.m_bin_Sx2w[ibin][iaxis];
+      }
+    }
+  }
+
+  bool base_multiply(const base_histo& a_histo) {  
+    //ill-defined operation. We keep that because of the "ill-defined past".
+
+    // We build a new histo with one entry in each bin of weight : 
+    //   this.w * a_histo.w
+    // The current histo is overriden with this new histo.
+    // The m_bin_Sw2 computation is consistent with FreeHEP and ROOT.
+  
+    if(!is_compatible(a_histo)) return false;
+
+    std::vector<int> is(m_dimension);
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      TW swa = m_bin_Sw[ibin];
+      TW sw2a = m_bin_Sw2[ibin];
+      TW swb = a_histo.m_bin_Sw[ibin];
+      TW sw2b = a_histo.m_bin_Sw2[ibin];
+      TW sw = swa * swb;
+      m_bin_entries[ibin] = 1;
+      m_bin_Sw[ibin] = sw;
+      m_bin_Sw2[ibin] = sw2a * swb * swb + sw2b * swa * swa;
+      get_indices(ibin,is);
+      for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+        TC x = m_axes[iaxis].bin_center(is[iaxis]);
+        m_bin_Sxw[ibin][iaxis] = x * sw;
+        m_bin_Sx2w[ibin][iaxis] = x * x * sw;
+      }
+    }
+    return true;
+  }
+  
+  bool base_divide(const base_histo& a_histo) {
+    //ill-defined operation. We keep that because of the "ill-defined past".
+  
+    // We build a new histo with one entry in each bin of weight : 
+    //   this.w / a_histo.w
+    // The current histo is overriden with this new histo.
+    // The m_bin_Sw2 computation is consistent with FreeHEP and ROOT.
+  
+    if(!is_compatible(a_histo)) return false;
+
+    std::vector<int> is(m_dimension);
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      get_indices(ibin,is);
+      TW swa = m_bin_Sw[ibin];
+      TW swb = a_histo.m_bin_Sw[ibin];
+      TW sw2a = m_bin_Sw2[ibin];
+      TW sw2b = a_histo.m_bin_Sw2[ibin];
+      if(swb!=0) {
+        m_bin_entries[ibin] = 1;
+        TW sw = swa / swb;
+        m_bin_Sw[ibin] = sw;
+        TW swb2 = swb * swb;
+        m_bin_Sw2[ibin] = sw2a / swb2 + sw2b * swa * swa /(swb2*swb2);
+        for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+          TC x = m_axes[iaxis].bin_center(is[iaxis]);
+          m_bin_Sxw[ibin][iaxis] = x * sw;
+          m_bin_Sx2w[ibin][iaxis] = x * x * sw;
+        }
+      } else {
+        m_bin_entries[ibin] = 0;
+        m_bin_Sw[ibin] = 0;
+        m_bin_Sw2[ibin] = 0;
+        for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+          m_bin_Sxw[ibin][iaxis] = 0;
+          m_bin_Sx2w[ibin][iaxis] = 0;
+        }
+      }
+    }
+    return true;
+  }
+
+  bool base_multiply(TW aFactor) {
+    if(aFactor<0) return false;
+    TW factor2 = aFactor * aFactor;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      m_bin_Sw[ibin] *= aFactor;
+      m_bin_Sw2[ibin] *= factor2;
+      for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+        m_bin_Sxw[ibin][iaxis] *= aFactor;
+        m_bin_Sx2w[ibin][iaxis] *= aFactor;
+      }
+    }
+    return true;
+  }
+
+  bool get_ith_axis_mean(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=m_dimension) return false;
+    TW sw = 0;
+    TC sxw = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        sw += m_bin_Sw[ibin];
+        sxw += m_bin_Sxw[ibin][a_axis];
+      }
+    }
+    if(sw==0) return false;
+    a_value = sxw/sw;
+    return true;
+  }
+
+  bool get_ith_axis_rms(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=m_dimension) return false;
+    TW sw = 0;
+    TC sxw = 0;
+    TC sx2w = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        sw += m_bin_Sw[ibin];
+        sxw += m_bin_Sxw[ibin][a_axis];
+        sx2w += m_bin_Sx2w[ibin][a_axis];
+      }
+    }
+    if(sw==0) return false;
+    TC mean = sxw/sw;
+    a_value = ::sqrt(::fabs((sx2w / sw) - mean * mean));
+    return true;
+  }
+
+  TN get_bin_entries(const std::vector<int>& aIs) const {
+    if(m_bin_number==0) return 0;
+    bn_t offset;
+    if(!get_offset(aIs,offset)) return 0;
+    return m_bin_entries[offset];
+  }
+
+protected:
+  // General :
+  std::string m_title;
+  dim_t m_dimension;
+  // Bins :
+  bn_t m_bin_number;
+  std::vector<TN> m_bin_entries;
+  std::vector<TW> m_bin_Sw;
+  std::vector<TW> m_bin_Sw2;
+  std::vector< std::vector<TC> > m_bin_Sxw;
+  std::vector< std::vector<TC> > m_bin_Sx2w;
+  // Axes :
+  std::vector< axis<TC> > m_axes;
+  // etc :
+  annotations_t m_annotations;
+};
+
+// predefined annotation keys :
+inline const std::string& key_axis_x_title() {
+  static const std::string s_v("axis_x.title");
+  return s_v;
+}
+inline const std::string& key_axis_y_title() {
+  static const std::string s_v("axis_y.title");
+  return s_v;
+}
+inline const std::string& key_axis_z_title() {
+  static const std::string s_v("axis_z.title");
+  return s_v;
+}
+
+}}
+
+#endif

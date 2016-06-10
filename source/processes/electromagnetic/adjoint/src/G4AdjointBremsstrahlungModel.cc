@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointBremsstrahlungModel.cc 75591 2013-11-04 12:33:11Z gcosmo $
 //
 #include "G4AdjointBremsstrahlungModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -58,7 +58,7 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel(G4VEmModel* aModel):
   theEmModelManagerForFwdModels->AddEmModel(1, theDirectStdBremModel, f, r);
 
   SetApplyCutInRange(true);
-  highKinEnergy= 100.*TeV;
+  highKinEnergy= 1.*GeV;
   lowKinEnergy = 1.0*keV;
 
   lastCZ =0.;
@@ -68,6 +68,7 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel(G4VEmModel* aModel):
   theAdjEquivOfDirectSecondPartDef=G4AdjointGamma::AdjointGamma();
   theDirectPrimaryPartDef=G4Electron::Electron();
   second_part_of_same_type=false;
+
   
   /*UsePenelopeModel=false;
   if (UsePenelopeModel) {
@@ -222,7 +223,7 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
         G4double Emin=  GetSecondAdjEnergyMinForProdToProjCase(adjointPrimKinEnergy);;
 	if (Emin>=Emax) return;
 	projectileKinEnergy=Emin*std::pow(Emax/Emin,G4UniformRand());
-	diffCSUsed=lastCZ/projectileKinEnergy;
+	diffCSUsed=100.*CS_biasing_factor*lastCZ/projectileKinEnergy;
  	
  }
  else {	G4double Emax = GetSecondAdjEnergyMaxForScatProjToProjCase(adjointPrimKinEnergy);
@@ -411,7 +412,7 @@ G4double G4AdjointBremsstrahlungModel::AdjointCrossSection(const G4MaterialCutsC
   if (!IsScatProjToProjCase ){
   	G4double Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(primEnergy);
   	G4double Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(primEnergy);
-	if (Emax_proj>Emin_proj && primEnergy > currentTcutForDirectSecond) Cross= lastCZ*std::log(Emax_proj/Emin_proj);
+	if (Emax_proj>Emin_proj && primEnergy > currentTcutForDirectSecond) Cross= 100.*CS_biasing_factor*lastCZ*std::log(Emax_proj/Emin_proj);
   }
   else {
   	G4double Emax_proj = GetSecondAdjEnergyMaxForScatProjToProjCase(primEnergy);

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 080809 Change interpolation scheme of "histogram", now using LinearLinear
 //        For multidimensional interpolations By T. Koi

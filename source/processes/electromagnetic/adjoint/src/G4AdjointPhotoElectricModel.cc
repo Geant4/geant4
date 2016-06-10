@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointPhotoElectricModel.cc 75591 2013-11-04 12:33:11Z gcosmo $
 //
 #include "G4AdjointPhotoElectricModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -59,7 +59,7 @@ G4AdjointPhotoElectricModel::G4AdjointPhotoElectricModel():
   theAdjEquivOfDirectSecondPartDef=G4AdjointElectron::AdjointElectron();
   theDirectPrimaryPartDef=G4Gamma::Gamma();
   second_part_of_same_type=false;
-  theDirectPEEffectModel = new G4PEEffectModel();
+  theDirectPEEffectModel = new G4PEEffectFluoModel();
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -106,8 +106,8 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
    G4double gammaEnergy= electronEnergy+(*theElementVector)[index_element]->GetAtomicShell(i);
 	
   //Sample cos theta
-  //Copy of the G4PEEffectModel cos theta sampling method ElecCosThetaDistribution.   
-  //This method cannot be used directly from G4PEEffectModel because it is a friend method. I should ask Vladimir to change that  
+  //Copy of the G4PEEfectFluoModel cos theta sampling method ElecCosThetaDistribution.   
+  //This method cannot be used directly from G4PEEfectFluoModel because it is a friend method. I should ask Vladimir to change that  
   //------------------------------------------------------------------------------------------------	
   //G4double cos_theta = theDirectPEEffectModel->ElecCosThetaDistribution(electronEnergy);
 	
@@ -175,6 +175,8 @@ void G4AdjointPhotoElectricModel::CorrectPostStepWeight(G4ParticleChange* fParti
 
  G4double w_corr =G4AdjointCSManager::GetAdjointCSManager()->GetPostStepWeightCorrection()/factorCSBiasing;
  w_corr*=post_step_AdjointCS/pre_step_AdjointCS; 
+
+
  new_weight*=w_corr; 
  new_weight*=projectileKinEnergy/adjointPrimKinEnergy;
  fParticleChange->SetParentWeightByProcess(false);
@@ -266,4 +268,5 @@ void G4AdjointPhotoElectricModel::DefineCurrentMaterialAndElectronEnergy(const G
   currentCoupleIndex = couple->GetIndex();
   currentMaterialIndex = currentMaterial->GetIndex();
   current_eEnergy = anEnergy;	
+  theDirectPEEffectModel->SetCurrentCouple(couple);
 }

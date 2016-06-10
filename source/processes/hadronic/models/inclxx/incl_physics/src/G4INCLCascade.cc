@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -46,6 +44,7 @@
 #include "G4INCLGeant4Random.hh"
 #include "G4INCLStandardPropagationModel.hh"
 #include "G4INCLParticleTable.hh"
+#include "G4INCLNuclearMassTable.hh"
 #include "G4INCLGlobalInfo.hh"
 
 #include "G4INCLPauliBlocking.hh"
@@ -56,9 +55,15 @@
 #include "G4INCLPauliGlobal.hh"
 #include "G4INCLCDPP.hh"
 
+#include "G4INCLCrossSections.hh"
+#include "G4INCLICrossSections.hh"
+#include "G4INCLCrossSectionsINCL46.hh"
+
 #include "G4INCLLogger.hh"
 #include "G4INCLGlobals.hh"
 #include "G4INCLNuclearDensityFactory.hh"
+
+#include "G4INCLINuclearPotential.hh"
 
 #include "G4INCLCoulombDistortion.hh"
 #include "G4INCLICoulomb.hh"
@@ -71,7 +76,7 @@
 
 #include "G4INCLIntersection.hh"
 
-#include "G4INCLCrossSections.hh"
+#include "G4INCLBinaryCollisionAvatar.hh"
 
 #include <cstring>
 #include <cstdlib>
@@ -88,18 +93,23 @@ namespace G4INCL {
     fixedImpactParameter(0.),
     theConfig(config),
     nucleus(NULL),
+    forceTransparent(false),
     minRemnantSize(4)
   {
     // Set the logger object.
+#ifdef INCLXX_IN_GEANT4_MODE
+    G4INCL::Logger::initVerbosityLevelFromEnvvar();
+#else // INCLXX_IN_GEANT4_MODE
     G4INCL::Logger::setLoggerSlave(new G4INCL::LoggerSlave(theConfig->getLogFileName()));
     G4INCL::Logger::setVerbosityLevel(theConfig->getVerbosity());
+#endif // INCLXX_IN_GEANT4_MODE
 
     // Set the random number generator algorithm. The system can support
     // multiple different generator algorithms in a completely
     // transparent way.
 #ifdef INCLXX_IN_GEANT4_MODE
     G4INCL::Random::setGenerator(new G4INCL::Geant4RandomGenerator());
-#else
+#else // INCLXX_IN_GEANT4_MODE
     G4INCL::Random::setGenerator(new G4INCL::Ranecu(theConfig->getRandomSeeds()));
 #endif // INCLXX_IN_GEANT4_MODE
 
@@ -115,6 +125,9 @@ namespace G4INCL {
       G4INCL::Pauli::setBlocker(new G4INCL::PauliGlobal);
     else if(pauli == G4INCL::NoPauli)
       G4INCL::Pauli::setBlocker(NULL);
+
+    // Set the cross-section set
+    CrossSections::setCrossSections(new CrossSectionsINCL46);
 
     if(theConfig->getCDPP())
       G4INCL::Pauli::setCDPP(new G4INCL::CDPP);
@@ -138,6 +151,9 @@ namespace G4INCL {
     // Initialize the INCL particle table:
     G4INCL::ParticleTable::initialize(theConfig);
 
+    // Initialize the value of cutNN in BinaryCollisionAvatar
+    BinaryCollisionAvatar::setCutNN(theConfig->getCutNN());
+
     // Propagation model is responsible for finding avatars and
     // transporting the particles. In principle this step is "hidden"
     // behind an abstract interface and the rest of the system does not
@@ -146,12 +162,14 @@ namespace G4INCL {
     // finding schemes and even to support things like curved
     // trajectories in the future.
     propagationModel = new G4INCL::StandardPropagationModel(theConfig->getLocalEnergyBBType(),theConfig->getLocalEnergyPiType());
-    eventAction = new EventAction();
-    propagationAction = new PropagationAction();
-    avatarAction = new AvatarAction();
+    cascadeAction = new CascadeAction();
+    cascadeAction->beforeRunAction(theConfig);
 
-    theGlobalInfo.cascadeModel = theConfig->getVersionID().c_str();
-    theGlobalInfo.deexcitationModel = "none";
+    theGlobalInfo.cascadeModel = theConfig->getVersionString();
+    theGlobalInfo.deexcitationModel = theConfig->getDeExcitationString();
+#ifdef INCL_ROOT_USE
+    theGlobalInfo.rootSelection = theConfig->getROOTSelectionString();
+#endif
 
 #ifndef INCLXX_IN_GEANT4_MODE
     // Fill in the global information
@@ -162,32 +180,48 @@ namespace G4INCL {
     theGlobalInfo.Zp = theSpecies.theZ;
     theGlobalInfo.Ep = theConfig->getProjectileKineticEnergy();
     // Echo the input parameters to the log file
-    INFO(theConfig->echo() << std::endl);
+    INCL_INFO(theConfig->echo() << std::endl);
 #endif
 
     fixedImpactParameter = theConfig->getImpactParameter();
   }
 
   INCL::~INCL() {
+    G4INCL::InteractionAvatar::deleteBackupParticles();
+#ifndef INCLXX_IN_GEANT4_MODE
+    G4INCL::NuclearMassTable::deleteTable();
+#endif
+    G4INCL::CrossSections::deleteCrossSections();
     G4INCL::Pauli::deleteBlockers();
     G4INCL::CoulombDistortion::deleteCoulomb();
     G4INCL::Random::deleteGenerator();
     G4INCL::Clustering::deleteClusteringModel();
+#ifndef INCLXX_IN_GEANT4_MODE
     G4INCL::Logger::deleteLoggerSlave();
+#endif
     G4INCL::NuclearDensityFactory::clearCache();
-    delete avatarAction;
-    delete propagationAction;
-    delete eventAction;
+    G4INCL::NuclearPotential::clearCache();
+    cascadeAction->afterRunAction();
+    delete cascadeAction;
     delete propagationModel;
     delete theConfig;
   }
 
   G4bool INCL::prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z) {
     if(A < 0 || A > 300 || Z < 1 || Z > 200) {
-      ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl);
-      ERROR("Target configuration rejected." << std::endl);
+      INCL_ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl
+                 << "Target configuration rejected." << std::endl);
       return false;
     }
+    if(projectileSpecies.theType==Composite &&
+       (projectileSpecies.theZ==projectileSpecies.theA || projectileSpecies.theZ==0)) {
+      INCL_ERROR("Unsupported projectile: A = " << projectileSpecies.theA << " Z = " << projectileSpecies.theZ << std::endl
+                 << "Projectile configuration rejected." << std::endl);
+      return false;
+    }
+
+    // Reset the forced-transparent flag
+    forceTransparent = false;
 
     // Initialise the maximum universe radius
     initUniverseRadius(projectileSpecies, kineticEnergy, A, Z);
@@ -202,7 +236,10 @@ namespace G4INCL {
 
     // Set the maximum impact parameter
     maxImpactParameter = CoulombDistortion::maxImpactParameter(projectileSpecies, kineticEnergy, nucleus);
-    initMaxInteractionDistance(projectileSpecies, kineticEnergy); // for forced CN events
+    INCL_DEBUG("Maximum impact parameter initialised: " << maxImpactParameter << std::endl);
+
+    // For forced CN events
+    initMaxInteractionDistance(projectileSpecies, kineticEnergy);
 
     // Set the geometric cross section
     theGlobalInfo.geometricCrossSection =
@@ -221,7 +258,7 @@ namespace G4INCL {
     delete nucleus;
 
     nucleus = new Nucleus(A, Z, theConfig, maxUniverseRadius);
-    nucleus->getStore()->getBook()->reset();
+    nucleus->getStore()->getBook().reset();
     nucleus->initializeParticles();
 
     propagationModel->setNucleus(nucleus);
@@ -238,16 +275,20 @@ namespace G4INCL {
     targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
 
     if(!targetInitSuccess) {
-      WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);
+      INCL_WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);
       theEventInfo.transparent=true;
       return theEventInfo;
     }
+
+    cascadeAction->beforeCascadeAction(propagationModel);
 
     const G4bool canRunCascade = preCascade(projectileSpecies, kineticEnergy);
     if(canRunCascade) {
       cascade();
       postCascade();
+      cascadeAction->afterCascadeAction(nucleus);
     }
+    updateGlobalInfo();
     return theEventInfo;
   }
 
@@ -256,9 +297,6 @@ namespace G4INCL {
     theEventInfo.reset();
 
     EventInfo::eventNumber++;
-
-    // Increment the global counter for the number of shots
-    theGlobalInfo.nShots++;
 
     // Fill in the event information
     theEventInfo.projectileType = projectileSpecies.theType;
@@ -270,9 +308,6 @@ namespace G4INCL {
 
     // Do nothing below the Coulomb barrier
     if(maxImpactParameter<=0.) {
-      // Increment the global counter for the number of transparents
-      theGlobalInfo.nTransparents++;
-
       // Fill in the event information
       theEventInfo.transparent = true;
 
@@ -289,15 +324,13 @@ namespace G4INCL {
       impactParameter = fixedImpactParameter;
       phi = 0.;
     }
+    INCL_DEBUG("Selected impact parameter: " << impactParameter << std::endl);
 
     // Fill in the event information
     theEventInfo.impactParameter = impactParameter;
 
     const G4double effectiveImpactParameter = propagationModel->shoot(projectileSpecies, kineticEnergy, impactParameter, phi);
     if(effectiveImpactParameter < 0.) {
-      // Increment the global counter for the number of transparents
-      theGlobalInfo.nTransparents++;
-
       // Fill in the event information
       theEventInfo.transparent = true;
 
@@ -314,19 +347,19 @@ namespace G4INCL {
   void INCL::cascade() {
     do {
       // Run book keeping actions that should take place before propagation:
-      propagationAction->beforePropagationAction(propagationModel);
+      cascadeAction->beforePropagationAction(propagationModel);
 
       // Get the avatar with the smallest time and propagate particles
       // to that point in time.
       G4INCL::IAvatar *avatar = propagationModel->propagate();
 
       // Run book keeping actions that should take place after propagation:
-      propagationAction->afterPropagationAction(propagationModel, avatar);
+      cascadeAction->afterPropagationAction(propagationModel, avatar);
 
       if(avatar == 0) break; // No more avatars in the avatar list.
 
       // Run book keeping actions that should take place before avatar:
-      avatarAction->beforeAvatarAction(avatar, nucleus);
+      cascadeAction->beforeAvatarAction(avatar, nucleus);
 
       // Channel is responsible for calculating the outcome of the
       // selected avatar. There are different kinds of channels. The
@@ -338,7 +371,7 @@ namespace G4INCL {
       G4INCL::FinalState *finalState = avatar->getFinalState();
 
       // Run book keeping actions that should take place after avatar:
-      avatarAction->afterAvatarAction(avatar, nucleus, finalState);
+      cascadeAction->afterAvatarAction(avatar, nucleus, finalState);
 
       // So now we must give this information to the nucleus
       nucleus->applyFinalState(finalState);
@@ -356,8 +389,9 @@ namespace G4INCL {
 
     // Forced CN?
     if(nucleus->getTryCompoundNucleus()) {
-      DEBUG("Trying compound nucleus" << std::endl);
+      INCL_DEBUG("Trying compound nucleus" << std::endl);
       makeCompoundNucleus();
+      theEventInfo.transparent = forceTransparent;
       // Global checks of conservation laws
 #ifndef INCLXX_IN_GEANT4_MODE
       if(!theEventInfo.transparent) globalConservationChecks(true);
@@ -365,21 +399,15 @@ namespace G4INCL {
       return;
     }
 
-    theEventInfo.transparent = nucleus->isEventTransparent();
+    theEventInfo.transparent = forceTransparent || nucleus->isEventTransparent();
 
     if(theEventInfo.transparent) {
-      // Increment the global counter for the number of transparents
-      theGlobalInfo.nTransparents++;
-      if(nucleus->isForcedTransparent())
-        theGlobalInfo.nForcedTransparents++;
       ProjectileRemnant * const projectileRemnant = nucleus->getProjectileRemnant();
       if(projectileRemnant) {
-        // Delete the projectile remnant and the particles it contains
-        projectileRemnant->deleteParticles();
-        nucleus->deleteProjectileRemnant();
+        // Clear the incoming list (particles will be deleted by the ProjectileRemnant)
         nucleus->getStore()->clearIncoming();
       } else {
-        // Clean up the incoming list and force a transparent gracefully
+        // Delete particles in the incoming list
         nucleus->getStore()->deleteIncoming();
       }
     } else {
@@ -400,17 +428,16 @@ namespace G4INCL {
       // If the normal cascade predicted complete fusion, use the tabulated
       // masses to compute the excitation energy, the recoil, etc.
       if(nucleus->getStore()->getOutgoingParticles().size()==0
-          && nucleus->getProjectileRemnant()
-          && nucleus->getProjectileRemnant()->getParticles().size()==0) {
+         && (!nucleus->getProjectileRemnant()
+             || nucleus->getProjectileRemnant()->getParticles().size()==0)) {
 
-        DEBUG("Cascade resulted in complete fusion, using realistic fusion kinematics" << std::endl);
+        INCL_DEBUG("Cascade resulted in complete fusion, using realistic fusion kinematics" << std::endl);
 
         nucleus->useFusionKinematics();
-        nucleus->deleteProjectileRemnant();
 
         if(nucleus->getExcitationEnergy()<0.) {
           // Complete fusion is energetically impossible, return a transparent
-          WARN("Complete-fusion kinematics yields negative excitation energy, returning a transparent!" << std::endl);
+          INCL_WARN("Complete-fusion kinematics yields negative excitation energy, returning a transparent!" << std::endl);
           theEventInfo.transparent = true;
           return;
         }
@@ -449,13 +476,20 @@ namespace G4INCL {
       // Fill the EventInfo structure
       nucleus->fillEventInfo(&theEventInfo);
 
-      // Check if we have an absorption:
-      if(theEventInfo.nucleonAbsorption) theGlobalInfo.nNucleonAbsorptions++;
-      if(theEventInfo.pionAbsorption) theGlobalInfo.nPionAbsorptions++;
     }
   }
 
   void INCL::makeCompoundNucleus() {
+    // If this is not a nucleus-nucleus collision, don't attempt to make a
+    // compound nucleus.
+    //
+    // Yes, even nucleon-nucleus collisions can lead to particles entering
+    // below the Fermi level. Take e.g. 1-MeV p + He4.
+    if(!nucleus->isNucleusNucleusCollision()) {
+      forceTransparent = true;
+      return;
+    }
+
     // Reset the internal Nucleus variables
     nucleus->getStore()->clearIncoming();
     nucleus->getStore()->clearOutgoing();
@@ -481,37 +515,31 @@ namespace G4INCL {
 
     G4bool success = true;
     G4bool atLeastOneNucleonEntering = false;
-    for(std::vector<Particle*>::const_iterator p=shuffledComponents.begin(); p!=shuffledComponents.end(); ++p) {
-      // Skip geometrical spectators
-      Intersection intersectionUniverse(IntersectionFactory::getEarlierTrajectoryIntersection(
-            (*p)->getPosition(),
-            (*p)->getPropagationVelocity(),
-            maxUniverseRadius));
-      if(!intersectionUniverse.exists)
-        continue;
-
-      // At least one nucleon must enter the interaction distance
-      Intersection intersectionInteraction(IntersectionFactory::getEarlierTrajectoryIntersection(
+    for(std::vector<Particle*>::const_iterator p=shuffledComponents.begin(), e=shuffledComponents.end(); p!=e; ++p) {
+      // Skip particles that miss the interaction distance
+      Intersection intersectionInteractionDistance(IntersectionFactory::getEarlierTrajectoryIntersection(
             (*p)->getPosition(),
             (*p)->getPropagationVelocity(),
             maxInteractionDistance));
-      if(intersectionInteraction.exists)
-        atLeastOneNucleonEntering = true;
+      if(!intersectionInteractionDistance.exists)
+        continue;
 
       // Build an entry avatar for this nucleon
-      ParticleEntryAvatar theAvatar(0.0, nucleus, *p);
-      FinalState *fs = theAvatar.getFinalState();
+      atLeastOneNucleonEntering = true;
+      ParticleEntryAvatar *theAvatar = new ParticleEntryAvatar(0.0, nucleus, *p);
+      nucleus->getStore()->addParticleEntryAvatar(theAvatar);
+      FinalState *fs = theAvatar->getFinalState();
       nucleus->applyFinalState(fs);
       FinalStateValidity validity = fs->getValidity();
       delete fs;
       switch(validity) {
         case ValidFS:
         case ParticleBelowFermiFS:
+        case ParticleBelowZeroFS:
           // Add the particle to the CN
           theCNA++;
           theCNZ += (*p)->getZ();
           break;
-        case ParticleBelowZeroFS:
         case PauliBlockedFS:
         case NoEnergyConservationFS:
         default:
@@ -521,17 +549,14 @@ namespace G4INCL {
     }
 
     if(!success || !atLeastOneNucleonEntering) {
-      DEBUG("No nucleon entering in forced CN, or some nucleons entering below zero, forcing a transparent" << std::endl);
-      theEventInfo.transparent = true;
-      theGlobalInfo.nTransparents++;
-      theGlobalInfo.nForcedTransparents++;
-      nucleus->getProjectileRemnant()->deleteParticles();
-      nucleus->deleteProjectileRemnant();
+      INCL_DEBUG("No nucleon entering in forced CN, forcing a transparent" << std::endl);
+      forceTransparent = true;
       return;
     }
 
 // assert(theCNA==nucleus->getA());
-// assert(theCNA>theEventInfo.At);
+// assert(theCNA<=theEventInfo.At+theEventInfo.Ap);
+// assert(theCNZ<=theEventInfo.Zt+theEventInfo.Zp);
 
     // Update the kinematics of the CN
     theCNEnergy -= theProjectileRemnant->getEnergy();
@@ -543,7 +568,7 @@ namespace G4INCL {
     // Subtract the angular momentum of the projectile remnant
     ParticleList const &outgoing = nucleus->getStore()->getOutgoingParticles();
 // assert(outgoing.size()==0 || outgoing.size()==1);
-    for(ParticleIter i=outgoing.begin(); i!=outgoing.end(); ++i) {
+    for(ParticleIter i=outgoing.begin(), e=outgoing.end(); i!=e; ++i) {
       theCNSpin -= (*i)->getAngularMomentum();
     }
 
@@ -552,20 +577,32 @@ namespace G4INCL {
     const G4double theCNInvariantMassSquared = theCNEnergy*theCNEnergy-theCNMomentum.mag2();
     if(theCNInvariantMassSquared<0.) {
       // Negative invariant mass squared, return a transparent
-      theGlobalInfo.nTransparents++;
-      theGlobalInfo.nForcedTransparents++;
-      theEventInfo.transparent = true;
+      forceTransparent = true;
       return;
     }
     const G4double theCNExcitationEnergy = std::sqrt(theCNInvariantMassSquared) - theCNMass;
     if(theCNExcitationEnergy<0.) {
       // Negative excitation energy, return a transparent
-      theGlobalInfo.nTransparents++;
-      theGlobalInfo.nForcedTransparents++;
-      theEventInfo.transparent = true;
+      INCL_DEBUG("CN excitation energy is negative, forcing a transparent" << std::endl
+            << "  theCNA = " << theCNA << std::endl
+            << "  theCNZ = " << theCNZ << std::endl
+            << "  theCNEnergy = " << theCNEnergy << std::endl
+            << "  theCNMomentum = (" << theCNMomentum.getX() << ", "<< theCNMomentum.getY() << ", "  << theCNMomentum.getZ() << ")" << std::endl
+            << "  theCNExcitationEnergy = " << theCNExcitationEnergy << std::endl
+            << "  theCNSpin = (" << theCNSpin.getX() << ", "<< theCNSpin.getY() << ", "  << theCNSpin.getZ() << ")" << std::endl
+            );
+      forceTransparent = true;
       return;
     } else {
       // Positive excitation energy, can make a CN
+      INCL_DEBUG("CN excitation energy is positive, forcing a CN" << std::endl
+            << "  theCNA = " << theCNA << std::endl
+            << "  theCNZ = " << theCNZ << std::endl
+            << "  theCNEnergy = " << theCNEnergy << std::endl
+            << "  theCNMomentum = (" << theCNMomentum.getX() << ", "<< theCNMomentum.getY() << ", "  << theCNMomentum.getZ() << ")" << std::endl
+            << "  theCNExcitationEnergy = " << theCNExcitationEnergy << std::endl
+            << "  theCNSpin = (" << theCNSpin.getX() << ", "<< theCNSpin.getY() << ", "  << theCNSpin.getZ() << ")" << std::endl
+            );
       nucleus->setA(theCNA);
       nucleus->setZ(theCNZ);
       nucleus->setMomentum(theCNMomentum);
@@ -582,7 +619,6 @@ namespace G4INCL {
 
       // Fill the EventInfo structure
       nucleus->fillEventInfo(&theEventInfo);
-      theGlobalInfo.nForcedCompoundNucleus++;
     }
   }
 
@@ -590,12 +626,11 @@ namespace G4INCL {
     RecoilCMFunctor theRecoilFunctor(nucleus, theEventInfo);
 
     // Apply the root-finding algorithm
-    const G4bool success = RootFinder::solve(&theRecoilFunctor, 1.0);
-    if(success) {
-      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
-      theRecoilFunctor(theSolution.first); // Apply the solution
+    const RootFinder::Solution theSolution = RootFinder::solve(&theRecoilFunctor, 1.0);
+    if(theSolution.success) {
+      theRecoilFunctor(theSolution.x); // Apply the solution
     } else {
-      WARN("Couldn't accommodate remnant recoil while satisfying energy conservation, root-finding algorithm failed." << std::endl);
+      INCL_WARN("Couldn't accommodate remnant recoil while satisfying energy conservation, root-finding algorithm failed." << std::endl);
     }
 
   }
@@ -608,10 +643,10 @@ namespace G4INCL {
     const G4double pLongBalance = theBalance.momentum.getZ();
     const G4double pTransBalance = theBalance.momentum.perp();
     if(theBalance.Z != 0) {
-      ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << std::endl);
+      INCL_ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << std::endl);
     }
     if(theBalance.A != 0) {
-      ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << std::endl);
+      INCL_ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << std::endl);
     }
     G4double EThreshold, pLongThreshold, pTransThreshold;
     if(afterRecoil) {
@@ -626,13 +661,13 @@ namespace G4INCL {
       pTransThreshold = 0.1; // MeV/c
     }
     if(std::abs(theBalance.energy)>EThreshold) {
-      WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
+      INCL_WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
     }
     if(std::abs(pLongBalance)>pLongThreshold) {
-      WARN("Violation of longitudinal momentum conservation > " << pLongThreshold << " MeV/c. pLongBalance = " << pLongBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
+      INCL_WARN("Violation of longitudinal momentum conservation > " << pLongThreshold << " MeV/c. pLongBalance = " << pLongBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
     }
     if(std::abs(pTransBalance)>pTransThreshold) {
-      WARN("Violation of transverse momentum conservation > " << pTransThreshold << " MeV/c. pTransBalance = " << pTransBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
+      INCL_WARN("Violation of transverse momentum conservation > " << pTransThreshold << " MeV/c. pTransBalance = " << pTransBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
     }
 
     // Feed the EventInfo variables
@@ -645,20 +680,20 @@ namespace G4INCL {
   G4bool INCL::continueCascade() {
     // Stop if we have passed the stopping time
     if(propagationModel->getCurrentTime() > propagationModel->getStoppingTime()) {
-      DEBUG("Cascade time (" << propagationModel->getCurrentTime()
+      INCL_DEBUG("Cascade time (" << propagationModel->getCurrentTime()
           << ") exceeded stopping time (" << propagationModel->getStoppingTime()
           << "), stopping cascade" << std::endl);
       return false;
     }
     // Stop if there are no participants and no pions inside the nucleus
-    if(nucleus->getStore()->getBook()->getCascading()==0 &&
+    if(nucleus->getStore()->getBook().getCascading()==0 &&
         nucleus->getStore()->getIncomingParticles().empty()) {
-      DEBUG("No participants in the nucleus and no incoming particles left, stopping cascade" << std::endl);
+      INCL_DEBUG("No participants in the nucleus and no incoming particles left, stopping cascade" << std::endl);
       return false;
     }
     // Stop if the remnant is smaller than minRemnantSize
     if(nucleus->getA() <= minRemnantSize) {
-      DEBUG("Remnant size (" << nucleus->getA()
+      INCL_DEBUG("Remnant size (" << nucleus->getA()
           << ") smaller than or equal to minimum (" << minRemnantSize
           << "), stopping cascade" << std::endl);
       return false;
@@ -666,11 +701,7 @@ namespace G4INCL {
     // Stop if we have to try and make a compound nucleus or if we have to
     // force a transparent
     if(nucleus->getTryCompoundNucleus()) {
-      DEBUG("Trying to make a compound nucleus, stopping cascade" << std::endl);
-      return false;
-    }
-    if(nucleus->isForcedTransparent()) {
-      DEBUG("Forcing a transparent, stopping cascade" << std::endl);
+      INCL_DEBUG("Trying to make a compound nucleus, stopping cascade" << std::endl);
       return false;
     }
 
@@ -678,21 +709,29 @@ namespace G4INCL {
   }
 
   void INCL::finalizeGlobalInfo() {
-    theGlobalInfo.nucleonAbsorptionCrossSection = theGlobalInfo.geometricCrossSection *
-      ((G4double) theGlobalInfo.nNucleonAbsorptions) / ((G4double) theGlobalInfo.nShots);
-    theGlobalInfo.pionAbsorptionCrossSection = theGlobalInfo.geometricCrossSection *
-      ((G4double) theGlobalInfo.nPionAbsorptions) / ((G4double) theGlobalInfo.nShots);
-    theGlobalInfo.reactionCrossSection = theGlobalInfo.geometricCrossSection *
-      ((G4double) (theGlobalInfo.nShots - theGlobalInfo.nTransparents)) /
+    const G4double normalisationFactor = theGlobalInfo.geometricCrossSection /
       ((G4double) theGlobalInfo.nShots);
-    theGlobalInfo.errorReactionCrossSection = theGlobalInfo.geometricCrossSection *
-      std::sqrt((G4double) (theGlobalInfo.nShots - theGlobalInfo.nTransparents)) /
-      ((G4double) theGlobalInfo.nShots);
+    theGlobalInfo.nucleonAbsorptionCrossSection = normalisationFactor *
+      ((G4double) theGlobalInfo.nNucleonAbsorptions);
+    theGlobalInfo.pionAbsorptionCrossSection = normalisationFactor *
+      ((G4double) theGlobalInfo.nPionAbsorptions);
+    theGlobalInfo.reactionCrossSection = normalisationFactor *
+      ((G4double) (theGlobalInfo.nShots - theGlobalInfo.nTransparents));
+    theGlobalInfo.errorReactionCrossSection = normalisationFactor *
+      std::sqrt((G4double) (theGlobalInfo.nShots - theGlobalInfo.nTransparents));
+    theGlobalInfo.forcedCNCrossSection = normalisationFactor *
+      ((G4double) theGlobalInfo.nForcedCompoundNucleus);
+    theGlobalInfo.errorForcedCNCrossSection = normalisationFactor *
+      std::sqrt((G4double) (theGlobalInfo.nForcedCompoundNucleus));
+    theGlobalInfo.completeFusionCrossSection = normalisationFactor *
+      ((G4double) theGlobalInfo.nCompleteFusion);
+    theGlobalInfo.errorCompleteFusionCrossSection = normalisationFactor *
+      std::sqrt((G4double) (theGlobalInfo.nCompleteFusion));
+    theGlobalInfo.energyViolationInteractionCrossSection = normalisationFactor *
+      ((G4double) theGlobalInfo.nEnergyViolationInteraction);
   }
 
   G4int INCL::makeProjectileRemnant() {
-    G4int nUnmergedSpectators = 0;
-
     // Do nothing if this is not a nucleus-nucleus reaction
     if(!nucleus->getProjectileRemnant())
       return 0;
@@ -701,31 +740,21 @@ namespace G4INCL {
     ParticleList geomSpectators(nucleus->getProjectileRemnant()->getParticles());
     ParticleList dynSpectators(nucleus->getStore()->extractDynamicalSpectators());
 
+    G4int nUnmergedSpectators = 0;
+
     // If there are no spectators, do nothing
     if(dynSpectators.empty() && geomSpectators.empty()) {
-      nucleus->deleteProjectileRemnant();
       return 0;
-    } else if(geomSpectators.size()+dynSpectators.size()==1) {
-      if(dynSpectators.empty()) {
-        // No dynamical spectators, one geometrical spectator
-        // It should already be on shell.
-#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
-        Particle *theSpectator = geomSpectators.front();
-#endif
-// assert(std::abs(theSpectator->getTableMass()-theSpectator->getInvariantMass())<1.e-3);
-        nucleus->moveProjectileRemnantComponentsToOutgoing();
-      } else {
-        // No geometrical spectators, one dynamical spectator
-        // Just put it back in the outgoing list
-        nucleus->getStore()->addToOutgoing(dynSpectators.front());
-      }
-      nucleus->deleteProjectileRemnant();
+    } else if(dynSpectators.size()==1 && geomSpectators.empty()) {
+      // No geometrical spectators, one dynamical spectator
+      // Just put it back in the outgoing list
+      nucleus->getStore()->addToOutgoing(dynSpectators.front());
     } else {
       // Make a cluster out of the geometrical spectators
       ProjectileRemnant *theProjectileRemnant = nucleus->getProjectileRemnant();
 
       // Add the dynamical spectators to the bunch
-      ParticleList rejected = theProjectileRemnant->addMostDynamicalSpectators(dynSpectators);
+      ParticleList rejected = theProjectileRemnant->addAllDynamicalSpectators(dynSpectators);
       // Put back the rejected spectators into the outgoing list
       nUnmergedSpectators = rejected.size();
       nucleus->getStore()->addToOutgoing(rejected);
@@ -744,10 +773,14 @@ namespace G4INCL {
       return;
     }
 
-    const G4double projectileKineticEnergyPerNucleon = kineticEnergy/projectileSpecies.theA;
-    const G4double r0 = NuclearDensityFactory::createDensity(theA, theZ)->getNuclearRadius();
+    const G4double r0 = std::max(ParticleTable::getNuclearRadius(Proton, theA, theZ),
+                               ParticleTable::getNuclearRadius(Neutron, theA, theZ));
 
-    maxInteractionDistance = r0 + CrossSections::interactionDistanceNN(projectileKineticEnergyPerNucleon);
+    const G4double theNNDistance = CrossSections::interactionDistanceNN(projectileSpecies, kineticEnergy);
+    maxInteractionDistance = r0 + theNNDistance;
+    INCL_DEBUG("Initialised interaction distance: r0 = " << r0 << std::endl
+          << "    theNNDistance = " << theNNDistance << std::endl
+          << "    maxInteractionDistance = " << maxInteractionDistance << std::endl);
   }
 
   void INCL::initUniverseRadius(ParticleSpecies const &p, const G4double kineticEnergy, const G4int A, const G4int Z) {
@@ -756,57 +789,55 @@ namespace G4INCL {
       IsotopicDistribution const &anIsotopicDistribution =
         ParticleTable::getNaturalIsotopicDistribution(Z);
       IsotopeVector theIsotopes = anIsotopicDistribution.getIsotopes();
-      for(IsotopeIter i=theIsotopes.begin(); i!=theIsotopes.end(); ++i) {
-        NuclearDensity *theDensity = NuclearDensityFactory::createDensity(i->theA,Z);
-        if(!theDensity) {
-          FATAL("NULL density in initUniverseRadius. "
-                << "Projectile type=" << p.theType
-                << ", A=" << p.theA
-                << ", Z=" << p.theZ
-                << ", kinE=" << kineticEnergy
-                << ", target A=" << A
-                << ", Z=" << Z
-                << std::endl);
-          std::abort();
-        }
-        rMax = std::max(theDensity->getMaximumRadius(), rMax);
+      for(IsotopeIter i=theIsotopes.begin(), e=theIsotopes.end(); i!=e; ++i) {
+        const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, i->theA, Z);
+        const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, i->theA, Z);
+        const G4double maximumRadius = std::min(pMaximumRadius, nMaximumRadius);
+        rMax = std::max(maximumRadius, rMax);
       }
     } else {
-      NuclearDensity *theDensity = NuclearDensityFactory::createDensity(A,Z);
-      if(!theDensity) {
-        FATAL("NULL density in initUniverseRadius. "
-              << "Projectile type=" << p.theType
-              << ", A=" << p.theA
-              << ", Z=" << p.theZ
-              << ", kinE=" << kineticEnergy
-              << ", target A=" << A
-              << ", Z=" << Z
-              << std::endl);
-        std::abort();
-      }
-      rMax = theDensity->getMaximumRadius();
+      const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, A, Z);
+      const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, A, Z);
+      rMax = std::min(pMaximumRadius, nMaximumRadius);
     }
-    if(p.theType==Composite) {
-      maxUniverseRadius = rMax;
-    } else if(p.theType==Proton || p.theType==Neutron) {
-      const G4double interactionDistanceNN = CrossSections::interactionDistanceNN(kineticEnergy);
-      if(interactionDistanceNN>CrossSections::interactionDistanceNN1GeV()) {
-        maxUniverseRadius = rMax
-          - CrossSections::interactionDistanceNN1GeV()
-          + interactionDistanceNN;
-      } else
-        maxUniverseRadius = rMax;
+    if(p.theType==Composite || p.theType==Proton || p.theType==Neutron) {
+      const G4double interactionDistanceNN = CrossSections::interactionDistanceNN(p, kineticEnergy);
+      maxUniverseRadius = rMax + interactionDistanceNN;
     } else if(p.theType==PiPlus
         || p.theType==PiZero
         || p.theType==PiMinus) {
       const G4double interactionDistancePiN = CrossSections::interactionDistancePiN(kineticEnergy);
-      if(interactionDistancePiN>CrossSections::interactionDistancePiN1GeV()) {
-        maxUniverseRadius = rMax
-          - CrossSections::interactionDistancePiN1GeV()
-          + interactionDistancePiN;
-      } else
-        maxUniverseRadius = rMax;
+      maxUniverseRadius = rMax + interactionDistancePiN;
     }
+    INCL_DEBUG("Initialised universe radius: " << maxUniverseRadius << std::endl);
+  }
+
+  void INCL::updateGlobalInfo() {
+    // Increment the global counter for the number of shots
+    theGlobalInfo.nShots++;
+
+    if(theEventInfo.transparent) {
+      // Increment the global counter for the number of transparents
+      theGlobalInfo.nTransparents++;
+      // Increment the global counter for the number of forced transparents
+      if(forceTransparent)
+        theGlobalInfo.nForcedTransparents++;
+      return;
+    }
+
+    // Check if we have an absorption:
+    if(theEventInfo.nucleonAbsorption) theGlobalInfo.nNucleonAbsorptions++;
+    if(theEventInfo.pionAbsorption) theGlobalInfo.nPionAbsorptions++;
+
+    // Count complete-fusion events
+    if(theEventInfo.nCascadeParticles==0) theGlobalInfo.nCompleteFusion++;
+
+    if(nucleus->getTryCompoundNucleus())
+      theGlobalInfo.nForcedCompoundNucleus++;
+
+    // Counters for the number of violations of energy conservation in
+    // collisions
+    theGlobalInfo.nEnergyViolationInteraction += theEventInfo.nEnergyViolationInteraction;
   }
 
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsVector.icc 74730 2013-10-21 08:54:46Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -41,51 +41,36 @@
 //
 //---------------------------------------------------------------
 
-#if defined G4GLOB_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4PhysicsVector> aPVAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4PhysicsVector> aPVAllocator;
-#endif
+extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator;
 
-inline void* G4PhysicsVector::operator new(size_t)
-{
-  void* aVector;
-  aVector = (void*)aPVAllocator.MallocSingle();
-  return aVector;
-}
-
-inline void G4PhysicsVector::operator delete(void* aVector)
-{
-  aPVAllocator.FreeSingle((G4PhysicsVector*)aVector);
-}
-
-inline G4double G4PhysicsVector::Value(G4double theEnergy) 
-{
-  // Use cache for speed up - check if the value 'theEnergy' is same as the 
-  // last call. If it is same, then use the last value, if not - recompute
-
-  if( theEnergy != cache->lastEnergy ) { ComputeValue(theEnergy); }
-  return cache->lastValue;
-}
+//---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::GetLastEnergy() const
-{
-  return cache->lastEnergy;	
+ void* G4PhysicsVector::operator new(size_t)
+{ 
+  if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
+  return (void*)fpPVAllocator->MallocSingle();
 }
+
+//---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::GetLastValue() const
+ void G4PhysicsVector::operator delete(void* aVector)
 {
-   return cache->lastValue;
+  fpPVAllocator->FreeSingle((G4PhysicsVector*)aVector);
 }
 
-inline 
- size_t G4PhysicsVector::GetLastBin() const
+//---------------------------------------------------------------
+
+inline
+ G4double G4PhysicsVector::Value(G4double theEnergy) const
 {
-   return cache->lastBin;
+  size_t idx=0;
+  return Value(theEnergy, idx);
 }
- 
+
+//---------------------------------------------------------------
+
 inline
  G4double G4PhysicsVector::operator[](const size_t binNumber) const
 {
@@ -127,57 +112,50 @@ inline
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) 
+ G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) const 
 {
-  return Value(theEnergy);
+  size_t idx=0;
+  return Value(theEnergy, idx);
 }
 
 //------------------------------------------------
 
 inline
- G4double G4PhysicsVector::LinearInterpolation(G4int lastBin)
+ G4double G4PhysicsVector::LinearInterpolation(size_t idx, G4double e) const
 {
-  // Linear interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  G4double intplFactor = (cache->lastEnergy-binVector[lastBin]) 
-     / (binVector[lastBin + 1]-binVector[lastBin]); // Interpol. factor
-
-  return dataVector[lastBin] +
-         ( dataVector[lastBin + 1]-dataVector[lastBin] ) * intplFactor;
+  // Linear interpolation is used to get the value. Before this method
+  // is called it is ensured that the energy is inside the bin
+  // 0 < idx < numberOfNodes-1
+  
+  return dataVector[idx] +
+         ( dataVector[idx + 1]-dataVector[idx] ) * (e - binVector[idx])
+         /( binVector[idx + 1]-binVector[idx] );
 }
 
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::SplineInterpolation(G4int lastBin)
+ G4double G4PhysicsVector::SplineInterpolation(size_t idx, G4double e) const
 {
-  // Spline interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  if(0 == secDerivative.size() ) { FillSecondDerivatives(); }
+  // Spline interpolation is used to get the value. Before this method
+  // is called it is ensured that the energy is inside the bin
+  // 0 < idx < numberOfNodes-1
 
   // check bin value
-  G4double x1 = binVector[lastBin];
-  G4double x2 = binVector[lastBin + 1];
+  G4double x1 = binVector[idx];
+  G4double x2 = binVector[idx + 1];
   G4double delta = x2 - x1;
 
-  G4double a = (x2 - cache->lastEnergy)/delta;
-  G4double b = (cache->lastEnergy - x1)/delta;
+  G4double a = (x2 - e)/delta;
+  G4double b = (e - x1)/delta;
    
   // Final evaluation of cubic spline polynomial for return   
-  G4double y1 = dataVector[lastBin];
-  G4double y2 = dataVector[lastBin + 1];
+  G4double y1 = dataVector[idx];
+  G4double y2 = dataVector[idx + 1];
 
   G4double res = a*y1 + b*y2 + 
-        ( (a*a*a - a)*secDerivative[lastBin] +
-          (b*b*b - b)*secDerivative[lastBin + 1] )*delta*delta/6.0;
+        ( (a*a*a - a)*secDerivative[idx] +
+          (b*b*b - b)*secDerivative[idx + 1] )*delta*delta/6.0;
 
   return res;
 }
@@ -185,10 +163,12 @@ inline
 //---------------------------------------------------------------
 
 inline 
- void G4PhysicsVector::Interpolation(G4int lastBin)
+ G4double G4PhysicsVector::Interpolation(size_t idx, G4double e) const
 {
-  if(useSpline) { cache->lastValue = SplineInterpolation(lastBin); }
-  else          { cache->lastValue = LinearInterpolation(lastBin); }
+  G4double res;
+  if(useSpline) { res = SplineInterpolation(idx, e); }
+  else          { res = LinearInterpolation(idx, e); }
+  return res;
 }
 
 //---------------------------------------------------------------
@@ -220,10 +200,18 @@ inline
 
 //---------------------------------------------------------------
 
+// Flag useSpline is "true" only if second derivatives are filled 
 inline 
  void G4PhysicsVector::SetSpline(G4bool val)
 {
-  useSpline = val;
+  if(val) {
+    if(0 == secDerivative.size() && 0 < dataVector.size()) { 
+      FillSecondDerivatives(); 
+    }
+  } else {
+    useSpline = false;
+    secDerivative.clear();
+  }
 }
 
 //---------------------------------------------------------------
@@ -242,3 +230,58 @@ G4int G4PhysicsVector::GetVerboseLevel(G4int)
    return verboseLevel;
 }
 
+//---------------------------------------------------------------
+
+inline 
+size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
+{
+   size_t bin;
+   if(type == T_G4PhysicsLogVector) {
+     bin = size_t(G4Log(theEnergy)/dBin - baseBin);
+     if(bin + 2 > numberOfNodes) { bin = numberOfNodes - 2; }
+     else if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
+     else if(bin + 2 < numberOfNodes && theEnergy > binVector[bin+1]) 
+            { ++bin; }
+   } else if(type == T_G4PhysicsLinearVector) {
+     bin = size_t( theEnergy/dBin - baseBin ); 
+     if(bin + 2 > numberOfNodes) { bin = numberOfNodes - 2; }   
+     else if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
+     else if(bin + 2 < numberOfNodes && theEnergy > binVector[bin+1]) 
+            { ++bin; }
+   } else {
+     bin = 0;
+     size_t bin2;
+     size_t bin3 = numberOfNodes - 1;
+     while (bin != bin3 - 1) {
+       bin2 = bin + (bin3 - bin + 1)/2;
+       if (theEnergy > binVector[bin2]) { bin = bin2; }
+       else { bin3 = bin2; }
+     }
+/*
+// V.I. Usage of this algorithm provide identical results
+//      no CPU advantage is observed in EM tests
+//      if new validation information will be known this code may be used
+     G4PVDataVector::const_iterator it =
+       std::lower_bound(binVector.begin(), binVector.end(), theEnergy);
+     bin = it - binVector.begin() - 1;
+*/
+   }
+   return bin;
+}
+
+//---------------------------------------------------------------
+
+inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
+{
+  size_t id = idx;
+  if(e < binVector[1]) { 
+    id = 0; 
+  } else if(e >= binVector[numberOfNodes-2]) { 
+    id = numberOfNodes - 2; 
+  } else if(idx >= numberOfNodes || e < binVector[idx] || e > binVector[idx+1]) { 
+    id = FindBinLocation(e); 
+  }
+  return id;
+}
+
+//---------------------------------------------------------------

@@ -1,0 +1,102 @@
+$Id: History 77498 2013-11-25 10:26:36Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example RE06 History file
+                    ------------------------
+                    (previously N07)
+                    
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 22, 2013 G.Folger (exampleRE06-V09-06-01)
+- fix typo in RE06RunAction.cc, use G4endl to end output line.
+
+Oct 25, 2013 M.Asai (exampleRE06-V09-06-00)
+- MT migration
+
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members names and initialization)
+- Fixed GNUmakefile 
+
+Dec. 19, 2012 I.Hrivnacova
+- /novice/N07 moved in runAndEvent as RE06
+
+20 June 2012 Pere Mato (exampleN07-V09-05-00)
+- ExN07SteppingVerbose.cc added propection with G4VERBOSE
+
+29 November 2011 Ben Morgan (exampleN07-V09-04-00)
+- CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
+  to build directory, plus comments and neatification.
+
+4th June 2010 Joseph Perl (exampleN07-V09-03-01)
+- Updated vis usage
+
+March 17, 2010 Makoto Asai (exampleN07-V09-03-00)
+- ExN07PhysicsList 
+ - Change G4MultipleScattering to G4eMultipleScattering, G4MuMultipleScattering
+   and G4hMultipleScattering.
+
+October 30, 2009 John Allison (exampleN07-V09-02-00)
+- Introduced G4UIExecutive.
+
+May 07, 2008 J.Allison (exampleN07-V09-01-00)
+- Protected "/control/execute vis.mac" with G4VIS_USE flag.
+     
+May 03, 2007 M.Asai (exampleN07-V08-02-00)
+- ExN07ParallelWorld is introduced. Related modifications in
+ exampleN07.cc, ExN07PhysicsList.hh, ExN07Run.hh, ExN07DetectorConstruction.cc,
+ ExN07PhysicsList.cc, ExN07Run.cc and ExN07RunAction.cc.
+- vis.mac is modified to visualize parallel world.
+
+November 04, 2006 M.Asai (exampleN07-V08-01-00)
+- Timing measurement for each region and for e+/e- is added.
+
+June 16, 2006 G.Cosmo (exampleN07-V08-00-00)
+- Use coherent allocation scheme for user-classes and
+  initialisation in main().
+
+January 18, 2006 H.Kurashige
+- Fixed a bug in ExN07DetectorConstruction::SetGapMaterial().
+- Added ExN07DetectorConstruction::AddMaterial() and modified 
+  ExN07DetectorMessenger class accordingly.
+- Updated sample.mac and retrieve.mac for modified ExN07DetectorMessenger.
+
+November 22, 2005 M.Asai (exampleN07-V07-01-00)
+- Fully revised with new G4VPrimitiveScorer and G4VSDFilter.
+
+May 3, 2005 J.Allison (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+November 17, 2004 H.Kurashige (exampleN07-V06-02-00)
+- Modify for new cut-per-region scheme
+
+November 13, 2003 J.Allison (exampleN07-V05-02-01)
+- Removed OPACS from Vis Manager.
+
+October 24, 2003 M.Maire (exampleN07-V05-02-00)
+- PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+
+May 28, 2003  G.Cosmo (exampleN07-V05-01-01)
+- Get rid of more pedantic warnings ...
+
+May 22, 2003  M.Asai (exampleN07-V05-01-00)
+- Fixed pedantic warnings.
+
+April 29, 2003  M.Asai (exampleN07-V05-00-04)
+- Added fileIO macro and a couple of other sample macro files.
+
+April 28, 2003  G.Cosmo (exampleN07-V05-00-03)
+- Added large_N macro. Reduced number of events in the standard macro.
+
+April 25, 2003  G.Cosmo (exampleN07-V05-00-02)
+- Fixed exampleN07.cc to protect against use of TCSH.
+- Created.

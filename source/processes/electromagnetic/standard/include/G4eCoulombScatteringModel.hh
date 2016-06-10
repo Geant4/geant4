@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eCoulombScatteringModel.hh 75582 2013-11-04 12:13:01Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,7 +72,7 @@
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;
-class G4ParticleTable;
+class G4IonTable;
 class G4NistManager;
 
 class G4eCoulombScatteringModel : public G4VEmModel
@@ -85,6 +85,9 @@ public:
   virtual ~G4eCoulombScatteringModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+                               G4VEmModel* masterModel);
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -100,11 +103,21 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double);
+
   // defines low energy limit of the model
   inline void SetLowEnergyThreshold(G4double val);
 
   // user definition of low-energy threshold of recoil
   inline void SetRecoilThreshold(G4double eth);
+
+  // defines low energy limit on energy transfer to atomic electron
+  inline void SetFixedCut(G4double);
+
+  // low energy limit on energy transfer to atomic electron
+  inline G4double GetFixedCut() const;
 
 protected:
 
@@ -120,7 +133,7 @@ private:
 
 protected:
  
-  G4ParticleTable*          theParticleTable;
+  G4IonTable*               theIonTable;
   G4ParticleChangeForGamma* fParticleChange;
   G4WentzelOKandVIxSection* wokvi;
   G4NistManager*            fNistManager;
@@ -138,6 +151,8 @@ protected:
   G4double                  recoilThreshold;
   G4double                  elecRatio;
   G4double                  mass;
+
+  G4double                  fixedCut;
 
   // projectile
   const G4ParticleDefinition* particle;
@@ -187,6 +202,20 @@ inline void G4eCoulombScatteringModel::SetLowEnergyThreshold(G4double val)
 inline void G4eCoulombScatteringModel::SetRecoilThreshold(G4double eth)
 {
   recoilThreshold = eth;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4eCoulombScatteringModel::SetFixedCut(G4double val)
+{
+  fixedCut = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eCoulombScatteringModel::GetFixedCut() const
+{
+  return fixedCut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VAtomDeexcitation.cc 74376 2013-10-04 08:25:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,8 +59,13 @@
 #include "G4ElementVector.hh"
 #include "Randomize.hh"
 #include "G4VParticleChange.hh"
+#include "G4PhysicsModelCatalog.hh"
+#include "G4Gamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4VAtomDeexcitation::pixeIDg = -1;
+G4int G4VAtomDeexcitation::pixeIDe = -1;
 
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname, 
 					 const G4String& pname) 
@@ -69,6 +74,11 @@ G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname,
 {
   vdyn.reserve(5);
   theCoupleTable = 0;
+  G4String gg = "gammaPIXE";
+  G4String ee = "e-PIXE";
+  if(pixeIDg < 0) { pixeIDg = G4PhysicsModelCatalog::Register(gg); }
+  if(pixeIDe < 0) { pixeIDe = G4PhysicsModelCatalog::Register(ee); }
+  gamma = G4Gamma::Gamma();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -228,16 +238,18 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
   const G4Material* material = preStep->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
   G4int nelm = material->GetNumberOfElements();
 
   // loop over deexcitations
   for(G4int i=0; i<nelm; ++i) {
     G4int Z = G4lrint((*theElementVector)[i]->GetZ());
     if(activeZ[Z] && Z < 93) {  
-      G4int nshells = std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());
+      G4int nshells = 
+	std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());
       G4double rho = truelength*theAtomNumDensityVector[i];
-      //G4cout << "   Z " << Z <<" is active  x(mm)= " << truelength/mm << G4endl;
+      //G4cout<<"   Z "<< Z <<" is active  x(mm)= " << truelength/mm << G4endl;
       for(G4int ii=0; ii<nshells; ++ii) {
 	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(ii);
 	const G4AtomicShell* shell = GetAtomicShell(Z, as);
@@ -247,7 +259,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
 	if(eLossMax > bindingEnergy) { 
 	  G4double sig = rho*
-	    GetShellIonisationCrossSectionPerAtom(part, Z, as, ekin, material); 
+	    GetShellIonisationCrossSectionPerAtom(part, Z, as, ekin, material);
 
 	  // mfp is mean free path in units of step size
 	  if(sig > 0.0) {
@@ -273,6 +285,14 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 		  if(eLossMax >= e) {
 		    eLossMax -= e;		    
 		    G4Track* t = new G4Track(dp, time, r);
+
+		    // defined secondary type
+                    if(dp->GetDefinition() == gamma) { 
+		      t->SetCreatorModelIndex(pixeIDg);
+		    } else {
+		      t->SetCreatorModelIndex(pixeIDe);
+		    }
+
 		    tracks.push_back(t);
 		  } else {
 		    delete dp;

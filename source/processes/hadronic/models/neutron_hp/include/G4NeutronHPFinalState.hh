@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 080721 Create adjust_final_state method by T. Koi  
 // 080801 Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
@@ -108,6 +107,7 @@ public:
 //080721
    protected:
       void adjust_final_state ( G4LorentzVector );
+      G4bool DoNotAdjustFinalState(){ return adjustResult; };
       G4int theNDLDataZ;
       G4int theNDLDataA;
       G4int theNDLDataM;

@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2009-11-20 17:48:26 gcosmo Exp $
+$Id: History 68030 2013-03-13 13:51:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 19, 2012  I. Hrivnacova - exRadioactivedecay-V09-06-00
+- Applied coding guidelines (data members names and initialization)
 
 November 25, 2012  I. Hrivnacova - exRadioactivedecay-V09-05-01
 - Updated documentation:

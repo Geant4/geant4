@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/G4AdjointPhysicsMessenger.cc
 /// \brief Implementation of the G4AdjointPhysicsMessenger class
 //
-// $Id$
+// $Id: G4AdjointPhysicsMessenger.cc 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        G4AdjointPhysicsMessenger
@@ -55,50 +55,74 @@
 
 G4AdjointPhysicsMessenger::G4AdjointPhysicsMessenger(
                                            G4AdjointPhysicsList* pPhysicsList)
-:fPhysicsList(pPhysicsList)
+: G4UImessenger(),
+  fPhysicsList(pPhysicsList),
+  fPhysicsDir(0),
+  fUsepIonisationCmd(0),
+  fUseBremCmd(0),
+  fUseComptonCmd(0),
+  fUseMSCmd(0),
+  fUsePEEffectCmd(0),
+  fUseGammaConversionCmd(0),
+  fUseEgainFluctuationCmd(0),
+  fSetEminAdjModelsCmd(0),
+  fSetEmaxAdjModelsCmd(0)
 { 
   fPhysicsDir = new G4UIdirectory("/adjoint_physics/");
 
-  fPhysicsDir->SetGuidance("Definition of physics processes to be used in the adjoint and forward simulation mode");
- 
-  //Physics
+  fPhysicsDir->SetGuidance(
+                     "Definition of adjoint and forward physics processes");
   //-------
-  fUsepIonisationCmd = new G4UIcmdWithABool("/adjoint_physics/UseProtonIonisation",this);
-  fUsepIonisationCmd->SetGuidance("If true (false) the proton ionisation is (not) considered for adjoint and forward simulations");
+  fUsepIonisationCmd = new G4UIcmdWithABool(
+                 "/adjoint_physics/UseProtonIonisation",this);
+  fUsepIonisationCmd->SetGuidance(
+      "If true (false) the proton ionisation is (not) considered");
   fUsepIonisationCmd->AvailableForStates(G4State_PreInit);
   
   fUseBremCmd = new G4UIcmdWithABool("/adjoint_physics/UseBremsstrahlung",this);
-  fUseBremCmd->SetGuidance("If true (false) the bremsstrahlung process is (not) considered for adjoint and forward simulations");
+  fUseBremCmd->SetGuidance(
+          "If true (false) the bremsstrahlung process is (not) considered");
   fUseBremCmd->AvailableForStates(G4State_PreInit); 
   
   fUseComptonCmd = new G4UIcmdWithABool("/adjoint_physics/UseCompton",this);
-  fUseComptonCmd->SetGuidance("If true (false) the Compton scattering is (not) considered for adjoint and forward simulations");
+  fUseComptonCmd->SetGuidance(
+                "If true (false) the Compton scattering is (not) considered");
   fUseComptonCmd->AvailableForStates(G4State_PreInit);  
   
   fUseMSCmd = new G4UIcmdWithABool("/adjoint_physics/UseMS",this);
-  fUseMSCmd->SetGuidance("If true (false) the continuous multiple scattering is (not) considered for adjoint and forward simulations");
+  fUseMSCmd->SetGuidance(
+      "If true (false) the continuous multiple scattering is (not) considered");
   fUseMSCmd->AvailableForStates(G4State_PreInit); 
   
-  fUseEgainFluctuationCmd = new G4UIcmdWithABool("/adjoint_physics/UseEgainElossFluctuation",this);
-  fUseEgainFluctuationCmd->SetGuidance("If true (false) the fluctation for continuous energy gain and loss is (not) considered for adjoint and forward simulations");
+  fUseEgainFluctuationCmd = new G4UIcmdWithABool(
+              "/adjoint_physics/UseEgainElossFluctuation",this);
+  fUseEgainFluctuationCmd->SetGuidance(
+    "Switch on/off the fluctation for continuous energy gain/loss");
   fUseEgainFluctuationCmd->AvailableForStates(G4State_PreInit); 
   
   fUsePEEffectCmd = new G4UIcmdWithABool("/adjoint_physics/UsePEEffect",this);
   fUsePEEffectCmd->AvailableForStates(G4State_PreInit); 
-  fUsePEEffectCmd->SetGuidance("If true (false) the photo electric effect is (not) considered for the adjoint and forward simulations");
+  fUsePEEffectCmd->SetGuidance(
+     "If true (false) the photo electric effect is (not) considered");
    
-  fUseGammaConversionCmd = new G4UIcmdWithABool("/adjoint_physics/UseGammaConversion",this);
+  fUseGammaConversionCmd = new G4UIcmdWithABool(
+          "/adjoint_physics/UseGammaConversion",this);
   fUseGammaConversionCmd->AvailableForStates(G4State_PreInit);
-  fUseGammaConversionCmd->SetGuidance("If true the gamma pair conversion is considered as well as the e+ physics for the forward simulation");
+  fUseGammaConversionCmd->SetGuidance(
+             "If true the fwd gamma pair conversion is considered");
   
-  fSetEminAdjModelsCmd =  new G4UIcmdWithADoubleAndUnit("/adjoint_physics/SetEminForAdjointModels",this);
-  fSetEminAdjModelsCmd->SetGuidance("Set the minimum energy  of the adjoint models");
+  fSetEminAdjModelsCmd =  new G4UIcmdWithADoubleAndUnit(
+             "/adjoint_physics/SetEminForAdjointModels",this);
+  fSetEminAdjModelsCmd->SetGuidance(
+            "Set the minimum energy  of the adjoint models");
   fSetEminAdjModelsCmd->SetParameterName("Emin",false);
   fSetEminAdjModelsCmd->SetUnitCategory("Energy");
   fSetEminAdjModelsCmd->AvailableForStates(G4State_PreInit);
   
-  fSetEmaxAdjModelsCmd =  new G4UIcmdWithADoubleAndUnit("/adjoint_physics/SetEmaxForAdjointModels",this);
-  fSetEmaxAdjModelsCmd->SetGuidance("Set the minimum energy  of the adjoint models.");
+  fSetEmaxAdjModelsCmd =  new G4UIcmdWithADoubleAndUnit(
+                 "/adjoint_physics/SetEmaxForAdjointModels",this);
+  fSetEmaxAdjModelsCmd->SetGuidance(
+                "Set the minimum energy of the adjoint models.");
   fSetEmaxAdjModelsCmd->SetParameterName("Emax",false);
   fSetEmaxAdjModelsCmd->SetUnitCategory("Energy");
   fSetEmaxAdjModelsCmd->AvailableForStates(G4State_PreInit);
@@ -122,11 +146,11 @@ G4AdjointPhysicsMessenger::~G4AdjointPhysicsMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4AdjointPhysicsMessenger::SetNewValue(G4UIcommand* command,
-                                                                      G4String newValue)
+                                                             G4String newValue)
 {
   if ( command==fUsepIonisationCmd){
     fPhysicsList->SetUseProtonIonisation(
-                                                        fUsepIonisationCmd->GetNewBoolValue(newValue));
+                               fUsepIonisationCmd->GetNewBoolValue(newValue));
      
   }
   else if ( command==fUseBremCmd){
@@ -143,20 +167,20 @@ void G4AdjointPhysicsMessenger::SetNewValue(G4UIcommand* command,
   }
   else if ( command==fUseGammaConversionCmd){
     fPhysicsList->SetUseGammaConversion(
-                                                         fUseGammaConversionCmd->GetNewBoolValue(newValue));
+                         fUseGammaConversionCmd->GetNewBoolValue(newValue));
   }
   else if ( command==fUseEgainFluctuationCmd){
     fPhysicsList->SetUseEgainFluctuation(
-                                    fUseEgainFluctuationCmd->GetNewBoolValue(newValue));
+                    fUseEgainFluctuationCmd->GetNewBoolValue(newValue));
   }
 
   else if ( command== fSetEminAdjModelsCmd){
     fPhysicsList->SetEminAdjModels(
-                                     fSetEminAdjModelsCmd->GetNewDoubleValue(newValue));
+                     fSetEminAdjModelsCmd->GetNewDoubleValue(newValue));
   }
   else if ( command== fSetEmaxAdjModelsCmd){
     fPhysicsList->SetEmaxAdjModels(
-                                    fSetEmaxAdjModelsCmd->GetNewDoubleValue(newValue));
+                      fSetEmaxAdjModelsCmd->GetNewDoubleValue(newValue));
   }
 }
 

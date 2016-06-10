@@ -1,4 +1,4 @@
-/$Id$
+//$Id$
 
 ///\file "hadronic/Hadr03/.README"
 ///\brief Example Hadr03 README page
@@ -30,7 +30,14 @@
    In order not to introduce 'artificial' constraints on the step size,
    electromagnetic processes are not registered: there is no continuous energy 
    loss.  
- 	 
+ 
+   Several hadronic physics options are controlled by environment variables.
+   To trigger them, an envHadronic.csh has been added in this example.
+   One must select the options wished, and do
+\verbatim   
+        source envHadronic.csh  (or sh)
+\endverbatim	 
+  	 
 \section Hadr03_s3 AN EVENT : THE PRIMARY GENERATOR
  
    The primary kinematic consists of a single particle starting at the edge
@@ -68,7 +75,7 @@
 
 \section Hadr03_s5 HISTOGRAMS
          
-   The test contains 11 built-in 1D histograms, which are managed by
+   The test contains 12 built-in 1D histograms, which are managed by
    G4AnalysisManager and its Messenger. The histos can be individually 
    activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
@@ -86,6 +93,7 @@
    - 9   : "kinetic energy of all others mesons"
    - 10  : "kinetic energy of all others baryons"
    - 11  : "Q = Ekin out - Ekin in"              
+   - 12  : "Pbalance = mag(P_out - P_in)"		
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :

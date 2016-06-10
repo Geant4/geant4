@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmPrimaryGeneratorAction.cc 68030 2013-03-13 13:51:27Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmPrimaryGeneratorAction.cc
 /// \brief Implementation of the exrdmPrimaryGeneratorAction class
 //
@@ -37,6 +39,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmPrimaryGeneratorAction::exrdmPrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(), 
+   fParticleGun(0)
 {
   fParticleGun = new G4GeneralParticleSource ();
 }

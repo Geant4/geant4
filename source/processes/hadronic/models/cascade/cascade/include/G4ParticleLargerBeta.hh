@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ParticleLargerBeta.hh 70080 2013-05-22 22:46:28Z mkelsey $
 //
 // 20100112  M. Kelsey -- Add additional operator() which uses pointers,
 //		also fix bug which returns wrong result
 // 20110415  M. Kelsey -- Add additional operator() for G4CascadParticle
+// 20130522  M. Kelsey -- Long-standing error: should be ">", not ">="
 
 #ifndef G4ParticleLargerBeta_h
 #define G4ParticleLargerBeta_h
@@ -35,11 +36,20 @@
 #include "G4CascadParticle.hh"
 #include "G4InuclElementaryParticle.hh"
 
+#ifdef G4CASCADE_DEBUG_SORT
+#include "G4ios.hh"
+#endif
+
 class G4ParticleLargerBeta {
 public:
   G4bool operator() (const G4InuclElementaryParticle& part1,
 		     const G4InuclElementaryParticle& part2) {
-    return (part1.getMomModule()/part1.getEnergy() >=
+#ifdef G4CASCADE_DEBUG_SORT
+    G4cout << "part1 @ " << &part1 << ": " << part1
+	   << "part2 @ " << &part2 << ": " << part2
+	   << G4endl;
+#endif
+    return (part1.getMomModule()/part1.getEnergy() >
 	    part2.getMomModule()/part2.getEnergy()
 	    );
   }

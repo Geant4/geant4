@@ -24,8 +24,7 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: jshape.F,v 1.4 2006-06-29 18:15:14 gunter Exp $
-*     GEANT4 tag $Name: not supported by cvs2svn $
+*     $Id: jshape.F 67982 2013-03-13 10:36:03Z gcosmo $
 *    
 *     
 *--   Author : Jouko Vuoskoski, CERN, Jouko.Vuoskoski@cern.ch

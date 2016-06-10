@@ -68,7 +68,6 @@ private:
 	G4UIcmdWithAnInteger *nMaxParticlesInRamPhaseSpace;
 	G4UIcmdWithADoubleAndUnit *GunMeanEnegy, *GunStdEnegy, *GunRadious;
 	G4UIcmdWithAString  *calculatedPhaseSpaceFileIN, *sourceTypeName;
-	G4UIcmdWithADoubleAndUnit *rotationX,  *rotationY,  *rotationZ;
 };
 
 #endif

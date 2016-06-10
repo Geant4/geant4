@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm12/src/PhysListEmStandardSS.cc
 /// \brief Implementation of the PhysListEmStandardSS class
 //
-// $Id$
+// $Id: PhysListEmStandardSS.cc 77092 2013-11-21 10:50:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandardSS.hh"
 
@@ -76,9 +76,9 @@ void PhysListEmStandardSS::ConstructProcess()
 {
   // Add standard EM Processes
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -97,8 +97,7 @@ void PhysListEmStandardSS::ConstructProcess()
       G4eCoulombScatteringModel* model = 
         new G4eCoulombScatteringModel();
       model->SetLowEnergyThreshold(10*eV);
-      model->SetPolarAngleLimit(0.0);
-      cs->AddEmModel(0, model);
+      cs->SetEmModel(model, 1);
       pmanager->AddDiscreteProcess(cs);            
             
     } else if (particleName == "e+") {

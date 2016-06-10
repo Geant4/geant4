@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Navigator.hh 70647 2013-06-03 15:12:33Z gcosmo $
 //
 //
 // class G4Navigator
@@ -333,6 +333,10 @@ class G4Navigator
 
  private:
 
+  G4Navigator(const G4Navigator&);
+  G4Navigator& operator=(const G4Navigator&);
+    // Private copy-constructor and assignment operator.
+
   void ComputeStepLog(const G4ThreeVector& pGlobalpoint,
                             G4double moveLenSq) const;
     // Log and checks for steps larger than the tolerance
@@ -482,6 +486,7 @@ class G4Navigator
   G4ParameterisedNavigation fparamNav;
   G4ReplicaNavigation freplicaNav;
   G4RegularNavigation fregularNav;
+  G4VoxelSafety       *fpVoxelSafety;
 };
 
 #include "G4Navigator.icc"

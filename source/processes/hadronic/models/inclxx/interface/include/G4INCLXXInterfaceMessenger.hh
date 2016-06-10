@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -51,6 +49,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4String.hh"
 
 class G4INCLXXInterfaceStore;
@@ -72,6 +71,7 @@ class G4INCLXXInterfaceMessenger : public G4UImessenger
     G4UIdirectory *theINCLXXDirectory;
     G4UIcmdWithAString *accurateNucleusCmd;
     G4UIcmdWithAnInteger *maxClusterMassCmd;
+    G4UIcmdWithADoubleAndUnit *cascadeMinEnergyPerNucleonCmd;
 };
 
 #endif

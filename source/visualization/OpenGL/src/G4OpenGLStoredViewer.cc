@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLStoredViewer.cc 76286 2013-11-08 13:03:03Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -73,7 +73,6 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
       (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
-      (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
@@ -203,11 +202,19 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	      glMatrixMode (GL_MODELVIEW);
 	      glPushMatrix();
 	      glLoadIdentity();
-	    }
-	    G4OpenGLTransform3D oglt (po.fTransform);
-	    glMultMatrixd (oglt.GetGLMatrix ());
-	    fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
+        G4OpenGLTransform3D oglt (po.fTransform);
+        glMultMatrixd (oglt.GetGLMatrix ());
+        fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
 	      (po.fpG4TextPlus->fG4Text);
+	    } else {
+        glPushMatrix();
+        G4OpenGLTransform3D oglt (po.fTransform);
+        glMultMatrixd (oglt.GetGLMatrix ());
+        fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
+	      (po.fpG4TextPlus->fG4Text);
+        glPopMatrix();
+      }
+      
 	    if (po.fpG4TextPlus->fProcessing2D) {
 	      glMatrixMode (GL_PROJECTION);
 	      glPopMatrix();

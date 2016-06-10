@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: GammaRayTelAnalysisMessenger.cc 68794 2013-04-05 13:23:26Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -52,66 +52,6 @@ GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* 
   gammaRayTelAnalysisDir = new G4UIdirectory("/analysis/");
   gammaRayTelAnalysisDir->SetGuidance("GammaRayTel analysis control.");
   
-  /* 
-     Commands for the 1D histograms (energy deposition in the last 
-     TKR layer and hits distribution along the TKR)
-     
-     The Draw command gives the possibility to draw the 1d histograms 
-     at every event.
-
-     The Save command gives the possibility to save the 1d histograms in
-     two separate PostScript files at the end of the run.
-  */
-
-  Histo1DDrawCmd = new G4UIcmdWithAString("/analysis/histo1dDraw",this);
-  Histo1DDrawCmd->SetGuidance("Enable the drawing of the 1d histograms every event.");
-  Histo1DDrawCmd->SetGuidance("Choice: disable, enable(default)");
-  Histo1DDrawCmd->SetParameterName("choice",true);
-  Histo1DDrawCmd->SetDefaultValue("ebable");
-  Histo1DDrawCmd->SetCandidates("disable enable");
-  Histo1DDrawCmd->AvailableForStates(G4State_Idle);
-
-  Histo1DSaveCmd = new G4UIcmdWithAString("/analysis/histo1dSave",this);
-  Histo1DSaveCmd->SetGuidance("Enable the saving of the 1d histograms every run.");
-  Histo1DSaveCmd->SetGuidance("Choice: disable, enable(default)");
-  Histo1DSaveCmd->SetParameterName("choice",true);
-  Histo1DSaveCmd->SetDefaultValue("enable");
-  Histo1DSaveCmd->SetCandidates("disable enable");
-  Histo1DSaveCmd->AvailableForStates(G4State_Idle);
-
-  /* 
-     Commands for the 2D histograms (hits positions along the TKR)
-     
-     The Draw command gives the possibility to draw the 1d histograms 
-     at every event.
-
-     The Save command gives the possibility to save the 1d histograms in
-     two separate PostScript files at the end of the run.
-     
-     Moreover there is the possibility to set the 2d histograms so
-     that the info stored are true position ((x,z) or (y,z)
-     coordinates with respect to the payload reference frame in mm) or
-     the number of the Strip and the number of the Plane in which the
-     hit occur. To note that this feature is just for visualization 
-     purpouse since both the information are saved in the external ASCII
-     file.
-  */
-  Histo2DDrawCmd = new G4UIcmdWithAString("/analysis/histo2dDraw",this);
-  Histo2DDrawCmd->SetGuidance("Enable the drawing of the 2d histograms every events.");
-  Histo2DDrawCmd->SetGuidance("Choice: disable, enable(default)");
-  Histo2DDrawCmd->SetParameterName("choice",true);
-  Histo2DDrawCmd->SetDefaultValue("enable");
-  Histo2DDrawCmd->SetCandidates("disable enable");
-  Histo2DDrawCmd->AvailableForStates(G4State_Idle);
-
-  Histo2DSaveCmd = new G4UIcmdWithAString("/analysis/histo2dSave",this);
-  Histo2DSaveCmd->SetGuidance("Enable the saving of the 2d histograms every run.");
-  Histo2DSaveCmd->SetGuidance("Choice: disable, enable(default)");
-  Histo2DSaveCmd->SetParameterName("choice",true);
-  Histo2DSaveCmd->SetDefaultValue("enable");
-  Histo2DSaveCmd->SetCandidates("disable enable");
-  Histo2DSaveCmd->AvailableForStates(G4State_Idle);
-
   Histo2DModeCmd = new G4UIcmdWithAString("/analysis/histo2dMode",this);
   Histo2DModeCmd->SetGuidance("Select the mode for the 2d histograms.");
   Histo2DModeCmd->SetGuidance("Choice: position, strip(default)");
@@ -127,10 +67,6 @@ GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* 
 
 GammaRayTelAnalysisMessenger::~GammaRayTelAnalysisMessenger()
 {
-  delete Histo1DDrawCmd; 
-  delete Histo1DSaveCmd; 
-  delete Histo2DDrawCmd; 
-  delete Histo2DSaveCmd; 
   delete Histo2DModeCmd; 
 }
 
@@ -138,22 +74,6 @@ GammaRayTelAnalysisMessenger::~GammaRayTelAnalysisMessenger()
 
 void GammaRayTelAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-
-  // 1D Histograms
-
-  if( command == Histo1DDrawCmd )
-    { gammaRayTelAnalysis->SetHisto1DDraw(newValue);}
-
-  if( command == Histo1DSaveCmd )
-    { gammaRayTelAnalysis->SetHisto1DSave(newValue);}
-
-  // 2D Histograms
-
-  if( command == Histo2DDrawCmd )
-    { gammaRayTelAnalysis->SetHisto2DDraw(newValue);}
-
-  if( command == Histo2DSaveCmd )
-    { gammaRayTelAnalysis->SetHisto2DSave(newValue);}
 
   if( command == Histo2DModeCmd )
     { gammaRayTelAnalysis->SetHisto2DMode(newValue);}

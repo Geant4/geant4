@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE03/src/RE03PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE03PrimaryGeneratorAction class
 //
-//
-// $Id$
+// $Id: RE03PrimaryGeneratorAction.cc 68026 2013-03-13 13:45:22Z gcosmo $
 //
 
 #include "RE03PrimaryGeneratorAction.hh"
@@ -40,7 +39,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03PrimaryGeneratorAction::RE03PrimaryGeneratorAction()
-  :G4VUserPrimaryGeneratorAction()
+  :G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);

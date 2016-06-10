@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Region.hh 67975 2013-03-13 10:19:44Z gcosmo $
 //
 // class G4Region
 //
@@ -40,6 +40,14 @@
 #ifndef G4REGION_HH
 #define G4REGION_HH
 
+#include <vector>
+#include <map>
+#include <algorithm>
+
+#include "G4Types.hh"
+#include "G4String.hh"
+#include "G4GeomSplitter.hh"
+
 class G4ProductionCuts;
 class G4LogicalVolume;
 class G4Material;
@@ -51,19 +59,55 @@ class G4FastSimulationManager;
 class G4VPhysicalVolume;
 class G4UserSteppingAction;
 
-#include <vector>
-#include <map>
-#include <algorithm>
+class G4RegionData
+{
+  // Encapsulates the fields associated to the class
+  // G4Region that may not be read-only.
 
-#include "G4Types.hh"
-#include "G4String.hh"
+  public:
+
+    void initialize()
+    {
+      fFastSimulationManager = 0;
+      fRegionalSteppingAction = 0;
+    }
+
+    G4FastSimulationManager* fFastSimulationManager;
+    G4UserSteppingAction* fRegionalSteppingAction;
+};
+
+// The type G4RegionManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4RegionData. When each thread
+// initializes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4Region instance, there is a
+// corresponding G4RegionData instance. All G4RegionData instances are
+// organized by the class G4RegionManager as an array.
+// The field "int instanceID" is added to the class G4Region.
+// The value of this field in each G4Region instance is the subscript
+// of the corresponding G4RegionData instance.
+// In order to use the class G4RegionManager, we add a static member in
+// the class G4Region as follows: "static G4RegionManager subInstanceManager".
+// For the master thread, the array for G4RegionData instances grows
+// dynamically along with G4Region instances are created. For each worker
+// thread, it copies the array of G4RegionData instances from the master thread.
+// In addition, it invokes a method similiar to the constructor explicitly
+// to achieve the partial effect for each instance in the array.
+//
+typedef G4GeomSplitter<G4RegionData> G4RegionManager;
+
+// These macros changes the references to fields that are now encapsulated
+// in the class G4RegionData.
+//
+#define G4MT_fsmanager ((subInstanceManager.offset[instanceID]).fFastSimulationManager)
+#define G4MT_rsaction ((subInstanceManager.offset[instanceID]).fRegionalSteppingAction)
 
 class G4Region
 {
-    typedef std::vector<G4LogicalVolume*> G4RootLVList;
-    typedef std::vector<G4Material*> G4MaterialList;
-    typedef std::pair<G4Material*,G4MaterialCutsCouple*> G4MaterialCouplePair;
-    typedef std::map<G4Material*,G4MaterialCutsCouple*> G4MaterialCoupleMap;
+  typedef std::vector<G4LogicalVolume*> G4RootLVList;
+  typedef std::vector<G4Material*> G4MaterialList;
+  typedef std::pair<G4Material*,G4MaterialCutsCouple*> G4MaterialCouplePair;
+  typedef std::map<G4Material*,G4MaterialCutsCouple*> G4MaterialCoupleMap;
 
   public:  // with description
 
@@ -182,6 +226,12 @@ class G4Region
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    inline G4int GetInstanceID() const;
+      // Returns the instance ID.
+
+    static const G4RegionManager& GetSubInstanceManager();
+      // Returns the private data instance manager. 
+
     inline void UsedInMassGeometry(G4bool val=true);
     inline void UsedInParallelGeometry(G4bool val=true);
     inline G4bool IsInMassGeometry() const;
@@ -214,15 +264,15 @@ class G4Region
     G4UserLimits* fUserLimits;
     G4FieldManager* fFieldManager;
 
-    G4FastSimulationManager* fFastSimulationManager;
-
     G4VPhysicalVolume* fWorldPhys;
-
-    G4UserSteppingAction* fRegionalSteppingAction;
 
     G4bool fInMassGeometry;
     G4bool fInParallelGeometry;
-  
+
+    G4int instanceID;
+      // This field is used as instance ID.
+    G4GEOM_DLL static G4RegionManager subInstanceManager;
+      // This field helps to use the class G4RegionManager introduced above.
 };
 
 #include "G4Region.icc"

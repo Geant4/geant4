@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeGammaConversionModel.cc 76220 2013-11-08 10:15:00Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -31,6 +31,8 @@
 // --------
 // 13 Jan 2010   L Pandola    First implementation (updated to Penelope08)
 // 24 May 2011   L Pandola    Renamed (make v2008 as default Penelope)
+// 18 Sep 2013   L Pandola    Migration to MT paradigm. Only master model deals with 
+//                             data and creates shared tables
 //
 
 #include "G4PenelopeGammaConversionModel.hh"
@@ -45,20 +47,27 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4PhysicsFreeVector.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleDefinition*,
+G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleDefinition* part,
 							       const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),logAtomicCrossSection(0),
+  :G4VEmModel(nam),fParticleChange(0),fParticle(0),
+   logAtomicCrossSection(0),
    fEffectiveCharge(0),fMaterialInvScreeningRadius(0),
-   fScreeningFunction(0),isInitialised(false)
-{
+   fScreeningFunction(0),isInitialised(false),fLocalTable(false)
+
+{  
   fIntrinsicLowEnergyLimit = 2.0*electron_mass_c2;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
   fSmallEnergy = 1.1*MeV;
+  
   InitializeScreeningRadii();
+
+  if (part)
+    SetParticle(part);
 
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
@@ -76,62 +85,99 @@ G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleD
 
 G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
 {
-  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
-  if (logAtomicCrossSection)
+  //Delete shared tables, they exist only in the master model
+  if (IsMaster() || fLocalTable)
     {
-      for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-        if (i->second) delete i->second;
-      delete logAtomicCrossSection;
+      //std::map <G4int,G4PhysicsFreeVector*>::iterator i;
+      if (logAtomicCrossSection)
+	{
+	  /*
+	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
+	     if (i->second) delete i->second;
+	  */
+	  delete logAtomicCrossSection;
+	}
+      if (fEffectiveCharge)
+	delete fEffectiveCharge;
+      if (fMaterialInvScreeningRadius)
+	delete fMaterialInvScreeningRadius;
+      if (fScreeningFunction)
+	delete fScreeningFunction;
     }
-  if (fEffectiveCharge)
-    delete fEffectiveCharge;
-  if (fMaterialInvScreeningRadius)
-    delete fMaterialInvScreeningRadius;
-  if (fScreeningFunction)
-    delete fScreeningFunction;
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition*,
+void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition* part,
 						const G4DataVector&)
 {
   if (verboseLevel > 3)
     G4cout << "Calling  G4PenelopeGammaConversionModel::Initialise()" << G4endl;
 
-  // logAtomicCrossSection is created only once, since it is  never cleared
-  if (!logAtomicCrossSection)
-    logAtomicCrossSection =  new std::map<G4int,G4PhysicsFreeVector*>;
+  SetParticle(part);
 
-  //delete old material data...
-  if (fEffectiveCharge)
+  //Only the master model creates/fills/destroys the tables
+  if (IsMaster() && part == fParticle)
     {
-      delete fEffectiveCharge;
-      fEffectiveCharge = 0;
-    }
-  if (fMaterialInvScreeningRadius)
-    {
-      delete fMaterialInvScreeningRadius;
-      fMaterialInvScreeningRadius = 0;
-    }
-  if (fScreeningFunction)
-    {
-      delete fScreeningFunction;
-      fScreeningFunction = 0;
-    }      
-  //and create new ones
-  fEffectiveCharge = new std::map<const G4Material*,G4double>;
-  fMaterialInvScreeningRadius = new std::map<const G4Material*,G4double>;
-  fScreeningFunction = new std::map<const G4Material*,std::pair<G4double,G4double> >;
+      // logAtomicCrossSection is created only once, since it is never cleared
+      if (!logAtomicCrossSection)
+	logAtomicCrossSection =  new std::map<G4int,G4PhysicsFreeVector*>;
 
-  if (verboseLevel > 0) { 
-    G4cout << "Penelope Gamma Conversion model v2008 is initialized " << G4endl
-	   << "Energy range: "
-	   << LowEnergyLimit() / MeV << " MeV - "
-	   << HighEnergyLimit() / GeV << " GeV"
-	   << G4endl;
-  }
+      //delete old material data...
+      if (fEffectiveCharge)
+	{
+	  delete fEffectiveCharge;
+	  fEffectiveCharge = 0;
+	}
+      if (fMaterialInvScreeningRadius)
+	{
+	  delete fMaterialInvScreeningRadius;
+	  fMaterialInvScreeningRadius = 0;
+	}
+      if (fScreeningFunction)
+	{
+	  delete fScreeningFunction;
+	  fScreeningFunction = 0;
+	}      
+      //and create new ones
+      fEffectiveCharge = new std::map<const G4Material*,G4double>;
+      fMaterialInvScreeningRadius = new std::map<const G4Material*,G4double>;
+      fScreeningFunction = new std::map<const G4Material*,std::pair<G4double,G4double> >;
+      
+      G4ProductionCutsTable* theCoupleTable = 
+	G4ProductionCutsTable::GetProductionCutsTable();
+
+      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+	{
+	  const G4Material* material = 
+	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+	  const G4ElementVector* theElementVector = material->GetElementVector();
+	  
+	  for (size_t j=0;j<material->GetNumberOfElements();j++)
+	    {
+	      G4int iZ = (G4int) theElementVector->at(j)->GetZ();
+	      //read data files only in the master
+	      if (!logAtomicCrossSection->count(iZ))
+		ReadDataFile(iZ);
+	    }
+
+	  //check if material data are available
+	  if (!fEffectiveCharge->count(material))
+	    InitializeScreeningFunctions(material); 
+	}
+
+
+      if (verboseLevel > 0) { 
+	G4cout << "Penelope Gamma Conversion model v2008 is initialized " << G4endl
+	       << "Energy range: "
+	       << LowEnergyLimit() / MeV << " MeV - "
+	       << HighEnergyLimit() / GeV << " GeV"
+	       << G4endl;
+      }
+
+    }
+
 
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
@@ -139,6 +185,38 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition*,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeGammaConversionModel::InitialiseLocal(const G4ParticleDefinition* part,
+						     G4VEmModel *masterModel)
+{
+  if (verboseLevel > 3)
+    G4cout << "Calling  G4PenelopeGammaConversionModel::InitialiseLocal()" << G4endl;
+
+  //
+  //Check that particle matches: one might have multiple master models (e.g. 
+  //for e+ and e-).
+  //
+  if (part == fParticle)
+    {
+      //Get the const table pointers from the master to the workers
+      const G4PenelopeGammaConversionModel* theModel = 
+	static_cast<G4PenelopeGammaConversionModel*> (masterModel);
+      
+      //Copy pointers to the data tables
+      fEffectiveCharge = theModel->fEffectiveCharge;
+      fMaterialInvScreeningRadius = theModel->fMaterialInvScreeningRadius;
+      fScreeningFunction = theModel->fScreeningFunction;
+      logAtomicCrossSection = theModel->logAtomicCrossSection;
+      
+      //Same verbosity for all workers, as the master
+      verboseLevel = theModel->verboseLevel;
+    }      
+
+  return;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+namespace { G4Mutex  PenelopeGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
 
 G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
 								    const G4ParticleDefinition*,
@@ -157,21 +235,35 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
     return 0;
 
   G4int iZ = (G4int) Z;
-
- //read data files
-  if (!logAtomicCrossSection->count(iZ))
-    ReadDataFile(iZ);
+ 
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!logAtomicCrossSection)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;
+      logAtomicCrossSection = new std::map<G4int,G4PhysicsFreeVector*>;
+    }
   //now it should be ok
   if (!logAtomicCrossSection->count(iZ))
      {
+       //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+       //not filled up. This can happen in a UnitTest or via G4EmCalculator
        G4ExceptionDescription ed;
-       ed << "Unable to retrieve cross section table for Z=" << iZ << G4endl;
+       ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
+       ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;   
        G4Exception("G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom()",
-		   "em2018",FatalException,ed);
+		   "em2018",JustWarning,ed);
+       //protect file reading via autolock
+       G4AutoLock lock(&PenelopeGammaConversionModelMutex);
+       ReadDataFile(iZ);
+       lock.unlock();
      }
 
   G4double cs = 0;
   G4double logene = std::log(energy);
+
   G4PhysicsFreeVector* theVec = logAtomicCrossSection->find(iZ)->second;
 
   G4double logXS = theVec->Value(logene);
@@ -222,9 +314,6 @@ G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
   const G4Material* mat = couple->GetMaterial();
 
-  //check if material data are available
-  if (!fEffectiveCharge->count(mat))
-    InitializeScreeningFunctions(mat); 
   if (!fEffectiveCharge->count(mat))
     {
       G4ExceptionDescription ed;      
@@ -395,6 +484,11 @@ G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*
 
 void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
 {
+  if (!IsMaster())    
+      //Should not be here!
+    G4Exception("G4PenelopeGammaConversionModel::ReadDataFile()",
+		"em0100",FatalException,"Worker thread in this method");    
+
  if (verboseLevel > 2)
     {
       G4cout << "G4PenelopeGammaConversionModel::ReadDataFile()" << G4endl;
@@ -515,6 +609,11 @@ void G4PenelopeGammaConversionModel::InitializeScreeningRadii()
 
 void G4PenelopeGammaConversionModel::InitializeScreeningFunctions(const G4Material* material)
 {
+  if (!IsMaster())    
+      //Should not be here!
+    G4Exception("G4PenelopeGammaConversionModel::InitializeScreeningFunctions()",
+		"em01001",FatalException,"Worker thread in this method");    
+
   // This is subroutine GPPa0 of Penelope
   //
   // 1) calculate the effective Z for the purpose
@@ -625,3 +724,13 @@ G4PenelopeGammaConversionModel::GetScreeningFunctions(G4double B)
 
   return result;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+
+void G4PenelopeGammaConversionModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!fParticle) {
+    fParticle = p;  
+  }
+}
+

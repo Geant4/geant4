@@ -1,4 +1,4 @@
-.$Id: History,v 1.136 2010-11-07 22:29:30 perl Exp $
+.$Id: History 71534 2013-06-17 16:07:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,31 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+16th June 2013  John Allison  (vis-HepRep-V09-06-06)
+  o G4HepRepSceneHandler.cc: Added an assert to keep Coverity happy.
+
+26th March 2013  Ben Morgan  (vis-HepRep-V09-06-05)
+- sources.cmake:
+  o BUGFIX #1322 : Update include paths/library linking to use new 
+  ZLIB variables allowing transparent use of internal/external ZLIB
+  as required.
+- G4HepRepSceneHandler:
+  o BUGFIX #1322 : Remove #ifndef block on G4LIB_USE_ZLIB as we now
+  always have zlib available.
+
+24th February 2013  John Allison  (vis-HepRep-V09-06-04)
+- G4HepRepMessenger, G4HepRepSceneHandler:
+  o Removed unused fields as warned by new clang compiler.
+
+29th January 2013  John Allison  (vis-HepRep-V09-06-03)
+- More Coverity fixes and un-doing of some previous ones.
+
+12th and 13th January 2013  John Allison  (vis-HepRep-V09-06-02)
+  o Coverity fixes.
+
+2nd December 2012  John Allison  (vis-HepRep-V09-06-00)
+- Remove NURBS.
 
 8th August 2012  John Allison  (vis-HepRep-V09-05-05 and 06)
 - G4HepRepSceneHandler.cc: Intercepted 2D primitives.

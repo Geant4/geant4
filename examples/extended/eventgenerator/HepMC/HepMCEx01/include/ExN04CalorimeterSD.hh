@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04CalorimeterSD.hh
 /// \brief Definition of the ExN04CalorimeterSD class
 //
+// $Id: ExN04CalorimeterSD.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #ifndef ExN04CalorimeterSD_h
 #define ExN04CalorimeterSD_h 1
@@ -36,29 +38,24 @@ class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-class ExN04CalorimeterSD : public G4VSensitiveDetector
-{
+class ExN04CalorimeterSD : public G4VSensitiveDetector {
+public:
+  ExN04CalorimeterSD(G4String name);
+  ~ExN04CalorimeterSD();
 
-  public:
-      ExN04CalorimeterSD(G4String name);
-      ~ExN04CalorimeterSD();
+  virtual void Initialize(G4HCofThisEvent*HCE);
+  virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+  virtual void EndOfEvent(G4HCofThisEvent*HCE);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
-      void clear();
-      void DrawAll();
-      void PrintAll();
+private:
+  ExN04CalorimeterHitsCollection* fCalCollection;
+  int fCellID[20][48];
+  const int fnumberOfCellsInZ;
+  const int fnumberOfCellsInPhi;
 
-  private:
-      ExN04CalorimeterHitsCollection *CalCollection;
-      int CellID[20][48];
-      const int numberOfCellsInZ;
-      const int numberOfCellsInPhi;
 };
 
-
-
-
 #endif
-

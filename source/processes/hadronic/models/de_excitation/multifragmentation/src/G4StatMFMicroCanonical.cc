@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StatMFMicroCanonical.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -261,7 +261,7 @@ G4StatMFChannel *  G4StatMFMicroCanonical::ChooseAandZ(const G4Fragment & theFra
 	for (it = _ThePartitionManagerVector.begin(); it != _ThePartitionManagerVector.end(); ++it) {
 	    AccumWeight += (*it)->GetProbability();
 	    if (RandNumber < AccumWeight) {
-		return (*it)->ChooseChannel(theFragment.GetA(),theFragment.GetZ(),__MeanTemperature);
+	      return (*it)->ChooseChannel(theFragment.GetA_asInt(),theFragment.GetZ_asInt(),__MeanTemperature);
 	    }
 	}
 	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::ChooseAandZ: wrong normalization!");

@@ -23,96 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: FCALRunAction.cc 67976 2013-03-13 10:23:17Z gcosmo $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//#ifndef G4ANALYSIS_USE
 
 #include "FCALRunAction.hh"
 
 #include "G4Run.hh"
-#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
 
-#include "Randomize.hh"
 #include "FCALAnalysisManager.hh"
-//#include <AIDA/AIDA.h>
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALRunAction::FCALRunAction()
-{
-}
+FCALRunAction::FCALRunAction() : 
+  fOutputFileName("fcal.root")
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALRunAction::~FCALRunAction()
-{
-
-  // cleanHisto();
-
-}
-
-
-//void FCALRunAction::bookHisto(){
-//
-//  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
-// 
-// // Creating the tree factory
-//  AIDA::ITreeFactory* tf = af->createTreeFactory();
-//
-// // Creating a tree mapped to an hbook file.
-//  tree = tf->create("fcal.paw", "hbook", false, true);
-//
-// // Creating a histogram factory, whose histograms will be handled by the tree
-//  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-//
-// // Creating a ntuple factory.
-//
-//  AIDA::ITupleFactory* nf = af->createTupleFactory(*tree);
-//
-// // Creating ntuples
-//
-//  ntuple[1] = nf->create("100","Number Out of World","float OutOfWorld, i, j");
-//   
-//  ntuple[2] = nf->create("200","Secondary Info","float Secondary, i, j");
-//  
-//  ntuple[3] = nf->create("300","Energy Deposits","float EmEdep, HadEdep");
-//
-//  // Creating Histograms
-//  
-//  histo[1] = hf->createHistogram1D("1","Number of OutOfWorld",100, 0., 100.);
-//  histo[2] = hf->createHistogram1D("2","Number of Secondaries",100, 0., 100.);
-//  histo[3] = hf->createHistogram1D("3","Electromagnetic Energy / MeV",100, 0., 100.);
-//  histo[4] = hf->createHistogram1D("4","Hadronic Energy / MeV",100, 0., 100.);
-//
-//  delete hf;
-//  delete tf;
-//  delete af;     
-//  delete nf;
-// 
-//}
-//
-////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-//void FCALRunAction::cleanHisto()
-//{
-//
-//  tree->commit();       // Writing the histograms to the file
-//  tree->close();        // and closing the tree (and the file)
-//  
-//  delete tree;
-// 
-//
-//}
-//
-
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -121,22 +58,26 @@ void FCALRunAction::BeginOfRunAction(const G4Run* aRun)
  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  //  if (aRun->GetRunID() == 0) bookHisto();
-
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     }
 
-#ifdef G4ANALYSIS_USE
+  // Get/create analysis manager
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  // book histograms and ntuples
+  // Open an output file
+  G4cout << "Opening output file " << fOutputFileName << " ... ";
+  man->OpenFile(fOutputFileName);
+  man->SetFirstHistoId(1);
+  G4cout << " done" << G4endl;
 
-  FCALAnalysisManager * analysis = FCALAnalysisManager::getInstance();
-  analysis->book();
-
-#endif
+  // Create histogram(s)
+  man->CreateH1("1","Number of Out Of World", 100,0.,10.); 
+  man->CreateH1("2","Number of Secondaries", 100,0.,100.);
+  man->CreateH1("3","Electromagnetic Energy/MeV", 100,0.,100.);
+  man->CreateH1("4","hadronic Energy/MeV", 100,10.,60.);
  
 }
 
@@ -145,21 +86,17 @@ void FCALRunAction::BeginOfRunAction(const G4Run* aRun)
 void FCALRunAction::EndOfRunAction(const G4Run* )
 {
 
-#ifdef G4ANALYSIS_USE
-  FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-#endif
-
   if (G4VVisManager::GetConcreteInstance()) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
 
-#ifdef G4ANALYSIS_USE
-  analysis->finish();
-#endif
-
+  // Save histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+  // Complete clean-up
+  delete G4AnalysisManager::Instance();
 }
-
-//#endif
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Colour.cc 69802 2013-05-15 14:52:57Z gcosmo $
 //
 // 
 // John Allison 20th October 1996
@@ -79,19 +79,22 @@ G4bool G4Colour::operator != (const G4Colour& c) const {
   return false;
 }
 
-std::map<G4String, G4Colour> G4Colour::fColourMap;
-bool G4Colour::fInitColourMap = false;
+G4ThreadLocal std::map<G4String, G4Colour> *G4Colour::fColourMap = 0;
+G4ThreadLocal bool G4Colour::fInitColourMap = false;
 
 void
 G4Colour::AddToMap(const G4String& key, const G4Colour& colour) 
 {
+  if (!fColourMap)
+    fColourMap = new std::map<G4String, G4Colour>;
+
   // Convert to lower case since colour map is case insensitive
   G4String myKey(key);
   myKey.toLower();
 
-  std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+  std::map<G4String, G4Colour>::iterator iter = fColourMap->find(myKey);
   
-  if (iter == fColourMap.end()) fColourMap[myKey] = colour;  
+  if (iter == fColourMap->end()) (*fColourMap)[myKey] = colour;  
   else {
     G4ExceptionDescription ed; 
     ed << "G4Colour with key "<<myKey<<" already exists."<<G4endl;
@@ -131,10 +134,10 @@ G4Colour::GetColour(const G4String& key, G4Colour& result)
   G4String myKey(key);
   myKey.toLower();
  
-  std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+  std::map<G4String, G4Colour>::iterator iter = fColourMap->find(myKey);
 
   // Don't modify "result" if colour was not found in map
-  if (iter == fColourMap.end()) return false;
+  if (iter == fColourMap->end()) return false;
   
   result = iter->second;
 
@@ -149,5 +152,5 @@ const std::map<G4String, G4Colour>& G4Colour::GetMap()
     InitialiseColourMap();
   }
  
-  return fColourMap;
+  return *fColourMap;
 }

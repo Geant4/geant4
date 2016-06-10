@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointCSManager.cc 75591 2013-11-04 12:33:11Z gcosmo $
 //
 
 #include <fstream>
@@ -55,12 +55,12 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCutsTable.hh"
 
-G4AdjointCSManager* G4AdjointCSManager::theInstance = 0;
+G4ThreadLocal G4AdjointCSManager* G4AdjointCSManager::theInstance = 0;
 ///////////////////////////////////////////////////////
 //
 G4AdjointCSManager* G4AdjointCSManager::GetAdjointCSManager()
 { if(theInstance == 0) {
-    static G4AdjointCSManager ins;
+    static G4ThreadLocal G4AdjointCSManager *ins_G4MT_TLS_ = 0 ; if (!ins_G4MT_TLS_) ins_G4MT_TLS_ = new  G4AdjointCSManager  ;  G4AdjointCSManager &ins = *ins_G4MT_TLS_;
      theInstance = &ins;
   }
  return theInstance; 
@@ -465,7 +465,7 @@ void G4AdjointCSManager::GetMaxAdjTotalCS(G4ParticleDefinition* aPartDef,
 G4double G4AdjointCSManager::GetCrossSectionCorrection(G4ParticleDefinition* aPartDef,G4double PreStepEkin,const G4MaterialCutsCouple* aCouple, G4bool& fwd_is_used,
 										G4double& fwd_TotCS)
 { G4double corr_fac = 1.;
-  if (forward_CS_mode) {
+  if (forward_CS_mode && aPartDef ) {
   	fwd_TotCS=PrefwdCS;
   	if (LastEkinForCS != PreStepEkin || aPartDef != lastPartDefForCS || aCouple!=currentCouple) {
 		DefineCurrentMaterial(aCouple);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GenericIon.cc 72056 2013-07-04 13:06:21Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -81,6 +81,7 @@ G4GenericIon* G4GenericIon::Definition()
   }
 
   theInstance = reinterpret_cast<G4GenericIon*>(anInstance);
+  pTable->SetGenericIon(theInstance);
   return theInstance;
 }
 

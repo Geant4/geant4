@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc 68585 2013-04-01 23:35:07Z adotti $
 //
 //---------------------------------------------------------------------------
 //
@@ -83,7 +83,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList(),
+  fEmPhysicsList(0),
+  fDecayPhysicsList(0),
+  fStepMaxProcess(0),
+  fMessenger(0),
+  fVertexDetectorCuts(0),
+  fMuonDetectorCuts(0)
 {
   G4LossTableManager::Instance();
   defaultCutValue  = 1.*mm;

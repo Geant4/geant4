@@ -26,38 +26,40 @@
 /// \file field/field02/include/F02DetectorMessenger.hh
 /// \brief Definition of the F02DetectorMessenger class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F02DetectorMessenger.hh 77123 2013-11-21 16:13:28Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02DetectorMessenger_h
 #define F02DetectorMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
 
 class F02DetectorConstruction;
+
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02DetectorMessenger: public G4UImessenger
 {
   public:
     F02DetectorMessenger(F02DetectorConstruction* );
-    ~F02DetectorMessenger();
-    
+    virtual ~F02DetectorMessenger();
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
+
     F02DetectorConstruction*   fDetector;
-    
+
     G4UIdirectory*             fDetDir;
 
     G4UIcmdWithAString*        fAbsMaterCmd;
@@ -69,10 +71,6 @@ class F02DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        fWorldMaterCmd;
     G4UIcmdWithADoubleAndUnit* fWorldZCmd;
     G4UIcmdWithADoubleAndUnit* fWorldRCmd;
-
-    G4UIcmdWithoutParameter*   fUpdateCmd;
-
 };
 
 #endif
-

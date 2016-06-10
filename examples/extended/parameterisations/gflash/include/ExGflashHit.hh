@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ExGflashHit.hh 72372 2013-07-16 14:30:39Z gcosmo $
+//
 /// \file parameterisations/gflash/include/ExGflashHit.hh
 /// \brief Definition of the ExGflashHit class
 //
@@ -60,56 +62,55 @@ class ExGflashHit : public G4VHit
       void Print();
 
   private:
-      G4double edep;
-      G4ThreeVector pos;
-      G4int crystalnumber;
-      G4ThreeVector start;
-      G4RotationMatrix rot;
-      const G4LogicalVolume* pLogV;
+      G4double fEdep;
+      G4ThreeVector fPos;
+      G4int fCrystalNumber;
+      G4ThreeVector fStart;
+      G4RotationMatrix fRot;
+      const G4LogicalVolume* fLogV;
 
   public:
       inline void SetEdep(G4double de)
-      { edep = de; };
+      { fEdep = de; };
       inline void AddEdep(G4double de)
-      { edep += de; };
+      { fEdep += de; };
       inline G4double GetEdep()
-      { return edep; };
+      { return fEdep; };
       inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; };
+      { fPos = xyz; };
       inline G4int GetCrystalNum()
-      { return crystalnumber; };  
+      { return fCrystalNumber; };  
       inline void SetCrystalNum(G4int num)
-      { crystalnumber=num; };
+      { fCrystalNumber=num; };
       inline G4ThreeVector GetPos()
-      { return pos; };
+      { return fPos; };
       inline void SetStart(G4ThreeVector xyz)
-      { start = xyz; };
+      { fStart = xyz; };
       inline G4ThreeVector GetStart()
-      { return start; };
+      { return fStart; };
 
       inline void SetRot(G4RotationMatrix rmat)
-      { rot = rmat; };
+      { fRot = rmat; };
       inline G4RotationMatrix GetRot()
-      { return rot; };
+      { return fRot; };
       inline const G4LogicalVolume * GetLogV()
-      { return pLogV; };
+      { return fLogV; };
 
 };
 
 typedef G4THitsCollection<ExGflashHit> ExGflashHitsCollection;
 
-extern G4Allocator<ExGflashHit> ExGflashHitAllocator;
+extern G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator;
 
 inline void* ExGflashHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) ExGflashHitAllocator.MallocSingle();
-  return aHit;
+  if(!ExGflashHitAllocator) ExGflashHitAllocator = new G4Allocator<ExGflashHit>;
+  return (void *) ExGflashHitAllocator->MallocSingle();
 }
 
 inline void ExGflashHit::operator delete(void *aHit)
 {
-  ExGflashHitAllocator.FreeSingle((ExGflashHit*) aHit);
+  ExGflashHitAllocator->FreeSingle((ExGflashHit*) aHit);
 }
 
 #endif

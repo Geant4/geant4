@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -52,38 +50,21 @@
 
 namespace G4INCL {
 
-  Int_t EventInfo::eventNumber = 0;
+  G4ThreadLocal Int_t EventInfo::eventNumber = 0;
 
 #ifdef INCL_INVERSE_KINEMATICS
   void EventInfo::fillInverseKinematics(const Double_t gamma) {
     const Double_t beta = std::sqrt(1.-1./(gamma*gamma));
     for(Int_t i=0; i<nParticles; ++i) {
-      Double_t mass;
-      if(A[i]>0) {
-        mass = ParticleTable::getTableMass(A[i],Z[i]);
-      } else if(origin[i]==-1) { // cascade particles with A=0, must be pions
-        if(Z[i]==1)
-          mass = ParticleTable::getTableParticleMass(PiPlus);
-        else if(Z[i]==0)
-          mass = ParticleTable::getTableParticleMass(PiZero);
-        else
-          mass = ParticleTable::getTableParticleMass(PiMinus);
-      } else // gamma rays
-        mass = 0.;
+      // determine the particle mass from the kinetic energy and the momentum;
+      // this ensures consistency with the masses uses by the models
+      const Double_t mass = std::max(
+         0.5 * (px[i]*px[i]+py[i]*py[i]+pz[i]*pz[i]-EKin[i]*EKin[i]) / EKin[i],
+         0.0);
 
       const Double_t ETot = EKin[i] + mass;
       const Double_t ETotPrime = gamma*(ETot - beta*pz[i]);
-      /* Using the invariant mass here avoids negative kinetic energies with
-       * particles produced by the de-excitation models, which do not
-       * necessarily use the same mass look-up tables as INCL.
-       */
-      Double_t invariantMass;
-      if(A[i]>0 || origin[i]==-1) { // massive particles
-        invariantMass = std::sqrt(ETot*ETot - px[i]*px[i] - py[i]*py[i] - pz[i]*pz[i]);
-      } else { // gamma rays
-        invariantMass = 0.;
-      }
-      EKinPrime[i] = ETotPrime - invariantMass;
+      EKinPrime[i] = ETotPrime - mass;
       pzPrime[i] = -gamma*(pz[i] - beta*ETot);
       const Double_t pPrime = std::sqrt(px[i]*px[i] + py[i]*py[i] + pzPrime[i]*pzPrime[i]);
       const Double_t cosThetaPrime = pzPrime[i]/pPrime;
@@ -96,5 +77,32 @@ namespace G4INCL {
     }
   }
 #endif // INCL_INVERSE_KINEMATICS
+
+  void EventInfo::remnantToParticle(const G4int remnantIndex) {
+    A[nParticles] = ARem[remnantIndex];
+    Z[nParticles] = ZRem[remnantIndex];
+    emissionTime[nParticles] = stoppingTime;
+
+    px[nParticles] = pxRem[remnantIndex];
+    py[nParticles] = pyRem[remnantIndex];
+    pz[nParticles] = pzRem[remnantIndex];
+
+    const G4double plab = std::sqrt(pxRem[remnantIndex]*pxRem[remnantIndex]
+                                  +pyRem[remnantIndex]*pyRem[remnantIndex]
+                                  +pzRem[remnantIndex]*pzRem[remnantIndex]);
+    G4double pznorm = pzRem[remnantIndex]/plab;
+    if(pznorm>1.)
+      pznorm = 1.;
+    else if(pznorm<-1.)
+      pznorm = -1.;
+    theta[nParticles] = 180.*std::acos(pznorm)/G4INCL::Math::pi;
+    phi[nParticles] = 180.*std::atan2(pyRem[remnantIndex],pxRem[remnantIndex])/G4INCL::Math::pi;
+
+    EKin[nParticles] = EKinRem[remnantIndex];
+    origin[nParticles] = -1; // Origin: cascade
+    history.push_back(""); // history
+    nParticles++;
+// assert(history.size()==(unsigned int)nParticles);
+  }
 }
 

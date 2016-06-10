@@ -1,6 +1,6 @@
 # - Setup of general build options for Geant4 Libraries
 #
-# In addition to the core compiler/linker flags (configured in the 
+# In addition to the core compiler/linker flags (configured in the
 # Geant4MakeRules_<LANG>.cmake files) for Geant4, the build may require
 # further configuration. This module performs this task whicj includes:
 #
@@ -14,6 +14,11 @@
 #
 
 #-----------------------------------------------------------------------
+# Load needed modules
+#
+include(CheckCXXSourceCompiles)
+
+#-----------------------------------------------------------------------
 # Set up Build types or configurations
 # If further tuning of compiler flags is needed then it should be done here.
 # (It can't be done in the make rules override section).
@@ -22,18 +27,61 @@
 # with compiler specifics and linker flags
 if(NOT WIN32)
   include(Geant4BuildModes)
-endif(NOT WIN32)
+endif()
 
 #-----------------------------------------------------------------------
 # Optional compiler definitions which are applicable globally
 #
+# - G4MULTITHREADED
+# OFF by default. Switching on will enable multithreading, adding the
+# G4MULTITHREADED definition globally and appending the relevant
+# compiler flags to CMAKE_CXX_FLAGS
+option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
+
+if(WIN32)
+  mark_as_advanced(GEANT4_BUILD_MULTITHREADED)
+endif()
+
+if(GEANT4_BUILD_MULTITHREADED)
+  # - Need Thread Local Storage support (POSIX)
+  if(UNIX)
+    check_cxx_source_compiles("__thread int i; int main(){return 0;}" HAVE_TLS)
+    if(NOT HAVE_TLS)
+      message(FATAL_ERROR "Configured compiler ${CMAKE_CXX_COMPILER} does not support thread local storage")
+    endif()
+  endif()
+
+  # - Emit warning on Windows - message will format oddly on CMake prior
+  # to 2.8, but still print
+  if(WIN32)
+    message(WARNING "GEANT4_BUILD_MULTITHREADED IS NOT SUPPORTED on Win32. This option should only be activated by developers")
+  endif()
+
+  add_definitions(-DG4MULTITHREADED)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
+endif()
+
+geant4_add_feature(GEANT4_BUILD_MULTITHREADED "Build multithread enabled libraries")
+
+# - G4TPMALLOC
+# Only usable when Multithreading is enabled and we are not on WIN32
+# If it is enabled, add the global definition "G4TPMALLOC"
+cmake_dependent_option(GEANT4_BUILD_TPMALLOC "Build multithread optimized malloc library" OFF "GEANT4_BUILD_MULTITHREADED;NOT WIN32" OFF)
+
+if(GEANT4_BUILD_TPMALLOC)
+  add_definitions(-DG4TPMALLOC)
+endif()
+
+mark_as_advanced(GEANT4_BUILD_TPMALLOC)
+geant4_add_feature(GEANT4_BUILD_TPMALLOC "Build multithread optimized malloc library")
+
 # - G4_STORE_TRAJECTORY
 # ON by default, switching off can improve performance. Needs to be on
 # for visualization to work fully. Mark as advanced because most users
 # should not need to worry about it.
 # FIXES : Bug #1208
-option(GEANT4_BUILD_STORE_TRAJECTORY 
-  "Store trajectories in event processing. Switch off for improved performance but note that visualization of trajectories will not be possible" 
+option(GEANT4_BUILD_STORE_TRAJECTORY
+  "Store trajectories in event processing. Switch off for improved performance but note that visualization of trajectories will not be possible"
   ON)
 mark_as_advanced(GEANT4_BUILD_STORE_TRAJECTORY)
 
@@ -42,10 +90,10 @@ if(GEANT4_BUILD_STORE_TRAJECTORY)
 endif()
 
 # - G4VERBOSE
-# ON by default, switching off can improve performance, but at the cost 
-# of fewer informational or warning messages. Mark as advanced because 
+# ON by default, switching off can improve performance, but at the cost
+# of fewer informational or warning messages. Mark as advanced because
 # most users should not need to worry about it.
-option(GEANT4_BUILD_VERBOSE_CODE 
+option(GEANT4_BUILD_VERBOSE_CODE
   "Enable verbose output from Geant4 code. Switch off for better performance at the cost of fewer informational messages or warnings"
   ON)
 mark_as_advanced(GEANT4_BUILD_VERBOSE_CODE)
@@ -61,7 +109,7 @@ endif()
 # Choose C++ Standard to build against, if supported.
 # Mark as advanced because most users will not need it.
 if(CXXSTD_IS_AVAILABLE)
-  enum_option(GEANT4_BUILD_CXXSTD 
+  enum_option(GEANT4_BUILD_CXXSTD
     DOC "C++ Standard to compile against"
     VALUES ${CXXSTD_IS_AVAILABLE}
     CASE_INSENSITIVE
@@ -74,24 +122,15 @@ endif()
 
 #-----------------------------------------------------------------------
 # Setup Library Format Option.
-# Libraries can be built in one of two 'formats':
-#  global   : One library per category.
-#  granular : One library per module.
-#
-# This division does not always apply because some libraries are the same
-# in both 'formats', e.g. G4materials or G4OpenGL.
-# Global libraries are built by default, but we provide an option to 
-# switch to granular format. Granular format is only intended for 
-# developers, so we mark this option as advanced and warn the user.
-
-# Still warn, because the variable can still be set from the command line!
+# Always build global libraries - always FATAL_ERROR if old
+# granular library switch is set, e.g. from command line
 if(GEANT4_BUILD_GRANULAR_LIBS)
-  message(WARNING " Granular libraries are only intended for developers!")
+  message(FATAL_ERROR " Granular libraries are no longer supported!")
 endif()
 
 #-----------------------------------------------------------------------
 # Setup Shared and/or Static Library builds
-# We name these options without a 'GEANT4_' prefix because they are 
+# We name these options without a 'GEANT4_' prefix because they are
 # really higher level CMake options.
 # Default to building shared libraries, mark options as advanced because
 # most user should not have to touch them.
@@ -113,7 +152,7 @@ if(MSVC)
     message(WARNING " Building shared AND static libraries on VS2010 may result in link errors.
  You are welcome to try building both, but please be aware of this warning.
  Problems can be reported to the Geant4 Bugzilla system:
- 
+
  http://bugzilla-geant4.kek.jp
     ")
   endif()
@@ -150,26 +189,26 @@ endif()
 
 # On WIN32, we need to build the genwindef application to create export
 # def files for building DLLs.
-# We only use it as a helper application at the moment so we exclude it from 
+# We only use it as a helper application at the moment so we exclude it from
 # the ALL target.
 # TODO: We could move this section into the Geant4MacroLibraryTargets.cmake
 # if it can be protected so that the genwindef target wouldn't be defined
 # more than once... Put it here for now...
 if(WIN32)
-    add_definitions(-DG4LIB_BUILD_DLL)
-    # Assume the sources are co-located 
-    get_filename_component(_genwindef_src_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
-    add_executable(genwindef EXCLUDE_FROM_ALL 
-        ${_genwindef_src_dir}/genwindef/genwindef.cpp 
-        ${_genwindef_src_dir}/genwindef/LibSymbolInfo.h
-        ${_genwindef_src_dir}/genwindef/LibSymbolInfo.cpp)
+  add_definitions(-DG4LIB_BUILD_DLL)
+  # Assume the sources are co-located
+  get_filename_component(_genwindef_src_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
+  add_executable(genwindef EXCLUDE_FROM_ALL
+    ${_genwindef_src_dir}/genwindef/genwindef.cpp
+    ${_genwindef_src_dir}/genwindef/LibSymbolInfo.h
+    ${_genwindef_src_dir}/genwindef/LibSymbolInfo.cpp)
 endif()
 
 
 #------------------------------------------------------------------------
 # Setup Locations for Build Outputs
-# Because of the highly nested structure of Geant4, targets will be 
-# distributed throughout this tree, potentially making usage and debugging 
+# Because of the highly nested structure of Geant4, targets will be
+# distributed throughout this tree, potentially making usage and debugging
 # difficult (especially if developers use non-CMake tools).
 #
 # We therefore set the output directory of runtime, library and archive
@@ -180,8 +219,8 @@ endif()
 # built against the targets in the build tree.
 #
 # Note that for multi-configuration generators like VS and Xcode, these
-# directories will have the configuration type (e.g. Debug) appended to 
-# them, so are not backward compatible with the old Make toolchain in 
+# directories will have the configuration type (e.g. Debug) appended to
+# them, so are not backward compatible with the old Make toolchain in
 # these cases.
 #
 # Also, we only do this on UNIX because we want to avoid mixing static and

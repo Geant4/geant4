@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -54,7 +52,7 @@ namespace G4INCL {
 
   class NuclearDensity {
   public:
-    NuclearDensity(G4int A, G4int Z, InverseInterpolationTable *rpCorrelationTable);
+    NuclearDensity(const G4int A, const G4int Z, InverseInterpolationTable const * const rpCorrelationTableProton, InverseInterpolationTable const * const rpCorrelationTableNeutron);
     ~NuclearDensity();
 
     /// \brief Copy constructor
@@ -67,13 +65,14 @@ namespace G4INCL {
     void swap(NuclearDensity &rhs);
 
     /** \brief Get the maximum allowed radius for a given momentum.
-     *  \param p Absolute value of the particle momentum, divided by the
-     *  relevant Fermi momentum.
-     *  \return Maximum allowed radius.
+     *  \param t type of the particle
+     *  \param p absolute value of the particle momentum, divided by the
+     *           relevant Fermi momentum.
+     *  \return maximum allowed radius.
      */
-    G4double getMaxRFromP(G4double p) const;
+    G4double getMaxRFromP(const ParticleType t, const G4double p) const;
 
-    G4double getMaxTFromR(G4double r) const;
+    G4double getMinPFromR(const ParticleType t, const G4double r) const;
 
     G4double getMaximumRadius() const { return theMaximumRadius; };
 
@@ -86,7 +85,7 @@ namespace G4INCL {
 // assert(t!=Neutron && t!=PiZero && t!=DeltaZero); // no neutral particles here
       if(t==Composite) {
         return transmissionRadius[t] +
-          ParticleTable::getNuclearRadius(p->getA(), p->getZ());
+          ParticleTable::getNuclearRadius(t, p->getA(), p->getZ());
       } else
         return transmissionRadius[t];
     };
@@ -95,7 +94,7 @@ namespace G4INCL {
      *
      * \return the radius
      */
-    G4double getTransmissionRadius(ParticleType type) {
+    G4double getTransmissionRadius(ParticleType type) const {
 // assert(type!=Composite);
       return transmissionRadius[type];
     };
@@ -106,7 +105,8 @@ namespace G4INCL {
     /// \brief Get the charge number.
     G4int getZ() const { return theZ; }
 
-    G4double getNuclearRadius() { return theNuclearRadius; }
+    G4double getProtonNuclearRadius() const { return theProtonNuclearRadius; }
+    void setProtonNuclearRadius(const G4double r) { theProtonNuclearRadius = r; }
 
   private:
 
@@ -116,13 +116,13 @@ namespace G4INCL {
     G4int theA, theZ;
     G4double theMaximumRadius;
     /// \brief Represents INCL4.5's R0 variable
-    G4double theNuclearRadius;
+    G4double theProtonNuclearRadius;
 
     /* \brief map of transmission radii per particle type */
     G4double transmissionRadius[UnknownParticle];
 
-    InverseInterpolationTable *rFromP;
-    InverseInterpolationTable *tFromR;
+    InverseInterpolationTable const *rFromP[UnknownParticle];
+    InverseInterpolationTable const *pFromR[UnknownParticle];
   };
 
 }

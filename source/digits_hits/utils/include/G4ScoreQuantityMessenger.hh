@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoreQuantityMessenger.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.

@@ -1,0 +1,28 @@
+$Id: History 66241 2012-12-13 18:34:42Z gunter $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+              Hadronic physics-list/constructors/factory History
+              --------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+07-Nov-2013, Alberto Ribon              (phys-ctor-fact-V09-06-03)
+- Removed low_energy and high_energy from sources.cmake and GNUmakefile.
+
+29-Jan-2013, Gunter Folger              (phys-ctor-fact-V09-06-02)
+- fix sources.cmake for moved files
+
+29-Jan-2013, Gunter Folger              (phys-ctor-fact-V09-06-01)
+- move G4PhysListFactory from constructor/factory to lists.
+
+10-Jan-2012, Gunter Folger              (phys-ctor-fact-V09-06-00)
+- new directory structure introduced. 
+   constructors/factory classes

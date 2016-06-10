@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorSymMatrix.cc 68739 2013-04-05 09:55:11Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -844,18 +844,20 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
   // by having a new without a delete that is only done once.
   
   static const G4int max_array = 25;
-  static std::vector<G4double> xvec (max_array);
-  static std::vector<G4int>    pivv (max_array);
+  static G4ThreadLocal std::vector<G4double> *xvec = 0;
+  if (!xvec) xvec = new  std::vector<G4double> (max_array) ;
+  static G4ThreadLocal std::vector<G4int>    *pivv = 0;
+  if (!pivv) pivv = new  std::vector<G4int>    (max_array) ;
   typedef std::vector<G4int>::iterator pivIter; 
-  if (xvec.size() < static_cast<unsigned int>(nrow)) xvec.resize(nrow);
-  if (pivv.size() < static_cast<unsigned int>(nrow)) pivv.resize(nrow);
+  if (xvec->size() < static_cast<unsigned int>(nrow)) xvec->resize(nrow);
+  if (pivv->size() < static_cast<unsigned int>(nrow)) pivv->resize(nrow);
     // Note - resize should do  nothing if the size is already larger than nrow,
     //        but on VC++ there are indications that it does so we check.
     // Note - the data elements in a vector are guaranteed to be contiguous,
     //        so x[i] and piv[i] are optimally fast.
-  G4ErrorMatrixIter   x   = xvec.begin();
+  G4ErrorMatrixIter   x   = xvec->begin();
     // x[i] is used as helper storage, needs to have at least size nrow.
-  pivIter piv = pivv.begin();
+  pivIter piv = pivv->begin();
     // piv[i] is used to store details of exchanges
       
   G4double temp1, temp2;
@@ -1236,10 +1238,10 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
   return; // inversion successful
 }
 
-G4double G4ErrorSymMatrix::posDefFraction5x5 = 1.0;
-G4double G4ErrorSymMatrix::posDefFraction6x6 = 1.0;
-G4double G4ErrorSymMatrix::adjustment5x5 = 0.0;
-G4double G4ErrorSymMatrix::adjustment6x6 = 0.0;
+G4ThreadLocal G4double G4ErrorSymMatrix::posDefFraction5x5 = 1.0;
+G4ThreadLocal G4double G4ErrorSymMatrix::posDefFraction6x6 = 1.0;
+G4ThreadLocal G4double G4ErrorSymMatrix::adjustment5x5 = 0.0;
+G4ThreadLocal G4double G4ErrorSymMatrix::adjustment6x6 = 0.0;
 const G4double G4ErrorSymMatrix::CHOLESKY_THRESHOLD_5x5 = .5;
 const G4double G4ErrorSymMatrix::CHOLESKY_THRESHOLD_6x6 = .2;
 const G4double G4ErrorSymMatrix::CHOLESKY_CREEP_5x5 = .005;

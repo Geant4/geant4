@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeData.icc 71890 2013-06-27 22:14:13Z mkelsey $
 //
 // 20100803  M. Kelsey -- Move implementations to this .icc file.  Use name
 //		string to report output
@@ -35,10 +35,12 @@
 // 20110923  M. Kelsey -- Add optional ostream& argument to print() fns,
 //		drop all "inline" keywords
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20130627  M. Kelsey -- Use new function to print particle name strings.
 
 #ifndef G4_CASCADE_DATA_ICC
 #define G4_CASCADE_DATA_ICC
 
+#include "G4InuclParticleNames.hh"
 #include <iostream>
 #include <iomanip>
 
@@ -122,14 +124,22 @@ print(G4int mult, std::ostream& os) const {
     os << "\n final state x" << mult << "bfs[" << ichan << "] : ";
     for (G4int fsi=0; fsi<mult; fsi++) {
       switch (mult) {
-      case 2: os << " " << x2bfs[ichan][fsi]; break;
-      case 3: os << " " << x3bfs[ichan][fsi]; break;
-      case 4: os << " " << x4bfs[ichan][fsi]; break;
-      case 5: os << " " << x5bfs[ichan][fsi]; break;
-      case 6: os << " " << x6bfs[ichan][fsi]; break;
-      case 7: os << " " << x7bfs[ichan][fsi]; break;
-      case 8: os << " " << x8bfs[ichan][fsi]; break;
-      case 9: os << " " << x9bfs[ichan][fsi]; break;
+      case 2: os << " " << G4InuclParticleNames::nameShort(x2bfs[ichan][fsi]);
+	break;
+      case 3: os << " " << G4InuclParticleNames::nameShort(x3bfs[ichan][fsi]);
+	break;
+      case 4: os << " " << G4InuclParticleNames::nameShort(x4bfs[ichan][fsi]);
+	break;
+      case 5: os << " " << G4InuclParticleNames::nameShort(x5bfs[ichan][fsi]);
+	break;
+      case 6: os << " " << G4InuclParticleNames::nameShort(x6bfs[ichan][fsi]);
+	break;
+      case 7: os << " " << G4InuclParticleNames::nameShort(x7bfs[ichan][fsi]);
+	break;
+      case 8: os << " " << G4InuclParticleNames::nameShort(x8bfs[ichan][fsi]);
+	break;
+      case 9: os << " " << G4InuclParticleNames::nameShort(x9bfs[ichan][fsi]);
+	break;
       default: ;
       }
     }
@@ -143,8 +153,8 @@ template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
 void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::
 printXsec(const G4double (&xsec)[NE], std::ostream& os) const {
   for (G4int k=0; k<NE; k++) {
-    os << std::setw(6) << xsec[k];		// Use sign-gap as separator
-    if ((k+1)%12 == 0) os << G4endl;
+    os << " " << std::setw(6) << xsec[k];
+    if ((k+1)%10 == 0) os << G4endl;
   }
   os << G4endl;
 }

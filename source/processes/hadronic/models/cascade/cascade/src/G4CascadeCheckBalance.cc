@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeCheckBalance.cc 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.
@@ -48,6 +48,7 @@
 // 20120525  M. Kelsey -- Follow process-level checking: allow _either_ rel.
 //		or abs. to pass (instead of requiring both)
 // 20121002  M. Kelsey -- Add strangeness check (useful for Omega- beam)
+// 20130621  Add interface to take G4Fragment input instead of G4InuclNuclei.
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -133,6 +134,39 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   }
 }
 
+// For de-excitation, take G4Fragment as initial state
+void G4CascadeCheckBalance::collide(const G4Fragment& fragment,
+				    G4CollisionOutput& output) {
+  if (verboseLevel)
+    G4cout << " >>> G4CascadeCheckBalance(" << theName << ")::collide(<FRAG>)"
+	   << G4endl;
+
+  // Copy initial state directly from fragment (no bullet/target sums)
+  initial = fragment.GetMomentum();
+  initialCharge = G4int(fragment.GetZ());
+  initialBaryon = G4int(fragment.GetA());
+  initialStrange = 0;				// No hypernuclei at present
+
+  // Final state totals are computed for us
+  final = output.getTotalOutputMomentum();
+  finalBaryon = output.getTotalBaryonNumber();
+  finalCharge = output.getTotalCharge();
+  finalStrange = output.getTotalStrangeness();
+
+  // Report results
+  if (verboseLevel) {
+    G4cout << " initial px " << initial.px() << " py " << initial.py()
+	   << " pz " << initial.pz() << " E " << initial.e()
+	   << " baryon " << initialBaryon << " charge " << initialCharge
+	   << " strange " << initialStrange << G4endl
+	   << "   final px " << final.px() << " py " << final.py()
+	   << " pz " << final.pz() << " E " << final.e()
+	   << " baryon " << finalBaryon << " charge " << finalCharge
+	   << " strange " << finalStrange << G4endl;
+  }
+}
+
+
 // Take list of output particles directly (e.g., from G4EPCollider internals)
 
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet, 
@@ -147,11 +181,21 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   collide(bullet, target, tempOutput);
 }
 
+void G4CascadeCheckBalance::collide(const G4Fragment& target,
+    const std::vector<G4InuclElementaryParticle>& particles) {
+  if (verboseLevel)
+    G4cout << " >>> G4CascadeCheckBalance(" << theName
+	   << ")::collide(<FRAG>,<vector>)" << G4endl;
+
+  tempOutput.reset();			// Buffer for processing
+  tempOutput.addOutgoingParticles(particles);
+  collide(target, tempOutput);
+}
+
 
 // Take list of nuclear fragments directly (e.g., from G4Fissioner internals)
 
-void G4CascadeCheckBalance::collide(G4InuclParticle* bullet, 
-				    G4InuclParticle* target,
+void G4CascadeCheckBalance::collide(const G4Fragment& target,
     const std::vector<G4InuclNuclei>& fragments) {
   if (verboseLevel)
     G4cout << " >>> G4CascadeCheckBalance(" << theName << ")::collide(<vector>)"
@@ -159,7 +203,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 
   tempOutput.reset();			// Buffer for processing
   tempOutput.addOutgoingNuclei(fragments);
-  collide(bullet, target, tempOutput);
+  collide(target, tempOutput);
 }
 
 

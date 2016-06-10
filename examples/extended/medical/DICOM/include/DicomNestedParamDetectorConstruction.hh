@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomNestedParamDetectorConstruction.hh 74809 2013-10-22 09:49:26Z gcosmo $
+//
 /// \file medical/DICOM/include/DicomNestedParamDetectorConstruction.hh
 /// \brief Definition of the DicomNestedParamDetectorConstruction class
 //
@@ -47,6 +49,9 @@ public:
   DicomNestedParamDetectorConstruction();
   ~DicomNestedParamDetectorConstruction();
 
+protected:
+    //virtual void ConstructSDandField();
+    
 private:
 
   virtual void ConstructPhantom();

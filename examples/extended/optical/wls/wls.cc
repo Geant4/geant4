@@ -23,40 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: wls.cc 78066 2013-12-03 11:08:36Z gcosmo $
+//
 /// \file optical/wls/wls.cc
 /// \brief Main program of the optical/wls example
 //
-//
-//
-//
-// --------------------------------------------------------------
-//      GEANT 4 - Example wls
-//
-// --------------------------------------------------------------
-// Comments
-//
-//
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef WIN32
 #include <unistd.h>
 #endif
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 
 #include "Randomize.hh"
 
 #include "WLSPhysicsList.hh"
 #include "WLSDetectorConstruction.hh"
-#include "WLSPrimaryGeneratorAction.hh"
 
-#include "WLSRunAction.hh"
-#include "WLSEventAction.hh"
-#include "WLSTrackingAction.hh"
-#include "WLSSteppingAction.hh"
-#include "WLSStackingAction.hh"
-#include "WLSSteppingVerbose.hh"
+#include "WLSActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -71,17 +62,25 @@
 // argv[0] is always the name of the program
 // argv[1] points to the first argument, and so on
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int main(int argc,char** argv) 
 {
-  G4String physName = "QGSP_BERT_EMV";
-
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+#else
   G4int seed = 123;
   if (argc  > 2) seed = atoi(argv[argc-1]);
 
-  // Choose the Random engine
+  // Choose the Random engine and set the seed
 
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheSeed(seed);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheSeed(seed);
+
+  G4RunManager * runManager = new G4RunManager;
+#endif
+
+  G4String physName = "QGSP_BERT_HP";
 
 #ifndef WIN32
   G4int c = 0;
@@ -104,43 +103,24 @@ int main(int argc,char** argv)
   }
 #endif
 
-  // My Verbose output class
-
-  G4VSteppingVerbose::SetInstance(new WLSSteppingVerbose);
-  
-  // Construct the default run manager
-
-  G4RunManager * runManager = new G4RunManager;
-
   // Set mandatory initialization classes
-
+  //
+  // Detector construction
   WLSDetectorConstruction* detector = new WLSDetectorConstruction();
-
   runManager->SetUserInitialization(detector);
-
+  // Physics list
   runManager->SetUserInitialization(new WLSPhysicsList(physName));
+  // User action initialization
+  runManager->SetUserInitialization(new WLSActionInitialization(detector));
 
 #ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new G4VisExecutive();
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-
 #endif
-
-  // Set mandatory user action class 
-
-  runManager->SetUserAction( new WLSPrimaryGeneratorAction(detector) );
-
-  WLSRunAction* runAction = new WLSRunAction();
-  WLSEventAction* eventAction = new WLSEventAction(runAction);
-
-  runManager->SetUserAction(runAction);
-  runManager->SetUserAction(eventAction);
-  runManager->SetUserAction( new WLSTrackingAction() );
-  runManager->SetUserAction( new WLSSteppingAction(detector) );
-  runManager->SetUserAction( new WLSStackingAction() );
 
   // Get the pointer to the User Interface manager
 
@@ -174,6 +154,8 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
      UImanager->ApplyCommand("/control/execute init.in");
 #endif
+     if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
      ui->SessionStart();
      delete ui;
 #endif
@@ -188,3 +170,5 @@ int main(int argc,char** argv)
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id$
+// $Id: PhysicsList.cc 68015 2013-03-13 13:27:27Z gcosmo $
 //
 // 
 

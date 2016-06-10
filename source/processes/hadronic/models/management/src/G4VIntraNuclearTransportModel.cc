@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VIntraNuclearTransportModel.cc 69717 2013-05-13 09:47:57Z gcosmo $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -34,13 +34,15 @@
 //                  F.W.Jones, 06-JUL-99
 //      V.Ivanchenko 03.01.2012
 //          Added G4VPreCompoundModel pointer to the constructor and cleanup
+//      V. Uzhinsky Nov. 2012
+//          Added method PropagateNuclNucl for simulation of nucleus-nucleus inter. 
 // -----------------------------------------------------------------------------
 
 #include "G4VIntraNuclearTransportModel.hh"
 
 G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(
-        const G4String& modName, G4VPreCompoundModel* ptr) 
-  : G4HadronicInteraction(modName),theTransportModelName(modName), 
+        const G4String& modName, G4VPreCompoundModel* ptr)
+  : G4HadronicInteraction(modName),theTransportModelName(modName),
     the3DNucleus(0),theDeExcitation(ptr),thePrimaryProjectile(0)
 {}
 
@@ -63,4 +65,12 @@ void G4VIntraNuclearTransportModel::PropagateModelDescription(std::ostream& outF
 	outFile << "G4VIntraNuclearTransportModel is abstract class, missing description" << G4endl;
 //	G4Exception("G4VIntraNuclearTransportModel::ModelDescription()","G4VINT01",FatalException,
 //			"G4VIntraNuclearTransportModel is abstract class, no description available");
+}
+
+G4ReactionProductVector* G4VIntraNuclearTransportModel::PropagateNuclNucl(G4KineticTrackVector* ,
+               G4V3DNucleus* , G4V3DNucleus* )
+{
+   G4Exception("G4VIntraNuclearTransportModel::Propagate()","G4VINT02",FatalException,
+         "Propagate method for nucleus-nucleus interactions not implemented");
+   return 0;
 }

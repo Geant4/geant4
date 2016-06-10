@@ -41,6 +41,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "HadrontherapyMatrix.hh"
+#include "HadrontherapyLet.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager* amgr)
@@ -69,6 +70,15 @@ HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(Hadronthe
   FileNameCmd->AvailableForStates(G4State_Idle,G4State_PreInit);
 #endif
 
+
+LetCmd = new G4UIcmdWithABool("/analysis/computeLet",this);
+	LetCmd  -> SetParameterName("choice",true); 
+	LetCmd  -> SetDefaultValue(true);
+	LetCmd  -> SetGuidance("Set if Let must be computed and write the ASCII filename for the Let");
+	LetCmd  -> AvailableForStates(G4State_Idle, G4State_PreInit);
+
+
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -76,6 +86,8 @@ HadrontherapyAnalysisFileMessenger::~HadrontherapyAnalysisFileMessenger()
 {
   delete secondaryCmd; 
   delete DoseMatrixCmd; 
+  delete LetCmd;
+
 #ifdef G4ANALYSIS_USE_ROOT
   delete FileNameCmd;
 #endif
@@ -104,6 +116,13 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
 #endif
 	}
     }
+    
+     else if (command == LetCmd)
+    {
+		if (HadrontherapyLet::GetInstance())
+			HadrontherapyLet::GetInstance() -> doCalculation = LetCmd -> GetNewBoolValue(newValue);
+    }
+    
 #ifdef G4ANALYSIS_USE_ROOT
     else if (command == FileNameCmd)
     {

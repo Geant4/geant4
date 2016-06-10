@@ -15,6 +15,47 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 02, 2013
+- More fixes in gui.mac:
+  corrected wireframe parameter
+
+November 30, 2013 M.Asai - (fieldex04-V09-06-08)
+- fix additional thread-safety issues.
+
+November 29, 2013 - I. Hrivnacova
+- Fixed gui.mac (commented out command specific to B2 example)
+
+November 28, 2013 M.Asai - (fieldex04-V09-06-07)
+- fix thread-safety issues.
+
+November 15, 2013 P.Gumplinger - (fieldex04-V09-06-06)
+- fix compile warning of Windows code in field04.cc
+
+November 13, 2013 P.Gumplinger - (fieldex04-V09-06-05)
+- migration to MT
+
+August 26, 2013 P.Gumplinger - (fieldex04-V09-06-04)
+- do not execute vis.mac in main
+
+July 29, 2013 P.Gumplinger - (fieldex04-V09-06-03)
+- fix MAC/clang32 compilation warnings
+
+Apr 13, 2013 A.Dotti - (fieldex04-V09-06-02)
+- Changes in API physics list for MT
+
+Dec 12, 2012 A.Ribon  - not tagged
+- I have rejected my previous tag (fieldex04-V09-06-01) and
+  switched back to QGSP_BERT_EMV, because it is used via the
+  physics list factory, so it is fine!
+
+Dec 12, 2012 A.Ribon - fieldex04-V09-06-01
+- Replaced QGSP_BERT_EMV with QGSP_BERT.
+
+Dec 02, 2012 J.Allison - fieldex04-V09-06-00
+  Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o F04Trajectory.cc: Removed DrawTrajectory(G4int i_mode).
+  o F04EventAction.cc: Removed argument from DrawTrajectory().
+
 Nov 28th, 2012 Gabriele Cosmo - fieldex04-V09-05-04
 - Fixed cases of variable shadowing.
 

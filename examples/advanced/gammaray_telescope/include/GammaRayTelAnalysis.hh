@@ -25,7 +25,7 @@
 //
 #ifdef G4ANALYSIS_USE
 //
-// $Id$
+// $Id: GammaRayTelAnalysis.hh 68794 2013-04-05 13:23:26Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -33,6 +33,9 @@
 //
 //      ------------ GammaRayTelAnalysis  ------
 //           by R.Giannitrapani, F. Longo & G.Santin (30 nov 2000)
+//
+// 03.04.2013 F.Longo and L.Pandola
+// - migrated to G4AnalysisManager
 //
 // 07.12.2001 A.Pfeiffer
 // - integrated Guy's addition of the ntuple
@@ -42,8 +45,13 @@
 //
 // 22.11.2001 G.Barrand
 // - Adaptation to AIDA
+// -------------------------------------------------------------------
+// Class description:
+// Example of analysis in a simulation application (histograms, ntuples etc.)
+// This class follows the singleton design pattern; 
+// it is responsible for the analysis management and algorithms 
 //
-// ************************************************************
+// -------------------------------------------------------------------//
 
 #ifndef GammaRayTelAnalysis_h 
 #define GammaRayTelAnalysis_h 1
@@ -52,20 +60,14 @@
 #include <vector>
 #include "G4ThreeVector.hh"
 
-#include <AIDA/AIDA.h>
+// uncomment g4xml.hh and comment g4root.hh for a XML-based output file
 
-using namespace AIDA;
+#include "g4root.hh"
+//#include "g4xml.hh"
+
 
 class GammaRayTelAnalysisMessenger;
 class GammaRayTelDetectorConstruction;
-
-class AIDA::IAnalysisFactory;
-class AIDA::ITree;
-class AIDA::IHistogramFactory;
-class AIDA::ITupleFactory;
-//class AIDA::IPlotter;
-class AIDA::IHistogram1D;
-class AIDA::IHistogram2D;
 
 class GammaRayTelAnalysis {
 public:
@@ -77,20 +79,15 @@ public:
   //  void BeginOfRun(G4int n);
 
   void BeginOfRun();
-  void EndOfRun(G4int n);
+  void EndOfRun();
   void EndOfEvent(G4int flag);
 
   void Init();
   void Finish();
 
-  void SetHisto1DDraw(G4String str) {histo1DDraw = str;};
-  void SetHisto1DSave(G4String str) {histo1DSave = str;};
-  void SetHisto2DDraw(G4String str) {histo2DDraw = str;};
-  void SetHisto2DSave(G4String str) {histo2DSave = str;};
   void SetHisto2DMode(G4String str) {histo2DMode = str;};
-
   G4String GetHisto2DMode() {return histo2DMode;};
-
+  
   void InsertPositionXZ(double x, double z);
   void InsertPositionYZ(double y, double z);
   void InsertEnergy(double en);
@@ -104,8 +101,8 @@ private:
 
   GammaRayTelAnalysis();
 
-  void plot1D(IHistogram1D* histo);
-  void plot2D(IHistogram2D* histo);
+  //void plot1D(IHistogram1D* histo);
+  //void plot2D(IHistogram2D* histo);
   void Plot();
 
 private:
@@ -113,21 +110,8 @@ private:
 
   GammaRayTelDetectorConstruction*    GammaRayTelDetector;
 
-  IAnalysisFactory* analysisFactory;
-  ITree* tree;
-  //IPlotter* plotter;
-  ITuple* tuple;
-
-  IHistogram1D* energy;
-  IHistogram1D* hits;
-  IHistogram2D* posXZ;
-  IHistogram2D* posYZ;
-
-  G4String histo1DDraw;
-  G4String histo1DSave;
-  G4String histo2DDraw;
-  G4String histo2DSave;
   G4String histo2DMode;
+  G4String histoFileName;
 
   GammaRayTelAnalysisMessenger* analysisMessenger;
 };

@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 June 2013  Dennis Wright  (hadr-man-V09-06-03)
+-------------------------------------------------
+- G4EnergyRangeManager : re-order initialization of hadronicInteractionCounter
+  in copy ctor and assignment operator to satisfy coverity
+
+19 April 2013 Tatsumi Koi (hadr-man-V09-06-02)
+-------------------------------------------------------
+- Add dump method
+	include/G4EnergyRangeManager.hh
+	src/G4EnergyRangeManager.cc
+     
+ 7 March 2013 michel maire  (hadr-man-V09-06-01)
+- G4HadronicProcessStore- Dump and Print: cosmetic in Processes summary 
+     
+30 January 2013 michel maire  (hadr-man-V09-06-00)
+-------------------------------------------------------
+- G4HadronicProcessStore::GetCrossSectionPerAtom() - add material
+    
 14 November 2012 Vladimir Ivantchenko  (hadr-man-V09-05-24)
 -------------------------------------------------------
 - G4HadronicProcess.cc - added full printout about hadronic exception 

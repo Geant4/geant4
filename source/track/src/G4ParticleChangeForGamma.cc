@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleChangeForGamma.cc 68795 2013-04-05 13:24:46Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -120,6 +120,19 @@ G4ParticleChangeForGamma & G4ParticleChangeForGamma::operator=(
   return *this;
 }
 
+void G4ParticleChangeForGamma::AddSecondary(G4DynamicParticle* aParticle)
+{
+  //  create track
+  G4Track* aTrack = new G4Track(aParticle, currentTrack->GetGlobalTime(),
+                                           currentTrack->GetPosition());
+
+  //   Touchable handle is copied to keep the pointer
+  aTrack->SetTouchableHandle(currentTrack->GetTouchableHandle());
+
+  //  add a secondary
+  G4VParticleChange::AddSecondary(aTrack);
+}
+
 //----------------------------------------------------------------
 // method for updating G4Step
 //
@@ -139,9 +152,18 @@ G4Step* G4ParticleChangeForGamma::UpdateStepForAtRest(G4Step* pStep)
 G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
 {
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  G4Track* pTrack = pStep->GetTrack();
+
   pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
   pPostStepPoint->SetPolarization( proposedPolarization );
+
+  // update velocity for scattering process and particles with mass
+  if(proposedKinEnergy > 0.0) { 
+    if(pTrack->GetParticleDefinition()->GetPDGMass() > 0.0) {
+      pPostStepPoint->SetVelocity(pTrack->CalculateVelocity());
+    }
+  } 
 
   if (isParentWeightProposed ){
     pPostStepPoint->SetWeight( theParentWeight );
@@ -150,19 +172,6 @@ G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
   return pStep;
-}
-
-void G4ParticleChangeForGamma::AddSecondary(G4DynamicParticle* aParticle)
-{
-  //  create track
-  G4Track* aTrack = new G4Track(aParticle, currentTrack->GetGlobalTime(),
-                                           currentTrack->GetPosition());
-
-  //   Touchable handle is copied to keep the pointer
-  aTrack->SetTouchableHandle(currentTrack->GetTouchableHandle());
-
-  //  add a secondary
-  G4VParticleChange::AddSecondary(aTrack);
 }
 
 //----------------------------------------------------------------

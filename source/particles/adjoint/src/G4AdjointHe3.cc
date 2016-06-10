@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointHe3.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 #include "G4AdjointHe3.hh"
 #include "G4PhysicalConstants.hh"

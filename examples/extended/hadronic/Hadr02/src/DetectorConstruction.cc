@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -81,7 +81,8 @@ DetectorConstruction::DetectorConstruction()
   radius = 10.*cm;
 
   targetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-  worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  worldMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
   HistoManager::GetPointer()->SetTargetMaterial(targetMaterial);
 
   // Prepare sensitive detectors
@@ -139,7 +140,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   for(G4int i=0; i<nSlices; i++) {
     // physC = 
-    new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),logicTarget,"Target",logicCheck,false,i);
+    new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),logicTarget,
+		      "Target",logicCheck,false,i);
     z += 2.0*sliceZ;
   }
   G4cout << "### Target consist of " << nSlices

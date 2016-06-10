@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointCSManager.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointCSManager
@@ -171,7 +171,7 @@ class G4AdjointCSManager
 	
 	
   private:
-        static 	G4AdjointCSManager* theInstance;
+        static G4ThreadLocal 	G4AdjointCSManager* theInstance;
   	std::vector< std::vector<G4AdjointCSMatrix*> > theAdjointCSMatricesForScatProjToProj; //x dim is for G4VAdjointEM* while y dim is for elements
 	std::vector< std::vector<G4AdjointCSMatrix*> > theAdjointCSMatricesForProdToProj;
 	std::vector< G4VEmAdjointModel*> listOfAdjointEMModel;

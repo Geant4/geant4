@@ -81,7 +81,7 @@ private:
     CML2SDWithVoxels *sensDet;
 
     G4ThreeVector centreBoxInside;
-    G4double halfBoxInside_Thickness, surfaceToTargetZValue;
+    G4double halfBoxInside_Thickness; 
     G4ThreeVector halfSize, centre;
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InuclSpecialFunctions.hh 67863 2013-03-11 19:00:21Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100319  M. Kelsey -- Add optional mass argument to generateWithFixedTheta;
@@ -33,14 +33,21 @@
 // 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard unused binding
 //		energy functions
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20130308  M. Kelsey -- New function to encapsulate INUCL power expansion
+// 20130808  M. Kelsey -- Convert paraMaker[Truncated] to class object, to
+//		allow thread isolation
+// 20130829  M. Kelsey -- Address Coverity #52158, 52161 for copy actions.
 
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
 
 #include "globals.hh"
+#include "G4LorentzVector.hh"
 #include <algorithm>
 #include <vector>
-#include "G4LorentzVector.hh"
+
+template <int N> class G4CascadeInterpolator;
+
 
 namespace G4InuclSpecialFunctions {
   G4double bindingEnergy(G4int A, G4int Z);
@@ -50,11 +57,6 @@ namespace G4InuclSpecialFunctions {
 
   G4double FermiEnergy(G4int A, G4int Z, G4int ntype);
   
-  // NOTE:  Passing Z as double here, to be used as interpolation argument
-  void paraMaker(G4double Z, std::pair<std::vector<G4double>, std::vector<G4double> >& parms);
-
-  void paraMakerTruncated(G4double Z, std::pair<G4double, G4double>& parms); 
-
   G4double getAL(G4int A);
  
   G4double csNN(G4double e);
@@ -63,9 +65,12 @@ namespace G4InuclSpecialFunctions {
 
   G4double G4cbrt(G4double x);	// Can't use "cbrt" name, clashes with <math.h>
 
-  G4double inuclRndm();
+  G4double inuclRndm();				// Wrapper for G4UniformRand()
 
-  G4double randomGauss(G4double sigma);
+  G4double randomInuclPowers(G4double ekin, 	// Power series in Ekin, S
+			     const G4double (&coeff)[4][4]);
+
+  G4double randomGauss(G4double sigma);		// Gaussian distribution
 
   G4double randomPHI();
 
@@ -78,6 +83,27 @@ namespace G4InuclSpecialFunctions {
 					 G4double mass=0.);
 
   G4LorentzVector generateWithRandomAngles(G4double p, G4double mass=0.);
+
+  // This is an object to be instantiated by client code
+  class paraMaker {
+  public:
+    paraMaker(G4int verbose=0);
+    ~paraMaker();
+
+  // NOTE:  Passing Z as double here, to be used as interpolation argument
+    void getParams(G4double Z, std::pair<std::vector<G4double>,
+		                         std::vector<G4double> >& parms);
+
+    void getTruncated(G4double Z, std::pair<G4double, G4double>& parms); 
+
+  private:
+    G4int verboseLevel;
+    G4CascadeInterpolator<5>* interp;
+
+    // No copy actions
+    paraMaker(const paraMaker& right);
+    paraMaker& operator=(const paraMaker& right);
+  };
 }
 
 

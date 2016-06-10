@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2010-11-26 02:39:14 guatelli Exp $
+$Id: README 76254 2013-11-08 11:27:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,8 +8,13 @@ $Id: README,v 1.17 2010-11-26 02:39:14 guatelli Exp $
                                  README
                           -----------------------
 
-Authors: S. Guatelli (susanna@uow.edu.au), University of Wollongong, Australia, and M. G. Pia (pia@ge.infn.it),
-         INFN Genova, Italy.
+Authors: S. Guatelli (susanna@uow.edu.au), University of Wollongong, Australia,  M. G. Pia (pia@ge.infn.it),
+         INFN Genova, Italy and F. Ambroglini (filippo.ambroglini@pg.infn.it), INFN Perugia, Italy.
+
+This example is currently maintained by S. Guatelli, University of Wollongong, Australia 
+and L. Pandola, LNGS, INFN, Italy.
+
+The example is based on code developed by G. Guerrieri, University of Genova, Italy.
 
 ------> Introduction
 
@@ -24,15 +29,9 @@ J. Nucl. Med. Suppl., no. 3, pp. 5-52, 1969.
 
 [2] M. Cristy and K. F. Eckerman, "Specific absorbed fractions of energy 
 at various ages from internal photon sources", ORNL/TM-8381/VI, Apr. 1987.
- 
-The example is based on code developed by the undergraduate student
-G. Guerrieri, University of Genova, Italy.
 
-Note: this is a preliminary beta-version of the code; an improved 
-version will be distributed in the next future.
-Currently the ORNL phantom is under review.
+Note: Currently the ORNL phantom is under review.
 
- 
 -----> Geometry 
 
 The process of building a phantom is handled through the Builder 
@@ -60,31 +59,22 @@ program", Report RMTPC 02/1005.
 
 -----> Physics
 
-Particles: e-, e+, photon, geantino
-Physics list: electromagnetic processes are active for photons, e- and e+
-The threshold of production of secondary particles is set to 0.1 * mm.
+Particles: charged particles, gamma, geantino
+Physics list: electromagnetic processes are modelled.
+The threshold of production of secondary particles is set to 1 * mm.
 
 -----> Primary particles
 
-The primary particles are geantino.
-UI commands:
-
-/gun/energy energy : to change the energy of primary particles
-/gun/particle particle_type : to change the type of primary particle
-/gun/setBeam beamAlongX : generate a primary particle beam along the X axis
-/gun/setBeam beamAlongY : generate a primary particle beam along the Y axis
-/gun/setBeam beamAlongZ : generate a primary particle beam along the Y axis
-/gun/setBeam isotropicFlux : generate a primary particle with random direction,
-                             from a random point.   
+The G4 General Particle Source is used to generate primary radiation field.
+Macro primary.mac contains the definition of the primary radiation field.   
 
 -----> Energy deposit
 
 The energy deposit is calculated in the organs of the phantom.
 At the end of the execution of the simulation  the summary of the total energy deposit in 
 each organ is print out.
-The user can set the sensitivity of each organ interactively through the UI command:
-/bodypart/addBodyPart organName yes
-(see adultFemale.mac as example)
+
+Currently for ORNL model the energy deposition is calculated in the head only.
 
 If the sensitivity is not set ( /bodypart/addBodyPart organName no ), 
 the energy deposit is not calculated in the specific organ.
@@ -92,50 +82,67 @@ the energy deposit is not calculated in the specific organ.
 The energy deposit is calculated in each voxel of the parameterised breast.
 
 -----> Analysis
+To activate the analysis, the application must be built with the option
+WITH_ANALYSIS_USE=ON :
+make -DCMAKE_INSTALL_PREFIX=/path/to/geant4-installation -DWITH_ANALYSIS_USE=ON /path/to/human_phantom/
 
+**** SEQUENTIAL MODE *************
 output file: g4humanphantom.root containing
 an ntuple with the Energy Deposit in each Body Part.
 macro.C is provided to print the content of the ntuple in a ROOT
 interactive analysis session.
 
+**** MULTITHREAD MODE
+output files:
+human_phantom.root_t0
+..
+..
+human_phantom.root_t#
+
+where # is the number of threads
+
+type: source MergeFiles to merge the output of each thread in a single one
+called human_phantom.root
+macro.C is provided to print the content of the ntuple in a ROOT
+interactive analysis session.
+
 ----> Macro files: example of different human phantoms
 
-default.mac is executed by default in the simulation
+default.mac is executed by default in the simulation, with visualisation
+batch.mac: macro to run in batch mode ( with no visualisation)
 adultMIRDFemale.mac: example to define a MIRD female human phantom
 adultMIRDMale.mac: example to define a MIRD male human phantom
 adultHead.mac: example how to define one piece of the anatomy
-adultORNLFemale.mac: example to define a ORNL female human phantom
-adultORNLMale.mac: example to define a ORNL male human phantom
+adultORNLFemale.mac: example to define a ORNL female human phantom - THIS NEEDS GDML INSTALLED
+adultORNLMale.mac: example to define a ORNL male human phantom - THIS NEEDS GDML INSTALLED
 adultMIXFemale.mac : example of MIRD human female phantom with 
 	             parameterised breast
 
------> Setup
+-----> How to build the example 
 
-A standard Geant4 example GNUmakefile is provided.                     
+If the user wants to run the example importing geometries via GDML, 
+he/she needs to have built the persistency/gdml module by having
+set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
+the path where the XercesC XML parser package is installed in your system.
 
-The following environment variables need to be set:
-G4LEDATA : points to low energy data base
-- Requires the GDML module to be installed with Geant4:
-. 
-  Set G4LIB_BUILD_GDML to 1 to model ORNL phantom
-  Set XERCESCROOT variable defining the path to the Xercec-C library
-  See also: http://cern.ch/gdml.
+- By default GDML is not configured to be used in the example. If the user wishes
+to use GDML, he/she has to build the example with the following command:
+cmake -DCMAKE_INSTALL_PREFIX=/path/to/geant4-installation -DWITH_GDML_USE=ON /path/to/human_phantom/
 
-- IMPORTANT!!!! Customize the '*.gdml' schema file in the directories
-  gdmlData/Female and gdmlData/Male, specifying in the top line the
-  right path where to retrieve the main GDML schema file.
+- if using GDML, the directory gdmlData must be copied in the directory where 
+the simulation will be launched.
 
-- Compile and link to generate an executable:
- 	      % gmake
- 		
+- Compile and link to generate the executable (in your CMAKE build directory):
+ 	      % make
+
 - Execute the application:
- 	      % phantom
+ 	      % ./phantom
 	 
-- Default macro: adultFemale.mac (MIRD, Female model) 
-- Other macros:  adultMale.mac (MIRD, Male model)
-                 adultORNLFemale.mac (ORNL, Female model)
-                 adultORNLMale.mac (ORNL, Male model)
-- Visualization macros: vrmlVis.mac, dawnVis.mac, openGLVis.mac, noVis.mac
-- Run particles: run.mac
+- Default macro: default.mac (MIRD, Female model) 
+
+- Visualization macros: vrmlVis.mac, dawnVis.mac, openGLVis.mac
+
+- Run simulation in batch mode: batch.mac
 
 ---------------------------------------------------------------------------

@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: RE02PrimaryGeneratorAction.cc 68026 2013-03-13 13:45:22Z gcosmo $
 //
 
 #include "RE02PrimaryGeneratorAction.hh"
@@ -43,6 +43,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 RE02PrimaryGeneratorAction::RE02PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0)
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4XXXSGViewer.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // 
 // John Allison  10th March 2006
@@ -118,7 +118,6 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
       (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
-      (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||

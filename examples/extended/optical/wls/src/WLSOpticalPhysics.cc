@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSOpticalPhysics.cc 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/src/WLSOpticalPhysics.cc
 /// \brief Implementation of the WLSOpticalPhysics class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -41,21 +40,18 @@
 WLSOpticalPhysics::WLSOpticalPhysics(G4bool toggle)
     : G4VPhysicsConstructor("Optical")
 {
-  theWLSProcess                = NULL;
-  theScintProcess              = NULL;
-  theCerenkovProcess           = NULL;
-  theBoundaryProcess           = NULL;
-  theAbsorptionProcess         = NULL;
-  theRayleighScattering        = NULL;
-  theMieHGScatteringProcess    = NULL;
+  fWLSProcess                = NULL;
+  fScintProcess              = NULL;
+  fCerenkovProcess           = NULL;
+  fBoundaryProcess           = NULL;
+  fAbsorptionProcess         = NULL;
+  fRayleighScattering        = NULL;
+  fMieHGScatteringProcess    = NULL;
 
-  AbsorptionOn                 = toggle;
+  fAbsorptionOn              = toggle;
 }
 
 WLSOpticalPhysics::~WLSOpticalPhysics() { }
-
-//#include "G4ParticleDefinition.hh"
-//#include "G4ParticleTable.hh"
 
 #include "G4OpticalPhoton.hh"
 
@@ -71,20 +67,20 @@ void WLSOpticalPhysics::ConstructProcess()
     G4cout << "WLSOpticalPhysics:: Add Optical Physics Processes"
            << G4endl;
 
-  theWLSProcess = new G4OpWLS();
+  fWLSProcess = new G4OpWLS();
 
-  theScintProcess = new G4Scintillation();
-  theScintProcess->SetScintillationYieldFactor(1.);
-  theScintProcess->SetTrackSecondariesFirst(true);
+  fScintProcess = new G4Scintillation();
+  fScintProcess->SetScintillationYieldFactor(1.);
+  fScintProcess->SetTrackSecondariesFirst(true);
 
-  theCerenkovProcess = new G4Cerenkov();
-  theCerenkovProcess->SetMaxNumPhotonsPerStep(300);
-  theCerenkovProcess->SetTrackSecondariesFirst(true);
+  fCerenkovProcess = new G4Cerenkov();
+  fCerenkovProcess->SetMaxNumPhotonsPerStep(300);
+  fCerenkovProcess->SetTrackSecondariesFirst(true);
 
-  theAbsorptionProcess      = new G4OpAbsorption();
-  theRayleighScattering     = new G4OpRayleigh();
-  theMieHGScatteringProcess = new G4OpMieHG();
-  theBoundaryProcess        = new G4OpBoundaryProcess();
+  fAbsorptionProcess      = new G4OpAbsorption();
+  fRayleighScattering     = new G4OpRayleigh();
+  fMieHGScatteringProcess = new G4OpMieHG();
+  fBoundaryProcess        = new G4OpBoundaryProcess();
 
   G4ProcessManager* pManager =
                 G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
@@ -96,31 +92,31 @@ void WLSOpticalPhysics::ConstructProcess()
                   FatalException,o.str().c_str());
   }
 
-  if (AbsorptionOn) pManager->AddDiscreteProcess(theAbsorptionProcess);
+  if (fAbsorptionOn) pManager->AddDiscreteProcess(fAbsorptionProcess);
 
-  //pManager->AddDiscreteProcess(theRayleighScattering);
-  //pManager->AddDiscreteProcess(theMieHGScatteringProcess);
+  //pManager->AddDiscreteProcess(fRayleighScattering);
+  //pManager->AddDiscreteProcess(fMieHGScatteringProcess);
 
-  pManager->AddDiscreteProcess(theBoundaryProcess);
+  pManager->AddDiscreteProcess(fBoundaryProcess);
 
-  theWLSProcess->UseTimeProfile("delta");
-  //theWLSProcess->UseTimeProfile("exponential");
+  fWLSProcess->UseTimeProfile("delta");
+  //fWLSProcess->UseTimeProfile("exponential");
 
-  pManager->AddDiscreteProcess(theWLSProcess);
+  pManager->AddDiscreteProcess(fWLSProcess);
 
-  theScintProcess->SetScintillationYieldFactor(1.);
-  theScintProcess->SetScintillationExcitationRatio(0.0);
-  theScintProcess->SetTrackSecondariesFirst(true);
+  fScintProcess->SetScintillationYieldFactor(1.);
+  fScintProcess->SetScintillationExcitationRatio(0.0);
+  fScintProcess->SetTrackSecondariesFirst(true);
 
   // Use Birks Correction in the Scintillation process
 
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
-  theScintProcess->AddSaturation(emSaturation);
+  fScintProcess->AddSaturation(emSaturation);
 
-  theParticleIterator->reset();
-  while ( (*theParticleIterator)() ){
+  aParticleIterator->reset();
+  while ( (*aParticleIterator)() ){
 
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     pManager = particle->GetProcessManager();
@@ -131,20 +127,20 @@ void WLSOpticalPhysics::ConstructProcess()
                     FatalException,o.str().c_str());
     }
 
-    if(theCerenkovProcess->IsApplicable(*particle)){
-      pManager->AddProcess(theCerenkovProcess);
-      pManager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
+    if(fCerenkovProcess->IsApplicable(*particle)){
+      pManager->AddProcess(fCerenkovProcess);
+      pManager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
     }
-    if(theScintProcess->IsApplicable(*particle)){
-      pManager->AddProcess(theScintProcess);
-      pManager->SetProcessOrderingToLast(theScintProcess,idxAtRest);
-      pManager->SetProcessOrderingToLast(theScintProcess,idxPostStep);
+    if(fScintProcess->IsApplicable(*particle)){
+      pManager->AddProcess(fScintProcess);
+      pManager->SetProcessOrderingToLast(fScintProcess,idxAtRest);
+      pManager->SetProcessOrderingToLast(fScintProcess,idxPostStep);
     }
 
   }
 }
 
-void WLSOpticalPhysics::SetNbOfPhotonsCerenkov(G4int MaxNumber)
+void WLSOpticalPhysics::SetNbOfPhotonsCerenkov(G4int maxNumber)
 {
-  theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumber);
+  fCerenkovProcess->SetMaxNumPhotonsPerStep(maxNumber);
 }

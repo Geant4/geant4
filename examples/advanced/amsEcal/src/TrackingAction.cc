@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: TrackingAction.cc 73008 2013-08-15 08:43:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,11 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run,
-                               PrimaryGeneratorAction* prim, EventAction* evt,
-			       HistoManager* hist)
-:G4UserTrackingAction(),detector(det),runAct(run),primary(prim),eventAct(evt),
- histoManager(hist)
+TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run)
+:G4UserTrackingAction(),detector(det),runAct(run)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

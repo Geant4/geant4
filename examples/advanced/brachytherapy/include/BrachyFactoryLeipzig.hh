@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: BrachyFactoryLeipzig.hh 69765 2013-05-14 10:11:22Z gcosmo $
 //
 //    **********************************
 //    *                                *
@@ -35,6 +35,7 @@
 //
 // This class manages the creation of iridum source used in superficial
 // brachytherapy ...
+
 #ifndef BrachyFactoryLeipzig_h
 #define BrachyFactoryLeipzig_h 1
 
@@ -45,9 +46,7 @@
 class G4ParticleGun;
 class G4Run;
 class G4Event;
-class BrachyAnalysisManager;
 class BrachyFactory;
-class BrachyPrimaryGeneratorActionIr;
 class BrachyDetectorConstructionLeipzig;
 
 class BrachyFactoryLeipzig : public BrachyFactory
@@ -56,12 +55,10 @@ public:
   BrachyFactoryLeipzig();
  ~BrachyFactoryLeipzig();
 
-  void CreatePrimaryGeneratorAction(G4Event*);
   void CreateSource(G4VPhysicalVolume*);
   void CleanSource();
 
 private:
   BrachyDetectorConstructionLeipzig* leipzigSource;
-  BrachyPrimaryGeneratorActionIr*  iridiumPrimaryParticle;
 };
 #endif

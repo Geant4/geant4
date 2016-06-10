@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TrajectoriesModel.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 // 
 // John Allison  26th August 1998.
@@ -42,19 +42,10 @@
 #include "G4UIcommand.hh"
 
 G4TrajectoriesModel::G4TrajectoriesModel ():
-  fDrawingModeSet(false),
-  fDrawingMode(0),
-  fpCurrentTrajectory(0)
+  fpCurrentTrajectory(0),
+  fEventID(0)
 {
   fType = "G4TrajectoriesModel";
-  fGlobalTag = "G4TrajectoriesModel for all trajectories.";
-  fGlobalDescription = fGlobalTag;
-}
-
-G4TrajectoriesModel::G4TrajectoriesModel (G4int drawingMode):
-  fDrawingModeSet(true),
-  fDrawingMode(drawingMode),
-  fpCurrentTrajectory(0) {
   fGlobalTag = "G4TrajectoriesModel for all trajectories.";
   fGlobalDescription = fGlobalTag;
 }
@@ -92,42 +83,6 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
       sceneHandler.AddCompound (*fpCurrentTrajectory);
   }
   pVVisManager->EndDraw();
-}
-
-G4bool G4TrajectoriesModel::IsDrawingModeSet() const
-{
-  return fDrawingModeSet;
-}
-
-G4int G4TrajectoriesModel::GetDrawingMode() const
-{
-  if (fDrawingModeSet) return fDrawingMode;
-  else {
-    G4Exception
-      ("G4TrajectoriesModel::GetDrawingMode",
-       "modeling0010",
-       FatalException,
-       "Illegal attempt to obtain i_mode."
-       "\n  i_mode is an old trajectories parameter that is DEPRECATED"
-       "\n  and will be removed at the next major release."
-       );
-    return 0;
-  }
-}
-
-void G4TrajectoriesModel::SetDrawingMode(G4int drawingMode)
-{
-  if (fDrawingModeSet) fDrawingMode = drawingMode;
-  else {
-    G4Exception
-      ("G4TrajectoriesModel::SetDrawingMode",
-       "modeling0011",
-       FatalException,
-       "Illegal attempt to set i_mode."
-       "\n  i_mode is an old trajectories parameter that is DEPRECATED"
-       "\n  and will be removed at the next major release."
-       );
-  }
 }
 
 const std::map<G4String,G4AttDef>* G4TrajectoriesModel::GetAttDefs() const

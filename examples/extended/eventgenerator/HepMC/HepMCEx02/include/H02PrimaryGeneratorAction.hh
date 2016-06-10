@@ -29,7 +29,7 @@
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.hh
-//   $Id$
+//   $Id: H02PrimaryGeneratorAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 // ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_ACTION_H
@@ -44,17 +44,6 @@ class G4VPrimaryGenerator;
 class H02PrimaryGeneratorMessenger;
 
 class H02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
-private:
-  G4VPrimaryGenerator* particleGun;
-  G4VPrimaryGenerator* hepmcAscii;
-  G4VPrimaryGenerator* pythiaGen;
-
-  G4VPrimaryGenerator* currentGenerator;
-  G4String currentGeneratorName;
-  std::map<G4String, G4VPrimaryGenerator*> gentypeMap;
-
-  H02PrimaryGeneratorMessenger* messenger;
-
 public:
   H02PrimaryGeneratorAction();
   ~H02PrimaryGeneratorAction();
@@ -66,34 +55,44 @@ public:
 
   G4VPrimaryGenerator* GetGenerator() const;
   G4String GetGeneratorName() const;
+
+private:
+  G4VPrimaryGenerator* particleGun;
+  G4VPrimaryGenerator* hepmcAscii;
+  G4VPrimaryGenerator* pythiaGen;
+
+  G4VPrimaryGenerator* currentGenerator;
+  G4String currentGeneratorName;
+  std::map<G4String, G4VPrimaryGenerator*> gentypeMap;
+
+  H02PrimaryGeneratorMessenger* messenger;
+
 };
 
-// ====================================================================
-// inline functions
-// ====================================================================
-
-inline void H02PrimaryGeneratorAction::SetGenerator(G4VPrimaryGenerator* gen) 
-{ 
-  currentGenerator= gen; 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+inline void H02PrimaryGeneratorAction::SetGenerator(G4VPrimaryGenerator* gen)
+{
+  currentGenerator= gen;
 }
 
-inline void H02PrimaryGeneratorAction::SetGenerator(G4String genname) 
+inline void H02PrimaryGeneratorAction::SetGenerator(G4String genname)
 {
-  std::map<G4String, G4VPrimaryGenerator*>::iterator pos= gentypeMap.find(genname);
+  std::map<G4String, G4VPrimaryGenerator*>::iterator
+       pos = gentypeMap.find(genname);
   if(pos != gentypeMap.end()) {
     currentGenerator= pos->second;
     currentGeneratorName= genname;
-  }  
+  }
 }
 
-inline G4VPrimaryGenerator* H02PrimaryGeneratorAction::GetGenerator() const 
-{ 
-  return currentGenerator; 
+inline G4VPrimaryGenerator* H02PrimaryGeneratorAction::GetGenerator() const
+{
+  return currentGenerator;
 }
 
-inline G4String H02PrimaryGeneratorAction::GetGeneratorName() const 
-{ 
-  return currentGeneratorName; 
+inline G4String H02PrimaryGeneratorAction::GetGeneratorName() const
+{
+  return currentGeneratorName;
 }
 
 #endif

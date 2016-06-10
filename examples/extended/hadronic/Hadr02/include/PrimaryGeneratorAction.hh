@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr02/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id$
-//
+// $Id: PrimaryGeneratorAction.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -56,10 +55,12 @@ class HistoManager;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
+
   PrimaryGeneratorAction();
+
   virtual ~PrimaryGeneratorAction();
 
-  void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
 
 private:
 

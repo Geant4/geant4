@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2010-06-14 13:31:06 gcosmo Exp $
+$Id: History 74457 2013-10-07 15:21:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 05, 2013  A.Kimura (detutils-V09-06-00)
+- Fixed a bug in G4ScoringBox::DrawColumn(...), which was a wrong size check of the column.
 
 June 14, 2010  G.Cosmo (detutils-V09-03-00)
 - Added missing virtual destructor to G4VScoringMesh and removed unnecessary

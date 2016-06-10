@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITModelHandler.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITModelHandler.hh 66881 2013-01-16 02:55:54Z adotti $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -39,6 +39,7 @@
 #ifndef G4ITModelHandler_H
 #define G4ITModelHandler_H
 
+#include "G4Types.hh"
 #include "G4ITType.hh"
 #include "G4ITModelManager.hh"
 

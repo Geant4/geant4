@@ -53,6 +53,15 @@ G4MuElecInelastic::G4MuElecInelastic(const G4String& processName,
     isInitialised(false)
 {
   SetProcessSubType(53);
+  
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The name of the class G4MuElecInelastic is changed to G4MicroElecInelastic. " << G4endl;
+   G4cout << "   The obsolete class will be REMOVED with the next release of Geant4. " << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,29 +90,29 @@ void G4MuElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     {
-      if(!Model()) SetModel(new G4MuElecInelasticModel);
-      Model()->SetLowEnergyLimit(16.7*eV);
-      Model()->SetHighEnergyLimit(100*MeV);
+      if(!EmModel()) SetEmModel(new G4MuElecInelasticModel);
+      EmModel()->SetLowEnergyLimit(16.7*eV);
+      EmModel()->SetHighEnergyLimit(100*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
     else if(name == "proton")
     {
-      if(!Model()) SetModel(new G4MuElecInelasticModel);
-      Model()->SetLowEnergyLimit(50.*keV);
-      Model()->SetHighEnergyLimit(1*GeV);
+      if(!EmModel()) SetEmModel(new G4MuElecInelasticModel);
+      EmModel()->SetLowEnergyLimit(50.*keV);
+      EmModel()->SetHighEnergyLimit(10*GeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
-    else
+    else if(name == "GenericIon")
     {
-      if(!Model()) SetModel(new G4MuElecInelasticModel);
-      Model()->SetLowEnergyLimit(50.*keV);
-      Model()->SetHighEnergyLimit(100.*GeV);
+      if(!EmModel()) SetEmModel(new G4MuElecInelasticModel);
+      EmModel()->SetLowEnergyLimit(50.*keV);
+      EmModel()->SetHighEnergyLimit(10000.*GeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
   } 
 }
@@ -112,13 +121,17 @@ void G4MuElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4MuElecInelastic::PrintInfo()
 {
-  if (Model(2))
+  // V.I. printout of models is perfored by model manager
+  //      if this extra printout is needed it should be 
+  //      protected by verbosity level
+  /*
+  if (EmModel(2))
   {
     G4cout
       << " Total cross sections computed from " 
-      << Model(1)->GetName() 
+      << EmModel(1)->GetName() 
       << " and "
-      << Model(2)->GetName() 
+      << EmModel(2)->GetName() 
       << " models"
       << G4endl;
   } 
@@ -126,9 +139,10 @@ void G4MuElecInelastic::PrintInfo()
   {
     G4cout
       << " Total cross sections computed from " 
-      << Model()->GetName() 
+      << EmModel()->GetName() 
       << G4endl;
   }
+  */
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

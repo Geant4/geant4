@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4hRDEnergyLoss.hh 70904 2013-06-07 10:34:25Z gcosmo $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -141,44 +141,44 @@ protected:
   
 protected:
   
-  static G4PhysicsTable* theDEDXpTable ;
-  static G4PhysicsTable* theDEDXpbarTable ;
-  static G4PhysicsTable* theRangepTable ;
-  static G4PhysicsTable* theRangepbarTable ;
+  static G4ThreadLocal G4PhysicsTable* theDEDXpTable ;
+  static G4ThreadLocal G4PhysicsTable* theDEDXpbarTable ;
+  static G4ThreadLocal G4PhysicsTable* theRangepTable ;
+  static G4ThreadLocal G4PhysicsTable* theRangepbarTable ;
   
   //inverse of the range tables
-  static G4PhysicsTable* theInverseRangepTable ;
-  static G4PhysicsTable* theInverseRangepbarTable ;
+  static G4ThreadLocal G4PhysicsTable* theInverseRangepTable ;
+  static G4ThreadLocal G4PhysicsTable* theInverseRangepbarTable ;
   
   //lab and proper time tables
-  static G4PhysicsTable* theLabTimepTable ;
-  static G4PhysicsTable* theLabTimepbarTable ;
+  static G4ThreadLocal G4PhysicsTable* theLabTimepTable ;
+  static G4ThreadLocal G4PhysicsTable* theLabTimepbarTable ;
   
-  static G4PhysicsTable* theProperTimepTable ;
-  static G4PhysicsTable* theProperTimepbarTable ;
+  static G4ThreadLocal G4PhysicsTable* theProperTimepTable ;
+  static G4ThreadLocal G4PhysicsTable* theProperTimepbarTable ;
   
   //  processes inherited from G4hRDEnergyLoss
   //   register themselves  in the static array Recorder
-  static G4PhysicsTable** RecorderOfpProcess;
-  static G4PhysicsTable** RecorderOfpbarProcess;
-  static G4int CounterOfpProcess ;
-  static G4int CounterOfpbarProcess ;
+  static G4ThreadLocal G4PhysicsTable** RecorderOfpProcess;
+  static G4ThreadLocal G4PhysicsTable** RecorderOfpbarProcess;
+  static G4ThreadLocal G4int CounterOfpProcess ;
+  static G4ThreadLocal G4int CounterOfpbarProcess ;
   
   // particle mass
-  static G4double ParticleMass ;
+  static G4ThreadLocal G4double ParticleMass ;
   
   // cut in range
-  static G4double ptableElectronCutInRange;
-  static G4double pbartableElectronCutInRange;
+  static G4ThreadLocal G4double ptableElectronCutInRange;
+  static G4ThreadLocal G4double pbartableElectronCutInRange;
   
-  static G4double Charge ;
+  static G4ThreadLocal G4double Charge ;
   
-  static G4double LowestKineticEnergy;
-  static G4double HighestKineticEnergy;
-  static G4int TotBin; // number of bins in table,
+  static G4ThreadLocal G4double LowestKineticEnergy;
+  static G4ThreadLocal G4double HighestKineticEnergy;
+  static G4ThreadLocal G4int TotBin; // number of bins in table,
   // calculated in BuildPhysicsTable
   
-  static G4double RTable,LOGRTable; // LOGRTable=std::log(HighestKineticEnergy
+  static G4ThreadLocal G4double RTable,LOGRTable; // LOGRTable=std::log(HighestKineticEnergy
   //          /LowestKineticEnergy)/TotBin
   //   RTable = std::exp(LOGRTable)
 
@@ -188,13 +188,13 @@ protected:
   
   G4double MinKineticEnergy ;
   
-  static G4double dRoverRange ; // maximum allowed deltarange/range
+  static G4ThreadLocal G4double dRoverRange ; // maximum allowed deltarange/range
   //  in one step
-  static G4double finalRange ;  // last step before stop
-  static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
+  static G4ThreadLocal G4double finalRange ;  // last step before stop
+  static G4ThreadLocal G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
   
-  static G4bool rndmStepFlag ;
-  static G4bool EnlossFlucFlag ;
+  static G4ThreadLocal G4bool rndmStepFlag ;
+  static G4ThreadLocal G4bool EnlossFlucFlag ;
 
 
 private:
@@ -205,7 +205,7 @@ private:
   G4hRDEnergyLoss & operator=(const G4hRDEnergyLoss &right);
   
   // variables for the integration routines
-  static G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
+  static G4ThreadLocal G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
    
   // ====================================================================
   //  static part of the class
@@ -242,32 +242,29 @@ private:
   
   // ====================================================================
     
-  static G4PhysicsTable* theDEDXTable;
+  static G4ThreadLocal G4PhysicsTable* theDEDXTable;
   
-  static G4PhysicsTable* theRangeTable;
-  static G4PhysicsTable* theInverseRangeTable;
+  static G4ThreadLocal G4PhysicsTable* theRangeTable;
+  static G4ThreadLocal G4PhysicsTable* theInverseRangeTable;
   
-  static G4PhysicsTable* theLabTimeTable;
-  static G4PhysicsTable* theProperTimeTable;
+  static G4ThreadLocal G4PhysicsTable* theLabTimeTable;
+  static G4ThreadLocal G4PhysicsTable* theProperTimeTable;
   
-  static G4PhysicsTable** RecorderOfProcess;
-  static G4int CounterOfProcess;
+  static G4ThreadLocal G4PhysicsTable** RecorderOfProcess;
+  static G4ThreadLocal G4int CounterOfProcess;
   
-  static G4PhysicsTable* thepRangeCoeffATable;
-  static G4PhysicsTable* thepRangeCoeffBTable;
-  static G4PhysicsTable* thepRangeCoeffCTable;
-  static G4PhysicsTable* thepbarRangeCoeffATable;
-  static G4PhysicsTable* thepbarRangeCoeffBTable;
-  static G4PhysicsTable* thepbarRangeCoeffCTable;
+  static G4ThreadLocal G4PhysicsTable* thepRangeCoeffATable;
+  static G4ThreadLocal G4PhysicsTable* thepRangeCoeffBTable;
+  static G4ThreadLocal G4PhysicsTable* thepRangeCoeffCTable;
+  static G4ThreadLocal G4PhysicsTable* thepbarRangeCoeffATable;
+  static G4ThreadLocal G4PhysicsTable* thepbarRangeCoeffBTable;
+  static G4ThreadLocal G4PhysicsTable* thepbarRangeCoeffCTable;
   
-  static G4PhysicsTable* theRangeCoeffATable;
-  static G4PhysicsTable* theRangeCoeffBTable;
-  static G4PhysicsTable* theRangeCoeffCTable;
-  static G4int NumberOfProcesses ;
+  static G4ThreadLocal G4PhysicsTable* theRangeCoeffATable;
+  static G4ThreadLocal G4PhysicsTable* theRangeCoeffBTable;
+  static G4ThreadLocal G4PhysicsTable* theRangeCoeffCTable;
+  static G4ThreadLocal G4int NumberOfProcesses ;
     
 };
 
 #endif
-
-
-

@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASmoluchowskiReactionModel.cc 65695 2012-11-27 11:39:12Z gunter $
+// $Id: G4DNASmoluchowskiReactionModel.cc 70171 2013-05-24 13:34:18Z gcosmo $
 //
 #include "G4DNASmoluchowskiReactionModel.hh"
 #include "Randomize.hh"
 #include "G4Track.hh"
 #include "G4DNAMolecularReactionTable.hh"
+#include "G4UnitsTable.hh"
 
 G4DNASmoluchowskiReactionModel::G4DNASmoluchowskiReactionModel() : G4VDNAReactionModel()
 {
@@ -131,7 +132,10 @@ G4bool G4DNASmoluchowskiReactionModel::FindReaction(const G4Track& __trackA,
         {
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "The molecule : " <<  __moleculeA->GetName();
-            exceptionDescription << " did not move since the previous step ";
+            exceptionDescription << " with track ID :" <<  __trackA.GetTrackID();
+            exceptionDescription << " did not move since the previous step." << G4endl;
+            exceptionDescription << "Current position : " << G4BestUnit(__trackA.GetPosition(),"Length") << G4endl;
+            exceptionDescription << "Previous position : " << G4BestUnit(__preStepPositionA,"Length") << G4endl;
             G4Exception("G4DNASmoluchowskiReactionModel::FindReaction","G4DNASmoluchowskiReactionModel",
                         FatalErrorInArgument,exceptionDescription);
         }

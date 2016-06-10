@@ -53,6 +53,7 @@
 #include "G4IonDEDXScalingICRU73.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4Material.hh"
 
 
@@ -63,13 +64,12 @@ G4IonDEDXScalingICRU73::G4IonDEDXScalingICRU73(
                           G4int maxAtomicNumberIon) :
      minAtomicNumber( minAtomicNumberIon ),
      maxAtomicNumber( maxAtomicNumberIon ),
-     referenceFe( 0 ),
+     referencePrepared( false ),
      atomicNumberRefFe( 26 ),
      massNumberRefFe( 56 ),
      atomicNumberRefPow23Fe( 0 ),
      chargeRefFe( 0 ),
      massRefFe( 0 ),
-     referenceAr( 0 ),
      atomicNumberRefAr( 18 ),
      massNumberRefAr( 40 ),
      atomicNumberRefPow23Ar( 0 ),
@@ -89,30 +89,24 @@ G4IonDEDXScalingICRU73::G4IonDEDXScalingICRU73(
 // ###########################################################################
 
 G4IonDEDXScalingICRU73::~G4IonDEDXScalingICRU73() {
-
 }
 
 // ###########################################################################
 
 void G4IonDEDXScalingICRU73::CreateReferenceParticles() {
-   
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-
-  G4double excitationEnergy = 0.0;
-
-  referenceFe = particleTable -> GetIon(atomicNumberRefFe, massNumberRefFe,  
-                                        excitationEnergy); 
-  referenceAr = particleTable -> GetIon(atomicNumberRefAr, massNumberRefAr, 
-                                        excitationEnergy); 
   
-  massRefFe = referenceFe -> GetPDGMass();
-  massRefAr = referenceAr -> GetPDGMass();
+  G4IonTable* ionTable = G4IonTable::GetIonTable(); 
 
-  chargeRefFe = referenceFe -> GetPDGCharge();
-  chargeRefAr = referenceAr -> GetPDGCharge();
+  massRefFe = ionTable->GetIonMass(atomicNumberRefFe,massNumberRefFe);
+  massRefAr = ionTable->GetIonMass(atomicNumberRefAr,massNumberRefAr);
+
+  chargeRefFe = G4double(atomicNumberRefFe)*CLHEP::eplus;
+  chargeRefAr = G4double(atomicNumberRefAr)*CLHEP::eplus;
 
   atomicNumberRefPow23Fe = std::pow(G4double(atomicNumberRefFe), 2./3.);
   atomicNumberRefPow23Ar = std::pow(G4double(atomicNumberRefAr), 2./3.);
+
+  referencePrepared = true;
 }
 
 
@@ -133,7 +127,7 @@ G4double G4IonDEDXScalingICRU73::ScalingFactorEnergy (
      cacheAtomicNumber != atomicNumberRefFe &&
      cacheAtomicNumber != atomicNumberRefAr) {
 
-     if(referenceFe == 0 || referenceAr == 0) CreateReferenceParticles();
+     if(!referencePrepared) CreateReferenceParticles();
 
      if( useFe )
          factor = cacheMassNumber * (massRefFe / cacheMass) / massNumberRefFe;
@@ -161,7 +155,7 @@ G4double G4IonDEDXScalingICRU73::ScalingFactorDEDX(
      cacheAtomicNumber != atomicNumberRefFe &&
      cacheAtomicNumber != atomicNumberRefAr) {
       
-      if(referenceFe == 0 || referenceAr == 0) CreateReferenceParticles();
+      if(!referencePrepared) CreateReferenceParticles();
 
       if( useFe ) {
 
@@ -219,7 +213,7 @@ G4int G4IonDEDXScalingICRU73::AtomicNumberBaseIon(
      atomicNumberIon != atomicNumberRefFe &&
      atomicNumberIon != atomicNumberRefAr) {
 
-     if(referenceFe == 0 || referenceAr == 0) CreateReferenceParticles();
+     if(!referencePrepared) CreateReferenceParticles();
 
      if( useFe ) atomicNumber = atomicNumberRefFe;
      else atomicNumber = atomicNumberRefAr;     

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrPlaceParameterisation.cc 73052 2013-08-15 15:45:36Z gcosmo $
 //
 //
 // class G4tgrPlaceParameterisation
@@ -94,7 +94,7 @@ std::ostream& operator<<(std::ostream& os,
   os << "G4tgrPlaceParameterisation= in " << obj.theParentName
      << " ParamTyep = " << obj.theParamType
      << " RotMatName= " << obj.theRotMatName << " EXTRA DATA= ";
-  for( size_t ii = 0; ii << obj.theExtraData.size(); ii++ )
+  for( size_t ii = 0; ii < obj.theExtraData.size(); ii++ )
   {
     os << obj.theExtraData[ii] << " ";
   }

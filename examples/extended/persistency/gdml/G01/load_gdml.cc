@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G01 example
 //
 //
-// $Id$
+// $Id: load_gdml.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 //
 // --------------------------------------------------------------

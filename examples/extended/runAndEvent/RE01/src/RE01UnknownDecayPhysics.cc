@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01UnknownDecayPhysics.cc
 /// \brief Implementation of the RE01UnknownDecayPhysics class
 //
-// $Id$
+// $Id: RE01UnknownDecayPhysics.cc 68761 2013-04-05 12:35:00Z gcosmo $
 //
 #include "RE01UnknownDecayPhysics.hh"
 
@@ -52,9 +52,9 @@ void RE01UnknownDecayPhysics::ConstructParticle()
 void RE01UnknownDecayPhysics::ConstructProcess()
 {
   // Add Decay Process
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if(particle->GetParticleName()=="unknown") {
       pmanager ->AddProcess(&fUnknownDecay);

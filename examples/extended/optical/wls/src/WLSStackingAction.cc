@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSStackingAction.cc 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/src/WLSStackingAction.cc
 /// \brief Implementation of the WLSStackingAction class
 //
 //
-//
-
 #include "WLSStackingAction.hh"
 
 #include "G4RunManager.hh"
@@ -37,9 +37,15 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleDefinition.hh"
 
-WLSStackingAction::WLSStackingAction() : photonCounter(0) { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+WLSStackingAction::WLSStackingAction() : fPhotonCounter(0) { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSStackingAction::~WLSStackingAction() { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ClassificationOfNewTrack
       WLSStackingAction::ClassifyNewTrack(const G4Track * aTrack)
@@ -51,7 +57,7 @@ G4ClassificationOfNewTrack
 
   if (particleType == G4OpticalPhoton::OpticalPhotonDefinition()) {
      // keep optical photon
-     photonCounter++;
+     fPhotonCounter++;
      return fUrgent;
   } else {
      // discard all other secondaries
@@ -60,9 +66,13 @@ G4ClassificationOfNewTrack
   return fUrgent;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSStackingAction::NewStage() {
   // G4cout << "Number of optical photons produces in this event : "
-  //        << photonCounter << G4endl;
+  //        << fPhotonCounter << G4endl;
 }
 
-void WLSStackingAction::PrepareNewEvent() { photonCounter = 0; }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void WLSStackingAction::PrepareNewEvent() { fPhotonCounter = 0; }

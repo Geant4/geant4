@@ -26,35 +26,34 @@
 /// \file field/field02/include/F02EventActionMessenger.hh
 /// \brief Definition of the F02EventActionMessenger class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F02EventActionMessenger.hh 76247 2013-11-08 11:18:52Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02EventActionMessenger_h
 #define F02EventActionMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
 
 class F02EventAction;
-class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02EventActionMessenger: public G4UImessenger
 {
   public:
     F02EventActionMessenger(F02EventAction*);
-    ~F02EventActionMessenger();
-    
+    virtual ~F02EventActionMessenger();
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-    F02EventAction*       fEventAction;   
+    F02EventAction* fEventAction;
+
     G4UIcmdWithAnInteger* fSetVerboseCmd;
     G4UIcmdWithAnInteger* fPrintCmd;
 };

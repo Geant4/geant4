@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2010-12-07 15:20:46 gunter Exp $
+$Id: History 76939 2013-11-19 09:52:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,22 +15,59 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 11, 2012 I. Hrivnacova (exampleRE02-V09-05-03)
+November 18, 2013  I.Hrivnacova (exampleRE02-V09-06-09)
+- Fixed .README
+
+November 6, 2013  A. Kimura (exampleRE02-V09-06-08)
+- modified RE02.cc and removed RE02EMPhysics.{cc,hh}, 
+  RE02GeneralPhysics.{cc,hh}, RE02HadronPhysics.{cc,hh},
+  RE02IonPhysics.{cc,hh}, RE02MuonPhysics.{cc,hh} and
+  RE02PhysicsList.{cc,hh} for MT migration 
+- fixed a warning in RE02Run.cc
+
+November 4, 2013  D.H. Wright (exampleRE02-V09-06-07)
+- replaced LEP/HEP models with Bertini, FTF
+- replaced G4LCapture with G4NeutronRadCature
+
+October 25, 2013  M.Asai (exampleRE02-V09-06-06)
+- MT migration.
+
+August 28, 2013  G.Cosmo (exampleRE02-V09-06-05)
+- Added G4Ellipsoid to solids enabled for parameterisation in
+  RE02NestedPhantomParameterisation.
+
+July 30/31, 2013  P.Gumplinger (exampleRE02-V09-06-03/04)
+- fix (or rather fool) MAC/clang32 compiler to avoid warnings.
+
+Apr 01, 2013  A.Dotti (exampleRE02-V09-06-02)
+- New interface for G4MT physics list.
+
+Feb 15, 2013  I.Hrivnacova
+- Applied coding guidelines (data members initialization)
+
+Dec 27, 2012  G.Folger  (exampleRE02-V09-06-01)
+-  re-tag, no change. 
+    Tag exRunAndEvent-V09-06-00 in runAndEvent missed to inlcude this tag.
+
+Dec 18, 2012  M.Kelsey (exampleRE02-V09-06-00)
+- Replace G4AntiProtonAnnihiliationAtRest with G4AntiProtonAbsorptionFritiof.
+
+Nov 11, 2012  I.Hrivnacova (exampleRE02-V09-05-03)
 - Updated documentation:
   - Fixed .README files for artefacts from Markdown support
   - Removed obsolete instructions (how to compile & link)
 
-Oct 12, 2012 A. Dotti (exampleRE02-V09-05-02)
+Oct 12, 2012  A.Dotti (exampleRE02-V09-05-02)
 - Adding forgotten system of units in physics list file
 
-Oct 8, 2012 A.Kimura 
+Oct 8, 2012  A.Kimura 
 - revised all codes according to the coding guideline for extended examples
 - the main program exampleRE02 was renamed RE02.
 
-Jul 28, 2012 V.Ivanchenko (exampleRE02-V09-05-01)
+Jul 28, 2012  V.Ivanchenko (exampleRE02-V09-05-01)
 - fixed elastic physics for ions
 
-Jan 27, 2012 T.Aso (exampleRE02-V09-05-00)
+Jan 27, 2012  T.Aso (exampleRE02-V09-05-00)
 - Fix the indexing scheme of CopyNo() method in the RunAction.
 
 October 10th, 2011  G.Folger  (exampleRE02-V09-04-00)
@@ -46,7 +83,7 @@ November 9th, 2010  M.Asai (exampleRE02-V09-03-04)
 November 8th, 2010  M.Asai (exampleRE02-V09-03-03)
 - Fixing warning messages.
 
-November 8th, 2010  John Allison (exampleRE02-V09-03-02)
+November 8th, 2010  J.Allison (exampleRE02-V09-03-02)
 - Introduced G4UIExecutive.
  
 June 4th, 2010  Joseph Perl (exampleRE02-V09-03-01)

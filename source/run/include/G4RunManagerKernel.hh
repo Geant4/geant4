@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RunManagerKernel.hh 77649 2013-11-27 08:39:54Z gcosmo $
 //
 // 
 
@@ -73,18 +73,29 @@ class G4RunManagerKernel
     // its derived class.
 
   private:
-    static G4RunManagerKernel* fRunManagerKernel;
+    static G4ThreadLocal G4RunManagerKernel* fRunManagerKernel;
 
   public: // with description
+
     G4RunManagerKernel();
     virtual ~G4RunManagerKernel();
     //  The constructor and the destructor. The user must construct this class
     // object at the beginning of his/her main() and must delete it at the 
     // bottom of the main(), unless he/she used G4RunManager.
+  public:
+    enum RMKType { sequentialRMK, masterRMK, workerRMK };
+  protected:
+    //Constructor to be used by derived classes 
+    G4RunManagerKernel(RMKType rmkType);
+    RMKType runManagerKernelType;
 
   public: // with description
     void DefineWorldVolume(G4VPhysicalVolume * worldVol,
                            G4bool topologyIsChanged=true);
+
+    void WorkerDefineWorldVolume(G4VPhysicalVolume * worldVol,
+                                G4bool topologyIsChanged=true);
+
     //  This method must be invoked if the geometry setup has been changed between
     // runs. The flag 'topologyIsChanged' will specify if the geometry topology is
     // different from the original one used in the previous run; if not, it must be
@@ -99,7 +110,7 @@ class G4RunManagerKernel
     //  This method must be invoked at least once by the user to build physics
     // processes.
 
-    G4bool RunInitialization();
+    G4bool RunInitialization(G4bool fakeRun=false);
     //  Trigger geometry closing and physics table constructions.
     // It returns TRUE if all procedures went well.
 
@@ -107,9 +118,15 @@ class G4RunManagerKernel
     //  Set the application state to G4State_Idle so that the user can modify
     // physics/geometry.
 
-  private:
+  public:
+    void WorkerUpdateWorldVolume();
+
+  protected:
+    void SetupDefaultRegion();
+    //Called by DefineWorldVolume
+    void SetupPhysics();
     void ResetNavigator();
-    void BuildPhysicsTables();
+    void BuildPhysicsTables(G4bool fakeRun);
     void CheckRegions();
 
   public: // with description
@@ -131,7 +148,6 @@ class G4RunManagerKernel
     G4VPhysicalVolume* currentWorld;
     G4bool geometryInitialized;
     G4bool physicsInitialized;
-    G4bool geometryNeedsToBeClosed;
     G4bool geometryToBeOptimized;
     G4bool physicsNeedsToBeReBuilt;
     G4int verboseLevel;
@@ -139,10 +155,11 @@ class G4RunManagerKernel
 
     G4EventManager * eventManager;
     G4ExceptionHandler* defaultExceptionHandler;
+    G4String versionString;
+  protected:
     G4Region* defaultRegion;
     G4Region* defaultRegionForParallelWorld;
-    G4String versionString;
-
+    G4bool geometryNeedsToBeClosed;
   public: // with description
     inline void GeometryHasBeenModified()
     { geometryNeedsToBeClosed = true; }
@@ -189,10 +206,26 @@ class G4RunManagerKernel
     inline void SetNumberOfParallelWorld(G4int i)
     { numberOfParallelWorld = i; }
 
+    inline G4VUserPhysicsList* GetPhysicsList() const
+    { return physicsList; }
+
+    inline G4VPhysicalVolume* GetCurrentWorld() const
+    { return currentWorld; }
   private:
     void CheckRegularGeometry();
     G4bool ConfirmCoupledTransportation();
     void SetScoreSplitter();
+
+    G4int numberOfStaticAllocators;
+
+  public:
+    inline G4int GetNumberOfStaticAllocators() const
+    { return numberOfStaticAllocators; }
+protected:
+    virtual void SetupShadowProcess() const;
+    // This method will setup the G4VProcesses
+    // instances to have a reference to the process instance
+    // created by the master thread. See G4VProcess::GetMasterProcess
 };
 
 #endif

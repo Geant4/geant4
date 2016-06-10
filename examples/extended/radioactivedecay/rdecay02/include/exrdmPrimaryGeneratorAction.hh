@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmPrimaryGeneratorAction.hh 68007 2013-03-13 11:28:03Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/include/exrdmPrimaryGeneratorAction.hh
 /// \brief Definition of the exrdmPrimaryGeneratorAction class
 //

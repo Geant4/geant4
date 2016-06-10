@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 2008-06-11 22:15:20 maire Exp $
+# $Id: GNUmakefile 76340 2013-11-08 15:21:09Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,20 +11,9 @@ ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
 
-.PHONY: all
-all: hbook lib bin
-
-#### G4_USE_HBOOK := true
-include GNUmakefile.tools_hbook
+.PHONY: setup clean_setup all
+all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
 include $(G4INSTALL)/config/binmake.gmk
-
-histclean:
-	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/RunAction.o
-	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/EventAction.o
-			
-visclean:
-	rm -f g4*.prim g4*.eps g4*.wrl
-	rm -f .DAWN_*

@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2010-11-08 11:31:23 maire Exp $
+$Id: History 77256 2013-11-22 10:10:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,36 @@ $Id: History,v 1.3 2010-11-08 11:31:23 maire Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21th November 2013 A. Dotti      (analysisExample-V09-06-06)
+- Removing Update method and UI command in shared
+  DetectorConstruction
+- Adding G4RunManager::ReinitializeGeoemtry in set methods
+  that change geometry
+- Mark /N03/det commands as not to be broadcasted
+
+09th November 2013 I. Hrivnacova (analysisExample-V09-06-05)
+- Removed A01, as it was transformed in basic/B5
+
+22th October 2013 I. Hrivnacova (analysisExample-V09-06-04)
+- N03Con replaced with B1Con 
+- Adding README files on AIDA and OpenScientist form A01 
+  (which is being migrated to g4tools in B5) in AnaEx03
+
+30th September 2013 I. Hrivnacova (analysisExample-V09-06-03)
+- Updated for changes in analysis:
+  removal of G4AnalysisManager::Create(isMaster)
+
+16th September 2013 I. Hrivnacova (analysisExample-V09-06-02)
+- AnaEx01 migrated to MT;
+  an argument isOnMaster added to HistoManager::book() method
+  (for consistency in all AnaEx0N examples)
+
+16th September 2013 I. Hrivnacova (analysisExample-V09-06-01)
+- Fixed handling required packages in CMake files
+
+08th February 2013 Ivana Hrivnacova (analysisExample-V09-06-00)
+- Applied coding guidelines in AnaEx01,2,3
 
 10th October 2012 Ivana Hrivnacova (analysisExample-V09-05-05)
 - Removed FindAIDA.cmake modules (now available in geant4/cmake)

@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm9/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-//
-// $Id$
+// $Id: SteppingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction():
-  fHisto(HistoManager::GetPointer())
+  G4UserSteppingAction(),fHisto(HistoManager::GetPointer())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

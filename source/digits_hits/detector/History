@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2007-06-04 13:17:18 ahoward Exp $
+$Id: History 67992 2013-03-13 10:59:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Febr 26, 2013 Andrea Dotti
+- Adding cloning capbailities to SD
 
 June 4, 2007, A.Howard
 - Put back some classes required for scoring of geometrical biasing cells:

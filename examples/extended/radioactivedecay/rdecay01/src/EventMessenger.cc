@@ -26,7 +26,7 @@
 /// \file radioactivedecay/rdecay01/src/EventMessenger.cc
 /// \brief Implementation of the EventMessenger class
 //
-// $Id$
+// $Id: EventMessenger.cc 68030 2013-03-13 13:51:27Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventMessenger::EventMessenger(EventAction* EvAct)
-:fEventAction(EvAct)
+:G4UImessenger(),
+ fEventAction(EvAct),
+ fDir(0),       
+ fEventDir(0),   
+ fPrintCmd(0)
 {   
   fDir = new G4UIdirectory("/rdecay01/");
   fDir->SetGuidance("this example");

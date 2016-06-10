@@ -23,28 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04DetectorConstruction.hh 77884 2013-11-29 08:41:11Z gcosmo $
+//
 /// \file field/field04/include/F04DetectorConstruction.hh
 /// \brief Definition of the F04DetectorConstruction class
 //
-//
+
 #ifndef F04DetectorConstruction_h
 #define F04DetectorConstruction_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
 
+#include "G4LogicalVolume.hh"
 #include "G4RotationMatrix.hh"
 
 class G4Tubs;
 
-class G4LogicalVolume;
 class G4VPhysicalVolume;
 
 class F04Materials;
 class G4Material;
 
-class F04SimpleSolenoid;
-class F04FocusSolenoid;
+class F04GlobalField;
 
 class F04DetectorMessenger;
 
@@ -59,6 +59,8 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
 
     virtual G4VPhysicalVolume* Construct();
     G4VPhysicalVolume* ConstructDetector();
+
+    virtual void ConstructSDandField();
 
     void UpdateGeometry();
 
@@ -102,30 +104,35 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
  
   public:
  
-     G4Material* GetWorldMaterial()    {return fWorldMaterial;};
-     G4double GetWorldSizeZ()          {return fWorldSizeZ;};
-     G4double GetWorldSizeR()          {return fWorldSizeR;};
+     G4Material* GetWorldMaterial()    {return fWorldMaterial;}
+     G4double GetWorldSizeZ()          {return fWorldSizeZ;}
+     G4double GetWorldSizeR()          {return fWorldSizeR;}
+     G4VPhysicalVolume* GetWorld()     {return fPhysiWorld;}
 
-     G4double GetCaptureMgntRadius()   {return fCaptureMgntRadius;};
-     G4double GetCaptureMgntLength()   {return fCaptureMgntLength;};
-     G4double GetCaptureMgntB1()       {return fCaptureMgntB1;};
-     G4double GetCaptureMgntB2()       {return fCaptureMgntB2;};
+     G4LogicalVolume* GetCaptureMgnt()     {return fLogicCaptureMgnt;}
+     G4double GetCaptureMgntRadius()       {return fCaptureMgntRadius;}
+     G4double GetCaptureMgntLength()       {return fCaptureMgntLength;}
+     G4double GetCaptureMgntB1()           {return fCaptureMgntB1;}
+     G4double GetCaptureMgntB2()           {return fCaptureMgntB2;}
+     G4ThreeVector GetCaptureMgntCenter()  {return fCaptureMgntCenter;}
 
-     G4double GetTransferMgntRadius()  {return fTransferMgntRadius;};
-     G4double GetTransferMgntLength()  {return fTransferMgntLength;};
-     G4double GetTransferMgntB()       {return fTransferMgntB;};
-     G4double GetTransferMgntPos()     {return fTransferMgntPos;};
+     G4LogicalVolume* GetTransferMgnt()    {return fLogicTransferMgnt;}
+     G4double GetTransferMgntRadius()      {return fTransferMgntRadius;}
+     G4double GetTransferMgntLength()      {return fTransferMgntLength;}
+     G4double GetTransferMgntB()           {return fTransferMgntB;}
+     G4double GetTransferMgntPos()         {return fTransferMgntPos;}
+     G4ThreeVector GetTransferMgntCenter() {return fTransferMgntCenter;}
 
-     G4Material* GetTargetMaterial()  {return fTargetMaterial;};
-     G4double    GetTargetRadius()    {return fTargetRadius;};
-     G4double    GetTargetThickness() {return fTargetThickness;};
-     G4double    GetTargetPos()       {return fTargetPos;};
-     G4int       GetTargetAngle()     {return fTargetAngle;};
+     G4Material* GetTargetMaterial()  {return fTargetMaterial;}
+     G4double    GetTargetRadius()    {return fTargetRadius;}
+     G4double    GetTargetThickness() {return fTargetThickness;}
+     G4double    GetTargetPos()       {return fTargetPos;}
+     G4int       GetTargetAngle()     {return fTargetAngle;}
 
-     G4Material* GetDegraderMaterial()  {return fDegraderMaterial;};
-     G4double    GetDegraderRadius()    {return fDegraderRadius;};
-     G4double    GetDegraderThickness() {return fDegraderThickness;};
-     G4double    GetDegraderPos()       {return fDegraderPos;};
+     G4Material* GetDegraderMaterial()  {return fDegraderMaterial;}
+     G4double    GetDegraderRadius()    {return fDegraderRadius;}
+     G4double    GetDegraderThickness() {return fDegraderThickness;}
+     G4double    GetDegraderPos()       {return fDegraderPos;}
 
   private:
 
@@ -178,8 +185,9 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
      G4double           fDegraderRadius;
      G4double           fDegraderPos;
 
-     F04FocusSolenoid*  fFocusSolenoid;
-     F04SimpleSolenoid* fSimpleSolenoid;
+     G4ThreeVector fCaptureMgntCenter, fTransferMgntCenter;
+
+     static G4ThreadLocal F04GlobalField* fField;
 
   private:
 

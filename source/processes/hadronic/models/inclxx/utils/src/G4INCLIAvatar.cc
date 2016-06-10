@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -44,11 +42,12 @@
  */
 
 #include "G4INCLIAvatar.hh"
+#include "G4INCLRandom.hh"
 #include <sstream>
 
 namespace G4INCL {
 
-  long IAvatar::nextID = 1;
+  G4ThreadLocal long IAvatar::nextID = 1;
 
   IAvatar::IAvatar() :
     type(UnknownAvatarType),
@@ -74,7 +73,7 @@ namespace G4INCL {
     std::stringstream particleString;
     ParticleList pl = getParticles();
     G4int numberOfParticles = 0;
-    for(ParticleIter i = pl.begin(); i != pl.end(); ++i) {
+    for(ParticleIter i=pl.begin(), e=pl.end(); i!=e; ++i) {
       numberOfParticles++;
       particleString << (*i)->getID() << " ";
     }
@@ -88,12 +87,16 @@ namespace G4INCL {
 
   G4INCL::FinalState* IAvatar::getFinalState()
   {
+    INCL_DEBUG("Random seeds before preInteraction: " << Random::getSeeds() << std::endl);
     preInteraction();
+    INCL_DEBUG("Random seeds before getChannel: " << Random::getSeeds() << std::endl);
     IChannel *c = getChannel();
     if( !c ) {
-      return new FinalState;
+      return NULL;
     }
+    INCL_DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << std::endl);
     FinalState *fs = c->getFinalState();
+    INCL_DEBUG("Random seeds before postInteraction: " << Random::getSeeds() << std::endl);
     fs = postInteraction(fs);
     delete c;
     return fs;

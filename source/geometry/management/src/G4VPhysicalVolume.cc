@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPhysicalVolume.cc 74466 2013-10-07 15:36:32Z gcosmo $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -36,6 +36,49 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
 
+// This static member is thread local. For each thread, it points to the
+// array of G4PVData instances.
+//
+template <class G4PVData> G4ThreadLocal
+G4PVData* G4GeomSplitter<G4PVData>::offset = 0;
+
+// This new field helps to use the class G4PVManager
+//
+G4PVManager G4VPhysicalVolume::subInstanceManager;
+
+// This method is similar to the constructor. It is used by each worker
+// thread to achieve the same effect as that of the master thread exept
+// to register the new created instance. This method is invoked explicitly.
+// It does not create a new G4VPhysicalVolume instance.
+// It only assign the value for the fields encapsulated by the class G4PVData.
+//
+void G4VPhysicalVolume::
+InitialiseWorker( G4VPhysicalVolume* /*pMasterObject*/,
+                  G4RotationMatrix *pRot,
+                  const G4ThreeVector &tlate)
+{
+  subInstanceManager.SlaveCopySubInstanceArray();
+
+  this->SetRotation( pRot );      // G4MT_rot   = pRot;
+  this->SetTranslation( tlate );  // G4MT_trans = tlate;
+  //  G4PhysicalVolumeStore::Register(this);
+}
+
+// This method is similar to the destructor. It is used by each worker
+// thread to achieve the partial effect as that of the master thread.
+// For G4VPhysicalVolume instances, nothing more to do here.
+//
+void G4VPhysicalVolume::TerminateWorker( G4VPhysicalVolume* /*pMasterObject*/)
+{
+}
+
+// Returns the private data instance manager.
+//
+const G4PVManager& G4VPhysicalVolume::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
+
 // Constructor: init parameters and register in Store
 //
 G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
@@ -43,9 +86,13 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
                                 const G4String& pName,
                                       G4LogicalVolume* pLogical,
                                       G4VPhysicalVolume* )
-  : frot(pRot), ftrans(tlate), flogical(pLogical),
+  : flogical(pLogical),
     fname(pName), flmother(0)
 {
+  instanceID = subInstanceManager.CreateSubInstance();
+
+  this->SetRotation( pRot );       // G4MT_rot = pRot;
+  this->SetTranslation( tlate );   // G4MT_trans = tlate;
   G4PhysicalVolumeStore::Register(this);
 }
 
@@ -53,10 +100,15 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
 //                            for usage restricted to object persistency.
 //
 G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
-  : frot(0), flogical(0), fname(""), flmother(0)
+  : flogical(0), fname(""), flmother(0)
 {
   // Register to store
   //
+  instanceID = subInstanceManager.CreateSubInstance();
+
+  this->SetRotation( 0 );                             // G4MT_rot = 0; 
+  this->SetTranslation( G4ThreeVector(0., 0., 0.) );  // G4MT_trans = ...
+
   G4PhysicalVolumeStore::Register(this);
 }
 
@@ -74,19 +126,16 @@ G4int G4VPhysicalVolume::GetMultiplicity() const
 
 G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
 {
-  static G4RotationMatrix  aRotM; 
-  static G4RotationMatrix  IdentityRM;  // Never changed (from "1")
-  G4RotationMatrix* retval; 
+  static G4RotationMatrix aRotM;
+  static G4RotationMatrix IdentityRM;
+
+  G4RotationMatrix* retval = &IdentityRM;
 
   // Insure against frot being a null pointer
-  if(frot)
+  if(this->GetRotation())
   {
-    aRotM= frot->inverse();
-    retval= &aRotM;
-  }
-  else
-  {
-    retval= &IdentityRM;
+     aRotM = GetRotation()->inverse();
+     retval= &aRotM;
   }
   return retval;
 }
@@ -94,7 +143,7 @@ G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
 // Only implemented for placed and parameterised volumes.
 // Not required for replicas.
 //
-G4bool G4VPhysicalVolume::CheckOverlaps(G4int, G4double, G4bool)
+G4bool G4VPhysicalVolume::CheckOverlaps(G4int, G4double, G4bool, G4int)
 {
   return false;
 }

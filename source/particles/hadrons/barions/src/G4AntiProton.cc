@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4AntiProton.cc 69557 2013-05-08 12:01:40Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -75,7 +75,7 @@ G4AntiProton* G4AntiProton::Definition()
 		    1,              -1,             0,             
 	     "baryon",               0,            -1,       -2212,
 		 true,            -1.0,          NULL,
-                false,       "nucleon"
+		 false,      "nucleon",          2212
               );
     // Magnetic Moment
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);

@@ -27,11 +27,14 @@
 /// \brief Implementation of the F03PhysicsList class
 //
 //
-// $Id$
-// 
+// $Id: F03PhysicsList.cc 77795 2013-11-28 09:55:34Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Timer.hh"
-   
+ 
 #include "F03PhysicsList.hh"
 #include "F03DetectorConstruction.hh"
 #include "F03PhysicsListMessenger.hh"
@@ -43,65 +46,49 @@
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
-#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ios.hh"
-#include <iomanip>
 
-
-
-/////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03PhysicsList::F03PhysicsList(F03DetectorConstruction* p)
-:  G4VUserPhysicsList(), MaxChargedStep(DBL_MAX),
-   thePhotoElectricEffect(0), theComptonScattering(0),
-   theGammaConversion(0), theeminusIonisation(0),
-   theeminusBremsstrahlung(0), theeplusIonisation(0),
-   theeplusBremsstrahlung(0), theeplusAnnihilation(0),
-   theeminusStepCut(0), theeplusStepCut(0)
+:  G4VUserPhysicsList(), fMaxChargedStep(DBL_MAX)
 {
-  pDet = p;
+  fDet = p;
 
-  defaultCutValue = 1.000*mm ;
+  defaultCutValue = 1.000*mm;
 
-  cutForGamma = defaultCutValue ;
-  cutForElectron = defaultCutValue ;
+  fCutForGamma = defaultCutValue;
+  fCutForElectron = defaultCutValue;
 
   SetVerboseLevel(1);
-  physicsListMessenger = new F03PhysicsListMessenger(this);
+  fPhysicsListMessenger = new F03PhysicsListMessenger(this);
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03PhysicsList::~F03PhysicsList()
 {
-  delete physicsListMessenger; 
+  delete fPhysicsListMessenger;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
-  // created in the program. 
+  // created in the program.
 
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
   ConstructBarions();
+
+  G4GenericIon::GenericIonDefinition();
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::ConstructBosons()
 {
@@ -113,8 +100,9 @@ void F03PhysicsList::ConstructBosons()
 
   G4ChargedGeantino::ChargedGeantinoDefinition();
 
-
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::ConstructLeptons()
 {
@@ -131,9 +119,11 @@ void F03PhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F03PhysicsList::ConstructMesons()
 {
- //  mesons
+  //  mesons
 
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
@@ -142,32 +132,27 @@ void F03PhysicsList::ConstructMesons()
   G4KaonMinus::KaonMinusDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::ConstructBarions()
 {
-//  barions
+  //  barions
 
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
 }
 
-
-///////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  //AddParameterisation();
 
   ConstructEM();
   ConstructGeneral();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -199,90 +184,82 @@ void F03PhysicsList::ConstructEM()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
-    if (particleName == "gamma") 
+    if (particleName == "gamma")
     {
       // Construct processes for gamma
 
-      thePhotoElectricEffect = new G4PhotoElectricEffect();      
-      theComptonScattering   = new G4ComptonScattering();
-      theGammaConversion     = new G4GammaConversion();
-      
-      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
-      pmanager->AddDiscreteProcess(theComptonScattering);
+      G4PhotoElectricEffect* fPhotoElectricEffect = new G4PhotoElectricEffect();
+      G4ComptonScattering* fComptonScattering   = new G4ComptonScattering();
+      G4GammaConversion* fGammaConversion     = new G4GammaConversion();
 
-      pmanager->AddDiscreteProcess(theGammaConversion);
-      
-    } 
-    else if (particleName == "e-") 
+      pmanager->AddDiscreteProcess(fPhotoElectricEffect);
+      pmanager->AddDiscreteProcess(fComptonScattering);
+
+      pmanager->AddDiscreteProcess(fGammaConversion);
+    }
+    else if (particleName == "e-")
     {
-      // Construct processes for electron 
+      // Construct processes for electron
 
-     theeminusIonisation = new G4eIonisation();
-     theeminusBremsstrahlung = new G4eBremsstrahlung();
+      G4eIonisation* feminusIonisation = new G4eIonisation();
+      G4eBremsstrahlung* feminusBremsstrahlung = new G4eBremsstrahlung();
+      F03StepCut* feminusStepCut = new F03StepCut();
+      feminusStepCut->SetMaxStep(fMaxChargedStep);
 
-     theeminusStepCut = new F03StepCut();
-
-     pmanager->AddProcess(theeminusIonisation,-1,2,2);
-     pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3); 
-     pmanager->AddProcess(theeminusStepCut,-1,-1,4);
-     theeminusStepCut->SetMaxStep(MaxChargedStep) ;
-
-    } 
-    else if (particleName == "e+") 
+      pmanager->AddProcess(feminusIonisation,-1,2,2);
+      pmanager->AddProcess(feminusBremsstrahlung,-1,-1,3);
+      pmanager->AddProcess(feminusStepCut,-1,-1,4);
+    }
+    else if (particleName == "e+")
     {
-      // Construct processes for positron 
+      // Construct processes for positron
 
-      theeplusIonisation = new G4eIonisation();
-      theeplusBremsstrahlung = new G4eBremsstrahlung();
-      theeplusStepCut = new F03StepCut();
-      
-      pmanager->AddProcess(theeplusIonisation,-1,2,2);
-      pmanager->AddProcess(theeplusBremsstrahlung,-1,-1,3);
-      pmanager->AddProcess(theeplusStepCut,-1,-1,5);
-      theeplusStepCut->SetMaxStep(MaxChargedStep) ;
-  
-    } 
-    else if( particleName == "mu+" || 
-               particleName == "mu-"    ) 
+      G4eIonisation* feplusIonisation = new G4eIonisation();
+      G4eBremsstrahlung* feplusBremsstrahlung = new G4eBremsstrahlung();
+      F03StepCut* feplusStepCut = new F03StepCut();
+      feplusStepCut->SetMaxStep(fMaxChargedStep);
+
+      pmanager->AddProcess(feplusIonisation,-1,2,2);
+      pmanager->AddProcess(feplusBremsstrahlung,-1,-1,3);
+      pmanager->AddProcess(feplusStepCut,-1,-1,5);
+    }
+    else if( particleName == "mu+" || particleName == "mu-" )
     {
-      // Construct processes for muon+ 
+      // Construct processes for muon+
 
       F03StepCut* muonStepCut = new F03StepCut();
+      muonStepCut->SetMaxStep(fMaxChargedStep);
+      G4MuIonisation* muIonisation = new G4MuIonisation();
 
-      G4MuIonisation* themuIonisation = new G4MuIonisation() ;
       pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
-      pmanager->AddProcess(themuIonisation,-1,2,2);
+      pmanager->AddProcess(muIonisation,-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
-      pmanager->AddProcess( muonStepCut,-1,-1,3);
-      muonStepCut->SetMaxStep(MaxChargedStep) ;
+      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
+      pmanager->AddProcess(muonStepCut,-1,-1,3);
     }
-    else if (
-                particleName == "proton"  
-               || particleName == "antiproton"  
-               || particleName == "pi+"  
-               || particleName == "pi-"  
-               || particleName == "kaon+"  
-               || particleName == "kaon-"  
-              )
+    else if ( particleName == "proton"
+              || particleName == "antiproton"
+              || particleName == "pi+"
+              || particleName == "pi-"
+              || particleName == "kaon+"
+              || particleName == "kaon-"
+            )
     {
-      F03StepCut* thehadronStepCut = new F03StepCut();
-
-      G4hIonisation* thehIonisation = new G4hIonisation() ; 
+      F03StepCut* theHadronStepCut = new F03StepCut();
+      theHadronStepCut->SetMaxStep(10*mm);
+      
+      G4hIonisation* thehIonisation = new G4hIonisation();
       G4hMultipleScattering* thehMultipleScattering =
-                     new G4hMultipleScattering() ;
-
+                                                  new G4hMultipleScattering();
 
       pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       pmanager->AddProcess(thehIonisation,-1,2,2);
-
-
-        pmanager->AddProcess( thehadronStepCut,-1,-1,3);
-        thehadronStepCut->SetMaxStep(MaxChargedStep) ;
+      pmanager->AddProcess(theHadronStepCut,-1,-1,3);
     }
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
 
@@ -298,8 +275,8 @@ void F03PhysicsList::ConstructGeneral()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (theDecayProcess->IsApplicable(*particle)) 
-    { 
+    if (theDecayProcess->IsApplicable(*particle))
+    {
       pmanager ->AddProcess(theDecayProcess);
 
       // set ordering for PostStepDoIt and AtRestDoIt
@@ -310,12 +287,12 @@ void F03PhysicsList::ConstructGeneral()
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::SetCuts()
 {
-  G4Timer theTimer ;
-  theTimer.Start() ;
+  G4Timer theTimer;
+  theTimer.Start();
   if (verboseLevel >0)
   {
     G4cout << "F03PhysicsList::SetCuts:";
@@ -323,40 +300,42 @@ void F03PhysicsList::SetCuts()
   }
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
+  SetCutValue(fCutForGamma,"gamma");
 
-   SetCutValue(cutForGamma,"gamma");
-
-   SetCutValue(cutForElectron,"e-");
-   SetCutValue(cutForElectron,"e+");
+  SetCutValue(fCutForElectron,"e-");
+  SetCutValue(fCutForElectron,"e+");
 
   if (verboseLevel>1)     DumpCutValuesTable();
 
   theTimer.Stop();
   G4cout.precision(6);
-  G4cout << G4endl ;
-  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
+  G4cout << G4endl;
+  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed()
+                                   << " s " <<G4endl;
 
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::SetGammaCut(G4double val)
 {
-  cutForGamma = val;
+  fCutForGamma = val;
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::SetElectronCut(G4double val)
 {
-  cutForElectron = val;
+  fCutForElectron = val;
 }
 
-////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03PhysicsList::SetMaxStep(G4double step)
 {
-  MaxChargedStep = step ;
-  G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
+  fMaxChargedStep = step;
+  G4cout << " MaxChargedStep=" << fMaxChargedStep << G4endl;
   G4cout << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

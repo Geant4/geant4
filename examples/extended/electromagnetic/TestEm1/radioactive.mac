@@ -5,7 +5,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Aluminium
+/testem/det/setMat Air
 /testem/det/setSize 100 m
 #
 /testem/phys/addPhysics  local
@@ -17,15 +17,18 @@
 #
 /testem/gun/setDefault
 /gun/particle ion
-/gun/ion 82 210 0 0
+/gun/ion 20 56 20 1000.
 /gun/energy 1 eV
 /gun/position 0 0 0 mm
 #
-/grdm/nucleusLimits 210 210 82 82
+###/grdm/nucleusLimits 210 210 82 82
 #
 /analysis/setFileName rdecay
 /analysis/h1/set 4 100 0 80 keV	#total edep
 #	 
-/testem/event/printModulo 40000
+/run/printProgress 10000
 #
-/run/beamOn 400000
+###/run/beamOn 40000
+#
+/tracking/verbose 2
+/run/beamOn 1

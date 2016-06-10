@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuBremsstrahlungModel.hh 72114 2013-07-10 09:37:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 // 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
 // 28-02-08 Reorganized protected methods and members (V.Ivanchenko) 
 // 06-03-08 Remove obsolete methods and members (V.Ivanchenko) 
+// 31-05-13 Use element selectors instead of local data (V.Ivanchenko)
 //
 
 //
@@ -80,6 +81,9 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel* masterModel);
+
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
 				const G4MaterialCutsCouple*);
 			      
@@ -103,6 +107,9 @@ public:
 
   inline void SetLowestKineticEnergy(G4double e);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+                                    const G4ParticleDefinition*, G4double);
+
 protected:
 
   G4double ComputMuBremLoss(G4double Z, G4double tkin, G4double cut);
@@ -118,11 +125,6 @@ protected:
   inline void SetParticle(const G4ParticleDefinition*);
 
 private:
-
-  G4DataVector* ComputePartialSumSigma(const G4Material* material,
-				       G4double tkin, G4double cut);
-
-  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
 
   // hide assignment operator
   G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
@@ -150,9 +152,10 @@ private:
   G4double lowestKinEnergy;
   G4double minThreshold;
 
-  G4double fDN[93];
+  static const G4double xgi[6];
+  static const G4double wgi[6];
 
-  std::vector<G4DataVector*> partialSumSigma;
+  static G4double fDN[93];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

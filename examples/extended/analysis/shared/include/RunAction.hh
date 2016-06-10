@@ -27,7 +27,7 @@
 /// \brief Definition of the RunAction class
 //
 //
-// $Id$
+// $Id: RunAction.hh 68015 2013-03-13 13:27:27Z gcosmo $
 //
 // 
 
@@ -51,8 +51,8 @@ public:
   RunAction(HistoManager*);
   virtual ~RunAction();
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void   EndOfRunAction(const G4Run*);
     
   void fillPerEvent(G4double, G4double, G4double, G4double); 
 

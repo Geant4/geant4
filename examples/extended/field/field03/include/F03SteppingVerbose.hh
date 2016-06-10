@@ -26,28 +26,42 @@
 /// \file field/field03/include/F03SteppingVerbose.hh
 /// \brief Definition of the F03SteppingVerbose class
 //
-// $Id$
 //
+// $Id: F03SteppingVerbose.hh 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//---------------------------------------------------------------
+//
+// F03SteppingVerbose.hh
+//
+// Description:
+//   This class manages the vervose outputs in G4SteppingManager.
+//
+//
+// Contact:
+//   Questions and comments to this code should be sent to
+//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//
+//---------------------------------------------------------------
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F03SteppingVerbose_h
 #define F03SteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
-/// This class manages the vervose outputs in G4SteppingManager. 
-///   
-/// Contact: \n
-/// Questions and comments to this code should be sent to
-///   -  Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-///   -  Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F03SteppingVerbose : public G4SteppingVerbose 
 {
-  public:   
+  public:
 
     F03SteppingVerbose();
-    ~F03SteppingVerbose();
-      // Constructor, Destructor
+    virtual ~F03SteppingVerbose();
 
     virtual void StepInfo();
     virtual void TrackingStarted();

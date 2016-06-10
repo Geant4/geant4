@@ -25,7 +25,6 @@
 //
 //
 // $ Id: G4CachedMagneticField.hh,v 1.0 2009/07/20 18:53:00 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4CachedMagneticField
@@ -67,6 +66,8 @@ class G4CachedMagneticField : public G4MagneticField
      G4int GetCountEvaluations() const { return fCountEvaluations; } 
      void  ClearCounts() { fCountCalls = 0; fCountEvaluations=0; }
      void  ReportStatistics();
+    
+    virtual G4CachedMagneticField* Clone() const;
 
   private: 
      G4MagneticField *fpMagneticField;

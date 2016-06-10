@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.hh 68996 2013-04-15 09:19:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,6 @@
 
 class DetectorConstruction;
 class RunAction;
-class HistoManager;
 class StackingMessenger;
 class G4Material;
 class G4EmCalculator;
@@ -49,17 +48,16 @@ class G4EmCalculator;
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(DetectorConstruction*,RunAction*,HistoManager* );
+    StackingAction(DetectorConstruction*,RunAction* );
    ~StackingAction();
    
-    void SetKillStatus(G4bool value) {fKillTrack = value;};
+    virtual void SetKillStatus(G4bool value) {fKillTrack = value;};
      
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
     DetectorConstruction* fDetector;  
     RunAction*            fRunAction;
-    HistoManager*         fHistoManager;
     StackingMessenger*    fStackMessenger;
 
     G4Material*           fMatWall;

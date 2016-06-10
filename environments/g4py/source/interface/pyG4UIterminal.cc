@@ -23,15 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UIterminal.cc,v 1.8 2008-03-13 07:32:18 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4UIterminal.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4UIterminal.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "G4Version.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 
@@ -49,7 +47,7 @@ void StartUISession()
 /////////////////////
 {
   if (session == 0 ) {
-    G4UItcsh* tcsh= new 
+    G4UItcsh* tcsh= new
       G4UItcsh("[40;01;33mg4py[40;31m(%s)[40;36m[%/][00;30m:");
 
 #if G4VERSION_NUMBER >= 900
@@ -63,7 +61,7 @@ void StartUISession()
   session-> SessionStart();
 }
 
-};
+}
 
 using namespace pyG4UIterminal;
 

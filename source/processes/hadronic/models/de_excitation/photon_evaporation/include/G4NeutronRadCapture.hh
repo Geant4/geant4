@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NeutronRadCapture.hh 74869 2013-10-23 09:26:17Z gcosmo $
 //
 //
 // Geant4 header : G4NeutronRadCapture
@@ -46,6 +46,7 @@
 #include "G4Nucleus.hh"
 
 class G4PhotonEvaporation;
+class G4IonTable;
 
 class G4NeutronRadCapture : public G4HadronicInteraction
 {
@@ -64,7 +65,9 @@ private:
   G4NeutronRadCapture(const G4NeutronRadCapture&);
 
   G4double lowestEnergyLimit;
+  G4double minExcitation;
   G4PhotonEvaporation* photonEvaporation;
+  G4IonTable*  theTableOfIons;
 };
 
 #endif

@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2010-12-23 06:00:42 kurasige Exp $
+$Id: History 77079 2013-11-21 10:32:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov. 21st, 2013  - H.Kurashige (procuts-V09-06-08)
+- Fix Coverity defects in G4VRangeToEnergyConverter CTOR 
+
+July 21st, 2013  - H.Kurashige (procuts-V09-06-07)
+- Fix the bug in G4ProductionCuts copy constructor
+
+June 21st, 2013  - M.Asai (procuts-V09-06-06)
+- G4ProductionCutstable: print out energy thresholds regardless of
+  G4MaterialCutsCouple::IsReCalcNeeded(). 
+
+June 16th, 2013  - M.Asai (procuts-V09-06-05)
+- G4VRangeToEnergyConverter: stop calling Reset() from its destructor.
+
+June 5th, 2013   - V.Ivanchenko (procuts-V09-06-04)
+  G4VRangeToEnergyConverter: members LowestEnergy, HighestEnergy,
+    MaxEnergyCut become static and not G4ThreadLocal - this
+    is needed to fix FPE crash in MT mode; fixed all loops for
+    G4PhysicsLogVector - upper index is nbins+1
+
+June 4th, 2013   - H.Kurashige (procuts-V09-06-03)
+- Modify G4RToEConvForXXX to remove unnecessary static declaration
+  (Some static variables are moved to simple member of the class)
+  
+May. 30th, 2013   - G.Cosmo (procuts-V09-06-02)
+- Added protection to initialisation of static data in
+  G4VRangeToEnergyConverter constructor.
+  NOTE: static data in G4VRangeToEnergyConverter should eventually NOT be
+        thread-local, as related modifiers should be called -only- at
+        initialisation phase (by physics-lists). This needs to be verified
+        so that thread-local specifications can be safely removed!
+        Is it also -bad- practice to have a -base- class like
+        G4VRangeToEnergyConverter containing static data that can be modified
+        through static methods, as these can be modified before the actual
+        constructor is called (as it is not a singleton)!!  Needs to review
+        this as well!
+
+May. 29th, 2013   - G.Cosmo (procuts-V09-06-01, procuts-V09-06-00)
+- Cleanup from automatic MT changes in G4VRangeToEnergyConverter,
+  G4ProductionCuts and G4RToEConvForElectron.
 
 Jul. 5th, 2012   - G.Cosmo (procuts-V09-05-04)
 - Explicitly use inclusion of headers for system of units and physical

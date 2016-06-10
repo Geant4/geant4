@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ElectronOccupancy.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -39,10 +39,10 @@
 
 #include "G4ElectronOccupancy.hh"
 
-G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
+G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator = 0;
 
-G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit ):
-                  theSizeOfOrbit(sizeOrbit)
+G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit )
+  : theSizeOfOrbit(sizeOrbit)
 {
   // check size
   if  ( (theSizeOfOrbit <1 ) || (theSizeOfOrbit > MaxSizeOfOrbit) ) {
@@ -67,7 +67,6 @@ G4ElectronOccupancy::~G4ElectronOccupancy()
    theOccupancies =0;
    theTotalOccupancy =0;
 }
-
 
 G4ElectronOccupancy::G4ElectronOccupancy(const G4ElectronOccupancy& right)
 {
@@ -122,7 +121,6 @@ G4int G4ElectronOccupancy::operator!=(const G4ElectronOccupancy& right) const
 {
   return !(*this == right);
 }
-
 
 void G4ElectronOccupancy::DumpInfo() const
 {

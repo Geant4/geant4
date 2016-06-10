@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StatMFMicroManager.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -61,11 +61,9 @@ G4bool G4StatMFMicroManager::operator!=(const G4StatMFMicroManager & ) const
     return true;
 }
 
-
-
 // constructor
-G4StatMFMicroManager::G4StatMFMicroManager(const G4Fragment & theFragment, const G4int multiplicity,
-					   const G4double FreeIntE, const G4double SCompNuc) : 
+G4StatMFMicroManager::G4StatMFMicroManager(const G4Fragment & theFragment, G4int multiplicity,
+					   G4double FreeIntE, G4double SCompNuc) : 
     _Normalization(0.0)
 {
     // Perform class initialization
@@ -87,15 +85,15 @@ G4StatMFMicroManager::~G4StatMFMicroManager()
 
 // Initialization method
 
-void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4int im, 
-				      const G4double FreeIntE, const G4double SCompNuc) 
+void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, G4int im, 
+				      G4double FreeIntE, G4double SCompNuc) 
 {
     G4int i;
 
     G4double U = theFragment.GetExcitationEnergy();
 
-    G4double A = theFragment.GetA();
-    G4double Z = theFragment.GetZ();
+    G4int A = theFragment.GetA_asInt();
+    G4int Z = theFragment.GetZ_asInt();
 	
     // Statistical weights
     _WW = 0.0;
@@ -118,7 +116,7 @@ void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4in
     // FragmentAtomicNumbers[m-1]>FragmentAtomicNumbers[m-2]>...>FragmentAtomicNumbers[0]
     // Our initial distribution is 
     // FragmentAtomicNumbers[m-1]=A, FragmentAtomicNumbers[m-2]=0, ..., FragmentAtomicNumbers[0]=0
-    FragmentAtomicNumbers[im-1] = static_cast<G4int>(A);
+    FragmentAtomicNumbers[im-1] = A;
     for (i = 0; i <  (im - 1); i++) FragmentAtomicNumbers[i] = 0;
 
     // We try to distribute A nucleons in partitions of m fragments
@@ -127,8 +125,7 @@ void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4in
     while (MakePartition(im,FragmentAtomicNumbers)) {
 	// Allowed partitions are stored and its probability calculated
 			
-	G4StatMFMicroPartition * aPartition = new G4StatMFMicroPartition(static_cast<G4int>(A),
-									 static_cast<G4int>(Z));
+	G4StatMFMicroPartition * aPartition = new G4StatMFMicroPartition(A,Z);
 	G4double PartitionProbability = 0.0;
 			
 	for (i = im-1; i >= 0; i--) aPartition->SetPartitionFragment(FragmentAtomicNumbers[i]);
@@ -142,15 +139,9 @@ void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4in
 	    _MeanEntropy += PartitionProbability * aPartition->GetEntropy();
 			
     }
-		
-	
-    // garbage collection
-// 	delete [] FragmentAtomicNumbers;
-	
 }
 
-
-G4bool G4StatMFMicroManager::MakePartition(const G4int k, G4int * ANumbers)
+G4bool G4StatMFMicroManager::MakePartition(G4int k, G4int * ANumbers)
     // Distributes A nucleons between k fragments
     // mantaining the order ANumbers[k-1] > ANumbers[k-2] > ... > ANumbers[0]
     // If it is possible returns true. In other case returns false
@@ -169,9 +160,7 @@ G4bool G4StatMFMicroManager::MakePartition(const G4int k, G4int * ANumbers)
     return false;
 }
 
-
-
-void G4StatMFMicroManager::Normalize(const G4double Norm)
+void G4StatMFMicroManager::Normalize(G4double Norm)
 {
     _Normalization = Norm;
     _WW /= Norm;
@@ -182,8 +171,8 @@ void G4StatMFMicroManager::Normalize(const G4double Norm)
     return;
 }
 
-G4StatMFChannel * G4StatMFMicroManager::ChooseChannel(const G4double A0, const G4double Z0, 
-						      const G4double MeanT)
+G4StatMFChannel* 
+G4StatMFMicroManager::ChooseChannel(G4int A0, G4int Z0, G4double MeanT)
 {
     G4double RandNumber = _Normalization * _WW * G4UniformRand();
     G4double AccumWeight = 0.0;

@@ -36,6 +36,8 @@
 /// \file hadronic/Hadr02/src/G4VGlauberDataSet.cc
 /// \brief Implementation of the G4VGlauberDataSet class
 //
+// $Id: G4VGlauberDataSet.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4VGlauberDataSet.cc
@@ -56,6 +58,8 @@
 #include "G4VGlauberDataSet.hh"
 
 #include "G4DPMJET2_5Interface.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <iomanip>
 #include <iostream>

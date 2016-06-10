@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fBox(0), fBoxSize(500*m), fMaterial(0), fMagField(0)
+:G4VUserDetectorConstruction(),
+ fBox(0), fBoxSize(500*m), fMaterial(0), fMagField(0),
+ fUserLimits(0), fDetectorMessenger(0)
 {
   DefineMaterials();
   SetMaterial("Iron");

@@ -49,6 +49,8 @@
 #include "PassiveProtonBeamLine.hh"
 #include "PassiveProtonBeamLineMessenger.hh"
 
+
+
 /////////////////////////////////////////////////////////////////////////////
 PassiveProtonBeamLine::PassiveProtonBeamLine():
   modulator(0), physicalTreatmentRoom(0),hadrontherapyDetectorConstruction(0),
@@ -71,9 +73,22 @@ PassiveProtonBeamLine::PassiveProtonBeamLine():
   physiBrassTube(0),
   solidFinalCollimator(0),
   physiFinalCollimator(0)
-{
+{  
+
   // Messenger to change parameters of the passiveProtonBeamLine geometry
   passiveMessenger = new PassiveProtonBeamLineMessenger(this);
+
+//***************************** PW ***************************************
+
+  static G4String ROGeometryName = "DetectorROGeometry";
+  RO = new HadrontherapyDetectorROGeometry(ROGeometryName);
+  
+  
+
+  G4cout << "Going to register Parallel world...";
+  RegisterParallelWorld(RO);
+  G4cout << "... done" << G4endl;
+//***************************** PW ***************************************
 
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -83,18 +98,33 @@ PassiveProtonBeamLine::~PassiveProtonBeamLine()
   delete hadrontherapyDetectorConstruction;
 }
 
-/////////////////////////////////////////////////////////////////////////////
 G4VPhysicalVolume* PassiveProtonBeamLine::Construct()
 { 
-  // Sets default geometry and materials
+   // Sets default geometry and materials
   SetDefaultDimensions();
   
   // Construct the whole Passive Beam Line 
   ConstructPassiveProtonBeamLine();
 
+
+//***************************** PW ***************************************
+  if (!hadrontherapyDetectorConstruction)
+
+//***************************** PW ***************************************
+
+
   // HadrontherapyDetectorConstruction builds ONLY the phantom and the detector with its associated ROGeometry
-  hadrontherapyDetectorConstruction = new HadrontherapyDetectorConstruction(physicalTreatmentRoom); 
-  
+   hadrontherapyDetectorConstruction = new HadrontherapyDetectorConstruction(physicalTreatmentRoom);
+ 
+
+ //***************************** PW ***************************************
+
+ hadrontherapyDetectorConstruction->InitializeDetectorROGeometry(RO,hadrontherapyDetectorConstruction->GetDetectorToWorldPosition());
+
+//***************************** PW ***************************************
+ 
+ 
+
   return physicalTreatmentRoom;
 }
 
@@ -459,6 +489,15 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   brass -> AddElement(zincNist, fractionmass = 30 *perCent);
   brass -> AddElement(copperNist, fractionmass = 70 *perCent);
 
+
+//***************************** PW ***************************************
+
+// DetectorROGeometry Material
+  new G4Material("dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+
+//***************************** PW ***************************************
+
+  
  
   // MATERIAL ASSIGNMENT
   // Range shifter

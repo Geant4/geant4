@@ -27,7 +27,7 @@
 /// \brief Implementation of the SteppingAction class
 //
 //
-// $Id$
+// $Id: SteppingAction.cc 68015 2013-03-13 13:27:27Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,8 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
                                          EventAction* evt)
-:fDetector(det), fEventAction(evt)                                         
+: G4UserSteppingAction(), 
+  fDetector(det), fEventAction(evt)                                         
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

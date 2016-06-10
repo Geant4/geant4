@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Allocator.hh 71573 2013-06-18 10:26:21Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -49,8 +49,20 @@
 
 #include "G4AllocatorPool.hh"
 
+class G4AllocatorBase
+{
+  public:
+    G4AllocatorBase(); 
+    virtual ~G4AllocatorBase();
+    virtual void ResetStorage()=0;
+    virtual size_t GetAllocatedSize() const=0;
+    virtual int GetNoPages() const=0;
+    virtual size_t GetPageSize() const=0;
+    virtual void IncreasePageSize( unsigned int sz )=0;
+};
+
 template <class Type>
-class G4Allocator
+class G4Allocator : public G4AllocatorBase
 {
   public:  // with description
 

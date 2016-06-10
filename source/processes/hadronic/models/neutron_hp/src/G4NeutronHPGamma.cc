@@ -30,7 +30,7 @@
 #include "G4NeutronHPGamma.hh"
 #include "G4SystemOfUnits.hh"
 
-int G4NeutronHPGamma::instancecount = 0;
+G4ThreadLocal int G4NeutronHPGamma::instancecount = 0;
 
   G4NeutronHPGamma::G4NeutronHPGamma() 
   {
@@ -40,7 +40,7 @@ int G4NeutronHPGamma::instancecount = 0;
 
   G4NeutronHPGamma::~G4NeutronHPGamma() {instancecount--;}
 
-G4bool G4NeutronHPGamma::Init(std::ifstream & aDataFile)
+G4bool G4NeutronHPGamma::Init(std::istream & aDataFile)
 {
   G4bool theResult = true;
   if(aDataFile >> levelEnergy)

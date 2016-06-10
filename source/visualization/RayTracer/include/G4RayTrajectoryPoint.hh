@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RayTrajectoryPoint.hh 77479 2013-11-25 10:01:22Z gcosmo $
 //
 //
 
@@ -70,7 +70,7 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
     inline const G4VisAttributes* GetPreStepAtt() const { return preStepAtt; }
     inline void SetPostStepAtt(const G4VisAttributes* val) { postStepAtt = val; }
     inline const G4VisAttributes* GetPostStepAtt() const { return postStepAtt; }
-    inline void SetSurfaceNormal(G4ThreeVector val) { surfaceNormal = val; }
+    inline void SetSurfaceNormal(const G4ThreeVector& val) { surfaceNormal = val; }
     inline G4ThreeVector GetSurfaceNormal() const { return surfaceNormal; }
     inline void SetStepLength(G4double val) { stepLength = val; }
     inline G4double GetStepLength() const { return stepLength; }
@@ -80,21 +80,21 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
 };
 
 #if defined G4VIS_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4RayTrajectoryPoint>* rayTrajectoryPointAllocator;
 #else
-  extern G4DLLIMPORT G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4RayTrajectoryPoint>* rayTrajectoryPointAllocator;
 #endif
 
 inline void* G4RayTrajectoryPoint::operator new(size_t)
 {
-   void *aTrajectoryPoint;
-   aTrajectoryPoint = (void *) G4RayTrajectoryPointAllocator.MallocSingle();
-   return aTrajectoryPoint;
+   if(!rayTrajectoryPointAllocator)
+   { rayTrajectoryPointAllocator = new G4Allocator<G4RayTrajectoryPoint>; }
+   return (void *) rayTrajectoryPointAllocator->MallocSingle();
 }
 
 inline void G4RayTrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-   G4RayTrajectoryPointAllocator.FreeSingle((G4RayTrajectoryPoint *) aTrajectoryPoint);
+   rayTrajectoryPointAllocator->FreeSingle((G4RayTrajectoryPoint *) aTrajectoryPoint);
 }
 
 #endif

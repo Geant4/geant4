@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbVolumeMgr.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgbVolumeMgr
@@ -50,7 +50,7 @@
 #include "G4tgrMessenger.hh"
 #include "G4tgbDetectorBuilder.hh"
 
-G4tgbVolumeMgr* G4tgbVolumeMgr::theInstance = 0;
+G4ThreadLocal G4tgbVolumeMgr* G4tgbVolumeMgr::theInstance = 0;
 
 //---------------------------------------------------------------------
 G4tgbVolumeMgr::G4tgbVolumeMgr() 

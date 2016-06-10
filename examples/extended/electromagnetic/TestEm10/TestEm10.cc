@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm10 example
 //
 //
-// $Id$
+// $Id: TestEm10.cc 73033 2013-08-15 09:24:45Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,9 +94,8 @@ int main(int argc,char** argv)
 
   runManager->SetUserAction(eventAction);
 
-  Em10SteppingAction* steppingAction = new Em10SteppingAction(detector,
-                                                            eventAction, 
-                                                            runAction);
+  Em10SteppingAction* steppingAction = new Em10SteppingAction(eventAction,
+                                                              runAction);
   runManager->SetUserAction(steppingAction);
 
 

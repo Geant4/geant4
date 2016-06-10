@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -54,47 +54,42 @@ G4MIRDUrinaryBladder::~G4MIRDUrinaryBladder()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDUrinaryBladder::Construct(const G4String& volumeName, G4VPhysicalVolume* mother,
-							const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
+						   const G4String& colourName, G4bool wireFrame, G4bool)
 {
  
-  G4cout << "Construct " << volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
 
- G4double ax = 4.958*cm; 
- G4double by= 3.458 *cm;
- G4double cz= 3.458 *cm;
+  G4double ax = 4.958*cm; 
+  G4double by= 3.458 *cm;
+  G4double cz= 3.458 *cm;
  
- G4Ellipsoid* bladder = new G4Ellipsoid("bladder_out",ax, by, cz);
+  G4Ellipsoid* bladder = new G4Ellipsoid("bladder_out",ax, by, cz);
  
- ax = 4.706 * cm;
- by = 3.206 * cm;
- cz = 3.206 * cm;
- G4Ellipsoid* inner = new G4Ellipsoid("innerBladder", ax, by, cz);
+  ax = 4.706 * cm;
+  by = 3.206 * cm;
+  cz = 3.206 * cm;
+  G4Ellipsoid* inner = new G4Ellipsoid("innerBladder", ax, by, cz);
  
- G4SubtractionSolid* totalBladder = new G4SubtractionSolid("bladder", bladder, inner);
+  G4SubtractionSolid* totalBladder = new G4SubtractionSolid("bladder", bladder, inner);
 
- G4LogicalVolume* logicUrinaryBladder = new G4LogicalVolume(totalBladder, soft,
-							    "logical" + volumeName,
-							    0, 0, 0);
+  G4LogicalVolume* logicUrinaryBladder = new G4LogicalVolume(totalBladder, soft,
+							     "logical" + volumeName,
+							     0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physUrinaryBladder = new G4PVPlacement(0,G4ThreeVector(0 *cm, -4.5 *cm,-27. *cm),
-      			       "physicalUrinaryBladder",
-  			       logicUrinaryBladder,
-			       mother,
-			       false,
-			       0, true);
+							    "physicalUrinaryBladder",
+							    logicUrinaryBladder,
+							    mother,
+							    false,
+							    0, true);
 
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicUrinaryBladder->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
 
   // Visualization Attributes
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();

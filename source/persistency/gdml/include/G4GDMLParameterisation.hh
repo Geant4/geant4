@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GDMLParameterisation.hh 77528 2013-11-25 13:06:36Z gcosmo $
 //
 //
 // class G4GDMLParameterisation
@@ -49,6 +49,9 @@
 #include "G4Cons.hh"
 #include "G4Sphere.hh"
 #include "G4Orb.hh"
+#include "G4Ellipsoid.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4Torus.hh"
 #include "G4Para.hh"
 #include "G4Hype.hh"
@@ -86,6 +89,7 @@ class G4GDMLParameterisation : public G4VPVParameterisation
    void ComputeDimensions(G4Cons&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Sphere&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Orb&,const G4int,const G4VPhysicalVolume*) const;
+   void ComputeDimensions(G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Torus&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Para&,const G4int,const G4VPhysicalVolume*) const;
    void ComputeDimensions(G4Hype&,const G4int,const G4VPhysicalVolume*) const;

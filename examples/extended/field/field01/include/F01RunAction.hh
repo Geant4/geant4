@@ -27,32 +27,27 @@
 /// \brief Definition of the F01RunAction class
 //
 //
-// $Id$
+// $Id: F01RunAction.hh 76248 2013-11-08 11:19:52Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01RunAction_h
 #define F01RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "globals.hh"
-#include <iostream>
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class F01RunMessenger;
 class G4Run;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01RunAction : public G4UserRunAction
 {
   public:
     F01RunAction();
-    ~F01RunAction();
+    virtual ~F01RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
@@ -64,7 +59,7 @@ class F01RunAction : public G4UserRunAction
   private:
 
     F01RunMessenger* fMessenger;
-    G4int fSaveRndm;    
+    G4int fSaveRndm;
 };
 
 #endif

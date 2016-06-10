@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPFissionBaseFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
@@ -57,11 +58,13 @@
       return; // no data for exactly this isotope.
     }
 
-    std::ifstream theData(filename, std::ios::in);
+    //std::ifstream theData(filename, std::ios::in);
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
     G4int dummy;
     if(!(theData))
     {
-      theData.close();
+      //theData.close();
       hasFSData = false;
       hasXsec = false;
       hasAnyData = false;
@@ -74,7 +77,7 @@
     if (!(theData >> dummy))
     {
       hasFSData = false;
-      theData.close();
+      //theData.close();
       return;
     }
     theData >> dummy;
@@ -84,7 +87,7 @@
     theData >> dummy >> dummy;
 
     theEnergyDistribution.Init(theData);
-    theData.close();
+    //theData.close();
     
   }
   

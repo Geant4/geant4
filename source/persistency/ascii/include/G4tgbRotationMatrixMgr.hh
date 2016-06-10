@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbRotationMatrixMgr.hh 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgbRotationMatrixMgr
@@ -83,7 +83,7 @@ class G4tgbRotationMatrixMgr
     G4tgbRotationMatrixMgr();
     void CopyRotMats();
 
-    static G4tgbRotationMatrixMgr* theInstance;
+    static G4ThreadLocal G4tgbRotationMatrixMgr* theInstance;
    
   private:
 

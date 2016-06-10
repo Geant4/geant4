@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Mag_UsualEqRhs.cc 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 //  This is the 'standard' right-hand side for the equation of motion
@@ -40,7 +40,7 @@
 #include "globals.hh"    // For DBL_MAX
 
 G4Mag_UsualEqRhs::G4Mag_UsualEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ), fInvCurrentMomentumXc(1.0e+99) {}
+  : G4Mag_EqRhs( MagField ) {}
 
 G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs() {}
 
@@ -67,14 +67,10 @@ G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
 
 void
 G4Mag_UsualEqRhs::
- SetChargeMomentumMass( G4double particleCharge, // in e+ units
+ SetChargeMomentumMass( G4ChargeState particleCharge,
                         G4double MomentumXc,
 			G4double mass)
 
 {
-   // fInvCurrentMomentumXc= 1.0e+99; 
-   // if( MomentumXc != 0.0 ){ 
-   //   fInvCurrentMomentumXc= 1.0 / MomentumXc;
-   // }
    G4Mag_EqRhs::SetChargeMomentumMass( particleCharge, MomentumXc, mass);
 }

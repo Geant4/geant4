@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 70906 2013-06-07 10:36:44Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct)
-:fDetector(det), fRunAction(RuAct)
+:G4UserSteppingAction(),fDetector(det), fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,8 +78,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4double x2 = postPoint->GetPosition().x();  
   G4double x  = x1 + G4UniformRand()*(x2-x1) + 0.5*(fDetector->GetAbsorSizeX());
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->FillH1(1, x, edep);
-  analysisManager->FillH1(2, x, edep);    
+  analysisManager->FillH1(1, x, edep);  
+  analysisManager->FillH1(2, x, edep);
 
   //fill tallies
   //

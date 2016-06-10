@@ -26,20 +26,21 @@
 /// \file field/field02/src/F02FieldMessenger.cc
 /// \brief Implementation of the F02FieldMessenger class
 //
-// $Id$
-// 
+//
+// $Id: F02FieldMessenger.cc 76247 2013-11-08 11:18:52Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F02FieldMessenger.hh"
-#include "F02ElectricFieldSetup.hh"
 
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+#include "F02ElectricFieldSetup.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
  : G4UImessenger(),
@@ -49,7 +50,7 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
    fElFieldCmd(0),
    fMinStepCmd(0),
    fUpdateCmd(0)
-{ 
+{
   fFieldDir = new G4UIdirectory("/field/");
   fFieldDir->SetGuidance("F02 field tracking control.");
 
@@ -58,29 +59,29 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
   fStepperCmd->SetParameterName("choice",true);
   fStepperCmd->SetDefaultValue(4);
   fStepperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
- 
+
   fUpdateCmd = new G4UIcmdWithoutParameter("/field/update",this);
   fUpdateCmd->SetGuidance("Update calorimeter geometry.");
   fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
   fUpdateCmd->AvailableForStates(G4State_Idle);
-      
-  fElFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
+
+  fElFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);
   fElFieldCmd->SetGuidance("Define uniform Electric field.");
   fElFieldCmd->SetGuidance("Electric field will be in Z direction.");
   fElFieldCmd->SetGuidance("Value of Electric field has to be given in volt/m");
   fElFieldCmd->SetParameterName("Ez",false,false);
   fElFieldCmd->SetDefaultUnit("volt/m");
-  fElFieldCmd->AvailableForStates(G4State_Idle); 
+  fElFieldCmd->AvailableForStates(G4State_Idle);
  
-  fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
+  fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCmd->SetGuidance("Define minimal step");
   fMinStepCmd->SetParameterName("min step",false,false);
   fMinStepCmd->SetDefaultUnit("mm");
-  fMinStepCmd->AvailableForStates(G4State_Idle);  
+  fMinStepCmd->AvailableForStates(G4State_Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02FieldMessenger::~F02FieldMessenger()
 {
@@ -91,26 +92,18 @@ F02FieldMessenger::~F02FieldMessenger()
   delete fUpdateCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F02FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
-{ 
+void F02FieldMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
   if( command == fStepperCmd )
-  { 
     fElFieldSetup->SetStepperType(fStepperCmd->GetNewIntValue(newValue));
-  }  
   if( command == fUpdateCmd )
-  { 
-    fElFieldSetup->UpdateField(); 
-  }
+    fElFieldSetup->UpdateField();
   if( command == fElFieldCmd )
-  { 
     fElFieldSetup->SetFieldValue(fElFieldCmd->GetNewDoubleValue(newValue));
-  }
   if( command == fMinStepCmd )
-  { 
     fElFieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));
-  }
 }
 
-/////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

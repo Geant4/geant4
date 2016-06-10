@@ -42,7 +42,7 @@ class G4AntiXiMinusInelasticProcess : public G4HadronInelasticProcess
 {
   public:
     
-    G4AntiXiMinusInelasticProcess(const G4String& processName = "AntiXiMinusInelastic");
+    G4AntiXiMinusInelasticProcess(const G4String& processName = "anti_xi-Inelastic");
     
     ~G4AntiXiMinusInelasticProcess() {}
 

@@ -99,3 +99,9 @@ G4bool G4NeutronHPThermalScatteringNames::IsThisThermalElement( G4String materia
    if ( nist_names.find ( std::pair<G4String,G4String>(material,element) ) != nist_names.end() ) result = true; 
    return result;
 }
+
+                                                               //Name of G4Element , Name of NDL file
+void G4NeutronHPThermalScatteringNames::AddThermalElement ( G4String nameG4Element , G4String filename)
+{  
+   if ( names.find ( nameG4Element ) == names.end() ) names.insert( std::pair<G4String,G4String>( nameG4Element , filename ) ); 
+}

@@ -26,24 +26,23 @@
 /// \file hadronic/Hadr03/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 73011 2013-08-15 08:48:30Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
 
 #include "G4ParticleTypes.hh"
 #include "G4RunManager.hh"
 #include "G4HadronicProcess.hh"
-			   
+                           
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(PrimaryGeneratorAction* prim, RunAction* RuAct)
-:fPrimary(prim),fRunAction(RuAct)
+SteppingAction::SteppingAction(RunAction* RuAct)
+: G4UserSteppingAction(),fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,7 +104,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   //secondaries
   //
-  const G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+  const std::vector<const G4Track*>* secondary 
+                                    = aStep->GetSecondaryInCurrentStep();  
   for (size_t lp=0; lp<(*secondary).size(); lp++) {
     particle = (*secondary)[lp]->GetDefinition(); 
     G4String name   = particle->GetParticleName();

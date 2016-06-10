@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Tet.cc 76263 2013-11-08 11:41:52Z gcosmo $
 //
 // class G4Tet
 //
@@ -56,7 +56,9 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.16 2010-10-20 08:54:18 gcosmo Exp $";
+#if !defined(G4GEOM_USE_UTET)
+
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc 76263 2013-11-08 11:41:52Z gcosmo $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -67,8 +69,6 @@ const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.16 2010-10-20 08:54:18 gcosmo Exp
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 #include "G4ThreeVector.hh"
@@ -421,12 +421,53 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
   G4double r142=std::fabs(p.dot(fNormal142)-fCdotN142);
   G4double r234=std::fabs(p.dot(fNormal234)-fCdotN234);
 
-  if( (r123<=r134) && (r123<=r142) && (r123<=r234) )  { return fNormal123; }
-  else if ( (r134<=r142) && (r134<=r234) )  { return fNormal134; }
-  else if (r142 <= r234)  { return fNormal142; }
-  return fNormal234;
-}
+  const G4double delta = 0.5*kCarTolerance;
+  G4ThreeVector sumnorm(0., 0., 0.);
+  G4int noSurfaces=0; 
 
+  if (r123 <= delta)         
+  {
+     noSurfaces ++; 
+     sumnorm= fNormal123; 
+  }
+
+  if (r134 <= delta)    
+  {
+     noSurfaces ++; 
+     sumnorm += fNormal134; 
+  }
+ 
+  if (r142 <= delta)    
+  {
+     noSurfaces ++; 
+     sumnorm += fNormal142;
+  }
+  if (r234 <= delta)    
+  {
+     noSurfaces ++; 
+     sumnorm += fNormal234;
+  }
+  
+  if( noSurfaces > 0 )
+  { 
+     if( noSurfaces == 1 )
+     { 
+       return sumnorm; 
+     }
+     else
+     {
+       return sumnorm.unit();
+     }
+  }
+  else // Approximative Surface Normal
+  {
+
+    if( (r123<=r134) && (r123<=r142) && (r123<=r234) ) { return fNormal123; }
+    else if ( (r134<=r142) && (r134<=r234) )           { return fNormal134; }
+    else if (r142 <= r234)                             { return fNormal142; }
+    return fNormal234;
+  }
+}
 ///////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to box from an outside point
@@ -577,12 +618,12 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
     }
     else if(calcNorm && n)
     {
-      static G4ThreeVector normal;
+      G4ThreeVector normal;
       if(tt==t1)        { normal=fNormal123; }
       else if (tt==t2)  { normal=fNormal134; }
       else if (tt==t3)  { normal=fNormal142; }
       else if (tt==t4)  { normal=fNormal234; }
-      n=&normal;
+      *n=normal;
       if(validNorm) { *validNorm=true; }
     }
 
@@ -793,7 +834,7 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
 {
   G4Polyhedron *ph=new G4Polyhedron;
   G4double xyz[4][3];
-  static G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
+  const G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
   xyz[0][0]=fAnchor.x(); xyz[0][1]=fAnchor.y(); xyz[0][2]=fAnchor.z();
   xyz[1][0]=fP2.x(); xyz[1][1]=fP2.y(); xyz[1][2]=fP2.z();
   xyz[2][0]=fP3.x(); xyz[2][1]=fP3.y(); xyz[2][2]=fP3.z();
@@ -802,15 +843,6 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
   ph->createPolyhedron(4,4,xyz,faces);
 
   return ph;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// CreateNURBS
-
-G4NURBS* G4Tet::CreateNURBS () const 
-{
-  return new G4NURBSbox (fDx, fDy, fDz);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -828,3 +860,5 @@ G4Polyhedron* G4Tet::GetPolyhedron () const
     }
   return fpPolyhedron;
 }
+
+#endif

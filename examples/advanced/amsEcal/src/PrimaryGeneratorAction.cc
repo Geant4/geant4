@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 73008 2013-08-15 08:43:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,7 +32,6 @@
 
 #include "PrimaryGeneratorMessenger.hh"
 #include "DetectorConstruction.hh"
-#include "HistoManager.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
@@ -43,9 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det,
-                               HistoManager* hist)
-:Detector(det),histoManager(hist) 
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
+:Detector(det)
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);

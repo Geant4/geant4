@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: DMXMinEkineCuts.cc 69148 2013-04-19 10:35:21Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -41,15 +41,15 @@
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
 #include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
+#include "G4LossTableManager.hh"
 
 DMXMinEkineCuts::DMXMinEkineCuts(const G4String& aName)
   : DMXSpecialCuts(aName)
 {
-   if (verboseLevel>1) {
-     G4cout << GetProcessName() << " is created "<< G4endl;
+    if (verboseLevel>1) {
+    G4cout << GetProcessName() << " is created "<< G4endl;
    }
-   SetProcessType(fUserDefined);
+  SetProcessType(fUserDefined);
 }
 
 DMXMinEkineCuts::~DMXMinEkineCuts()
@@ -63,37 +63,36 @@ DMXMinEkineCuts::DMXMinEkineCuts(DMXMinEkineCuts&)
 G4double DMXMinEkineCuts::PostStepGetPhysicalInteractionLength(
                              const G4Track& aTrack,
 			     G4double ,
-			     G4ForceCondition* condition
-			    )
+			     G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
-
-   G4double     proposedStep = DBL_MAX;
-   // get the pointer to UserLimits
-   G4UserLimits* pUserLimits = aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
-   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
   
-   if (pUserLimits && aParticleDef->GetPDGCharge() != 0.0) {
-     //min kinetic energy
-     G4double temp = DBL_MAX;
-     G4double    eKine     = aParticle->GetKineticEnergy();
-     const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
-     G4double eMin = pUserLimits->GetUserMinEkine(aTrack);
+  G4double     proposedStep = DBL_MAX;
+  // get the pointer to UserLimits
+  G4UserLimits* pUserLimits = aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
+  
+  if (pUserLimits && aParticleDef->GetPDGCharge() != 0.0) {
+    //min kinetic energy
+    G4double temp = DBL_MAX;
+    G4double    eKine     = aParticle->GetKineticEnergy();
+    const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+    G4double eMin = pUserLimits->GetUserMinEkine(aTrack);
 
-     G4double    rangeNow = DBL_MAX;
+    if (eKine < eMin)
+      return 0.;
 
-     rangeNow = G4EnergyLossTables::GetRange(aParticleDef,eKine,couple);
+    G4double    rangeNow = DBL_MAX;
+      
+    G4LossTableManager* lossManager = G4LossTableManager::Instance();
+    rangeNow = lossManager->GetRange(aParticleDef,eKine,couple);
 
-     if (eKine < eMin ) {
-       proposedStep = 0.;
-     } else {
-       // charged particles only
-       G4double rangeMin = G4EnergyLossTables::GetRange(aParticleDef,eMin,couple);
-       temp = rangeNow - rangeMin;
-       if (proposedStep > temp) proposedStep = temp;
-     }
-   }
-   return proposedStep;
+    // charged particles only      
+    G4double rangeMin = lossManager->GetRange(aParticleDef,eMin,couple); 
+    temp = rangeNow - rangeMin;
+    if (proposedStep > temp) proposedStep = temp;  
+  }
+  return proposedStep;
 }

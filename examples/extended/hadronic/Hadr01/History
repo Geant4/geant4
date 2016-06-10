@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2010-11-19 20:13:26 vnivanch Exp $
+$Id: History 78109 2013-12-03 14:54:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-12-13  A. Dotti      (exhadr01-V09-06-07)
+- Updated .README for changes in README
+
+21-11-13  A. Dotti      (exhadr01-V09-06-06)
+- USe G4RunManager::ReinitializeGeometry() to trigger geometry
+  rebuilds. 
+- Remove ui command /testhadr/Update and corresponding
+  DetectorConstruction::Update method
+- Mark UI command to change detector as ToBeBroadcasted(false)
+- Update README file for change in ui command 
+- Start migration to MT: added CreateSDandField method 
+
+29-07-13  P. Gumplinger (exhadr01-V09-06-05)
+- fix MAC/clang32 compilation warnings
+
+05-06-13  I. Hrivnacova (exhadr01-V09-06-04)
+- Applied coding guidelines (data members names and initialization, 
+  tabulations, separators)
+
+05-04-13  V.Ivanchenko (exhadr01-V09-06-03)
+- Appling code guidelines
+
+31-01-13  V.Ivanchenko (exhadr01-V09-06-02)
+- PhysicsList - migration to new structure of physics_lists
+
+12-12-12  V.Ivanchenko (exhadr01-V09-06-01)
+- PhysicsList - removed unused LHEP builder header
+
+07-12-12  V.Ivanchenko (exhadr01-V09-06-00)
+- PhysicsList - removed CHIPS and LHEP builders
 
 17-11-12  V.Ivanchenko (exhadr01-V09-05-09)
 - PhysicsList - bug fixed (absence of elestic scattering)

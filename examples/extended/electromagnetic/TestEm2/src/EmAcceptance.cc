@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/EmAcceptance.cc
 /// \brief Implementation of the Emeptance class
 //
-// $Id$
+// $Id: EmAcceptance.cc 74994 2013-10-25 10:47:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EmAcceptance::EmAcceptance()
+ : fIsAccepted(false)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,8 +66,8 @@ void EmAcceptance::EndOfAcceptance()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
-                                           G4double avr, G4double avr0,
-                                           G4double rms, G4double limit)
+                                     G4double avr, G4double avr0,
+                                     G4double rms, G4double limit)
 {
   G4double x = std::sqrt((G4double)stat);
   G4double dde = avr - avr0;
@@ -74,7 +75,7 @@ void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
   if(std::fabs(de) > limit) fIsAccepted = false;
   
   G4cout << title << ": " << avr << "  del" << title << "= " << dde 
-                                 << " nrms= " << de << G4endl;
+         << " nrms= " << de << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

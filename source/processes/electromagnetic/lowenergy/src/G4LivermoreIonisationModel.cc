@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermoreIonisationModel.cc 74822 2013-10-22 14:42:13Z gcosmo $
 //
 // Author: Luciano Pandola
 //         on base of G4LowEnergyIonisation developed by A.Forti and V.Ivanchenko
@@ -69,6 +69,7 @@
 #include "G4SemiLogInterpolation.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
+#include "G4DeltaAngle.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -83,6 +84,7 @@ G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinitio
   fIntrinsicHighEnergyLimit = 100.0*GeV;
 
   verboseLevel = 0;
+  //SetAngularDistribution(new G4DeltaAngle());
 
   transitionManager = G4AtomicTransitionManager::Instance();
 }
@@ -104,7 +106,8 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
   if (particle != G4Electron::Electron())
     {
       G4Exception("G4LivermoreIonisationModel::Initialise",
-		    "em0002",FatalException,"Livermore Ionisation Model is applicable only to electrons");
+		  "em0002",FatalException,
+		  "Livermore Ionisation Model is applicable only to electrons");
     }
 
   //Read energy spectrum
@@ -131,8 +134,9 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
   if(ndec <= 0) { ndec = 1; }
 
   G4VDataSetAlgorithm* interpolation = new G4SemiLogInterpolation();
-  crossSectionHandler = new G4eIonisationCrossSectionHandler(energySpectrum,interpolation,
-							     emin,emax,nbins*ndec);
+  crossSectionHandler = 
+    new G4eIonisationCrossSectionHandler(energySpectrum,interpolation,
+					 emin,emax,nbins*ndec);
   crossSectionHandler->Clear();
   crossSectionHandler->LoadShellData("ioni/ion-ss-cs-");
   //This is used to retrieve cross section values later on
@@ -167,29 +171,35 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double 
-G4LivermoreIonisationModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-						       G4double energy,
-						       G4double Z, G4double,
-						       G4double cutEnergy, 
-						       G4double)
+G4LivermoreIonisationModel::ComputeCrossSectionPerAtom(
+                            const G4ParticleDefinition*,
+			    G4double energy,
+			    G4double Z, G4double,
+			    G4double cutEnergy, 
+			    G4double)
 {
   G4int iZ = (G4int) Z;
   if (!crossSectionHandler)
     {
       G4Exception("G4LivermoreIonisationModel::ComputeCrossSectionPerAtom",
-		    "em1007",FatalException,"The cross section handler is not correctly initialized");
+		  "em1007",FatalException,
+		  "The cross section handler is not correctly initialized");
       return 0;
     }
   
   //The cut is already included in the crossSectionHandler
   G4double cs = 
-    crossSectionHandler->GetCrossSectionAboveThresholdForElement(energy,cutEnergy,iZ);
+    crossSectionHandler->GetCrossSectionAboveThresholdForElement(energy,
+								 cutEnergy,
+								 iZ);
 
   if (verboseLevel > 1)
     {
       G4cout << "G4LivermoreIonisationModel " << G4endl;
-      G4cout << "Cross section for delta emission > " << cutEnergy/keV << " keV at " <<
-	energy/keV << " keV and Z = " << iZ << " --> " << cs/barn << " barn" << G4endl;
+      G4cout << "Cross section for delta emission > " 
+	     << cutEnergy/keV << " keV at " 
+	     << energy/keV << " keV and Z = " << iZ << " --> " 
+	     << cs/barn << " barn" << G4endl;
     }
   return cs;
 }
@@ -197,10 +207,11 @@ G4LivermoreIonisationModel::ComputeCrossSectionPerAtom(const G4ParticleDefinitio
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LivermoreIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
-							  const G4ParticleDefinition* ,
-							  G4double kineticEnergy,
-							  G4double cutEnergy)
+G4double 
+G4LivermoreIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
+						 const G4ParticleDefinition*,
+						 G4double kineticEnergy,
+						 G4double cutEnergy)
 {
   G4double sPower = 0.0;
 
@@ -228,8 +239,9 @@ G4double G4LivermoreIonisationModel::ComputeDEDXPerVolume(const G4Material* mate
   if (verboseLevel > 2)
     {
       G4cout << "G4LivermoreIonisationModel " << G4endl;
-      G4cout << "Stopping power < " << cutEnergy/keV << " keV at " << 
-	kineticEnergy/keV << " keV = " << sPower/(keV/mm) << " keV/mm" << G4endl;
+      G4cout << "Stopping power < " << cutEnergy/keV 
+	     << " keV at " << kineticEnergy/keV << " keV = " 
+	     << sPower/(keV/mm) << " keV/mm" << G4endl;
     }
   
   return sPower;
@@ -237,11 +249,12 @@ G4double G4LivermoreIonisationModel::ComputeDEDXPerVolume(const G4Material* mate
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-						   const G4MaterialCutsCouple* couple,
-						   const G4DynamicParticle* aDynamicParticle,
-						   G4double cutE,
-						   G4double maxE)
+void G4LivermoreIonisationModel::SampleSecondaries(
+                                 std::vector<G4DynamicParticle*>* fvect,
+				 const G4MaterialCutsCouple* couple,
+				 const G4DynamicParticle* aDynamicParticle,
+				 G4double cutE,
+				 G4double maxE)
 {
   
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();

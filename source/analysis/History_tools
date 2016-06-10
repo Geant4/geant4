@@ -1,3 +1,48 @@
+ 1.7.0 :
+ - test/cpp/list_free_segs.C : to list free segments in a out.root file.
+ - wroot/file : set_END() : update first back free segment m_first field
+   when writing something. This permits to have good free segs infos in file.
+ - wroot/file/make_free_seg : use free_seg/add_free() function.
+ - wroot/free_seg : add_free function.
+ - histo/c[1,2,3] : operator= : protect against same object.
+ - wroot/named/ObjArray : operator= : protect against same object.
+ - wroot/ntuple/column : operator= : protect against same object.
+ - sto/to() : have a default value.
+ - pointer/p2s : void* -> const void*.
+ - args/find() : have a default value.
+
+ 1.6.0 :
+ - test/cpp/wroot.cpp : add an empty tree to check the below modification.
+ - wroot/basket/stream : remove the if(!m_data.length()) test that
+   refrains to write an empty tree.
+ - wroot/store : put in this directory the code that permits to stream
+   histos with all their internal infos.
+ - args, path, hbook/hdummy.c : changes coming from the inlib/exlib
+   context but not used within g4tools. 
+
+ 1.5.0 :
+ - build_f77 : modifications to build from CYGWIN with DF98 fortran.
+ - wroot : osc_streamers, iobj_const_visitor, to, buffer, member_writer :
+   modifications in order to be able to stream histos as in
+   OpenScientist/BatchLab and then with all the internal infos.
+   We remember that the ROOT/TH streaming does not handle the number
+   of entries per bin (but only the weight per bin) and not the annotations.
+ - tools/gzip_buffer, test/cpp/wroot.cpp : show how to use compression
+   with zlib.
+ - histo/base_histo : in a for, change an unsigned to "unsigned int".
+ - histo/c[1,2,3]d : inlib::mn,mx<> changed to mn,mx<>.
+ - wroot/wbuf : have a public : set_byte_swap() method (then
+   the wbuf byte swapping can be changed out of the constructor).
+ - safe_cast, hbook/wntuple  : rename the global cast() functions
+   to safe_cast(). It permits to trace them more easily.
+ - strip : have a "return bool" returning true if some stripping had been done.
+ - test/cpp/use_cc, use_cpp, build : [cc,cpp]_linker : variables to
+   explicitely link with cc or cpp.
+ - test/cpp/use_cernlib : Windows : try to handle a build from cygwin.
+ - vmanip, mem, platform, mem : slight changes coming from the inlib/exlib
+   context but not used within g4tools. 
+ - license file : correct some typos (` to ').
+
  1.4.3 :
  - histo/b3,h3d : have a print() method. (Few things in it for the moment...)
  - histo/sliced : for h3 : projection_[xy,yz,xz] methods.

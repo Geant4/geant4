@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsSceneHandler.cc 70646 2013-06-03 15:07:58Z gcosmo $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -234,7 +234,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
     }
   }
   if (iGS < 0 || iGS >= nSystems) {
-    // Invalid command line argument or non.
+    // Invalid command line argument or none.
     // This shouldn't happen!!!!!!
     if (verbosity >= G4VisManager::errors) {
       G4cout << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsLinearVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 //  15 Feb 1996 - K.Amako : 1st version
 //  19 Jun 2009 - V.Ivanchenko : removed hidden bin 
+//  02 Oct 2013 - V.Ivanchenko : removed FindBinLocation
 //
 //--------------------------------------------------------------------
 
@@ -112,18 +113,3 @@ void G4PhysicsLinearVector::ScaleVector(G4double factorE, G4double factorV)
   baseBin = theEmin/dBin;
 }
 
-
-size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
-{
-  // For G4PhysicsLinearVector, FindBinLocation is implemented using
-  // a simple arithmetic calculation.
-  //
-  // Because this is a virtual function, it is accessed through a
-  // pointer to the G4PhyiscsVector object for most usages. In this
-  // case, 'inline' will not be invoked. However, there is a possibility 
-  // that the user access to the G4PhysicsLinearVector object directly and 
-  // not through pointers or references. In this case, the 'inline' will
-  // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
-
-  return size_t( theEnergy/dBin - baseBin ); 
-}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenInventorXtViewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation

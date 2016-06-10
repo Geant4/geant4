@@ -27,7 +27,7 @@
 /// \brief Main program of the biasing/B02 example
 //
 //
-// $Id$
+// $Id: exampleB02.cc 77475 2013-11-25 09:38:51Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -36,192 +36,120 @@
 // --------------------------------------------------------------
 // Comments
 //
-// This example intends to show how to use both importance sampling and a
-// customized scoring making use of the scoring framework
-// in a parallel geometry.
-// 
+// This example intends to show how to use importance sampling and scoring
+// in the mass (tracking) geometry.
 // A simple geometry consisting of a 180 cm high concrete cylinder
-// is constructed in the mass geometry.
-// A geometry is constructed in the parallel geometry
-// in order to assign importance values to slabs
-// of width 10cm and for scoring. The parallel world volume should 
-// overlap the mass world volume and  the radii of the slabs is larger 
-// than the radius of the concrete cylinder in the mass geometry.
+// divided into 18 slabs of 10cm each is created. 
+// Importance values are assigned to the 18 concrete slabs in the
+// detector construction class for simplicity.
 // Pairs of G4GeometryCell and importance values are stored in
 // the importance store.
-// The scoring uses the G4CellSCorer and one customized scorer for
-// the last slab. 
-// 
 // 
 
 // --------------------------------------------------------------
 
 #include <iostream>
 
-#include "G4VPhysicalVolume.hh"
+#include <stdlib.h>
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
+#include "G4VPhysicalVolume.hh"
 #include "G4UImanager.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4GeometryManager.hh"
 
+// user classes
 #include "B02DetectorConstruction.hh"
-#include "B02PhysicsList.hh"
-#include "B02PrimaryGeneratorAction.hh"
-
-#include "B02RunAction.hh"
-#include "B02PSScoringDetectorConstruction.hh"
-
-// construction for the parallel geometry
 #include "B02ImportanceDetectorConstruction.hh"
+#include "FTFP_BERT.hh"
+#include "G4ImportanceBiasing.hh"
+#include "G4ParallelWorldPhysics.hh"
+
+#include "B02ActionInitialization.hh"
+// #include "B02PrimaryGeneratorAction.hh"
+// #include "B02RunAction.hh"
 
 // Files specific for biasing and scoring
-//#include "G4Scorer.hh"
 #include "G4GeometrySampler.hh"
 #include "G4IStore.hh"
+#include "G4VWeightWindowStore.hh"
+#include "G4WeightWindowAlgorithm.hh"
 
-// customized scorer and store
-#include "B02CellScorer.hh"
-#include "B02CellScorerStore.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// a score table
-//#include "G4ScoreTable.hh"
-#include "B02ScoreTable.hh"
-
-// AIDA stuff
-
-#include "AIDA/IAnalysisFactory.h"
-#include "AIDA/ITree.h"
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogramFactory.h"
-
-
-
-int main(int , char **)
-{  
-  G4int numberOfEvents = 100;
-
-  G4long myseed = 345354;
-
-  CLHEP::HepRandom::setTheSeed(myseed);
-
-  G4RunManager *runManager = new G4RunManager;
-  
-  // create the detector      ---------------------------
-  B02DetectorConstruction *detector = new B02DetectorConstruction();
-  runManager->SetUserInitialization(detector);
-  //  ---------------------------------------------------
-
-  // create a parallel detector
-  // create a parallel detector
-  //  B02ImportanceDetectorConstruction *pdet = 
-  //    new B02ImportanceDetectorConstruction;
-  G4String parallelName("ParallelBiasingWorld");
-  B02ImportanceDetectorConstruction *pdet = 
-    new B02ImportanceDetectorConstruction(parallelName);
-  detector->RegisterParallelWorld(pdet);
-
-
-  B02PhysicsList* physlist = new B02PhysicsList;
-  physlist->AddParallelWorldName(parallelName); 
-  //physlist->AddParallelWorldName(sparallelName);
-  runManager->SetUserInitialization(physlist);
-  runManager->SetUserAction(new B02PrimaryGeneratorAction);
-  //  runManager->SetUserAction(new B02PrimaryGeneratorAction(ifElectron));
-  runManager->SetUserAction(new B02RunAction);
-
-  runManager->Initialize();
-
-  G4VPhysicalVolume* ghostWorld = pdet->GetWorldVolume();
-  G4VPhysicalVolume& aghostWorld = pdet->GetWorldVolumeAddress();
-
-  G4cout << " ghost world: " << pdet->GetName() << G4endl;
-
-  // create an importance 
-  G4IStore aIstore(aghostWorld);
-  // create a geometry cell for the world volume replpicanumber is 0!
-  G4GeometryCell gWorldVolumeCell(aghostWorld, 0);
-  // set world volume importance to 1
-  aIstore.AddImportanceGeometryCell(1, gWorldVolumeCell);
-
-  // create a customized cell scorer store
-  B02CellScorerStore b02store;
-
-  // set importance values and create scorers 
-  G4int cell(1);
-  for (cell=1; cell<=18; cell++) {
-    G4GeometryCell gCell = pdet->GetGeometryCell(cell);
-    G4cout << " adding cell: " << cell << " replica: " << gCell.GetReplicaNumber() << " name: " << gCell.GetPhysicalVolume().GetName() << G4endl;
-    G4double imp = std::pow(2.0,cell-1);
-    //x    aIstore.AddImportanceGeometryCell(imp, gCell);
-    aIstore.AddImportanceGeometryCell(imp, gCell.GetPhysicalVolume(), cell);
-    // adding the standard G4CellScorer for 17 concrete cells
-    if (cell<18) {
-      b02store.AddG4CellScorer(gCell);
-    }
+int main(int argc, char **argv)
+{
+  G4int mode = 0;
+  if (argc>1)  mode = atoi(argv[1]);
+  if(mode != 0) {
+    G4cout << " mode not used yet, refer to B01 to see WeightWindow technique " 
+           << mode << G4endl;
   }
 
-  // create a histogram for a special scorer for the last cell 
-  AIDA::IAnalysisFactory *af = AIDA_createAnalysisFactory();
-  AIDA::ITreeFactory *tf = af->createTreeFactory();
-  AIDA::ITree *tree = tf->create("b02.hbook", "hbook",false,true);
-  AIDA::IHistogramFactory *hf = af->createHistogramFactory( *tree );
-  AIDA::IHistogram1D *h = 
-    hf->createHistogram1D("10","w*sl vs. e", 30, 0., 20*MeV);
-  // create a special scorer for the last cell 
-  B02CellScorer b02scorer(h);
-  
+  G4int numberOfEvents = 100;
+  G4long myseed = 345354;
 
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+  G4cout << " Number of cores: " << G4Threading::G4GetNumberOfCores() << G4endl;
+  G4cout << " but using two! " << G4endl;
+  runManager->SetNumberOfThreads(2);
+  //  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+#else
+  G4RunManager * runManager = new G4RunManager;
+#endif
 
+  G4Random::setTheSeed(myseed);
 
-  // creating the geometry cell and add both to the store
-  G4GeometryCell gCell = pdet->GetGeometryCell(18);
-  b02store.AddB02CellScorer(&b02scorer, gCell);
+  // create the detector      ---------------------------
+  B02DetectorConstruction* detector = new B02DetectorConstruction();
+  runManager->SetUserInitialization(detector);
 
+  G4String parallelName("ParallelBiasingWorld");
+  B02ImportanceDetectorConstruction* pdet = 
+                   new B02ImportanceDetectorConstruction(parallelName);
+  detector->RegisterParallelWorld(pdet);
 
-  // create importance geometry cell pair for the "rest"cell
-  // with the same importance as the last concrete cell 
-  gCell = pdet->GetGeometryCell(19);
-  //  G4double imp = std::pow(2.0,18); 
-  G4double imp = std::pow(2.0,17); 
-  aIstore.AddImportanceGeometryCell(imp, gCell.GetPhysicalVolume(), 19);
-  
-
-  // create the importance and scoring sampler for biasing and scoring 
-  // in the parallel world
-
-  //  G4CellStoreScorer scorer(b02store); 
-
-  G4GeometrySampler pgs(ghostWorld,"neutron");
+  G4GeometrySampler pgs(pdet->GetWorldVolume(),"neutron");
 
   pgs.SetParallel(true);
 
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->RegisterPhysics(new G4ImportanceBiasing(&pgs,parallelName));
+  physicsList->RegisterPhysics(new G4ParallelWorldPhysics(parallelName));
+
+  runManager->SetUserInitialization(physicsList);
+
+ // Set user action classes through Worker Initialization
+ //
+  B02ActionInitialization* actions = new B02ActionInitialization;
+  runManager->SetUserInitialization(actions);
+
+  runManager->Initialize();
+
+  pdet->CreateImportanceStore();
+
+  //temporary fix before runManager->BeamOn works...
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  G4String command1 = "/control/cout/setCoutFile threadOut";
+  UImanager->ApplyCommand(command1);
+  G4String command2 = "/run/beamOn " + 
+                      G4UIcommand::ConvertToString(numberOfEvents);
+  UImanager->ApplyCommand(command2);
+
+  // open geometry for clean biasing stores clean-up
   //
-  //  pgs.PrepareScoring(&scorer);
-
-  pgs.PrepareImportanceSampling(&aIstore, 0);
-
-  pgs.Configure();
-
-  runManager->BeamOn(numberOfEvents);
-
-  // print a table of the scores
-  B02ScoreTable sp(&aIstore);
-
-
- 
-  tree->commit();
-  tree->close();
-
-  delete tree;
-  delete tf;
-  delete af;
+  G4GeometryManager::GetInstance()->OpenGeometry();
 
   pgs.ClearSampling();
 
   delete runManager;
- 
+
   return 0;
 }
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

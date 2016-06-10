@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -56,64 +56,60 @@ G4MIRDStomach::~G4MIRDStomach()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDStomach::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
-					         const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
+					    const G4String& colourName, G4bool wireFrame, G4bool)
 {
 
-  G4cout << "Construct "<< volumeName << G4endl;
- 
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
- G4double ax = 4. * cm;
- G4double by= 3. * cm;
- G4double cz = 8. * cm;
- //G4double zcut1 = -8. * cm;
- //G4double zcut2 = 8* cm;
+ 
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
+
+  G4double ax = 4. * cm;
+  G4double by= 3. * cm;
+  G4double cz = 8. * cm;
+  //G4double zcut1 = -8. * cm;
+  //G4double zcut2 = 8* cm;
 
   G4Ellipsoid* stomach_out = new G4Ellipsoid("stomach_out", 
-					 ax, by, cz);
+					     ax, by, cz);
   // zcut1, zcut2);
   /*
-  ax = 3.387 * cm;
-  by = 2.387 * cm;
-  cz = 7.387 * cm;
-  zcut1 = - 7.387 *cm;
-  zcut2 = 7.387 *cm;
+    ax = 3.387 * cm;
+    by = 2.387 * cm;
+    cz = 7.387 * cm;
+    zcut1 = - 7.387 *cm;
+    zcut2 = 7.387 *cm;
 
-  G4Ellipsoid* cavity = new G4Ellipsoid ("cavity", ax, by, cz, zcut1, zcut2);
+    G4Ellipsoid* cavity = new G4Ellipsoid ("cavity", ax, by, cz, zcut1, zcut2);
 
-  G4SubtractionSolid* stomach = new G4SubtractionSolid("stomach",stomach_out, cavity);
+    G4SubtractionSolid* stomach = new G4SubtractionSolid("stomach",stomach_out, cavity);
   */
   G4LogicalVolume* logicStomach = new G4LogicalVolume(stomach_out, soft,
 						      "logical" + volumeName, 0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physStomach = new G4PVPlacement(0,G4ThreeVector(8. *cm,-4. * cm, 0),
-      			       "physicalStomach",
-  			       logicStomach,
-			       mother,
-			       false,
-			       0, true);
+						     "physicalStomach",
+						     logicStomach,
+						     mother,
+						     false,
+						     0, true);
 
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicStomach->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
 
   // Visualization Attributes
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-
-   G4VisAttributes* StomachVisAtt = new G4VisAttributes(colour);
+  
+  G4VisAttributes* StomachVisAtt = new G4VisAttributes(colour);
   StomachVisAtt->SetForceSolid(wireFrame);
   logicStomach->SetVisAttributes(StomachVisAtt);
-
+  
   G4cout << "Stomach created !!!!!!" << G4endl;
-
+  
   // Testing Stomach Volume
   G4double StomachVol = logicStomach->GetSolid()->GetCubicVolume();
   G4cout << "Volume of Stomach = " << StomachVol/cm3 << " cm^3" << G4endl;

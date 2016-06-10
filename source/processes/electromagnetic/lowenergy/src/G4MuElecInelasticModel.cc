@@ -61,6 +61,16 @@ G4MuElecInelasticModel::G4MuElecInelasticModel(const G4ParticleDefinition*,
                                              const G4String& nam)
 :G4VEmModel(nam),fAtomDeexcitation(0),isInitialised(false)
 {
+  
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The name of the class G4MuElecInelasticModel is changed to G4MicroElecInelasticModel. " << G4endl;
+   G4cout << "   The obsolete class will be REMOVED with the next release of Geant4. " << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
+   
   nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
 
   verboseLevel= 0;
@@ -112,8 +122,8 @@ void G4MuElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
 
   // Energy limits
 
-  G4String fileElectron("muelec/sigma_inelastic_e_Si");
-  G4String fileProton("muelec/sigma_inelastic_p_Si");
+  G4String fileElectron("microelec/sigma_inelastic_e_Si");
+  G4String fileProton("microelec/sigma_inelastic_p_Si");
 
   G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
   G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
@@ -143,12 +153,12 @@ void G4MuElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
     // Final state
     
     std::ostringstream eFullFileName;
-    eFullFileName << path << "/muelec/sigmadiff_inelastic_e_Si.dat";
+    eFullFileName << path << "/microelec/sigmadiff_inelastic_e_Si.dat";
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
 
     if (!eDiffCrossSection)
     { 
-            G4Exception("G4MuElecInelasticModel::Initialise","em0003",FatalException,"Missing data file:/muelec/sigmadiff_inelastic_e_Si.dat");
+            G4Exception("G4MuElecInelasticModel::Initialise","em0003",FatalException,"Missing data file:/microelec/sigmadiff_inelastic_e_Si.dat");
     }
       
     eTdummyVec.push_back(0.);
@@ -178,7 +188,7 @@ void G4MuElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
     tableFile[proton] = fileProton;
 
     lowEnergyLimit[proton] = 50. * keV;
-    highEnergyLimit[proton] = 1. * GeV;
+    highEnergyLimit[proton] = 10. * GeV;
 
     // Cross section
     
@@ -190,12 +200,12 @@ void G4MuElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
     // Final state
 
     std::ostringstream pFullFileName;
-    pFullFileName << path << "/muelec/sigmadiff_inelastic_p_Si.dat";
+    pFullFileName << path << "/microelec/sigmadiff_inelastic_p_Si.dat";
     std::ifstream pDiffCrossSection(pFullFileName.str().c_str());
     
     if (!pDiffCrossSection)
     { 
-            G4Exception("G4MuElecInelasticModel::Initialise","em0003",FatalException,"Missing data file:/muelec/sigmadiff_inelastic_p_Si.dat");
+            G4Exception("G4MuElecInelasticModel::Initialise","em0003",FatalException,"Missing data file:/microelec/sigmadiff_inelastic_p_Si.dat");
     }
       
     pTdummyVec.push_back(0.);
@@ -428,15 +438,15 @@ void G4MuElecInelasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     G4int secNumberInit = 0;  // need to know at a certain point the energy of secondaries   
     G4int secNumberFinal = 0; // So I'll make the difference and then sum the energies
 
-    if(fAtomDeexcitation && Shell > 3) {
+    if(fAtomDeexcitation && Shell > 2) {
       G4int Z = 14;
       G4AtomicShellEnumerator as = fKShell;
 
-      if (Shell == 5) 
+      if (Shell == 4) 
 	{
 	  as = G4AtomicShellEnumerator(1);
 	}
-      else if (Shell == 4)
+      else if (Shell == 3)
 	{
 	  as = G4AtomicShellEnumerator(3);
 	}

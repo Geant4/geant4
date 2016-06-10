@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2010-11-10 09:16:33 gcosmo Exp $
+$Id: History 75219 2013-10-29 16:12:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 29th, 2013      T.Nikitina (geomdiv-V09-06-04)
+- Split G4Polycone into G4GenericPolycone and optimised.
+  Coworks with tag "geom-specific-V09-06-22".
+
+August 27th, 2013       G.Cosmo (geomdiv-V09-06-03)
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+March 22nd, 2013        G.Cosmo (geomdiv-V09-06-02)
+- Use dynamic instead of static cast in singleton accessor implementation
+  for G4PVDivisionFactory.
+
+March 21st, 2013        A.Dotti (geomdiv-V09-06-01)
+- Corrected definition of G4PVDivisionFactory singleton accessor for MT.
+
+February 22nd, 2013     G.Cosmo (geomdiv-V09-06-00)
+- Cleanup of changes for multi-threading in G4PVDivisionFactory.
+- Corrected composed cout in exceptions for G4ParameterisationBox and
+  G4ParameterisationTrd.
 
 June 12th, 2012         G.Cosmo (geomdiv-V09-05-01)
 - Explicitly use inclusion of headers for system of units and physical

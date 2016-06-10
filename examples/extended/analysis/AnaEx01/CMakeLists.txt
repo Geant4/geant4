@@ -33,6 +33,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Get examples sources from common and shared
 #
 list(APPEND sources 
+  ${PROJECT_SOURCE_DIR}/../shared/src/ActionInitialization.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/DetectorConstruction.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/DetectorMessenger.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/EventAction.cc
@@ -60,8 +61,9 @@ endif()
 if (HBOOK_FOUND)
   include_directories(
        ${PROJECT_SOURCE_DIR}/../../common/analysis/include)
-  list(APPEND sources 
-       ${PROJECT_SOURCE_DIR}/../../common/analysis/src/ExG4HbookAnalysisManager.cc)
+
+  file(GLOB add_sources ${PROJECT_SOURCE_DIR}/../../common/analysis/src/*.cc)
+  list(APPEND sources ${add_sources})
 
   add_custom_command(
        OUTPUT  ${PROJECT_BINARY_DIR}/close.o

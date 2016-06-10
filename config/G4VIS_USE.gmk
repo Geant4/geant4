@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.28 2009-11-17 11:34:56 gcosmo Exp $
+# $Id: G4VIS_USE.gmk 66368 2012-12-18 09:20:17Z gcosmo $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.

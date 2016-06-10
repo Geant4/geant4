@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10EventActionMessenger class
 //
 //
-// $Id$
+// $Id: Em10EventActionMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 
@@ -45,7 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em10EventActionMessenger::Em10EventActionMessenger(Em10EventAction* EvAct)
-:eventAction(EvAct)
+:G4UImessenger(),eventAction(EvAct)
 { 
   setVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
   setVerboseCmd->SetGuidance("Set verbose level ." );

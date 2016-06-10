@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSMaterials.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSMaterials.hh
 /// \brief Definition of the WLSMaterials class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,7 +43,7 @@ class WLSMaterials
 {
   public:
 
-    ~WLSMaterials();
+    virtual ~WLSMaterials();
  
     static WLSMaterials* GetInstance();
 
@@ -58,18 +57,18 @@ class WLSMaterials
 
   private:
 
-    static WLSMaterials* instance;
+    static WLSMaterials* fInstance;
 
-    G4NistManager*     nistMan;
+    G4NistManager*     fNistMan;
 
-    G4Material*        Air;
+    G4Material*        fAir;
 
-    G4Material*        PMMA;
-    G4Material*        Pethylene;
-    G4Material*        FPethylene;
-    G4Material*        Polystyrene;
-    G4Material*        Silicone;
-    G4Material*        Coating;
+    G4Material*        fPMMA;
+    G4Material*        fPethylene;
+    G4Material*        fFPethylene;
+    G4Material*        fPolystyrene;
+    G4Material*        fSilicone;
+    G4Material*        fCoating;
 
 };
 

@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -64,8 +62,8 @@ namespace G4INCL {
     SurfaceAvatar(G4INCL::Particle *aParticle, G4double time, G4INCL::Nucleus *aNucleus);
     virtual ~SurfaceAvatar();
 
-    G4INCL::IChannel* getChannel() const;
-    G4INCL::FinalState* getFinalState() const;
+    G4INCL::IChannel* getChannel();
+    G4INCL::FinalState* getFinalState();
 
     virtual void preInteraction();
     virtual FinalState *postInteraction(FinalState *);
@@ -79,11 +77,33 @@ namespace G4INCL {
     std::string dump() const;
 
     /// \brief Calculate the transmission probability for the particle
-    G4double getTransmissionProbability(Particle const * const particle) const;
+    G4double getTransmissionProbability(Particle const * const particle);
+
+    /// \brief Get the cosine of the refraction angle (precalculated by initializeRefractionVariables)
+    G4double getCosRefractionAngle() const { return cosRefractionAngle; }
+
+    /// \brief Get the outgoing momentum (precalculated by initializeRefractionVariables)
+    G4double getOutgoingMomentum() const { return particlePOut; }
+
+  private:
+    void initializeRefractionVariables(Particle const * const particle);
 
   private:
     G4INCL::Particle *theParticle;
     G4INCL::Nucleus *theNucleus;
+
+    G4double particlePIn;
+    G4double particlePOut;
+    G4double particleTOut;
+    G4double TMinusV;
+    G4double TMinusV2;
+    G4double particleMass;
+    G4double sinIncidentAngle;
+    G4double cosIncidentAngle;
+    G4double sinRefractionAngle;
+    G4double cosRefractionAngle;
+    G4double refractionIndexRatio;
+    G4bool internalReflection;
   };
 
 }

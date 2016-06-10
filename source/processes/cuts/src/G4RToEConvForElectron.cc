@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RToEConvForElectron.cc 70745 2013-06-05 10:54:00Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -42,7 +42,14 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-G4RToEConvForElectron::G4RToEConvForElectron() : G4VRangeToEnergyConverter()
+G4RToEConvForElectron::G4RToEConvForElectron() 
+  : G4VRangeToEnergyConverter(),
+    Mass(0.0),
+    Z(-1.),  
+    taul(0.0),
+    ionpot(0.0),
+    ionpotlog(-1.0e-10),
+    bremfactor(0.1)
 {    
   theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("e-");
   if (theParticle ==0) {
@@ -52,7 +59,9 @@ G4RToEConvForElectron::G4RToEConvForElectron() : G4VRangeToEnergyConverter()
       G4cout << " Electron is not defined !!" << G4endl;
     }
 #endif
-  } 
+  } else {
+    Mass = theParticle->GetPDGMass();
+  }
 }
 
 G4RToEConvForElectron::~G4RToEConvForElectron()
@@ -64,15 +73,10 @@ G4RToEConvForElectron::~G4RToEConvForElectron()
 // ************************* ComputeLoss ********************************
 // **********************************************************************
 G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
-					    G4double KineticEnergy) const
+					    G4double KineticEnergy) 
 {
-  static G4double Z;  
-  static G4double taul, ionpot, ionpotlog;
   const  G4double cbr1=0.02, cbr2=-5.7e-5, cbr3=1., cbr4=0.072;
   const  G4double Tlow=10.*keV, Thigh=1.*GeV;
-  static G4double bremfactor= 0.1 ;
-
-  static G4double Mass= theParticle->GetPDGMass();
 
   //  calculate dE/dx for electrons
   if( std::fabs(AtomicNumber-Z)>0.1 ) {

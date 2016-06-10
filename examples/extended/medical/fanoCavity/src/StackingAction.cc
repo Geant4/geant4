@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.cc 68996 2013-04-15 09:19:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,9 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(DetectorConstruction* det, RunAction* run,
-                               HistoManager* histo)
-:fDetector(det),fRunAction(run),fHistoManager(histo)
+StackingAction::StackingAction(DetectorConstruction* det, RunAction* run)
+:fDetector(det),fRunAction(run),fStackMessenger(0)
 {
   fMatWall = 0;
   fZcav = 0.; 
@@ -102,10 +101,11 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
 
  //histograms
  //
- fHistoManager->FillHisto(1,position);
- fHistoManager->FillHisto(2,energy);
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance(); 
+ analysisManager->FillH1(1,position);
+ analysisManager->FillH1(2,energy);
  G4ThreeVector direction = track->GetMomentumDirection();
- fHistoManager->FillHisto(3,std::acos(direction.z()));      
+ analysisManager->FillH1(3,std::acos(direction.z()));      
     
  return status;
 }

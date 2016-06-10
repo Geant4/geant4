@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:fDrawFlag("none"),fPrintModulo(10000)
+:fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
 {
   fEventMessenger = new EventMessenger(this);
 }

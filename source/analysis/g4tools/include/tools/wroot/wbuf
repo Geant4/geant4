@@ -1,0 +1,269 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_wbuf
+#define tools_wroot_wbuf
+
+#include <ostream>
+#include "../pointer"
+#include "../stype"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include <cstring> //memcpy
+#include <vector>
+
+namespace tools {
+namespace wroot {
+
+class wbuf {
+
+  /////////////////////////////////////////////////////////
+  /// swap ////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  // NOTE : on most common platforms (including Android, iPad)
+  //        CERN-ROOT byte swaps ! (Bad luck). We have arranged to
+  //        optimize this operation. The below "_swap_" functions
+  //        do not have local variables and manipulates pointers
+  //        directly.
+
+  static void write_swap_2(char* a_pos,char* a_x) {
+    *a_pos++ = *(a_x+1);
+    *a_pos++ = *a_x;
+  }
+  static void write_swap_4(char* a_pos,char* a_x) {
+    a_x += 3;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x;
+  }
+  static void write_swap_8(char* a_pos,char* a_x) {
+    a_x += 7;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x--;
+    *a_pos++ = *a_x;
+  }
+  /////////////////////////////////////////////////////////
+  /// nswp ////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  static void write_nswp_2(char* a_pos,char* a_x) {
+    ::memcpy(a_pos,a_x,2);
+  }
+  static void write_nswp_4(char* a_pos,char* a_x) {
+    ::memcpy(a_pos,a_x,4);
+  }
+  static void write_nswp_8(char* a_pos,char* a_x) {
+    ::memcpy(a_pos,a_x,8);
+  }
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  
+  
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::wbuf");
+    return s_v;
+  }
+  typedef void (*w_2_func)(char*,char*);
+  typedef void (*w_4_func)(char*,char*);
+  typedef void (*w_8_func)(char*,char*);
+public:
+  wbuf(std::ostream& a_out,bool a_byte_swap,
+       const char* a_eob,char*& a_pos)
+  :m_out(a_out)
+  ,m_byte_swap(a_byte_swap)
+  ,m_eob(a_eob)
+  ,m_pos(a_pos)
+
+  ,m_w_2_func(0)
+  ,m_w_4_func(0)
+  ,m_w_8_func(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    set_byte_swap(a_byte_swap);
+  }
+  virtual ~wbuf(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  wbuf(const wbuf& a_from)
+  :m_out(a_from.m_out) //a ref.
+  ,m_byte_swap(a_from.m_byte_swap)
+  ,m_eob(a_from.m_eob)
+  ,m_pos(a_from.m_pos) //a ref.
+  ,m_w_2_func(a_from.m_w_2_func)
+  ,m_w_4_func(a_from.m_w_4_func)
+  ,m_w_8_func(a_from.m_w_8_func)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    set_byte_swap(a_from.m_byte_swap);
+  }
+  wbuf& operator=(const wbuf& a_from){
+    set_byte_swap(a_from.m_byte_swap);
+    m_eob = a_from.m_eob;
+    //m_pos is a ref.
+    m_w_2_func = a_from.m_w_2_func;
+    m_w_4_func = a_from.m_w_4_func;
+    m_w_8_func = a_from.m_w_8_func;
+    return *this;
+  }
+public:
+  void set_eob(const char* a_eob){m_eob = a_eob;}
+  bool byte_swap() const {return m_byte_swap;}
+  void set_byte_swap(bool a_value) {
+    m_byte_swap = a_value;
+    if(m_byte_swap) {
+      m_w_2_func = write_swap_2;
+      m_w_4_func = write_swap_4;
+      m_w_8_func = write_swap_8;
+    } else {
+      m_w_2_func = write_nswp_2;
+      m_w_4_func = write_nswp_4;
+      m_w_8_func = write_nswp_8;
+    }
+  }
+public:
+  bool write(unsigned char a_x) {
+    if(!check_eob<unsigned char>()) return false;
+    *m_pos++ = a_x;
+    return true;
+  }
+
+  bool write(unsigned short a_x) {
+    if(!check_eob<unsigned short>()) return false;
+    m_w_2_func(m_pos,(char*)&a_x);
+    m_pos += sizeof(unsigned short);
+    return true;
+  }
+
+  bool write(unsigned int a_x) {
+    if(!check_eob<unsigned int>()) return false;
+    m_w_4_func(m_pos,(char*)&a_x);
+    m_pos += sizeof(unsigned int);
+    return true;
+  }
+
+  bool write(uint64 a_x){
+    if(!check_eob<uint64>()) return false;
+    m_w_8_func(m_pos,(char*)&a_x);
+    m_pos += 8;
+    return true;
+  }
+
+  bool write(float a_x) {
+    if(!check_eob<float>()) return false;
+    m_w_4_func(m_pos,(char*)&a_x);
+    m_pos += sizeof(float);
+    return true;
+  }
+
+  bool write(double a_x) {
+    if(!check_eob<double>()) return false;
+    m_w_8_func(m_pos,(char*)&a_x);
+    m_pos += sizeof(double);
+    return true;
+  }
+
+  bool write(char a_x)  {return write((unsigned char)a_x);}
+  bool write(short a_x) {return write((unsigned short)a_x);}
+  bool write(int a_x)   {return write((unsigned int)a_x);}
+  bool write(int64 a_x) {return write((uint64)a_x);}
+
+  bool write(const std::string& a_x) {
+    unsigned char nwh;
+    unsigned int nchars = a_x.size();
+    if(nchars>254) {
+      if(!check_eob(1+4,"std::string")) return false;
+      nwh = 255;
+      if(!write(nwh)) return false;
+      if(!write(nchars)) return false;
+    } else {
+      if(!check_eob(1,"std::string")) return false;
+      nwh = (unsigned char)nchars;
+      if(!write(nwh)) return false;
+    }
+    if(!check_eob(nchars,"std::string")) return false;
+    for (unsigned int i = 0; i < nchars; i++) m_pos[i] = a_x[i];
+    m_pos += nchars;
+    return true;
+  }
+
+
+  template <class T>
+  bool write(const T* a_a,uint32 a_n) {
+    if(!a_n) return true;
+    uint32 l = a_n * sizeof(T);
+    if(!check_eob(l,"array")) return false;
+    if(m_byte_swap) {
+      for(uint32 i=0;i<a_n;i++) {
+        if(!write(a_a[i])) return false;
+      }
+    } else {
+      ::memcpy(m_pos,a_a,l);
+      m_pos += l;
+    }
+    return true;
+  }
+
+  template <class T>
+  bool write(const std::vector<T>& a_v) {
+    if(a_v.empty()) return true;
+    uint32 n = a_v.size();
+    uint32 l = n * sizeof(T);
+    if(!check_eob(l,"array")) return false;
+    for(uint32 i=0;i<n;i++) {
+      if(!write(a_v[i])) return false;
+    }
+    return true;
+  }
+
+protected:
+  template <class T>
+  bool check_eob(){
+    if((m_pos+sizeof(T))>m_eob) {
+      m_out << s_class() << " : " << stype(T()) << " : "
+           << " try to access out of buffer " << long2s(sizeof(T)) << " bytes"
+           << " (pos=" << char_p2s(m_pos)
+           << ", eob=" << char_p2s(m_eob) << ")." << std::endl;
+      return false;
+    }
+    return true;
+  }
+  bool check_eob(size_t a_n,const char* a_cmt){
+    if((m_pos+a_n)>m_eob) {
+      m_out << s_class() << " : " << a_cmt << " : "
+           << " try to access out of buffer " << long2s(a_n) << " bytes"
+           << " (pos=" << char_p2s(m_pos)
+           << ", eob=" << char_p2s(m_eob) << ")." << std::endl;
+      return false;
+    }
+    return true;
+  }
+protected:
+  std::ostream& m_out;
+  bool m_byte_swap;
+  const char* m_eob;
+  char*& m_pos;
+
+  w_2_func m_w_2_func;
+  w_4_func m_w_4_func;
+  w_8_func m_w_8_func;
+};
+
+}}
+
+#endif

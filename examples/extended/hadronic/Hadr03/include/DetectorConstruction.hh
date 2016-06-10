@@ -26,9 +26,7 @@
 /// \file hadronic/Hadr03/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-//
-// $Id$
-//
+// $Id: DetectorConstruction.hh 77251 2013-11-22 10:06:41Z gcosmo $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,8 +63,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetMaterial (G4String);            
     void SetMagField (G4double);
 
-    void UpdateGeometry();
-     
   public:
   
      const

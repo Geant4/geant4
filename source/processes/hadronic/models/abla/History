@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.2 2010-11-11 02:13:12 dennis Exp $
+$Id: History 76294 2013-11-08 13:13:27Z gcosmo $
 ---------------------------------------------------------------------
 
          History file for the ABLA evaporation/fission model
@@ -15,6 +15,32 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+6 November 2013 - Davide Mancusi (hadr-abla-V09-06-03)
+--------------------------------------------------
+- Fix segfault on the production of exotic fragments.
+
+6 November 2013 - Davide Mancusi (hadr-abla-V09-06-02)
+--------------------------------------------------
+- Fix clang warnings.
+
+6 November 2013 - Davide Mancusi (hadr-abla-V09-06-01)
+--------------------------------------------------
+- Remove some old unused source files.
+- Fix dependencies and includes in GNUmakefile and sources.cmake.
+
+30 October 2013 - Davide Mancusi (hadr-abla-V09-06-00)
+--------------------------------------------------
+- Resurrect the ABLA model.
+
+12 May 2012 - Davide Mancusi (hadr-abla-V09-05-01)
+--------------------------------------------------
+- Update the ABLA files to the latest version (includes some bug fixes and some
+  refactoring) and add build files.
+
+15 September 2011  Dennis Wright
+-------------------------------
+- use new G4Exception.  Files affected: G4Abla.cc, G4AblaDataFile.cc
 
 10 November 2010  Dennis Wright
 -------------------------------

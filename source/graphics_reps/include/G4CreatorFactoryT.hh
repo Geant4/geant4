@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CreatorFactoryT.hh 66376 2012-12-18 09:42:59Z gcosmo $
 //
 // Generic identifier-creator based factory. Based on 
 // factory presented in "Modern C++ Design, Andrei Alexandrescu"

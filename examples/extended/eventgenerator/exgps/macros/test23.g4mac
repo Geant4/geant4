@@ -42,8 +42,7 @@
 
 # commands below are independent of gps
 #
-/analysis/filetype root
-/analysis/filename test23.root
+/analysis/filename test23
 /analysis/maxeng 50 MeV
 /analysis/mineng 0 MeV
 /analysis/maxpos 5 cm 

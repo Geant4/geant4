@@ -24,48 +24,43 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ElasticHNScattering.hh 74627 2013-10-17 07:04:38Z gcosmo $
 
 #ifndef G4ElasticHNScattering_h
 #define G4ElasticHNScattering_h 1
+
 // ------------------------------------------------------------
 //                    GEANT 4 class header file
 //
 //      ---------------- G4ElasticHNScattering --------------
 //                   by V. Uzhinsky, March 2008.
 //             elastic scattering used by Fritiof model
-//	           Take a projectile and a target
-//	           scatter the projectile and target
+//                 Take a projectile and a target
+//                 scatter the projectile and target
 // ------------------------------------------------------------
 
 #include "globals.hh"
-class G4VSplitableHadron;
-class G4ExcitedString;
 #include "G4FTFParameters.hh"
 #include "G4ThreeVector.hh"
 
-class G4ElasticHNScattering 
-{
+class G4VSplitableHadron;
+class G4ExcitedString;
+
+
+class G4ElasticHNScattering {
 
   public:
+    G4ElasticHNScattering();
+    virtual ~G4ElasticHNScattering();
+    virtual G4bool ElasticScattering( G4VSplitableHadron* aPartner, G4VSplitableHadron* bPartner,
+                                      G4FTFParameters* theParameters ) const;
 
-      G4ElasticHNScattering();
-      virtual ~G4ElasticHNScattering();
-
-      virtual G4bool ElasticScattering (G4VSplitableHadron *aPartner, 
-                                        G4VSplitableHadron * bPartner,
-                                        G4FTFParameters *theParameters) const;
-      
   private:
-
-      G4ElasticHNScattering(const G4ElasticHNScattering &right);
-      
-      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
-      
-      const G4ElasticHNScattering & operator=(const G4ElasticHNScattering &right);
-      int operator==(const G4ElasticHNScattering &right) const;
-      int operator!=(const G4ElasticHNScattering &right) const;
-
+    G4ElasticHNScattering( const G4ElasticHNScattering& right );
+    G4ThreeVector GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const;
+    const G4ElasticHNScattering& operator=( const G4ElasticHNScattering& right );
+    int operator==( const G4ElasticHNScattering& right ) const;
+    int operator!=( const G4ElasticHNScattering& right ) const;
 
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Integrator.icc 69546 2013-05-08 09:50:34Z gcosmo $
 //
 // Implementation of G4Integrator methods. 
 //
@@ -138,8 +138,8 @@ template <class T, class F>
 G4double G4Integrator<T,F>::Gauss( T& typeT, F f,
                                    G4double xInitial, G4double xFinal   ) 
 {
-   static G4double root = 1.0/std::sqrt(3.0) ;
-   
+   static const G4double root = 1.0/std::sqrt(3.0) ;
+
    G4double xMean = (xInitial + xFinal)/2.0 ;
    G4double Step = (xFinal - xInitial)/2.0 ;
    G4double delta = Step*root ;
@@ -167,8 +167,8 @@ template <class T, class F>
 G4double G4Integrator<T,F>::Gauss( G4double (*f)(G4double), 
                               G4double xInitial, G4double xFinal) 
 {
-   static G4double root = 1.0/std::sqrt(3.0) ;
-   
+   static const G4double root = 1.0/std::sqrt(3.0) ;
+
    G4double xMean = (xInitial + xFinal)/2.0 ;
    G4double Step  = (xFinal - xInitial)/2.0 ;
    G4double delta = Step*root ;
@@ -473,13 +473,13 @@ G4double G4Integrator<T,F>::Legendre10( T& typeT, F f,G4double a, G4double b)
    
    // From Abramowitz M., Stegan I.A. 1964 , Handbook of Math... , p. 916
    
-   static G4double abscissa[] = { 0.148874338981631, 0.433395394129247,
-                                  0.679409568299024, 0.865063366688985,
-                                  0.973906528517172                      } ;
+   static const G4double abscissa[] = { 0.148874338981631, 0.433395394129247,
+                                        0.679409568299024, 0.865063366688985,
+                                        0.973906528517172                   } ;
    
-   static G4double weight[] =   { 0.295524224714753, 0.269266719309996, 
-                                  0.219086362515982, 0.149451349150581,
-                                  0.066671344308688                      } ;
+   static const G4double weight[] =   { 0.295524224714753, 0.269266719309996, 
+                                        0.219086362515982, 0.149451349150581,
+                                        0.066671344308688                   } ;
    xMean = 0.5*(a + b) ;
    xDiff = 0.5*(b - a) ;
    integral = 0.0 ;
@@ -514,13 +514,13 @@ G4double G4Integrator<T,F>::Legendre10( G4double (*f)(G4double),
    
    // From Abramowitz M., Stegan I.A. 1964 , Handbook of Math... , p. 916
    
-   static G4double abscissa[] = { 0.148874338981631, 0.433395394129247,
-                                  0.679409568299024, 0.865063366688985,
-                                  0.973906528517172                      } ;
+   static const G4double abscissa[] = { 0.148874338981631, 0.433395394129247,
+                                        0.679409568299024, 0.865063366688985,
+                                        0.973906528517172                  } ;
    
-   static G4double weight[] =   { 0.295524224714753, 0.269266719309996, 
-                                  0.219086362515982, 0.149451349150581,
-                                  0.066671344308688                      } ;
+   static const G4double weight[] =   { 0.295524224714753, 0.269266719309996, 
+                                        0.219086362515982, 0.149451349150581,
+                                        0.066671344308688                  } ;
    xMean = 0.5*(a + b) ;
    xDiff = 0.5*(b - a) ;
    integral = 0.0 ;
@@ -549,7 +549,7 @@ G4double G4Integrator<T,F>::Legendre96( T& typeT, F f,G4double a, G4double b)
    
    // From Abramowitz M., Stegan I.A. 1964 , Handbook of Math... , p. 919
    
-   static G4double 
+   static const G4double 
    abscissa[] = { 
                   0.016276744849602969579, 0.048812985136049731112,
                   0.081297495464425558994, 0.113695850110665920911,
@@ -584,7 +584,7 @@ G4double G4Integrator<T,F>::Legendre96( T& typeT, F f,G4double a, G4double b)
                   0.998364375863181677724, 0.999689503883230766828   // 48
                                                                             } ;
    
-   static G4double 
+   static const G4double 
    weight[] = {  
                   0.032550614492363166242, 0.032516118713868835987,
                   0.032447163714064269364, 0.032343822568575928429,
@@ -652,7 +652,7 @@ G4double G4Integrator<T,F>::Legendre96( G4double (*f)(G4double),
    
    // From Abramowitz M., Stegan I.A. 1964 , Handbook of Math... , p. 919
    
-   static G4double 
+   static const G4double 
    abscissa[] = { 
                   0.016276744849602969579, 0.048812985136049731112,
                   0.081297495464425558994, 0.113695850110665920911,
@@ -687,7 +687,7 @@ G4double G4Integrator<T,F>::Legendre96( G4double (*f)(G4double),
                   0.998364375863181677724, 0.999689503883230766828   // 48
                                                                             } ;
    
-   static G4double 
+   static const G4double 
    weight[] = {  
                   0.032550614492363166242, 0.032516118713868835987,
                   0.032447163714064269364, 0.032343822568575928429,
@@ -1015,9 +1015,9 @@ G4Integrator<T,F>::Laguerre( G4double (*f)(G4double),
 template <class T, class F>
 G4double G4Integrator<T,F>::GammaLogarithm(G4double xx)
 {
-  static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
-                             24.01409824083091,      -1.231739572450155,
-                              0.1208650973866179e-2, -0.5395239384953e-5  } ;
+  static const G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
+                                  24.01409824083091,      -1.231739572450155,
+                                   0.1208650973866179e-2, -0.5395239384953e-5 };
   register G4int j;
   G4double x = xx - 1.0 ;
   G4double tmp = x + 5.5 ;

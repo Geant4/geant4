@@ -27,7 +27,7 @@
 /// \brief Definition of the G4BlineTracer class
 //
 //
-// $Id$
+// $Id: G4BlineTracer.hh 77941 2013-11-29 15:22:58Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -94,7 +94,7 @@ class G4BlineTracer : public G4UserRunAction
      G4double fMaxTrackingStep;
      G4bool fWas_ResetChordFinders_already_called;
  
-     G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
+     //G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
        // User defined primary generator action
 
      std::vector<G4ChordFinder* > fVecChordFinders;

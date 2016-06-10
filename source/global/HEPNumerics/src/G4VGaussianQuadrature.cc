@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VGaussianQuadrature.cc 69546 2013-05-08 09:50:34Z gcosmo $
 //
 // Implementation file for G4VGaussianQuadrature virtual base class
 //
@@ -81,9 +81,9 @@ G4VGaussianQuadrature::GammaLogarithm(G4double xx)
 // xx > 1. For 0 < xx < 1. the reflection formula (6.1.4) can be used first.
 // (Adapted from Numerical Recipes in C)
 
-  static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
-                             24.01409824083091,      -1.231739572450155,
-                              0.1208650973866179e-2, -0.5395239384953e-5  } ;
+  static const G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
+                                  24.01409824083091,      -1.231739572450155,
+                                   0.1208650973866179e-2, -0.5395239384953e-5 };
   G4double x = xx - 1.0;
   G4double tmp = x + 5.5;
   tmp -= (x + 0.5) * std::log(tmp);

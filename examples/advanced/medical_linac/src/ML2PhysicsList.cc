@@ -65,7 +65,7 @@
 //    For ML2 we suggest the use of:
 //
 //    /physic/addPhysic/emstandard_option3 (electromagnetic model)
-//    /physic/addPhysic/QElastic (hadronic elastic model)
+//    /physic/addPhysic/elastic (hadronic elastic model)
 //    /physic/addPhysic/binary (hadronic inelastic models for proton and neutrons)
 //    /physic/addPhysic/binary_ion (hadronic inelastic models for ions)
 //
@@ -85,7 +85,6 @@
 #include "G4EmPenelopePhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
-#include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4Decay.hh"
@@ -224,10 +223,6 @@ void ML2PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "elastic" && !helIsRegisted) {
     G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
     hadronPhys.push_back( new G4HadronElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "QElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronQElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "binary" && !bicIsRegisted) {

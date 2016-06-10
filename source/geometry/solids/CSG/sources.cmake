@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:42:59 bmorgan Exp $
+# $Id: sources.cmake 76263 2013-11-08 11:41:52Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/usolids/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
@@ -43,6 +44,8 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4CutTubs.icc
         G4Orb.hh
         G4Orb.icc
+        G4OTubs.hh
+        G4OTubs.icc
         G4Para.hh
         G4Para.icc
         G4Sphere.hh
@@ -55,18 +58,31 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4Trd.icc
         G4Tubs.hh
         G4Tubs.icc
+        G4UBox.hh
+        G4UCons.hh
+        G4UOrb.hh
+        G4USphere.hh
+        G4UTrd.hh
+        G4UTubs.hh
     SOURCES
         G4Box.cc
         G4CSGSolid.cc
         G4Cons.cc
         G4CutTubs.cc
         G4Orb.cc
+        G4OTubs.cc
         G4Para.cc
         G4Sphere.cc
         G4Torus.cc
         G4Trap.cc
         G4Trd.cc
         G4Tubs.cc
+        G4UBox.cc
+        G4UCons.cc
+        G4UOrb.cc
+        G4USphere.cc
+        G4UTrd.cc
+        G4UTubs.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
         G4globman
@@ -74,6 +90,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4hepnumerics
         G4intercoms
         G4volumes
+        G4GeomUSolids
     GLOBAL_DEPENDENCIES
         G4global
         G4graphics_reps

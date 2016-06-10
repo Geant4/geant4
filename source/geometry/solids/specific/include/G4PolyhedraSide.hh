@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PolyhedraSide.hh 67973 2013-03-13 10:16:25Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -64,6 +64,40 @@ struct G4PolyhedraSideRZ
 {
   G4double r, z;  // start of vector
 };
+
+// ----------------------------------------------------------------------------
+// MT-specific utility code 
+
+#include "G4GeomSplitter.hh"
+
+// The class G4PhSideData is introduced to encapsulate the
+// fields of the class G4PolyhedraSide that may not be read-only.
+//
+class G4PhSideData
+{
+  public:
+    void initialize()
+    {
+      fPhi.first = G4ThreeVector(0,0,0);
+      fPhi.second= 0.0;
+    }
+
+    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
+
+};
+
+// The type G4PhSideManager is introduced to encapsulate the methods used
+// by both the master thread and worker threads to allocate memory space
+// for the fields encapsulated by the class G4PhSideData.
+//
+typedef G4GeomSplitter<G4PhSideData> G4PhSideManager;
+
+// This macro changes the references to fields that are now encapsulated
+// in the class G4PhSideData.
+//
+#define G4MT_phphi ((subInstanceManager.offset[instanceID]).fPhi)
+//
+// ----------------------------------------------------------------------------
 
 class G4PolyhedraSide : public G4VCSGface
 {
@@ -123,6 +157,12 @@ class G4PolyhedraSide : public G4VCSGface
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    inline G4int GetInstanceID() const  { return instanceID; }
+      // Returns the instance ID.
+
+    static const G4PhSideManager& GetSubInstanceManager();
+      // Returns the private data instance manager.
 
   protected:
 
@@ -197,9 +237,13 @@ class G4PolyhedraSide : public G4VCSGface
 
   private:
 
-    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
     G4double kCarTolerance;  // Geometrical surface thickness
     G4double fSurfaceArea;   // Surface Area 
+
+    G4int instanceID;
+      // This field is used as instance ID.
+    G4GEOM_DLL static G4PhSideManager subInstanceManager;
+      // This field helps to use the class G4PhSideManager introduced above.
 };
 
 #endif

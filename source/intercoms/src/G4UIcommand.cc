@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIcommand.cc 77563 2013-11-26 09:03:18Z gcosmo $
 //
 // 
 
@@ -39,13 +39,15 @@
 #include <sstream>
 
 G4UIcommand::G4UIcommand()
-  : messenger(0), bp(0), token(IDENTIFIER), paramERR(0)
+  : messenger(0), toBeBroadcasted(false), toBeFlushed(false), workerThreadOnly(false),
+    bp(0), token(IDENTIFIER), paramERR(0)
 {
 }
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
-			 G4UImessenger * theMessenger)
-:messenger(theMessenger),token(IDENTIFIER),paramERR(0)
+     G4UImessenger * theMessenger, G4bool tBB)
+:messenger(theMessenger),toBeBroadcasted(tBB),toBeFlushed(false), workerThreadOnly(false),
+token(IDENTIFIER),paramERR(0)
 {
   G4String comStr = theCommandPath;
   if(!theMessenger)
@@ -100,6 +102,8 @@ G4int G4UIcommand::operator!=(const G4UIcommand &right) const
 {
   return ( commandPath != right.GetCommandPath() );
 }
+
+#include "G4Threading.hh"
 
 G4int G4UIcommand::DoIt(G4String parameterList)
 {
@@ -206,6 +210,8 @@ G4int G4UIcommand::DoIt(G4String parameterList)
 
   if(CheckNewValue( correctParameters ))
   { return fParameterOutOfRange+99; }
+
+  if(workerThreadOnly && !G4Threading::IsWorkerThread()) return 0;
 
   messenger->SetNewValue( this, correctParameters );
   return 0;
@@ -331,6 +337,8 @@ void G4UIcommand::List()
   G4cout << G4endl;
   if(commandPath(commandPath.length()-1)!='/')
   { G4cout << "Command " << commandPath << G4endl; }
+  if(workerThreadOnly)
+  { G4cout << "    ---- available only in worker thread" << G4endl; }
   G4cout << "Guidance :" << G4endl;
   G4int n_guidanceEntry = commandGuidance.size();
   for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ )

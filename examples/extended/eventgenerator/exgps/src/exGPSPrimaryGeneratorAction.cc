@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSPrimaryGeneratorAction.cc 68020 2013-03-13 13:34:15Z gcosmo $
+//
 /// \file eventgenerator/exgps/src/exGPSPrimaryGeneratorAction.cc
 /// \brief Implementation of the exGPSPrimaryGeneratorAction class
 //
@@ -38,6 +40,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSPrimaryGeneratorAction::exGPSPrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0)
 {
    fParticleGun = new G4GeneralParticleSource();
 }

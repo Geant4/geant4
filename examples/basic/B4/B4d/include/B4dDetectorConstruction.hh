@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4dDetectorConstruction.hh 75215 2013-10-29 16:07:06Z gcosmo $
 //
 /// \file B4dDetectorConstruction.hh
 /// \brief Definition of the B4dDetectorConstruction class
@@ -34,10 +34,8 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-class G4Box;
 class G4VPhysicalVolume;
-class G4UniformMagField;
-class G4GenericMessenger;
+class G4GlobalMagFieldMessenger;
 
 /// Detector construction class to define materials and geometry.
 /// The calorimeter is a box made of a given number of layers. A layer consists
@@ -50,15 +48,10 @@ class G4GenericMessenger;
 /// - the number of layers,
 /// - the transverse size of the calorimeter (the input face is a square).
 ///
-/// In DefineVolumes(), sensitive detectors of G4MultiFunctionalDetector type
-/// with primitive scorers are created and associated with the Absorber 
-/// and Gap volumes.
-///
-/// In addition a transverse uniform magnetic field is defined in
-/// SetMagField() method which can be activated
-/// via a command defined using G4GenericMessenger class: 
-/// - /B4/det/setMagField value unit
-
+/// In ConstructSDandField() sensitive detectors of G4MultiFunctionalDetector 
+/// type with primitive scorers are created and associated with the Absorber 
+/// and Gap volumes.  In addition a transverse uniform magnetic field is defined
+/// via G4GlobalMagFieldMessenger class.
 
 class B4dDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -68,10 +61,7 @@ class B4dDetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
-
-    // set methods
-    //
-    void SetMagField(G4double fieldValue);
+    virtual void ConstructSDandField();
      
   private:
     // methods
@@ -81,8 +71,8 @@ class B4dDetectorConstruction : public G4VUserDetectorConstruction
   
     // data members
     //
-    G4GenericMessenger*  fMessenger; // messenger 
-    G4UniformMagField*   fMagField;  // magnetic field
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+                            // magnetic field messenger
 
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
 };

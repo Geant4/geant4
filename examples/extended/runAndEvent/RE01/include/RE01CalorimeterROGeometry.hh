@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01CalorimeterROGeometry.hh
 /// \brief Definition of the RE01CalorimeterROGeometry class
 //
-// $Id$
+// $Id: RE01CalorimeterROGeometry.hh 66379 2012-12-18 09:46:33Z gcosmo $
 //
 
 #ifndef RE01CalorimeterROGeometry_h

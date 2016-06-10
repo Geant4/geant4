@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXePMTSD.hh 73915 2013-09-17 07:32:26Z gcosmo $
+//
 /// \file optical/LXe/include/LXePMTSD.hh
 /// \brief Definition of the LXePMTSD class
 //
@@ -33,6 +35,8 @@
 #include "G4DataVector.hh"
 #include "G4VSensitiveDetector.hh"
 #include "LXePMTHit.hh"
+
+#include <vector>
 
 class G4Step;
 class G4HCofThisEvent;
@@ -67,11 +71,7 @@ class LXePMTSD : public G4VSensitiveDetector
     }
 
     //Store a pmt position
-    inline void SetPMTPos(G4int n,G4double x,G4double y,G4double z){
-      if(fPMTPositionsX)fPMTPositionsX->insertAt(n,x);
-      if(fPMTPositionsY)fPMTPositionsY->insertAt(n,y);
-      if(fPMTPositionsZ)fPMTPositionsZ->insertAt(n,z);
-    }
+    void SetPmtPositions(const std::vector<G4ThreeVector>& positions);
 
   private:
 

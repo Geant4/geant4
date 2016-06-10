@@ -40,10 +40,10 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 
-void G4NeutronHPIsotropic::Init(std::ifstream & )
+void G4NeutronHPIsotropic::Init(std::istream & )
 {
 }
 
@@ -83,13 +83,13 @@ G4ReactionProduct * G4NeutronHPIsotropic::Sample(G4double anEnergy, G4double mas
      //if(Z!=2) throw G4HadronicException(__FILE__, __LINE__, "Unknown ion case 1");    
      if(Z!=2) 
      {
-        result->SetDefinition( G4ParticleTable::GetParticleTable()->GetIon ( Z ,  A , 0.0 ) );
+        result->SetDefinition( G4IonTable::GetIonTable()->GetIon ( Z ,  A , 0.0 ) );
      }
    }
    else
    {
      //110607 TK modified following parts for migration to G4NDL3.15 (ENDF VII.r0)
-     result->SetDefinition( G4ParticleTable::GetParticleTable()->GetIon ( Z ,  A , 0.0 ) );
+     result->SetDefinition( G4IonTable::GetIonTable()->GetIon ( Z ,  A , 0.0 ) );
      //throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPIsotropic: Unknown ion case 2");
    }
 

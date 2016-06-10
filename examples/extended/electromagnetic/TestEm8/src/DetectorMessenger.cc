@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.cc 68198 2013-03-18 16:39:51Z maire $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -47,10 +47,18 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-///////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
-  : fDetector(det)
+  : G4UImessenger(),fDetector(det),
+    fDetDir(0),
+    fGasMaterCmd(0),
+    fGasThickCmd(0),
+    fGasRadCmd(0),
+    fWinThickCmd(0),
+    fWindowMaterCmd(0),
+    fWorldMaterCmd(0),
+    fIonCmd(0)
 { 
   fDetDir = new G4UIdirectory("/testem/");
   fDetDir->SetGuidance("Detector control.");
@@ -101,13 +109,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
   fIonCmd->SetGuidance("Set energy per electron-ion pair for detector");
   fIonCmd->SetParameterName("en",false,false);
   fIonCmd->SetUnitCategory("Energy");
-  fIonCmd->SetDefaultUnit("eV");
+  fIonCmd->SetDefaultUnit("MeV");
   fIonCmd->SetRange("en>0.");
-  fIonCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    
+  fIonCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
 }
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorMessenger::~DetectorMessenger()
 {
@@ -121,7 +128,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fDetDir;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
@@ -155,4 +162,4 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

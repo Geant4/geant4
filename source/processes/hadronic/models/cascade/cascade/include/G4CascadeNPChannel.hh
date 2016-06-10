@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeNPChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20120907  M. Kelsey -- Subclass and overload findCrossSection() function.
 
@@ -36,7 +36,7 @@
 
 struct G4CascadeNPChannelData {
   typedef G4CascadeData<30,1,9,22,38,7,9,10,12> data_t;
-  static data_t data;
+  static const data_t data;
 };
 
 

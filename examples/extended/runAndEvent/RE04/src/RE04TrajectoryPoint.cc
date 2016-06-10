@@ -42,26 +42,30 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<RE04TrajectoryPoint> faTrajPointAllocator;
+G4ThreadLocal G4Allocator<RE04TrajectoryPoint> * faTrajPointAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04TrajectoryPoint::RE04TrajectoryPoint()
+ : G4VTrajectoryPoint(),
+   fPosition(G4ThreeVector(0.,0.,0.)), 
+   fpMaterial(0)
 {
-  fPosition = G4ThreeVector(0.,0.,0.);
-  fpMaterial = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04TrajectoryPoint::RE04TrajectoryPoint(G4ThreeVector pos,
                                          const G4Material* mat)
+ : G4VTrajectoryPoint(),
+   fPosition(pos), 
+   fpMaterial(mat)
 {
-  fPosition = pos;
-  fpMaterial = mat;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04TrajectoryPoint::RE04TrajectoryPoint(const RE04TrajectoryPoint &right)
- : G4VTrajectoryPoint(),fPosition(right.fPosition),fpMaterial(right.fpMaterial)
+ : G4VTrajectoryPoint(),
+   fPosition(right.fPosition),
+   fpMaterial(right.fpMaterial)
 {
 }
 

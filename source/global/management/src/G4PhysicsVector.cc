@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -53,35 +53,36 @@
 //    16 Aug. 2011  H.Kurashige  : Add dBin, baseBin and verboseLevel
 // --------------------------------------------------------------
 
-#include "G4PhysicsVector.hh"
 #include <iomanip>
+#include "G4PhysicsVector.hh"
 
-G4Allocator<G4PhysicsVector> aPVAllocator;
+G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator = 0;
 
 // --------------------------------------------------------------
 
-G4PhysicsVector::G4PhysicsVector(G4bool spline)
+G4PhysicsVector::G4PhysicsVector(G4bool)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
-   useSpline(spline), 
+   useSpline(false), 
    dBin(0.), baseBin(0.),
    verboseLevel(0)
 {
-  cache      = new G4PhysicsVectorCache();
+  if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
+  // g4pow = G4Pow::GetInstance();
 }
 
 // --------------------------------------------------------------
 
 G4PhysicsVector::~G4PhysicsVector() 
 {
-  delete cache; cache =0;
 }
 
 // --------------------------------------------------------------
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  cache        = new G4PhysicsVectorCache();
+  //  g4pow = G4Pow::GetInstance();
+
   dBin         = right.dBin;
   baseBin      = right.baseBin;
   verboseLevel = right.verboseLevel;
@@ -122,6 +123,7 @@ G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 
 void G4PhysicsVector::DeleteData()
 {
+  useSpline = false;
   secDerivative.clear();
 }
 
@@ -133,9 +135,6 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   edgeMin = vec.edgeMin;
   edgeMax = vec.edgeMax;
   numberOfNodes = vec.numberOfNodes;
-  cache->lastEnergy = vec.GetLastEnergy();
-  cache->lastValue = vec.GetLastValue();
-  cache->lastBin = vec.GetLastBin();
   useSpline = vec.useSpline;
 
   size_t i;
@@ -198,9 +197,6 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   // clear properties;
-  cache->lastEnergy=-DBL_MAX;
-  cache->lastValue =0.;
-  cache->lastBin   =0;
   dataVector.clear();
   binVector.clear();
   secDerivative.clear();
@@ -298,8 +294,6 @@ G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
 
   edgeMin *= factorE;
   edgeMax *= factorE;
-  cache->lastEnergy = factorE*(cache->lastEnergy);
-  cache->lastValue  = factorV*(cache->lastValue);
 }
 
 // --------------------------------------------------------------
@@ -319,6 +313,8 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   }
 
   if(!SplinePossible()) { return; }
+
+  useSpline = true;
 
   G4int n = numberOfNodes-1;
 
@@ -372,7 +368,7 @@ void G4PhysicsVector::FillSecondDerivatives()
   // Computation of second derivatives using "Not-a-knot" endpoint conditions
   // B.I. Kvasov "Methods of shape-preserving spline approximation"
   // World Scientific, 2000
-{  
+{
   if(5 > numberOfNodes)  // cannot compute derivatives for less than 4 points
   {
     ComputeSecDerivatives();
@@ -380,6 +376,8 @@ void G4PhysicsVector::FillSecondDerivatives()
   }
 
   if(!SplinePossible()) { return; }
+
+  useSpline = true;
  
   G4int n = numberOfNodes-1;
 
@@ -441,13 +439,15 @@ void
 G4PhysicsVector::ComputeSecDerivatives()
   //  A simplified method of computation of second derivatives 
 {
-  if(!SplinePossible())  { return; }
-
   if(3 > numberOfNodes)  // cannot compute derivatives for less than 4 bins
   {
     useSpline = false;
     return;
   }
+
+  if(!SplinePossible())  { return; }
+
+  useSpline = true;
 
   size_t n = numberOfNodes-1;
 
@@ -468,18 +468,22 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
+  G4bool result = true;
   secDerivative.clear();
-  if(!useSpline)  { return useSpline; }
   secDerivative.reserve(numberOfNodes);
   for(size_t j=0; j<numberOfNodes; ++j)
   {
     secDerivative.push_back(0.0);
     if(j > 0)
     {
-      if(binVector[j]-binVector[j-1] <= 0.)  { useSpline = false; }
+      if(binVector[j]-binVector[j-1] <= 0.)  { 
+	result = false; 
+	secDerivative.clear();
+	break;
+      }
     }
   }  
-  return useSpline;
+  return result;
 }
    
 // --------------------------------------------------------------
@@ -503,31 +507,46 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 
 //---------------------------------------------------------------
 
-void G4PhysicsVector::ComputeValue(G4double theEnergy) 
+G4double 
+G4PhysicsVector::Value(G4double theEnergy, size_t& lastIdx) const
 {
-  // Use cache for speed up - check if the value 'theEnergy' lies 
-  // between the last energy and low edge of of the 
-  // bin of last call, then the last bin location is used.
-
-  if( theEnergy < cache->lastEnergy
-        &&   theEnergy >= binVector[cache->lastBin]) {
-     cache->lastEnergy = theEnergy;
-     Interpolation(cache->lastBin);
-
-  } else if( theEnergy <= edgeMin ) {
-     cache->lastBin = 0;
-     cache->lastEnergy = edgeMin;
-     cache->lastValue  = dataVector[0];
-
-  } else if( theEnergy >= edgeMax ) {
-     cache->lastBin = numberOfNodes-1;
-     cache->lastEnergy = edgeMax;
-     cache->lastValue  = dataVector[cache->lastBin];
-
+  G4double y;
+  if(theEnergy <= edgeMin) {
+    lastIdx = 0; 
+    y = dataVector[0]; 
+  } else if(theEnergy >= edgeMax) { 
+    lastIdx = numberOfNodes-1; 
+    y = dataVector[lastIdx]; 
   } else {
-    cache->lastBin = FindBinLocation(theEnergy);
-    cache->lastEnergy = theEnergy;
-    Interpolation(cache->lastBin);
+    lastIdx = FindBin(theEnergy, lastIdx);
+    y = Interpolation(lastIdx, theEnergy);
   }
+  return y;
 }
 
+//---------------------------------------------------------------
+
+G4double G4PhysicsVector::FindLinearEnergy(G4double rand) const
+{
+  if(1 >= numberOfNodes) { return 0.0; }
+  size_t n1 = 0;
+  size_t n2 = numberOfNodes/2;
+  size_t n3 = numberOfNodes - 1;
+  G4double y = rand*dataVector[n3];
+  while (n1 + 1 != n3)
+    {
+      if (y > dataVector[n2])
+	{ n1 = n2; }
+      else
+	{ n3 = n2; }
+      n2 = (n3 + n1 + 1)/2;
+    }
+  G4double res = binVector[n1];
+  G4double del = dataVector[n3] - dataVector[n1];
+  if(del > 0.0) { 
+    res += (y - dataVector[n1])*(binVector[n3] - res)/del;  
+  }
+  return res;
+}
+
+//---------------------------------------------------------------

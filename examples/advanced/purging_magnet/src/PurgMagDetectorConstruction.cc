@@ -32,7 +32,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id$
+// $Id: PurgMagDetectorConstruction.cc 69086 2013-04-18 07:29:59Z gcosmo $
 //
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagTabulatedField3D.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VProcess.cc 75600 2013-11-04 13:03:02Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -37,6 +37,7 @@
 // ------------------------------------------------------------
 //   removed thePhysicsTable           02 Aug. 1998 H.Kurashige
 //   Modified DumpInfo                 15 Aug. 1998 H.Kurashige
+//   Add fPhonon to ProcessTypeName    30 Oct. 2013 M.Kelsey
 
 #include "G4VProcess.hh"
 
@@ -61,7 +62,8 @@ G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                     enableAtRestDoIt(true),
                     enableAlongStepDoIt(true),
                     enablePostStepDoIt(true),
-                    verboseLevel(0)
+                    verboseLevel(0),
+                    masterProcessShadow(0)
 
 {
   pParticleChange = &aParticleChange;
@@ -84,7 +86,8 @@ G4VProcess::G4VProcess(const G4VProcess& right)
             enableAtRestDoIt(right.enableAtRestDoIt),
             enableAlongStepDoIt(right.enableAlongStepDoIt),
             enablePostStepDoIt(right.enablePostStepDoIt),
-            verboseLevel(right.verboseLevel)
+            verboseLevel(right.verboseLevel),
+            masterProcessShadow(right.masterProcessShadow)
 {
 }
 
@@ -93,33 +96,6 @@ void G4VProcess::ResetNumberOfInteractionLengthLeft()
 {
   theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
   theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
-}
-
-void G4VProcess::SubtractNumberOfInteractionLengthLeft(
-                                  G4double previousStepSize )
-{
-  if (currentInteractionLength>0.0) {
-    theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
-    if(theNumberOfInteractionLengthLeft<0.) {
-       theNumberOfInteractionLengthLeft=perMillion;
-    }          
-
-  } else {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cerr << "G4VProcess::SubtractNumberOfInteractionLengthLeft()";
-      G4cerr << " [" << theProcessName << "]" <<G4endl;
-      G4cerr << " currentInteractionLength = " << currentInteractionLength/cm << " [cm]";
-      G4cerr << " previousStepSize = " << previousStepSize/cm << " [cm]";
-      G4cerr << G4endl;
-    }
-#endif
-    G4String msg = "Negative currentInteractionLength for ";
-    msg += 	theProcessName;
-    G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
-		"ProcMan201",EventMustBeAborted,
-		msg);
-  }
 }
 
 void G4VProcess::StartTracking(G4Track*)
@@ -147,43 +123,39 @@ void G4VProcess::EndTracking()
 }
 
 
+namespace {
+  static const G4String typeNotDefined = "NotDefined";
+  static const G4String typeTransportation = "Transportation";
+  static const G4String typeElectromagnetic = "Electromagnetic";
+  static const G4String typeOptical = "Optical";
+  static const G4String typeHadronic = "Hadronic";
+  static const G4String typePhotolepton_hadron = "Photolepton_hadron";
+  static const G4String typeDecay = "Decay";
+  static const G4String typeGeneral = "General";
+  static const G4String typeParameterisation = "Parameterisation";
+  static const G4String typeUserDefined = "UserDefined";
+  static const G4String typePhonon = "Phonon";
+  static const G4String noType = "------";
+}
+
 const G4String& G4VProcess::GetProcessTypeName(G4ProcessType aType ) 
 {
-  static G4String typeNotDefined= "NotDefined";
-  static G4String typeTransportation = "Transportation";
-  static G4String typeElectromagnetic = "Electromagnetic";
-  static G4String typeOptical = "Optical";
-  static G4String typeHadronic = "Hadronic";
-  static G4String typePhotolepton_hadron = "Photolepton_hadron";
-  static G4String typeDecay = "Decay";
-  static G4String typeGeneral = "General";
-  static G4String typeParameterisation = "Parameterisation";
-  static G4String typeUserDefined = "UserDefined";
-  static G4String noType = "------";   // Do not modify this !!!!
-
-  if (aType ==   fNotDefined) {
-    return  typeNotDefined;
-  } else if  (aType ==   fTransportation ) {
-    return typeTransportation;
-  } else if  (aType ==   fElectromagnetic ) {
-    return typeElectromagnetic;
-  } else if  (aType ==   fOptical ) {
-    return typeOptical;
-  } else if  (aType ==   fHadronic ) {
-    return typeHadronic;
-  } else if  (aType ==   fPhotolepton_hadron ) {
-    return typePhotolepton_hadron;
-  } else if  (aType ==   fDecay ) {
-    return typeDecay;
-  } else if  (aType ==   fGeneral ) {
-    return typeGeneral;
-  } else if  (aType ==   fParameterisation ) {
-    return typeParameterisation;
-  } else if  (aType ==   fUserDefined ) {
-    return typeUserDefined;
-  } else {
-    return noType;  
+  switch (aType) {
+  case fNotDefined:         return typeNotDefined; break;
+  case fTransportation:     return typeTransportation; break;
+  case fElectromagnetic:    return typeElectromagnetic; break;
+  case fOptical:            return typeOptical; break;
+  case fHadronic:           return typeHadronic; break;
+  case fPhotolepton_hadron: return typePhotolepton_hadron; break;
+  case fDecay:              return typeDecay; break;
+  case fGeneral:            return typeGeneral; break;
+  case fParameterisation:   return typeParameterisation; break;
+  case fUserDefined:        return typeUserDefined; break;
+  case fPhonon:             return typePhonon; break;
+  default: ;
   }
+
+  return noType;  
 }
 
 G4VProcess & G4VProcess::operator=(const G4VProcess &)
@@ -225,4 +197,19 @@ const G4String&  G4VProcess::GetPhysicsTableFileName(const G4ParticleDefinition*
   thePhysicsTableFileName += particle->GetParticleName() + thePhysicsTableFileExt;
   
   return thePhysicsTableFileName;
+}
+
+void G4VProcess::BuildWorkerPhysicsTable(const G4ParticleDefinition& part)
+{
+    BuildPhysicsTable(part);
+}
+
+void G4VProcess::PrepareWorkerPhysicsTable(const G4ParticleDefinition& part)
+{
+    PreparePhysicsTable(part);
+}
+
+void G4VProcess::SetMasterProcess( G4VProcess* masterP)
+{
+    masterProcessShadow = masterP;
 }

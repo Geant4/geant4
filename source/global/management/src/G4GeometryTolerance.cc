@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GeometryTolerance.cc 70333 2013-05-29 08:56:45Z gcosmo $
 //
 // class G4GeometryTolerance
 //
@@ -43,7 +43,7 @@
 // Static class data
 // ***************************************************************************
 //
-G4GeometryTolerance* G4GeometryTolerance::fInstance = 0;
+G4GeometryTolerance* G4GeometryTolerance::fpInstance = 0;
 G4bool G4GeometryTolerance::fInitialised = false;
 G4double G4GeometryTolerance::fCarTolerance = 1E-9*mm;
 G4double G4GeometryTolerance::fAngTolerance = 1E-9*rad;
@@ -63,6 +63,7 @@ G4GeometryTolerance::G4GeometryTolerance()
 //
 G4GeometryTolerance::~G4GeometryTolerance()
 {
+  delete fpInstance; fpInstance = 0;
 }
 
 // ***************************************************************************
@@ -72,12 +73,11 @@ G4GeometryTolerance::~G4GeometryTolerance()
 //
 G4GeometryTolerance* G4GeometryTolerance::GetInstance()
 {
-  static G4GeometryTolerance theToleranceManager;
-  if (!fInstance)
+  if (fpInstance == 0)
   {
-    fInstance = &theToleranceManager;
+    fpInstance = new  G4GeometryTolerance;
   }
-  return fInstance;    
+  return fpInstance;    
 }
 
 // ***************************************************************************

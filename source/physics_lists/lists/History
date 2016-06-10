@@ -1,0 +1,86 @@
+$Id: History 76249 2013-11-08 11:21:29Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                  Hadronic physics-list/lists History
+                  -----------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+07-Nov-2013, Tatsumi Koi                (phys-lists-V09-06-20)
+-Activate production of fission fragments in Shielding PhysicsList
+
+07-Nov-2013, Alberto Ribon              (phys-lists-V09-06-19)
+- Removed low_energy and high_energy from sources.cmake and GNUmakefile.
+
+04-Nov-2013, Tatsumi Koi                (phys-lists-V09-06-18)
+-Set proton cut value to 0 for producing low energy recoil nucleus
+-Use G4IonElasticPhysics for Elastic Scattering of GenericIon
+
+30-Oct-2013, Alberto Ribon              (phys-lists-V09-06-17)
+- LBE : deleted stoppingPhysics in the destructor (Coverity defect).
+
+15-Oct-2013, Davide Mancusi             (phys-lists-V09-06-16)
+- Missing header.
+
+15-Oct-2013, Davide Mancusi             (phys-lists-V09-06-15)
+- Make the *_HP variants of the INCLXX-based physics list use ElasticHP.
+
+06-Sep-2013, Luciano Pandola            (phys-lists-V09-06-14)
+- LBE.icc, add missing #include of G4HadronCaptureProcess
+(gave compilation error to user application using LBE) 
+
+21-Aug-2013, Vladimir Ivantchenko       (phys-lists-V09-06-13)
+- LBE - removed forgotten header
+
+19-Aug-2013, Vladimir Ivantchenko       (phys-lists-V09-06-12)
+- LBE - use G4UrbanMscModel instead on Urban93
+
+14-Jun-2013, Peter Gumplinger           (phys-lists-V09-06-11)
+- fix coverity error in LBE.inc
+
+27-Mar-2013, Andrea Dotti		(phys-lists-V09-06-10)
+- Adding mechanism for splitting class of base class G4VUserPhysicsList
+  for LBE physics list (needed for G4MT). 
+  Co-working with tag in run category
+
+28-Mar-2013, Alberto Ribon              (phys-lists-V09-06-09)
+- LBE physics list: replaced LEP/HEP with FTFP+BERT.
+
+20-Mar-2013, Vladimir Ivantchenko       (phys-lists-V09-06-08)
+- PhysListFactory - fixed typo in previous tag
+
+18-Mar-2013, Vladimir Ivantchenko       (phys-lists-V09-06-07)
+- PhysListFactory - fixed bug report #1458 (correct printout of
+    available Physics Lists); clean up of the code
+
+04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-06)
+04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-05)
+04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-04)
+04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-03)
+- Added new INCL++-based physics lists:
+  o QGSP_INCLXX_HP
+  o FTFP_INCLXX
+  o FTFP_INCLXX_HP
+  These are based on the new INCLXXPhysicsListHelper class, which avoids
+  unnecessary code duplication.
+- Depends on tag phys-ctor-hinelastic-V09-06-05.
+- Provides QGSP_INCLXX.hh and similar headers for backwards compatibility.
+
+30-Jan-2013, Gunter Folger              (phys-lists-V09-06-02)
+- fix sources.cmake for moved files
+
+29-Jan-2013, Gunter Folger              (phys-lists-V09-06-01)
+- move G4PhysListFactory from constructor/factory to lists.
+
+10-Jan-2013, Gunter Folger              (phys-lists-V09-06-00)
+- new directory structure introduced. 
+   lists directory only keeps physics lists, hadronic constructors moved to 
+   constructors/hadron_inelastic

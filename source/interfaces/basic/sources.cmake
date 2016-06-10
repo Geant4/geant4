@@ -11,8 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-11-29 17:04:04 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: sources.cmake 75000 2013-10-25 10:58:17Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -103,6 +102,28 @@ if(GEANT4_USE_QT)
     # both linked in.
     list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES 
         "${QT_QTGUI_LIBRARY};${QT_QTCORE_LIBRARY}") 
+endif()
+
+
+#
+# Wt only if selected.
+#
+if(GEANT4_USE_WT)
+    list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIWt.hh)
+    list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIWt.cc)
+
+    # Must have Wt includes...
+    include_directories(${Wt_INCLUDE_DIR})
+
+    # Add the definitions
+    # We have to also add in G4INTY_BUILD_Wt 'cause G4Wt header needs that...
+    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES G4UIWt.cc G4UIExecutive.cc
+        COMPILE_DEFINITIONS G4UI_BUILD_WT_SESSION;G4INTY_BUILD_WT)
+
+    # Add the extra libraries - seem to need to quote variables to get
+    # both linked in.
+    list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES 
+        "${Wt_LIBRARY}") 
 endif()
 
 

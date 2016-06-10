@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UniformElectricField.hh 68055 2013-03-13 14:43:28Z gcosmo $
 //
 // 
 // class G4UniformElectricField
@@ -63,6 +63,7 @@ class G4UniformElectricField : public G4ElectricField
 
     virtual void GetFieldValue(const G4double pos[4], G4double *field) const;
 
+    virtual G4UniformElectricField* Clone() const;
   private:
   
     G4double fFieldComponents[6] ;

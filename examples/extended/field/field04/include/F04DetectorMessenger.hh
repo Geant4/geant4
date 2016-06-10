@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04DetectorMessenger.hh 76690 2013-11-14 08:45:07Z gcosmo $
+//
 /// \file field/field04/include/F04DetectorMessenger.hh
 /// \brief Definition of the F04DetectorMessenger class
 //
-//
+
 #ifndef F04DetectorMessenger_h
 #define F04DetectorMessenger_h 1
 
@@ -62,12 +64,9 @@ class F04DetectorMessenger : public G4UImessenger
 
     G4UIcmdWithADoubleAndUnit* fCaptureRCmd;
     G4UIcmdWithADoubleAndUnit* fCaptureZCmd;
-    G4UIcmdWithADoubleAndUnit* fCaptureB1Cmd;
-    G4UIcmdWithADoubleAndUnit* fCaptureB2Cmd;
 
     G4UIcmdWithADoubleAndUnit* fTransferRCmd;
     G4UIcmdWithADoubleAndUnit* fTransferZCmd;
-    G4UIcmdWithADoubleAndUnit* fTransferBCmd;
     G4UIcmdWithADoubleAndUnit* fTransferPCmd;
 
     G4UIcmdWithAString*        fTgtMaterCmd;

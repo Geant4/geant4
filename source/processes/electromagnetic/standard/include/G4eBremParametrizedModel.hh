@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eBremParametrizedModel.hh 74581 2013-10-15 12:03:25Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
@@ -70,6 +70,9 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel);
+
   virtual G4double MinEnergyCut(const G4ParticleDefinition*, 
 				const G4MaterialCutsCouple*);
 
@@ -104,7 +107,15 @@ private:
 
   G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
+  G4double ComputeParametrizedDXSectionPerAtom(G4double kineticEnergy, 
+					       G4double gammaEnergy, 
+					       G4double Z);
+
   void SetParticle(const G4ParticleDefinition* p);
+
+  G4double ScreenFunction1(G4double ScreenVariable);
+
+  G4double ScreenFunction2(G4double ScreenVariable);
 
   // * fast inline functions *
   inline void SetCurrentElement(const G4double);

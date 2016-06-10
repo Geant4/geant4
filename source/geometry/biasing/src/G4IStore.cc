@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4IStore.cc 77780 2013-11-28 07:50:59Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -38,15 +38,60 @@
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellStepStream.hh"
 #include "G4LogicalVolume.hh"
+#include "G4TransportationManager.hh"
 
-G4IStore::G4IStore(const G4VPhysicalVolume &worldvolume) :
-  fWorldVolume(worldvolume)
+// ***************************************************************************
+// Static class variable: ptr to single instance of class
+// ***************************************************************************
+//G4ThreadLocal 
+G4IStore* G4IStore::fInstance = 0;
+
+G4IStore::G4IStore() :
+fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume())
 {}
+
+G4IStore::G4IStore(G4String ParallelWorldName) :
+fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName))
+{
+  G4cout << " G4IStore:: ParallelWorldName = " << ParallelWorldName << G4endl;
+  G4cout << " G4IStore:: fParallelWorldVolume = " << fWorldVolume->GetName() << G4endl;  
+}
 
 G4IStore::~G4IStore()
 {}
 
-const G4VPhysicalVolume &G4IStore::GetWorldVolume() const 
+void G4IStore::Clear()
+{
+  fGeometryCelli.clear();
+}
+
+void G4IStore::SetWorldVolume()
+{
+  G4cout << " G4IStore:: SetWorldVolume " << G4endl;
+  fWorldVolume = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
+  G4cout << " World volume is: " << fWorldVolume->GetName() << G4endl;
+  //  fGeometryCelli = new G4GeometryCellImportance;
+}
+
+void G4IStore::SetParallelWorldVolume(G4String paraName)
+{
+  G4cout << " G4IStore:: SetParallelWorldVolume " << G4endl;
+  fWorldVolume = G4TransportationManager::GetTransportationManager()->GetParallelWorld(paraName);
+  G4cout << " ParallelWorld volume is: " << fWorldVolume->GetName() << G4endl;
+    //  fGeometryCelli = new G4GeometryCellImportance;
+}
+
+const G4VPhysicalVolume& G4IStore::GetWorldVolume() const
+{
+  return *fWorldVolume;
+}
+
+// const G4VPhysicalVolume& G4IStore::GetParallelWorldVolume() const
+// {
+//   return *fParallelWorldVolume;
+// }
+
+const G4VPhysicalVolume* G4IStore::GetParallelWorldVolumePointer() const
 {
   return fWorldVolume;
 }
@@ -57,7 +102,8 @@ void G4IStore::SetInternalIterator(const G4GeometryCell &gCell) const
 }
 
 void G4IStore::AddImportanceGeometryCell(G4double importance,
-			 const G4GeometryCell &gCell){
+			 const G4GeometryCell &gCell)
+{
   if (importance < 0 ) {
     Error("AddImportanceGeometryCell() - Invalid importance value given.");
   }  
@@ -142,8 +188,10 @@ G4bool G4IStore::IsKnown(const G4GeometryCell &gCell) const {
 G4bool G4IStore::IsInWorld(const G4VPhysicalVolume &aVolume) const
 {
   G4bool isIn(true);
-  if (!(aVolume == fWorldVolume)) {
-    isIn = fWorldVolume.GetLogicalVolume()->IsAncestor(&aVolume);
+  // G4cout << "G4IStore:: aVolume: " << aVolume.GetName() << G4endl;
+  // G4cout << "G4IStore:: fWorld: " << fWorldVolume->GetName() << G4endl;
+  if (!(aVolume == *fWorldVolume)) {
+      isIn = fWorldVolume->GetLogicalVolume()->IsAncestor(&aVolume);
   }
   return isIn;
 }
@@ -154,3 +202,34 @@ void G4IStore::Error(const G4String &msg) const
 {
   G4Exception("G4IStore::Error()", "GeomBias0002", FatalException, msg);
 }
+
+// ***************************************************************************
+// Returns the instance of the singleton.
+// Creates it in case it's called for the first time.
+// ***************************************************************************
+//
+G4IStore* G4IStore::GetInstance()
+{
+  if (!fInstance)
+  {
+    G4cout << "G4IStore:: Creating new MASS IStore " << G4endl;
+    fInstance = new G4IStore();
+  }
+  return fInstance;    
+}
+
+// ***************************************************************************
+// Returns the instance of the singleton.
+// Creates it in case it's called for the first time.
+// ***************************************************************************
+//
+G4IStore* G4IStore::GetInstance(G4String ParallelWorldName)
+{
+  if (!fInstance)
+  {
+    G4cout << "G4IStore:: Creating new Parallel IStore " << ParallelWorldName << G4endl;
+    fInstance = new G4IStore(ParallelWorldName);
+  }
+  return fInstance;    
+}
+

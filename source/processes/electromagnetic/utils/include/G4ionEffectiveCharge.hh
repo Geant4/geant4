@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ionEffectiveCharge.hh 74376 2013-10-04 08:25:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,7 +57,7 @@
 #include "G4ParticleDefinition.hh"
 
 class G4Material;
-class G4NistManager;
+class G4Pow;
 
 class G4ionEffectiveCharge 
 {
@@ -83,7 +83,7 @@ private:
   G4ionEffectiveCharge & operator=(const G4ionEffectiveCharge &right);
   G4ionEffectiveCharge(const G4ionEffectiveCharge&);
 
-  G4NistManager*              nist;
+  G4Pow*                      g4pow;
 
   const G4ParticleDefinition* lastPart;
   const G4Material*           lastMat;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NeutronInelasticXS.hh 67988 2013-03-13 10:52:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -47,7 +47,10 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include "G4ElementData.hh"
 #include <vector>
+
+const G4int MAXZINEL = 93;
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
@@ -75,7 +78,7 @@ public:
   virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, 
 				  G4int Z, const G4Material* mat=0);
-  /*
+
   virtual
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
                               const G4Isotope* iso,
@@ -83,7 +86,6 @@ public:
                               const G4Material* mat);
 
   virtual G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
-  */
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -94,6 +96,10 @@ private:
 
   void Initialise(G4int Z, G4DynamicParticle* dp = 0, const char* = 0);
 
+  G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
+
+  G4double IsoCrossSection(G4double ekin, G4int Z, G4int A);
+
   G4NeutronInelasticXS & operator=(const G4NeutronInelasticXS &right);
   G4NeutronInelasticXS(const G4NeutronInelasticXS&);
   
@@ -102,12 +108,15 @@ private:
 
   const G4ParticleDefinition* proton;
 
-  std::vector<G4PhysicsVector*> data;
+  G4ElementData data;
+  std::vector<G4PhysicsVector*> work;
+  std::vector<G4double>         temp;
   std::vector<G4double>         coeff;
-  G4int   maxZ;
 
   G4bool  isInitialized;
 
+  static const G4int amin[MAXZINEL];
+  static const G4int amax[MAXZINEL];
 };
 
 #endif

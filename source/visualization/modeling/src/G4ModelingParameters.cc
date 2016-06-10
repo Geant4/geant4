@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ModelingParameters.cc 71534 2013-06-17 16:07:53Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -234,8 +234,8 @@ G4bool G4ModelingParameters::operator !=
       (fExplodeFactor          != mp.fExplodeFactor)          ||
       (fExplodeCentre          != mp.fExplodeCentre)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
-      (fpSectionSolid          != mp.fpSectionSolid)     ||
-      (fpCutawaySolid          != mp.fpCutawaySolid)     ||
+      (fpSectionSolid          != mp.fpSectionSolid)          ||
+      (fpCutawaySolid          != mp.fpCutawaySolid)          ||
       (fpEvent                 != mp.fpEvent)
       )
     return true;
@@ -243,90 +243,67 @@ G4bool G4ModelingParameters::operator !=
   if (fDensityCulling &&
       (fVisibleDensity != mp.fVisibleDensity)) return true;
 
-  if (VAMSNotEqual(fVisAttributesModifiers, mp.fVisAttributesModifiers))
+  if (fVisAttributesModifiers != mp.fVisAttributesModifiers)
     return true;
 
   return false;
 }
 
-G4bool G4ModelingParameters::PVNameCopyNoPathNotEqual
-(const G4ModelingParameters::PVNameCopyNoPath& path1,
- const G4ModelingParameters::PVNameCopyNoPath& path2)
+G4bool G4ModelingParameters::PVNameCopyNo::operator!=
+(const G4ModelingParameters::PVNameCopyNo& rhs) const
 {
-  if (path1.size() != path2.size()) return true;
-  if (path1.empty()) return false;
-  PVNameCopyNoPathConstIterator i1, i2;
-  for (i1 = path1.begin(), i2 = path2.begin();
-       i1 != path1.end();
-       ++i1, ++i2) {
-    if (i1->GetName() != i2->GetName()) return true;
-    if (i1->GetCopyNo() != i2->GetCopyNo()) return true;
-  }
+  if (fName != rhs.fName) return true;
+  if (fCopyNo != rhs.fCopyNo) return true;
   return false;
 }
 
-G4bool G4ModelingParameters::VAMSNotEqual
-(const std::vector<G4ModelingParameters::VisAttributesModifier>& vams1,
- const std::vector<G4ModelingParameters::VisAttributesModifier>& vams2)
+G4bool G4ModelingParameters::VisAttributesModifier::operator!=
+(const G4ModelingParameters::VisAttributesModifier& rhs) const
 {
-  if (vams1.size() != vams2.size()) return true;
-  if (vams1.empty()) return false;
-  std::vector<VisAttributesModifier>::const_iterator i1, i2;
-  for (i1 = vams1.begin(), i2 = vams2.begin();
-       i1 != vams1.end();
-       ++i1, ++i2) {
-    const PVNameCopyNoPath& vam1Path = i1->GetPVNameCopyNoPath();
-    const PVNameCopyNoPath& vam2Path = i2->GetPVNameCopyNoPath();
-    if (PVNameCopyNoPathNotEqual(vam1Path,vam2Path)) return true;
-    if (i1->GetVisAttributesSignifier() != i2->GetVisAttributesSignifier())
-      return true;
-    const G4VisAttributes& vam1VisAtts = i1->GetVisAttributes();
-    const G4VisAttributes& vam2VisAtts = i2->GetVisAttributes();
-    const G4Colour& c1 = vam1VisAtts.GetColour();
-    const G4Colour& c2 = vam2VisAtts.GetColour();
-    switch (i1->GetVisAttributesSignifier()) {
-      case G4ModelingParameters::VASVisibility:
-        if (vam1VisAtts.IsVisible() != vam2VisAtts.IsVisible())
-          return true;
-        break;
-      case G4ModelingParameters::VASDaughtersInvisible:
-        if (vam1VisAtts.IsDaughtersInvisible() !=
-            vam2VisAtts.IsDaughtersInvisible())
-          return true;
-        break;
-      case G4ModelingParameters::VASColour:
-        if (c1 != c2)
-          return true;
-        break;
-      case G4ModelingParameters::VASLineStyle:
-        if (vam1VisAtts.GetLineStyle() != vam2VisAtts.GetLineStyle())
-          return true;
-        break;
-      case G4ModelingParameters::VASLineWidth:
-        if (vam1VisAtts.GetLineWidth() != vam2VisAtts.GetLineWidth())
-          return true;
-        break;
-      case G4ModelingParameters::VASForceWireframe:
-        if (vam1VisAtts.GetForcedDrawingStyle() !=
-            vam2VisAtts.GetForcedDrawingStyle())
-          return true;
-        break;
-      case G4ModelingParameters::VASForceSolid:
-        if (vam1VisAtts.GetForcedDrawingStyle() !=
-            vam2VisAtts.GetForcedDrawingStyle())
-          return true;
-        break;
-      case G4ModelingParameters::VASForceAuxEdgeVisible:
-        if (vam1VisAtts.IsForceAuxEdgeVisible() !=
-            vam2VisAtts.IsForceAuxEdgeVisible())
-          return true;
-        break;
-      case G4ModelingParameters::VASForceLineSegmentsPerCircle:
-        if (vam1VisAtts.GetForcedLineSegmentsPerCircle() !=
-            vam2VisAtts.GetForcedLineSegmentsPerCircle())
-          return true;
-        break;
-    }
+  if (fSignifier != rhs.fSignifier) return true;
+  if (fPVNameCopyNoPath != rhs.fPVNameCopyNoPath) return true;
+  switch (fSignifier) {
+    case G4ModelingParameters::VASVisibility:
+      if (fVisAtts.IsVisible() != rhs.fVisAtts.IsVisible())
+        return true;
+      break;
+    case G4ModelingParameters::VASDaughtersInvisible:
+      if (fVisAtts.IsDaughtersInvisible() !=
+          rhs.fVisAtts.IsDaughtersInvisible())
+        return true;
+      break;
+    case G4ModelingParameters::VASColour:
+      if (fVisAtts.GetColour() != rhs.fVisAtts.GetColour())
+        return true;
+      break;
+    case G4ModelingParameters::VASLineStyle:
+      if (fVisAtts.GetLineStyle() != rhs.fVisAtts.GetLineStyle())
+        return true;
+      break;
+    case G4ModelingParameters::VASLineWidth:
+      if (fVisAtts.GetLineWidth() != rhs.fVisAtts.GetLineWidth())
+        return true;
+      break;
+    case G4ModelingParameters::VASForceWireframe:
+      if (fVisAtts.GetForcedDrawingStyle() !=
+          rhs.fVisAtts.GetForcedDrawingStyle())
+        return true;
+      break;
+    case G4ModelingParameters::VASForceSolid:
+      if (fVisAtts.GetForcedDrawingStyle() !=
+          rhs.fVisAtts.GetForcedDrawingStyle())
+        return true;
+      break;
+    case G4ModelingParameters::VASForceAuxEdgeVisible:
+      if (fVisAtts.IsForceAuxEdgeVisible() !=
+          rhs.fVisAtts.IsForceAuxEdgeVisible())
+        return true;
+      break;
+    case G4ModelingParameters::VASForceLineSegmentsPerCircle:
+      if (fVisAtts.GetForcedLineSegmentsPerCircle() !=
+          rhs.fVisAtts.GetForcedLineSegmentsPerCircle())
+        return true;
+      break;
   }
   return false;
 }

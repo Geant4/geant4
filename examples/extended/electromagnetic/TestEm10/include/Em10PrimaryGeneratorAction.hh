@@ -27,7 +27,7 @@
 /// \brief Definition of the Em10PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: Em10PrimaryGeneratorAction.hh 73033 2013-08-15 09:24:45Z gcosmo $
 //
 // 
 
@@ -50,31 +50,29 @@ class Em10PrimaryGeneratorMessenger;
 class Em10PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Em10PrimaryGeneratorAction(Em10DetectorConstruction*);    
+    Em10PrimaryGeneratorAction(Em10DetectorConstruction*);
    ~Em10PrimaryGeneratorAction();
 
   public:
     void GeneratePrimaries(G4Event*);
     void SetRndmFlag(G4String val) { rndmFlag = val;}
-    void Setxvertex(G4double x) ;
-    void Setyvertex(G4double y) ;
-    void Setzvertex(G4double z) ;
+    void Setxvertex(G4double x);
+    void Setyvertex(G4double y);
+    void Setzvertex(G4double z);
 
-    static G4String GetPrimaryName() ;                
+    static G4String GetPrimaryName();
 
   private:
-    G4ParticleGun*                particleGun;        //pointer a to G4 service class
-    Em10DetectorConstruction*      Em10Detector; //pointer to the geometry
-    
-    Em10PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;        //flag for a random impact point       
+    G4ParticleGun*                particleGun; //pointer a to G4 service class
+//    Em10DetectorConstruction*      Em10Detector; //pointer to the geometry
 
-    static G4String thePrimaryParticleName ;
+    Em10PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
+    G4String                      rndmFlag;  //flag for a random impact point
+
+    static G4String thePrimaryParticleName;
     G4double xvertex,yvertex,zvertex;
-    G4bool vertexdefined ;
+    G4bool vertexdefined;
 
 };
 
 #endif
-
-

@@ -1,4 +1,4 @@
-// $Id: Doxymodules_geometry.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_geometry.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_geometry.h
@@ -9,28 +9,6 @@
  *  Extended examples geometry classes
  *  @{
  */
-
-/** @defgroup extended_geometry_olap olap
- *  Geometry example olap
- *  @{
- */
-
-  class G4GeoNav {};
-  class OlapDetConstr {};
-  class OlapEventAction {};
-  class OlapGenerator {};
-  class OlapLogManager {};
-  class OlapManager {};
-  class OlapManagerMessenger {};
-  class OlapNotify {};
-  class OlapPhysicsList {};
-  class OlapRunAction {};
-  class OlapSteppingAction {};
-  class RandomDetector {};
-  class SolidAnalyser {};
-  class tree {};
-
-/** @} */
 
 /** @defgroup extended_geometry_transforms transforms
  *  Geometry example transforms has its

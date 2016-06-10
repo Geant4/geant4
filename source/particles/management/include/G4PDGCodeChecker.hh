@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PDGCodeChecker.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -86,7 +86,6 @@ class G4PDGCodeChecker
 
   G4int code;
   G4String theParticleType;
-  G4int thePDGiSpin; 
 
   G4int higherSpin;
   G4int exotic;

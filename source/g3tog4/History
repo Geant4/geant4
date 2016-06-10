@@ -1,7 +1,10 @@
-$Id: History,v 1.63 2008-11-17 08:34:11 gcosmo Exp $
+$Id: History 67982 2013-03-13 10:36:03Z gcosmo $
 --------------------------------------------------------------------
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V09-06-00 09-Mar-2013 G.Cosmo
+- Fixed missing inclusion of assert.h in G3Division.cc.
 
 g3tog4-V09-05-02 05-Jul-2012 G.Cosmo
 - Explicitly use inclusion of headers for system of units and physical

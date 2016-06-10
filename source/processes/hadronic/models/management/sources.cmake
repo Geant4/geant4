@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:03:55 bmorgan Exp $
+# $Id: sources.cmake 66785 2013-01-12 15:10:13Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -44,12 +44,10 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_man
     HEADERS
         G4HadronicInteraction.hh
         G4HadronicInteractionRegistry.hh
-        G4IsoParticleChange.hh
         G4V3DNucleus.hh
         G4VCrossSectionBase.hh
         G4VHighEnergyGenerator.hh
         G4VIntraNuclearTransportModel.hh
-        G4VIsotopeProduction.hh
         G4VKineticNucleon.hh
         G4VNuclearDensity.hh
         G4VPreCompoundModel.hh

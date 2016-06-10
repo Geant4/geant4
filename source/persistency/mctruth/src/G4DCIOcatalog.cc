@@ -33,7 +33,7 @@
 // Addtional Include:
 #include "G4VDCIOentry.hh"
 
-G4DCIOcatalog* G4DCIOcatalog::f_thePointer = 0;
+G4ThreadLocal G4DCIOcatalog* G4DCIOcatalog::f_thePointer = 0;
 
 // Implementation of Constructor #1
 G4DCIOcatalog::G4DCIOcatalog()

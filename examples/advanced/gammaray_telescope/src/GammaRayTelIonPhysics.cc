@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: GammaRayTelIonPhysics.cc 76280 2013-11-08 12:54:34Z gcosmo $
 //
 // 
 
@@ -37,17 +37,13 @@
 
 GammaRayTelIonPhysics::GammaRayTelIonPhysics(const G4String& name)
                  :  G4VPhysicsConstructor(name)
-{
-}
+{;}
 
 GammaRayTelIonPhysics::~GammaRayTelIonPhysics()
-{
-}
+{;}
 
 void GammaRayTelIonPhysics::ConstructParticle()
-{
-
-}
+{;}
 
 
 #include "G4ProcessManager.hh"
@@ -57,8 +53,29 @@ void GammaRayTelIonPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
   
+  const G4double theBERTMin =   0.0*GeV;
+  const G4double theBERTMax =   5.0*GeV;
+  const G4double theFTFMin =    4.0*GeV;
+  const G4double theFTFMax =  100.0*TeV;
+  
+  G4FTFModel* theStringModel = new G4FTFModel;
+  G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay( new G4LundStringFragmentation );
+  theStringModel->SetFragmentationModel( theStringDecay );
+  G4PreCompoundModel* thePreEquilib = new G4PreCompoundModel( new G4ExcitationHandler );
+  G4GeneratorPrecompoundInterface* theCascade = new G4GeneratorPrecompoundInterface( thePreEquilib );
+
+  G4TheoFSGenerator* theModel = new G4TheoFSGenerator( "FTFP" );
+  theModel->SetHighEnergyGenerator( theStringModel );
+  theModel->SetTransport( theCascade );
+  theModel->SetMinEnergy( theFTFMin );
+  theModel->SetMaxEnergy( theFTFMax ); 
+
+  G4CascadeInterface * theBERTModel = new G4CascadeInterface;
+  theBERTModel->SetMinEnergy( theBERTMin );
+  theBERTModel->SetMaxEnergy( theBERTMax );
+
   // Elastic Process
-  theElasticModel = new G4LElastic();
+  theElasticModel = new G4HadronElastic();
   theElasticProcess.RegisterMe(theElasticModel);
 
   // Generic Ion
@@ -72,13 +89,16 @@ void GammaRayTelIonPhysics::ConstructProcess()
   pManager->SetProcessOrdering(&fIonMultipleScattering, idxAlongStep,  1);
   pManager->SetProcessOrdering(&fIonMultipleScattering, idxPostStep,  1);
 
+  G4VCrossSectionDataSet * theGGNuclNuclData = G4CrossSectionDataSetRegistry::Instance()->
+    GetCrossSectionDataSet(G4GGNuclNuclCrossSection::Default_Name());
+  
   // Deuteron 
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  fDeuteronModel = new G4LEDeuteronInelastic();
-  fDeuteronProcess.RegisterMe(fDeuteronModel);
+  fDeuteronProcess.AddDataSet(theGGNuclNuclData);
+  fDeuteronProcess.RegisterMe(theBERTModel);
+  fDeuteronProcess.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&fDeuteronProcess);
 
   pManager->AddProcess(&fDeuteronIonisation, ordInActive, 2, 2);
@@ -91,9 +111,9 @@ void GammaRayTelIonPhysics::ConstructProcess()
   pManager = G4Triton::Triton()->GetProcessManager();
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
-
-  fTritonModel = new G4LETritonInelastic();
-  fTritonProcess.RegisterMe(fTritonModel);
+  fTritonProcess.AddDataSet(theGGNuclNuclData);
+  fTritonProcess.RegisterMe(theBERTModel);
+  fTritonProcess.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&fTritonProcess);
 
   pManager->AddProcess(&fTritonIonisation, ordInActive, 2, 2);
@@ -107,8 +127,9 @@ void GammaRayTelIonPhysics::ConstructProcess()
   // add process
   pManager->AddDiscreteProcess(&theElasticProcess);
 
-  fAlphaModel = new G4LEAlphaInelastic();
-  fAlphaProcess.RegisterMe(fAlphaModel);
+  fAlphaProcess.AddDataSet(theGGNuclNuclData);
+  fAlphaProcess.RegisterMe(theBERTModel);
+  fAlphaProcess.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&fAlphaProcess);
 
   pManager->AddProcess(&fAlphaIonisation, ordInActive, 2, 2);

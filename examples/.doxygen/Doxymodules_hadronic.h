@@ -1,4 +1,4 @@
-// $Id: Doxymodules_hadronic.h 65679 2012-11-26 13:41:53Z gcosmo $
+// $Id: Doxymodules_hadronic.h 78005 2013-12-02 08:29:57Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_hadronic.h
@@ -46,4 +46,21 @@
 
 /** @} */
 
+/** @defgroup extended_hadronic_Hadr04 Hadr04
+ *  The shared hadronic classes have their
+ *  <a href="../html_Hadr04/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_Hadr05 Hadr05
+ *  The shared hadronic classes have their
+ *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
 /** @} */

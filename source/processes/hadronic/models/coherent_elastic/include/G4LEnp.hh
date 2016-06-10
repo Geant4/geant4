@@ -77,8 +77,8 @@ class G4LEnp : public G4HadronicInteraction
  // The following arrays are declared static to allow the use of initializers.
  // They are initialized in G4LEnpData.hh
 
-   static G4float sig[NENERGY][NANGLE];
-   static G4float pcm[NENERGY], elab[NENERGY], 
+   static const G4float sig[NENERGY][NANGLE];
+   static const G4float pcm[NENERGY], elab[NENERGY], 
      dsigmax[NENERGY], sigtot[NENERGY];
 
 };

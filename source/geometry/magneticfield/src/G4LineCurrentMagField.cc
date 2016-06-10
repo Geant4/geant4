@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LineCurrentMagField.cc 68055 2013-03-13 14:43:28Z gcosmo $
 // -------------------------------------------------------------------
 
 #include "G4LineCurrentMagField.hh"
@@ -32,6 +32,10 @@
 G4LineCurrentMagField::G4LineCurrentMagField(G4double pFieldConstant)
 {
    fFieldConstant = pFieldConstant ;
+}
+G4LineCurrentMagField* G4LineCurrentMagField::Clone() const
+{
+    return new G4LineCurrentMagField( this->fFieldConstant );
 }
 ////////////////////////////////////////////////////////////////////////
 

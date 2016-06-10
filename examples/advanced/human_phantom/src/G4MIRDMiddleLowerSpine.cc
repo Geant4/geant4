@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -54,14 +54,16 @@ G4MIRDMiddleLowerSpine::~G4MIRDMiddleLowerSpine()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDMiddleLowerSpine::Construct(const G4String& volumeName,
-							  G4VPhysicalVolume* mother,
-							  const G4String& colourName
-							  , G4bool wireFrame, G4bool sensitivity)
+						     G4VPhysicalVolume* mother,
+						     const G4String& colourName
+						     , G4bool wireFrame, G4bool )
 {
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
- G4cout << "Construct "<< volumeName  <<G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
+
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
  
@@ -84,17 +86,11 @@ G4VPhysicalVolume* G4MIRDMiddleLowerSpine::Construct(const G4String& volumeName,
 							      false,
 							      0, true);
 
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicMiddleLowerSpine->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
-
+ 
   // Visualization Attributes
   // G4VisAttributes* MiddleLowerSpineVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
  
- G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   G4VisAttributes* MiddleLowerSpineVisAtt = new G4VisAttributes(colour);
   MiddleLowerSpineVisAtt->SetForceSolid(wireFrame);

@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ExTGRCLineProcessor.cc 76943 2013-11-19 09:57:34Z gcosmo $
 //
-/// \file ExTGRCLineProcessor.cc
+/// \file persistency/P03/src/ExTGRCLineProcessor.cc
 /// \brief Implementation of the ExTGRCLineProcessor class
 
 #include "ExTGRCLineProcessor.hh"

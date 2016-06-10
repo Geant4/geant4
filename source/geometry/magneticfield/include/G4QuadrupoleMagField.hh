@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4QuadrupoleMagField.hh 68055 2013-03-13 14:43:28Z gcosmo $
 //
 //
 // class G4QuadrupoleMagField
@@ -63,6 +63,7 @@ class G4QuadrupoleMagField : public G4MagneticField
 
     void GetFieldValue(const G4double yTrack[],
                              G4double B[]     ) const;
+    G4QuadrupoleMagField* Clone() const;
   private:
 
     G4double          fGradient;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SimpleIntegration.cc 69546 2013-05-08 09:50:34Z gcosmo $
 //
 // Implementation file for simple integration methods
 //
@@ -33,19 +33,18 @@
 #include "G4SimpleIntegration.hh"
 
 
-G4int G4SimpleIntegration::fMaxDepth = 100 ;
-
-
 G4SimpleIntegration::G4SimpleIntegration( function pFunction )
    : fFunction(pFunction),
-     fTolerance(.0001)
+     fTolerance(.0001),
+     fMaxDepth(100)
 {
 }
 
 G4SimpleIntegration::G4SimpleIntegration( function pFunction,
                                           G4double pTolerance)
    : fFunction(pFunction),
-     fTolerance(pTolerance)
+     fTolerance(pTolerance),
+     fMaxDepth(100)
 {
 }
 
@@ -94,7 +93,7 @@ G4SimpleIntegration::Gauss(G4double xInitial,
                            G4int iterationNumber ) 
 {
    G4double x=0.;
-   static G4double root = 1.0/std::sqrt(3.0) ;
+   static const G4double root = 1.0/std::sqrt(3.0) ;
    G4double Step = (xFinal - xInitial)/(2.0*iterationNumber) ;
    G4double delta = Step*root ;
    G4double mean = 0.0 ;
@@ -146,7 +145,7 @@ G4double
 G4SimpleIntegration::Gauss( G4double xInitial,
                             G4double xFinal   ) 
 {
-   static G4double root = 1.0/std::sqrt(3.0) ;
+   static const G4double root = 1.0/std::sqrt(3.0) ;
    
    G4double xMean = (xInitial + xFinal)/2.0 ;
    G4double Step = (xFinal - xInitial)/2.0 ;

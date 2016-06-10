@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
 //
 
 #ifndef G4HumanPhantomRunAction_h
@@ -37,12 +32,13 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "G4HumanPhantomAnalysisManager.hh"
 #include <map>
 
 class G4HumanPhantomRunAction : public G4UserRunAction
 {
   public:
-    G4HumanPhantomRunAction();
+    G4HumanPhantomRunAction(G4HumanPhantomAnalysisManager* analysis);
    ~G4HumanPhantomRunAction();
 
   public:
@@ -54,6 +50,9 @@ private:
     std::map<std::string,G4double> energyTotal;
     G4String bodypartName;
 
+#ifdef ANALYSIS_USE
+    G4HumanPhantomAnalysisManager* analysisMan;
+#endif
 };
 #endif
 

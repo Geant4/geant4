@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/include/XDetectorConstruction.hh
 /// \brief Definition of the XDetectorConstruction class
 //
-// $Id$
+// $Id: XDetectorConstruction.hh 76246 2013-11-08 11:17:29Z gcosmo $
 //
 
 #ifndef XDetectorConstruction_h
@@ -34,39 +34,33 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "XLatticeManager3.hh"
-
-
 
 class G4Material;
 class G4VPhysicalVolume;
-class XDetectorConstruction : public G4VUserDetectorConstruction
-{
-  public:
-    XDetectorConstruction();
-    virtual ~XDetectorConstruction();
 
+class XDetectorConstruction : public G4VUserDetectorConstruction {
 public:
-    virtual G4VPhysicalVolume* Construct();
-     
+  XDetectorConstruction();
+  virtual ~XDetectorConstruction();
+  
+public:
+  virtual G4VPhysicalVolume* Construct();
+  
 private:
   void DefineMaterials();
   void SetupGeometry();
-
-  private:
-    
-  static const G4String fsCrystalMapsDir;
-
-    G4Material* fLiquidHelium;
-    G4Material* fGermanium;
-    G4Material* fAlminum;
-    G4Material* fTungsten;
-    G4VPhysicalVolume* fWorldPhys;
-    G4bool fConstructed;
-    G4bool fIfField;
-
-  public:
-    inline void Field(G4bool bl) { fIfField = bl; }
+  
+private:
+  G4Material* fLiquidHelium;
+  G4Material* fGermanium;
+  G4Material* fAluminum;
+  G4Material* fTungsten;
+  G4VPhysicalVolume* fWorldPhys;
+  G4bool fConstructed;
+  G4bool fIfField;
+  
+public:
+  inline void Field(G4bool bl) { fIfField = bl; }
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4QGSPNeutronBuilder.hh 75290 2013-10-30 09:20:47Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,7 +48,6 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"
@@ -56,13 +55,11 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4ProjectileDiffractiveChannel.hh"
 
 class G4QGSPNeutronBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4QGSPNeutronBuilder(G4bool quasiElastic=false,
-                         G4bool projectileDiffraction=false);
+    G4QGSPNeutronBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSPNeutronBuilder();
 
   public: 
@@ -80,10 +77,8 @@ class G4QGSPNeutronBuilder : public G4VNeutronBuilder
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
-    G4ProjectileDiffractiveChannel * theProjectileDiffraction;
 
     G4QGSMFragmentation * theQGSM;
-    G4ExcitationHandler * theHandler;
 
     G4double theMin;
 

@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeDeexcitation.cc 71954 2013-06-29 04:40:40Z mkelsey $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
 //
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
 // 20110302  M. Kelsey -- Don't do "final" conservation check (not needed)
+// 20130621  Replace collide() interface with deExcite() using G4Fragment
+// 20130622  Inherit from G4CascadeDeexciteBase
 
 #include "G4CascadeDeexcitation.hh"
 #include "globals.hh"
@@ -43,7 +45,7 @@
 // Constructor and destructor
 
 G4CascadeDeexcitation::G4CascadeDeexcitation() 
-  : G4VCascadeDeexcitation("G4CascadeDeexcitation"),
+  : G4CascadeDeexciteBase("G4CascadeDeexcitation"),
     theBigBanger(new G4BigBanger),
     theNonEquilibriumEvaporator(new G4NonEquilibriumEvaporator),
     theEquilibriumEvaporator(new G4EquilibriumEvaporator) {}
@@ -54,80 +56,57 @@ G4CascadeDeexcitation::~G4CascadeDeexcitation() {
   delete theEquilibriumEvaporator;
 }
 
-
-// Convert generic G4Fragment into Bertini particle
-
-void G4CascadeDeexcitation::deExcite(G4Fragment* fragment,
-				     G4CollisionOutput& globalOutput) {
-  if (verboseLevel > 1) {
-    G4cout << " >>> G4CascadeDeexcitation::deExcite" << G4endl;
-  }
-
-  if (!fragment) {
-    if (verboseLevel > 1) G4cerr << " NULL pointer fragment" << G4endl;
-    return;
-  }
-
-  if (verboseLevel > 1) G4cout << *fragment << G4endl;
-
-  G4InuclNuclei target(*fragment);
-  collide(0, &target, globalOutput);
+void G4CascadeDeexcitation::setVerboseLevel(G4int verbose) {
+  G4CascadeDeexciteBase::setVerboseLevel(verbose);
+  theBigBanger->setVerboseLevel(verbose);
+  theNonEquilibriumEvaporator->setVerboseLevel(verbose);
+  theEquilibriumEvaporator->setVerboseLevel(verbose);
 }
 
 
-// Main processing
+// Convert generic G4Fragment into Bertini particle
 
-void G4CascadeDeexcitation::collide(G4InuclParticle* /*bullet*/, 
-				    G4InuclParticle* target,
-				    G4CollisionOutput& globalOutput) {
-  if (verboseLevel > 1) {
-    G4cout << " >>> G4CascadeDeexcitation::collide" << G4endl;
+void G4CascadeDeexcitation::deExcite(const G4Fragment& fragment,
+				     G4CollisionOutput& globalOutput) {
+  if (verboseLevel) {
+    G4cout << " >>> G4CascadeDeexcitation::deExcite" << G4endl;
   }
 
-  // Initialize colliders verbosity
-  theBigBanger->setVerboseLevel(verboseLevel);
-  theNonEquilibriumEvaporator->setVerboseLevel(verboseLevel);
-  theEquilibriumEvaporator->setVerboseLevel(verboseLevel);
-
-  // Ensure that input state is sensible
-  G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
-  if (!ntarget) {
-    G4cerr << " G4CascadeDeexcitation ERROR:  target must be G4InuclNuclei"
-	   << G4endl;
-    return;
-  }
+  if (verboseLevel > 1) G4cout << fragment << G4endl;
 
   // Check if fragment should be broken up
-  if (explosion(ntarget)) {
+  if (explosion(fragment)) {
     if (verboseLevel > 1) G4cout << " big bang after cascade " << G4endl;
 
-    // Add result of explosion diretly to output and exit
-    theBigBanger->collide(0, target, globalOutput);
+    // Add result of explosion directly to output and exit
+    theBigBanger->deExcite(fragment, globalOutput);
     return;
   }
 
   // Fragment is unstable nucleus
-  output.reset();
-  theNonEquilibriumEvaporator->collide(0, target, output);
+  tempOutput.reset();
+  theNonEquilibriumEvaporator->deExcite(fragment, tempOutput);
   
   if (verboseLevel > 1) {
     G4cout << " After NonEquilibriumEvaporator " << G4endl;
+    tempOutput.printCollisionOutput(G4cout);
   }
   
   // Copy evaporated particles (not nuclear fragment) to output
-  globalOutput.addOutgoingParticles(output.getOutgoingParticles());
+  globalOutput.addOutgoingParticles(tempOutput.getOutgoingParticles());
     
   // Use nuclear fragment left from non-equilibrium for next step
-  // NOT:  Must make a copy before reset occurs below
-  G4InuclNuclei exciton = output.getOutgoingNuclei()[0];
-    
-  output.reset();
-  theEquilibriumEvaporator->collide(0, &exciton, output);
+  // NOTE:  Must make a copy before reset occurs below
+  G4Fragment newfrag = tempOutput.getRecoilFragment();
+
+  tempOutput.reset();
+  theEquilibriumEvaporator->deExcite(newfrag, tempOutput);
     
   if (verboseLevel > 1) {
     G4cout << " After EquilibriumEvaporator " << G4endl;
+    tempOutput.printCollisionOutput(G4cout);
   }
     
-  globalOutput.add(output);		// Evaporated particles and nucleus
+  globalOutput.add(tempOutput);		// Evaporated particles and nucleus
 }
   

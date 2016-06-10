@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Element.hh 69704 2013-05-13 09:06:12Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -77,7 +77,7 @@
 // 14-09-01, fCountUse: nb of materials which use this element
 // 26-02-02, fIndexInTable renewed 
 // 01-04-05, new data member fIndexZ to count the number of elements with same Z
-// 17-10-06: Add Get/Set fNaturalAbandances (V.Ivanchenko)
+// 17-10-06: Add Get/Set fNaturalAbundance (V.Ivanchenko)
 // 17.09.09, add fNbOfShellElectrons and methods (V. Grichine)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -137,9 +137,9 @@ public:  // with description
   // Mass of a mole in Geant4 units for atoms with atomic shell
   inline G4double GetA()             const {return fAeff;}    
 
-  inline G4bool   GetNaturalAbandancesFlag();
+  inline G4bool   GetNaturalAbundanceFlag() const;
 
-  inline void     SetNaturalAbandancesFlag(G4bool);
+  inline void     SetNaturalAbundanceFlag(G4bool);
   
   //the number of atomic shells in this element:
   //
@@ -171,8 +171,7 @@ public:  // with description
 
   //the (static) Table of Elements:
   //
-  static 
-  const  G4ElementTable* GetElementTable();
+  static G4ElementTable* GetElementTable();
   
   static 
   size_t GetNumberOfElements();
@@ -185,17 +184,7 @@ public:  // with description
   //
   static
   G4Element* GetElement(G4String name, G4bool warning=true);
-  
-  //count number of materials which use this element
-  //
-  inline G4int GetCountUse() const {return fCountUse;}
-  inline void  increaseCountUse()  {fCountUse++;}
-  inline void  decreaseCountUse()  {fCountUse--;}
-  
-  //count elements with same Z
-  //
-  inline G4int GetIndexZ() const {return fIndexZ;}
-        
+    
   //Coulomb correction factor:
   //
   inline G4double GetfCoulomb() const {return fCoulomb;}
@@ -257,13 +246,11 @@ private:
   G4IsotopeVector* theIsotopeVector;
   G4double* fRelativeAbundanceVector;     // Fraction nb of atomes per volume
                                           // for each constituent
-  G4int fCountUse;          // nb of materials which use this element
-  G4int fIndexZ;            // index for elements with same Z
-    
+
   // Set up the static Table of Elements
   static G4ElementTable theElementTable;
   size_t fIndexInTable;
-  G4bool fNaturalAbandances;
+  G4bool fNaturalAbundance;
 
   //
   // Derived data members (computed from the basic data members)
@@ -273,14 +260,14 @@ private:
   G4IonisParamElm* fIonisation;  // Pointer to ionisation parameters
 };
 
-inline G4bool G4Element::GetNaturalAbandancesFlag()
+inline G4bool G4Element::GetNaturalAbundanceFlag() const
 {
-  return fNaturalAbandances;
+  return fNaturalAbundance;
 }
 
-inline void G4Element::SetNaturalAbandancesFlag(G4bool val)
+inline void G4Element::SetNaturalAbundanceFlag(G4bool val) 
 {
-  fNaturalAbandances = val;
+  fNaturalAbundance = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,21 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4CameronGilbertPairingCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4CameronGilbertPairingCorrections.hh"
-
+#include <CLHEP/Units/SystemOfUnits.h>
 
 // Data comes from:
 // A. Gilbert and A.G.W. Cameron, Can. J. Phys., 43, 1446(1965)
 
 // P(Z)
-const G4double G4CameronGilbertPairingCorrections::PairingZTable
-[G4CameronGilbertPairingCorrections::ZTableSize] = { // 88 values from Z = 11 to Z = 98
+G4double G4CameronGilbertPairingCorrections::PairingZTable[] = 
+{ // 88 values from Z = 11 to Z = 98
     0.00,  2.46,  0.00,  2.09,  0.00,  1.62,  0.00,  1.62,  0.00,  1.83,
     0.00,  1.73,  0.00,  1.35,  0.00,  1.54,  0.00,  1.20,  0.00,  1.06,
     0.00,  1.36,  0.00,  1.43,  0.00,  1.17,  0.00,  1.24,  0.00,  1.20,  
@@ -49,8 +51,8 @@ const G4double G4CameronGilbertPairingCorrections::PairingZTable
     0.00,  0.69,  0.00,  0.61,  0.00,  0.72,  0.00,  0.77
 };
 // P(N)
-const G4double G4CameronGilbertPairingCorrections::PairingNTable
-[G4CameronGilbertPairingCorrections::NTableSize] = { // 140 values from Z = 11 to Z = 150
+G4double G4CameronGilbertPairingCorrections::PairingNTable[] = 
+{ // 140 values from Z = 11 to Z = 150
     0.00,  2.67,  0.00,  1.80,  0.00,  1.67,  0.00,  1.86,  0.00,  2.04,
     0.00,  1.64,  0.00,  1.44,  0.00,  1.54,  0.00,  1.30,  0.00,  1.27,
     0.00,  1.29,  0.00,  1.41,  0.00,  1.50,  0.00,  1.50,  0.00,  1.43,
@@ -67,19 +69,12 @@ const G4double G4CameronGilbertPairingCorrections::PairingNTable
     0.00,  0.57,  0.00,  0.49,  0.00,  0.43,  0.00,  0.50,  0.00,  0.39
 };
 
-G4CameronGilbertPairingCorrections* G4CameronGilbertPairingCorrections::theInstance = 0;
-
 G4CameronGilbertPairingCorrections::G4CameronGilbertPairingCorrections()
-{;}
+{
+  for(size_t i=0; i<ZTableSize; ++i) { PairingZTable[i] *= CLHEP::MeV; }
+  for(size_t i=0; i<NTableSize; ++i) { PairingNTable[i] *= CLHEP::MeV; }
+}
 
 G4CameronGilbertPairingCorrections::~G4CameronGilbertPairingCorrections()
-{;}
+{}
 
-G4CameronGilbertPairingCorrections* G4CameronGilbertPairingCorrections::GetInstance()
-{
-  if (!theInstance)  { 
-    static G4CameronGilbertPairingCorrections theCorrections;
-    theInstance = &theCorrections; 
-  }
-  return theInstance;
-}

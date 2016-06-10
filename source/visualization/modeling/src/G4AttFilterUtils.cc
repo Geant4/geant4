@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AttFilterUtils.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // Visualisation attribute filter utility functions.
 //

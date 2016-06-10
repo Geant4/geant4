@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Fissioner.cc 71954 2013-06-29 04:40:40Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100318  M. Kelsey -- Bug fix setting mass with G4LV
@@ -42,9 +42,13 @@
 // 20110801  M. Kelsey -- Replace constant-size std::vector's w/C arrays
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20120517  A. Ribon  -- Removed static in local vectors for reproducibility
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
+// 20130628  Replace local list of fragments with use of output G4Fragments
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
+#include "G4Fragment.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -55,35 +59,21 @@
 using namespace G4InuclSpecialFunctions;
 
 
-G4Fissioner::G4Fissioner() : G4CascadeColliderBase("G4Fissioner") {}
-
-void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
-			  G4InuclParticle* target,
-			  G4CollisionOutput& output) {
+void G4Fissioner::deExcite(const G4Fragment& target,
+			   G4CollisionOutput& output) {
   if (verboseLevel) {
-    G4cout << " >>> G4Fissioner::collide" << G4endl;
-  }
-
-  //  const G4int itry_max = 1000;
-
-  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
-  if (!nuclei_target) {
-    G4cerr << " >>> G4Fissioner -> target is not nuclei " << G4endl;
-    return;
+    G4cout << " >>> G4Fissioner::deExcite" << G4endl;
   }
 
   if (verboseLevel > 1) 
-    G4cout << " Fissioner input\n" << *nuclei_target << G4endl;
+    G4cout << " Fissioner input\n" << target << G4endl;
 
   // Initialize buffer for fission possibilities
   fissionStore.setVerboseLevel(verboseLevel);
   fissionStore.clear();
 
-  G4int A = nuclei_target->getA();
-  G4int Z = nuclei_target->getZ();
-
-  G4double EEXS = nuclei_target->getExitationEnergy();
-  G4double mass_in = nuclei_target->getMass();
+  getTargetData(target);
+  G4double mass_in = PEX.m();
   G4double e_in = mass_in; 		// Mass includes excitation
   G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A-Z) + G4cbrt(Z));
   G4double TEM = std::sqrt(EEXS / PARA);
@@ -177,16 +167,9 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   G4double EEXS1 = EV*A1;
   G4double EEXS2 = EV*A2;
 
-  G4InuclNuclei nuclei1(mom1, A1, Z1, EEXS1, G4InuclParticle::Fissioner);
-  G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, G4InuclParticle::Fissioner);
-
   // Pass only last two nuclear fragments
-  static std::vector<G4InuclNuclei> frags(2);		// Always the same size!
-  frags[0] = nuclei1;
-  frags[1] = nuclei2;
-  validateOutput(0, target, frags);		// Check energy conservation
-
-  output.addOutgoingNuclei(frags);
+  output.addRecoilFragment(makeFragment(mom1, A1, Z1, EEXS1));
+  output.addRecoilFragment(makeFragment(mom2, A2, Z2, EEXS2));
 }
 
 G4double G4Fissioner::getC2(G4int A1, 
@@ -270,7 +253,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
   G4double X2[2];
   G4double RAL[2];
   G4double RBE[2];
-  G4double A[4][4];
+  G4double AA[4][4];
   G4double B[4];
   G4int itry = 0;
 
@@ -329,24 +312,24 @@ void G4Fissioner::potentialMinimization(G4double& VP,
 	};
 
 	G4double DEL = 2.0e-3 * DEL1;
-	A[i][j] = R3 * RBE[i] * RBE[j] - 
+	AA[i][j] = R3 * RBE[i] * RBE[j] - 
 	  R2 * (-0.6 * 
 		(X1[i] * SAL[j] + 
 		 X1[j] * SAL[i]) + SAL[i] * SAL[j] * Y4) + 
 	  DEL * C[i] + DEL1 * DX1;
 	G4int i1 = i + 2;
 	G4int j1 = j + 2;
-	A[i1][j1] = R3 * RBE[i] * RBE[j] 
+	AA[i1][j1] = R3 * RBE[i] * RBE[j] 
 	  - R2 * (0.857 * 
 		  (X2[i] * SBE[j] + 
 		   X2[j] * SBE[i]) + SBE[i] * SBE[j] * Y4) +
 	  DEL * F[i] + DEL1 * DX2;
-	A[i][j1] = R3 * RAL[i] * RBE[j] - 
+	AA[i][j1] = R3 * RAL[i] * RBE[j] - 
 	  R2 * (0.857 * 
 		(X2[j] * SAL[i] - 
 		 0.6 * X1[i] * SBE[j]) + SBE[j] * SAL[i] * Y4 - 
 		0.257 * R[i] * Y3 * DEL1);
-	A[j1][i] = A[i][j1];   	 
+	AA[j1][i] = AA[i][j1];   	 
       };
     };
 
@@ -367,7 +350,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
     for (i = 0; i < 4; i++) {
       ST += B[i] * B[i];
 
-      for (G4int j = 0; j < 4; j++) ST1 += A[i][j] * B[i] * B[j];
+      for (G4int j = 0; j < 4; j++) ST1 += AA[i][j] * B[i] * B[j];
     };
 
     G4double STEP = ST / ST1;

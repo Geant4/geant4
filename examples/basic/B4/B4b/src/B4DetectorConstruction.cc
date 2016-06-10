@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4DetectorConstruction.cc 77601 2013-11-26 17:08:44Z gcosmo $
 // 
 /// \file B4DetectorConstruction.cc
 /// \brief Implementation of the B4DetectorConstruction class
@@ -37,7 +37,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -47,43 +48,28 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4GenericMessenger.hh"
-
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#include <stdio.h>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal 
+G4GlobalMagFieldMessenger* B4DetectorConstruction::fMagFieldMessenger = 0; 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4DetectorConstruction::B4DetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fMessenger(0),
-   fMagField(0),
    fAbsorberPV(0),
    fGapPV(0),
    fCheckOverlaps(true)
 {
-  // Define /B4/det commands using generic messenger class
-  fMessenger 
-    = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
-
-  // Define /B4/det/setMagField command
-  G4GenericMessenger::Command& setMagFieldCmd
-    = fMessenger->DeclareMethod("setMagField", 
-                                &B4DetectorConstruction::SetMagField, 
-                                "Define magnetic field value (in X direction");
-  setMagFieldCmd.SetUnitCategory("Magnetic flux density");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4DetectorConstruction::~B4DetectorConstruction()
 { 
-  delete fMagField;
-  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,8 +89,7 @@ void B4DetectorConstruction::DefineMaterials()
 { 
   // Lead material defined using NIST Manager
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
-  nistManager->FindOrBuildMaterial("G4_Pb", fromIsotopes);
+  nistManager->FindOrBuildMaterial("G4_Pb");
   
   // Liquid argon material
   G4double a;  // mass of a mole;
@@ -142,9 +127,10 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   G4Material* gapMaterial = G4Material::GetMaterial("liquidArgon");
   
   if ( ! defaultMaterial || ! absorberMaterial || ! gapMaterial ) {
-    G4cerr << "Cannot retrieve materials already defined. " << G4endl;
-    G4cerr << "Exiting application " << G4endl;
-    exit(1);
+    G4ExceptionDescription msg;
+    msg << "Cannot retrieve materials already defined."; 
+    G4Exception("B4DetectorConstruction::DefineVolumes()",
+      "MyCode0001", FatalException, msg);
   }  
    
   //     
@@ -290,25 +276,17 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  // Apply a global uniform magnetic field along X axis
-  G4FieldManager* fieldManager
-    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  // Delete the existing magnetic field
-  if ( fMagField )  delete fMagField; 
-
-  if ( fieldValue != 0. ) {
-    // create a new one if not null
-    fMagField 
-      = new G4UniformMagField(G4ThreeVector(fieldValue, 0., 0.));
-      
-    fieldManager->SetDetectorField(fMagField);
-    fieldManager->CreateChordFinder(fMagField);
-  } 
-  else {
-    fMagField = 0;
-    fieldManager->SetDetectorField(fMagField);
-  }
+void B4DetectorConstruction::ConstructSDandField()
+{ 
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
+  
+  // Register the field messenger for deleting
+  G4AutoDelete::Register(fMagFieldMessenger);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

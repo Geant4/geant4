@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:$
+// $Id: G4SurfaceVoxelizer.icc 72335 2013-07-16 09:01:49Z gcosmo $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -62,7 +62,13 @@ void G4SurfaceVoxelizer::GetVoxel(std::vector<G4int> &curVoxel,
 {
   for (G4int i=0; i<=2; ++i)
   {
-    curVoxel[i] = BinarySearch(GetBoundary(i), point[i]);
+    const std::vector<double> &boundary = GetBoundary(i);
+    G4int n = BinarySearch(boundary, point[i]);
+    if (n == -1)
+      { n = 0; }
+    else if (n == G4int(boundary.size()) - 1)
+      { n--; }
+    curVoxel[i] = n;
   }
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TwistTubsHypeSide.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -188,7 +188,7 @@ G4ThreeVector G4TwistTubsHypeSide::GetNormal(const G4ThreeVector &tmpxx,
 EInside G4TwistTubsHypeSide::Inside(const G4ThreeVector &gp) 
 {
    // Inside returns 
-   static const G4double halftol
+   const G4double halftol
      = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
    if (fInside.gp == gp) {
@@ -511,7 +511,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
     // We arranged G4Hype::ApproxDistOutside and G4Hype::ApproxDistInside
     // for this function. See these discriptions.
     
-   static const G4double halftol
+   const G4double halftol
      = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
    fCurStat.ResetfDone(kDontValidate, &gp);
@@ -649,7 +649,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
 G4int G4TwistTubsHypeSide::GetAreaCode(const G4ThreeVector &xx, 
                                              G4bool         withTol)
 {
-   static const G4double ctol = 0.5 * kCarTolerance;
+   const G4double ctol = 0.5 * kCarTolerance;
    G4int areacode = sInside;
 
    if ((fAxis[0] == kPhi && fAxis[1] == kZAxis))  {

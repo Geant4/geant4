@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
 //
 #include "G4HumanPhantomSD.hh"
 #include "G4HCofThisEvent.hh"
@@ -37,11 +32,12 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 
-G4HumanPhantomSD::G4HumanPhantomSD(G4String name)
+G4HumanPhantomSD::G4HumanPhantomSD(const G4String& name,
+                         const G4String& hitsCollectionName)
   :G4VSensitiveDetector(name)
 {
  G4String HCname;
- collectionName.insert(HCname="HumanPhantomCollection");
+ collectionName.insert(hitsCollectionName);
 }
 
 G4HumanPhantomSD::~G4HumanPhantomSD()

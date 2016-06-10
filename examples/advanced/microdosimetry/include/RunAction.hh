@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
 #ifndef RunAction_h
 #define RunAction_h 1
-
-#include "DetectorConstruction.hh"
-#include "HistoManager.hh"
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
@@ -40,13 +40,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
+
 class TrackingAction;
 
 class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*, HistoManager *, TrackingAction* trackingAction);
+  RunAction();
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -54,9 +55,36 @@ public:
 
 private:
 
-  DetectorConstruction* Detector;    
-  HistoManager* Histo;
-  TrackingAction* TrackingAct;
-  
+  /////////////////
+  // Histogramming
+  //
+  void CreateHistogram();
+  void WriteHistogram();
+
+  /////////////////
+  // Worker
+  //
+  void BeginMaster(const G4Run*);
+  void EndMaster(const G4Run*);
+
+  /////////////////
+  // Worker
+  //
+  void InitializeWorker(const G4Run*);
+  void BeginWorker(const G4Run*);
+  void EndWorker(const G4Run*);
+
+  /////////////////
+  // Print Info
+  //
+  void PrintRunInfo(const G4Run* run);
+
+  /////////////////
+  // Attributes
+  //
+  TrackingAction* fpTrackingAction;
+  bool fInitialized;
+  bool fDebug;
+
 };
 #endif

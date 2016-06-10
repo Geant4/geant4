@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryKaonBuilder.cc 65043 2012-11-12 17:11:00Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4FTFBinaryKaonBuilder.cc 68750 2013-04-05 10:19:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,6 +53,7 @@ G4FTFBinaryKaonBuilder::
 G4FTFBinaryKaonBuilder(G4bool quasiElastic)
 {    
   theMin = 4*GeV;
+  theMax = 100*TeV;
   theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
@@ -74,7 +74,7 @@ G4FTFBinaryKaonBuilder(G4bool quasiElastic)
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
 }
 
 G4FTFBinaryKaonBuilder:: ~G4FTFBinaryKaonBuilder()
@@ -93,6 +93,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
@@ -101,6 +102,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
@@ -109,6 +111,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonZeroLInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
@@ -117,7 +120,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonZeroSInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-    
+  theModel->SetMaxEnergy(theMax);    
   aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }

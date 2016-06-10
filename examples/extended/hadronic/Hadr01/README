@@ -37,11 +37,6 @@ modify the geometry:
 /testhadr/TargetLength  20 cm
 /testhadr/NumberDivZ    200
 
-If geometry was changed between two runs, then the following command need to
-be executed:
-
-/testhadr/Update
-
 Beam direction coincides with the target axis and is Z axis in the global
 coordinate system. The beam starts 5 mm in front of the target. G4ParticleGun
 is used as a primary generator. The energy and the type of the beam can be

@@ -27,7 +27,7 @@
 /// \brief Definition of the TrackingAction class
 //
 //
-// $Id$
+// $Id: TrackingAction.hh 68030 2013-03-13 13:51:27Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -53,7 +53,7 @@ class TrackingAction : public G4UserTrackingAction {
     virtual void  PreUserTrackingAction(const G4Track*);
     virtual void PostUserTrackingAction(const G4Track*);
     
-    void SetFullChain(G4bool flag) { fullChain = flag;};
+    void SetFullChain(G4bool flag) { fFullChain = flag;};
     
   private:
     RunAction*          fRun;
@@ -61,7 +61,7 @@ class TrackingAction : public G4UserTrackingAction {
     TrackingMessenger*  fTrackMessenger;
     
     G4double fCharge, fMass;        
-    G4bool   fullChain;
+    G4bool   fFullChain;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G3SensVolVector.hh 67982 2013-03-13 10:36:03Z gcosmo $
 //
 // vector of logical volumes that were defined with
 // tracking medium with ISVOL=1

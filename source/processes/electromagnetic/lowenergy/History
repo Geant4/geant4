@@ -1,4 +1,4 @@
-$Id: History,v 1.483 2011-01-04 11:50:19 vnivanch Exp $
+$Id: History 77345 2013-11-22 16:00:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,219 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21.11.2013  V. Ivanchenko, tag emlowen-V09-06-48
+            G4QAOLowEnergyLoss, G4hICRU49He, G4hICRU49p, 
+	    G4hParametrisedLossModel  - removed G4ThreadLocal
+
+20.11.2013  L. Pandola, tag emlowen-V09-06-47
+	    Fix double-deletion problem reported by Gabriele 
+	    and some cosmetics (G4PenelopeBremsstrahlungFS)
+
+19.11.2013  V. Ivanchenko, tag emlowen-V09-06-46
+            G4LivermoreComptonModel - fixed form-factor parameterisation
+              by increasing number of digits in form-factor table
+
+17.11.2013  V. Ivanchenko, L. Pandola, tag emlowen-V09-06-45
+            G4LivermorePhotoElectricModel and G4PenelopeIonisationXSHandler,
+             - fixed Coverity defect.
+   
+08.11.2013  V. Ivanchenko, tag emlowen-V09-06-44
+            G4IonParametrisedLossModel - fixed destructor
+
+08.11.2013  V. Ivanchenko, tag emlowen-V09-06-43
+            G4IonDEDXHandler, G4LivermoreComptonModel,
+            G4LivermoreGammaConversionModel, 
+            G4LivermorePhotoElectricModel, G4LivermoreRayleighModel,
+            G4LivermoreBremsstrahlungModel - cleanup
+
+07.11.2013  V. Ivanchenko, tag emlowen-V09-06-42
+            G4PenelopeBremsstrahlungAngular, 
+            G4PenelopeBremsstrahlungFS, G4PenelopeBremsstrahlungModel,
+            G4PenelopeIonisationXSHandler - do not delete
+            G4PhysicsVector at destruction
+
+07.11.2013  V. Ivanchenko, tag emlowen-V09-06-41
+            G4IonDEDXHandler, G4LivermoreComptonModel,
+            G4LivermoreGammaConversionModel, 
+            G4LivermorePhotoElectricModel, G4LivermoreRayleighModel,
+            G4PenelopeCrossSection, G4PenelopeGammaConversionModel,
+            G4PenelopePhotoElectricModel, G4PenelopeRayleighModel
+              - do not delete G4PhysicsVector at destruction 
+
+05.11.2013  V. Ivanchenko, tag emlowen-V09-06-40
+            G4LivermoreComptonModel - fixed compillation problem
+            and problem of spectra due to which previous tag was
+            rejected
+
+02.11.2013  L. Pandola, tag emlowen-V09-06-39
+	    Bug fixes in Penelope Ionisation and Bremsstrahlung
+            after emlowen-V09-06-36. Should occur only in unit 
+            tests or by G4EmCalculator.
+
+01.11.2013  V. Ivanchenko, tag emlowen-V09-06-38
+            G4LivermorePhotoElectricModel - do not upload data in 
+            SampleSecondaries method, instead kill the gamma
+
+01.11.2013  V. Ivanchenko, tag emlowen-V09-06-37
+            G4LivermoreGammaConversionModel, G4LivermoreRayleighModel,
+            G4LivermorePhotoElectricModel, G4LivermoreComptonModel - more
+            accurate read data from file in run time (shoudl be used
+            onlz in Unit tests and by G4EmCalculator)  
+
+31.10.2013  L. Pandola, tag emlowen-V09-06-36
+	    Allow for (AutoLock-protected) creation on-the-fly of 
+            tables. Nothing changes for loops driven by the RunManager.
+            Allows to get the CrossSection and StoppingPower without 
+	    crash from Unit Tests and G4EmCalculator
+	    
+30.10.2013  L. Pandola, tag emlowen-V09-06-35
+	    Implemented G4Cache in G4PenelopeBremsstrahlungFS, to 
+	    avoid the new/delete mechanism of emlowen-V09-06-34 in 
+	    a MT-safe way.
+
+28.10.2013  L. Pandola, tag emlowen-V09-06-34             
+	    Remove AutoLock from G4PenelopeBremsstrahlungFS. Support 
+	    vector is allocated and released at every loop (not 
+	    optimal) to avoid interference of threads.
+
+27.10.2013  S. Incerti, M. Raine, tag emlowen-V09-06-33
+            Updated sources.cmake
+	    Fixed Coverity reports is G4LivermoreComptonMode (VI), 
+            G4LivermorePhotoElectricModel (VI) and 
+ 	    G4PenelopeComptonModel (LP)
+
+24.10.2013  S. Incerti, M. Raine, tag emlowen-V09-06-32
+            Added G4MicroElec* processes and models 
+	    in replacement of G4MuElec*
+
+22.10.2013, V.Ivanchenko, tag emlowen-V09-06-31
+            G4LivermoreComptonModel, G4LivermoreGammaConversionModel,
+            G4RayleighAngularGenerator - use G4Log, G4Exp
+
+22.10.2013, V.Ivanchenko, tag emlowen-V09-06-30
+            G4LivermoreGammaConversionModelRC - fixed compillation 
+            warnings due non-accurate definition of variables
+            G4LivermoreComptonModel (A.Bagulya) and 
+            G4LivermoreBremsstrahlungModel are migrated to MT 
+
+17.10.2013, L.Pandola, tag emlowen-V09-06-29
+	    Partially revert the MT migration of emlowen-V09-06-26 
+            to fix a problem found by STT. The angular generator of 
+	    Penelope bremsstrahlung is kept thread-local (one copy 
+            per worker). 
+
+16.10.2013, L.Pandola, tag emlowen-V09-06-28
+	    Migration to MT for the Penelope Compton model
+	    Fix Exception on G4PenelopeOscillatorManager 
+            reported by Krzysztof Genser for specific materials
+
+08.10.2013, L.Pandola, tag emlowen-V09-06-27	
+	    Enforce const for G4PenelopeBremsstrahlungFS methods
+            used by the workers.
+	    Migration to MT for the Penelope Ionisation model,
+	    and related helper classes (including Penelope PIXE).
+
+07.10.2013, L.Pandola, tag emlowen-V09-06-26
+	    Migration to MT for the Penelope models of 
+	    bremsstrahlung and e+ annihilation.
+            Improve CPU performances of G4PenelopePhotoElectricModel
+
+01.10.2013, L.Pandola, tag emlowen-V09-06-25
+	    Migration to MT for G4PenelopePhotoElectricModel,
+            G4PenelopeRayleighModel and G4PenelopeGammaConversionModel
+
+05.09.2013  M.Asai, tag emlowen-V09-06-24
+            - G4IonDEDXScalingICRU73 - remove GetIon for reference
+              Fe and Ar but use G4IonTable::GetIonMass() instead
+              to prevent unnecessary instantiation of ion objects
+              for individual threads.
+
+09.08.2013  V.Ivanchenko, tag emlowen-V09-06-23
+            - fixed bug in previous tag
+
+09.08.2013  V.Ivanchenko, tag emlowen-V09-06-22
+            - G4LivermorePhotoElectricModel - migration to MT
+
+04.08.2013  S.Incerti, tag emlowen-V09-06-21
+            - G4LivermoreGammaConversionModel - migration to MT
+
+01.08.2013  V.Ivanchenko, tag emlowen-V09-06-20
+            - G4PenelopeRayleighModel - removed debug printout
+            - G4LivermoreRayleighModel - migration to MT: sharing
+                internal tables between threads, two new methods
+                added InitialiseLocal, InitialiseForElement
+
+23.07.2013  V.Ivanchenko, tag emlowen-V09-06-18
+22.07.2013  V.Ivanchenko, tag emlowen-V09-06-17
+            - added protection for MT mode in G4PenelopeRaylModel
+
+03.07.2013  M.Asai, tag emlowen-V09-06-16
+            - Fix G4IonDEDXScalingICRU73.cc for multi-threading:
+              "referenceAr" and "referenceFe" are now instantiated
+              but not registered to the particel table.
+
+25.06.2013  S.Incerti, B. Bouguelmouna, tag emlowen-V09-06-15
+            - Fix Mi shell cross section computation in G4teoCrossSection
+
+17.06.2013  V.Ivanchenko, tag emlowen-V09-06-14
+            - G4IonDEDXHandler, G4IonParametrisedLossModel,
+              G4LivermoreGammaConversionModel,
+              G4PenelopeBremsstrahlungAngular - moved call
+              SetSpline(true) to be always after the vector is 
+              filled - only in that case spline interpolation
+              is enabled in the most recent version of G4PhysicsVector
+
+13.06.2013  M.Karamitros, tag emlowen-V09-06-13
+	    - GNUmakefile: Dependency on hadronic package withdrawn
+
+13.06.2013  M.Karamitros, tag emlowen-V09-06-12
+	    - G4LowEPComptonModel.cc : Dependency on G4HadTmpUtil withdrawn
+	    
+29.03.2013  L.Pandola, tag emlowen-V09-06-11
+	    - replaced "static G4ThreadLocal" with "static const" 
+	      when applicable
+            - added static keyword to some constants.
+
+21.02.2013  V.Ivanchenko, L. Pandola, tag emlowen-V09-06-10 
+            G4Generator2BN and G4PenelopeComptonModel 
+	    - removed G4ThreadLocal declarations
+
+15.02.2013  V.Ivanchenko, tag emlowen-V09-06-09
+- G4LowEPComptonModel - fixed compillation problem at MAC and Windows
+
+14.02.2013  V.Ivanchenko, tag emlowen-V09-06-08
+- G4LowEPComptonModel - J.Brown fixed numerical problem (seen by FPE)
+
+06.02.2013  S. Incerti, tag emlowen-V09-06-07
+- Removed useless verbosity
+
+20.12.2012  V.Ivanchenko, tag emlowen-V09-06-06
+- Fixed build
+
+20.12.2012  V.Ivanchenko, tag emlowen-V09-06-05
+- G4AtomicDeexcitation is return back as number of classes
+    which are still in use
+- G4PenelopeIonisationModel - removed unused obsolete header
+
+19.12.2012  V.Ivanchenko, tag emlowen-V09-06-04
+- Fixed build problems
+
+19.12.2012  V.Ivanchenko, tag emlowen-V09-06-03
+- G4AtomicDeexcitation is cloned from G4UAtomicDeexcitation
+- removed obsolete unused classes
+
+07.12.2012  V.Ivanchenko, tag emlowen-V09-06-02
+- G4MuElecInelastic, G4MuElecElastic - substituted calls to obsolete 
+    method
+
+05.12.2012  L. Pandola, tag emlowen-V09-06-01
+	    Slightly change the fix on G4LivermorePhotoElectricModel 
+  	    introduced in the previous tag; bug fix #1402
+
+04.12.2012  A. Mantero, tag emlowen-V09-06-00
+- G4LivermorePhotoElectricModel: fixed a bug in line 310
+- G4UAtomDeexcitation: Added some debug options
 
 12.11.2012  V.Ivanchenko, tag emlowen-V09-05-48
 - G4MuElecInelasticModel Gunter Folger fixed usage of iterators at 

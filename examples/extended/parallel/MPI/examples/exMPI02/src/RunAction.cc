@@ -22,36 +22,43 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: RunAction.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file RunAction.cc
 /// @brief Describe run actions
 
-#include "RunAction.hh"
-#include "Analysis.hh"
 #include "G4MPImanager.hh"
 #include <stdio.h>
+#include "G4Threading.hh"
+#include "Analysis.hh"
+#include "RunAction.hh"
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RunAction::RunAction()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RunAction::~RunAction()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RunAction::BeginOfRunAction(const G4Run*)
 {
   Analysis* myana = Analysis::GetAnalysis();
   myana-> Clear();
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RunAction::EndOfRunAction(const G4Run*)
 {
+  G4bool is_worker = G4Threading::IsWorkerThread();
+  if ( is_worker ) return;
+
   G4int rank = G4MPImanager::GetManager()-> GetRank();
-  
+
   char str[64];
   sprintf(str, "dose-%03d.root", rank);
   G4String fname(str);

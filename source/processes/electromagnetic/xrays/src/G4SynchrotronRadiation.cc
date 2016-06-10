@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SynchrotronRadiation.cc 74582 2013-10-15 12:06:25Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -46,6 +46,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4DipBustGenerator.hh"
+#include "G4Log.hh"
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -68,7 +70,11 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/electron_mass_c2 ;
 
   SetProcessSubType(fSynchrotronRadiation);
-  verboseLevel=1;
+  verboseLevel = 1;
+  FirstTime    = true;
+  FirstTime1   = true;
+  genAngle     = 0;
+  SetAngularGenerator(new G4DipBustGenerator());
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -77,20 +83,38 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
 //
 
 G4SynchrotronRadiation::~G4SynchrotronRadiation()
-{}
+{
+    delete genAngle;
+}
 
 /////////////////////////////// METHODS /////////////////////////////////
 //
+
+void 
+G4SynchrotronRadiation::SetAngularGenerator(G4VEmAngularDistribution* p)
+{
+  if(p != genAngle) {
+    delete genAngle;
+    genAngle = p;
+  }
+}
+
+G4bool
+G4SynchrotronRadiation::IsApplicable(const G4ParticleDefinition& particle)
+{
+  return ( ( &particle == theElectron ) || ( &particle == thePositron ));
+}
+
+/////////////////////////////////////////////////////////////////////////
 //
 // Production of synchrotron X-ray photon
 // GEANT4 internal units.
 //
 
-
 G4double
-G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
-                                               G4double,
-                                               G4ForceCondition* condition)
+G4SynchrotronRadiation::GetMeanFreePath(const G4Track& trackData,
+					G4double,
+					G4ForceCondition* condition)
 {
   // gives the MeanFreePath in GEANT4 internal units
   G4double MeanFreePath;
@@ -104,27 +128,25 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
 
   G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
 
-  if ( gamma < 1.0e3 )  MeanFreePath = DBL_MAX;
+  if ( gamma < 1.0e3 || 0.0 == particleCharge)  { MeanFreePath = DBL_MAX; }
   else
   {
 
     G4ThreeVector  FieldValue;
-    const G4Field*   pField = 0;
+    const G4Field* pField = 0;
+    G4bool         fieldExertsForce = false;
 
-    G4FieldManager* fieldMgr=0;
-    G4bool          fieldExertsForce = false;
 
-    if( (particleCharge != 0.0) )
+    G4FieldManager* fieldMgr = 
+	fFieldPropagator->FindAndSetFieldManager(trackData.GetVolume());
+
+    if ( fieldMgr != 0 )
     {
-      fieldMgr = fFieldPropagator->FindAndSetFieldManager( trackData.GetVolume() );
+      // If the field manager has no field, there is no field !
 
-      if ( fieldMgr != 0 )
-      {
-        // If the field manager has no field, there is no field !
-
-        fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
-      }
+      fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
     }
+   
     if ( fieldExertsForce )
     {
       pField = fieldMgr->GetDetectorField();
@@ -143,8 +165,6 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
                                    FieldValueVec[1],
                                    FieldValueVec[2]   );
 
-
-
       G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection();
       G4ThreeVector unitMcrossB  = FieldValue.cross(unitMomentum);
       G4double perpB             = unitMcrossB.mag();
@@ -152,7 +172,6 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
       if( perpB > 0.0 ) MeanFreePath = fLambdaConst/perpB;
       else              MeanFreePath = DBL_MAX;
 
-      static G4bool FirstTime=true;
       if(verboseLevel > 0 && FirstTime)
       {
         G4cout << "G4SynchrotronRadiation::GetMeanFreePath :" << '\n' 
@@ -160,31 +179,32 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
 	       << G4endl;
         if(verboseLevel > 1)
         {
-          G4ThreeVector pvec=aDynamicParticle->GetMomentum();
-          G4double Btot=FieldValue.getR();
-          G4double ptot=pvec.getR();
-          G4double rho= ptot / (MeV * c_light * Btot ); // full bending radius
-          G4double Theta=unitMomentum.theta(FieldValue); // angle between particle and field
-          G4cout
-	        << "  B = " << Btot/tesla << " Tesla"
-            << "  perpB = " << perpB/tesla << " Tesla"
-            << "  Theta = " << Theta << " std::sin(Theta)=" << std::sin(Theta) << '\n'
-            << "  ptot  = " << G4BestUnit(ptot,"Energy")
-            << "  rho   = " << G4BestUnit(rho,"Length")
-  	        << G4endl;
+          G4ThreeVector pvec = aDynamicParticle->GetMomentum();
+          G4double Btot = FieldValue.getR();
+          G4double ptot = pvec.getR();
+          G4double rho  = ptot / (MeV * c_light * Btot ); 
+	  // full bending radius
+          G4double Theta=unitMomentum.theta(FieldValue); 
+	  // angle between particle and field
+          G4cout << "  B = " << Btot/tesla << " Tesla"
+		 << "  perpB = " << perpB/tesla << " Tesla"
+		 << "  Theta = " << Theta << " std::sin(Theta)=" 
+		 << std::sin(Theta) << '\n'
+		 << "  ptot  = " << G4BestUnit(ptot,"Energy")
+		 << "  rho   = " << G4BestUnit(rho,"Length")
+		 << G4endl;
         }
 	FirstTime=false;
       }
     }
     else  MeanFreePath = DBL_MAX;
 
-
   }
 
   return MeanFreePath;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //
 
@@ -195,33 +215,30 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 {
   aParticleChange.Initialize(trackData);
 
-  const G4DynamicParticle* aDynamicParticle=trackData.GetDynamicParticle();
+  const G4DynamicParticle* aDynamicParticle = trackData.GetDynamicParticle();
 
   G4double gamma = aDynamicParticle->GetTotalEnergy()/
                    (aDynamicParticle->GetMass()              );
 
-  if(gamma <= 1.0e3 ) 
+  G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
+  if(gamma <= 1.0e3  || 0.0 == particleCharge) 
   {
     return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
   }
-  G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
 
   G4ThreeVector  FieldValue;
   const G4Field*   pField = 0;
 
-  G4FieldManager* fieldMgr=0;
   G4bool          fieldExertsForce = false;
+  G4FieldManager* fieldMgr = 
+    fFieldPropagator->FindAndSetFieldManager(trackData.GetVolume());
 
-  if( (particleCharge != 0.0) )
+  if ( fieldMgr != 0 )
   {
-    fieldMgr = fFieldPropagator->FindAndSetFieldManager( trackData.GetVolume() );
-    if ( fieldMgr != 0 )
-    {
-      // If the field manager has no field, there is no field !
-
-      fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
-    }
+    // If the field manager has no field, there is no field !
+    fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
   }
+ 
   if ( fieldExertsForce )
   {
     pField = fieldMgr->GetDetectorField();
@@ -234,8 +251,8 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 
     pField->GetFieldValue( globPosVec, FieldValueVec );
     FieldValue = G4ThreeVector( FieldValueVec[0],
-                                   FieldValueVec[1],
-                                   FieldValueVec[2]   );
+				FieldValueVec[1],
+				FieldValueVec[2]   );
 
     G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection();
     G4ThreeVector unitMcrossB = FieldValue.cross(unitMomentum);
@@ -253,61 +270,21 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
         return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
       }
       G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
-      G4ParticleMomentum
-      particleDirection = aDynamicParticle->GetMomentumDirection();
-
-      // M-C of its direction, simplified dipole boosted approach
-
-      // G4double Teta, fteta;  // = G4UniformRand()/gamma;    // Very roughly
-
-      G4double cosTheta, sinTheta, fcos, beta;
-
-  do
-  { 
-    cosTheta = 1. - 2.*G4UniformRand();
-    fcos     = (1 + cosTheta*cosTheta)*0.5;
-  }
-  while( fcos < G4UniformRand() );
-
-  beta = std::sqrt(1. - 1./(gamma*gamma));
-
-  cosTheta = (cosTheta + beta)/(1. + beta*cosTheta);
-
-  if( cosTheta >  1. ) cosTheta =  1.;
-  if( cosTheta < -1. ) cosTheta = -1.;
-
-  sinTheta = std::sqrt(1. - cosTheta*cosTheta );
-
-      G4double Phi  = twopi * G4UniformRand();
-
-      G4double dirx = sinTheta*std::cos(Phi) ,
-               diry = sinTheta*std::sin(Phi) ,
-               dirz = cosTheta;
-
-      G4ThreeVector gammaDirection ( dirx, diry, dirz);
-      gammaDirection.rotateUz(particleDirection);
-
-      // polarization of new gamma
-
-      // G4double sx =  std::cos(Teta)*std::cos(Phi);
-      // G4double sy =  std::cos(Teta)*std::sin(Phi);
-      // G4double sz = -std::sin(Teta);
+      G4ThreeVector gammaDirection = 
+	genAngle->SampleDirection(aDynamicParticle,
+				  energyOfSR, 1, 0);
 
       G4ThreeVector gammaPolarization = FieldValue.cross(gammaDirection);
       gammaPolarization = gammaPolarization.unit();
 
-      // (sx, sy, sz);
-      // gammaPolarization.rotateUz(particleDirection);
-
       // create G4DynamicParticle object for the SR photon
 
       G4DynamicParticle* aGamma= new G4DynamicParticle ( theGamma,
-                                                         gammaDirection,
-                                                         energyOfSR      );
+							 gammaDirection,
+							 energyOfSR      );
       aGamma->SetPolarization( gammaPolarization.x(),
-                               gammaPolarization.y(),
-                               gammaPolarization.z() );
-
+			       gammaPolarization.y(),
+			       gammaPolarization.z() );
 
       aParticleChange.SetNumberOfSecondaries(1);
       aParticleChange.AddSecondary(aGamma);
@@ -315,24 +292,21 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
       // Update the incident particle
 
       G4double newKinEnergy = kineticEnergy - energyOfSR;
-      aParticleChange.ProposeLocalEnergyDeposit (0.);
 
       if (newKinEnergy > 0.)
       {
-        aParticleChange.ProposeMomentumDirection( particleDirection );
-        aParticleChange.ProposeEnergy( newKinEnergy );
+	aParticleChange.ProposeEnergy( newKinEnergy );
       }
       else
       {
-        aParticleChange.ProposeEnergy( 0. );
+	aParticleChange.ProposeEnergy( 0. );
       }
     }
   }
   return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //
 
@@ -340,8 +314,8 @@ G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
 // direct generation
 {
   // from 0 to 0.7
-  const G4double aa1=0  ,aa2=0.7;
-  const G4int ncheb1=27;
+  static const G4double aa1=0  ,aa2=0.7;
+  static const G4int ncheb1=27;
   static const G4double cheb1[] =
   { 1.22371665676046468821,0.108956475422163837267,0.0383328524358594396134,0.00759138369340257753721,
    0.00205712048644963340914,0.000497810783280019308661,0.000130743691810302187818,0.0000338168760220395409734,
@@ -351,8 +325,8 @@ G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
    1.61856011449276096e-12,4.529450993473807e-13,1.2698603951096606e-13,3.566117394511206e-14,1.00301587494091e-14,
    2.82515346447219e-15,7.9680747949792e-16};
   //   from 0.7 to 0.9132260271183847
-  const G4double aa3=0.9132260271183847;
-  const G4int ncheb2=27;
+  static const G4double aa3=0.9132260271183847;
+  static const G4int ncheb2=27;
   static const G4double cheb2[] =
   { 1.1139496701107756,0.3523967429328067,0.0713849171926623,0.01475818043595387,0.003381255637322462,
 	0.0008228057599452224,0.00020785506681254216,0.00005390169253706556,0.000014250571923902464,3.823880733161044e-6,
@@ -362,8 +336,8 @@ G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
 	6.030906040404772e-15,1.9549163926819867e-15};
    // Chebyshev with exp/log  scale
    // a = -Log[1 - SynFracInt[1]]; b = -Log[1 - SynFracInt[7]];
-  const G4double aa4=2.4444485538746025480,aa5=9.3830728608909477079;
-  const G4int ncheb3=28;
+  static const G4double aa4=2.4444485538746025480,aa5=9.3830728608909477079;
+  static const G4int ncheb3=28;
   static const G4double cheb3[] =
   { 1.2292683840435586977,0.160353449247864455879,-0.0353559911947559448721,0.00776901561223573936985,
    -0.00165886451971685133259,0.000335719118906954279467,-0.0000617184951079161143187,9.23534039743246708256e-6,
@@ -372,8 +346,8 @@ G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
    2.31128525568385247392e-10,-6.41796873254200220876e-11,1.74815310473323361543e-11,-4.68653536933392363045e-12,
    1.24016595805520752748e-12,-3.24839432979935522159e-13,8.44601465226513952994e-14,-2.18647276044246803998e-14,
    5.65407548745690689978e-15,-1.46553625917463067508e-15,3.82059606377570462276e-16,-1.00457896653436912508e-16};
-  const G4double aa6=33.122936966163038145;
-  const G4int ncheb4=27;
+  static const G4double aa6=33.122936966163038145;
+  static const G4int ncheb4=27;
   static const G4double cheb4[] =
   {1.69342658227676741765,0.0742766400841232319225,-0.019337880608635717358,0.00516065527473364110491,
    -0.00139342012990307729473,0.000378549864052022522193,-0.000103167085583785340215,0.0000281543441271412178337,
@@ -386,30 +360,32 @@ G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
   if(x<aa2)      return x*x*x*Chebyshev(aa1,aa2,cheb1,ncheb1,x);
   else if(x<aa3) return       Chebyshev(aa2,aa3,cheb2,ncheb2,x);
   else if(x<1-0.0000841363)
-  { G4double y=-std::log(1-x);
+  { G4double y=-G4Log(1-x);
 	return y*Chebyshev(aa4,aa5,cheb3,ncheb3,y);
   }
   else
-  { G4double y=-std::log(1-x);
+  { G4double y=-G4Log(1-x);
 	return y*Chebyshev(aa5,aa6,cheb4,ncheb4,y);
   }
 }
 
-G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perpB)
+G4double 
+G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perpB)
 {
 
   G4double Ecr=fEnergyConst*gamma*gamma*perpB;
 
-  static G4bool FirstTime=true;
-  if(verboseLevel > 0 && FirstTime)
+  //  static G4ThreadLocal G4bool FirstTime=true;
+  if(verboseLevel > 0 && FirstTime1)
   { G4double Emean=8./(15.*std::sqrt(3.))*Ecr; // mean photon energy
     G4double E_rms=std::sqrt(211./675.)*Ecr; // rms of photon energy distribution
     G4int prec = G4cout.precision();
-    G4cout << "G4SynchrotronRadiation::GetRandomEnergySR :" << '\n' << std::setprecision(4)
-	<< "  Ecr   = "    << G4BestUnit(Ecr,"Energy") << '\n'
-	<< "  Emean = "    << G4BestUnit(Emean,"Energy") << '\n'
-	<< "  E_rms = "    << G4BestUnit(E_rms,"Energy") << G4endl;
-    FirstTime=false;
+    G4cout << "G4SynchrotronRadiation::GetRandomEnergySR :" << '\n' 
+	   << std::setprecision(4)
+	   << "  Ecr   = "    << G4BestUnit(Ecr,"Energy") << '\n'
+	   << "  Emean = "    << G4BestUnit(Emean,"Energy") << '\n'
+	   << "  E_rms = "    << G4BestUnit(E_rms,"Energy") << G4endl;
+    FirstTime1=false;
     G4cout.precision(prec); 
   }
 
@@ -417,17 +393,27 @@ G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perp
   return energySR;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+//
 
-void G4SynchrotronRadiation::BuildPhysicsTable(const G4ParticleDefinition& part)
+void 
+G4SynchrotronRadiation::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   if(0 < verboseLevel && &part==theElectron ) PrintInfoDefinition();
 }
 
-void G4SynchrotronRadiation::PrintInfoDefinition() // not yet called, usually called from BuildPhysicsTable
+///////////////////////////////////////////////////////////////////////////////
+//
+//
+
+void G4SynchrotronRadiation::PrintInfoDefinition() 
+// not yet called, usually called from BuildPhysicsTable
 {
   G4String comments ="Incoherent Synchrotron Radiation\n";
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "      good description for long magnets at all energies" << G4endl;
+         << "      good description for long magnets at all energies" 
+	 << G4endl;
 }
 
 ///////////////////// end of G4SynchrotronRadiation.cc

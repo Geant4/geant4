@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Scene.cc 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -41,7 +41,7 @@ G4Scene::G4Scene (const G4String& name):
   fName (name),
   fRefreshAtEndOfEvent(true),
   fRefreshAtEndOfRun(true),
-  fMaxNumberOfKeptEvents(0)
+  fMaxNumberOfKeptEvents(100)
 {} // Note all other data members have default initial values.
 
 G4Scene::~G4Scene () {}

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeAnnihilationModel.hh 74452 2013-10-07 15:08:00Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -31,6 +31,7 @@
 // -----------
 // 29 Oct 2008   L. Pandola   1st implementation. Migration from EM process 
 //                            to EM model
+// 02 Oct 2013   L. Pandola   Migration to MT paradigm
 //
 // -------------------------------------------------------------------
 //
@@ -62,6 +63,8 @@ public:
   virtual ~G4PenelopeAnnihilationModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+                               G4VEmModel* );
 
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double kinEnergy,
@@ -75,18 +78,21 @@ public:
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
-
+  
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
+  const G4ParticleDefinition* fParticle;
 
 private:
   G4double ComputeCrossSectionPerElectron(G4double energy);
 
   G4PenelopeAnnihilationModel & operator=(const G4PenelopeAnnihilationModel &right);
   G4PenelopeAnnihilationModel(const G4PenelopeAnnihilationModel&);
+
+  void SetParticle(const G4ParticleDefinition*);
 
   G4int verboseLevel;
   G4bool isInitialised;
@@ -95,7 +101,7 @@ private:
   G4double fIntrinsicHighEnergyLimit;
 
   //Stored here so it is not recalculated every time
-  G4double fPielr2;
+  static G4double fPielr2;
 };
 
 #endif

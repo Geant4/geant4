@@ -1,0 +1,45 @@
+$Id: History 66373 2012-12-18 09:41:34Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for G4 zlib package
+--------------------------------
+7 May 2013 Gunter Folger     (zlib-V09-06-03)
+-  Fixes for Windows:
+   - Add few more explicit typecasts, in #ifdef protected code
+   - in inflate.h,.cc an enum used OS, this clashes with a #define, rename OS to
+     OS_ZLIB
+   - sources.cmake: add -DZLIB_DLL, to export symbols, don't rename debug
+     version of G4zlib to G4zlibd  
+6 May 2013 Gunter Folger     (zlib-V09-06-02)
+-  Adapt full zlib to G4 cmake:
+   - copied portions of zlib CMakeLists.tzt to sources.cmake, 
+     using standard G4 CMakeLists.txt     
+   - Private header are in src, include only has zlib.h. zconf.h is created 
+     in build tree from src/zconf.h.cmakein; zlib.h and zconf.h are installed.   
+
+27 March 2013 Gunter Folger  (zlib-V09-06-01)
+-  Update to zlib  1.2.7
+   - include complete zlib, not only writer.
+   
+20 March 2013 Gabriele Cosmo (zlib-V09-06-00)
+- Moved from visualization/externals module
+
+25 May 2005 Mark Donszelmann
+- zlib version 1.2.2
+

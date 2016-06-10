@@ -48,6 +48,8 @@ class G4QMDCollision
 {
    public:
       G4QMDCollision();
+//      G4QMDCollision( const G4QMDCollision& );
+//      G4QMDCollision& operator= ( const G4QMDCollision& );
       ~G4QMDCollision();
 
       void CalKinematicsOfBinaryCollisions( G4double );
@@ -57,14 +59,24 @@ class G4QMDCollision
 
       void SetMeanField ( G4QMDMeanField* meanfield ){ theMeanField = meanfield; theSystem = meanfield->GetSystem(); }
 
+      // Get, Set method of parameters; For expert only 
+      void deltar( G4double x ){ fdeltar = x; };
+      G4double deltar(){ return fdeltar; };
+      void bcmax0( G4double x ){ fbcmax0 = x; };
+      G4double bcmax0(){ return fbcmax0; };
+      void bcmax1( G4double x ){ fbcmax1 = x; };
+      G4double bcmax1(){ return fbcmax1; };
+      void epse( G4double x ){ fepse = x; };
+      G4double epse(){ return fepse; };
+
    private:
       G4QMDSystem* theSystem;
       G4QMDMeanField* theMeanField;
 
-      G4double deltar;
-      G4double bcmax0 , bcmax1;
-      G4double sig0 , sig1;
-      G4double epse; 
+      G4double fdeltar;
+      G4double fbcmax0 , fbcmax1;
+      //G4double sig0 , sig1;
+      G4double fepse; 
 
       G4Scatterer* theScatterer;
 };

@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPFFFissionFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 
 void G4NeutronHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
@@ -50,11 +51,13 @@ void G4NeutronHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & d
       hasXsec = false;
       return; // no data for exactly this isotope.
    }
-   std::ifstream theData(filename, std::ios::in);
+   //std::ifstream theData(filename, std::ios::in);
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
    G4double dummy;
    if ( !theData )
    {
-      theData.close();
+      //theData.close();
       hasFSData = false;
       hasXsec = false;
       hasAnyData = false;
@@ -86,7 +89,7 @@ void G4NeutronHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & d
          G4double Ei;
          G4int jmax;
          G4int ip;
-         //        energy of incidnece neutron 
+         //        energy of incidence neutron
          theData >> Ei;
          //        Number of data set followings 
          theData >> jmax;
@@ -112,7 +115,7 @@ void G4NeutronHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & d
       FissionProductYieldData.insert( std::pair< G4int , std::map< G4double , std::map< G4int , G4double >* >* > (iMT,mEnergyFSPData));
       mMTInterpolation.insert( std::pair<G4int,std::map<G4double,G4int>*> (iMT,mInterporation) ); 
    } 
-   theData.close();
+   //theData.close();
 }
   
 G4DynamicParticleVector * G4NeutronHPFFFissionFS::ApplyYourself(G4int nNeutrons)
@@ -162,7 +165,7 @@ void G4NeutronHPFFFissionFS::GetAFissionFragment( G4double energy , G4int& fragZ
    std::map<G4int,G4double>* mFSPYieldData = (*mEnergyFSPData)[key_energy];
 
    G4int ifrag=0;
-   G4double ceilling = mFSPYieldData->rbegin()->second; // Becaseu of numerical accuracy, this is not always 2 
+   G4double ceilling = mFSPYieldData->rbegin()->second; // Because of numerical accuracy, this is not always 2
    for ( std::map<G4int,G4double>::iterator it = mFSPYieldData->begin() ; it != mFSPYieldData->end() ; it++ )
    {
       //if ( ( rand - it->second/ceilling ) < 1.0e-6 ) std::cout << rand - it->second/ceilling << std::endl;

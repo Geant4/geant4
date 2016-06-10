@@ -23,103 +23,92 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-//
-// Author: Luciano Pandola
-//         on base of G4LowEnergyBremsstrahlung developed by A.Forti and V.Ivanchenko
-//
-// History:
-// -----------
-// 03 Mar 2009   L. Pandola   1st implementation. Migration from EM process 
-//                            to EM model. Physics is unchanged.
+// $Id: G4LivermoreBremsstrahlungModel.hh 74822 2013-10-22 14:42:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
-// Class description:
-// Low Energy Electromagnetic Physics, e- bremsstrahlung
-// with Livermore Model
+// GEANT4 Class header file
+//
+//
+// File name:     G4LivermoreBremsstrahlungModel
+//
+// Author:        Andreas Schaelicke & Vladimir Ivantchenko
+//
+// Creation date: 04.10.2011
+//
+// Modifications:
+//
+//
+// Class Description:
+//
+// Implementation of the bremssrahlung energy spectrum using
+// 1. S.M. Seltzer and M.J. Berger Nucl. Instr. Meth. B12 (1985) 95
+// 2. S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data 
+//    Tables 35 (1986) 345
+// Cross section computation in the base class G4eBremsstrahlungRelModel
+
 // -------------------------------------------------------------------
+//
 
-#ifndef G4LIVERMOREBREMSSTRAHLUNGMODEL_HH
-#define G4LIVERMOREBREMSSTRAHLUNGMODEL_HH 1
+#ifndef G4LivermoreBremsstrahlungModel_h
+#define G4LivermoreBremsstrahlungModel_h 1
 
+#include "G4eBremsstrahlungRelModel.hh"
 #include "globals.hh"
-#include "G4VEmModel.hh"
-#include "G4ParticleChangeForLoss.hh"
 
-class G4ParticleDefinition;
-class G4MaterialCutsCouple;
-class G4Material;
-//class G4VBremAngularDistribution;
-class G4BremsstrahlungCrossSectionHandler;
-class G4VEnergySpectrum;
+class G4Physics2DVector;
 
-class G4LivermoreBremsstrahlungModel : public G4VEmModel 
+class G4LivermoreBremsstrahlungModel : public G4eBremsstrahlungRelModel
 {
 
 public:
-  
-  G4LivermoreBremsstrahlungModel(const G4ParticleDefinition* p=0,
-			 const G4String& processName = "LowEnBrem");
-  
+
+  G4LivermoreBremsstrahlungModel(const G4ParticleDefinition* p = 0, 
+				 const G4String& nam = "LowEnBrem");
+
   virtual ~G4LivermoreBremsstrahlungModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-                                              G4double kinEnergy,
-                                              G4double Z,
-                                              G4double A=0,
-                                              G4double cut=0,
-                                              G4double emax=DBL_MAX);
-					 
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
-				 G4double tmin,
+				 G4double cutEnergy,
 				 G4double maxEnergy);
-				   
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-                               const G4ParticleDefinition*,
-                               G4double kineticEnergy,
-                               G4double cutEnergy);
-			 
-  // min cut in kinetic energy allowed by the model
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-                                const G4MaterialCutsCouple*);
 
-  void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
-  /*
-  void SetAngularGenerator(G4VBremAngularDistribution* distribution);
-  void SetAngularGenerator(const G4String& name);
-  */
+  inline void SetBicubicInterpolationFlag(G4bool);
+
 protected:
-  G4ParticleChangeForLoss* fParticleChange;
+
+  virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
+
+  virtual G4String DirectoryPath() const;
 
 private:
- 
-  G4LivermoreBremsstrahlungModel & operator=(const G4LivermoreBremsstrahlungModel &right);
-  G4LivermoreBremsstrahlungModel(const G4LivermoreBremsstrahlungModel&);
 
+  void ReadData(G4int Z, const char* path = 0);
 
-  //Intrinsic energy limits of the model: cannot be extended by the parent process
-  G4double fIntrinsicLowEnergyLimit;
-  G4double fIntrinsicHighEnergyLimit;
-  G4int fNBinEnergyLoss;
+  // hide assignment operator
+  G4LivermoreBremsstrahlungModel & operator=(const  G4LivermoreBremsstrahlungModel &right);
+  G4LivermoreBremsstrahlungModel(const  G4LivermoreBremsstrahlungModel&);
 
-  G4bool isInitialised;
- 
-  G4int verboseLevel;
-
-  G4BremsstrahlungCrossSectionHandler* crossSectionHandler;
-  G4VEnergySpectrum* energySpectrum;
-  G4DataVector energyBins;
-
-  //G4VBremAngularDistribution* angularDistribution;
-  // G4VBremAngularDistribution* TsaiAngularDistribution;
-  //G4String generatorName;
+  static G4Physics2DVector* dataSB[101];
+  static G4double ylimit[101];
+  static G4double expnumlim;
+  G4int  nwarn;
+  size_t idx;
+  size_t idy;
+  G4bool useBicubicInterpolation;
 };
 
-#endif
+inline void G4LivermoreBremsstrahlungModel::SetBicubicInterpolationFlag(G4bool val)
+{
+  useBicubicInterpolation = val;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+#endif

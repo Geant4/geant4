@@ -75,8 +75,6 @@ public:
 
 	void  SetMottCoeff( G4double targetZ, G4double coeff[5][6] );
 
-
-
 private:
 
  	G4MottCoefficients & operator=(const  G4MottCoefficients &right);

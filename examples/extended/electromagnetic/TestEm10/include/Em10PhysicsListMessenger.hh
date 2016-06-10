@@ -27,7 +27,7 @@
 /// \brief Definition of the Em10PhysicsListMessenger class
 //
 //
-// $Id$
+// $Id: Em10PhysicsListMessenger.hh 73033 2013-08-15 09:24:45Z gcosmo $
 //
 // 
 
@@ -62,8 +62,6 @@ class Em10PhysicsListMessenger: public G4UImessenger
 
     G4UIcmdWithADoubleAndUnit* cutGCmd;
     G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* cutPCmd;
-    G4UIcmdWithADoubleAndUnit* rCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
 
     G4UIcmdWithADoubleAndUnit* ElectronCutCmd;

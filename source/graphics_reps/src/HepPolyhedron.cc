@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: HepPolyhedron.cc 69802 2013-05-15 14:52:57Z gcosmo $
 //
 // 
 //
@@ -71,6 +71,8 @@ using CLHEP::perMillion;
 using CLHEP::deg;
 using CLHEP::pi;
 using CLHEP::twopi;
+using CLHEP::nm;
+const G4double spatialTolerance = 0.01*nm;
 
 /***********************************************************************
  *                                                                     *
@@ -444,7 +446,7 @@ void HepPolyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4double wholeCircle   = twopi;
+  static const G4double wholeCircle   = twopi;
     
   //   S E T   R O T A T I O N   P A R A M E T E R S
 
@@ -467,7 +469,7 @@ void HepPolyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
   G4int i, j, k;
 
   for(i=i1beg; i<=i2end; i++) {
-    if (std::abs(r[i]) < perMillion) r[i] = 0.;
+    if (std::abs(r[i]) < spatialTolerance) r[i] = 0.;
   }
 
   j = 0;                                                // external nodes
@@ -863,8 +865,8 @@ G4bool HepPolyhedron::GetNextVertexIndex(G4int &index, G4int &edgeFlag) const
  *                                                                     *
  ***********************************************************************/
 {
-  static G4int iFace = 1;
-  static G4int iQVertex = 0;
+  static G4ThreadLocal G4int iFace = 1;
+  static G4ThreadLocal G4int iQVertex = 0;
   G4int vIndex = pF[iFace].edge[iQVertex].v;
 
   edgeFlag = (vIndex > 0) ? 1 : 0;
@@ -931,8 +933,8 @@ G4bool HepPolyhedron::GetNextVertex(G4Point3D &vertex, G4int &edgeFlag,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4int iFace = 1;
-  static G4int iNode = 0;
+  static G4ThreadLocal G4int iFace = 1;
+  static G4ThreadLocal G4int iNode = 0;
 
   if (nface == 0) return false;  // empty polyhedron
 
@@ -963,9 +965,9 @@ G4bool HepPolyhedron::GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4int iFace    = 1;
-  static G4int iQVertex = 0;
-  static G4int iOrder   = 1;
+  static G4ThreadLocal G4int iFace    = 1;
+  static G4ThreadLocal G4int iQVertex = 0;
+  static G4ThreadLocal G4int iOrder   = 1;
   G4int  k1, k2, kflag, kface1, kface2;
 
   if (iFace == 1 && iQVertex == 0) {
@@ -1128,7 +1130,7 @@ HepPolyhedron::GetNextFacet(G4int &n, G4Point3D *nodes,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4int iFace = 1;
+  static G4ThreadLocal G4int iFace = 1;
 
   if (edgeFlags == 0) {
     GetFacet(iFace, n, nodes);
@@ -1207,7 +1209,7 @@ G4bool HepPolyhedron::GetNextNormal(G4Normal3D &normal) const
  *                                                                     *
  ***********************************************************************/
 {
-  static G4int iFace = 1;
+  static G4ThreadLocal G4int iFace = 1;
   normal = GetNormal(iFace);
   if (++iFace > nface) {
     iFace = 1;
@@ -1510,7 +1512,7 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(G4double r1,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4double wholeCircle=twopi;
+  static const G4double wholeCircle=twopi;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
@@ -1614,7 +1616,7 @@ HepPolyhedronHype::HepPolyhedronHype(G4double r1,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4double wholeCircle=twopi;
+  static const G4double wholeCircle=twopi;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
@@ -1706,7 +1708,7 @@ HepPolyhedronCons::HepPolyhedronCons(G4double Rmn1,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4double wholeCircle=twopi;
+  static const G4double wholeCircle=twopi;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
@@ -1944,7 +1946,7 @@ HepPolyhedronSphere::HepPolyhedronSphere(G4double rmin, G4double rmax,
   G4int nds = (GetNumberOfRotationSteps() + 1) / 2;
   G4int np1 = G4int(dthe*nds/pi+.5) + 1;
   if (np1 <= 1) np1 = 2;
-  G4int np2 = rmin < perMillion ? 1 : np1;
+  G4int np2 = rmin < spatialTolerance ? 1 : np1;
 
   G4double *zz, *rr;
   zz = new G4double[np1+np2];
@@ -2018,7 +2020,7 @@ HepPolyhedronTorus::HepPolyhedronTorus(G4double rmin,
   //   P R E P A R E   T W O   P O L Y L I N E S
 
   G4int np1 = GetNumberOfRotationSteps();
-  G4int np2 = rmin < perMillion ? 1 : np1;
+  G4int np2 = rmin < spatialTolerance ? 1 : np1;
 
   G4double *zz, *rr;
   zz = new G4double[np1+np2];
@@ -2244,7 +2246,7 @@ HepPolyhedronEllipticalCone::HepPolyhedronEllipticalCone(G4double ax,
 
 HepPolyhedronEllipticalCone::~HepPolyhedronEllipticalCone() {}
 
-G4int HepPolyhedron::fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
+G4ThreadLocal G4int HepPolyhedron::fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::fNumberOfRotationSteps       Date:    24.06.97 *

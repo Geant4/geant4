@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VCascadeCollider.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately
 // 20100623  M. Kelsey -- Use old bindingEnergy() wrapper (now returns

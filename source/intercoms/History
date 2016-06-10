@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2010-11-11 11:32:08 gcosmo Exp $
+$Id: History 77651 2013-11-27 08:47:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,78 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 November, 2013 M. Asai (intercoms-V09-06-16)
+- G4GenericMessenger : introducing two methods for declaring a method
+  that has a unit. This solves the issue of G4GenericMessenger in
+  multi-threaded mode.
+
+21 November, 2013 M. Asai (intercoms-V09-06-15)
+- G4UIcommandTree : add a protection against a G4UIcommandTree object
+  that does not have any guidance.
+
+20 November, 2013 M. Asai (intercoms-V09-06-14)
+- Modify G4UImanager, G4UIcommandTree and G4UIcommand classes to make
+  all UI commands defined in the worker thread are visible by the
+  G4UImanager of the master thread so that undefined command, wrong
+  parameters, etc are correctly detected.
+
+20 November, 2013 M. Asai (intercoms-V09-06-13)
+- Fix G4UIcmdWith3VectorAndUnit and G4UIcmdWithADoubleAndUnit.
+  Since version 9.3, they do not check and reject incorrect unit 
+  but instead misinterpret and accept with wrong value.
+
+5 November, 2013 M. Asai (intercoms-V09-06-12)
+- Fix the way of forwarding a UI command to a thread immediately.
+
+1 November, 2013 P. Mato (intercoms-V09-06-11)
+- Moved template specilizations from G4AnyType.cc to header file to
+  avoid Windows linking problems.
+
+29 October, 2013 P. Mato (intercoms-V09-06-10)
+- Fixed problem with G4GenericMessenger reported by Ivana that SetUnit 
+  and SetRange were not working together. Fixed variable shadowing in 
+  G4AnyType.hh.
+
+25 September, 2013 M. Asai (intercoms-V09-06-09)
+- G4UImessenger constructor with command directory now may take
+  a boolean flag of not-to-be-broadcasted.
+
+20 September, 2013 M. Asai (intercoms-V09-06-08)
+- A UI command directory may be specified as such that all commands in that
+  directory and all decendant directories should not be broadcased to
+  worker threads. This setting must be made by the argument of G4UIdirectory
+  constructor and cannot be changed. Each individual command may still be
+  set to be broadcasted by accessing to G4UIcommand::SetToBeBroadcasted()
+  method individually.
+
+15 August, 2013 M. Asai (intercoms-V09-06-07)
+- Improve the behavior of ignoring thread cout.
+
+15 August, 2013 M. Asai (intercoms-V09-06-06)
+- G4MTcoutDestination now has a capability of printing out only for
+  the selected thread to make the display readable.
+- Introducing according UI command /control/cout/ignoreThreadsExcept.
+
+23 May, 2013 M. Asai (intercoms-V09-06-05)
+- Introducing /control/cout/ command category for handling thread-local cout/cerr.
+
+14 March, 2013 A. Dotti (intercoms-V09-06-04)
+- Changing signature for GetCommandStack() 
+
+12 March, 2013 M. Asai (intercoms-V09-06-03)
+- Adding flags for commands to be boradcasted to thread-local UI mamaners.
+
+12 March, 2013 M. Asai (intercoms-V09-06-02)
+- Adding IgnoreCmdNotFound into G4UImanager required for multi-threading.
+
+14 February 2013 Jean Jacquemier (intercoms-V09-06-01)
+- Removed modifcation G4UIcommand.cc for G4UnitTable (see tag intercoms-V09-06-00). These
+  modification will be done once MultiThreading performance loss will be recover.
+
+February 08, 2013 J.Jacquemier (intercoms-V09-06-00)
+- G4UIcommand.cc: Modification for G4UnitTable (std::map).
+
 26 October, 2012 P. Mato (intercoms-V09-05-07)
  - G4AnyMethod.hh avoided compilation warning.
 

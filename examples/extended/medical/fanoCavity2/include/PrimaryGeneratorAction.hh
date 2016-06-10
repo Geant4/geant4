@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.hh 68999 2013-04-15 09:23:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,19 +40,18 @@
 
 class G4Event;
 class DetectorConstruction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction(DetectorConstruction*, HistoManager*);    
+    PrimaryGeneratorAction(DetectorConstruction*);    
    ~PrimaryGeneratorAction();
 
   public:      
     void RunInitialisation(G4double, G4double);   
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
          
     G4ParticleGun* GetParticleGun() {return fParticleGun;}
     
@@ -66,7 +65,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double                   fCavityThickness;
     G4double                   fMassWallRatio;
     G4int                      fNwall, fNcavity;
-    HistoManager*              fHistoManager;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

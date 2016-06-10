@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.cc 77251 2013-11-22 10:06:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,8 @@
 
 #include "DetectorConstruction.hh"
 #include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -42,7 +44,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:fDetector(Det)
+:G4UImessenger(), 
+ fDetector(Det), fTestemDir(0), fDetDir(0), fMaterCmd(0), fSizeCmd(0),
+ fMagFieldCmd(0), fIsotopeCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testhadr/");
   fTestemDir->SetGuidance("commands specific to this example");
@@ -54,6 +58,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fMaterCmd->SetGuidance("Select material of the box.");
   fMaterCmd->SetParameterName("choice",false);
   fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd->SetToBeBroadcasted(false);
   
   fSizeCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/det/setSize",this);
   fSizeCmd->SetGuidance("Set size of the box");
@@ -61,19 +66,47 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSizeCmd->SetRange("Size>0.");
   fSizeCmd->SetUnitCategory("Length");
   fSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-      
+  fSizeCmd->SetToBeBroadcasted(false);
+    
   fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/det/setField",this);  
   fMagFieldCmd->SetGuidance("Define magnetic field.");
   fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   fMagFieldCmd->SetParameterName("Bz",false);
   fMagFieldCmd->SetUnitCategory("Magnetic flux density");
   fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMagFieldCmd->SetToBeBroadcasted(false);
     
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testhadr/det/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
+  fIsotopeCmd = new G4UIcommand("/testhadr/det/setIsotopeMat",this);
+  fIsotopeCmd->SetGuidance("Build and select a material with single isotope");
+  fIsotopeCmd->SetGuidance("  symbol of isotope, Z, A, density of material");
+  //
+  G4UIparameter* symbPrm = new G4UIparameter("isotope",'s',false);
+  symbPrm->SetGuidance("isotope symbol");
+  fIsotopeCmd->SetParameter(symbPrm);
+  //      
+  G4UIparameter* ZPrm = new G4UIparameter("Z",'i',false);
+  ZPrm->SetGuidance("Z");
+  ZPrm->SetParameterRange("Z>0");
+  fIsotopeCmd->SetParameter(ZPrm);
+  //      
+  G4UIparameter* APrm = new G4UIparameter("A",'i',false);
+  APrm->SetGuidance("A");
+  APrm->SetParameterRange("A>0");
+  fIsotopeCmd->SetParameter(APrm);  
+  //    
+  G4UIparameter* densityPrm = new G4UIparameter("density",'d',false);
+  densityPrm->SetGuidance("density of material");
+  densityPrm->SetParameterRange("density>0.");
+  fIsotopeCmd->SetParameter(densityPrm);
+  //
+  G4UIparameter* unitPrm = new G4UIparameter("unit",'s',false);
+  unitPrm->SetGuidance("unit of density");
+  G4String unitList = G4UIcommand::UnitsList(G4UIcommand::CategoryOf("g/cm3"));
+  unitPrm->SetParameterCandidates(unitList);
+  fIsotopeCmd->SetParameter(unitPrm);
+  //
+  fIsotopeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fIsotopeCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,7 +116,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fMaterCmd;
   delete fSizeCmd; 
   delete fMagFieldCmd;
-  delete fUpdateCmd;
+  delete fIsotopeCmd;
   delete fDetDir;
   delete fTestemDir;
 }
@@ -100,9 +133,17 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == fMagFieldCmd )
    { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
-     
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry(); }
+       
+  if (command == fIsotopeCmd)
+   {
+     G4int Z; G4int A; G4double dens;
+     G4String name, unt;
+     std::istringstream is(newValue);
+     is >> name >> Z >> A >> dens >> unt;
+     dens *= G4UIcommand::ValueOf(unt);
+     fDetector->MaterialWithSingleIsotope (name,name,dens,Z,A);
+     fDetector->SetMaterial(name);    
+   }   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

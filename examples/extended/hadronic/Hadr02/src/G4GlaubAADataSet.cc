@@ -36,6 +36,8 @@
 /// \file hadronic/Hadr02/src/G4GlaubAADataSet.cc
 /// \brief Implementation of the G4GlaubAADataSet class
 //
+// $Id: G4GlaubAADataSet.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4GlaubAADataSet.cc
@@ -54,6 +56,8 @@
 
 
 #include "G4GlaubAADataSet.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4DPMJET2_5Interface.hh"
 

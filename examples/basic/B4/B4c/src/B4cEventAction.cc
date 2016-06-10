@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4cEventAction.cc 75604 2013-11-04 13:17:26Z gcosmo $
 // 
 /// \file B4cEventAction.cc
 /// \brief Implementation of the B4cEventAction class
@@ -37,7 +37,6 @@
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4GenericMessenger.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
@@ -47,42 +46,30 @@
 
 B4cEventAction::B4cEventAction()
  : G4UserEventAction(),
-   fMessenger(0),
-   fPrintModulo(1)
-{
-  // Define /B4/event commands using generic messenger class
-  fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
-
-  // Define /B4/event/setPrintModulo command
-  G4GenericMessenger::Command& setPrintModulo 
-    = fMessenger->DeclareProperty("setPrintModulo", 
-                                  fPrintModulo, 
-                                 "Print events modulo n");
-  setPrintModulo.SetRange("value>0");                                
-}
+   fAbsHCID(-1),
+   fGapHCID(-1)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4cEventAction::~B4cEventAction()
-{
-  delete fMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4cCalorHitsCollection* 
-B4cEventAction::GetHitsCollection(const G4String& hcName,
+B4cEventAction::GetHitsCollection(G4int hcID,
                                   const G4Event* event) const
 {
-  G4int hcID 
-    = G4SDManager::GetSDMpointer()->GetCollectionID(hcName);
   B4cCalorHitsCollection* hitsCollection 
     = static_cast<B4cCalorHitsCollection*>(
         event->GetHCofThisEvent()->GetHC(hcID));
   
   if ( ! hitsCollection ) {
-    G4cerr << "Cannot access hitsCollection " << hcName << G4endl;
-    exit(1);
+    G4ExceptionDescription msg;
+    msg << "Cannot access hitsCollection ID " << hcID; 
+    G4Exception("B4cEventAction::GetHitsCollection()",
+      "MyCode0003", FatalException, msg);
   }         
 
   return hitsCollection;
@@ -110,25 +97,24 @@ void B4cEventAction::PrintEventStatistics(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4cEventAction::BeginOfEventAction(const G4Event* event)
-{  
-
-  G4int eventID = event->GetEventID();
-  if ( eventID % fPrintModulo == 0 )  { 
-    G4cout << "\n---> Begin of event: " << eventID << G4endl;
-    //CLHEP::HepRandom::showEngineStatus();
-  }
-}
+void B4cEventAction::BeginOfEventAction(const G4Event* /*event*/)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4cEventAction::EndOfEventAction(const G4Event* event)
 {  
+  // Get hits collections IDs (only once)
+  if ( fAbsHCID == -1 ) {
+    fAbsHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("AbsorberHitsCollection");
+    fGapHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("GapHitsCollection");
+  }
+
   // Get hits collections
-  B4cCalorHitsCollection* absoHC
-    = GetHitsCollection("AbsorberHitsCollection", event);
-  B4cCalorHitsCollection* gapHC
-    = GetHitsCollection("GapHitsCollection", event);
+  B4cCalorHitsCollection* absoHC = GetHitsCollection(fAbsHCID, event);
+  B4cCalorHitsCollection* gapHC = GetHitsCollection(fGapHCID, event);
 
   // Get hit with total values
   B4cCalorHit* absoHit = (*absoHC)[absoHC->entries()-1];
@@ -137,7 +123,8 @@ void B4cEventAction::EndOfEventAction(const G4Event* event)
   // Print per event (modulo n)
   //
   G4int eventID = event->GetEventID();
-  if ( eventID % fPrintModulo == 0) {
+  G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
 
     PrintEventStatistics(

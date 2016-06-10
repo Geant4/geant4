@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VSensitiveDetector.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4VSensitiveDetector_h
@@ -153,6 +153,8 @@ class G4VSensitiveDetector
       { return ROgeometry; }
       inline G4VSDFilter* GetFilter() const
       { return filter; }
+public:
+    virtual G4VSensitiveDetector* Clone() const;
 };
 
 

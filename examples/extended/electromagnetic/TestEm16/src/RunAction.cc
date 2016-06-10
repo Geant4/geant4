@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 67797 2013-03-08 09:52:18Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,12 +44,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
+ : G4UserRunAction(),
+   fHistoManager(0)
 {
-  n_gam_sync = 0;
-  e_gam_sync = 0;
-  e_gam_sync2 = 0;
-  e_gam_sync_max =0;
-  lam_gam_sync = 0;
+  f_n_gam_sync = 0;
+  f_e_gam_sync = 0;
+  f_e_gam_sync2 = 0;
+  f_e_gam_sync_max = 0;
+  f_lam_gam_sync = 0;
   fHistoManager = new HistoManager();   
 }
 
@@ -82,18 +84,18 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  if(n_gam_sync>0)
+  if (f_n_gam_sync > 0)
   {
-    G4double Emean = e_gam_sync/n_gam_sync;
-    G4double E_rms = std::sqrt(e_gam_sync2/n_gam_sync - Emean*Emean);
+    G4double Emean = f_e_gam_sync/f_n_gam_sync;
+    G4double E_rms = std::sqrt(f_e_gam_sync2/f_n_gam_sync - Emean*Emean);
     G4cout
     << "Summary for synchrotron radiation :" << '\n' << std::setprecision(4)
-    << "  Number of photons = " << n_gam_sync << '\n'
+    << "  Number of photons = " << f_n_gam_sync << '\n'
     << "  Emean             = " << Emean/keV << " +/- "
-    << E_rms/(keV * std::sqrt((G4double) n_gam_sync)) << " keV" << '\n'
+    << E_rms/(keV * std::sqrt((G4double) f_n_gam_sync)) << " keV" << '\n'
     << "  E_rms             = " << G4BestUnit(E_rms,"Energy") << '\n'
-    << "  Energy Max / Mean = " << e_gam_sync_max / Emean << '\n'
-    << "  MeanFreePath      = " << G4BestUnit(lam_gam_sync/n_gam_sync,"Length")
+    << "  Energy Max / Mean = " << f_e_gam_sync_max / Emean << '\n'
+    << "  MeanFreePath      = " << G4BestUnit(f_lam_gam_sync/f_n_gam_sync,"Length")
     << G4endl;
   }
   

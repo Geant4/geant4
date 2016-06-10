@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsTouchableSet.cc 76285 2013-11-08 13:01:44Z gcosmo $
 
 // /vis/touchable/set commands - John Allison  8th October 2012
 
@@ -51,11 +51,11 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetColour->SetGuidance("Set colour of current touchable.");
   fpCommandSetColour->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
+  fpCommandSetColour->SetGuidance
+  ("If \"red\" is a string understood by the vis system it will be taken."
+   "\n  Otherwise the values of \red\", \"green\", etc., are used.");
   parameter = new G4UIparameter("red", 's', omitable = true);
   parameter->SetDefaultValue("1.");
-  parameter->SetGuidance
-  ("Red component or a string, e.g., \"blue\", in which case succeeding colour"
-   "\ncomponents are ignored.");
   fpCommandSetColour->SetParameter(parameter);
   parameter = new G4UIparameter("green", 'd', omitable = true);
   parameter->SetDefaultValue(1.);
@@ -79,8 +79,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetForceAuxEdgeVisible = new G4UIcmdWithABool
   ("/vis/touchable/set/forceAuxEdgeVisible", this);
   fpCommandSetForceAuxEdgeVisible->SetGuidance
-  ("Force auxiliary (soft) edges of current touchable to be visible:"
-   " true/false.");
+    ("Force auxiliary (soft) edges of current touchable to be visible: true/false.");
   fpCommandSetForceAuxEdgeVisible->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
   fpCommandSetForceAuxEdgeVisible->SetParameterName("forceAuxEdgeVisible", omitable = true);

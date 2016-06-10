@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE01PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: RE01PrimaryGeneratorAction.cc 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #include "RE01PrimaryGeneratorAction.hh"
@@ -41,7 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01PrimaryGeneratorAction::RE01PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction()
+  : G4VUserPrimaryGeneratorAction(),
+    fHEPEvt(0), fParticleGun(0), fMessenger(0)
 {
   const char* filename = "pythia_event.data";
   fHEPEvt = new G4HEPEvtInterface(filename);
@@ -60,12 +61,21 @@ RE01PrimaryGeneratorAction::RE01PrimaryGeneratorAction()
 
   fMessenger = new RE01PrimaryGeneratorMessenger(this);
   fUseHEPEvt = true;
+  
+  G4cout << "*********************************************2" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4AutoLock.hh"
+namespace {
+  G4Mutex RE01PrimGenDestrMutex = G4MUTEX_INITIALIZER;
+  G4Mutex RE01PrimGenMutex = G4MUTEX_INITIALIZER;
+}
+
 RE01PrimaryGeneratorAction::~RE01PrimaryGeneratorAction()
 {
-  delete fHEPEvt;
+  G4AutoLock lock(&RE01PrimGenDestrMutex);
+  if(fHEPEvt) {delete fHEPEvt; fHEPEvt = 0;}
   delete fParticleGun;
   delete fMessenger;
 }
@@ -74,7 +84,9 @@ RE01PrimaryGeneratorAction::~RE01PrimaryGeneratorAction()
 void RE01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   if(fUseHEPEvt)
-  { fHEPEvt->GeneratePrimaryVertex(anEvent); }
+  {
+    G4AutoLock lock(&RE01PrimGenMutex);
+    fHEPEvt->GeneratePrimaryVertex(anEvent); }
   else
   { fParticleGun->GeneratePrimaryVertex(anEvent); }
 }

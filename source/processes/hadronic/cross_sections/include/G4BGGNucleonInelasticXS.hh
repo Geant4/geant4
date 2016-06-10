@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BGGNucleonInelasticXS.hh 76889 2013-11-18 13:01:55Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -56,7 +56,6 @@
 class G4GlauberGribovCrossSection;
 class G4NucleonNuclearCrossSection;
 class G4HadronNucleonXsc;
-//class G4HadronInelasticDataSet;
 class G4ComponentSAIDTotalXS;
 class G4Material;
 class G4Element;
@@ -94,6 +93,8 @@ public:
 
   virtual void CrossSectionDescription(std::ostream&) const;
 
+  inline void SetLowestCrossSection(G4double val);
+
 private:
 
   G4double CoulombFactor(G4double kinEnergy, G4int Z);
@@ -105,19 +106,25 @@ private:
   G4double fLowEnergy;  
   G4double fHighEnergy;  
   G4double fSAIDHighEnergyLimit;
+  G4double fLowestXSection;
   G4double theGlauberFac[93];
   G4double theCoulombFac[93];
   G4int    theA[93];
 
   const G4ParticleDefinition*     particle;
   const G4ParticleDefinition*     theProton;
+
   G4GlauberGribovCrossSection*    fGlauber;
   G4NucleonNuclearCrossSection*   fNucleon;
   G4HadronNucleonXsc*             fHadron;
-  //G4HadronInelasticDataSet*       fGHEISHA;
   G4ComponentSAIDTotalXS*         fSAID;
   G4bool                          isProton;
   G4bool                          isInitialized;
 };
+
+inline void G4BGGNucleonInelasticXS::SetLowestCrossSection(G4double val)
+{
+  fLowestXSection = val;
+}
 
 #endif

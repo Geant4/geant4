@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorSymMatrix.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 // Class Description:
 //
@@ -219,13 +219,13 @@ class G4ErrorSymMatrix
    G4int nrow;
    G4int size;   // total number of elements
 
-   static G4double posDefFraction5x5;
-   static G4double adjustment5x5;
+   static G4ThreadLocal G4double posDefFraction5x5;
+   static G4ThreadLocal G4double adjustment5x5;
    static const  G4double CHOLESKY_THRESHOLD_5x5;
    static const  G4double CHOLESKY_CREEP_5x5;
 
-   static G4double posDefFraction6x6;
-   static G4double adjustment6x6;
+   static G4ThreadLocal G4double posDefFraction6x6;
+   static G4ThreadLocal G4double adjustment6x6;
    static const G4double CHOLESKY_THRESHOLD_6x6;
    static const G4double CHOLESKY_CREEP_6x6;
 

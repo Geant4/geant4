@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GeometryManager.cc 67975 2013-03-13 10:19:44Z gcosmo $
 //
 // class G4GeometryManager
 //
@@ -60,7 +60,7 @@
 // Static class variable: ptr to single instance of class
 // ***************************************************************************
 //
-G4GeometryManager* G4GeometryManager::fgInstance = 0;
+G4ThreadLocal G4GeometryManager* G4GeometryManager::fgInstance = 0;
 
 // ***************************************************************************
 // Constructor. Set the geometry to be open
@@ -134,10 +134,9 @@ G4bool G4GeometryManager::IsGeometryClosed()
 //
 G4GeometryManager* G4GeometryManager::GetInstance()
 {
-  static G4GeometryManager worldManager;
   if (!fgInstance)
   {
-    fgInstance = &worldManager;
+    fgInstance = new G4GeometryManager;
   }
   return fgInstance;    
 }

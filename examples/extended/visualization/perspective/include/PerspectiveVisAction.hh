@@ -27,7 +27,7 @@
 /// \brief Definition of the PerspectiveVisAction class
 //
 //
-// $Id$
+// $Id: PerspectiveVisAction.hh 68031 2013-03-13 13:52:48Z gcosmo $
 
 #ifndef PERSPECTIVEVISACTION_HH
 #define PERSPECTIVEVISACTION_HH

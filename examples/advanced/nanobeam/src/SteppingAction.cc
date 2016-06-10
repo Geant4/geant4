@@ -23,23 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "SteppingAction.hh"
+#include "Analysis.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri, HistoManager* his)
-:Run(run),Detector(det),Primary(pri),Histo(his)
-{ }
+SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det)
+:fRun(run),fDetector(det)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 SteppingAction::~SteppingAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -47,94 +47,111 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   
 { 
 
-if (Detector->GetCoef()==1) 
-{
+G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  if  ( (step->GetTrack()->GetDynamicParticle()->GetDefinition() == 
+
+if  ( (step->GetTrack()->GetDynamicParticle()->GetDefinition() == 
        G4Proton::ProtonDefinition())
 
 /*
 // for doublet
 
-	 && (step->GetPostStepPoint()->GetPosition().z()/mm>-3230.2)
+    && (step->GetPostStepPoint()->GetPosition().z()/mm>-3230.2)
          && (step->GetPostStepPoint()->GetPosition().z()/mm<-3229.8) 
 */
 
 // for triplet and whole line
 
-	 && (step->GetPostStepPoint()->GetPosition().z()/mm>249.99999)
+    && (step->GetPostStepPoint()->GetPosition().z()/mm>249.99999)
          && (step->GetPostStepPoint()->GetPosition().z()/mm<250.00001) 
-         && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume()  == Detector->GetLogicalVol())
-         && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalWorld())
+         && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->
+                   GetLogicalVolume()->GetName()  == fDetector->GetLogicalVol()->GetName())
+         && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->
+                  GetLogicalVolume()->GetName() == fDetector->GetLogicalWorld()->GetName())
      )
-		
+      
      {
-     	      xIn = step->GetPostStepPoint()->GetPosition().x();
-	      yIn = step->GetPostStepPoint()->GetPosition().y();
-	      zIn = step->GetPostStepPoint()->GetPosition().z();
-	      E   = step->GetTrack()->GetKineticEnergy();
+         fXIn = step->GetPostStepPoint()->GetPosition().x();
+         fYIn = step->GetPostStepPoint()->GetPosition().y();
+         fZIn = step->GetPostStepPoint()->GetPosition().z();
+         fE   = step->GetTrack()->GetKineticEnergy();
 
-              G4ThreeVector angleIn;
-              angleIn = step->GetTrack()->GetMomentumDirection();
+         G4ThreeVector angleIn;
+         angleIn = step->GetTrack()->GetMomentumDirection();
 
-              thetaIn = std::asin(angleIn[0]/std::sqrt(angleIn[0]*angleIn[0]+angleIn[1]*angleIn[1]+angleIn[2]*angleIn[2]));
-              phiIn = std::asin(angleIn[1]/std::sqrt(angleIn[0]*angleIn[0]+angleIn[1]*angleIn[1]+angleIn[2]*angleIn[2]));
+         fThetaIn = std::asin(angleIn[0]/std::sqrt(angleIn[0]
+                   *angleIn[0]+angleIn[1]*angleIn[1]+angleIn[2]*angleIn[2]));
+         fPhiIn = std::asin(angleIn[1]/std::sqrt(angleIn[0]
+                   *angleIn[0]+angleIn[1]*angleIn[1]+angleIn[2]*angleIn[2]));
 
-              G4cout << "    =>IMAGE : X(microns)=" << xIn/micrometer <<" Y(microns)="<< yIn/micrometer << " THETA(mrad)=" << (thetaIn/mrad) << " PHI(mrad)=" << (phiIn/mrad) << G4endl;
-	      G4cout << G4endl;
+         G4cout << "    =>IMAGE : X(microns)=" << fXIn/micrometer
+                <<" Y(microns)="<< fYIn/micrometer << " THETA(mrad)="
+                << (fThetaIn/mrad) << " PHI(mrad)=" << (fPhiIn/mrad) << G4endl;
+         G4cout << G4endl;
 
-              Run->AddRow();
-              Run->AddToXVector(xIn/um);
-              Run->AddToYVector(yIn/um);
-              Run->AddToThetaVector(thetaIn/mrad);
-              Run->AddToPhiVector(phiIn/mrad);
+         if (fDetector->GetCoef()==1) 
+	 {
+           fRun->AddRow();
+           fRun->AddToXVector(fXIn/um);
+           fRun->AddToYVector(fYIn/um);
+           fRun->AddToThetaVector(fThetaIn/mrad);
+           fRun->AddToPhiVector(fPhiIn/mrad);
+         }
 
-	      Histo->FillNtuple(2, 0, xIn/um);
-	      Histo->FillNtuple(2, 1, yIn/um);
-	      Histo->FillNtuple(2, 2, thetaIn/mrad);
-	      Histo->FillNtuple(2, 3, phiIn/mrad);
-	      Histo->AddRowNtuple(2);      
+	 //Fill ntuple 3
+	 man->FillNtupleDColumn(3,0,fXIn/um);
+	 man->FillNtupleDColumn(3,1,fYIn/um);
+	 man->FillNtupleDColumn(3,2,fThetaIn/mrad);
+	 man->FillNtupleDColumn(3,3,fPhiIn/mrad);
+	 man->AddNtupleRow(3);
 
      }
-}
 
-if (Detector->GetProfile()==1) 
+if (fDetector->GetProfile()==1) 
 {
 
-	if  (
-	    (step->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())
-         && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume()  == Detector->GetLogicalVol())
-         && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalVol()) )
-	{
-     	      xIn = step->GetPostStepPoint()->GetPosition().x();
-	      yIn = step->GetPostStepPoint()->GetPosition().y();
-	      zIn = step->GetPostStepPoint()->GetPosition().z();
-	      
-	      Histo->FillNtuple(0, 0, xIn/um);
-	      Histo->FillNtuple(0, 1, yIn/um);
-	      Histo->FillNtuple(0, 2, zIn/mm);
-	      Histo->AddRowNtuple(0);      
-	}
+   if  (
+       (step->GetTrack()->GetDynamicParticle()->GetDefinition()
+             == G4Proton::ProtonDefinition())
+         && (step->GetPreStepPoint()->GetTouchableHandle()
+             ->GetVolume()->GetLogicalVolume()->GetName()  == fDetector->GetLogicalVol()->GetName())
+         && (step->GetPostStepPoint()->GetTouchableHandle()
+            ->GetVolume()->GetLogicalVolume()->GetName() == fDetector->GetLogicalVol()->GetName()) )
+   {
+         fXIn = step->GetPostStepPoint()->GetPosition().x();
+         fYIn = step->GetPostStepPoint()->GetPosition().y();
+         fZIn = step->GetPostStepPoint()->GetPosition().z();
+
+         //Fill ntuple 1
+	 man->FillNtupleDColumn(1,0,fXIn/um);
+	 man->FillNtupleDColumn(1,1,fYIn/um);
+	 man->FillNtupleDColumn(1,2,fZIn/um);
+	 man->AddNtupleRow(1);
+   }
 }
-	
-if (Detector->GetGrid()==1) 
+   
+if (fDetector->GetGrid()==1) 
 {
 
-	if  (
-	    (step->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Proton::ProtonDefinition())
-         && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume()  == Detector->GetLogicalGrid())
-         && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalWorld()) )
-	{
-     	      xIn = step->GetPostStepPoint()->GetPosition().x();
-	      yIn = step->GetPostStepPoint()->GetPosition().y();
-              E   = step->GetTrack()->GetKineticEnergy();
+   if  (
+       (step->GetTrack()->GetDynamicParticle()->GetDefinition()
+             == G4Proton::ProtonDefinition())
+         && (step->GetPreStepPoint()->GetTouchableHandle()
+             ->GetVolume()->GetLogicalVolume()->GetName()  == fDetector->GetLogicalGrid()->GetName())
+         && (step->GetPostStepPoint()->GetTouchableHandle()
+             ->GetVolume()->GetLogicalVolume()->GetName() == fDetector->GetLogicalWorld()->GetName()) )
+   {
+         fXIn = step->GetPostStepPoint()->GetPosition().x();
+         fYIn = step->GetPostStepPoint()->GetPosition().y();
+         fE   = step->GetTrack()->GetKineticEnergy();
 
-	      Histo->FillNtuple(1, 0, xIn/um);
-	      Histo->FillNtuple(1, 1, yIn/um);
-	      Histo->FillNtuple(1, 2, E/MeV);
-	      Histo->AddRowNtuple(1);
-	}
-}
+	 //Fill ntuple 2
+	 man->FillNtupleDColumn(2,0,fXIn/um);
+	 man->FillNtupleDColumn(2,1,fYIn/um);
+	 man->FillNtupleDColumn(2,2,fE/MeV);
+	 man->AddNtupleRow(2);
+   }
+ }
 
 // end
 }     

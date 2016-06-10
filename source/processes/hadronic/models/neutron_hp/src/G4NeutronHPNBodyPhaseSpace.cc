@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4PhysicalConstants.hh"

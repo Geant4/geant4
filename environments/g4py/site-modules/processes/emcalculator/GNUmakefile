@@ -1,5 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2010-12-02 08:34:07 kmura Exp $
-# $Name: not supported by cvs2svn $
+# $Id: GNUmakefile 76884 2013-11-18 12:54:03Z gcosmo $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================
@@ -14,7 +13,7 @@ ifeq ($(Q_WITH_PYTHON3), 0)
 
 else
 
-.PHONY: all install clean 
+.PHONY: all install clean
 
 all:
 	@cd python3 && $(MAKE)

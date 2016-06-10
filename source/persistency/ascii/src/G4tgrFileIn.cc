@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrFileIn.cc 68052 2013-03-13 14:38:53Z gcosmo $
 //
 //
 // class G4tgrFileIn
@@ -44,22 +44,23 @@
 #include "G4tgrUtils.hh"
 #include "G4UIcommand.hh"
 
-std::vector<G4tgrFileIn*> G4tgrFileIn::theInstances;
-
+G4ThreadLocal std::vector<G4tgrFileIn*> *G4tgrFileIn::theInstances = 0;
 
 //-----------------------------------------------------------------------
 G4tgrFileIn::G4tgrFileIn()
   : theCurrentFile(-1), theName("")
 {
+  if (!theInstances)  { theInstances = new std::vector<G4tgrFileIn*>; }
 }
 
 
 //-----------------------------------------------------------------------
 G4tgrFileIn::~G4tgrFileIn()
 {
+  delete theInstances; theInstances=0;
 /*
   std::vector<G4tgrFileIn*>::const_iterator vfcite;
-  for( vfcite = theInstances.begin(); vfcite != theInstances.end(); vfcite++)
+  for( vfcite = theInstances->begin(); vfcite != theInstances->end(); vfcite++)
   {
     delete *vfcite;
   }
@@ -70,8 +71,10 @@ G4tgrFileIn::~G4tgrFileIn()
 //-----------------------------------------------------------------------
 G4tgrFileIn& G4tgrFileIn::GetInstance( const G4String& filename )
 {
+  if (!theInstances) { theInstances = new std::vector<G4tgrFileIn*>; }
+
   std::vector<G4tgrFileIn*>::const_iterator vfcite;
-  for( vfcite = theInstances.begin(); vfcite != theInstances.end(); vfcite++)
+  for( vfcite = theInstances->begin(); vfcite != theInstances->end(); vfcite++)
   {
     if( (*vfcite)->GetName() == filename)
     {
@@ -80,14 +83,14 @@ G4tgrFileIn& G4tgrFileIn::GetInstance( const G4String& filename )
   }
 
   G4tgrFileIn* instance = 0;
-  if( vfcite == theInstances.end() )
+  if( vfcite == theInstances->end() )
   {
     instance = new G4tgrFileIn( filename );
     
     instance->theCurrentFile = -1;
     instance->OpenNewFile( filename.c_str() );
 
-    theInstances.push_back( instance );
+    theInstances->push_back( instance );
   }
 
   return *instance;
@@ -96,7 +99,7 @@ G4tgrFileIn& G4tgrFileIn::GetInstance( const G4String& filename )
 
 //-----------------------------------------------------------------------
 void G4tgrFileIn::OpenNewFile( const char* filename )
-{ 
+{
   theCurrentFile++;
   std::ifstream* fin = new std::ifstream(filename);
   theFiles.push_back(fin);
@@ -119,7 +122,6 @@ void G4tgrFileIn::OpenNewFile( const char* filename )
 //-----------------------------------------------------------------------
 G4tgrFileIn& G4tgrFileIn::GetInstanceOpened( const G4String& filename )
 {
-
   G4tgrFileIn& filein = G4tgrFileIn::GetInstance(filename);
   if (filein.GetName() != filename )
   {

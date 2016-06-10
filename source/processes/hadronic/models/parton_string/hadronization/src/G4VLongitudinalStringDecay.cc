@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VLongitudinalStringDecay.cc 73023 2013-08-15 09:10:04Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -45,7 +45,6 @@
 #include "G4VShortLivedParticle.hh"
 #include "G4ShortLivedConstructor.hh"
 #include "G4ParticleTable.hh"
-#include "G4ShortLivedTable.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4VDecayChannel.hh"
 #include "G4DecayTable.hh"
@@ -227,9 +226,9 @@ G4double G4VLongitudinalStringDecay::FragmentationMass(
 {
 	
         G4double mass;
-        static G4bool NeedInit(true);
-	static std::vector<double> nomix;
-	static G4HadronBuilder * minMassHadronizer;
+        static G4ThreadLocal G4bool NeedInit(true);
+	static G4ThreadLocal std::vector<double> *nomix_G4MT_TLS_ = 0 ; if (!nomix_G4MT_TLS_) nomix_G4MT_TLS_ = new  std::vector<double>  ;  std::vector<double> &nomix = *nomix_G4MT_TLS_;
+	static G4ThreadLocal G4HadronBuilder * minMassHadronizer;
 	if ( NeedInit ) 
 	{
 	   NeedInit = false;
@@ -474,7 +473,7 @@ G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt(G4double ptMax)
       Pt = -std::log(G4UniformRand());
    } else {
       // sample in limited range
-      Pt = -std::log(CLHEP::RandFlat::shoot(std::exp(-sqr(ptMax)/sqr(SigmaQT)), 1.));
+      Pt = -std::log(G4RandFlat::shoot(std::exp(-sqr(ptMax)/sqr(SigmaQT)), 1.));
    }
    Pt = SigmaQT * std::sqrt(Pt);
    G4double phi = 2.*pi*G4UniformRand();

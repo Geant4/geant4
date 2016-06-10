@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2009-11-27 17:26:44 gunter Exp $
+# $Id: GNUmakefile 76279 2013-11-08 12:50:46Z gcosmo $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/builders library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -14,6 +14,9 @@ include $(G4INSTALL)/config/architecture.gmk
 CPPFLAGS += -DG4PROCESSES_EXPORT
 
 ifeq ($(G4SYSTEM), WIN32-VC)
+CPPFLAGS += -I$(G4BASE)/externals/expat/include
+endif
+ifdef G4LIB_BUILD_EXPAT
 CPPFLAGS += -I$(G4BASE)/externals/expat/include
 endif
 
@@ -36,6 +39,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/run/include \
+            -I$(G4BASE)/physics_lists/constructors/factory/include \
+            -I$(G4BASE)/physics_lists/util/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
@@ -63,11 +68,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
 	    -I$(G4BASE)/processes/hadronic/models/qmd/include \
-            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
-            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
-            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/processes/include \
-            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/fragmentation/include \
-            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
             -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
@@ -76,14 +76,12 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
-            -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \
             -I$(G4BASE)/processes/hadronic/models/lend/include \
             -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
-            -I$(G4BASE)/processes/hadronic/models/low_energy/include \
             -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \

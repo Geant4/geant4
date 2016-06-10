@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HepRepViewer.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 
 /**
@@ -65,7 +65,9 @@ G4HepRepViewer::~G4HepRepViewer () {
 #ifdef SDEBUG
     cout << "G4HepRepViewer::~G4HepRepViewer" << endl;
 #endif
-    dynamic_cast<G4HepRep*>(GetSceneHandler()->GetGraphicsSystem())->removeViewer();
+    G4HepRep* pHepRepSystem =
+      dynamic_cast<G4HepRep*>(GetSceneHandler()->GetGraphicsSystem());
+    if (pHepRepSystem) pHepRepSystem->removeViewer();
 }
 
 
@@ -107,11 +109,13 @@ void G4HepRepViewer::ShowView () {
     G4VViewer::ShowView();
 
     G4HepRepSceneHandler* sceneHandler = dynamic_cast<G4HepRepSceneHandler*>(GetSceneHandler());
-    if (sceneHandler->closeHepRep()) {
+    if (sceneHandler) {
+      if (sceneHandler->closeHepRep()) {
         sceneHandler->openHepRep();
-		
-		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+
+        G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
         if (messenger->appendGeometry()) geometryIncluded = false;
+      }
     }
 }
 

@@ -39,7 +39,7 @@ target_link_libraries(electronScattering2 ${Geant4_LIBRARIES} )
 # build electronScattering2. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-file(GLOB_RECURSE electronScattering2_SCRIPTS RELATIVE ${PROJECT_SOURCE_DIR} macros/*.mac)
+file(GLOB_RECURSE electronScattering2_SCRIPTS RELATIVE ${PROJECT_SOURCE_DIR} electronScattering2.in macros/*.mac)
 foreach(_script ${electronScattering2_SCRIPTS})
   configure_file(${PROJECT_SOURCE_DIR}/${_script} 
                  ${PROJECT_BINARY_DIR}/${_script} 

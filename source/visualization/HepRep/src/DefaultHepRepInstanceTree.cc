@@ -7,7 +7,7 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepInstanceTree.cc,v 1.11 2005-06-02 21:28:45 duns Exp $
+ * @version $Id: DefaultHepRepInstanceTree.cc 66373 2012-12-18 09:41:34Z gcosmo $
  */
 namespace cheprep {
 

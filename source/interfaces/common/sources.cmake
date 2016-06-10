@@ -11,8 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-11-30 12:00:56 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: sources.cmake 70601 2013-06-03 11:20:53Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -54,6 +53,7 @@ if(GEANT4_USE_QT)
     list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Qt.cc)
     
     # Stuff for Moc etc, plus LINK_LIBRARIES here
+    #  !!! ONLY QT4 to be comment with QT5
     include(${QT_USE_FILE})
     
     # Must enable Qt source with a def...
@@ -63,6 +63,28 @@ if(GEANT4_USE_QT)
     # It uses Qt core and gui(?) libs
     list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
         "${QT_QTGUI_LIBRARY};${QT_QTCORE_LIBRARY}") 
+endif()
+
+#
+# Add Wt if required
+#
+if(GEANT4_USE_WT)
+    # Add the sources
+    list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Wt.hh)
+    list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Wt.cc)
+        
+    # Must have Wt includes...
+    include_directories(${Wt_INCLUDE_DIR})
+
+    # Source needs to have a compile definition
+    GEANT4_ADD_COMPILE_DEFINITIONS(
+        SOURCES G4Wt.cc
+        COMPILE_DEFINITIONS G4INTY_BUILD_WT
+        )
+
+    # It uses Wt libs
+    list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
+        "${Wt_LIBRARY}") 
 endif()
 
 #

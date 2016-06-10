@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4mplIonisationModel.hh 76600 2013-11-13 08:30:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4VEmFluctuationModel.hh"
+#include <vector>
 
 class G4ParticleChangeForLoss;
 
@@ -78,16 +79,16 @@ public:
 				 G4double maxEnergy);
 
 
-  virtual G4double SampleFluctuations(const G4Material*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
                                       const G4DynamicParticle*,
-                                      G4double& tmax,
-                                      G4double& length,
-                                      G4double& meanLoss);
+                                      G4double tmax,
+                                      G4double length,
+                                      G4double meanLoss);
 
   virtual G4double Dispersion(const G4Material*,
                               const G4DynamicParticle*,
-                              G4double& tmax,
-                              G4double& length);
+                              G4double tmax,
+                              G4double length);
 
   void SetParticle(const G4ParticleDefinition* p);
 
@@ -113,6 +114,8 @@ private:
   G4double dedxlim;
   G4int    nmpl;
   G4double pi_hbarc2_over_mc2;
+
+  static std::vector<G4double>* dedx0;
 };
 
 #endif

@@ -26,42 +26,43 @@
 /// \file field/field02/src/F02CalorHit.cc
 /// \brief Implementation of the F02CalorHit class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F02CalorHit.cc 76247 2013-11-08 11:18:52Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F02CalorHit.hh"
 
-G4Allocator<F02CalorHit> F02CalorHitAllocator;
+G4ThreadLocal G4Allocator<F02CalorHit>* F02CalorHitAllocator=0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02CalorHit::F02CalorHit()
  : G4VHit(),
-   fEdepAbs(0.), 
+   fEdepAbs(0.),
    fTrackLengthAbs(0.),
    fEdepGap(0.),
    fTrackLengthGap(0.)
-{}
+{;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02CalorHit::~F02CalorHit()
-{}
+{;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02CalorHit::F02CalorHit(const F02CalorHit& right)
   : G4VHit(),
-    fEdepAbs(right.fEdepAbs), 
+    fEdepAbs(right.fEdepAbs),
     fTrackLengthAbs(right.fTrackLengthAbs),
-    fEdepGap(right.fEdepGap), 
+    fEdepGap(right.fEdepGap),
     fTrackLengthGap(right.fTrackLengthGap)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const F02CalorHit& F02CalorHit::operator=(const F02CalorHit& right)
 {
@@ -70,17 +71,16 @@ const F02CalorHit& F02CalorHit::operator=(const F02CalorHit& right)
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int F02CalorHit::operator==(const F02CalorHit& right) const
 {
   return (this==&right) ? 1 : 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02CalorHit::Print()
 {;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

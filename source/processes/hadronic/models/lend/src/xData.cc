@@ -978,14 +978,14 @@ static int xData_smrUserInterface( void *userData, char **str ) {
 
     int size, fileNameSize = 0, elementSize = 0;
     xData_smr *smrUserInterface = (xData_smr *) userData;
-    static char lcl[] = "\nat line %d and column %d", el[] = "\nin element ", fl[] = "\nof file ";
+    static const char lcl[] = "\nat line %d and column %d", el[] = "\nin element ", fl[] = "\nof file ";
     char str_lcl[sizeof( lcl ) + 40];
     xData_rootElement *currentRoot = smrUserInterface->doc->currentRoot;
 
     if( smrUserInterface->doc->fileName != NULL ) fileNameSize = strlen( smrUserInterface->doc->fileName ) + strlen( fl );
     if( currentRoot != NULL ) {
         if( currentRoot->parentElement != NULL ) {
-            sprintf( str_lcl, lcl, currentRoot->parentElement->docInfo.line, currentRoot->parentElement->docInfo.column );
+            sprintf( str_lcl, lcl, (int)currentRoot->parentElement->docInfo.line, (int)currentRoot->parentElement->docInfo.column );
             elementSize = strlen( str_lcl ) + strlen( currentRoot->parentElement->fullName ) + strlen( el );
         }
     }

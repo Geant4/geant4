@@ -25,7 +25,6 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4ChipsPionPlusInelasticXS for gamma+A cross sections
@@ -100,12 +99,12 @@ G4double G4ChipsPionPlusInelasticXS::GetIsoCrossSection(const G4DynamicParticle*
 
 G4double G4ChipsPionPlusInelasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int)
 {
-  static G4int j;                      // A#0f Z/N-records already tested in AMDB
-  static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
-  static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
-  static std::vector <G4double> colP;  // Vector of last momenta for the reaction
-  static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
-  static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
+  static G4ThreadLocal G4int j;                      // A#0f Z/N-records already tested in AMDB
+  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
+  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
+  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
   G4bool in=false;                     // By default the isotope must be found in the AMDB

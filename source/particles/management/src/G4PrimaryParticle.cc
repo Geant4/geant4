@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PrimaryParticle.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 
 #include "G4PrimaryParticle.hh"
@@ -34,7 +34,7 @@
 #include "G4ios.hh"
 #include "G4VUserPrimaryParticleInformation.hh"
 
-G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
+G4ThreadLocal G4Allocator<G4PrimaryParticle> *aPrimaryParticleAllocator = 0;
 
 G4PrimaryParticle::G4PrimaryParticle()
 :PDGcode(0),G4code(0),
@@ -295,7 +295,3 @@ void G4PrimaryParticle::Print() const
     G4cout << "<<<< End of link" << G4endl; 
   }
 }
-
-
-
-

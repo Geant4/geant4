@@ -23,21 +23,20 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find ROOT (required package)
 #
-find_package(ROOT QUIET)
-if(NOT ROOT_FOUND)
-  message(STATUS "G4 Examples: ROOT package not found. --> P02 example disabled")  
-  return()
-endif()
-if(NOT GCCXML)
-   message(STATUS "G4 Examples: GCCXML not found. --> P02 example disabled")
-   return()
-endif() 
+find_package(ROOT REQUIRED)
+
 #----------------------------------------------------------------------------
-# P02 requires shared libraries
+# P01 requires GCCXML 
 #
-if(BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS )
-  message(STATUS "G4 Examples: Building only Static Libraires. --> P02 example disabled")
-  return()
+if(NOT GCCXML)
+   message(FATAL_ERROR "P02 requires GCCXML")
+endif() 
+
+#----------------------------------------------------------------------------
+# P01 requires shared libraries
+#
+if(NOT Geant4_shared_FOUND)
+  message(FATAL_ERROR "P02 must use shared libraries")
 endif()
 
 

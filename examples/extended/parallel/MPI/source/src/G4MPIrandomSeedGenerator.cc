@@ -25,9 +25,10 @@
 /// @file G4MPIrandomSeedGenerator.cc
 /// @brief An implementation of random number seed distribution
 
-#include "G4MPIrandomSeedGenerator.hh"
-#include "G4MPImanager.hh"
+#include "mpi.h"
 #include "Randomize.hh"
+#include "G4MPImanager.hh"
+#include "G4MPIrandomSeedGenerator.hh"
 
 // --------------------------------------------------------------------------
 G4MPIrandomSeedGenerator::G4MPIrandomSeedGenerator()
@@ -44,14 +45,15 @@ G4MPIrandomSeedGenerator::~G4MPIrandomSeedGenerator()
 // --------------------------------------------------------------------------
 G4bool G4MPIrandomSeedGenerator::CheckDoubleCount()
 {
-  G4MPImanager* g4MPI = G4MPImanager::GetManager();
-  G4int nsize = g4MPI-> GetSize();
+  G4MPImanager* g4mpi = G4MPImanager::GetManager();
 
-  for (G4int i = 0; i < nsize; i++) {
-    for (G4int j = 0; j < nsize; j++) {
-      if((i != j) && (seedList[i] == seedList[j])) {
+  G4int nsize = g4mpi-> GetSize();
+
+  for ( G4int i = 0; i < nsize; i++ ) {
+    for ( G4int j = 0; j < nsize; j++ ) {
+      if( (i != j) && (seed_list_[i] == seed_list_[j]) ) {
         G4double x = G4UniformRand();
-        seedList[j] = G4long(x*LONG_MAX);
+        seed_list_[j] = G4long(x*LONG_MAX);
         return false;
       }
     }
@@ -63,14 +65,16 @@ G4bool G4MPIrandomSeedGenerator::CheckDoubleCount()
 // --------------------------------------------------------------------------
 void G4MPIrandomSeedGenerator::GenerateSeeds()
 {
-  G4MPImanager* g4MPI = G4MPImanager::GetManager();
-  G4int nsize= g4MPI-> GetSize();
-  seedList.clear();
+  G4MPImanager* g4mpi = G4MPImanager::GetManager();
 
-  for (G4int i = 0; i < nsize; i++) {
+  G4int nsize = g4mpi-> GetSize();
+
+  seed_list_.clear();
+
+  for ( G4int i = 0; i < nsize; i++ ) {
     G4double x = G4UniformRand();
     G4int seed = G4long(x*LONG_MAX);
-    seedList.push_back(seed);
+    seed_list_.push_back(seed);
   }
 
   while(! CheckDoubleCount()) {

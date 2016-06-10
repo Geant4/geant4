@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:15:19 bmorgan Exp $
+# $Id: sources.cmake 73344 2013-08-26 07:07:06Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -26,6 +26,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/event/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/Boolean/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
@@ -56,10 +57,10 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4CallbackModel.hh
         G4DigiFilterFactories.hh
         G4DigiModel.hh
-        G4FlavoredParallelWorldModel.hh
         G4HitFilterFactories.hh
         G4HitsModel.hh
         G4LogicalVolumeModel.hh
+        G4MagneticFieldModel.hh
         G4ModelApplyCommandsT.hh
         G4ModelColourMap.hh
         G4ModelCommandUtils.hh
@@ -102,10 +103,10 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4BoundingSphereScene.cc
         G4DigiFilterFactories.cc
         G4DigiModel.cc
-        G4FlavoredParallelWorldModel.cc
         G4HitFilterFactories.cc
         G4HitsModel.cc
         G4LogicalVolumeModel.cc
+        G4MagneticFieldModel.cc
         G4ModelingParameters.cc
         G4NullModel.cc
         G4PSHitsModel.cc

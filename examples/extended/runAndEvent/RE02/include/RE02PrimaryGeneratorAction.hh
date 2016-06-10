@@ -27,7 +27,7 @@
 /// \brief Definition of the RE02PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: RE02PrimaryGeneratorAction.hh 66501 2012-12-19 09:25:23Z gcosmo $
 //
  
 #ifndef RE02PrimaryGeneratorAction_h

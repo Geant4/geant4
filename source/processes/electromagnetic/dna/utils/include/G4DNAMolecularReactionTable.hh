@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularReactionTable.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4DNAMolecularReactionTable.hh 70171 2013-05-24 13:34:18Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -113,6 +113,7 @@ class G4DNAMolecularReactionTable : public G4ITReactionTable
 protected:
     G4DNAMolecularReactionTable();
     static G4DNAMolecularReactionTable* fInstance;
+//    static G4ThreadLocal G4DNAMolecularReactionTable* fInstance;
 
 public :
     static G4DNAMolecularReactionTable* GetReactionTable();

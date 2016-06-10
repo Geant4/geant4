@@ -3,8 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt,v 1.6 2010-12-08 16:36:34 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: CMakeLists.txt 78013 2013-12-02 12:51:57Z gcosmo $
 #
 
 #------------------------------------------------------------------------------
@@ -52,9 +51,9 @@ set(CMAKE_MODULE_PATH
 # See the documentation in each of these modules for further details.
 #
 # - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "9.6.0")
-set(${PROJECT_NAME}_VERSION_MAJOR "9")
-set(${PROJECT_NAME}_VERSION_MINOR "6")
+set(${PROJECT_NAME}_VERSION "10.0.0")
+set(${PROJECT_NAME}_VERSION_MAJOR "10")
+set(${PROJECT_NAME}_VERSION_MINOR "0")
 set(${PROJECT_NAME}_VERSION_PATCH "0")
 
 # - Provide dependent options as these are needed for some Geant4 features
@@ -131,10 +130,21 @@ if(GEANT4_ENABLE_TESTING)
     add_subdirectory(benchmarks)
   endif()
 endif()
+
 if(GEANT4_BUILD_EXAMPLES)
   set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
   add_subdirectory(examples)
 endif()
+
+# - Install example code to datarootdir
+install(DIRECTORY examples
+  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
+  COMPONENT Examples
+  PATTERN "CVS" EXCLUDE
+  PATTERN ".svn" EXCLUDE
+  )
+
+
 #-----------------------------------------------------------------------------
 # Provide packaging with CPack.
 include(Geant4CPackBase)

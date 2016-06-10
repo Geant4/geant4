@@ -1,4 +1,4 @@
-# $Id: History,v 1.8 2010-11-25 19:47:46 tkoi Exp $
+# $Id: History 69564 2013-05-08 12:33:30Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -14,6 +14,31 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+6 May 2013 Tatsumi Koi (hadr-lend-V09-06-01)
+Fix for "warning: conversion specifies type 'int' but the argument has type 'size_t'" 
+	src/xData.cc
+
+2 May 2013 Tatsumi Koi (hadr-lend-V09-06-00)
+----------------------------------------------
+Change default evaluation from endl99 to ENDF.B-VII.0
+Fix UNINIT_CTOR "proj"
+	src/G4LENDModel.cc
+	src/G4LENDCrossSection.cc
+Fix "MISSING_ASSIGN" and "COPY_WITHOUT_ASSIGN"
+Change visibility of constructor and so on from protected to private
+	include/G4LENDManager.hh
+Make sensitive to isomer level of isotope in material
+	include/G4LENDManager.hh
+	src/G4LENDManager.cc
+	src/G4LENDCrossSection.cc
+	src/G4LENDModel.cc
+	src/G4LENDFission.cc
+	src/G4LENDInelastic.cc
+	src/G4LENDElastic.cc
+	src/G4LENDCapture.cc
+Fix "RESOURCE_LEAK"
+	src/G4LENDManager.cc
 
 6 November 2012 Gabriele Cosmo (hadr-lend-V09-05-04)
 ----------------------------------------------

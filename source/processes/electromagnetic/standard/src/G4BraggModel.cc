@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BraggModel.cc 74790 2013-10-22 07:31:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,10 +71,15 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
+#include "G4DeltaAngle.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
+
+static const G4double invLog10 = 1.0/G4Log(10.);
 
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
@@ -117,6 +122,9 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
   if(!isInitialised) {
     isInitialised = true;
 
+    if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
+      SetAngularDistribution(new G4DeltaAngle());
+    }
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" && 
        pname != "deuteron" && pname != "triton" &&
@@ -165,7 +173,7 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -229,7 +237,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
     G4double beta2 = bg2/(gam*gam);
     G4double x     = cutEnergy/tmax;
 
-    dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
+    dedx += (G4Log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
           * (material->GetElectronDensity())/beta2;
   }
 
@@ -248,7 +256,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
-				     const G4MaterialCutsCouple*,
+				     const G4MaterialCutsCouple* couple,
 				     const G4DynamicParticle* dp,
 				     G4double xmin,
 				     G4double maxEnergy)
@@ -263,8 +271,6 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
   G4double grej    = 1.0;
   G4double deltaKinEnergy, f;
-
-  G4ThreeVector direction = dp->GetMomentumDirection();
 
   // sampling follows ...
   do {
@@ -282,30 +288,41 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 
   } while( grej*G4UniformRand() >= f );
 
-  G4double deltaMomentum =
-           sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double totMomentum = energy*sqrt(beta2);
-  G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
-                                   (deltaMomentum * totMomentum);
-  if(cost > 1.0) cost = 1.0;
-  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+  G4ThreeVector deltaDirection;
 
-  G4double phi = twopi * G4UniformRand() ;
+  if(UseAngularGeneratorFlag()) {
+    const G4Material* mat =  couple->GetMaterial();
+    G4int Z = SelectRandomAtomNumber(mat);
 
-  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
-  deltaDirection.rotateUz(direction);
+    deltaDirection = 
+      GetAngularDistribution()->SampleDirection(dp, deltaKinEnergy, Z, mat);
+
+  } else {
+ 
+    G4double deltaMomentum =
+      sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+    G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
+      (deltaMomentum * dp->GetTotalMomentum());
+    if(cost > 1.0) { cost = 1.0; }
+    G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+
+    G4double phi = twopi * G4UniformRand() ;
+
+    deltaDirection.set(sint*cos(phi),sint*sin(phi), cost) ;
+    deltaDirection.rotateUz(dp->GetMomentumDirection());
+  }  
+
+  // create G4DynamicParticle object for delta ray
+  G4DynamicParticle* delta = 
+    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
 
   // Change kinematics of primary particle
-  kineticEnergy       -= deltaKinEnergy;
-  G4ThreeVector finalP = direction*totMomentum - deltaDirection*deltaMomentum;
+  kineticEnergy -= deltaKinEnergy;
+  G4ThreeVector finalP = dp->GetMomentum() - delta->GetMomentum();
   finalP               = finalP.unit();
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
-
-  // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,
-						   deltaKinEnergy);
 
   vdp->push_back(delta);
 }
@@ -330,13 +347,13 @@ G4bool G4BraggModel::HasMaterial(const G4Material* material)
   if("" == chFormula) { return false; }
 
   // ICRU Report N49, 1993. Power's model for He.
-  const size_t numberOfMolecula = 11;
-  const G4String molName[numberOfMolecula] = {
+  static const size_t numberOfMolecula = 11;
+  static const G4String molName[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",                      "CH_4",
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
     "C_3H_8",                  "SiO_2",                     "H_2O",
     "H_2O-Gas",                "Graphite" } ;
-  const G4int idxPSTAR[numberOfMolecula] = {
+  static const G4int idxPSTAR[numberOfMolecula] = {
     6,  16,  36,
     52, 55,  56,
     59, 62,  71,
@@ -375,7 +392,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 
     G4double T = kineticEnergy/(keV*protonMassAMU) ; 
 
-     static G4double a[11][5] = {
+    static const G4double a[11][5] = {
    {1.187E+1, 1.343E+1, 1.069E+4, 7.723E+2, 2.153E-2},
    {7.802E+0, 8.814E+0, 8.303E+3, 7.446E+2, 7.966E-3}, 
    {7.294E+0, 8.284E+0, 5.010E+3, 4.544E+2, 8.153E-3}, 
@@ -388,7 +405,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
    {4.571E+0, 5.173E+0, 4.346E+3, 4.779E+2, 8.572E-3},
    {2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2} };
 
-     static G4double atomicWeight[11] = {
+    static const G4double atomicWeight[11] = {
     101.96128, 44.0098, 16.0426, 28.0536, 42.0804,
     104.1512, 44.665, 60.0843, 18.0152, 18.0152, 12.0};       
 
@@ -396,8 +413,8 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
       ionloss = a[iMolecula][0] * sqrt(T) ;
     
     } else if ( T < 10000.0 ) {
-      G4double slow  = a[iMolecula][1] * pow(T, 0.45) ;
-      G4double shigh = log( 1.0 + a[iMolecula][3]/T  
+      G4double slow  = a[iMolecula][1] * G4Exp(G4Log(T)* 0.45);
+      G4double shigh = G4Log( 1.0 + a[iMolecula][3]/T  
                      + a[iMolecula][4]*T ) * a[iMolecula][2]/T ;
       ionloss = slow*shigh / (slow + shigh) ;     
     } 
@@ -405,13 +422,13 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
     if ( ionloss < 0.0) ionloss = 0.0 ;
     if ( 10 == iMolecula ) { 
       if (T < 100.0) {
-	ionloss *= (1.0+0.023+0.0066*log10(T));  
+	ionloss *= (1.0+0.023+0.0066*G4Log(T)*invLog10);  
       }
       else if (T < 700.0) {   
-	ionloss *=(1.0+0.089-0.0248*log10(T-99.));
+	ionloss *=(1.0+0.089-0.0248*G4Log(T-99.)*invLog10);
       } 
       else if (T < 10000.0) {    
-	ionloss *=(1.0+0.089-0.0248*log10(700.-99.));
+	ionloss *=(1.0+0.089-0.0248*G4Log(700.-99.)*invLog10);
       }
     }
     ionloss /= atomicWeight[iMolecula];
@@ -441,7 +458,7 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
 
   G4double T = kineticEnergy/(keV*protonMassAMU) ; 
   
-  static G4double a[92][5] = {
+  static const G4double a[92][5] = {
    {1.254E+0, 1.440E+0, 2.426E+2, 1.200E+4, 1.159E-1},
    {1.229E+0, 1.397E+0, 4.845E+2, 5.873E+3, 5.225E-2},
    {1.411E+0, 1.600E+0, 7.256E+2, 3.013E+3, 4.578E-2},
@@ -561,8 +578,8 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
   }
 
   // Main parametrisation
-  G4double slow  = a[i][1] * pow(T, 0.45) ;
-  G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+  G4double slow  = a[i][1] * G4Exp(G4Log(T) * 0.45) ;
+  G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
   ionloss = slow*shigh*fac / (slow + shigh) ;     
   
   if ( ionloss < 0.0) { ionloss = 0.0; }
@@ -667,12 +684,12 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   const G4State theState = material->GetState() ;
   if( theState == kStateGas && myFormula == chFormula) return false ;
     
-  const size_t numberOfMolecula = 53 ;
 
   // The coffecient from Table.4 of Ziegler & Manoyan
-  const G4double HeEff = 2.8735 ;
+  static const G4double HeEff = 2.8735 ;
   
-  static G4String nameOfMol[numberOfMolecula] = {
+  static const size_t numberOfMolecula = 53;
+  static const G4String nameOfMol[53] = {
     "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
     "C_6H_6",    "C_4H_10",    "C_4H_6",   "C_4H_8O",            "CCl_4",
@@ -684,9 +701,9 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     "(CH_3)_2S", "N_2O",       "C_5H_10O", "C_8H_6",             "(CH_2)_N",
     "(C_3H_6)_N","(C_8H_8)_N", "C_3H_8",   "C_3H_6-Propylene",   "C_3H_6O",
     "C_3H_6S",   "C_4H_4S",    "C_7H_8"
-  } ;
+  };
 
-  static G4double expStopping[numberOfMolecula] = {
+  static const G4double expStopping[numberOfMolecula] = {
      66.1,  190.4, 258.7,  42.2, 141.5,
     210.9,  279.6, 198.8,  31.0, 267.5,
     122.8,  311.4, 260.3, 328.9, 391.3,
@@ -700,7 +717,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     306.8,  324.4, 420.0
   } ;
 
-  static G4double expCharge[numberOfMolecula] = {
+  static const G4double expCharge[53] = {
     HeEff, HeEff, HeEff,   1.0, HeEff,
     HeEff, HeEff, HeEff,   1.0,   1.0,
       1.0, HeEff, HeEff, HeEff, HeEff,
@@ -714,7 +731,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     HeEff, HeEff, HeEff
   } ;
 
-  static G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
+  static const G4double numberOfAtomsPerMolecula[53] = {
     3.0,  7.0, 10.0,  4.0,  6.0,
     9.0, 12.0,  7.0,  4.0, 24.0,
     12.0, 14.0, 10.0, 13.0,  5.0,
@@ -760,8 +777,8 @@ G4double G4BraggModel::ChemicalFactor(G4double kineticEnergy,
   G4double beta125  = sqrt(1.0 - 1.0/(gamma125*gamma125)) ;
   
   G4double factor = 1.0 + (expStopPower125/eloss125 - 1.0) *
-                   (1.0 + exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
-                   (1.0 + exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
+                   (1.0 + G4Exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
+                   (1.0 + G4Exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
 
   return factor ;
 }

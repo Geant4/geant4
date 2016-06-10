@@ -36,7 +36,7 @@
 //   **********************************************
 //
 //    Ultra EventAction class. The UltraAnalysisManager class is used for histogram
-//    filling if the G4ANALYSIS_USE environment variable is set.
+//    filling 
 //
 #ifndef UltraEventAction_h
 #define UltraEventAction_h 1
@@ -56,19 +56,16 @@ class G4HCofThisEvent;
 class UltraEventAction : public G4UserEventAction
 {
   public:
-    UltraEventAction(UltraRunAction*);
+    UltraEventAction();
    ~UltraEventAction();
 
   public:
     void BeginOfEventAction(const G4Event*);
     void EndOfEventAction(const G4Event*);
     
-
-    G4int GetRunNumb(){return UltraRun->GetRunNumb() ;} ;
     G4int GetEvtNumb(){return evtNb ;} ;
 
   private:
-    UltraRunAction* UltraRun;
     G4int    evtNb ;
 
   private: 

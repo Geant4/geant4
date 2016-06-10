@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EnergyRangeManager.hh 71734 2013-06-21 08:53:11Z gcosmo $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -36,21 +36,21 @@
  
 #include "G4HadronicInteraction.hh"
  
- class G4EnergyRangeManager 
- {
+
+class G4EnergyRangeManager 
+{
      
- public:
+  public:
     
     G4EnergyRangeManager();
  
-    ~G4EnergyRangeManager()
-    { }
+    ~G4EnergyRangeManager() {}
     
     G4EnergyRangeManager(const G4EnergyRangeManager& right);
     
     G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
     
- public:
+  public:
     
     inline G4bool operator==( const G4EnergyRangeManager &right ) const
     { return ( this == (G4EnergyRangeManager *) &right ); }
@@ -69,16 +69,15 @@
     
     inline G4int GetHadronicInteractionCounter() const
     { return theHadronicInteractionCounter; }
+
+    void Dump( G4int verbose = 0 ); 
     
- private:
+  private:
      
     enum { MAX_NUMBER_OF_MODELS = 100 };
-    
-    G4HadronicInteraction *
-     theHadronicInteraction[ MAX_NUMBER_OF_MODELS ];
-    
+
     G4int theHadronicInteractionCounter;
-    
+    G4HadronicInteraction* theHadronicInteraction[ MAX_NUMBER_OF_MODELS ];
  };
 
 #endif

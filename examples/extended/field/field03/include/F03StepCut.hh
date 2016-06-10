@@ -26,25 +26,28 @@
 /// \file field/field03/include/F03StepCut.hh
 /// \brief Definition of the F03StepCut class
 //
-// $Id$
-// 
+//
+// $Id: F03StepCut.hh 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F03StepCut_h
 #define F03StepCut_h 1
 
 #include "G4VDiscreteProcess.hh"
-#include "G4Step.hh"
-#include "G4ios.hh"
-#include "globals.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F03StepCut : public G4VDiscreteProcess
 {
-  public:     
+  public:
 
-     F03StepCut(const G4String& processName ="UserStepCut");
+     F03StepCut(const G4String& processName ="UserStepCut" );
      F03StepCut(F03StepCut &);
 
-     ~F03StepCut();
+     virtual ~F03StepCut();
 
      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -53,11 +56,11 @@ class F03StepCut : public G4VDiscreteProcess
                             );
 
      virtual G4VParticleChange* PostStepDoIt(
-                             const G4Track& ,
+                             const G4Track&,
                              const G4Step& 
                             );
 
-     void SetMaxStep(G4double);
+    void SetMaxStep(G4double);
 
   protected:
 
@@ -67,30 +70,24 @@ class F03StepCut : public G4VDiscreteProcess
                              G4ForceCondition* condition
                             );
 
-                            
   private:
-  
-     // hide assignment operator as private 
+
+     // hide assignment operator as private
      F03StepCut & operator=(const F03StepCut &right);
 
   private:
 
-     G4double fMaxChargedStep ;
+     G4double fMaxChargedStep;
 };
 
-// inlined function members implementation
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4UserLimits.hh"
-#include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
+// inlined function members implementation
 
 inline G4double F03StepCut::PostStepGetPhysicalInteractionLength(
                              const G4Track& aTrack,
                              G4double,
-                             G4ForceCondition* condition
-                            )
+                             G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
@@ -101,10 +98,12 @@ inline G4double F03StepCut::PostStepGetPhysicalInteractionLength(
       (aTrack.GetVolume() != 0) &&
       (aTrack.GetVolume()->GetName() == "Absorber") &&
       (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))
-        proposedStep = fMaxChargedStep ;
+        proposedStep = fMaxChargedStep;
 
    return proposedStep;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4VParticleChange* F03StepCut::PostStepDoIt(
                              const G4Track& aTrack,
@@ -115,6 +114,8 @@ inline G4VParticleChange* F03StepCut::PostStepDoIt(
    aParticleChange.Initialize(aTrack);
    return &aParticleChange;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double F03StepCut::GetMeanFreePath(const G4Track&,
                              G4double,

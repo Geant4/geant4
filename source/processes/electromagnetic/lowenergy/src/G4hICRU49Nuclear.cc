@@ -83,7 +83,7 @@ G4double G4hICRU49Nuclear::NuclearStoppingPower(G4double kineticEnergy,
 
   G4double er = 32.536 * m2Local * energy / ( z1 * z2 * rm ) ;  // reduced energy
 
-  static G4double a[104][2] = {
+  static const G4double a[104][2] = {
   { 1.0E+8, 5.831E-8},
   { 8.0E+7, 7.288E-8},
   { 6.0E+7, 9.719E-8},

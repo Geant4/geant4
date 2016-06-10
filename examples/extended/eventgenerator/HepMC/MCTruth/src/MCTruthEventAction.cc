@@ -27,7 +27,7 @@
 /// \brief Implementation of the MCTruthEventAction class
 //
 //
-// $Id$
+// $Id: MCTruthEventAction.cc 73446 2013-08-27 11:32:59Z gcosmo $
 //
 //
 // --------------------------------------------------------------

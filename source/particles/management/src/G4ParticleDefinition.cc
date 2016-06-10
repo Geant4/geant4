@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleDefinition.cc 73598 2013-09-02 09:18:28Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -47,6 +47,7 @@
 //      modify FillQuarkContents() for deltas      25 Nov.,98 H.Kurashige
 //
 //      modify FillQuarkContents() to use G4PDGCodeChecker 17 Aug. 99 H.Kurashige
+//      modified for thread-safety for MT - G.Cosmo, A.Dotti - January 2013
 // --------------------------------------------------------------
 
 
@@ -58,6 +59,29 @@
 #include "G4DecayTable.hh"
 #include "G4PDGCodeChecker.hh"
 #include "G4StateManager.hh"
+
+// This static member is thread local. For each thread, it holds the array
+// size of G4PDefData instances.
+//
+template <class G4PDefData> G4ThreadLocal
+G4int G4PDefSplitter<G4PDefData>::slavetotalspace = 0;
+
+// This static member is thread local. For each thread, it points to the
+// array of G4PDefData instances.
+//
+template <class G4PDefData> G4ThreadLocal
+G4PDefData* G4PDefSplitter<G4PDefData>::offset = 0;
+
+// This new field helps to use the class G4PDefManager.
+//
+G4PDefManager G4ParticleDefinition::subInstanceManager;
+
+// Returns the private data instance manager.
+//
+const G4PDefManager& G4ParticleDefinition::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
 
 G4ParticleDefinition::G4ParticleDefinition(
 		     const G4String&     aName,  
@@ -106,15 +130,19 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGStable(stable), 
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
-		   theProcessManager(0),
                    theAtomicNumber(0),
                    theAtomicMass(0),
                    verboseLevel(1),
-  		   fApplyCutsFlag(false)
+  		   fApplyCutsFlag(false),
+		   isGeneralIon(false)
 {
-  static G4String nucleus("nucleus");
-  theParticleTable = G4ParticleTable::GetParticleTable();
-   
+   static G4String nucleus("nucleus");
+
+   g4particleDefinitionInstanceID = -1;
+   theProcessManagerShadow = 0;
+
+   theParticleTable = G4ParticleTable::GetParticleTable();
+
    //set verboseLevel equal to ParticleTable 
    verboseLevel = theParticleTable->GetVerboseLevel();
 
@@ -124,8 +152,8 @@ G4ParticleDefinition::G4ParticleDefinition(
    if (this->FillQuarkContents() != thePDGEncoding) {
 #ifdef G4VERBOSE
      if (verboseLevel>0) {
-       // Using G4cerr expecting that it is available in construction of static objects 
-       G4cerr << "Particle " << aName << " has a strange PDGEncoding " <<G4endl;
+       // Using G4cout expecting that it is available in construction of static objects 
+       G4cout << "Particle " << aName << " has a strange PDGEncoding " <<G4endl;
      }
 #endif
      G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
@@ -139,7 +167,7 @@ G4ParticleDefinition::G4ParticleDefinition(
    if ( !fShortLivedFlag && (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
 #ifdef G4VERBOSE
      if (GetVerboseLevel()>0) {
-       G4cerr << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  " 
+       G4cout << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  " 
               << aName << G4endl;
      }
 #endif
@@ -255,7 +283,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 		  "Inconsistent charge against PDG code ");
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
-	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
+	  G4cout << "G4ParticleDefinition::FillQuarkContents  : "
 	         << " illegal charge (" << thePDGCharge/eplus
 	         << " PDG code=" << thePDGEncoding <<G4endl;
 	}
@@ -269,7 +297,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 		  "Inconsistent spin against PDG code ");
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
-	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
+	  G4cout << "G4ParticleDefinition::FillQuarkContents  : "
 	         << " illegal SPIN (" << thePDGiSpin << "/2"
 	         << " PDG code=" << thePDGEncoding <<G4endl;
 	}
@@ -347,11 +375,68 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
   { fApplyCutsFlag = flg; }
   else
   {
-    G4cerr
+    G4cout
      << "G4ParticleDefinition::SetApplyCutsFlag() for " << theParticleName
      << G4endl;
-    G4cerr
+    G4cout
      << "becomes obsolete. Production threshold is applied only for "
      << "gamma, e- ,e+ and proton." << G4endl;
   }
+}
+
+G4double G4ParticleDefinition::CalculateAnomaly()  const
+{
+  G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
+               "PART114", JustWarning, 
+               "CalculateAnomaly() method will be removed in next release");
+  
+  // gives the anomaly of magnetic moment for spin 1/2 particles 
+  if (thePDGiSpin==1) {
+    G4double muB = 0.5*CLHEP::eplus*CLHEP::hbar_Planck/(thePDGMass/CLHEP::c_squared);
+    return 0.5*std::fabs(thePDGMagneticMoment/muB - 2.*thePDGCharge/CLHEP::eplus);   
+  } else {
+    return 0.0;
+  }
+}
+
+void G4ParticleDefinition::SetParticleDefinitionID(G4int id)
+{
+  if(id<0)
+  {
+    g4particleDefinitionInstanceID = subInstanceManager.CreateSubInstance(); 
+    G4MT_pmanager = 0;
+  }
+  else
+  {
+    if(isGeneralIon)
+    { g4particleDefinitionInstanceID = id; }
+    else
+    {
+      G4ExceptionDescription ed;
+      ed << "ParticleDefinitionID should not be set for the particles <"
+         << theParticleName << ">.";
+      G4Exception( "G4ParticleDefintion::SetParticleDefinitionID","PART10114",
+                   FatalException,ed);
+    }
+  }
+}
+
+#include "G4Threading.hh"
+
+void G4ParticleDefinition::SetProcessManager(G4ProcessManager *aProcessManager)
+{
+  if(g4particleDefinitionInstanceID<0 && !isGeneralIon)
+  {
+    if(G4Threading::G4GetThreadId() >= 0)
+    {
+      G4ExceptionDescription ed;
+      ed << "ProcessManager is being set to " << theParticleName
+         << " without proper initialization of TLS pointer vector.\n"
+         << "This operation is thread-unsafe.";
+      G4Exception( "G4ParticleDefintion::SetProcessManager","PART10116",
+                   JustWarning,ed);
+    }
+    SetParticleDefinitionID();
+  }
+  G4MT_pmanager = aProcessManager;
 }

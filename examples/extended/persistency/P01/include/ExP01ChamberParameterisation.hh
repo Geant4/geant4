@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01ChamberParameterisation class
 //
 //
-// $Id$
+// $Id: ExP01ChamberParameterisation.hh 73396 2013-08-27 09:29:21Z gcosmo $
 //
 //
 //  A parameterisation that describes a series of boxes along Z
@@ -52,6 +52,7 @@ class G4Trap;
 class G4Cons;
 class G4Orb;
 class G4Sphere;
+class G4Ellipsoid;
 class G4Torus;
 class G4Para;
 class G4Hype;
@@ -73,8 +74,7 @@ class ExP01ChamberParameterisation : public G4VPVParameterisation
                                  G4double widthChamber, 
                                  G4double lengthInitial,
                                  G4double lengthFinal );
-
-    virtual                                 
+                                 
    ~ExP01ChamberParameterisation();
    
     void ComputeTransformation (const G4int copyNo,
@@ -90,12 +90,14 @@ class ExP01ChamberParameterisation : public G4VPVParameterisation
     void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+
   private:
 
     G4int    fNoChambers;   

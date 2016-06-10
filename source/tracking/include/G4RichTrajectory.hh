@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RichTrajectory.hh 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -56,8 +56,8 @@
 #ifndef G4RICHTRAJECTORY_HH
 #define G4RICHTRAJECTORY_HH
 
+#include "trkgdefs.hh"
 #include "G4Trajectory.hh"
-
 #include "G4TouchableHandle.hh"
 
 typedef std::vector<G4VTrajectoryPoint*>  RichTrajectoryPointsContainer;
@@ -83,6 +83,8 @@ public:
   {return (this==&right);} 
   
   // Other (virtual) member functions
+  void ShowTrajectory(std::ostream& os=G4cout) const;
+  void DrawTrajectory() const;
   void AppendStep(const G4Step* aStep);
   void MergeTrajectory(G4VTrajectory* secondTrajectory);
   int GetPointEntries() const { return fpRichPointsContainer->size(); }
@@ -107,25 +109,19 @@ private:
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-extern G4DLLEXPORT G4Allocator<G4RichTrajectory>
-aRichTrajectoryAllocator;
-#else
-extern G4DLLIMPORT G4Allocator<G4RichTrajectory>
-aRichTrajectoryAllocator;
-#endif
+extern G4TRACKING_DLL G4ThreadLocal
+G4Allocator<G4RichTrajectory> *aRichTrajectoryAllocator;
 
 inline void* G4RichTrajectory::operator new(size_t)
 {
-  void* aRichTrajectory;
-  aRichTrajectory = (void*)aRichTrajectoryAllocator.MallocSingle();
-  return aRichTrajectory;
+  if (!aRichTrajectoryAllocator)
+  { aRichTrajectoryAllocator = new G4Allocator<G4RichTrajectory>; }
+  return (void*)aRichTrajectoryAllocator->MallocSingle();
 }
 
 inline void G4RichTrajectory::operator delete(void* aRichTrajectory)
 {
-  aRichTrajectoryAllocator.FreeSingle
-    ((G4RichTrajectory*)aRichTrajectory);
+  aRichTrajectoryAllocator->FreeSingle((G4RichTrajectory*)aRichTrajectory);
 }
 
 #endif

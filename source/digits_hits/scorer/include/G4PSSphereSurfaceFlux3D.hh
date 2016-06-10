@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PSSphereSurfaceFlux3D.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4PSSphereSurfaceFlux3D_h

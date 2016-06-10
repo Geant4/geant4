@@ -5,7 +5,7 @@
 # Sets some default verbose
 #
 
-/gps/centre 0 0 0
+/gps/pos/centre 0 0 0
 /gps/particle  e-
 /gps/energy    50 GeV
 /gps/direction  0. 0. 1.0

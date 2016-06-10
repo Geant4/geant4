@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ReduciblePolygon.hh 72091 2013-07-09 09:55:52Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -100,6 +100,7 @@ class G4ReduciblePolygon
     G4bool RemoveRedundantVertices( G4double tolerance );
   
     void ReverseOrder();
+    void StartWithZMin();
 
     //
     // Tests
@@ -108,7 +109,7 @@ class G4ReduciblePolygon
     G4bool CrossesItself( G4double tolerance );
     G4bool BisectedBy( G4double a1, G4double b1,
            G4double a2, G4double b2, G4double tolerance );
-  
+   
     void Print();  // Debugging only
   
   public:  // without description

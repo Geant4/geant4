@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -68,6 +66,12 @@ namespace G4INCL {
     Nucleus(G4int mass, G4int charge, Config const * const conf, const G4double universeRadius=-1.);
     virtual ~Nucleus();
 
+    /// \brief Dummy copy constructor to silence Coverity warning
+    Nucleus(const Nucleus &rhs);
+
+    /// \brief Dummy assignment operator to silence Coverity warning
+    Nucleus &operator=(const Nucleus &rhs);
+
     /**
      * Call the Cluster method to generate the initial distribution of
      * particles. At the beginning all particles are assigned as spectators.
@@ -83,7 +87,7 @@ namespace G4INCL {
         theNpInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
         theNnInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
       }
-      if(!p->isTargetSpectator()) theStore->getBook()->incrementCascading();
+      if(!p->isTargetSpectator()) theStore->getBook().incrementCascading();
     };
 
     /**
@@ -123,8 +127,8 @@ namespace G4INCL {
      */
     G4double computeSeparationEnergyBalance() const {
       G4double S = 0.0;
-      ParticleList outgoing = theStore->getOutgoingParticles();
-      for(ParticleIter i = outgoing.begin(); i != outgoing.end(); ++i) {
+      ParticleList const &outgoing = theStore->getOutgoingParticles();
+      for(ParticleIter i=outgoing.begin(), e=outgoing.end(); i!=e; ++i) {
         const ParticleType t = (*i)->getType();
         switch(t) {
           case Proton:
@@ -237,8 +241,8 @@ namespace G4INCL {
 
     ///\brief Returns true if the nucleus contains any deltas.
     inline G4bool containsDeltas() {
-      ParticleList inside = theStore->getParticles();
-      for(ParticleIter i=inside.begin(); i!=inside.end(); ++i)
+      ParticleList const &inside = theStore->getParticles();
+      for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
         if((*i)->isDelta()) return true;
       return false;
     }
@@ -247,8 +251,6 @@ namespace G4INCL {
      * Print the nucleus info
      */
     std::string print();
-
-    std::string dump();
 
     Store* getStore() const {return theStore; };
     void setStore(Store *s) {
@@ -273,7 +275,6 @@ namespace G4INCL {
     /**
      * Fill the event info which contains INCL output data
      */
-    //    void fillEventInfo(Results::EventInfo *eventInfo);
     void fillEventInfo(EventInfo *eventInfo);
 
     G4bool getTryCompoundNucleus() { return tryCN; }
@@ -289,9 +290,6 @@ namespace G4INCL {
 
     /// \brief Set the mass number of the projectile
     void setProjectileMassNumber(G4int n) { projectileA=n; }
-
-    /// \brief Returns true if a transparent event should be forced.
-    G4bool isForcedTransparent() { return forceTransparent; }
 
     /// \brief Get the transmission barrier
     G4double getTransmissionBarrier(Particle const * const p) {
@@ -327,52 +325,12 @@ namespace G4INCL {
         return getUniverseRadius();
         //return 0.5*(theDensity->getTransmissionRadius(particle)+getUniverseRadius());
       else {
-        const G4double pr = particle->getMomentum().mag()/thePotential->getFermiMomentum(particle);
+        const G4double pr = particle->getReflectionMomentum()/thePotential->getFermiMomentum(particle);
         if(pr>=1.)
           return getUniverseRadius();
         else
-          return theDensity->getMaxRFromP(pr);
+          return theDensity->getMaxRFromP(particle->getType(), pr);
       }
-    }
-
-    /** \brief Get the Coulomb radius for a given particle
-     *
-     * That's the radius of the sphere that the Coulomb trajectory of the
-     * incoming particle should intersect. The intersection point is used to
-     * determine the effective impact parameter of the trajectory and the new
-     * entrance angle.
-     *
-     * If the particle is not a Cluster, the Coulomb radius reduces to the
-     * surface radius. We use a parametrisation for d, t, He3 and alphas. For
-     * heavier clusters we fall back to the surface radius.
-     *
-     * \param p the particle species
-     * \return Coulomb radius
-     */
-    G4double getCoulombRadius(ParticleSpecies const &p) const {
-      if(p.theType == Composite) {
-        const G4int zp = p.theZ;
-        const G4int ap = p.theA;
-        G4double barr, radius = 0.;
-        if(zp==1 && ap==2) { // d
-          barr = 0.2565*Math::pow23((G4double)theA)-0.78;
-          radius = ParticleTable::eSquared*zp*theZ/barr - 2.5;
-        } else if((zp==1 || zp==2) && ap==3) { // t, He3
-          barr = 0.5*(0.5009*Math::pow23((G4double)theA)-1.16);
-          radius = ParticleTable::eSquared*theZ/barr - 0.5;
-        } else if(zp==2 && ap==4) { // alpha
-          barr = 0.5939*Math::pow23((G4double)theA)-1.64;
-          radius = ParticleTable::eSquared*zp*theZ/barr - 0.5;
-        } else if(zp>2) {
-          radius = getUniverseRadius();
-        }
-        if(radius<=0.) {
-          ERROR("Negative Coulomb radius! Using the universe radius" << std::endl);
-          radius = getUniverseRadius();
-        }
-        return radius;
-      } else
-        return getUniverseRadius();
     }
 
     /// \brief Getter for theUniverseRadius.
@@ -405,12 +363,6 @@ namespace G4INCL {
       theProjectileRemnant = NULL;
     }
 
-    /// \brief Move the components of the projectile remnant to the outgoing list
-    void moveProjectileRemnantComponentsToOutgoing() {
-      theStore->addToOutgoing(theProjectileRemnant->getParticles());
-      theProjectileRemnant->clearParticles();
-    }
-
     /** \brief Finalise the projectile remnant
      *
      * Complete the treatment of the projectile remnant. If it contains
@@ -422,15 +374,22 @@ namespace G4INCL {
     void finalizeProjectileRemnant(const G4double emissionTime);
 
     /// \brief Update the particle potential energy.
-    inline void updatePotentialEnergy(Particle *p) {
+    inline void updatePotentialEnergy(Particle *p) const {
       p->setPotentialEnergy(thePotential->computePotentialEnergy(p));
     }
 
+    /// \brief Setter for theDensity
+    void setDensity(NuclearDensity const * const d) {
+      theDensity=d;
+      if(theParticleSampler)
+        theParticleSampler->setDensity(theDensity);
+    };
+
     /// \brief Getter for theDensity
-    NuclearDensity* getDensity() const { return theDensity; };
+    NuclearDensity const *getDensity() const { return theDensity; };
 
     /// \brief Getter for thePotential
-    NuclearPotential::INuclearPotential* getPotential() const { return thePotential; };
+    NuclearPotential::INuclearPotential const *getPotential() const { return thePotential; };
 
   private:
     /** \brief Compute the recoil kinematics for a 1-nucleon remnant.
@@ -457,7 +416,6 @@ namespace G4INCL {
     G4double initialEnergy;
     Store *theStore;
     G4bool tryCN;
-    G4bool forceTransparent;
 
     /// \brief The charge number of the projectile
     G4int projectileZ;
@@ -473,14 +431,17 @@ namespace G4INCL {
      */
     G4bool isNucleusNucleus;
 
-    /// \brief Pointer to the quasi-projectile
+    /** \brief Pointer to the quasi-projectile
+     *
+     * Owned by the Nucleus object.
+     */
     ProjectileRemnant *theProjectileRemnant;
 
     /// \brief Pointer to the NuclearDensity object
-    NuclearDensity *theDensity;
+    NuclearDensity const *theDensity;
 
     /// \brief Pointer to the NuclearPotential object
-    NuclearPotential::INuclearPotential *thePotential;
+    NuclearPotential::INuclearPotential const *thePotential;
 
   };
 

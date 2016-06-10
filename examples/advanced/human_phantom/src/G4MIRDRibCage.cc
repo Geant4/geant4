@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -51,14 +51,15 @@ G4MIRDRibCage::G4MIRDRibCage()
 
 G4MIRDRibCage::~G4MIRDRibCage()
 {
-  }
+}
+
 
 G4VPhysicalVolume* G4MIRDRibCage::Construct(const G4String& volumeName, G4VPhysicalVolume* mother,
-						 const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
+					    const G4String& colourName, G4bool wireFrame, G4bool)
 {
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "Construct "<< volumeName  <<G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
   G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -78,19 +79,19 @@ G4VPhysicalVolume* G4MIRDRibCage::Construct(const G4String& volumeName, G4VPhysi
   G4EllipticalTube* inCage = new G4EllipticalTube("inCage",dx, dy, dz/2.);
 
   G4SubtractionSolid* cage = new G4SubtractionSolid("Cage",
-						     outCage,
-						     inCage, 0, G4ThreeVector(0.*cm, 0.*cm, 0. * cm)); 
+						    outCage,
+						    inCage, 0, G4ThreeVector(0.*cm, 0.*cm, 0. * cm)); 
 
  
-  G4LogicalVolume* logicRibCage = new G4LogicalVolume(cage, soft, "LogicalCage", 0, 0, 0);
+  G4LogicalVolume* logicRibCage = new G4LogicalVolume(cage, soft, "logicalCage", 0, 0, 0);
 
   G4VPhysicalVolume* physRibCage = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, thickness/2. + 0.1 * cm),
-						      // with respect to the trunk
-						      "physicalRibCage",
-						      logicRibCage,
-						      mother,
-						      false,
-						      0, true);
+						     // with respect to the trunk
+						     "physicalRibCage",
+						     logicRibCage,
+						     mother,
+						     false,
+						     0, true);
 	
   
   G4double xx = 17.*cm;
@@ -107,109 +108,101 @@ G4VPhysicalVolume* G4MIRDRibCage::Construct(const G4String& volumeName, G4VPhysi
   G4LogicalVolume* logicRib= new G4LogicalVolume(rib, skeleton, "logical" + volumeName, 0, 0, 0);
 
   physRib1 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (- 32.2*cm/2. + 0.8 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
-   physRib2 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, ( - 32.2*cm/2. + 0.8 *cm + 2.8 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib2 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, ( - 32.2*cm/2. + 0.8 *cm + 2.8 *cm)),
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
-   physRib3 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 * cm + 5.6 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib3 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 * cm + 5.6 *cm)),
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
   physRib4 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 * cm + 8.4 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
- physRib5 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 * cm + 11.2 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib5 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 * cm + 11.2 *cm)),
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
- physRib6 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. +  0.8 * cm + 14. *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib6 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. +  0.8 * cm + 14. *cm)),
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
- physRib7 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 *cm + 16.8 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib7 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 *cm + 16.8 *cm)),
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
- physRib8 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 *cm + 19.6 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib8 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8 *cm + 19.6 *cm)),
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
- physRib9 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8*cm + 22.4 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib9 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8*cm + 22.4 *cm)),
+			       // with respect to the trunk
+			       "physicalRib",
+			       logicRib,
+			       physRibCage,
+			       false,
+			       0, true);
 
- physRib10 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8*cm + 25.2 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib10 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8*cm + 25.2 *cm)),
+				// with respect to the trunk
+				"physicalRib",
+				logicRib,
+				physRibCage,
+				false,
+				0, true);
 
- physRib11 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8*cm + 28. *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+  physRib11 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8*cm + 28. *cm)),
+				// with respect to the trunk
+				"physicalRib",
+				logicRib,
+				physRibCage,
+				false,
+				0, true);
 
   physRib12 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (-thickness/2. + 0.8*cm + 30.8 *cm)),
-						      // with respect to the trunk
-						      "physicalRib",
-						      logicRib,
-						      physRibCage,
-						      false,
-						      0, true);
+				// with respect to the trunk
+				"physicalRib",
+				logicRib,
+				physRibCage,
+				false,
+				0, true);
   
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    //    logicRibCage->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-    logicRib->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
-
   // Visualization Attributes
   logicRibCage -> SetVisAttributes(G4VisAttributes::Invisible);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EqMagElectricField.cc 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -43,11 +43,12 @@
 #include "G4SystemOfUnits.hh"
 
 void  
-G4EqMagElectricField::SetChargeMomentumMass(G4double particleCharge, // e+ units
+G4EqMagElectricField::SetChargeMomentumMass(G4ChargeState particleCharge,
 		                            G4double,
                                             G4double particleMass)
 {
-   fElectroMagCof =  eplus*particleCharge*c_light ;
+   G4double pcharge = particleCharge.GetCharge();
+   fElectroMagCof =  eplus*pcharge*c_light ;
    fMassCof = particleMass*particleMass ; 
 }
 

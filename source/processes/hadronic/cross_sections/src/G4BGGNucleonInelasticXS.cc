@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BGGNucleonInelasticXS.cc 76889 2013-11-18 13:01:55Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -46,7 +46,6 @@
 #include "G4GlauberGribovCrossSection.hh"
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4HadronNucleonXsc.hh"
-//#include "G4HadronInelasticDataSet.hh"
 #include "G4ComponentSAIDTotalXS.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -54,10 +53,14 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4double llog10 = G4Log(10.);
 
 G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
  : G4VCrossSectionDataSet("Barashenkov-Glauber")
@@ -67,6 +70,7 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
   fLowEnergy = 14.*MeV;
   fHighEnergy = 5.*GeV;
   fSAIDHighEnergyLimit = 1.3*GeV;
+  fLowestXSection = millibarn;
   for (G4int i = 0; i < 93; ++i) {
     theGlauberFac[i] = 0.0;
     theCoulombFac[i] = 0.0;
@@ -75,8 +79,8 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
   fNucleon = 0;
   fGlauber = 0;
   fHadron  = 0;
-  //  fGHEISHA = 0;
   fSAID    = 0;
+
   particle = p;
   theProton= G4Proton::Proton();
   isProton = false;
@@ -102,11 +106,11 @@ G4bool G4BGGNucleonInelasticXS::IsElementApplicable(const G4DynamicParticle*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4BGGNucleonInelasticXS::IsIsoApplicable(const G4DynamicParticle*, 
-						G4int Z, G4int A,  
+						G4int Z, G4int,  
 						const G4Element*,
 						const G4Material*)
 {
-  return (1 == Z && 2 >= A);
+  return (1 == Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -149,6 +153,7 @@ G4BGGNucleonInelasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
   }
+  if(cross <= fLowestXSection) { cross = 0.0; }
   return cross;
 }
 
@@ -185,6 +190,7 @@ G4BGGNucleonInelasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
   }
+  if(cross <= fLowestXSection) { cross = 0.0; }
   return cross;
 }
 
@@ -206,11 +212,10 @@ void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(isInitialized) { return; }
   isInitialized = true;
 
-    fNucleon = (G4NucleonNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NucleonNuclearCrossSection::Default_Name());
-    fGlauber = (G4GlauberGribovCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GlauberGribovCrossSection::Default_Name());
+  fNucleon = (G4NucleonNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NucleonNuclearCrossSection::Default_Name());
+  fGlauber = (G4GlauberGribovCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GlauberGribovCrossSection::Default_Name());
 
-    fHadron  = new G4HadronNucleonXsc();
-  //fGHEISHA = new G4HadronInelasticDataSet();
+  fHadron  = new G4HadronNucleonXsc();
   fSAID    = new G4ComponentSAIDTotalXS();
 
   fNucleon->BuildPhysicsTable(*particle);
@@ -275,7 +280,7 @@ void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 				  *fHadron->GetInelasticHadronNucleonXsc()/x - 1);
 
   fHadron->GetHadronNucleonXscNS(&dp, theProton);
-  //G4cout << "  xsNS(b)= " << fHadron->GetInelasticHadronNucleonXsc()/barn << G4endl;
+  //G4cout <<"  xsNS(b)= "<<fHadron->GetInelasticHadronNucleonXsc()/barn<<G4endl;
 
   if(verboseLevel > 0) {
     G4cout << "Z=1   A=1" << " CoulombFactor[0]= " << theCoulombFac[0]
@@ -303,20 +308,20 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
   if(kinEnergy <= 0.0) { return res; }
   else if (Z <= 1) { return kinEnergy*kinEnergy; }
   
-  G4double elog = std::log10(kinEnergy/GeV);
+  G4double elog = G4Log(kinEnergy/GeV)/llog10;
   G4double aa = theA[Z];
 
   // from G4ProtonInelasticCrossSection
   if(isProton) {
 
-    G4double ff1 = 0.70 - 0.002*aa;           // slope of the drop at medium energies.
-    G4double ff2 = 1.00 + 1/aa;               // start of the slope.
-    G4double ff3 = 0.8  + 18/aa - 0.002*aa;   // stephight
-    res = 1.0 + ff3*(1.0 - (1.0/(1+std::exp(-8*ff1*(elog + 1.37*ff2)))));
+    G4double ff1 = 5.6  - 0.016*aa;    // slope of the drop at medium energies.
+    G4double ff2 = 1.37 + 1.37/aa;     // start of the slope.
+    G4double ff3 = 0.8  + 18./aa - 0.002*aa;   // stephight
+    res = 1.0 + ff3*(1.0 - (1.0/(1+G4Exp(-ff1*(elog + ff2)))));
 
-    ff1 = 1.   - 1./aa - 0.001*aa; // slope of the rise
-    ff2 = 1.17 - 2.7/aa-0.0014*aa; // start of the rise
-    res /= (1 + std::exp(-8.*ff1*(elog + 2*ff2)));
+    ff1 = 8.   - 8./aa  - 0.008*aa; // slope of the rise
+    ff2 = 2.34 - 5.4/aa - 0.0028*aa; // start of the rise
+    res /= (1.0 + G4Exp(-ff1*(elog + ff2)));
 
   } else {
 
@@ -327,8 +332,8 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
     G4double p6 = 1. + 200./aa + 0.02*aa;
     G4double p7 = 3.0 - (aa-70.)*(aa-200.)/11000.;
 
-    G4double firstexp  = std::exp(-p4*(elog + p5));
-    G4double secondexp = std::exp(-p6*(elog + p7));
+    G4double firstexp  = G4Exp(-p4*(elog + p5));
+    G4double secondexp = G4Exp(-p6*(elog + p7));
 
     res = (1.+p3*firstexp/(1. + firstexp))/(1. + secondexp);
 

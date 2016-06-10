@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -59,11 +57,12 @@ namespace G4INCL {
   G4int shuffleComponentsHelper(G4int range);
 
   class ProjectileRemnant : public Cluster {
+    public:
+
     // typedefs for the calculation of the projectile excitation energy
     typedef std::vector<G4double> EnergyLevels;
     typedef std::map<long, G4double> EnergyLevelMap;
 
-    public:
     ProjectileRemnant(ParticleSpecies const species, const G4double kineticEnergy)
       : Cluster(species.theZ, species.theA) {
 
@@ -97,6 +96,8 @@ namespace G4INCL {
 
     ~ProjectileRemnant() {
       deleteStoredComponents();
+      // The ProjectileRemnant owns its particles
+      deleteParticles();
       clearEnergyLevels();
     }
 
@@ -131,9 +132,15 @@ namespace G4INCL {
      */
     ParticleList addMostDynamicalSpectators(ParticleList pL);
 
+    /** \brief Add back all dynamical spectators to the projectile remnant
+     *
+     * Return a list of rejected dynamical spectators.
+     */
+    ParticleList addAllDynamicalSpectators(ParticleList pL);
+
     /// \brief Clear the stored projectile components and delete the particles
     void deleteStoredComponents() {
-      for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(); p!=storedComponents.end(); ++p)
+      for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(), e=storedComponents.end(); p!=e; ++p)
         delete p->second;
       clearStoredComponents();
     }
@@ -149,7 +156,7 @@ namespace G4INCL {
       theGroundStateEnergies.clear();
     }
 
-    /** \brief Compute the excitation energy
+    /** \brief Compute the excitation energy when a nucleon is removed
      *
      * Compute the excitation energy of the projectile-like remnant as the
      * difference between the initial and the present configuration. This
@@ -158,24 +165,17 @@ namespace G4INCL {
      *
      * \return the excitation energy
      */
-    G4double computeExcitationEnergy(const long exceptID) const;
+    G4double computeExcitationEnergyExcept(const long exceptID) const;
 
-    EnergyLevels getPresentEnergyLevels(const long exceptID) const {
-      EnergyLevels theEnergyLevels;
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
-        if((*p)->getID()!=exceptID) {
-          EnergyLevelMap::const_iterator i = theInitialEnergyLevels.find((*p)->getID());
-// assert(i!=theInitialEnergyLevels.end());
-          theEnergyLevels.push_back(i->second);
-        }
-      }
-// assert(theEnergyLevels.size()==particles.size()-1);
-      return theEnergyLevels;
-    }
+    /** \brief Compute the excitation energy if some nucleons are put back
+     *
+     * \return the excitation energy
+     */
+    G4double computeExcitationEnergyWith(const ParticleList &pL) const;
 
     /// \brief Store the projectile components
     void storeComponents() {
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         // Store the particles (needed for forced CN)
         storedComponents[(*p)->getID()]=new Particle(**p);
       }
@@ -190,7 +190,7 @@ namespace G4INCL {
     void storeEnergyLevels() {
       EnergyLevels energies;
 
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         const G4double theCMEnergy = (*p)->getEnergy();
         // Store the CM energy in the EnergyLevels map
         theInitialEnergyLevels[(*p)->getID()] = theCMEnergy;
@@ -205,19 +205,36 @@ namespace G4INCL {
       std::partial_sum(energies.begin(), energies.end(), theGroundStateEnergies.begin());
     }
 
+    EnergyLevels const &getGroundStateEnergies() const {
+      return theGroundStateEnergies;
+    }
+
     private:
+
+    /** \brief Compute the excitation energy for a given configuration
+     *
+     * The function that does the real job of calculating the excitation energy
+     * for a given configuration of energy levels.
+     *
+     * \param levels a configuration of energy levels
+     * \return the excitation energy
+     */
+    G4double computeExcitationEnergy(const EnergyLevels &levels) const;
+
+    EnergyLevels getPresentEnergyLevelsExcept(const long exceptID) const;
+
+    EnergyLevels getPresentEnergyLevelsWith(const ParticleList &pL) const;
 
     /// \brief Shuffle the list of stored projectile components
     ParticleList shuffleStoredComponents() {
       ParticleList pL = getStoredComponents();
-      std::vector<Particle *> theVector(pL.begin(),pL.end());
-      std::random_shuffle(theVector.begin(), theVector.end(), shuffleComponentsHelper);
-      return ParticleList(theVector.begin(),theVector.end());
+      std::random_shuffle(pL.begin(), pL.end(), shuffleComponentsHelper);
+      return pL;
     }
 
     ParticleList getStoredComponents() const {
       ParticleList pL;
-      for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(); p!=storedComponents.end(); ++p)
+      for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(), e=storedComponents.end(); p!=e; ++p)
         pL.push_back(p->second);
       return pL;
     }
@@ -226,7 +243,7 @@ namespace G4INCL {
     ThreeVector const &getStoredMomentum(Particle const * const p) const {
       std::map<long,Particle*>::const_iterator i = storedComponents.find(p->getID());
       if(i==storedComponents.end()) {
-        ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
+        INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
         return p->getMomentum();
       } else {
         return i->second->getMomentum();
@@ -245,14 +262,17 @@ namespace G4INCL {
     /*    G4double getStoredEnergy(Particle const * const p) {
           std::map<long,Particle*>::const_iterator i = initialProjectileComponents.find(p->getID());
           if(i==initialProjectileComponents.end()) {
-          ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
+          INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
           return 0.;
           } else {
           return i->second->getEnergy();
           }
           }*/
 
-    /// \brief Stored projectile components
+    /** \brief Stored projectile components
+     *
+     * These particles are owned by the ProjectileRemnant.
+     */
     std::map<long, Particle*> storedComponents;
 
     /// \brief Initial energy levels of the projectile

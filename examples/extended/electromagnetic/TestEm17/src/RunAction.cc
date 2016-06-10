@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 67491 2013-02-22 17:03:46Z vnivanch $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,8 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
                      HistoManager* HistM)
-  : fDetector(det), fPrimary(prim), fProcCounter(0), fHistoManager(HistM)
+  : G4UserRunAction(),
+    fDetector(det), fPrimary(prim), fProcCounter(0), fHistoManager(HistM)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +70,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   CLHEP::HepRandom::showEngineStatus();
 
   fProcCounter = new ProcessesCount;
-  
   fHistoManager->book();
 }
 
@@ -142,8 +142,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     totalCrossSection = 0.;
     for (size_t i=0; i< fProcCounter->size();i++) {
       G4String procName = (*fProcCounter)[i]->GetName();
-      if (procName != "Transportation")
+      if (procName != "Transportation") {
         totalCrossSection += ComputeTheory(procName, NbOfEvents);
+      }
     }
   
     MeanFreePath     = 1./totalCrossSection;
@@ -182,41 +183,31 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   MuCrossSections crossSections;
 
   G4int id = 0; G4double cut = 0.;
-  if (process == "muIoni")          {id = 1; cut =    GetEnergyCut(material,1);}
-  else if (process == "muPairProd") {id = 2; cut = 2*(GetEnergyCut(material,1) 
+  if (process == "muIoni")          {id = 11; cut =    GetEnergyCut(material,1);}
+  else if (process == "muPairProd") {id = 12; cut = 2*(GetEnergyCut(material,1) 
                                                       + electron_mass_c2); }
-  else if (process == "muBrems")    {id = 3; cut =    GetEnergyCut(material,0);}
-  else if (process == "muNucl")      id = 4;
-  else if (process == "hIoni")      {id = 5; cut =    GetEnergyCut(material,1);}
-  else if (process == "hPairProd")  {id = 6; cut = 2*(GetEnergyCut(material,1) 
-                                                      + electron_mass_c2); }
-  else if (process == "hBrems")     {id = 7; cut =    GetEnergyCut(material,0);}
-  if (id == 0) return 0.;
+  else if (process == "muBrems")    {id = 13; cut =    GetEnergyCut(material,0);}
+  else if (process == "muonNuclear"){id = 14; }
+  if (id == 0) { return 0.; }
   
   G4int nbOfBins = 100;
-  G4double binMin = -10., binMax = 0., binWidth = (binMax-binMin)/nbOfBins;
+  G4double binMin = -10.;
+  G4double binMax = 0.;
+  G4double binWidth = (binMax-binMin)/G4double(nbOfBins);
 
   //create histo for theoritical crossSections, with same bining as simulation
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     
-  const G4String label[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                    "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
-                      
   G4AnaH1* histoTh = 0;
-  ////G4AnaH1* histoMC = 0;     
+  //  G4AnaH1* histoMC = 0;     
   if (fHistoManager->HistoExist(id)) {
-    ////histoMC  = analysisManager->GetH1(id);  
+    histoTh  = analysisManager->GetH1(fHistoManager->GetHistoID(id));  
+    //histoMC  = analysisManager->GetH1(fHistoManager->GetHistoID(id-10));  
     nbOfBins = fHistoManager->GetNbins(id);
     binMin   = fHistoManager->GetVmin (id);
     binMax   = fHistoManager->GetVmax (id);
-    binWidth = fHistoManager->GetBinWidth(id);
-    
-    G4String labelTh = label[MaxHisto + id];
-    G4String titleTh = fHistoManager->GetTitle(id) + " (Th)";
-    G4int histThId   = analysisManager
-                       ->CreateH1(labelTh,titleTh,nbOfBins,binMin,binMax);
-    histoTh = analysisManager->GetH1(histThId);
+    binWidth = fHistoManager->GetBinWidth(id);    
   }
   
   //compute and plot differential crossSection, as function of energy transfert.
@@ -235,15 +226,12 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
     sigmaE = crossSections.CR_Macroscopic(process,material,ekin,etransf);
     dsigma = sigmaE*etransf*binWidth*ln10;
     if (etransf > cut) sigmaTot += dsigma;    
-    G4double NbProcess = NbOfMu*length*dsigma;
-    if (histoTh) histoTh->fill(lgeps, NbProcess);
+    if (histoTh) {
+      G4double NbProcess = NbOfMu*length*dsigma;
+      histoTh->fill(lgeps, NbProcess);
+    }
   }
-  
-  //compare simulation and theory
-  //
-  ////if (histoMC && histoTh) fHistoManager->GetHistogramFactory()
-  ////                   ->divide(label[2*MaxHisto+id], *histoMC, *histoTh);
-   
+     
   //return integrated crossSection
   //
   return sigmaTot;   

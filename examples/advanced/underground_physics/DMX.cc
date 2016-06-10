@@ -82,17 +82,6 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 #endif
 
-  // output environment variables:
-#ifdef G4ANALYSIS_USE
-  G4cout << G4endl << G4endl << G4endl 
-	 << " User Environment " << G4endl
-	 << " Using AIDA 3.2.1 analysis " << G4endl;
-#else
-  G4cout << G4endl << G4endl << G4endl 
-	 << " User Environment " << G4endl
-	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
-	 << G4endl;
-#endif
 
 #ifdef DMXENV_GPS_USE
   G4cout << " Using GPS and not DMX gun " << G4endl;
@@ -142,10 +131,8 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-#ifdef G4ANALYSIS_USE  
-  DMXAnalysisManager::getInstance()->Finish(); 
+  DMXRun->Finish();
   G4cout << "Analysis files closed" << G4endl;
-#endif
 
 #ifdef G4VIS_USE
   if(visManager) delete visManager;

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4PVPlacement.cc,v 1.6 2008-03-13 07:32:18 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4PVPlacement.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4PVPlacement.cc
 //
@@ -42,17 +41,8 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4PVPlacement {
 
-#if G4VERSION_NUMBER <=711
-#elif G4VERSION_NUMBER <= 820
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CheckOverlaps,
-                                       CheckOverlaps, 0, 1);
-#elif G4VERSION_NUMBER <=821
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CheckOverlaps,
-                                       CheckOverlaps, 0, 2);
-#else
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CheckOverlaps,
-                                       CheckOverlaps, 0, 3);
-#endif
+                                       CheckOverlaps, 0, 3)
 
 }
 
@@ -63,7 +53,7 @@ using namespace pyG4PVPlacement;
 // ====================================================================
 void export_G4PVPlacement()
 {
-  class_<G4PVPlacement, G4PVPlacement*, bases<G4VPhysicalVolume>, 
+  class_<G4PVPlacement, G4PVPlacement*, bases<G4VPhysicalVolume>,
     boost::noncopyable >
     ("G4PVPlacement", "physical volume placement", no_init)
     // ---

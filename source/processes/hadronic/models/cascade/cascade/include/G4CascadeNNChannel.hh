@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeNNChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
 
 #ifndef G4_CASCADE_NN_CHANNEL_HH
 #define G4_CASCADE_NN_CHANNEL_HH
@@ -34,7 +34,7 @@
 
 struct G4CascadeNNChannelData {
   typedef G4CascadeData<30,1,6,18,32,7,8,10,11> data_t;
-  static data_t data;
+  static const data_t data;
 };
 
 class G4CascadeNNChannel

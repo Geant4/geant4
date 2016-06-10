@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Track.hh 74276 2013-10-02 14:59:07Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -49,8 +49,10 @@
 #ifndef G4Track_h
 #define G4Track_h 1
 
-#include "globals.hh"                 // Include from 'global'
 #include <cmath>                      // Include from 'system'
+
+#include "globals.hh"                 // Include from 'global'
+#include "trkdefs.hh"                 // Include DLL defs...
 #include "G4ThreeVector.hh"           // Include from 'geometry'
 #include "G4LogicalVolume.hh"         // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"       // Include from 'geometry'
@@ -59,6 +61,7 @@
 #include "G4TrackStatus.hh"           // Include from 'tracking'
 #include "G4TouchableHandle.hh"       // Include from 'geometry'
 #include "G4VUserTrackInformation.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 #include "G4Material.hh"
 
@@ -239,6 +242,13 @@ public: // With description
    const G4VProcess* GetCreatorProcess() const;
    void SetCreatorProcess(const G4VProcess* aValue);
 
+   inline void SetCreatorModelIndex(G4int idx)
+   { fCreatorModelIndex = idx; }
+   inline G4String& GetCreatorModelName()
+   { return G4PhysicsModelCatalog::GetModelName(fCreatorModelIndex); }
+   inline G4int GetCreatorModelID()
+   { return fCreatorModelIndex; }
+
   // track weight
   // These are methods for manipulating a weight for this track.
    G4double GetWeight() const;
@@ -298,6 +308,7 @@ public: // With description
    G4double fVtxKineticEnergy;          // Kinetic energy at the vertex
    const G4LogicalVolume* fpLVAtVertex; //Logical Volume at the vertex
    const G4VProcess* fpCreatorProcess; // Process which created the track
+   G4int fCreatorModelIndex;           // Index of the physics model which created the track
    
    G4VUserTrackInformation* fpUserInformation;
 
@@ -308,29 +319,13 @@ public: // With description
    mutable G4double                  prev_momentum;
 
    G4bool          is_OpticalPhoton; 
-   static G4VelocityTable*  velTable;
+   static G4ThreadLocal G4VelocityTable*  velTable;
  
    G4bool          useGivenVelocity;
       // do not calclulate velocity and just use current fVelocity
       // if this flag is set
-      
-};  
+};
 
 #include "G4Track.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -238,10 +238,10 @@ G4RPGPionInelastic::GetFSPartTypesForT12(G4int mult, G4double KE, G4int tzindex)
 ///////////////////////////////////////////////////////////////////////////////
 
 // Total pi+ cross section as a function of kinetic energy
-G4double G4RPGPionInelastic::pipPtot[30];
+G4ThreadLocal G4double G4RPGPionInelastic::pipPtot[30];
 
 // pi+ multiplicities as a function of kinetic energy
-G4double G4RPGPionInelastic::t32_dSigma_dMult[8][30];
+G4ThreadLocal G4double G4RPGPionInelastic::t32_dSigma_dMult[8][30];
 
 const G4int G4RPGPionInelastic::pipPindex[8][2] =
  {{0, 1}, {2, 8}, {9,23}, {24,47}, {48,52}, {53,58}, {59,65}, {66,73}};  
@@ -744,10 +744,10 @@ const G4float G4RPGPionInelastic::pipPCrossSections[74][30] = {
 ///////////////////////////////////////////////////////////////////////////////
 
 // Total pi- cross section as a function of kinetic energy
-G4double G4RPGPionInelastic::pimPtot[30];
+G4ThreadLocal G4double G4RPGPionInelastic::pimPtot[30];
 
 // pi- multiplicities as a function of kinetic energy
-G4double G4RPGPionInelastic::t12_dSigma_dMult[8][30];
+G4ThreadLocal G4double G4RPGPionInelastic::t12_dSigma_dMult[8][30];
 
 const G4int G4RPGPionInelastic::pimPindex[8][2] =
  {{0, 4}, {5,17}, {18,39}, {40,70}, {71,76}, {77,83}, {84,91}, {92,100}};  

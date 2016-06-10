@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4FluoTransition.cc,v 1.2 ????
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //

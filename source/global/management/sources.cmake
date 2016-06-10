@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:44:49 bmorgan Exp $
+# $Id: sources.cmake 75300 2013-10-30 09:56:52Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -29,20 +29,24 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         globals.hh
         templates.hh
         tls.hh
-        G4strstreambuf.hh
+        windefs.hh
         G4Allocator.hh
         G4strstreambuf.icc
         G4AllocatorPool.hh
+        G4AllocatorList.hh
         G4ApplicationState.hh
+        G4AutoLock.hh
         G4DataVector.hh
         G4DataVector.icc
         G4ErrorPropagatorData.hh
         G4ErrorPropagatorData.icc
         G4Evaluator.hh
         G4ExceptionSeverity.hh
+        G4Exp.hh
         G4FPEDetection.hh
         G4FastVector.hh
         G4GeometryTolerance.hh
+        G4Log.hh
         G4LPhysicsFreeVector.hh
         G4LPhysicsFreeVector.icc
         G4OrderedTable.hh
@@ -51,17 +55,16 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsLinearVector.hh
         G4PhysicsLnVector.hh
         G4PhysicsLogVector.hh
+        G4PhysicsModelCatalog.hh
         G4PhysicsOrderedFreeVector.hh
         G4PhysicsOrderedFreeVector.icc
         G4PhysicsTable.hh
         G4PhysicsTable.icc
         G4PhysicsVector.hh
         G4PhysicsVector.icc
-        G4PhysicsVectorCache.hh
         G4PhysicsVectorType.hh
         G4Physics2DVector.hh
         G4Physics2DVector.icc
-        G4Physics2DVectorCache.hh
         G4Pow.hh
         G4ReferenceCountedHandle.hh
         G4RotationMatrix.hh
@@ -73,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4String.hh
         G4String.icc
         G4SystemOfUnits.hh
+	G4Threading.hh
         G4ThreeVector.hh
         G4Timer.hh
         G4Timer.icc
@@ -89,8 +93,17 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4Version.hh
         G4coutDestination.hh
         G4ios.hh
+        G4strstreambuf.hh
+        G4ofstreamDestination.hh
+        G4MTcoutDestination.hh
+	G4CacheDetails.hh
+	G4Cache.hh
+	G4ThreadLocalSingleton.hh
+	G4AutoDelete.hh
     SOURCES
+        G4Allocator.cc
         G4AllocatorPool.cc
+        G4AllocatorList.cc
         G4DataVector.cc
         G4ErrorPropagatorData.cc
         G4Exception.cc
@@ -101,16 +114,16 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsLinearVector.cc
         G4PhysicsLnVector.cc
         G4PhysicsLogVector.cc
+        G4PhysicsModelCatalog.cc
         G4PhysicsOrderedFreeVector.cc
         G4PhysicsTable.cc
         G4PhysicsVector.cc
-        G4PhysicsVectorCache.cc
         G4Physics2DVector.cc
-        G4Physics2DVectorCache.cc
         G4Pow.cc
         G4ReferenceCountedHandle.cc
         G4SliceTimer.cc
         G4StateManager.cc
+	G4Threading.cc
         G4Timer.cc
         G4UnitsTable.cc
         G4VExceptionHandler.cc
@@ -118,6 +131,9 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4VStateDependent.cc
         G4coutDestination.cc
         G4ios.cc
+        G4ofstreamDestination.cc
+        G4MTcoutDestination.cc
+	G4CacheDetails.cc
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES

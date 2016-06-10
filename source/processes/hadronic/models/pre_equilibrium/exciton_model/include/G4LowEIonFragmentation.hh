@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LowEIonFragmentation.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
-// $Id$
+// $Id: G4LowEIonFragmentation.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // ClassName:   G4LowEIonFragmentation
 //
@@ -35,6 +35,7 @@
 //
 // Modified:
 // 01.06.2010 V.Ivanchenko moved constructor and destructor to the source
+// 14.02.2013 V.Ivanchenko remove all static declarations
 // 
 
 #ifndef G4LowEIonFragmentation_h
@@ -60,11 +61,11 @@ public:
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, 
 					  G4Nucleus & theNucleus);
 
-  static G4double GetCrossSection() 
+  inline G4double GetCrossSection() 
   {
-    //    clog << "area/millibarn = "<<area/millibarn<<G4endl;
-    //    clog << "hits = "<<hits<<G4endl;
-    //    clog << "totalTries = "<<totalTries<<G4endl;
+    //    G4cout << "area/millibarn = "<<area/millibarn<<G4endl;
+    //    G4cout << "hits = "<<hits<<G4endl;
+    //    G4cout << "totalTries = "<<totalTries<<G4endl;
     return area*hits/(static_cast<G4double>(totalTries)*CLHEP::millibarn);
   }
 
@@ -85,9 +86,9 @@ private:
   
 private:
 
-  static G4int hits;
-  static G4int totalTries;
-  static G4double area;
+  G4int hits;
+  G4int totalTries;
+  G4double area;
 
 };
 

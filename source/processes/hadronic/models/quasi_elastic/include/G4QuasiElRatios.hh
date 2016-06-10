@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics class: G4QuasiElRatios -- header file
@@ -103,8 +102,8 @@ private:
     
     // Body
 private:
-    static std::vector<G4double*> vT;     // Vector of pointers to LinTable
-    static std::vector<G4double*> vL;     // Vector of pointers to LogTable
-    static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable
+    static G4ThreadLocal std::vector<G4double*> *vT_G4MT_TLS_;     // Vector of pointers to LinTable
+    static G4ThreadLocal std::vector<G4double*> *vL_G4MT_TLS_;     // Vector of pointers to LogTable
+    static G4ThreadLocal std::vector<std::pair<G4double,G4double>*> *vX_G4MT_TLS_; // Vector of ETPointers to LogTable
 };
 #endif

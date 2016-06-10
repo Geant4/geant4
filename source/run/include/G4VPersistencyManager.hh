@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPersistencyManager.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 
 #ifndef G4VPersistencyManager_h
@@ -63,7 +63,7 @@ class G4VPersistencyManager
       virtual ~G4VPersistencyManager();
 
   private: 
-      static G4VPersistencyManager * fPersistencyManager;
+      static G4ThreadLocal G4VPersistencyManager * fPersistencyManager;
 
   public: // with description
       virtual G4bool Store(const G4Event* anEvent)=0;

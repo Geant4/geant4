@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProcessTableMessenger.cc 71231 2013-06-12 13:06:28Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -62,7 +62,7 @@
 #include <sstream>
 
 /////////////////////////////////////////
-G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
+G4ThreadLocal G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
 
 //////////////////////////
 G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)

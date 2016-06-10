@@ -22,25 +22,28 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: Materials.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file Materials.cc
 /// @brief Define materials
 
-#include "Materials.hh"
 #include "G4Material.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Materials.hh"
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 Materials::Materials()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 Materials::~Materials()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Materials::Construct()
 {
   G4double A, Z;
@@ -57,7 +60,7 @@ void Materials::Construct()
   G4Element* elAr = new G4Element("Argon",   "Ar", Z=18., A= 39.948*g/mole);
   G4Element* elI  = new G4Element("Iodine",  "I",  Z=53., A= 126.90447*g/mole);
   G4Element* elCs = new G4Element("Cesium",  "Cs", Z=55., A= 132.90543*g/mole);
-  
+
   // ------------------------------------------------------------------------
   // Materials
   // ------------------------------------------------------------------------
@@ -65,7 +68,7 @@ void Materials::Construct()
   G4int natoms, nel;
 
   // temperature of experimental hall is controlled at 20 degree.
-  const G4double expTemp = STP_Temperature+20.*kelvin; 
+  const G4double expTemp = STP_Temperature+20.*kelvin;
 
   // vacuum
   density = universe_mean_density;
@@ -75,7 +78,7 @@ void Materials::Construct()
 
   // air
   density = 1.2929e-03 *g/cm3;  // at 20 degree
-  G4Material* Air = new G4Material("Air", density, nel=3, 
+  G4Material* Air = new G4Material("Air", density, nel=3,
                                    kStateGas, expTemp);
   G4double ttt = 75.47+23.20+1.28;
   Air-> AddElement(elN,  massfraction= 75.47/ttt);
@@ -98,7 +101,7 @@ void Materials::Construct()
   // Ar(50%) + ethane(50%) mixture
   density =  (denAr+denEthane)/2.;
   G4Material* ArEthane = new G4Material("ArEthane", density, nel=2,
-                                        kStateGas, expTemp);  
+                                        kStateGas, expTemp);
   ArEthane-> AddMaterial(Ar, massfraction= denAr/density/2.);
   ArEthane-> AddMaterial(Ethane, massfraction= denEthane/density/2.);
 

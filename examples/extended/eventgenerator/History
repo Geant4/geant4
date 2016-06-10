@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2010-07-16 07:37:48 maire Exp $
+$Id: History 73923 2013-09-17 07:52:09Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th September, 2013 I. Hrivnacova (exEventgenerator-V09-06-00)
+- Fixed handling required packages in CMake files
 
 20th November 2012 Ivana Hrivnacova (exEventgenerator-V09-05-02)
 - Updated README files

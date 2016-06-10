@@ -25,57 +25,58 @@
 //
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04DetectorParameterDef.icc
 /// \brief The file with detector paremeter definistions
+//
+// $Id$
+//
 
-  expHall_x = 600.*cm;
-  expHall_y = 600.*cm;
-  expHall_z = 600.*cm;
+fexpHall_x = 600.*cm;
+fexpHall_y = 600.*cm;
+fexpHall_z = 600.*cm;
 
-  trkTubs_rmax =  50.*cm;
-  trkTubs_rmin =  20.*cm;
-  trkTubs_dz   = 100.*cm;
-  trkTubs_sphi =   0.*deg;
-  trkTubs_dphi = 360.*deg;
+ftrkTubs_rmax =  50.*cm;
+ftrkTubs_rmin =  20.*cm;
+ftrkTubs_dz   = 100.*cm;
+ftrkTubs_sphi =   0.*deg;
+ftrkTubs_dphi = 360.*deg;
 
-  notrkLayers = 5;
-  tracker_radius[0] = 25.*cm;
-  tracker_radius[1] = 30.*cm;
-  tracker_radius[2] = 35.*cm;
-  tracker_radius[3] = 40.*cm;
-  tracker_radius[4] = 45.*cm;
+fnotrkLayers = 5;
+ftracker_radius[0] = 25.*cm;
+ftracker_radius[1] = 30.*cm;
+ftracker_radius[2] = 35.*cm;
+ftracker_radius[3] = 40.*cm;
+ftracker_radius[4] = 45.*cm;
+ftracker_thick     =  0.5*cm;
+for( int il=0; il < 5; il++ ) {
+  ftracker_length[il] = ftracker_radius[il];
+}
 
-  tracker_thick     =  0.5*cm;
-  for(int il=0;il<5;il++)
-  {
-    tracker_length[il] = tracker_radius[il];
-  }
+fcaloTubs_rmax = 300.*cm;
+fcaloTubs_rmin =  50.*cm;
+fcaloTubs_dz   = 200.*cm;
+fcaloTubs_sphi =   0.*deg;
+fcaloTubs_dphi = 360.*deg;
 
-  caloTubs_rmax = 300.*cm;
-  caloTubs_rmin =  50.*cm;
-  caloTubs_dz   = 200.*cm;
-  caloTubs_sphi =   0.*deg;
-  caloTubs_dphi = 360.*deg;
+fabsorber_thick = 3.*cm;
+fscinti_thick = 2.*cm;
+fnocaloLayers = int( (fcaloTubs_rmax - fcaloTubs_rmin) /
+                    (fabsorber_thick + fscinti_thick) );
 
-  absorber_thick = 3.*cm;
-  scinti_thick = 2.*cm;
-  nocaloLayers = int((caloTubs_rmax-caloTubs_rmin)/(absorber_thick+scinti_thick));
+fsegmentsinPhi = 48;
+fcaloCell_rmax = fcaloTubs_rmax;
+fcaloCell_rmin = fcaloTubs_rmin;
+fcaloCell_dz   = fcaloTubs_dz;
+fcaloCell_sphi = fcaloTubs_sphi;
+fcaloCell_dphi = fcaloTubs_dphi / fsegmentsinPhi;
 
-  segmentsinPhi = 48;
-  caloCell_rmax = caloTubs_rmax;
-  caloCell_rmin = caloTubs_rmin;
-  caloCell_dz   = caloTubs_dz;
-  caloCell_sphi = caloTubs_sphi;
-  caloCell_dphi = caloTubs_dphi/segmentsinPhi;
+fsegmentsinZ = 20;
+fcaloRing_rmax = fcaloCell_rmax;
+fcaloRing_rmin = fcaloCell_rmin;
+fcaloRing_dz   = fcaloCell_dz / fsegmentsinZ ;
+fcaloRing_sphi = fcaloCell_sphi;
+fcaloRing_dphi = fcaloCell_dphi;
 
-  segmentsinZ = 20;
-  caloRing_rmax = caloCell_rmax;
-  caloRing_rmin = caloCell_rmin;
-  caloRing_dz   = caloCell_dz/segmentsinZ ;
-  caloRing_sphi = caloCell_sphi;
-  caloRing_dphi = caloCell_dphi;
-
-  nomucounter = 4;
-  muBox_radius = 350.*cm;
-  muBox_width  = muBox_radius - 5.*cm;
-  muBox_thick  = 1.*cm;
-  muBox_length = expHall_z - 10.*cm;
-
+fnomucounter = 4;
+fmuBox_radius = 350.*cm;
+fmuBox_width  = fmuBox_radius - 5.*cm;
+fmuBox_thick  = 1.*cm;
+fmuBox_length = fexpHall_z - 10.*cm;

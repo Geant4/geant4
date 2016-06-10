@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DataInterpolation.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 #include "G4DataInterpolation.hh"
 

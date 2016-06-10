@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CollisionOutput.hh 71954 2013-06-29 04:40:40Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100407  M. Kelsey -- Replace ::resize(0) with ::clear()
@@ -44,6 +44,7 @@
 // 20110323  M. Kelsey -- Add non-const access to lists (for G4NucleiModel)
 // 20110922  M. Kelsey -- Add optional stream argument to printCollisionOutput
 // 20121002  M. Kelsey -- Add strangeness calculation
+// 20130628  M. Kelsey -- Support multiple recoil fragments (for G4Fissioner)
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -93,15 +94,15 @@ public:
 
   void addOutgoingParticles(const G4ReactionProductVector* rproducts);
 
-  // Special buffer for initial, possible unstable fragment from cascade
+  // Special buffer for initial, possible unstable fragments from cascade
   void addRecoilFragment(const G4Fragment* aFragment) {
     if (aFragment) addRecoilFragment(*aFragment);
   }
 
   void addRecoilFragment(const G4Fragment& aFragment) {
-    theRecoilFragment = aFragment;
+    recoilFragments.push_back(aFragment);
   }
-
+  
   // ===== Remove contents of lists, by index, reference or value  =====
 
   void removeOutgoingParticle(G4int index);
@@ -116,7 +117,7 @@ public:
     if (nuclei) removeOutgoingNucleus(*nuclei);
   }
 
-  void removeRecoilFragment();		// There is only one fragment
+  void removeRecoilFragment(G4int index=-1);	// No argument removes all
 
   // ===== Access contents of lists =====
 
@@ -138,9 +139,15 @@ public:
 
   std::vector<G4InuclNuclei>& getOutgoingNuclei() { return outgoingNuclei; };
 
-  const G4Fragment& getRecoilFragment() const { return theRecoilFragment; }
+  G4int numberOfFragments() const { return recoilFragments.size(); }
 
-  G4Fragment& getRecoilFragment() { return theRecoilFragment; }
+  const G4Fragment& getRecoilFragment(G4int index=0) const;
+
+  const std::vector<G4Fragment>& getRecoilFragments() const {
+    return recoilFragments;
+  };
+
+  std::vector<G4Fragment>& getRecoilFragments() { return recoilFragments; };
 
   // ===== Get event totals for conservation checking, recoil, etc. ======
 
@@ -170,7 +177,8 @@ private:
 
   std::vector<G4InuclElementaryParticle> outgoingParticles;
   std::vector<G4InuclNuclei> outgoingNuclei;
-  G4Fragment theRecoilFragment;
+  std::vector<G4Fragment> recoilFragments;
+  static const G4Fragment emptyFragment;	// To return if list empty
 
   G4double eex_rest;		// Used by setOnShell() for kinematics
 

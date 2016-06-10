@@ -27,8 +27,7 @@
 /// \brief Main program of the analysis/AnaEx02 example
 //
 //
-// $Id: AnaEx02.cc 59868 2012-06-20 13:59:51Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: AnaEx02.cc 68015 2013-03-13 13:27:27Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

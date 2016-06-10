@@ -25,7 +25,6 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4ChipsKaonMinusInelasticXS for gamma+A cross sections
@@ -48,6 +47,20 @@
 //
 G4_DECLARE_XS_FACTORY(G4ChipsKaonMinusInelasticXS);
 
+namespace {
+    const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
+    const G4double THmiG=THmin*.001; // minimum Momentum (GeV/c) Threshold
+    const G4double dP=10.;        // step for the LEN (Low ENergy) table MeV/c
+    const G4double dPG=dP*.001;   // step for the LEN (Low ENergy) table GeV/c
+    const G4int    nL=105;        // A#of LEN points in E (step 10 MeV/c)
+    const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
+    const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
+    const G4int    nH=224;        // A#of HEN points in lnE
+    const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
+    const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
+    const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
+    const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
+}
 // Initialization of the
 
 G4ChipsKaonMinusInelasticXS::G4ChipsKaonMinusInelasticXS():G4VCrossSectionDataSet(Default_Name())
@@ -100,12 +113,12 @@ G4double G4ChipsKaonMinusInelasticXS::GetIsoCrossSection(const G4DynamicParticle
 
 G4double G4ChipsKaonMinusInelasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int)
 {
-  static G4int j;                      // A#0f Z/N-records already tested in AMDB
-  static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
-  static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
-  static std::vector <G4double> colP;  // Vector of last momenta for the reaction
-  static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
-  static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
+  static G4ThreadLocal G4int j;                      // A#0f Z/N-records already tested in AMDB
+  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
+  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
+  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
+  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
   G4bool in=false;                     // By default the isotope must be found in the AMDB
@@ -181,18 +194,6 @@ G4double G4ChipsKaonMinusInelasticXS::GetChipsCrossSection(G4double pMom, G4int 
 G4double G4ChipsKaonMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  static const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
-  static const G4double THmiG=THmin*.001; // minimum Momentum (GeV/c) Threshold
-  static const G4double dP=10.;        // step for the LEN (Low ENergy) table MeV/c
-  static const G4double dPG=dP*.001;   // step for the LEN (Low ENergy) table GeV/c
-  static const G4int    nL=105;        // A#of LEN points in E (step 10 MeV/c)
-  static const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
-  static const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
-  static const G4int    nH=224;        // A#of HEN points in lnE
-  static const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
-  static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
-  static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
-  static const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   //G4double A=targN+targZ;              // A of the target

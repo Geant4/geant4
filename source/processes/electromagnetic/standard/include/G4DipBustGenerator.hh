@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DipBustGenerator.hh 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,13 +72,11 @@ public:
 
   void PrintGeneratorInformation() const;
 
-protected:
-
 private:
 
   // hide assignment operator 
-     G4DipBustGenerator & operator=(const  G4DipBustGenerator &right);
-     G4DipBustGenerator(const  G4DipBustGenerator&);
+  G4DipBustGenerator & operator=(const  G4DipBustGenerator &right);
+  G4DipBustGenerator(const  G4DipBustGenerator&);
 
 };
 

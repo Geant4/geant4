@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GMocrenFileCTtoDensityMap.hh 70733 2013-06-05 10:05:57Z gcosmo $
 //
 //
 // Created:  Oct. 12, 2009  Akinori Kimura  
@@ -52,5 +52,11 @@ protected:
   G4int kCTMinMax[2];
   G4double * kDensity;
   G4int kSize;
+
+private:
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps Coverity happy.
+  G4GMocrenFileCTtoDensityMap (const G4GMocrenFileCTtoDensityMap&);
+  G4GMocrenFileCTtoDensityMap& operator = (const G4GMocrenFileCTtoDensityMap&);
 };
 #endif

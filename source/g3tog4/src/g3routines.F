@@ -24,8 +24,7 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: g3routines.F,v 1.5 2006-06-29 18:15:10 gunter Exp $
-*     GEANT4 tag $Name: not supported by cvs2svn $
+*     $Id: g3routines.F 67982 2013-03-13 10:36:03Z gcosmo $
 *    
 #define CALL_GEANT
 

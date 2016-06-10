@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4H2O.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4H2O.cc 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -41,7 +41,7 @@
 // ######################################################################
 // ###                         Hydrogen                               ###
 // ######################################################################
-G4H2O* G4H2O::theInstance = 0;
+/*G4ThreadLocal*/ G4H2O* G4H2O::theInstance = 0;
 
 G4H2O* G4H2O::Definition()
 {

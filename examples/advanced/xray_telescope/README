@@ -1,4 +1,4 @@
-$Id: README,v 1.15 2010-06-06 06:26:05 perl Exp $
+$Id: README 68710 2013-04-05 09:04:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -28,9 +28,7 @@ in Geant4:
 
  - the generation of particles is done via the new General Particle Source
 
- - histograming facilities are available through the AIDA 3.0 interfaces.
-
- - on-line visualisation of histograms is provided through the AIDA 3.0 interface.
+ - histograming facilities are available through the G4AnalysisManager tools
 
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
@@ -54,8 +52,8 @@ execute command "/control/execute test.mac"
 To enable visualisation, uncomment one line from test.mac:
 /control/execute vis.mac
 
-If the analysis options are set, histograming windows will
-automatically open and the corresponding files will be created.
+If the analysis options are set, histograms will
+automatically created and the corresponding files will be created.
 A 1D histogram will display the energy distribution of the protons
 that reach the detector at the end of the run.
 
@@ -83,28 +81,10 @@ http://reat.space.qinetiq.com/gps/
 
 6. Analysis
 
-In case the variable G4ANALYSIS_USE is set:
-setenv G4ANALYSIS_USE               1
-relevant information from the simulation is processed in the XrayTelAnalysis
-class and saved, through the AIDA interface, to Histograms and Tuples.
-
-Compilation and link flags to hook any AIDA compliant system are passed 
-to the Geant4 GNUmakefile system by using the "aida-config" tool
-that should come with any AIDA compliant system.
-Specifically in the GNUmakefile you find the 2 lines:
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS += `aida-config --lib`
-
-For more information about AIDA please look at:
-http://aida.freehep.org/
-
-Presently, tools
-- OpenScientist (http://openscientist.lal.in2p3.fr/)
-- JAS (http://jas.freehep.org/jas3/)
-- iAIDA (http://iaida.dynalias.net/Intro.html)
-provide an implementation of AIDA 3.2.1
-
-To build and execute the example on platforms where there is no
-implementation of the analysis system, the environment variables 
-must not be set.
+Relevant information from the simulation is processed in the XrayTelAnalysis
+class and saved, through the G4AnalysisManager interface, to Histograms and 
+Tuples. The output file is written in XML format, but one can easily switch to 
+ROOT (or Hbook) by changing the appropriate #include in XrayTelAnalysis.hh
+No external software is required (apart from the hbook case, in which the CERNLIB
+must be installed and a FORTRAN compiler must be present)
 

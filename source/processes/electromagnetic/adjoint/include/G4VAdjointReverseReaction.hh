@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VAdjointReverseReaction.hh 68044 2013-03-13 14:29:07Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4VAdjointReverseReaction
@@ -103,10 +103,6 @@ protected:
   
 
 private:
-  G4Material*  currentMaterial;
-  G4MaterialCutsCouple* currentCouple;
-  size_t   currentMaterialIndex; 
-  G4double currentTcut;
   G4double lastCS;
   std::vector<G4double> CS_Vs_Element;
   G4bool IsFwdCSUsed;

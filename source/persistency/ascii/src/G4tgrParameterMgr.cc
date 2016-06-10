@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrParameterMgr.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrParameterMgr
@@ -41,7 +41,7 @@
 #include "G4tgrMessenger.hh"
 #include "G4UIcommand.hh"
 
-G4tgrParameterMgr* G4tgrParameterMgr::theInstance = 0;
+G4ThreadLocal G4tgrParameterMgr* G4tgrParameterMgr::theInstance = 0;
 
 
 //-------------------------------------------------------------

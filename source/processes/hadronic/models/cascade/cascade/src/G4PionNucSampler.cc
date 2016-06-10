@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PionNucSampler.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100512  M. Kelsey -- Replaces (old, untemplated) G4FinalStateSampler
 

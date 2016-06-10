@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B2TrackerSD.hh 69706 2013-05-13 09:12:40Z gcosmo $
 //
 /// \file B2TrackerSD.hh
 /// \brief Definition of the B2TrackerSD class
@@ -44,10 +44,9 @@ class G4HCofThisEvent;
 
 /// B2Tracker sensitive detector class
 ///
-/// In Initialize(), it creates one hit for each tracker volume
-///
-/// The values are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step.
+/// The hits are accounted in hits in ProcessHits() function which is called
+/// by Geant4 kernel at each step. A hit is created with each step with non zero 
+/// energy deposit.
 
 class B2TrackerSD : public G4VSensitiveDetector
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DiscreteGammaDeexcitation.cc 69700 2013-05-13 08:56:05Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -69,6 +69,7 @@ G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation():
   _rdm(false), _levelManager(0)
 {
   _tolerance = CLHEP::keV;
+  G4NuclearLevelStore::GetInstance();
 }
 
 G4DiscreteGammaDeexcitation::~G4DiscreteGammaDeexcitation() 

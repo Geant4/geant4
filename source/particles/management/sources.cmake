@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:49:08 bmorgan Exp $
+# $Id: sources.cmake 75122 2013-10-28 09:51:40Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -43,6 +43,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4HyperNucleiProperties.hh
         G4IonTable.hh
         G4Ions.hh
+	G4IsomerTable.hh
         G4IsotopeProperty.hh
         G4KL3DecayChannel.hh
         G4MuonDecayChannel.hh
@@ -52,7 +53,9 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4NucleiProperties.hh
         G4NucleiPropertiesTableAME03.hh
         G4NucleiPropertiesTheoreticalTable.hh
+	G4NuclideTable.hh
         G4PDGCodeChecker.hh
+        G4PDefSplitter.hh
         G4ParticleDefinition.hh
         G4ParticleDefinition.icc
         G4ParticleMessenger.hh
@@ -69,12 +72,12 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4PionRadiativeDecayChannel.hh
         G4PrimaryParticle.hh
         G4PrimaryVertex.hh
-        G4ShortLivedTable.hh
         G4TauLeptonicDecayChannel.hh
         G4VDecayChannel.hh
         G4VIsotopeTable.hh
         G4VUserPrimaryParticleInformation.hh
         G4VUserPrimaryVertexInformation.hh
+        pwdefs.hh
     SOURCES
         G4DalitzDecayChannel.cc
         G4DecayProducts.cc
@@ -85,6 +88,8 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4HyperNucleiProperties.cc
         G4IonTable.cc
         G4Ions.cc
+	G4IsomerTable.cc
+	G4IsomerTable2.cc
         G4IsotopeProperty.cc
         G4KL3DecayChannel.cc
         G4MuonDecayChannel.cc
@@ -95,6 +100,9 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4NucleiPropertiesTableAME03.cc
         G4NucleiPropertiesTheoreticalTableA.cc
         G4NucleiPropertiesTheoreticalTableB.cc
+	G4NuclideTable.cc
+	G4NuclideTable2.cc
+	G4NuclideTable3.cc
         G4PDGCodeChecker.cc
         G4ParticleDefinition.cc
         G4ParticleMessenger.cc
@@ -106,9 +114,9 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4PionRadiativeDecayChannel.cc
         G4PrimaryParticle.cc
         G4PrimaryVertex.cc
-        G4ShortLivedTable.cc
         G4TauLeptonicDecayChannel.cc
         G4VDecayChannel.cc
+        G4VIsotopeTable.cc
         G4VUserPrimaryParticleInformation.cc
         G4VUserPrimaryVertexInformation.cc
     GRANULAR_DEPENDENCIES

@@ -169,7 +169,7 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(const G4Material* mater
   //                                    2 for ions in atomic gases
   //                                    3 for ions in molecular gases
   //                                    4 for ions in solids
-  static G4double b[5][4] = {
+  static const G4double b[5][4] = {
   {0.1014,  0.3700,  0.9642,  3.987},
   {0.1955,  0.6941,  2.522,   1.040},
   {0.05058, 0.08975, 0.1419, 10.80},

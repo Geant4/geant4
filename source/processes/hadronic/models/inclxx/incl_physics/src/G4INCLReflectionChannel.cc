@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -71,7 +69,7 @@ namespace G4INCL {
       const G4double minDeltaP2 = sinMinReflectionAngleSquaredOverFour * newMomentum.mag2();
       if(deltaP2 < minDeltaP2) { // Avoid extremely small reflection angles
         theParticle->setPosition(theParticle->getPosition() * positionScalingFactor);
-        DEBUG("Reflection angle for particle " << theParticle->getID() << " was too tangential: " << std::endl
+        INCL_DEBUG("Reflection angle for particle " << theParticle->getID() << " was too tangential: " << std::endl
             << "  " << deltaP2 << "=deltaP2<minDeltaP2=" << minDeltaP2 << std::endl
             << "  Resetting the particle position to ("
             << theParticle->getPosition().getX() << ", "

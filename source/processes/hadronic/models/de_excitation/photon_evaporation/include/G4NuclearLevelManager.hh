@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NuclearLevelManager.hh 77025 2013-11-20 16:11:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 

@@ -64,6 +64,7 @@ public:
 // Method
 public:
     virtual G4V3DNucleus* GetWoundedNucleus() const;
+    virtual G4V3DNucleus* GetProjectileNucleus() const;  // Uzhi Nov. 2012
     virtual void Init(const G4Nucleus& Nucleus, const G4DynamicParticle& Projectile);
     virtual G4ExcitedStringVector * GetStrings();
     virtual void ModelDescription(std::ostream& outFile) const;

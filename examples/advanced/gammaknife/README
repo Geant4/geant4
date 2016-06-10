@@ -7,16 +7,15 @@
                           --------------------------------------------
 
  AUTHORS:
- G. Cuttone (a), J. Pipek (b) F.Romano* (a,c), M.G.Sabini (d)
+ G. Cuttone (a), J. Pipek (b) F.Romano* (a), M.G.Sabini (c), A. Varisano (a)
 
  PAST AUTHORS:
- G.A.P. Cirrone (a), G.Russo (e), M.Russo (a)
+ G.A.P. Cirrone (a), G.Russo (d), M.Russo (a)
 
  (a) Laboratori Nazionali del Sud - INFN, Catania, Italy
  (b) Faculty of Nuclear Sciences and Physical Engineering, Czech Technical University, Czech Republic
- (c) Centro Studi e Ricerche e Museo Storico della Fisica E.Fermi, Roma, Italy
- (d) UOS Fisica Sanitaria, Ospedale Cannizzaro, Catania, Italy
- (e) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
+ (c) UOS Fisica Sanitaria, Ospedale Cannizzaro, Catania, Italy
+ (d) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
 
 
  *Corresponding author, email to francesco.romano@lns.infn.it
@@ -29,6 +28,9 @@
 The GAMMAKNIFE example is a Geant4 application specifically developed to simulate an advanced device for Stereotactic Radiosurgery. In particular, the example reproduces a Leksell Gamma-Knife unit model C, currently active at the Cannizzaro Hospital in Catania. Gamma-Knife Stereotactic Radiosurgery allows in a single session accurate external irradiations with high dose and sharp dose gradient to minimize radiation doses given to adjacent critical brain structures. The unit consists of a cast iron body containing 201 Co60 sources in a hemispherical arrangement. Beams of gamma radiation, coming from different directions focus through a collimation system at the isocentre, where the target volume is positioned.
 
 This example allows to simulate the main components of a Gamma-Knife unit: the source, collimation system and also a spherical phantom used for routinely measurements. All the four available final collimators are reproduced and its dimension can be changed run-time by a macro command. The energy deposited distribution is computed at the end of the simulation in a voxellized geometry, using scoring mesh. GAMMAKNIFE example exploits original solutions for the sources device simulation, providing a very simple configuration of the geometry and primary events: a single source is, indeed, simulated (instead of 201) and the scoring mesh (placed in a spherical water phantom) is rotated at 201 angles correspondent to the real angular displacement of the sources in the device. This is possible thanks to the symmetry of the source positions respect to the isocentre.
+
+The GAMMAKNIFE example has been recently migrated to multi-thread. Thus, according to the number of cores, you can choose the number of threads using the following command:
+ /run/numberOfThreads <nThread>
 
 The GAMMAKNIFE example contains the following subfolders and files:
 - /src: where source .cc files are stored

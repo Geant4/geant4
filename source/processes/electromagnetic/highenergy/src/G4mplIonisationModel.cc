@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4mplIonisationModel.cc 76600 2013-11-13 08:30:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,10 +59,15 @@
 #include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+
+std::vector<G4double>* G4mplIonisationModel::dedx0 = 0;
 
 G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
@@ -87,7 +92,9 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4mplIonisationModel::~G4mplIonisationModel()
-{}
+{
+  if(IsMaster()) { delete dedx0; }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -110,6 +117,25 @@ void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
 {
   if(!monopole) { SetParticle(p); }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if(IsMaster()) {
+    if(!dedx0) { dedx0 = new std::vector<G4double>; }
+    G4ProductionCutsTable* theCoupleTable=
+      G4ProductionCutsTable::GetProductionCutsTable();
+    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int n = dedx0->size();
+    if(n < numOfCouples) { dedx0->resize(numOfCouples); }
+
+    // initialise vector
+    for(G4int i=0; i<numOfCouples; ++i) {
+
+      const G4Material* material = 
+	theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+      G4double eDensity = material->GetElectronDensity();
+      G4double vF = electron_Compton_length*pow(3*pi*pi*eDensity,0.3333333333);
+      (*dedx0)[i] = pi_hbarc2_over_mc2*eDensity*nmpl*nmpl*
+	(G4Log(2*vF/fine_structure_const) - 0.5)/vF;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -127,7 +153,8 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double beta  = sqrt(beta2);
 
   // low-energy asymptotic formula
-  G4double dedx  = dedxlim*beta*material->GetDensity();
+  //G4double dedx  = dedxlim*beta*material->GetDensity();
+  G4double dedx = (*dedx0)[CurrentCouple()->GetIndex()]*beta;
 
   // above asymptotic
   if(beta > betalow) {
@@ -138,7 +165,8 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
 
     } else {
 
-      G4double dedx1 = dedxlim*betalow*material->GetDensity();
+      //G4double dedx1 = dedxlim*betalow*material->GetDensity();
+      G4double dedx1 = (*dedx0)[CurrentCouple()->GetIndex()]*betalow;
       G4double dedx2 = ComputeDEDXAhlen(material, bg2lim);
 
       // extrapolation between two formula 
@@ -203,13 +231,13 @@ void G4mplIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4mplIonisationModel::SampleFluctuations(
-				       const G4Material* material,
+				       const G4MaterialCutsCouple* couple,
 				       const G4DynamicParticle* dp,
-				       G4double& tmax,
-				       G4double& length,
-				       G4double& meanLoss)
+				       G4double tmax,
+				       G4double length,
+				       G4double meanLoss)
 {
-  G4double siga = Dispersion(material,dp,tmax,length);
+  G4double siga = Dispersion(couple->GetMaterial(),dp,tmax,length);
   G4double loss = meanLoss;
   siga = sqrt(siga);
   G4double twomeanLoss = meanLoss + meanLoss;
@@ -232,8 +260,8 @@ G4double G4mplIonisationModel::SampleFluctuations(
 
 G4double G4mplIonisationModel::Dispersion(const G4Material* material,
 					  const G4DynamicParticle* dp,
-					  G4double& tmax,
-					  G4double& length)
+					  G4double tmax,
+					  G4double length)
 {
   G4double siga = 0.0;
   G4double tau   = dp->GetKineticEnergy()/mass;

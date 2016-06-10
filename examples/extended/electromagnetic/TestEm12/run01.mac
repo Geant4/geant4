@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.7 2009-09-22 15:18:20 maire Exp $
+# $Id: run01.mac 69108 2013-04-18 13:10:10Z gcosmo $
 #
 # limit the step size from histos 1 and 8
 #
@@ -17,11 +17,10 @@
 /gun/particle e-
 /gun/energy 4 MeV
 #
-/testem/histo/setFileName run01
-/testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
-/testem/histo/setHisto 3 100  0.    3. cm	#true track length
-###/testem/histo/setcsdaRange       2.037 cm
-/testem/histo/setHisto 8 120  0.    1.2 none	#normalized edep profile
+/analysis/setFileName run01
+/analysis/h1/set 1 120  0.   2.4 cm	#edep profile
+/analysis/h1/set 3 100  0.    3. cm	#true track length
+/analysis/h1/set 8 120  0.    1.2 none	#normalized edep profile
 #
 /testem/applyAutomaticStepMax true
 #

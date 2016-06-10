@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmMaterial.cc 68030 2013-03-13 13:51:27Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmMaterial.cc
 /// \brief Implementation of the exrdmMaterial class
 //
@@ -42,6 +44,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 exrdmMaterial::exrdmMaterial ()
+ : fMaterialMessenger(0)
 {
   fMaterial.clear();
   fElement.clear();

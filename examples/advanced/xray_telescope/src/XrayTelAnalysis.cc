@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: XrayTelAnalysis.cc 68710 2013-04-05 09:04:21Z gcosmo $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copied from his UserAnalyser class)
 //
 // History:
 // -----------
+// 19 Mar 2013   LP         Migrated to G4tools
 //  8 Nov 2002   GS         Migration to AIDA 3
 //  7 Nov 2001   MGP        Implementation
 //
@@ -49,52 +50,25 @@
 
 XrayTelAnalysis* XrayTelAnalysis::instance = 0;
 
-XrayTelAnalysis::XrayTelAnalysis()
-#ifdef G4ANALYSIS_USE
-  : analysisFactory(0)
-  , tree(0)
-  , histoFactory(0)
-    , tupleFactory(0), h1(0), h2(0), h3(0), h4(0), ntuple(0)
-// #ifdef G4ANALYSIS_USE_PLOTTER
-//   , plotterFactory(0)
-//   , plotter(0)
-// #endif
-#endif
+XrayTelAnalysis::XrayTelAnalysis() : 
+  asciiFile(0)
 {
-#ifdef G4ANALYSIS_USE
   histFileName = "xraytel";
-  histFileType = "hbook";
-#endif
+
 
   asciiFileName="xraytel.out";
-  std::ofstream asciiFile(asciiFileName, std::ios::app);
-  if(asciiFile.is_open()) {
-    asciiFile << "Energy (keV)  x (mm)    y (mm)    z (mm)" << G4endl << G4endl;
-  }
+  asciiFile = new std::ofstream(asciiFileName);
+
+  if(asciiFile->is_open()) 
+    (*asciiFile) << "Energy (keV)  x (mm)    y (mm)    z (mm)" << G4endl << G4endl;  
 }
 
 XrayTelAnalysis::~XrayTelAnalysis()
-{ 
-#ifdef G4ANALYSIS_USE
-
-// #ifdef G4ANALYSIS_USE_PLOTTER
-//   if (plotterFactory) delete plotterFactory;
-//   plotterFactory = 0;
-// #endif
-
-  if (tupleFactory) delete tupleFactory;
-  tupleFactory = 0;
-
-  if (histoFactory) delete histoFactory;
-  histoFactory = 0;
-
-  if (tree) delete tree;
-  tree = 0;
-
-  if (analysisFactory) delete analysisFactory;
-  analysisFactory = 0;
-#endif
+{
+  if (asciiFile)
+    delete asciiFile;
 }
+
 
 XrayTelAnalysis* XrayTelAnalysis::getInstance()
 {
@@ -105,72 +79,46 @@ XrayTelAnalysis* XrayTelAnalysis::getInstance()
 
 void XrayTelAnalysis::book()
 {
-#ifdef G4ANALYSIS_USE
-  //build up  the  factories
-  analysisFactory = AIDA_createAnalysisFactory();
-  if(analysisFactory) {
-    //parameters for the TreeFactory
-    G4bool fileExists = true;
-    G4bool readOnly   = false;
-    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    if(treeFactory) {
-      G4String histFileNameComplete; 
-      histFileNameComplete = histFileName+".hbook";
-      tree = treeFactory->create(histFileNameComplete, "hbook", readOnly, fileExists);
-      G4cout << " Histogramfile: " << histFileNameComplete << G4endl;
-      
-      if (tree) {
-	G4cout << "Tree store : " << tree->storeName() << G4endl;
-	G4cout << "Booked Hbook File " << G4endl;
+  // Get/create analysis manager
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-	//HistoFactory and TupleFactory depend on theTree
-	histoFactory = analysisFactory->createHistogramFactory ( *tree );
-	tupleFactory = analysisFactory->createTupleFactory     ( *tree );
+  // Open an output file
+  G4cout << "Opening output file " << histFileName << " ... ";
+  man->OpenFile(histFileName);
+  man->SetFirstHistoId(1);
+  G4cout << " done" << G4endl;
 
-	// Book histograms
-	h1 = histoFactory->createHistogram1D("1","Energy, all /keV",  100,0.,100.);
-	h2 = histoFactory->createHistogram2D("2","y-z, all /mm", 100,-500.,500.,100,-500.,500.);
-	h3 = histoFactory->createHistogram1D("3","Energy, entering detector /keV", 500,0.,500.);
-	h4 = histoFactory->createHistogram2D("4","y-z, entering detector /mm", 200,-50.,50.,200,-50.,50.);
+  // Book 1D histograms
+  man->CreateH1("1","Energy, all /keV",  100,0.,100.);
+  man->CreateH1("2","Energy, entering detector /keV", 500,0.,500.);
 
-	// Book ntuples
-	ntuple = tupleFactory->create( "10", "Track ntuple", 
-						       "double energy,x,y,z,dirx,diry,dirz" );
-	}
-      delete treeFactory;
-    }
-  }
-#endif
-
+  // Book 2D histograms (notice: the numbering is independent)
+  man->CreateH2("1","y-z, all /mm", 100,-500.,500.,100,-500.,500.); 
+  man->CreateH2("2","y-z, entering detector /mm", 200,-50.,50.,200,-50.,50.);
+  
+  // Book ntuples
+  man->CreateNtuple("10", "Track ntuple");
+  man->CreateNtupleDColumn("energy");
+  man->CreateNtupleDColumn("x");
+  man->CreateNtupleDColumn("y");
+  man->CreateNtupleDColumn("z");
+  man->CreateNtupleDColumn("dirx");
+  man->CreateNtupleDColumn("diry");
+  man->CreateNtupleDColumn("dirz");
+  man->FinishNtuple();
 }
+
 
 void XrayTelAnalysis::finish()
 {
-#ifdef G4ANALYSIS_USE
-  if (tree) {
-    // Committing the transaction with the tree
-    G4cout << "Committing..." << G4endl;
-    // write all histograms to file
-    tree->commit();
+  asciiFile->close();
 
-    G4cout << "Closing the tree..." << G4endl;
-
-    // close (will again commit)
-    tree->close();
-  }
-
-  // extra delete as objects are created in book() method rather than during
-  // initialisation of class
-
-// #ifdef G4ANALYSIS_USE_PLOTTER
-//   if (plotterFactory)  delete plotterFactory;
-// #endif
-
-  if (tupleFactory)    delete tupleFactory;
-  if (histoFactory)    delete histoFactory;
-  if (tree)            delete tree;
-  if (analysisFactory) delete analysisFactory;
-#endif
+  // Save histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+  // Complete clean-up
+  delete G4AnalysisManager::Instance();
 }
 
 void XrayTelAnalysis::analyseStepping(const G4Track& track, G4bool entering)
@@ -184,110 +132,53 @@ void XrayTelAnalysis::analyseStepping(const G4Track& track, G4bool entering)
   dirY = dir.y();
   dirZ = dir.z();
 
-#ifdef G4ANALYSIS_USE
-  // Fill histograms, all tracks
-
-  h1->fill(eKin);  // fill(x,y,weight)
-
-  h2->fill(y,z);
-
+  // Fill histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillH1(1,eKin);
+  man->FillH2(1,y,z);
+  
   // Fill histograms and ntuple, tracks entering the detector
   if (entering) {
     // Fill and plot histograms
+    man->FillH1(2,eKin);
+    man->FillH2(2,y,z);
 
-    h3->fill(eKin);
-
-    h4->fill(y,z);
-// #ifdef G4ANALYSIS_USE_PLOTTER
-//     plotAll();
-// #endif
+    man->FillNtupleDColumn(0,eKin);
+    man->FillNtupleDColumn(1,x);
+    man->FillNtupleDColumn(2,y);
+    man->FillNtupleDColumn(3,z);
+    man->FillNtupleDColumn(4,dirX);
+    man->FillNtupleDColumn(5,dirY);
+    man->FillNtupleDColumn(6,dirZ);
+    man->AddNtupleRow();  
   }
 
-  // Fill ntuple
-  if (entering) {
-    if (ntuple) {
-      // Fill the secondaries ntuple
-      ntuple->fill( ntuple->findColumn( "energy" ), (G4double) eKin );
-      ntuple->fill( ntuple->findColumn( "x"      ), (G4double) x    );
-      ntuple->fill( ntuple->findColumn( "y"      ), (G4double) y    );
-      ntuple->fill( ntuple->findColumn( "z"      ), (G4double) z    );
-      ntuple->fill( ntuple->findColumn( "dirx"   ), (G4double) dirX );
-      ntuple->fill( ntuple->findColumn( "diry"   ), (G4double) dirY );
-      ntuple->fill( ntuple->findColumn( "dirz"   ), (G4double) dirZ );
-
-      ntuple->addRow(); // check for returning true ...
-    } else {
-      G4cout << "Ntuple not found" << G4endl;
-    }
-  }
-
-#endif
 
   // Write to file
   if (entering) {
-    std::ofstream asciiFile(asciiFileName, std::ios::app);
-    if(asciiFile.is_open()) {
-      asciiFile << std::setiosflags(std::ios::fixed)
-		<< std::setprecision(3)
-		<< std::setiosflags(std::ios::right)
-		<< std::setw(10);
-      asciiFile << eKin;
-      asciiFile << std::setiosflags(std::ios::fixed)
-		<< std::setprecision(3)
-		<< std::setiosflags(std::ios::right)
-		<< std::setw(10);
-      asciiFile << x;
-      asciiFile << std::setiosflags(std::ios::fixed)
-		<< std::setprecision(3)
-		<< std::setiosflags(std::ios::right)
-		<< std::setw(10);
-      asciiFile << y;
-      asciiFile << std::setiosflags(std::ios::fixed)
-		<< std::setprecision(3)
-		<< std::setiosflags(std::ios::right)
-		<< std::setw(10);
-      asciiFile << z
-		<< G4endl;
-      asciiFile.close();
+    if(asciiFile->is_open()) {
+      (*asciiFile) << std::setiosflags(std::ios::fixed)
+		   << std::setprecision(3)
+		   << std::setiosflags(std::ios::right)
+		   << std::setw(10);
+      (*asciiFile) << eKin;
+      (*asciiFile) << std::setiosflags(std::ios::fixed)
+		   << std::setprecision(3)
+		   << std::setiosflags(std::ios::right)
+		   << std::setw(10);
+      (*asciiFile) << x;
+      (*asciiFile) << std::setiosflags(std::ios::fixed)
+		   << std::setprecision(3)
+		   << std::setiosflags(std::ios::right)
+		   << std::setw(10);
+      (*asciiFile) << y;
+      (*asciiFile) << std::setiosflags(std::ios::fixed)
+		   << std::setprecision(3)
+		   << std::setiosflags(std::ios::right)
+		   << std::setw(10);
+      (*asciiFile) << z
+		   << G4endl;
     }
   }
-
 }
-
-// #ifdef G4ANALYSIS_USE_PLOTTER
-// void XrayTelAnalysis::plotAll()
-// {
-//   if (!plotter) {
-//     AIDA::IPlotterFactory* plotterFactory = 
-//       analysisFactory->createPlotterFactory();
-//     if(plotterFactory) {
-//       G4cout << "Creating the Plotter" << G4endl;
-//       plotter = plotterFactory->create();
-//       if(plotter) {
-// 	// Map the plotter on screen :
-// 	G4cout << "Showing the Plotter on screen" << G4endl;
-// 	plotter->show();
-//       } else {
-// 	G4cout << "XrayTelAnalysis::plotAll: WARNING: Plotter not created" << G4endl;
-//       }
-//       delete plotterFactory;
-//     } else {
-//       G4cout << "XrayTelAnalysis::plotAll: WARNING: Plotter Factory not created" << G4endl;
-//     }
-//   }
-
-//   if (plotter) {
-//     plotter->createRegions(2,1,0);
-//     AIDA::IHistogram1D* hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("3") );
-//     AIDA::IHistogram1D& h  = *hp;  
-//     (plotter->currentRegion()).plot(h);
-//     plotter->refresh();
-//     plotter->setCurrentRegionNumber(1);
-//     AIDA::IHistogram1D* hp2 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("1") );
-//     AIDA::IHistogram1D& h2  = *hp2;  
-//     (plotter->currentRegion()).plot(h2);
-//     plotter->refresh();
-//   }
-// }
-// #endif
 

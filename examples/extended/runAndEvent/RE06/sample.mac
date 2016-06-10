@@ -1,0 +1,27 @@
+/control/verbose 2
+/run/initialize
+/RE06/verbose 2 
+/run/dumpRegion
+/run/beamOn 10 
+#
+#
+/RE06/numberOfLayers 4
+/run/setCutForRegion Calor-A 1 mm
+/run/setCutForRegion Calor-B 1 mm
+/run/setCutForRegion Calor-C 1 mm
+/run/dumpRegion
+/run/beamOn 10 
+#
+#
+/RE06/setGapMat Water
+/run/dumpRegion
+/run/beamOn 10 
+
+/RE06/AddMaterial
+/RE06/setAbsMat Tungsten 
+/run/setCutForRegion Calor-A 0.01 mm
+/run/setCutForRegion Calor-B 0.1 mm
+/run/setCutForRegion Calor-C 1 mm
+/run/dumpRegion
+/run/beamOn 10
+

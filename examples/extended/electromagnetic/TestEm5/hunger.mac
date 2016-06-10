@@ -1,4 +1,4 @@
-# $Id: hunger.mac,v 1.3 2007-07-31 16:51:29 maire Exp $
+# $Id: hunger.mac 76464 2013-11-11 10:22:56Z gcosmo $
 #
 # macro file for TestEm5.cc    
 #
@@ -25,6 +25,6 @@
 #
 ###/testem/stepMax 1 um
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 # 
 /run/beamOn 100000

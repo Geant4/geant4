@@ -1,0 +1,359 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_basket
+#define tools_wroot_basket
+
+#include "ibo"
+#include "key"
+#include "buffer"
+
+namespace tools {
+namespace wroot {
+
+class basket : public virtual ibo, public key {
+  static uint32 START_BIG_FILE() {return 2000000000;}
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::basket");
+    return s_v;
+  }
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TBasket");
+    return s_v;
+  }
+  virtual bool stream(buffer& a_buffer) const {
+    // in principle we pass here only for the last basket
+    // of a branch when it is streamed from branch::stream().
+
+    // some consitency checks :
+    //G.Barrand : the below test is "too much". Someone
+    //            may have to write a tree (and then a basket)
+    //            which had been never filled.
+    //            Moreover with the today branch code, a
+    //              basket.write_on_file()
+    //            happens only in a branch.fill() that deletes
+    //            the basket just after the call. 
+  //if(!m_data.length()) {
+  //  // to be sure to not work on a basket already written
+  //  // with write_on_file()
+  //  m_file.out() << "tools::wroot::basket::stream :" 
+  //               << " m_data.length() is null."
+  //               << std::endl;
+  //  return false;
+  //}
+    if(m_seek_key) {
+      m_file.out() << "tools::wroot::basket::stream :" 
+                   << " m_seek_key is not null."
+                   << std::endl;
+      return false;
+    }
+    if(m_last) {
+      m_file.out() << "tools::wroot::basket::stream :" 
+                   << " m_last is not null."
+                   << std::endl;
+      return false;
+    }
+    if(!m_entry_offset) {
+      m_file.out() << "tools::wroot::basket::stream :" 
+                   << " m_entry_offset is null."
+                   << std::endl;
+      return false;
+    }
+
+   {uint32 last = m_data.length()+m_key_length;
+    if(last>m_last) {
+      const_cast<basket&>(*this).m_last = last;
+    }}
+    if(m_last>m_buf_size) {
+      const_cast<basket&>(*this).m_buf_size = m_last;
+    }
+
+    char flag = 11;
+    if(m_displacement)  flag += 40;
+    if(!_stream_header(a_buffer,flag)) return false;
+
+    if(m_entry_offset && m_nev) {
+      if(!a_buffer.write_array(m_entry_offset,m_nev)) return false;
+      if(m_displacement) {
+        if(!a_buffer.write_array(m_displacement,m_nev)) return false;
+      }
+    }
+ 
+    if(m_data.to_displace()) {
+      //NOTE : how / when handle the displacements ?
+      m_file.out() << "tools::wroot::basket::stream :" 
+                   << " WARNING : m_data buffer has offsets to displace."
+                   << std::endl;
+      //if(!const_cast<basket&>(*this).m_data.displace_mapped(m_key_length))
+      //  return false; //???
+    }
+
+    buffer bref(m_file.out(),m_file.byte_swap(),256);
+    if(!_stream_header(bref)) return false; //then header stored twice !
+    //if(bref.length()!=m_key_length) {}
+    if(!bref.write_fast_array(m_data.buf(),m_data.length())) return false;
+    if(!a_buffer.write_fast_array(bref.buf(),bref.length())) return false;
+
+    return true;
+  }
+public:
+  basket(ifile& a_file,
+                seek a_seek_parent_dir,
+                const std::string& a_object_name,
+                const std::string& a_object_title,
+                const std::string& a_object_class,
+                uint32 a_basket_size)
+  :key(a_file,a_seek_parent_dir,
+       a_object_name,a_object_title,a_object_class,0)
+  ,m_data(a_file.out(),a_file.byte_swap(),a_basket_size)
+  ,m_nev_buf_size(1000)
+  ,m_nev(0)
+  ,m_last(0)
+  ,m_entry_offset(0)
+  ,m_displacement(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+
+    m_key_length = header_record_size(m_version);
+    initialize(0);
+
+    if(m_nev_buf_size) m_entry_offset = new uint32[m_nev_buf_size];
+  }
+  virtual ~basket(){
+    delete [] m_entry_offset;
+    delete [] m_displacement;
+    m_entry_offset = 0;
+    m_displacement = 0;
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  basket(const basket& a_from)
+  :ibo(a_from)
+  ,key(a_from)
+  ,m_data(m_file.out(),m_file.byte_swap(),256)
+  ,m_nev_buf_size(a_from.m_nev_buf_size)
+  ,m_nev(a_from.m_nev)
+  ,m_last(a_from.m_last)
+  ,m_entry_offset(0)
+  ,m_displacement(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  basket& operator=(const basket& a_from){
+    key::operator=(a_from);
+    m_nev_buf_size = a_from.m_nev_buf_size;
+    m_nev = a_from.m_nev;
+    m_last = a_from.m_last;
+    return *this;
+  }
+public:
+  buffer& datbuf() {return m_data;}
+
+  bool update(uint32 a_offset) {
+    if(m_entry_offset) {
+      if((m_nev+1)>=m_nev_buf_size) { //why +1 ?
+        uint32 newsize = mx<uint32>(10,2*m_nev_buf_size);
+        if(!realloc<uint32>(m_entry_offset,newsize,m_nev_buf_size,true)){
+          m_file.out() << "tools::wroot::basket::update : realloc failed."
+                << std::endl;
+          return false;
+        }
+        if(m_displacement) {
+          if(!realloc<int>(m_displacement,newsize,m_nev_buf_size,true)){
+            m_file.out() << "tools::wroot::basket::update : realloc failed."
+                  << std::endl;
+            return false;
+          }
+        }
+
+        m_nev_buf_size = newsize;
+
+        // Update branch only for the first 10 baskets
+        //if (fBranch.writeBasket() < 10) 
+        //  fBranch.setEntryOffsetLength(newsize);
+      }
+      m_entry_offset[m_nev] = a_offset;
+
+      //if (skipped!=offset && !m_displacement){
+      //  m_displacement = new int[m_nevSize];
+      //  for(int i=0;i<m_nev_buf_size;i++)
+      //     m_displacement[i] = m_entry_offset[i];
+      //}
+      //if (m_displacement) {
+      //  m_displacement[m_nev] = skipped;
+      //  fBufferRef->setDisplacement(skipped);
+      //}
+
+    }
+    m_nev++;
+    return true;
+  }
+
+  bool write_on_file(uint16 a_cycle,uint32& a_nbytes) {
+    // write m_data buffer into file.
+    //NOTE : m_data does not contain the key at its head.
+    //       At this point m_seek_key should be 0.
+
+    a_nbytes = 0;
+
+    if(m_seek_key) {
+      m_file.out() << "tools::wroot::basket::write_on_file :" 
+                   << " m_seek_key should be 0."
+                   << std::endl;
+      return false;
+    }
+
+    if(m_version>1000) {
+    } else {
+      if(m_file.END()>START_BIG_FILE()) {
+        //GB : enforce m_version>1000 if m_version is still 2 but
+        //     seek_key>START_BIG_FILE. If not doing that we shall
+        //     write a big m_seek_key on a seek32 and then have
+        //     a problem when reading.
+  
+        //m_file.out() << "tools::wroot::basket::write_on_file : " 
+        //             << " WARNING : pos>START_BIG_FILE."
+        //             << std::endl;
+
+        m_version += 1000;
+        m_key_length += 8;
+  
+        if(m_entry_offset) {
+          for(uint32 i=0;i<m_nev;i++) m_entry_offset[i] += 8;
+          if(m_displacement) {
+            //??? Do we have to shift them ?
+            m_file.out() << "tools::wroot::basket::write_on_file : " 
+                         << " displace logic : m_displacement not null."
+                         << std::endl;
+          }
+        }
+  
+      }
+    }
+
+    // Transfer m_entry_offset table at the end of fBuffer. Offsets to fBuffer
+    // are transformed in entry length to optimize compression algorithm.
+    m_last = m_key_length+m_data.length();
+    if(m_entry_offset) {
+      if(!m_data.write_array<uint32>(m_entry_offset,m_nev+1)) { //GB : why +1 ?
+        delete [] m_entry_offset; 
+        m_entry_offset = 0;
+        return false;
+      }
+      delete [] m_entry_offset; 
+      m_entry_offset = 0;
+      if(m_displacement) {
+        if(!m_data.write_array<int>(m_displacement,m_nev+1)) {
+          delete [] m_displacement; 
+          m_displacement = 0;
+          return false;
+        }
+        delete [] m_displacement; 
+        m_displacement = 0;
+      }
+    }
+    
+    m_object_size = m_data.length(); //uncompressed size.
+
+    m_cycle = a_cycle;
+
+    if(!m_data.displace_mapped(m_key_length)) return false;
+
+    char* kbuf = 0;
+    uint32 klen = 0;
+    bool kdelete = false;
+    m_file.compress_buffer(m_data,kbuf,klen,kdelete);
+
+    if(klen>m_object_size) {
+      m_file.out() << "tools::wroot::basket::write_on_file :" 
+                   << " compression anomaly "
+                   << " m_object_size " << m_object_size
+                   << " klen " << klen
+                   << std::endl;
+      if(kdelete) delete [] kbuf;
+      return false;
+    }
+
+    if(!initialize(klen)) { //it will do a file.set_END()
+      m_file.out() << "tools::wroot::basket::write_on_file :" 
+                   << " initialize() failed." 
+                   << std::endl;
+      if(kdelete) delete [] kbuf;
+      return false;
+    }
+
+    //write header of the key :
+   {buffer bref(m_file.out(),m_file.byte_swap(),256);
+    if(!_stream_header(bref)) return false;
+    if(bref.length()!=m_key_length) {
+      m_file.out() << "tools::wroot::basket::write_on_file :" 
+                   << " key len anomaly " << bref.length()
+                   << " m_key_length " << m_key_length
+                   << std::endl;
+      if(kdelete) delete [] kbuf;
+      return false;
+    }
+    ::memcpy(m_buffer,bref.buf(),m_key_length);}
+
+    ::memcpy(m_buffer+m_key_length,kbuf,klen);
+    if(kdelete) delete [] kbuf;
+    
+    uint32 nbytes;
+    if(!key::write_file(nbytes)) return false;
+  
+    m_data.pos() = m_data.buf(); //empty m_data.
+
+    a_nbytes = m_key_length + klen;
+    return true;
+  }
+protected:
+  uint32 header_record_size(uint32 a_version) const {
+    // header only.
+    uint32 nbytes = key::record_size(a_version);
+
+    nbytes += sizeof(short);   //version
+    nbytes += sizeof(uint32); //m_buf_size
+    nbytes += sizeof(uint32); //m_nev_buf_size
+    nbytes += sizeof(uint32); //m_nev
+    nbytes += sizeof(uint32); //m_last
+    nbytes += sizeof(char);   //flag
+
+    return nbytes;
+  }
+  bool _stream_header(buffer& a_buffer,char a_flag = 0) const {
+   {uint32 l = key::record_size(m_version);
+    if((a_buffer.length()+l)>a_buffer.size()) {
+      if(!a_buffer.expand(a_buffer.size()+l)) return false;
+    }
+    wbuf wb(m_file.out(),m_file.byte_swap(),a_buffer.max_pos(),a_buffer.pos());
+    if(!key::to_buffer(wb)) return false;}
+
+    if(!a_buffer.write_version(2)) return false;
+    if(!a_buffer.write(m_buf_size)) return false;
+    if(!a_buffer.write(m_nev_buf_size)) return false;
+    if(!a_buffer.write(m_nev)) return false;
+    if(!a_buffer.write(m_last)) return false;
+    if(!a_buffer.write(a_flag)) return false;
+    return true;
+  }
+protected:
+  buffer m_data;
+protected:
+  uint32 m_nev_buf_size;  //Length in Int_t of m_entry_offset
+  uint32 m_nev;           //Number of entries in basket
+  uint32 m_last;          //Pointer to last used byte in basket
+  uint32* m_entry_offset; //[m_nev] Offset of entries in fBuffer(TKey)
+  int* m_displacement; //![m_nev] Displacement of entries in fBuffer(TKey)
+};
+
+}}
+
+#endif

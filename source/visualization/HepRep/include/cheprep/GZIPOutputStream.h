@@ -8,7 +8,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: GZIPOutputStream.h,v 1.3 2005-06-02 21:28:45 duns Exp $
+ * @version $Id: GZIPOutputStream.h 66373 2012-12-18 09:41:34Z gcosmo $
  */
 namespace cheprep {
 

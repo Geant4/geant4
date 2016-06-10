@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4KleinNishinaModel.cc 74309 2013-10-03 06:42:30Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,10 +57,17 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4AtomicShells.hh"
 #include "G4LossTableManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+
+static const G4double
+    d1= 2.7965e-1*barn, d2=-1.8300e-1*barn, d3= 6.7527   *barn, d4=-1.9798e+1*barn,
+    e1= 1.9756e-5*barn, e2=-1.0205e-2*barn, e3=-7.3913e-2*barn, e4= 2.7079e-2*barn,
+    f1=-3.9178e-7*barn, f2= 6.8241e-5*barn, f3= 6.0480e-5*barn, f4= 3.0274e-4*barn;     
 
 G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
   : G4VEmModel(nam)
@@ -86,8 +93,16 @@ void G4KleinNishinaModel::Initialise(const G4ParticleDefinition* p,
 				     const G4DataVector& cuts)
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-  InitialiseElementSelectors(p, cuts);
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4KleinNishinaModel::InitialiseLocal(const G4ParticleDefinition*,
+					  G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -103,11 +118,6 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 
   static const G4double a = 20.0 , b = 230.0 , c = 440.0;
   
-  static const G4double
-    d1= 2.7965e-1*barn, d2=-1.8300e-1*barn, d3= 6.7527   *barn, d4=-1.9798e+1*barn,
-    e1= 1.9756e-5*barn, e2=-1.0205e-2*barn, e3=-7.3913e-2*barn, e4= 2.7079e-2*barn,
-    f1=-3.9178e-7*barn, f2= 6.8241e-5*barn, f3= 6.0480e-5*barn, f4= 3.0274e-4*barn;
-     
   G4double p1Z = Z*(d1 + e1*Z + f1*Z*Z), p2Z = Z*(d2 + e2*Z + f2*Z*Z),
            p3Z = Z*(d3 + e3*Z + f3*Z*Z), p4Z = Z*(d4 + e4*Z + f4*Z*Z);
 
@@ -115,20 +125,20 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   if (Z < 1.5) { T0 = 40.0*keV; } 
 
   G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
-  xSection = p1Z*std::log(1.+2.*X)/X
+  xSection = p1Z*G4Log(1.+2.*X)/X
                + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
 		
   //  modification for low energy. (special case for Hydrogen)
   if (GammaEnergy < T0) {
     G4double dT0 = keV;
     X = (T0+dT0) / electron_mass_c2 ;
-    G4double sigma = p1Z*log(1.+2*X)/X
+    G4double sigma = p1Z*G4Log(1.+2*X)/X
                     + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
     G4double   c1 = -T0*(sigma-xSection)/(xSection*dT0);             
     G4double   c2 = 0.150; 
-    if (Z > 1.5) { c2 = 0.375-0.0556*log(Z); }
-    G4double    y = log(GammaEnergy/T0);
-    xSection *= exp(-y*(c1+c2*y));          
+    if (Z > 1.5) { c2 = 0.375-0.0556*G4Log(Z); }
+    G4double    y = G4Log(GammaEnergy/T0);
+    xSection *= G4Exp(-y*(c1+c2*y));          
   }
 
   if(xSection < 0.0) { xSection = 0.0; }
@@ -173,7 +183,7 @@ void G4KleinNishinaModel::SampleSecondaries(
   G4double bindingEnergy, ePotEnergy, eKinEnergy;
   G4double gamEnergy0, gamEnergy1;
 
-  //static const G4double eminus2 =  1.0 - exp(-2.0);
+  //static const G4double eminus2 =  1.0 - G4Exp(-2.0);
 
   do {
     //++nloop;
@@ -193,7 +203,7 @@ void G4KleinNishinaModel::SampleSecondaries(
     //   << G4endl;
 
     // for rest frame of the electron
-    G4double x = -log(G4UniformRand());
+    G4double x = -G4Log(G4UniformRand());
     eKinEnergy = bindingEnergy*x;
     ePotEnergy = bindingEnergy*(1.0 + x);
 
@@ -223,12 +233,12 @@ void G4KleinNishinaModel::SampleSecondaries(
 
     G4double eps0       = 1./(1 + 2*E0_m);
     G4double epsilon0sq = eps0*eps0;
-    G4double alpha1     = - log(eps0);
+    G4double alpha1     = - G4Log(eps0);
     G4double alpha2     = 0.5*(1 - epsilon0sq);
 
     do {
       if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) {
-	epsilon   = exp(-alpha1*G4UniformRand());   // epsilon0**r
+	epsilon   = G4Exp(-alpha1*G4UniformRand());   // epsilon0**r
 	epsilonsq = epsilon*epsilon; 
 
       } else {
@@ -299,6 +309,7 @@ void G4KleinNishinaModel::SampleSecondaries(
   } else { eKinEnergy = 0.0; }
 
   G4double edep = energy - gamEnergy1 - eKinEnergy;
+  G4double esec = 0.0;
   
   // sample deexcitation
   //
@@ -313,14 +324,44 @@ void G4KleinNishinaModel::SampleSecondaries(
       size_t nafter = fvect->size();
       if(nafter > nbefore) {
 	for (size_t j=nbefore; j<nafter; ++j) {
-	  edep -= ((*fvect)[j])->GetKineticEnergy();
+	  G4double e = ((*fvect)[j])->GetKineticEnergy();
+	  if(esec + e > edep) {
+	    /*   
+	    G4cout << "### G4KleinNishinaModel Edep(eV)= " << edep/eV 
+		   << " Esec(eV)= " << esec/eV 
+		   << " E["<< j << "](eV)= " << e/eV
+		   << " N= " << nafter
+		   << " Z= " << Z << " shell= " << i 
+		   << "  Ebind(keV)= " << bindingEnergy/keV 
+		   << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
+		   << G4endl;
+	    */
+	    for (size_t jj=j; jj<nafter; ++jj) { delete (*fvect)[jj]; }
+	    for (size_t jj=j; jj<nafter; ++jj) { fvect->pop_back(); }
+	    break;	      
+	  }
+	  esec += e;
 	} 
       }
+      edep -= esec;
     }
   }
+  if(fabs(energy - gamEnergy1 - eKinEnergy - esec - edep) > eV) {
+    G4cout << "### G4KleinNishinaModel dE(eV)= " 
+	   << (energy - gamEnergy1 - eKinEnergy - esec - edep)/eV 
+	   << " shell= " << i 
+	   << "  E(keV)= " << energy/keV 
+	   << "  Ebind(keV)= " << bindingEnergy/keV 
+	   << "  Eg(keV)= " << gamEnergy1/keV 
+	   << "  Ee(keV)= " << eKinEnergy/keV 
+	   << "  Esec(keV)= " << esec/keV 
+	   << "  Edep(keV)= " << edep/keV 
+	   << G4endl;
+  }
   // energy balance
-  if(edep < 0.0) { edep = 0.0; }
-  fParticleChange->ProposeLocalEnergyDeposit(edep);
+  if(edep > 0.0) { 
+    fParticleChange->ProposeLocalEnergyDeposit(edep);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -46,14 +44,14 @@
 
 namespace G4INCL {
 
-  class KinematicsUtils {
-  public:
-    static void transformToLocalEnergyFrame(Nucleus const * const n, Particle * const p);
-    static G4double getLocalEnergy(Nucleus const * const n, Particle * const p);
+  namespace KinematicsUtils {
 
-    static ThreeVector makeBoostVector(Particle const * const p1, Particle const * const p2);
-    static G4double totalEnergyInCM(Particle const * const p1, Particle const * const p2);
-    static G4double squareTotalEnergyInCM(Particle const * const p1, Particle const * const p2);
+    void transformToLocalEnergyFrame(Nucleus const * const n, Particle * const p);
+    G4double getLocalEnergy(Nucleus const * const n, Particle * const p);
+
+    ThreeVector makeBoostVector(Particle const * const p1, Particle const * const p2);
+    G4double totalEnergyInCM(Particle const * const p1, Particle const * const p2);
+    G4double squareTotalEnergyInCM(Particle const * const p1, Particle const * const p2);
 
     /** \brief gives the momentum in the CM frame of two particles.
      *
@@ -67,9 +65,9 @@ namespace G4INCL {
      * \return the absolute value of the momentum of any of the two particles in
      * the CM frame, in MeV/c.
      */
-    static G4double momentumInCM(Particle const * const p1, Particle const * const p2);
+    G4double momentumInCM(Particle const * const p1, Particle const * const p2);
 
-    static G4double momentumInCM(const G4double E, const G4double M1, const G4double M2);
+    G4double momentumInCM(const G4double E, const G4double M1, const G4double M2);
 
     /** \brief gives the momentum in the lab frame of two particles.
      *
@@ -83,14 +81,15 @@ namespace G4INCL {
      * \return the absolute value of the momentum of particle 1 in the lab frame,
      * in MeV/c
      */
-    static G4double momentumInLab(Particle const * const p1, Particle const * const p2);
-    static G4double momentumInLab(const G4double s, const G4double m1, const G4double m2);
-    static G4double sumTotalEnergies(const ParticleList &);
-    static ThreeVector sumMomenta(const ParticleList &);
-    static G4double energy(const ThreeVector &p, const G4double m);
-    static G4double invariantMass(const G4double E, const ThreeVector & p);
-    static G4double gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin);
-  };
+    G4double momentumInLab(Particle const * const p1, Particle const * const p2);
+    G4double momentumInLab(const G4double s, const G4double m1, const G4double m2);
+    G4double sumTotalEnergies(const ParticleList &);
+    ThreeVector sumMomenta(const ParticleList &);
+    G4double energy(const ThreeVector &p, const G4double m);
+    G4double invariantMass(const G4double E, const ThreeVector & p);
+    G4double squareInvariantMass(const G4double E, const ThreeVector & p);
+    G4double gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin);
+  }
 }
 
 #endif

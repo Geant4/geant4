@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2006-05-08 12:28:20 gcosmo Exp $
+$Id: History 69579 2013-05-08 13:53:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 30th, 2013, M. Verderi (gflash-V09-06-02)
+--------------------------
+- Replace CLHEP::RandXXX by G4RandXXX for thread safety in
+       src/GFlashSamplingShowerParameterisation.cc
+       src/GFlashHomoShowerParameterisation.cc
+
+Apr 11th, 2013, G.Cosmo (gflash-V09-06-01)
+-----------------------
+- Removed unnecessary thread-local specification in
+  GVFlashShowerParameterisation::gam().
+
+Feb 27th, 2013, M.Verderi (gflash-V09-06-00)
+-------------------------
+- Fix warning compilation in clang from GFlashShowerModelMessenger.hh about
+  unused data member.
+
 Jul 5th, 2012 G.Cosmo (gflash-V09-05-00)
 ---------------------
 - Explicitly use inclusion of headers for system of units and physical
@@ -24,14 +40,11 @@ Jul 5th, 2012 G.Cosmo (gflash-V09-05-00)
 
 Nov 3rd, 2011 M.Verderi (gflash-V09-04-02)
 -----------------------
-- fix compilation warnings in
-  GFlashHomoShowerParameterisation.cc:152
-  GFlashSamplingShowerParameterisation.cc:144
-  due to respectiveley deletion of
+- Fix compilation warnings in GFlashHomoShowerParameterisation.cc
+  GFlashSamplingShowerParameterisation.cc due to respectiveley deletion of
       GVFlashHomoShowerTuning
       GFlashSamplingShowerTuning
   which have no virtual destructor.
-
   Empty constructor and destructor added to these (utility) classes.
 
 Sep 20th, 2011 M.Verderi (gflash-V09-04-01)

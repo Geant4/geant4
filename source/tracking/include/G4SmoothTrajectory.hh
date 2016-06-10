@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SmoothTrajectory.hh 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -47,20 +47,23 @@ class G4SmoothTrajectory;
 #ifndef G4SmoothTrajectory_h
 #define G4SmoothTrajectory_h 1
 
+#include <stdlib.h>                   // Include from 'system'
+#include <vector>
+
+#include "trkgdefs.hh"
 #include "G4VTrajectory.hh"
 #include "G4Allocator.hh"
-#include <stdlib.h>                 // Include from 'system'
-#include "G4ios.hh"               // Include from 'system'
-#include <vector>            // G4RWTValOrderedVector
-#include "globals.hh"               // Include from 'global'
-#include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
-#include "G4SmoothTrajectoryPoint.hh"     // Include from 'tracking'
+#include "G4ios.hh"                   // Include from 'system'
+#include "globals.hh"                 // Include from 'global'
+#include "G4ParticleDefinition.hh"    // Include from 'particle+matter'
+#include "G4SmoothTrajectoryPoint.hh" // Include from 'tracking'
 #include "G4Track.hh"
 #include "G4Step.hh"
 
-class G4Polyline;                   // Forward declaration.
+class G4Polyline;                     // Forward declaration
 
 typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
+
 class G4SmoothTrajectory : public G4VTrajectory
 {
 
@@ -104,8 +107,7 @@ public:
 
 // Other member functions
    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-   //virtual void DrawTrajectory() const;
-   virtual void DrawTrajectory(G4int i_mode = 0) const;
+   virtual void DrawTrajectory() const;
    virtual void AppendStep(const G4Step* aStep);
    virtual int GetPointEntries() const { return positionRecord->size(); }
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
@@ -133,22 +135,19 @@ public:
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
-#endif
+extern G4TRACKING_DLL G4ThreadLocal
+G4Allocator<G4SmoothTrajectory> *aSmoothTrajectoryAllocator;
 
 inline void* G4SmoothTrajectory::operator new(size_t)
 {
-  void* aTrajectory;
-  aTrajectory = (void*)aSmoothTrajectoryAllocator.MallocSingle();
-  return aTrajectory;
+  if (!aSmoothTrajectoryAllocator)
+  { aSmoothTrajectoryAllocator = new G4Allocator<G4SmoothTrajectory>; }
+  return (void*)aSmoothTrajectoryAllocator->MallocSingle();
 }
 
 inline void G4SmoothTrajectory::operator delete(void* aTrajectory)
 {
-  aSmoothTrajectoryAllocator.FreeSingle((G4SmoothTrajectory*)aTrajectory);
+  aSmoothTrajectoryAllocator->FreeSingle((G4SmoothTrajectory*)aTrajectory);
 }
 
 #endif

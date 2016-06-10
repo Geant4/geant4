@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01PhysicsList class
 //
 //
-// $Id$
+// $Id: ExP01PhysicsList.hh 71111 2013-06-11 10:51:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,10 +50,10 @@ class ExP01PhysicsList: public G4VUserPhysicsList
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
  
-    void SetCuts();
+    virtual void SetCuts();
 
    
   protected:

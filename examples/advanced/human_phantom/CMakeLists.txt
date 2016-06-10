@@ -20,17 +20,19 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-#----------------------------------------------------------------------------
-# Find gdml (optional package)
-#
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-find_package(gdml QUIET)
-if(GDML_FOUND)
-  message(STATUS "G4 Examples: gdml found. --> human_phantom example with gdml enabled.") 
-  # Uncomment this line if suitable (some customization may be needed)
-  add_definitions(-DG4LIB_USE_GDML)   
+# Setup of ROOT ANALYSIS : optional. 
+option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
+if(WITH_ANALYSIS_USE)
+add_definitions(-DANALYSIS_USE)
 else()
-  message(STATUS "G4 Examples: gdml not found. --> human_phantom example with gdml disabled.")
+endif()
+
+#----------------------------------------------------------------------------
+# Setup of GDML : optional. 
+option(WITH_GDML_USE "Build example with GDML" OFF)
+if(WITH_GDML_USE)
+add_definitions(-DG4LIB_USE_GDML)
+else()
 endif()
 
 #----------------------------------------------------------------------------
@@ -54,7 +56,7 @@ target_link_libraries(phantom ${Geant4_LIBRARIES} ${GDML_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(human_phantom_SCRIPTS
-    adultHead.mac adultMIRDFemale.mac adultMIRDMale.mac adultMIXFemale.mac adultORNLFemale.mac adultORNLMale.mac batch.mac dawnVis.mac default.mac noVis.mac openGLVis.mac run.mac vrmlVis.mac
+    adultHead.mac adultMIRDFemale.mac adultMIRDMale.mac adultMIXFemale.mac adultORNLFemale.mac adultORNLMale.mac batch.mac dawnVis.mac default.mac openGLVis.mac vrmlVis.mac primary.mac macro.C 
   )
 
 foreach(_script ${human_phantom_SCRIPTS})

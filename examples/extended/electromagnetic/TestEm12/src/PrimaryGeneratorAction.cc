@@ -26,14 +26,13 @@
 /// \file electromagnetic/TestEm12/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 73024 2013-08-15 09:11:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "DetectorConstruction.hh"
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
@@ -46,8 +45,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:fDetector(det)                                               
+PrimaryGeneratorAction::PrimaryGeneratorAction()
+:G4VUserPrimaryGeneratorAction(),                                               
+ fParticleGun(0),
+ fRndmBeam(0),
+ fGunMessenger(0)
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle

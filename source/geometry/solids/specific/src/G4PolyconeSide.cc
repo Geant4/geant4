@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PolyconeSide.cc 70648 2013-06-03 15:15:16Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -48,6 +48,23 @@
 
 #include "Randomize.hh"
 
+// This static member is thread local. For each thread, it points to the
+// array of G4PlSideData instances.
+//
+template <class G4PlSideData> G4ThreadLocal
+         G4PlSideData* G4GeomSplitter<G4PlSideData>::offset = 0;
+
+// This new field helps to use the class G4PlSideManager.
+//
+G4PlSideManager G4PolyconeSide::subInstanceManager;
+
+// Returns the private data instance manager.
+//
+const G4PlSideManager& G4PolyconeSide::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
+
 //
 // Constructor
 //
@@ -64,10 +81,13 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                                       G4bool isAllBehind )
   : ncorners(0), corners(0)
 {
+
+  instanceID = subInstanceManager.CreateSubInstance();
+
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea = 0.0;
-  fPhi.first = G4ThreeVector(0,0,0);
-  fPhi.second= 0.0;
+  G4MT_pcphi.first = G4ThreeVector(0,0,0);
+  G4MT_pcphi.second= 0.0;
 
   //
   // Record values
@@ -161,7 +181,7 @@ G4PolyconeSide::G4PolyconeSide( __void__& )
   : startPhi(0.), deltaPhi(0.), phiIsOpen(false), allBehind(false),
     cone(0), rNorm(0.), zNorm(0.), rS(0.), zS(0.), length(0.),
     prevRS(0.), prevZS(0.), nextRS(0.), nextZS(0.), ncorners(0), corners(0),
-    kCarTolerance(0.), fSurfaceArea(0.)
+    kCarTolerance(0.), fSurfaceArea(0.), instanceID(0)
 {
   r[0] = r[1] = 0.;
   z[0] = z[1] = 0.;
@@ -186,6 +206,8 @@ G4PolyconeSide::~G4PolyconeSide()
 G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
   : G4VCSGface(), ncorners(0), corners(0)
 {
+  instanceID = subInstanceManager.CreateSubInstance();
+
   CopyStuff( source );
 }
 
@@ -872,15 +894,15 @@ G4double G4PolyconeSide::GetPhi( const G4ThreeVector& p )
 {
   G4double val=0.;
 
-  if (fPhi.first != p)
+  if (G4MT_pcphi.first != p)
   {
     val = p.phi();
-    fPhi.first = p;
-    fPhi.second = val;
+    G4MT_pcphi.first = p;
+    G4MT_pcphi.second = val;
   }
   else
   {
-    val = fPhi.second;
+    val = G4MT_pcphi.second;
   }
   return val;
 }

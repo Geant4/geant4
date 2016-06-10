@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VPersistencyManager.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 
 #include "G4VPersistencyManager.hh"
 
-G4VPersistencyManager* G4VPersistencyManager::fPersistencyManager = 0;
+G4ThreadLocal G4VPersistencyManager* G4VPersistencyManager::fPersistencyManager = 0;
 
 G4VPersistencyManager* G4VPersistencyManager::GetPersistencyManager()
 {

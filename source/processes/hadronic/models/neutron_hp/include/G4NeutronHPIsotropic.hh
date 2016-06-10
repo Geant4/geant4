@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPIsotropic_h
 #define G4NeutronHPIsotropic_h 1
@@ -45,7 +44,7 @@ class G4NeutronHPIsotropic : public G4VNeutronHPEnergyAngular
   
   public:
   
-  void Init(std::ifstream & aDataFile);
+  void Init(std::istream & aDataFile);
   G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
   G4double MeanEnergyOfThisInteraction()
   {

@@ -34,6 +34,7 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
+#include <cstdio>
 #include <algorithm> // For using sort on a vector
 #include <X11/keysym.h>
 
@@ -564,10 +565,8 @@ void G4OpenInventorXtExaminerViewer::superimpositionEvent(SoAction * action)
       if (refParticleIdx < (int) refParticleTrajectory.size() - 1) {
          this->curInfoFont->size.setValue(16);
          this->curInfoFont->name.setValue("defaultFont:Bold");
-
          char zPos[20];
          sprintf(zPos, "%7.2f [m]", refZPositions[refParticleIdx] / 1000);
-
          this->curInfoText->string.setValue(SbString(zPos));
       }
    }
@@ -2386,8 +2385,9 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
 
    // Shell Dialog
    std::string dialogNameStr = This->fileName.substr(This->fileName.rfind('/') + 1);
-   char *dialogName = new char[dialogNameStr.size() + 1];
-   strcpy(dialogName, dialogNameStr.c_str());
+   const int nDialog = dialogNameStr.size() + 1;
+   char *dialogName = new char[nDialog];
+   strncpy(dialogName, dialogNameStr.c_str(), nDialog);
 
    n = 0;
    XtSetArg(args[n], XmNx, 610);	n++;
@@ -3031,8 +3031,9 @@ void G4OpenInventorXtExaminerViewer::getViewPtNameCB(Widget w,
    }
 
    if (!nameExists) {
-      name = new char[This->MAX_VP_NAME + 1];
-      strcpy(name, strName.c_str());
+      const int nVPName = This->MAX_VP_NAME + 1;
+      name = new char[nVPName];
+      strncpy(name, strName.c_str(), nVPName);
       if (This->viewPtIdx == -1)
          This->viewPtIdx = 0;
       This->saveViewPt(name);
@@ -4195,8 +4196,9 @@ void G4OpenInventorXtExaminerViewer::renameBookmarkCB(Widget,
    int beg = vpNameStr.find_first_not_of(' '); // Remove leading/trailing spaces
    int end = vpNameStr.find_last_not_of(' ');
    vpNameStr = vpNameStr.substr(beg, end - beg + 1);
-   vpName = new char[vpNameStr.size() + 1];
-   strcpy(vpName, vpNameStr.c_str());
+   const int nVPName = vpNameStr.size() + 1;
+   vpName = new char[nVPName];
+   strncpy(vpName, vpNameStr.c_str(), nVPName);
 
    int size = This->viewPtList.size();
    for (int i = 0; i < size; i++) {
@@ -4258,8 +4260,9 @@ void G4OpenInventorXtExaminerViewer::sortBookmarksCB(Widget,
       // viewPtIdx has to be changed to account for a different order in viewPtList
       if (!strcmp(charList[i].c_str(), This->curViewPtName))
          This->viewPtIdx = i;
-      char *vpName2 = new char[charList[i].size() + 1];
-      strcpy(vpName2, charList[i].c_str());
+      const int nVPName = charList[i].size() + 1;
+      char *vpName2 = new char[nVPName];
+      strncpy(vpName2, charList[i].c_str(), nVPName);
       newStrList[i] = XmStringCreateLocalized(vpName2);
       delete vpName2;
    }

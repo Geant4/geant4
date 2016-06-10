@@ -26,14 +26,13 @@
 /// \file electromagnetic/TestEm12/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.cc 73024 2013-08-15 09:11:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 
-#include "DetectorConstruction.hh"
 #include "RunAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
@@ -42,15 +41,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
-                               PrimaryGeneratorAction* kin, HistoManager* histo)
-:fDetector(det), fRunAction(run), fKinematic(kin), fHistoManager(histo)
+TrackingAction::TrackingAction(RunAction* run,
+                               PrimaryGeneratorAction* kin)
+:G4UserTrackingAction(),
+ fRunAction(run), fKinematic(kin)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
+ // histograms
+ //
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+ 
  G4int trackID = track->GetTrackID();
   
  //track length of primary particle or charged secondaries
@@ -58,9 +62,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  G4double tracklen = track->GetTrackLength();
  if (trackID == 1) {
     fRunAction->AddTrackLength(tracklen);
-    fHistoManager->FillHisto(3, tracklen);
+    analysisManager->FillH1(3, tracklen);
  } else if (track->GetDefinition()->GetPDGCharge() != 0.)
-    fHistoManager->FillHisto(6, tracklen);
+    analysisManager->FillH1(6, tracklen);
            
  //extract projected range of primary particle
  //
@@ -68,7 +72,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
    G4double pr = (track->GetPosition())*
                  (fKinematic->GetParticleGun()->GetParticleMomentumDirection());
    fRunAction->AddProjRange(pr);
-   fHistoManager->FillHisto(5, pr);
+   analysisManager->FillH1(5, pr);
  }
             
  //mean step size of primary particle

@@ -32,7 +32,7 @@
 //| Table of Atomic Mass Excess |
 //+-----------------------------+
 // unit: MeV
-G4double G4NucleiPropertiesTheoreticalTable::AtomicMassExcess
+const G4double G4NucleiPropertiesTheoreticalTable::AtomicMassExcess
         [G4NucleiPropertiesTheoreticalTable::nEntries] = {
  -4.84, -0.17, -2.62,  2.56,  2.57,  8.20, 10.41, 17.72, 22.14, 30.93,
  36.75, 46.58, 53.73, 65.03, 72.83, 82.30, 91.32,104.63,113.70,  1.90,
@@ -939,7 +939,7 @@ G4double G4NucleiPropertiesTheoreticalTable::AtomicMassExcess
 //|        indexArray[0][ ] --> Z                              |
 //|        indexArray[1][ ] --> A                              |
 //+------------------------------------------------------------+
-G4int G4NucleiPropertiesTheoreticalTable::indexArray[2][G4NucleiPropertiesTheoreticalTable::nEntries] = {
+const G4int G4NucleiPropertiesTheoreticalTable::indexArray[2][G4NucleiPropertiesTheoreticalTable::nEntries] = {
   // ---------- Z ----------
   {
   8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
@@ -2751,7 +2751,7 @@ G4int G4NucleiPropertiesTheoreticalTable::indexArray[2][G4NucleiPropertiesTheore
 //   For each Z value shortTable[Z-1] has the index of 
 //   the 1st occurrence in the indexArray[][]
 
-G4int G4NucleiPropertiesTheoreticalTable::shortTable[G4NucleiPropertiesTheoreticalTable::shortTableSize] =
+const G4int G4NucleiPropertiesTheoreticalTable::shortTable[G4NucleiPropertiesTheoreticalTable::shortTableSize] =
 {
     0,   19,   41 ,  65,   91,  119,  150,  183,  218,  255, 
   294,  335,  377,  421,  466,  513,  561,  610,  660,  711, 

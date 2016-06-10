@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EnergyLossMessenger.hh 74376 2013-10-04 08:25:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -110,6 +110,7 @@ private:
   G4UIcmdWithAString*        pixeeXsCmd;
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
+  G4UIcmdWithAnInteger*      ver2Cmd;
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lamCmd;
   G4UIcmdWithADouble*        lllCmd;

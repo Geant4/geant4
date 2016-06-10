@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLXmFourArrowButtons.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //Four arrow buttons class. Inherits from G4OpenGLXmVWidgetComponent
 
@@ -40,6 +40,9 @@
 #include "globals.hh"
 
 G4OpenGLXmFourArrowButtons::G4OpenGLXmFourArrowButtons (XtCallbackRec** c)
+: arrow_form(0)
+, arrow(0)
+, parent(0)
 {
   callback = c;
 }

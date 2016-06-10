@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:11:16 bmorgan Exp $
+# $Id: sources.cmake 77241 2013-11-22 09:55:47Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -23,6 +23,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
@@ -45,6 +46,7 @@ GEANT4_DEFINE_MODULE(NAME G4tracking
     HEADERS
         G4AdjointCrossSurfChecker.hh
         G4AdjointSteppingAction.hh
+        G4AdjointTrackingAction.hh
         G4RichTrajectory.hh
         G4RichTrajectoryPoint.hh
         G4SmoothTrajectory.hh
@@ -60,9 +62,11 @@ GEANT4_DEFINE_MODULE(NAME G4tracking
         G4VSteppingVerbose.hh
         G4VTrajectory.hh
         G4VTrajectoryPoint.hh
+        trkgdefs.hh
     SOURCES
         G4AdjointCrossSurfChecker.cc
         G4AdjointSteppingAction.cc
+        G4AdjointTrackingAction.cc
         G4RichTrajectory.cc
         G4RichTrajectoryPoint.cc
         G4SmoothTrajectory.cc

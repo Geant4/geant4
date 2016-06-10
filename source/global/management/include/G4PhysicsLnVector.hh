@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsLnVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -43,6 +43,7 @@
 //    27 Apr. 1999, M.G. Pia: Created, copying from G4PhysicsLogVector 
 //    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //    16 Aug. 2011  H.Kurashige : Move dBin, baseBin to the base class
+//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method
 //
 //--------------------------------------------------------------------
 
@@ -66,7 +67,7 @@ class G4PhysicsLnVector : public G4PhysicsVector
       // Because of logarithmic scale, note that 'theEmin' has to be 
       // greater than zero. No protection exists against this error.
 
-    ~G4PhysicsLnVector();
+    virtual ~G4PhysicsLnVector();
       // Destructor.
 
     virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
@@ -76,10 +77,6 @@ class G4PhysicsLnVector : public G4PhysicsVector
       // Scale all values of the vector and second derivatives
       // by factorV, energies by vectorE. 
 
-  protected:
-
-    virtual size_t FindBinLocation(G4double theEnergy) const;
-      // Find bin# in which theEnergy belongs - pure virtual function.
 };
 
 #endif

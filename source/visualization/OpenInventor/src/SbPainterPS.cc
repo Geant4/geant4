@@ -57,7 +57,6 @@ SbPainterPS::SbPainterPS(
 :fDeviceWidth((8.5-1.) * 72. * METAFILE_SCALE) /* 540. * METAFILE_SCALE */
 ,fDeviceHeight(11.     * 72. * METAFILE_SCALE) /* 792. * METAFILE_SCALE */
 ,fPageNumber(0)
-,fPagePos(0)
 ,fMarkerSize(2.)
 ,fFile(NULL)
 ,fFileName(NULL)
@@ -72,6 +71,7 @@ SbPainterPS::SbPainterPS(
   fParams.nbit = 2;
   fParams.doBack = 1;
   fParams.lineWidth = -1.;
+  fBufferPointer[0] = '\0';
 #ifdef WIN32
   ::setlocale(LC_NUMERIC,"USA");
 #endif

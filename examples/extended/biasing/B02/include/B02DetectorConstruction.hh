@@ -27,7 +27,7 @@
 /// \brief Definition of the B02DetectorConstruction class
 //
 //
-// $Id$
+// $Id: B02DetectorConstruction.hh 77475 2013-11-25 09:38:51Z gcosmo $
 //
 
 #ifndef B02DetectorConstruction_hh
@@ -35,9 +35,11 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-
+#include <vector>
 class G4VPhysicalVolume;
-class G4IStore;
+class G4LogicalVolume;
+class G4VIStore;
+class G4VWeightWindowStore;
 
 class B02DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -45,19 +47,30 @@ public:
   B02DetectorConstruction();
   ~B02DetectorConstruction();
   
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
+
+  G4VIStore* CreateImportanceStore();
+    // create an importance store, caller is responsible for deleting it
+
+  G4VWeightWindowStore *CreateWeightWindowStore();
+    // create an weight window  store, caller is responsible for 
+    // deleting it
 
   G4VPhysicalVolume* GetWorldVolume();
-  G4VPhysicalVolume& GetWorldVolumeAddress() const;
-
-  //  G4String GetCellName(G4int i);
 
   void SetSensitive();
 
+  //  virtual void ConstructSDandField();
+
+  inline G4VIStore* GetGeomStore(){return aIstore;};
+
 private:
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
 
-  G4VPhysicalVolume* pWorldVolume;
+  G4VPhysicalVolume* fWorldVolume;
 
+  G4VIStore *aIstore;
 
 };
 

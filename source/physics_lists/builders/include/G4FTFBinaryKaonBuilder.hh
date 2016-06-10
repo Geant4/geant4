@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryKaonBuilder.hh 54715 2011-11-11 16:16:06Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4FTFBinaryKaonBuilder.hh 68750 2013-04-05 10:19:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -70,6 +69,7 @@ class G4FTFBinaryKaonBuilder : public G4VKaonBuilder
     virtual void Build(G4KaonZeroSInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
@@ -79,9 +79,8 @@ class G4FTFBinaryKaonBuilder : public G4VKaonBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
 
-    G4VCrossSectionDataSet* theKaonData;
     G4double theMin;
-
+    G4double theMax;
 };
 
 #endif

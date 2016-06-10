@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DynamicParticle.icc 72152 2013-07-11 12:49:58Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -34,11 +34,7 @@
 //                             17 AUg. 1999   H.Kurashige  
 // ------------------------------------------------------------
 
-#if defined G4PARTICLES_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
-#endif
+extern G4PART_DLL G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator;
 
 // ------------------------
 // Inlined operators
@@ -46,14 +42,14 @@
 
 inline void * G4DynamicParticle::operator new(size_t)
 {
-  void * aDynamicParticle;
-  aDynamicParticle = (void *) aDynamicParticleAllocator.MallocSingle();
-  return aDynamicParticle;
+  if (!pDynamicParticleAllocator) pDynamicParticleAllocator =
+    new G4Allocator<G4DynamicParticle>;
+  return pDynamicParticleAllocator->MallocSingle();
 }
 
 inline void G4DynamicParticle::operator delete(void * aDynamicParticle)
 {
-  aDynamicParticleAllocator.FreeSingle((G4DynamicParticle *) aDynamicParticle);
+  pDynamicParticleAllocator->FreeSingle((G4DynamicParticle *) aDynamicParticle);
 }
 
 // ------------------------
@@ -102,8 +98,6 @@ inline void    G4DynamicParticle::RemoveElectron(G4int orbit, G4int number)
     theDynamicalMass -= GetElectronMass() * n;
   }
 }
-
- 
 
 inline G4double G4DynamicParticle::GetCharge() const
 {
@@ -158,7 +152,7 @@ inline void G4DynamicParticle::SetMass(G4double newMass)
 
 inline const G4ThreeVector& G4DynamicParticle::GetMomentumDirection() const
 {
-  return theMomentumDirection;
+ return theMomentumDirection;
 }
 
 inline G4ThreeVector G4DynamicParticle::GetMomentum() const
@@ -172,7 +166,7 @@ inline G4ThreeVector G4DynamicParticle::GetMomentum() const
 }
 
 inline  G4LorentzVector  G4DynamicParticle::Get4Momentum() const
-{       
+{
   G4double mass      = theDynamicalMass;
   G4double energy    = theKineticEnergy;
   G4double momentum  = std::sqrt(energy*energy+2.0*mass*energy);
@@ -250,7 +244,7 @@ inline void G4DynamicParticle::SetProperTime(G4double atime)
 }
 
 inline const G4DecayProducts* G4DynamicParticle::GetPreAssignedDecayProducts() const
-{ 
+{
   return thePreAssignedDecayProducts;
 }
 
@@ -306,10 +300,3 @@ void G4DynamicParticle::SetPDGcode(G4int c)
 {
   thePDGcode = c;
 }
-
-
-
-
-
-
-

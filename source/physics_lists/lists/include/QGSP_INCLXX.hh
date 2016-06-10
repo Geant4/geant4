@@ -23,77 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: QGSP_INCLXX.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   QGSP_INCLXX
 //
-// Author: 2011 P. Kaitaniemi
-//
-// Modified:
-// D. Mancusi 23.03.2012 Extended INCL++ to incident heavy ions up to 16O
+// Author: 04.03.2013 D. Mancusi
+//   For backwards-compatible inclusion
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TQGSP_INCLXX_h
-#define TQGSP_INCLXX_h 1
+#ifndef QGSP_INCLXX_h
+#define QGSP_INCLXX_h 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
+#include "INCLXXPhysicsListHelper.hh"
+typedef TINCLXXPhysicsListHelper<G4VModularPhysicsList,false,false> QGSP_INCLXX;
 
-#include "globals.hh"
-#include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
-
-/**
- * <h1>Physics list QGSP_INCLXX</h1>
- *
- * <h2>Use case</h2>
- * This list is mainly intended for use with energies less than 3
- * GeV. This is useful for e.g. spallation studies and Accelerator
- * Driven Systems (ADS) applications.
- *
- * <h2>Usage</h2>
- * The physics list can be activated in a simulation application by
- * giving it as part of the user initialization to the run manager:
- * @code
- * G4RunManager *runManager = new G4RunManager;
- * G4VUserPhysicsList *physics = new QGSP_INCLXX;
- * runManager->SetUserInitialization(physics);
- * @endcode
- *
- * <h2>Hadronic models</h2>
- * The list uses INCL++ intra-nuclear cascade model in the energy range 0 - 3
- * GeV. Between 3 - 15 GeV Bertini cascade is used and above 15 GeV the high
- * energy QGSP model.
- *
- * @see HadronPhysicsQGSP_INCLXX
- * @see G4INCLXXProtonBuilder
- * @see G4INCLXXNeutronBuilder
- * @see G4INCLXXPiKBuilder
- * @see G4IonINCLXXPhysics
- */
-template<class T>
-class TQGSP_INCLXX: public T
-{
-public:
-  TQGSP_INCLXX(G4int ver = 1);
-  virtual ~TQGSP_INCLXX();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
-};
-
-#include "QGSP_INCLXX.icc"
-typedef TQGSP_INCLXX<G4VModularPhysicsList> QGSP_INCLXX;
-
-// 2011 by P. Kaitaniemi
-
-#endif
-
-
+#endif // QGSP_INCLXX_h
 

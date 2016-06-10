@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomPhysicsList.hh 73076 2013-08-16 07:45:30Z gcosmo $
+//
 /// \file medical/DICOM/include/DicomPhysicsList.hh
 /// \brief Definition of the DicomPhysicsList class
 //
-// $Id$
 
 #ifndef DicomPhysicsList_h
 #define DicomPhysicsList_h 1
@@ -49,16 +50,16 @@ private:
   
 protected:
   
-  void ConstructParticle();
+  virtual void ConstructParticle();
   void ConstructBosons();
   void ConstructLeptons();
   void ConstructBaryons();
 
-  void ConstructProcess();
+  virtual void ConstructProcess();
   void ConstructEM();
   void ConstructHad();
   void ConstructGeneral();
-  void SetCuts();
+  virtual void SetCuts();
   
 };
 #endif

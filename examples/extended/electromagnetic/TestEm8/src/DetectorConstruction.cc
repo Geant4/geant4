@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68198 2013-03-18 16:39:51Z maire $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -38,6 +38,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 // 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
@@ -69,11 +70,14 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::DetectorConstruction(PrimaryGeneratorAction* p)
-  : fPhysWorld(0), fLogicWorld(0), fLogicWind(0), fLogicDet(0),
-    fTargetSD(0), fRegGasDet(0), fPrimaryGenerator(p)
+  : G4VUserDetectorConstruction(), 
+    fGasMat(0), fWindowMat(0), fWorldMaterial(0),
+    fPhysWorld(0), fLogicWorld(0), fLogicWind(0), fLogicDet(0),
+    fDetectorMessenger(0), fTargetSD(0), fGasDetectorCuts(0),
+    fRegGasDet(0), fPrimaryGenerator(p)
 {
   fGasThickness = 23.0*mm;
   fGasRadius    = 10.*cm;
@@ -92,7 +96,7 @@ DetectorConstruction::DetectorConstruction(PrimaryGeneratorAction* p)
   fGasDetectorCuts->SetProductionCut(cut,"proton");
 }
 
-//////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::~DetectorConstruction()
 { 
@@ -100,7 +104,7 @@ DetectorConstruction::~DetectorConstruction()
   delete fGasDetectorCuts;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::DefineMaterials()
 { 
@@ -225,7 +229,7 @@ void DetectorConstruction::DefineMaterials()
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
-/////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
@@ -258,22 +262,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
          << fWindowThick/mm << "mm of " << fWindowMat->GetName() << G4endl;
   G4cout << " The TARGET is made of " 
          << fGasThickness/mm << "mm of " << fGasMat->GetName() ;
-  G4cout << ", the transverse size (R) is " << fGasRadius/mm << " mm. " << G4endl;
+  G4cout << ", the transverse size (R) is " << fGasRadius/mm << " mm. " 
+         << G4endl;
   G4cout << G4endl;
       
   // World
   G4Tubs* SolidWorld = new G4Tubs("World",                             
                                   0.,worldSizeR,worldSizeZ/2.,0.,CLHEP::twopi);
                    
-  fLogicWorld = new G4LogicalVolume(SolidWorld, fWorldMaterial, "World");                
+  fLogicWorld = new G4LogicalVolume(SolidWorld, fWorldMaterial, "World");
                                    
   fPhysWorld = new G4PVPlacement(0,                        //no rotation
                                    G4ThreeVector(0.,0.,0.),     
                                  "World", 
                                  fLogicWorld,
-                                 0,                        //its mother  volume
-                                 false,                        //no boolean operation
-                                 0);                        //copy number
+                                 0,                       //its mother  volume
+                                 false,                   //no boolean operation
+                                 0);                      //copy number
 
   // Window
   G4Tubs* wind = new G4Tubs("Absorber",                
@@ -281,15 +286,18 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   fLogicWind = new G4LogicalVolume(wind, fWindowMat, "Window"); 
 
-  G4PVPlacement* PhysWind = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "Window", 
-                                              fLogicWind, fPhysWorld, false, 0);                
+  G4PVPlacement* PhysWind = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
+                                          "Window",  fLogicWind,
+					  fPhysWorld, false, 0);
                                         
   // Detector volume
-  G4Tubs* det = new G4Tubs("Gas", 0., fGasRadius, fGasThickness/2., 0., CLHEP::twopi);  
+  G4Tubs* det = new G4Tubs("Gas", 0., fGasRadius, fGasThickness/2.,
+                                  0., CLHEP::twopi); 
 
   fLogicDet = new G4LogicalVolume(det, fGasMat, "Gas"); 
 
-  new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "Gas", fLogicDet, PhysWind, false, 0);
+  new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "Gas", fLogicDet, PhysWind,
+                                                       false, 0);
 
   fRegGasDet->AddRootLogicalVolume(fLogicDet);
 
@@ -315,7 +323,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   return fPhysWorld;
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetGasMaterial(const G4String& name)
 {
@@ -335,7 +343,7 @@ void DetectorConstruction::SetGasMaterial(const G4String& name)
   }
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetContainerMaterial(const G4String& name)
 {
@@ -355,7 +363,7 @@ void DetectorConstruction::SetContainerMaterial(const G4String& name)
   }
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetWorldMaterial(const G4String& name)
 {
@@ -375,7 +383,7 @@ void DetectorConstruction::SetWorldMaterial(const G4String& name)
   }
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetGasThickness(G4double val)
 {
@@ -385,7 +393,7 @@ void DetectorConstruction::SetGasThickness(G4double val)
   }
 }  
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetGasRadius(G4double val)
 {
@@ -395,7 +403,7 @@ void DetectorConstruction::SetGasRadius(G4double val)
   }
 }  
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetContainerThickness(G4double val)
 {
@@ -405,7 +413,7 @@ void DetectorConstruction::SetContainerThickness(G4double val)
   }
 }  
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetPairEnergy(G4double val)
 {
@@ -414,4 +422,4 @@ void DetectorConstruction::SetPairEnergy(G4double val)
   }
 }
 
-////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLXmRadioButton.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //Radio button class. Inherits from G4OpenGLXmVWidgetComponent
 
@@ -42,6 +42,8 @@ G4OpenGLXmRadioButton::G4OpenGLXmRadioButton (const char* n,
 					      XtCallbackRec* c,
 					      G4bool d,
 					      G4int num) 
+: button(0)
+, parent(0)
 {
   name = n;
   callback = c;

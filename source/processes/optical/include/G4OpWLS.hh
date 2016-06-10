@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpWLS.hh 71487 2013-06-17 08:19:40Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Definition
@@ -108,6 +108,9 @@ public:
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable' only for an optical photon.
+
+        void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
+        // Build table at a right time
 
         G4double GetMeanFreePath(const G4Track& aTrack,
                                  G4double ,

@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2008-11-02 10:34:15 maire Exp $
+$Id: History 68749 2013-04-05 10:15:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+01-04-13 A.Dotti (electromagnetic-V09-06-00,electromagnetic-V09-06-01)
+- Collect tags needed for new physics list APIs needed for MT
 
 16-11-12 I. Hrivnacova (electromagnetic-V09-05-00)
 - Updated documentation:

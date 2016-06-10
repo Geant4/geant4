@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DecayTable.cc 69015 2013-04-15 09:46:48Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -61,7 +61,7 @@ void G4DecayTable::Insert( G4VDecayChannel * aChannel){
   if (parent == 0) { parent = (G4ParticleDefinition*)(aChannel->GetParent()); }
   if (parent != aChannel->GetParent()) {
 #ifdef G4VERBOSE
-    G4cerr << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) "
+    G4cout << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) "
            << "       " << parent->GetParticleName()
            << " input:" << aChannel->GetParent()->GetParticleName() << G4endl;
 #endif

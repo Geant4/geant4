@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSPhysicsList.cc 68020 2013-03-13 13:34:15Z gcosmo $
+//
 /// \file eventgenerator/exgps/src/exGPSPhysicsList.cc
 /// \brief Implementation of the exGPSPhysicsList class
 //
+
 #include "exGPSPhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"

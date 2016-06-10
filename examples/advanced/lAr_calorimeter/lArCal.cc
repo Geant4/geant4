@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: lArCal.cc 67976 2013-03-13 10:23:17Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -53,15 +53,10 @@
 #include "FCALSteppingVerbose.hh"
 #include "FCALPrimaryGeneratorAction.hh"
 #include "G4PhysListFactory.hh"
-
-
-#ifdef G4ANALYSIS_USE
-
 #include "FCALRunAction.hh"
 #include "FCALTBEventAction.hh"
 #include "FCALSteppingAction.hh"
 
-#endif
 
 
 int main(int argc,char** argv) {
@@ -91,8 +86,6 @@ int main(int argc,char** argv) {
   // set user action classes
   runManager->SetUserAction(new FCALPrimaryGeneratorAction());
 
-#ifdef G4ANALYSIS_USE
-
   FCALRunAction* RunAction = new FCALRunAction;
   runManager ->SetUserAction(RunAction);
 
@@ -103,8 +96,6 @@ int main(int argc,char** argv) {
   
   runManager->SetUserAction(new FCALTBEventAction(StepAction));
   
-  
-#endif
 
   //Initialize G4 kernel
   runManager->Initialize();

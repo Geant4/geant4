@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ContinuumGammaDeexcitation.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -103,7 +103,7 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition()
   //     of the right discrete ones (when excitation energy is slightly 
   //     over maximum discrete  energy): changed
   //  G4double tolerance = 10*eV;
-  const G4double tolerance = CLHEP::keV;
+  static const G4double tolerance = CLHEP::keV;
 
   if (_transition == 0) 
     {

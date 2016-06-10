@@ -74,8 +74,8 @@ G4double G4VhElectronicStoppingPower::HeEffChargeSquare(
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
 
-  static G4double c[6] = {0.2865,  0.1266, -0.001429,
-                          0.02402,-0.01135, 0.001475} ;
+  static const G4double c[6] = {0.2865,  0.1266, -0.001429,
+				0.02402,-0.01135, 0.001475} ;
 
   G4double e = std::log( std::max( 1.0, kineticEnergyHe/(keV*GetHeMassAMU()))) ; 
   G4double x = c[0] ;

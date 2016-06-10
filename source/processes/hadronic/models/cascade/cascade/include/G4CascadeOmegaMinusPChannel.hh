@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
+// $Id: G4CascadeOmegaMinusPChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // Author:  D.H. Wright (SLAC)
@@ -42,7 +42,7 @@
 
 struct G4CascadeOmegaMinusPChannelData {
   typedef G4CascadeData<31,4,18,55,76,20,34> data_t;
-  static data_t data;
+  static const data_t data;
 };
 
 typedef G4CascadeFunctions<G4CascadeOmegaMinusPChannelData,G4KaonHypSampler> G4CascadeOmegaMinusPChannel;

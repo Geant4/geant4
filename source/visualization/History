@@ -1,4 +1,4 @@
-$Id: History,v 1.495 2010-12-27 13:28:38 allison Exp $
+$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,259 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+23rd November 2013  Joseph Perl  (vis-V09-06-37)
+- opengl-V09-06-11: Fixes for Qt
+- opengl-V09-06-10: Fixes for Qt
+- VRML-V09-06-05: Some changes as suggested by PVS
+- raytracer-V09-06-07: Some changes as suggested by PVS and Coverity
+- modeling-V09-06-22: Some changes as suggested by PVS
+- vistree-V09-06-01: Some changes as suggested by PVS
+- DAWN-V09-06-06: Some changes as suggested by PVS
+- visman-V09-06-27: Fix for end-of-run action accumulate
+- visman-V09-06-26: Fix for smooth trajectories in MT mode
+
+9th November 2013  Joseph Perl  (vis-V09-06-36)
+- visman-V09-06-25 Command parameter updates
+- DAWN-V09-06-05 Replaced deprecated calls to solids accessor methods
+- VRML-V09-06-04 Replaced deprecated calls to solids accessor methods
+
+7th November 2013 Laurent Garnier
+- opengl-V09-06-09:
+  o Fix the JIRA-Dev28 problem : Text displays in wrong position in Qt
+
+7th November 2013  John Allison
+- visman-V09-06-24: /vis/scene/add/date: Change positioning.
+
+7th November 2013  John Allison  (vis-V09-06-35)
+- visman-V09-06-23: Fix compilation error.
+
+6th November 2013  John Allison  (vis-V09-06-34)
+- modeling-V09-06-21: Tidying.
+- visman-V09-06-22: Further improvements to parameter guidance.
+
+4th November 2013  John Allison  (vis-V09-06-33)
+- visman-V09-06-21:
+  o Fixes event keeping for MT mode when end-of-event-action is "refresh".
+
+3rd November 2013  John Allison  (vis-V09-06-32)
+- visman-V09-06-20:
+  o Further improvements to event keeping and informationals.
+
+2nd November 2013  John Allison
+- visman-V09-06-19: Fixed event keeping in MT mode.
+
+1st November 2013  John Allison  (vis-V09-06-31)
+- Needs geom-specific-V09-06-22 and geomdiv-V09-06-04.
+- modeling-V09-06-20: Make use of G4GenericPolycone in G4ArrowModel.
+- visman-V09-06-18:
+  o Printing brought under control of verbosity flag.
+  o /vis/touchable/set/colour and several other commands:
+    . Parameter guidance may be called only once. So instances of
+      multiple calls to parameter guidance have been eliminated.
+      Any extended information that was in parameter guidance has
+      been moved to command guidance. This fixes a problem whereby
+      guidance information was being lost and fixes a crash in the
+      GAG interface.
+- opengl-V09-06-08: Lots of changes for Wt and OpenGL2 (Laurent).
+
+30th September 2013  John Allison  (vis-V09-06-30)
+- modeling-V09-06-19: Re-tagged after clean-up by Gunter and Mike.
+
+27th September 2013  Michael Kelsey  (vis-V09-06-29)
+- modeling-V09-06-18
+  o Try to resolve SVN "modified" warnings due to 'Id' string use.
+
+25th September 2013  John Allison  (vis-V09-06-28)
+- visman-V09-06-17:
+  o Vis commands are *not* be broadcast to threads.
+  o Fix crash in EndOfEvent for batch MT mode.
+
+24th September 2013  John Allison  (vis-V09-06-27)
+- visman-V09-06-16:
+  o /vis/reviewKeptEvents: Keep enabled state (ConcreteInstance pointer).
+  o Implemented IgnoreStateChanges.
+  o MT mode: Implemented maxNumberOfKeptEvents.
+
+21st September 2013  John Allison  (vis-V09-06-26)
+- modeling-V09-06-17: Fix compiler warnings.
+
+20th September 2013  John Allison  (vis-V09-06-25 needs greps-V09-06-11)
+- modeling-V09-06-16:
+  o G4MagneticFieldModel:
+  - Added $Id functionality.
+  - Allowed for scene with extent not necessarily equal in x, y and z.
+- visman-V09-06-15
+  o First implementation of multithreading visualisation:
+  o Drawing from user code is explicitly ignored.
+  o Events are kept until end of run, then drawn:
+    - this could mean a huge consumption of memory.
+    - to avoid this, "/vis/disable".
+  o Some debug statements remain for testing.
+- visman-V09-06-14 (M.Asai)
+  o Implementing IgnoreStateChanges() to be invoked from RayTracer and
+    other utilities that have their own event loop.
+- visman-V09-06-13 (M.Asai)
+  o Introducing G4VisManager::SetUpForAThread(). This method is invoked
+    by G4WorkerRunManager so that G4VisManager will get noticed at the
+    end of event of each worker thread.
+- raytracer-V09-06-02 to raytracer-V09-06-06:
+  o Developments for multithreading (M.Asai)
+  o Needs greps-V09-06-11.
+
+30th August 2013  John Allison  (vis-V09-06-24)
+- modeling-V09-06-15: - GNUmakefile: Added geometry/magneticfield/include.
+
+29th August 2013  John Allison  (vis-V09-06-23)
+- modeling-V09-06-14: Fixed a corrupted file (SVN glitch?).
+
+27th August 2013  John Allison  (vis-V09-06-22)
+- modeling-V09-06-13:
+  o G4MagneticFieldModel: Removed diagnostic print statements.
+
+26th August 2013  John Allison
+- modeling-V09-06-12:
+  o G4MagneticFieldModel: Variable no. of data points per half scene.
+- visman-V09-06-12:
+  o /vis/scene/add/magneticField:
+    . Added integer parameter: No. of data points per half scene.
+
+25th August 2013  John Allison
+- modeling-V09-06-11: G4MagneticFieldModel: Bug fix.
+
+24th August 2013  John Allison  (vis-V09-06-21)
+- visman-V09-06-11 and modeling-V09-06-09 (coworking)
+  o Removed G4FlavoredParallelWorldModel.
+
+18th August 2013  John Allison (vis-V09-06-20 requires greps-V09-06-06)
+- modeling-V09-06-08: Added skeleton G4MagneticFieldModel.
+- visman-V09-06-10: Added /vis/scene/add/magneticField.
+
+30th July 2013  John Allison  (vis-V09-06-19)
+- visman-V09-06-09: Fixes Bugs 1499 and 1503.
+
+17th June 2013  John Allison  (vis-V09-06-18)
+- gMocren-V09-06-06: Reverted snprintf to sprintf.
+  o snprintf not in cstdlib on Windows.
+  o Mark as "intentional" on next Coverity analysis.
+
+17th June 2013  John Allison  (vis-V09-06-17)
+- opengl-V09-06-06:
+  o Improvements for Wt and Qt5.
+  o Skeleton (null effect) implementation of GetPrivateVisAttributesModifiers.
+
+16th June 2013  Makoto Asai
+- raytracer-V09-06-01:
+  o Make G4RayTrajectory and G4RayTrajectoryPoint classes thread safe.
+
+16th June 2013  John Allison
+- modeling-V09-06-07: Small bug fix.
+- vis-HepRep-V09-06-06: Keep Coverity happy.
+
+15th June 2013  Akinori Kimura
+- gMocren-V09-06-05: Fixed warnings of Coverity.
+
+10th June 2013  John Allison
+- modeling-V09-06-06: G4ModelingParameters:
+  o Replaced PVNameCopyNoPathNotEqual by appropriate operator!=.
+  o Replaced VAMSNotEqual by appropriate operator!=.
+- visman-V09-06-07: G4ViewParameters.cc:
+  o Migrated to modeling-V09-06-06.
+
+10th June 2013  John Allison
+- visman-V09-06-06: G4VViewer:
+  o Added new virtual function:
+    virtual const std::vector<G4ModelingParameters::VisAttributesModifier>*
+    GetPrivateVisAttributesModifiers() const;
+    // So that privately accumulated vis attributes modifiers may be
+    // concatenated with the standard vis attributes modifiers for commands
+    // such as /vis/viewer/set/all and /vis/viewer/save.
+
+4th June 2013  John Allison  (vis-V09-06-16)
+- gMocren-V09-06-04 (Akinori Kimura): Fixed Coverity warnings.
+
+3rd June 2013  John Allison  (vis-V09-06-15)
+- visexternal-V09-06-04: One more try at compiling on Windows!
+
+2nd June 2013  John Allison  (vis-V09-06-14)
+- visexternal-V09-06-03:
+  o G4OpenGL2PSAction.cc: Added #include <cstdlib> and <cstring>.
+
+30th May 2013  John Allison  (vis-V09-06-13)
+- visexternal-V09-06-02: G4OpenGL2PSAction.cc: Added #include <limits>.
+
+29th May 2013  John Allison  (vis-V09-06-12)
+- modeling-V09-06-05: Bug fix for vis attribute modifying (VAM).
+- visman-V09-06-05: Improved safety, spelling and guidance.
+- openinventor-V09-06-04: SoCounterAction.cc: Coverity fix.
+
+26th March 2013  John Allison  (vis-V09-06-11)
+- modeling-V09-06-04: Improved G4Exception messages.
+- visXXX-V09-06-01, opengl-V09-06-04:
+  o Removed or commented out unused typedefs that give warnings
+    with gcc-4.8.0.
+- vis-HepRep-V09-06-05 (Ben Morgan): BUGFIX #1322: Fixes for zlib move.
+
+21st March 2013  Gabriele Cosmo  (vis-V09-06-10)
+- opengl-V09-06-03:
+  o G4OpenGLQtExportDialog : changed "TRUE" by "true".
+  o G4OpenGLViewer : added "const" on getWin...();
+    removed bad "printf" statement.
+  o G4OpenGLSceneHandler : Null pointer fix (thanks to XCode analyzer).
+- visexternals-V09-06-00:
+  o Moved G4zlib package to source/externals; updated build configuration
+    accordingly.
+- Requires co-working tag "externals-V09-06-00".
+
+15th March 2013  John Allison
+- openinventor-V09-06-03:
+  o Changed strlcpy back to strncpy.  Fixes SLC5 compilation error.
+    (Can't remember why I changed to strlcopy in the first place -
+     see 29th January.  Only OpenInventor was changed.)
+
+24th February 2013  John Allison  (vis-V09-06-09)
+- modeling-V09-06-03, visman-V09-06-04, vis-HepRep-V09-06-04,
+  openinventor-V09-06-02, gMocren-V09-06-03:
+  o Removed unused fields as warned by new clang compiler.
+
+29th January 2013  John Allison  (vis-V09-06-08)
+- VRML-V09-06-03, DAWN-V09-06-03, vis-HepRep-V09-06-03,
+  opengl-V09-06-02, openinventor-V09-06-01:
+  o More Coverity fixes and un-doing of some previous ones.
+
+29th January 2013  John Allison  (vis-V09-06-06)
+- Changed strncpy and strncat to strlcpy and strlcat.
+
+21st January 2013  John Allison  (vis-V09-06-05)
+- Eliminated snprintf.
+  o Not available on Windows.
+  o Reverted to sprintf.
+
+21st January 2013  John Allison  (vis-V09-06-04)
+- Added #include <cstdio> in files containing snprintf.
+
+12-14th January 2013  John Allison  (vis-V09-06-03)
+- visman-V09-06-01, DAWN-V09-06-02, vis-HepRep-V09-06-02, opengl-V09-06-01,
+  VRML-V09-06-01:
+  o Coverity fixes.
+- modeling-V09-06-01 and 02:
+  o Coverity fixes and new verbosity flag.
+- visman-V09-06-02 and 03:
+  o Fixed bug in /vis/scene/add/trajectories. 
+
+2nd December 2012  John Allison  (vis-V09-06-00)
+- Removed NURBS and references to i_mode:
+  modeling-V09-06-00
+  visman-V09-06-00
+  VRML-V09-06-00
+  vis-HepRep-V09-06-00
+  opengl-V09-06-00
+  openinventor-V09-06-00
+  visXXX-V09-06-00
+  gMocren-V09-06-00
+  vistree-V09-06-00
+  DAWN-V09-06-00
+  raytracer-V09-06-00
 
 17th November 2012  John Allison  (vis-V09-05-49)
 - visman-V09-05-47:

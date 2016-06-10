@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id$
+// $Id: EventAction.hh 69108 2013-04-18 13:10:10Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 #include "globals.hh"
 
 class RunAction;
-class HistoManager;
 class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +45,7 @@ class EventActionMessenger;
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction(RunAction*, HistoManager*);
+    EventAction(RunAction*);
    ~EventAction();
 
   public:
@@ -64,7 +63,6 @@ class EventAction : public G4UserEventAction
     G4double               fTotalEdep;
     G4String               fDrawFlag;
     G4int                  fPrintModulo;
-    HistoManager*          fHistoManager;                        
     EventActionMessenger*  fEventMessenger;
 };
 

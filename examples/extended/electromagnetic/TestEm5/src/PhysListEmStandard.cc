@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PhysListEmStandard.cc 76464 2013-11-11 10:22:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
@@ -40,7 +40,6 @@
 #include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel96.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -86,9 +85,9 @@ void PhysListEmStandard::ConstructProcess()
   
   // Add standard EM Processes
   //
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
@@ -96,15 +95,13 @@ void PhysListEmStandard::ConstructProcess()
       ////ph->RegisterProcess(new G4RayleighScattering, particle);      
       ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
       G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
+      cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion, particle);
      
     } else if (particleName == "e-") {
-    
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc -> AddEmModel(0, new G4UrbanMscModel96());    
-      ph->RegisterProcess(msc, particle);
+      
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);
       //            
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
@@ -114,9 +111,7 @@ void PhysListEmStandard::ConstructProcess()
             
     } else if (particleName == "e+") {
     
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc -> AddEmModel(0, new G4UrbanMscModel96());    
-      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);
       //     
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
@@ -140,7 +135,7 @@ void PhysListEmStandard::ConstructProcess()
                particleName == "pi-" ||
                particleName == "pi+"    ) {
 
-      ph->RegisterProcess(new G4hMultipleScattering(), particle);      
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);        
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.1, 20*um);
       ph->RegisterProcess(hIoni, particle);
@@ -148,7 +143,7 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hPairProduction(), particle);            
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3"    ) {
+               particleName == "He3"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);           
       G4ionIonisation* ionIoni = new G4ionIonisation();
@@ -166,9 +161,9 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4NuclearStopping(), particle);                   
       
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-	       
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
+               
       //all others charged particles except geantino
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
@@ -184,10 +179,10 @@ void PhysListEmStandard::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(10*eV);	//default 100 eV   
-  emOptions.SetMaxEnergy(10*TeV);	//default 100 TeV 
-  emOptions.SetDEDXBinning(12*10);	//default=12*7
-  emOptions.SetLambdaBinning(12*10);	//default=12*7
+  emOptions.SetMinEnergy(10*eV);        //default 100 eV   
+  emOptions.SetMaxEnergy(10*TeV);        //default 100 TeV 
+  emOptions.SetDEDXBinning(12*10);        //default=12*7
+  emOptions.SetLambdaBinning(12*10);        //default=12*7
   
   //multiple coulomb scattering
   //

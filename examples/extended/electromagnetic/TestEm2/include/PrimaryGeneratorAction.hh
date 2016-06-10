@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.hh 75597 2013-11-04 12:41:21Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,19 +45,18 @@ class DetectorConstruction;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
-   ~PrimaryGeneratorAction();
+public:
+  PrimaryGeneratorAction(DetectorConstruction*);    
+  virtual ~PrimaryGeneratorAction();
 
-  public:
-    virtual void GeneratePrimaries(G4Event*);
-    G4ParticleGun* GetParticleGun() {return fParticleGun;};
+  virtual void GeneratePrimaries(G4Event*);
+  inline G4ParticleGun* GetParticleGun() {return fParticleGun;};
     
-  private:
-    G4ParticleGun*           fParticleGun;
-    DetectorConstruction*    fDetector;
+private:
+  G4ParticleGun*           fParticleGun;
+  DetectorConstruction*    fDetector;
     
-    G4ThreeVector            fInitPos; 
+  G4bool                   fInitPos; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

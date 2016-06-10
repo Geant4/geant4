@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:45:06 bmorgan Exp $
+# $Id: sources.cmake 66376 2012-12-18 09:42:59Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -45,12 +45,6 @@ GEANT4_DEFINE_MODULE(NAME G4graphics_reps
         G4DimensionedDouble.hh
         G4DimensionedThreeVector.hh
         G4DimensionedType.hh
-        G4NURBS.hh
-        G4NURBSbox.hh
-        G4NURBScylinder.hh
-        G4NURBShexahedron.hh
-        G4NURBStube.hh
-        G4NURBStubesector.hh
         G4PlacedPolyhedron.hh
         G4Point3DList.hh
         G4Polyhedron.hh
@@ -89,12 +83,6 @@ GEANT4_DEFINE_MODULE(NAME G4graphics_reps
         G4Circle.cc
         G4Colour.cc
         G4DimensionedTypeUtils.cc
-        G4NURBS.cc
-        G4NURBSbox.cc
-        G4NURBScylinder.cc
-        G4NURBShexahedron.cc
-        G4NURBStube.cc
-        G4NURBStubesector.cc
         G4PlacedPolyhedron.cc
         G4Point3DList.cc
         G4Polyhedron.cc

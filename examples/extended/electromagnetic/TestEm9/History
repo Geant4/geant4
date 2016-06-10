@@ -15,6 +15,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-07-13 P.Gumplinger (testem9-V09-06-06)
+- comply with compiler warnings about unused class fields in HistoManager.hh
+
+01-04-13 A.Dotti (testem9-V09-06-03,testem9-V09-06-04,testem9-V09-06-05)
+- New G4VUserPhysicsList interface needed for MT
+     
+20-03-13 mma (testem9-V09-06-02)
+- Applied coding guidelines 
+
+28-02-13 I. Hrivnacova (testem9-V09-06-01) 
+- When building materials with NistManager
+  do not set fromIsotopes argument (which was set to false), 
+  as since 9.6 all materials have to be built from isotopes.
+  (Thanks to V. Ivantchenko for pointing at this.)
+
+13-02-13 I.Hrivnacova 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+11-12-12 V.Ivant (testem9-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
+
 28-11-12 G. Cosmo (testem9-V09-05-08)
 - Fixed cases of variable shadowing.
 

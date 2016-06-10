@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id$
+// $Id: HistoManager.cc 74272 2013-10-02 14:48:50Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -40,8 +40,8 @@
 
 HistoManager::HistoManager()
 {
-  fileName[0] = "AnaEx01";
-  factoryOn = false;
+  fFileName[0] = "AnaEx01";
+  fFactoryOn = false;
   
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -69,7 +69,7 @@ void HistoManager::book()
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetVerboseLevel(2);
   G4String extension = analysisManager->GetFileType();
-  fileName[1] = fileName[0] + "." + extension;
+  fFileName[1] = fFileName[0] + "." + extension;
       
   // Create directories 
   analysisManager->SetHistoDirectoryName("histo");
@@ -77,9 +77,9 @@ void HistoManager::book()
     
   // Open an output file
   //
-  G4bool fileOpen = analysisManager->OpenFile(fileName[0]);
+  G4bool fileOpen = analysisManager->OpenFile(fFileName[0]);
   if (!fileOpen) {
-    G4cout << "\n---> HistoManager::book(): cannot open " << fileName[1] 
+    G4cout << "\n---> HistoManager::book(): cannot open " << fFileName[1] 
            << G4endl;
     return;
   }
@@ -87,6 +87,7 @@ void HistoManager::book()
   // create selected histograms
   //
   analysisManager->SetFirstHistoId(1);
+  analysisManager->SetFirstNtupleId(1);
 
   fHistId[1] = analysisManager->CreateH1("1","Edep in absorber (MeV)",
                                               100, 0., 800*MeV);
@@ -104,31 +105,36 @@ void HistoManager::book()
                                               100, 0., 50*cm);
   fHistPt[4] = analysisManager->GetH1(fHistId[4]);
                                   
-  // Create 1 ntuple
+  // Create 1st ntuple (id = 1)
   //    
-  analysisManager->CreateNtuple("101", "Edep and TrackL");
+  analysisManager->CreateNtuple("101", "Edep");
   fNtColId[0] = analysisManager->CreateNtupleDColumn("Eabs");
   fNtColId[1] = analysisManager->CreateNtupleDColumn("Egap");
+  analysisManager->FinishNtuple();
+
+  // Create 2nd ntuple (id = 2)
+  //    
+  analysisManager->CreateNtuple("102", "TrackL");
   fNtColId[2] = analysisManager->CreateNtupleDColumn("Labs");
   fNtColId[3] = analysisManager->CreateNtupleDColumn("Lgap");
   analysisManager->FinishNtuple();
   
-  factoryOn = true;       
-  G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
+  fFactoryOn = true;       
+  G4cout << "\n----> Histogram Tree is opened in " << fFileName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::save()
 {
-  if (factoryOn) {
+  if (fFactoryOn) {
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
     analysisManager->Write();
     analysisManager->CloseFile();  
-    G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
+    G4cout << "\n----> Histogram Tree is saved in " << fFileName[1] << G4endl;
       
     delete G4AnalysisManager::Instance();
-    factoryOn = false;
+    fFactoryOn = false;
   }                    
 }
 
@@ -164,18 +170,21 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
                               G4double trackLAbs, G4double trackLGap)
 {                
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->FillNtupleDColumn(fNtColId[0], energyAbs);
-  analysisManager->FillNtupleDColumn(fNtColId[1], energyGap);
-  analysisManager->FillNtupleDColumn(fNtColId[2], trackLAbs);
-  analysisManager->FillNtupleDColumn(fNtColId[2], trackLGap);
-  analysisManager->AddNtupleRow();  
+  // Fill 1st ntuple ( id = 1)
+  analysisManager->FillNtupleDColumn(1,fNtColId[0], energyAbs);
+  analysisManager->FillNtupleDColumn(1,fNtColId[1], energyGap);
+  analysisManager->AddNtupleRow(1);  
+  // Fill 2nd ntuple ( id = 2)
+  analysisManager->FillNtupleDColumn(2,fNtColId[2], trackLAbs);
+  analysisManager->FillNtupleDColumn(2,fNtColId[3], trackLGap);
+  analysisManager->AddNtupleRow(2);  
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::PrintStatistic()
 {
-  if(factoryOn) {
+  if(fFactoryOn) {
     G4cout << "\n ----> print histograms statistic \n" << G4endl;
     
     G4cout 

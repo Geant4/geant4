@@ -27,7 +27,7 @@
 /// \brief Definition of the SteppingAction class
 //
 //
-// $Id$
+// $Id: SteppingAction.hh 68015 2013-03-13 13:27:27Z gcosmo $
 //
 // 
 
@@ -50,7 +50,7 @@ public:
   SteppingAction(DetectorConstruction*, EventAction*);
   virtual ~SteppingAction();
 
-  void UserSteppingAction(const G4Step*);
+  virtual void UserSteppingAction(const G4Step*);
     
 private:
   DetectorConstruction* fDetector;

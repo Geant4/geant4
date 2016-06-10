@@ -1,5 +1,5 @@
 
-$Id: History,v 1.67 2010-10-20 07:31:58 gcosmo Exp $
+$Id: History 76607 2013-11-13 08:46:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ November 13, 2013  G.Cosmo              geom-bool-V09-06-05, 04
+ - Removed G4MultiUnion and related wrapper, as not yet ready for release.
+   Returning to tag "geom-bool-V09-06-02".
+
+ November 07, 2013  G.Cosmo              geom-bool-V09-06-03
+ - Moved G4UMultiUnion wrapper from usolids module. Added G4MultiUnion typedef.
+
+ November 06, 2013  G.Cosmo              geom-bool-V09-06-02
+  - Added wrapper for UMultiUnion from USolids module.
+
+ December 14, 2012  G.Cosmo              geom-bool-V09-06-01
+  - Restored return distance in G4SubtractionSolid.
+  - Restored SVN id headers.
+
+ December 02, 2012  J.Allison            geom-bool-V09-06-00
+  - Removed NURBS.
+
+ November, 30, 2012  J.Apostolakis
+  - G4SubtractionSolid: improved SurfaceNormal() method, by caching the
+    result of the calls to fPtrSolidA->Inside() and fPtrSolidB->Inside().
+    Corrected debug printout to say 'Point p is *out*side' not inside.
+    NOTE: further improvement can be made by creating new method 
+            Inside( point, &resultInsideA, &resultInsideB ); 
+          which can be called by a 'bare' Inside( point ) method.
 
  June 12, 2012  G.Cosmo                   geom-bool-V09-05-02
   - Explicitly use inclusion of headers for system of units and physical

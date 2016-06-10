@@ -27,25 +27,24 @@
 /// \brief Main program of the electromagnetic/TestEm1 example
 //
 //
-// $Id$
+// $Id: TestEm1.cc 76485 2013-11-11 10:54:47Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
+#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
-
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
-#include "SteppingAction.hh"
-#include "StackingAction.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -60,31 +59,26 @@
 int main(int argc,char** argv) {
  
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
     
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+#else
+    G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+    G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
-  DetectorConstruction* det;
-  PrimaryGeneratorAction* prim;
-  runManager->SetUserInitialization(det = new DetectorConstruction);
-  runManager->SetUserInitialization(new PhysicsList(det));
-  runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
+  DetectorConstruction* det = new DetectorConstruction;
+  runManager->SetUserInitialization(det);
+  
+  PhysicsList* phys = new PhysicsList(det);  
+  runManager->SetUserInitialization(phys);
       
   // set user action classes
-  RunAction*   run;
-  EventAction* event;
-  
-  runManager->SetUserAction(run = new RunAction(det,prim)); 
-  runManager->SetUserAction(event = new EventAction());
-  runManager->SetUserAction(new TrackingAction(prim,run));
-  runManager->SetUserAction(new SteppingAction(run,event));
-  runManager->SetUserAction(new StackingAction());
-     
+  runManager->SetUserInitialization(new ActionInitialization(det));
+
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
 
@@ -120,4 +114,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

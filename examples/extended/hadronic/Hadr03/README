@@ -1,5 +1,4 @@
-$Id: README,v 1.9 2010-04-02 13:22:02 maire Exp $
--------------------------------------------------------------------
+$Id: README 69179 2013-04-22 06:55:04Z gcosmo $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -33,6 +32,11 @@ $Id: README,v 1.9 2010-04-02 13:22:02 maire Exp $
    In order not to introduce 'artificial' constraints on the step size,
    electromagnetic processes are not registered: there is no continuous energy 
    loss.  
+ 
+   Several hadronic physics options are controlled by environment variables.
+   To trigger them, an envHadronic.csh has been added in this example.
+   One must select the options wished, and do
+        source envHadronic.csh  (or sh) 
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -126,4 +130,3 @@ $Id: README,v 1.9 2010-04-02 13:22:02 maire Exp $
  	Idle> type your commands
  	....
  	Idle> exit
-  

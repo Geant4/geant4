@@ -38,6 +38,8 @@
 #ifndef  G4MoleculeID_h
 #define  G4MoleculeID_h 1
 
+#include "G4Types.hh" 
+
 class G4MoleculeID
 {
 private :
@@ -45,7 +47,7 @@ private :
     friend G4MoleculeID operator -(const G4MoleculeID& left,const int& right);
     int fValue;
 
-    static int fLastValue;
+    static G4ThreadLocal int fLastValue;
 
 public :
 

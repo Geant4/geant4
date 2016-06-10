@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleTable.hh 73711 2013-09-09 09:57:29Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -44,22 +44,23 @@
 //      implement new version for using STL map instaed of RW PtrHashedDictionary
 //                                       28 ct., 99  H.Kurashige
 //      modified implementation of Remove 21 Mar.,08  H.Kurashige
+//      remove G4ShortLivedTable         25 July, 13 H.Kurashige
+//
 
 #ifndef G4ParticleTable_h
 #define G4ParticleTable_h 1
 
+#include <map>
+
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4Threading.hh"
 #include "G4ParticleDefinition.hh"
-
-
-#include <map>
 #include "G4ParticleTableIterator.hh"
 
 class G4UImessenger;
 class G4ParticleMessenger;
 class G4IonTable;
-class G4ShortLivedTable;
 
 class G4ParticleTable
 {
@@ -86,7 +87,14 @@ class G4ParticleTable
    G4ParticleTable & operator=(const G4ParticleTable &);
 
  public:
+
+   void SlaveG4ParticleTable();
+   void WorkerG4ParticleTable();
+   // This method is similar to the constructor. It is used by each worker
+   // thread to achieve the partial effect as that of the master thread.
+
    virtual ~G4ParticleTable();
+   // Do we need DestroySlaveG4ParticleTable()?
   
  public: // With Description
    static G4ParticleTable* GetParticleTable();
@@ -95,19 +103,19 @@ class G4ParticleTable
    //   At the first time of calling this function, the G4ParticleTable object
    //   is instantiated 
 
-   G4bool   contains(const G4ParticleDefinition *particle);
-   G4bool   contains(const G4String &particle_name);
+   G4bool   contains(const G4ParticleDefinition *particle) const;
+   G4bool   contains(const G4String &particle_name) const;
    // returns TRUE if the ParticleTable contains 
 
    G4int    entries() const;
    G4int    size() const;
    // returns the number of Particles in the ParticleTable
    
-   G4ParticleDefinition* GetParticle(G4int index);
+   G4ParticleDefinition* GetParticle(G4int index) const;
    // returns a pointer to i-th particles in the ParticleTable
    //    0<= index < entries()
 
-   const G4String& GetParticleName(G4int index);
+   const G4String& GetParticleName(G4int index) const;
    // returns name of i-th particles in the ParticleTable
 
    G4ParticleDefinition* FindParticle(G4int  PDGEncoding );
@@ -120,6 +128,22 @@ class G4ParticleTable
    G4ParticleDefinition* FindAntiParticle(const G4ParticleDefinition *particle);
    // returns a pointer to its anti-particle (0 if not contained)
 
+   G4PTblDicIterator* GetIterator() const;
+   // return the pointer of Iterator (RW compatible)
+   
+   void DumpTable(const G4String &particle_name = "ALL");
+   // dump information of particles specified by name 
+ 
+ public: //With Description
+
+   G4IonTable* GetIonTable() const; 
+   // return the pointer to G4IonTable object
+
+   ///////////////////////////////////////////////////////////////////////
+   // NOTE ::
+   //  Following FindIon/GetIon methods will be removed in future relases
+   //  Use  FindIon/GetIon methods of G4IonTable instead
+   //
    G4ParticleDefinition* FindIon( G4int    atomicNumber, 
 				  G4int    atomicMass, 
 				  G4double excitationEnergy );
@@ -137,6 +161,10 @@ class G4ParticleTable
 				  G4int    atomicMass, 
 				  G4int    numberOfLambda, 
 				  G4double   excitationEnergy);
+
+   G4ParticleDefinition* GetIon(G4int atomicNumber, G4int atomicMass,
+                                G4int level);
+
    //  return the pointer to an ion ( create ion if the ion does not exist)
    //  It has excitation energy nearest to given excitationEnergy  (0: ground state)
   
@@ -148,21 +176,10 @@ class G4ParticleTable
    //  !! This routine behaves same as GetIon( atomicNumber, atomicMass, 0) 
    //  !! The third and fourth arguments are meaningless
    //  !! This routine is provided for compatibility to old version
-
-   G4PTblDicIterator* GetIterator();
-   // return the pointer of Iterator (RW compatible)
+   ///////////////////////////////////////////////////////////////////////////////////////
    
-   void DumpTable(const G4String &particle_name = "ALL");
-   // dump information of particles specified by name 
 
- public: //With Description
 
-   G4IonTable* GetIonTable();
-   // return the pointer to G4IonTable object
-
-   const G4ShortLivedTable* GetShortLivedTable();
-   // return the pointer to G4ShortLivedTable object
- 
  public: // With Description
    G4ParticleDefinition* Insert(G4ParticleDefinition *particle);
    // insert the particle into ParticleTable 
@@ -184,14 +201,16 @@ class G4ParticleTable
    G4UImessenger*       CreateMessenger();
    void                 DeleteMessenger();
   // create/delete messenger for the particle table 
+  // these methods are supposed to  be invoked by G4RunManager only
  
- protected:
-   G4PTblDictionary* GetDictionary();
+  protected:
+
+   const G4PTblDictionary*    GetDictionary() const;
 
    const G4String& GetKey(const G4ParticleDefinition *particle) const;
    // return key value of the particle (i.e. particle name)
 
-   const G4PTblEncodingDictionary* GetEncodingDictionary();
+   const G4PTblEncodingDictionary* GetEncodingDictionary() const; 
    // return the pointer to EncodingDictionary
 
  private:
@@ -205,33 +224,56 @@ class G4ParticleTable
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
 
- private:
-   G4ParticleMessenger* fParticleMessenger;
-   G4PTblDictionary*  fDictionary;
-   G4PTblDicIterator* fIterator;
-   G4PTblEncodingDictionary* fEncodingDictionary;
-
+   static G4ThreadLocal G4ParticleMessenger* fParticleMessenger;
+   static G4ThreadLocal G4PTblDictionary*  fDictionary;
+   static G4ThreadLocal G4PTblDicIterator* fIterator;
+   static G4ThreadLocal G4PTblEncodingDictionary* fEncodingDictionary;
+   // These fields should be thread local or thread private. For a singleton
+   // class, we can change any member field as static without any problem
+   // because there is only one instance. Then we are allowed to add 
+   // "G4ThreadLocal".
+ 
+   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+   //Phase I changes this member to be thread local while each thread holds
+   //its own copy of particles.
+   //Phase II changes this member back in order to share particles.
    static G4ParticleTable*  fgParticleTable;
 
-   G4IonTable*            fIonTable;
-   G4ShortLivedTable*     fShortLivedTable;
+   static G4IonTable*            fIonTable;
+   // This field should be thread private. However, we have to keep one copy
+   // of the ion table pointer. So we change all important fields of G4IonTable
+   // to the thread local variable.
 
-   G4String               noName;
+   // These shadow pointers are used by each worker thread to copy the content
+   // from the master thread. 
 
-   G4bool  readyToUse;
+   static G4ParticleMessenger* fParticleMessengerShadow;
+   static G4PTblDictionary*  fDictionaryShadow;
+   static G4PTblDicIterator* fIteratorShadow;
+   static G4PTblEncodingDictionary* fEncodingDictionaryShadow;
+
+ private:
+   const G4String        noName;
+
+   G4bool                readyToUse;
+   G4ParticleDefinition* genericIon;
  
  public:
    void SetReadiness(G4bool val=true);
    G4bool GetReadiness() const;
+   G4ParticleDefinition* GetGenericIon() const;
+   void SetGenericIon(G4ParticleDefinition*);
  private:
-   void CheckReadiness();
+   void CheckReadiness() const;
+
+
+#ifdef G4MULTITHREADED
+public:
+     //Andrea Dotti January 16. Shared instance of a mutex
+     static G4Mutex particleTableMutex;
+     static G4int lockCount;
+#endif
 };
 #include "G4ParticleTable.icc"
 
 #endif
-
-
-
-
-
-

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/RunActionMessenger.cc
 /// \brief Implementation of the RunActionMessenger class
 //
-// $Id$
+// $Id: RunActionMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::RunActionMessenger(RunAction* run)
-:fRun(run)
+:G4UImessenger(),fRun(run),
+ fRunDir(0),
+ fAccCmd(0),
+ fVerbCmd(0), 
+ fHistoDir(0),        
+ factoryCmd(0)
 {
   fRunDir = new G4UIdirectory("/testem/run/");
   fRunDir->SetGuidance("run control");

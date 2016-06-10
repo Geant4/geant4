@@ -27,7 +27,7 @@
 /// \brief Implementation of the G02DetectorConstruction class
 //
 //
-// $Id$
+// $Id: G02DetectorConstruction.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02DetectorConstruction implementation
 //
@@ -87,7 +87,9 @@
 // Constructor
 //
 G02DetectorConstruction::G02DetectorConstruction()
-  : fAir(0), fAluminum(0), fPb(0), fXenon(0)
+  : G4VUserDetectorConstruction(), 
+    fAir(0), fAluminum(0), fPb(0), fXenon(0),
+    fDetectorMessenger(0)
 {
   fExpHall_x=5.*m;
   

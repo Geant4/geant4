@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicalVolumeModel.cc 70646 2013-06-03 15:07:58Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -63,6 +63,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
  G4bool useFullExtent):
   G4VModel        (modelTransformation, pMP),
   fpTopPV         (pVPV),
+  fTopPVCopyNo    (0),
   fRequestedDepth (requestedDepth),
   fUseFullExtent  (useFullExtent),
   fCurrentDepth   (0),
@@ -578,6 +579,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (copyForVAM) {
     delete pModifiedVisAtts;
     pVisAttribs = pUnmodifiedVisAtts;
+    copyForVAM = false;
   }
   
   // Vis atts for this volume no longer needed if created...
@@ -714,8 +716,9 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
     // The idea now is to seek a PV with the same name and copy no
     // in the hope it's the same one!!
     G4PhysicalVolumeModel searchModel (world);
+    G4int verbosity = 0;  // Suppress messages from G4PhysicalVolumeSearchScene.
     G4PhysicalVolumeSearchScene searchScene
-      (&searchModel, fTopPVName, fTopPVCopyNo);
+      (&searchModel, fTopPVName, fTopPVCopyNo, verbosity);
     G4ModelingParameters mp;  // Default modeling parameters for this search.
     mp.SetDefaultVisAttributes(fpMP? fpMP->GetDefaultVisAttributes(): 0);
     searchModel.SetModelingParameters (&mp);

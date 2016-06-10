@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbRotationMatrixMgr.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgbRotationMatrixMgr
@@ -41,7 +41,7 @@
 
 // -------------------------------------------------------------------------
 
-G4tgbRotationMatrixMgr * G4tgbRotationMatrixMgr::theInstance = 0;
+G4ThreadLocal G4tgbRotationMatrixMgr * G4tgbRotationMatrixMgr::theInstance = 0;
 
 
 // -------------------------------------------------------------------------

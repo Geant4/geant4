@@ -39,7 +39,8 @@
 #include "G4NistManager.hh"
 
 G4IonsKoxCrossSection::G4IonsKoxCrossSection()
-  : G4VCrossSectionDataSet("IonsKox"), lowerLimit ( 10*MeV ), 
+  : G4VCrossSectionDataSet("IonsKox"),
+// lowerLimit ( 10*MeV ), 
     r0 ( 1.1*fermi ), rc ( 1.3*fermi )
 {}
 

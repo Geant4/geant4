@@ -1,4 +1,4 @@
-# $Id: acosta.mac,v 1.2 2007-07-31 16:51:29 maire Exp $
+# $Id: acosta.mac 76464 2013-11-11 10:22:56Z gcosmo $
 #
 # macro file for TestEm5.cc    
 #
@@ -24,6 +24,6 @@
 #
 /testem/phys/setGCut 1 um
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 # 
 /run/beamOn 5000000

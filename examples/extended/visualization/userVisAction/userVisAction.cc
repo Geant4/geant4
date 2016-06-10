@@ -27,7 +27,7 @@
 /// \brief Main program of the visualization/userVisAction example
 //
 //
-// $Id$
+// $Id: userVisAction.cc 66378 2012-12-18 09:45:21Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "QGSP_BIC_EMY.hh"
+#include "FTFP_BERT.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -63,7 +63,7 @@ int main(int argc,char** argv) {
 
   // UserInitialization classes (mandatory)
   runManager->SetUserInitialization(new B1DetectorConstruction);
-  runManager->SetUserInitialization(new QGSP_BIC_EMY);
+  runManager->SetUserInitialization(new FTFP_BERT);
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!

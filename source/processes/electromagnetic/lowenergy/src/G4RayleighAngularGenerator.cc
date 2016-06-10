@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4RayleighAngularGenerator.cc 74822 2013-10-22 14:42:13Z gcosmo $
 // GEANT4 tag $Name: not supported by svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 using namespace std;
 
@@ -97,17 +99,17 @@ G4RayleighAngularGenerator::SampleDirection(const G4DynamicParticle* dp,
   const G4double numlim = 0.02;
   G4double x  = 2*xx*b0;
   if(x < numlim)   { w0 = n0*x*(1 - 0.5*(n0 - 1)*x*(1 - (n0 - 2)*x/3.)); }
-  else             { w0 = (1 - std::pow(1 + x,-n0)); }
+  else             { w0 = 1 - G4Exp(-n0*G4Log(1 + x)); }
 
   if(PP1[Z] > 0.0) {
     x  = 2*xx*b1;
     if(x < numlim) { w1 = n1*x*(1 - 0.5*(n1 - 1)*x*(1 - (n1 - 2)*x/3.)); }
-    else           { w1 = (1 - std::pow(1 + x,-n1)); }
+    else           { w1 = 1 - G4Exp(-n1*G4Log(1 + x)); }
   }
   if(PP2[Z] > 0.0) {
     x  = 2*xx*b2;
     if(x < numlim) { w2 = n2*x*(1 - 0.5*(n2 - 1)*x*(1 - (n2 - 2)*x/3.)); }
-    else           { w2 = (1 - std::pow(1 + x,-n2)); }
+    else           { w2 = 1 - G4Exp(-n2*G4Log(1 + x)); }
   }
 
   G4double x0= w0*PP0[Z]/(b0*n0);
@@ -138,7 +140,8 @@ G4RayleighAngularGenerator::SampleDirection(const G4DynamicParticle* dp,
     // sampling of angle
     G4double y = w*G4UniformRand();
     if(y < numlim) { x = y*n*( 1 + 0.5*(n + 1)*y*(1 - (n + 2)*y/3.)); }
-    else           { x = 1.0/std::pow(1 - y, n) - 1.0; }
+    //else           { x = 1.0/std::pow(1 - y, n) - 1.0; }
+    else           { x = G4Exp(-n*G4Log(1 - y)) - 1.0; }
     cost = 1.0 - x/(b*xx);
     //G4cout << "cost = " << cost << " w= " << w << " n= " << n 
     //	   << " b= " << b << " x= " << x << " xx= " << xx << G4endl;  

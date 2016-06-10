@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StatMFParameters.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,62 +33,105 @@
 #include "G4StatMFParameters.hh"
 #include "G4SystemOfUnits.hh"
 
-const G4double G4StatMFParameters::_Kappa = 1.0; // dimensionless
+const G4double G4StatMFParameters::fKappa = 1.0; // dimensionless
 
-const G4double G4StatMFParameters::_KappaCoulomb = 2.0; // dimensionless
+const G4double G4StatMFParameters::fKappaCoulomb = 2.0; // dimensionless
 
-const G4double G4StatMFParameters::_Epsilon0 = 16.0*MeV;
+const G4double G4StatMFParameters::fEpsilon0 = 16.0*MeV;
 
 // Bethe-Weizsacker coefficients
-const G4double G4StatMFParameters::_E0 = 16.0*MeV;
+const G4double G4StatMFParameters::fE0 = 16.0*MeV;
 
-const G4double G4StatMFParameters::_Beta0 = 18.0*MeV;
+const G4double G4StatMFParameters::fBeta0 = 18.0*MeV;
 
-const G4double G4StatMFParameters::_Gamma0 = 25.0*MeV;
+const G4double G4StatMFParameters::fGamma0 = 25.0*MeV;
 
 // Critical temperature (for liquid-gas phase transitions)
-const G4double G4StatMFParameters::_CriticalTemp = 18.0*MeV;
+const G4double G4StatMFParameters::fCriticalTemp = 18.0*MeV;
 
 // Nuclear radius
-const G4double G4StatMFParameters::_r0 = 1.17*fermi;
+const G4double G4StatMFParameters::fr0 = 1.17*fermi;
 
-G4double G4StatMFParameters::Beta(const G4double T)
-{
-  if (T > _CriticalTemp) return 0.0;
-  else {
-    G4double CriticalTempSqr = _CriticalTemp*_CriticalTemp;
-    G4double TempSqr = T*T;
-    G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
-		
-    return _Beta0*tmp*std::pow(tmp,1.0/4.0);
-  }
+G4StatMFParameters::G4StatMFParameters()
+{}
+
+G4StatMFParameters::~G4StatMFParameters()
+{}
+
+G4double G4StatMFParameters::GetKappa()
+{ 
+  return fKappa; 
+}
+  
+G4double G4StatMFParameters::GetKappaCoulomb()  
+{ 
+  return fKappaCoulomb; 
+} 
+  
+G4double G4StatMFParameters::GetEpsilon0() 
+{ 
+  return fEpsilon0; 
+}
+  
+G4double G4StatMFParameters::GetE0() 
+{ 
+  return fE0; 
+}
+  
+G4double G4StatMFParameters::GetBeta0() 
+{ 
+  return fBeta0; 
+} 
+  
+G4double G4StatMFParameters::GetGamma0() 
+{ 
+  return fGamma0; 
+}
+  
+G4double G4StatMFParameters::GetCriticalTemp()  
+{ 
+  return fCriticalTemp; 
+}
+  
+G4double G4StatMFParameters::Getr0() 
+{ 
+  return fr0; 
 }
 
-G4double G4StatMFParameters::DBetaDT(const G4double T) 
+G4double G4StatMFParameters::Beta(G4double T) 
 {
-  if (T > _CriticalTemp) return 0.0;
-  else {
-    G4double CriticalTempSqr = _CriticalTemp*_CriticalTemp;
+  G4double res = 0.0;
+  if (T < fCriticalTemp) {
+    G4double CriticalTempSqr = fCriticalTemp*fCriticalTemp;
     G4double TempSqr = T*T;
     G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
 		
-    return -5.0*_Beta0*std::pow(tmp,1.0/4.0)*(CriticalTempSqr*T)/
+    res = fBeta0*tmp*std::pow(tmp,0.25);
+  }
+  return res;
+}
+
+G4double G4StatMFParameters::DBetaDT(G4double T) 
+{
+  G4double res = 0.0;
+  if (T < fCriticalTemp) {
+    G4double CriticalTempSqr = fCriticalTemp*fCriticalTemp;
+    G4double TempSqr = T*T;
+    G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
+		
+    res = -5.0*fBeta0*std::pow(tmp,0.25)*(CriticalTempSqr*T)/
       ((CriticalTempSqr+TempSqr)*(CriticalTempSqr+TempSqr));
   }
+  return res;
 }
 
-G4double G4StatMFParameters::GetMaxAverageMultiplicity(const G4int A)
+G4double 
+G4StatMFParameters::GetMaxAverageMultiplicity(G4int A) 
 {
   // Maximun average multiplicity: M_0 = 2.6 for A ~ 200 
   // and M_0 = 3.3 for A <= 110
   G4double MaxAverageMultiplicity = 2.6;
-  if (A <= 110) MaxAverageMultiplicity = 3.3;
+  if (A <= 110) { MaxAverageMultiplicity = 3.3; }
   return MaxAverageMultiplicity;
 }
-
-G4StatMFParameters G4StatMFParameters::theStatMFParameters;
-
-
-G4StatMFParameters * G4StatMFParameters::GetAddress()
-{ return &theStatMFParameters; }
 

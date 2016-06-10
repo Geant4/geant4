@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomIntersectVolume.cc 74809 2013-10-22 09:49:26Z gcosmo $
+//
 /// \file medical/DICOM/src/DicomIntersectVolume.cc
 /// \brief Implementation of the DicomIntersectVolume class
+//
 
 #include "DicomIntersectVolume.hh"
 
@@ -45,19 +48,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomIntersectVolume::DicomIntersectVolume()
  : G4UImessenger(),
+   fG4VolumeCmd(0),
    fSolid(0),
-   fPhantomVolume(0),
-   fRegularParam(0),
    fPhantomMinusCorner(),
    fVoxelIsInside(0)
 {
   fUserVolumeCmd = new G4UIcmdWithAString("/dicom/intersectWithUserVolume",this);
-  fUserVolumeCmd->SetGuidance("Intersects a phantom with a user-defined volume and outputs the voxels that are totally inside the intersection as a new phantom file. It must have the parameters: POS_X POS_Y POS_Z ANG_X ANG_Y ANG_Z SOLID_TYPE SOLID_PARAM_1 (SOLID_PARAM_2 ...)");
+  fUserVolumeCmd->SetGuidance("Intersects a phantom with a user-defined volume and outputs the "
+                  "voxels that are totally inside the intersection as a new phantom "
+                  "file. It must have the parameters: POS_X POS_Y POS_Z "
+                  "ANG_X ANG_Y ANG_Z SOLID_TYPE SOLID_PARAM_1 (SOLID_PARAM_2 ...)");
   fUserVolumeCmd->SetParameterName("choice",true);
   fUserVolumeCmd->AvailableForStates(G4State_Idle);
 
   fG4VolumeCmd = new G4UIcmdWithAString("/dicom/intersectWithUserVolume",this);
-  fG4VolumeCmd->SetGuidance("Intersects a phantom with a user-defined volume and outputs the voxels that are totally inside the intersection as a new phantom file. It must have the parameters: POS_X POS_Y POS_Z ANG_X ANG_Y ANG_Z SOLID_TYPE SOLID_PARAM_1 (SOLID_PARAM_2 ...)");
+  fG4VolumeCmd->SetGuidance("Intersects a phantom with a user-defined volume and outputs the "
+                "voxels that are totally inside the intersection as a new phantom "
+                "file. It must have the parameters: POS_X POS_Y POS_Z "
+                "ANG_X ANG_Y ANG_Z SOLID_TYPE SOLID_PARAM_1 (SOLID_PARAM_2 ...)");
   fG4VolumeCmd->SetParameterName("choice",true);
   fG4VolumeCmd->AvailableForStates(G4State_Idle);
 }
@@ -80,9 +88,11 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
     std::vector<G4String> params = GetWordsInString( newValues );
     if( params.size() < 8 ) {
       G4Exception("DicomIntersectVolume::SetNewValue",
-                  " There must be at least 8 parameter: SOLID_TYPE POS_X POS_Y POS_Z ANG_X ANG_Y ANG_Z SOLID_PARAM_1 (SOLID_PARAM_2 ...)",
+                  " There must be at least 8 parameter: SOLID_TYPE POS_X POS_Y POS_Z "
+          "ANG_X ANG_Y ANG_Z SOLID_PARAM_1 (SOLID_PARAM_2 ...)",
                   FatalErrorInArgument,
-                  G4String("Number of parameters given = " + G4UIcommand::ConvertToString( G4int(params.size()) )).c_str());
+                  G4String("Number of parameters given = " + 
+               G4UIcommand::ConvertToString( G4int(params.size()) )).c_str());
       
     }
 
@@ -90,7 +100,9 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
     BuildUserSolid(params);
 
     //----- Calculate volume inverse 3D transform
-    G4ThreeVector pos = G4ThreeVector( G4UIcommand::ConvertToDouble(params[0]), G4UIcommand::ConvertToDouble(params[1]), G4UIcommand::ConvertToDouble(params[2]) );
+    G4ThreeVector pos = G4ThreeVector( G4UIcommand::ConvertToDouble(params[0]), 
+                       G4UIcommand::ConvertToDouble(params[1]),
+                       G4UIcommand::ConvertToDouble(params[2]) );
     G4RotationMatrix* rotmat = new G4RotationMatrix;
     std::vector<double> angles; 
     rotmat->rotateX( G4UIcommand::ConvertToDouble(params[3]) );
@@ -103,7 +115,10 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
     if( params.size() !=1 ) G4Exception("DicomIntersectVolume::SetNewValue",
                                         "",
                                         FatalErrorInArgument,
-                                        G4String("Command: "+ command->GetCommandPath() + "/" + command->GetCommandName() + " " + newValues + "  needs 1 argument: VOLUME_NAME").c_str()); 
+                                        G4String("Command: "+ command->GetCommandPath() + 
+                         "/" + command->GetCommandName() + 
+                         " " + newValues + 
+                         "  needs 1 argument: VOLUME_NAME").c_str()); 
 
     //----- Build G4VSolid 
     BuildG4Solid(params);
@@ -117,8 +132,10 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
   //----- Calculate relative phantom - volume 3D transform 
   G4PhantomParameterisation* thePhantomParam = GetPhantomParam(true);
   
-  G4RotationMatrix* rotph = new G4RotationMatrix(); // assumes the phantom mother is not rotated !!! 
-  G4AffineTransform thePhantomTransform( rotph, G4ThreeVector() ); // assumes the phantom mother is not translated !!! 
+  G4RotationMatrix* rotph = new G4RotationMatrix(); 
+  // assumes the phantom mother is not rotated !!! 
+  G4AffineTransform thePhantomTransform( rotph, G4ThreeVector() ); 
+  // assumes the phantom mother is not translated !!! 
 
   G4AffineTransform theTransform = theVolumeTransform*thePhantomTransform;
 
@@ -165,13 +182,15 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
       G4int firstVoxel = -1;
       G4int lastVoxel = -1;
       for(G4int ix = 0; ix < nx; ix++ ){
-        G4ThreeVector voxelCentre( (-nx+ix*2+1)*voxelHalfWidthX, (-ny+iy*2+1)*voxelHalfWidthY, (-nz+iz*2+1)*voxelHalfWidthZ);
+        G4ThreeVector voxelCentre( (-nx+ix*2+1)*voxelHalfWidthX, 
+                   (-ny+iy*2+1)*voxelHalfWidthY, (-nz+iz*2+1)*voxelHalfWidthZ);
         theTransform.ApplyPointTransform(voxelCentre);
         G4bool bVoxelIsInside = true;
         for( G4int ivx = -1; ivx <= 1; ivx+=2 ) {
           for( G4int ivy = -1; ivy <= 1; ivy+=2 ){
             for( G4int ivz = -1; ivz <= 1; ivz+=2 ) {
-              G4ThreeVector voxelPoint = voxelCentre + ivx*voxelHalfWidthX*axisX + ivy*voxelHalfWidthY*axisY + ivz*voxelHalfWidthZ*axisZ;
+              G4ThreeVector voxelPoint = voxelCentre + ivx*voxelHalfWidthX*axisX +
+        ivy*voxelHalfWidthY*axisY + ivz*voxelHalfWidthZ*axisZ;
               if( fSolid->Inside( voxelPoint ) == kOutside ) {
                 bVoxelIsInside = false;
                 break;
@@ -189,7 +208,8 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
             G4Exception("DicomIntersectVolume::SetNewValue",
                         "",
                         FatalException,
-                        "Volume cannot intersect phantom in discontiguous voxels, please use other voxel");
+                        "Volume cannot intersect phantom in discontiguous voxels, "
+            "please use other voxel");
           }
           if( !b1VoxelFoundInside ) {
             firstVoxel = ix;
@@ -242,7 +262,8 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomIntersectVolume::BuildUserSolid( std::vector<G4String> params )
 {
-  for( G4int ii = 0; ii < 6; ii++ ) params.erase( params.begin() ); // take otu position and rotation angles
+  for( G4int ii = 0; ii < 6; ii++ ) params.erase( params.begin() ); 
+  // take otu position and rotation angles
   params.insert( params.begin(), ":SOLID");
   params.insert( params.begin(), params[1] );
   G4tgrSolid* tgrSolid = new G4tgrSolid(params);
@@ -288,7 +309,9 @@ G4PhantomParameterisation* DicomIntersectVolume::GetPhantomParam(G4bool bMustExi
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-std::vector<G4VPhysicalVolume*> DicomIntersectVolume::GetPhysicalVolumes( const G4String& name, bool exists, G4int nVols )
+std::vector<G4VPhysicalVolume*> DicomIntersectVolume::GetPhysicalVolumes( const G4String& name,
+                                      bool exists,
+                                      G4int nVols )
 {
   std::vector<G4VPhysicalVolume*> vvolu;
   std::string::size_type ial = name.rfind(":");
@@ -327,7 +350,8 @@ std::vector<G4VPhysicalVolume*> DicomIntersectVolume::GetPhysicalVolumes( const 
                   FatalErrorInArgument,
                   G4String("No physical volume found with name " + name).c_str());
     } else {
-      G4cerr << "!!WARNING: DicomIntersectVolume::GetPhysicalVolumes: no physical volume found with name " << name << G4endl;
+      G4cerr << "!!WARNING: DicomIntersectVolume::GetPhysicalVolumes: no physical " <<
+    "volume found with name " << name << G4endl;
     }
   }
 
@@ -335,7 +359,9 @@ std::vector<G4VPhysicalVolume*> DicomIntersectVolume::GetPhysicalVolumes( const 
     G4Exception("DicomIntersectVolume::GetLogicalVolumes:",
                 "Wrong number of physical volumes found",
                 FatalErrorInArgument,
-                ("Number of physical volumes " + G4UIcommand::ConvertToString(G4int(vvolu.size())) + ", requesting " + G4UIcommand::ConvertToString(nVols)).c_str());
+                ("Number of physical volumes " + 
+         G4UIcommand::ConvertToString(G4int(vvolu.size())) + 
+         ", requesting " + G4UIcommand::ConvertToString(nVols)).c_str());
   } 
 
   return vvolu;
@@ -359,7 +385,8 @@ G4bool DicomIntersectVolume::IsPhantomVolume( G4VPhysicalVolume* pv )
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-std::vector<G4LogicalVolume*> DicomIntersectVolume::GetLogicalVolumes( const G4String& name, bool exists, G4int nVols )
+std::vector<G4LogicalVolume*> DicomIntersectVolume::GetLogicalVolumes( const G4String& name, 
+                                       bool exists, G4int nVols )
 {
   //  G4cout << "GetLogicalVolumes " << name << " " << exists << G4endl;
   std::vector<G4LogicalVolume*> vvolu;
@@ -382,9 +409,11 @@ std::vector<G4LogicalVolume*> DicomIntersectVolume::GetLogicalVolumes( const G4S
   //----- Check that at least one volume was found
   if( vvolu.size() == 0 ) {
     if(exists) {
-      G4Exception("DicomIntersectVolume::GetLogicalVolumes:","",FatalErrorInArgument,("no logical volume found with name " + name).c_str());
+      G4Exception("DicomIntersectVolume::GetLogicalVolumes:","",
+          FatalErrorInArgument,("no logical volume found with name " + name).c_str());
     } else {
-      G4Exception("DicomIntersectVolume::GetLogicalVolumes:","",JustWarning,("no  logical volume found with name " + name).c_str());
+      G4Exception("DicomIntersectVolume::GetLogicalVolumes:","",
+          JustWarning,("no  logical volume found with name " + name).c_str());
     }
   }
 
@@ -392,7 +421,9 @@ std::vector<G4LogicalVolume*> DicomIntersectVolume::GetLogicalVolumes( const G4S
     G4Exception("DicomIntersectVolume::GetLogicalVolumes:",
                 "Wrong number of logical volumes found",
                 FatalErrorInArgument,
-                ("Number of logical volumes " + G4UIcommand::ConvertToString(G4int(vvolu.size())) + ", requesting " + G4UIcommand::ConvertToString(nVols)).c_str());
+                ("Number of logical volumes " +
+         G4UIcommand::ConvertToString(G4int(vvolu.size())) + 
+         ", requesting " + G4UIcommand::ConvertToString(nVols)).c_str());
   } 
 
   return vvolu;
@@ -416,12 +447,14 @@ std::vector<G4String> DicomIntersectVolume::GetWordsInString( const G4String& st
   for( ii = 0; ii < siz; ii++ ){
     if(cstr[ii] == '\"' ){
       if( lastIsQuote ){
-        G4Exception("GmGenUtils:GetWordsFromString","",FatalException, ("There cannot be two quotes together " + stemp).c_str() );
+        G4Exception("GmGenUtils:GetWordsFromString","",FatalException,
+            ("There cannot be two quotes together " + stemp).c_str() );
       }
       if( nQuotes%2 == 1 ){
         //close word 
         wordlist.push_back( stemp.substr(istart,ii-istart) );
-        //        G4cout << "GetWordsInString new word0 " << wordlist[wordlist.size()-1] << " istart " << istart << " ii " << ii << G4endl;
+        //        G4cout << "GetWordsInString new word0 " 
+    //<< wordlist[wordlist.size()-1] << " istart " << istart << " ii " << ii << G4endl;
       } else {
         istart = ii+1;
       }
@@ -429,11 +462,13 @@ std::vector<G4String> DicomIntersectVolume::GetWordsInString( const G4String& st
       lastIsQuote = true;
       lastIsBlank = false;
     } else if(cstr[ii] == ' ' ){
-      //            G4cout << "GetWordsInString blank nQuotes " << nQuotes << " lastIsBlank " << lastIsBlank << G4endl;
+      //            G4cout << "GetWordsInString blank nQuotes " 
+      //<< nQuotes << " lastIsBlank " << lastIsBlank << G4endl;
       if( nQuotes%2 == 0 ){
         if( !lastIsBlank && !lastIsQuote ) {
           wordlist.push_back( stemp.substr(istart,ii-istart) );
-          //          G4cout << "GetWordsInString new word1 " << wordlist[wordlist.size()-1] << " lastIsBlank " << lastIsBlank << G4endl;
+          //          G4cout << "GetWordsInString new word1 " 
+      //<< wordlist[wordlist.size()-1] << " lastIsBlank " << lastIsBlank << G4endl;
         }
 
         istart = ii+1;
@@ -443,14 +478,16 @@ std::vector<G4String> DicomIntersectVolume::GetWordsInString( const G4String& st
     } else {
       if( ii == siz-1 ) {
         wordlist.push_back( stemp.substr(istart,ii-istart+1) );
-        //                G4cout << "GetWordsInString new word2 " << wordlist[wordlist.size()-1] << " istart " << istart << G4endl;
+        //                G4cout << "GetWordsInString new word2 " 
+    //<< wordlist[wordlist.size()-1] << " istart " << istart << G4endl;
       }
       lastIsQuote = false;
       lastIsBlank = false;
     }
   }
   if( nQuotes%2 == 1 ) {
-    G4Exception("GmGenUtils:GetWordsFromString","",FatalException, ("unbalanced quotes in line " + stemp).c_str() );
+    G4Exception("GmGenUtils:GetWordsFromString","",FatalException, 
+        ("unbalanced quotes in line " + stemp).c_str() );
   }
 
   return wordlist;

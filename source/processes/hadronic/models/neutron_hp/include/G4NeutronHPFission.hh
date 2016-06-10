@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -61,6 +60,10 @@ class G4NeutronHPFission : public G4HadronicInteraction
   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
+   public:
+      G4int GetVerboseLevel() const;
+      void SetVerboseLevel( G4int );
 
   private:
   

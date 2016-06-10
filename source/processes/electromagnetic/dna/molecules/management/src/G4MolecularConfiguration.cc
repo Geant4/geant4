@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MolecularConfiguration.cc 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4MolecularConfiguration.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -40,7 +40,9 @@ using namespace std;
 
 //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 // G4MolecularConfigurationManager
-G4MolecularConfiguration::G4MolecularConfigurationManager* G4MolecularConfiguration::fgManager = 0 ;
+typedef G4MolecularConfiguration::G4MolecularConfigurationManager MolecularConfigurationManager;
+
+G4ThreadLocal MolecularConfigurationManager* G4MolecularConfiguration::fgManager = 0 ;
 
 G4MolecularConfiguration::G4MolecularConfigurationManager*
         G4MolecularConfiguration::GetManager()

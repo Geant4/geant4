@@ -32,33 +32,20 @@
 //    *                            *
 //    ******************************
 //
-// $Id$
+// $Id: PurgMagRunAction.cc 72967 2013-08-14 14:57:48Z gcosmo $
 //
 
 #include "PurgMagRunAction.hh"
 
-#include "G4SteppingManager.hh"
-
 #include "G4Run.hh"
-#include "G4Material.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
-#include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
-#include <iomanip>
-
-#ifdef G4ANALYSIS_USE
 #include "PurgMagAnalysisManager.hh"
-#endif
-
-#include <assert.h>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagRunAction::PurgMagRunAction(PurgMagDetectorConstruction* det)
-:Detector(det)
+PurgMagRunAction::PurgMagRunAction()
 {   
   saveRndm = 1;  
 }
@@ -73,28 +60,19 @@ PurgMagRunAction::~PurgMagRunAction()
 void PurgMagRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
 
-#ifdef G4ANALYSIS_USE
-PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
+  PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
    analysis->book();
-#endif  
 
   G4cout << "---> Run " << aRun->GetRunID() << " start." << G4endl;
   
   
   // save Rndm status
   if (saveRndm > 0)
-    { CLHEP::HepRandom::showEngineStatus();
+    { 
+      CLHEP::HepRandom::showEngineStatus();
       CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
     }
-       
- 
-  //Drawing
-  // 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    } 
+      
 }
 
 
@@ -103,19 +81,11 @@ PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
 void PurgMagRunAction::EndOfRunAction(const G4Run* aRun)
 {     
   
-#ifdef G4ANALYSIS_USE
   PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
-#endif
   
   G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
   
-#ifdef G4ANALYSIS_USE      
-      analysis->finish();
-#endif
-
-  //drawing
-  if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+  analysis->finish();
        
   // save Rndm status
   if (saveRndm == 1)

@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADamages.cc 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4DNADamages.cc 66872 2013-01-15 01:25:57Z japost $
 //
 #include "G4DNADamages.hh"
 #include "G4UnitsTable.hh"
 
-G4DNADamages* G4DNADamages::fpInstance(0);
+G4ThreadLocal G4DNADamages* G4DNADamages::fpInstance(0);
 
 G4DNAIndirectHit::G4DNAIndirectHit(const G4String& baseName,
                                    const G4Molecule* molecule,

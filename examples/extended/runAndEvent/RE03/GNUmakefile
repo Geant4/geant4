@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2007-11-13 19:55:43 asaim Exp $
+# $Id: GNUmakefile 66379 2012-12-18 09:46:33Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,7 +16,7 @@ all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
-visclean:
-	rm -f g4*.prim g4*.eps g4*.wrl
-	rm -f .DAWN_*
+CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
+CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
+
 

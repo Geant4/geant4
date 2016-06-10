@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Isotope.cc 68070 2013-03-13 15:03:06Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,7 +57,7 @@ G4IsotopeTable G4Isotope::theIsotopeTable;
 // Create an isotope
 //
 G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int il)
-: fName(Name), fZ(Z), fN(N), fA(A), fm(il), fCountUse(0)
+  : fName(Name), fZ(Z), fN(N), fA(A), fm(il)//, fCountUse(0)
 {
   if (Z<1) { 
     G4ExceptionDescription ed;
@@ -82,7 +82,7 @@ G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int il)
 //                            for usage restricted to object persistency
 
 G4Isotope::G4Isotope(__void__&)
-  : fZ(0), fN(0), fA(0), fm(0), fCountUse(0), fIndexInTable(0)
+  : fZ(0), fN(0), fA(0), fm(0), /*fCountUse(0),*/ fIndexInTable(0)
 {
 }
 
@@ -115,7 +115,7 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
     fN = right.fN;
     fA = right.fA;
     fm = right.fm;    
-    fCountUse = right.fCountUse;
+    //    fCountUse = right.fCountUse;
   }
   return *this;
 }

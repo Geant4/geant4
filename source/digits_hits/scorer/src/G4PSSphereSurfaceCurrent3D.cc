@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PSSphereSurfaceCurrent3D.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4PSSphereSurfaceCurrent3D
 #include "G4PSSphereSurfaceCurrent3D.hh"

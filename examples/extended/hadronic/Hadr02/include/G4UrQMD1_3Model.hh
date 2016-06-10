@@ -32,6 +32,9 @@
 /// \file hadronic/Hadr02/include/G4UrQMD1_3Model.hh
 /// \brief Definition of the G4UrQMD1_3Model class
 //
+// $Id: G4UrQMD1_3Model.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4UrQMD1_3Model_hh
 #define G4UrQMD1_3Model_hh
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,6 +58,7 @@
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
+
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
 #include "G4VIntraNuclearTransportModel.hh"
@@ -65,84 +69,39 @@
 #include "G4ReactionProduct.hh"
 #include "G4IntraNucleiCascader.hh"
 #include "G4Track.hh"
+
 #include <fstream>                
 #include <string>
-//--------------------------------
-//AND->
-//This should be included in the .cc to 
-//avoid multiple definition issues
-//#include "G4UrQMD1_3Interface.hh"
-//AND<-
 
-
-////////////////////////////////////////////////////////////////////////////////
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 class G4UrQMD1_3Model : public G4VIntraNuclearTransportModel {
-
-
 
 public:
 
-    G4UrQMD1_3Model(const G4String& name = "UrQMD1_3");
-
+  G4UrQMD1_3Model(const G4String& name = "UrQMD1_3");
     
-    virtual ~G4UrQMD1_3Model ();
-
-//    G4double GetMinEnergy( const G4Material *aMaterial,
-//                                  const G4Element *anElement ) const;
-//    G4double GetMaxEnergy( const G4Material *aMaterial,
-//                                  const G4Element *anElement ) const;
-
+  virtual ~G4UrQMD1_3Model ();
     
-   G4ReactionProductVector* Propagate(G4KineticTrackVector* 
-   theSecondaries, G4V3DNucleus* theTarget);
+  G4ReactionProductVector* Propagate(G4KineticTrackVector* 
+				     theSecondaries, 
+				     G4V3DNucleus* theTarget);
 
-
-
-    virtual G4HadFinalState *ApplyYourself
-       (const G4HadProjectile &, G4Nucleus &);
-
-
-
+  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&, 
+					 G4Nucleus&);
     
-   private: 
+private: 
 
-   G4int operator==(G4UrQMD1_3Model& right) {
-    return (this == &right);
-   }
+  G4int operator==(G4UrQMD1_3Model& right);
+  G4int operator!=(G4UrQMD1_3Model& right);
+                                    
+  void InitialiseDataTables();
 
-   G4int operator!=(G4UrQMD1_3Model& right) {
-    return (this != &right);
-   }
-
-  
-   G4int verbose;
-                                  
-   void InitialiseDataTables();
+  void WelcomeMessage () const;                         
    
   G4int CurrentEvent;
-    
-  private:
+  G4int verbose;
 
-
-    void WelcomeMessage () const;                         
-
-    G4HadFinalState theResult; 
-   
-
+  G4HadFinalState theResult; 
 };
 
-// inline G4double G4UrQMD1_3Model::GetMinEnergy( const G4Material *,
-//  const G4Element * ) const
-//  {return theMinEnergy;}
-////////////////////////////////////////////////////////////////////////////////
-//
-// inline G4double G4UrQMD1_3Model::GetMaxEnergy( const G4Material *,
-//  const G4Element * ) const
-//  {return theMaxEnergy;}
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-//
 #endif

@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2010-07-16 07:37:48 maire Exp $
+$Id: History 72243 2013-07-12 08:45:36Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -12,6 +12,28 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
+11-07-13 I.Hrivnacova (particleGunExample-V09-06-06) 
+- In HistoManager: use new analysis manager method SetH1Activation()   
+     
+07-06-13 mma (particleGunExample-V09-06-05)
+- Cosmetic in SteppingAction.     
+     
+28-03-13 mma (particleGunExample-V09-06-04)
+- simplify histos management
+     
+24-03-13 mma (particleGunExample-V09-06-03)
+- polish coding conventions
+     
+17-03-13 mma (particleGunExample-V09-06-02)
+- G4 coding conventions
+
+14-02-13  I.Hrivnacova (particleGunExample-V09-06-01)
+- Do not declare virtual functions in PrimaryGeneratorActionN
+  classes which do not derive from Geant4 base class.
+
+13-02-13  I.Hrivnacova (particleGunExample-V09-06-00)
+- Applied coding guidelines (virtual keyword, data member initialization)
 
 17-11-12 I. Hrivnacova (particleGunExample-V09-05-05)
 - Updated documentation:

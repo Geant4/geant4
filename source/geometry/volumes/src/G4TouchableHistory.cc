@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TouchableHistory.cc 68773 2013-04-05 12:47:53Z gcosmo $
 //
 // 
 // class G4TouchableHistory Implementation
@@ -33,63 +33,65 @@
 
 #include "G4TouchableHistory.hh"
 
-G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
+G4ThreadLocal G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator = 0;
 
 G4TouchableHistory::G4TouchableHistory()
   : frot(G4RotationMatrix()),
     ftlate(G4ThreeVector(0.,0.,0.)),
     fhistory()
-{
+{ 
    G4VPhysicalVolume* pPhysVol=0;
    fhistory.SetFirstEntry(pPhysVol);
 }
 
 G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
   : fhistory(history)
-{
+{ 
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
   ftlate = tf.NetTranslation();
   frot = tf.NetRotation();
 }
 
 G4TouchableHistory::~G4TouchableHistory()
-{
+{ 
 }
 
 const G4ThreeVector&
 G4TouchableHistory::GetTranslation(G4int depth) const
-{
+{ 
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static G4ThreeVector currTranslation;
+  static G4ThreadLocal G4ThreeVector* ctrans = 0;
+  if ( !ctrans )  { ctrans = new G4ThreeVector; }
   if(depth==0.0)
   {
     return ftlate;
   }
   else
   {
-    currTranslation =
+    *ctrans =
       fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
-    return currTranslation;
+    return *ctrans;
   }
 }
 
 const G4RotationMatrix*
 G4TouchableHistory::GetRotation(G4int depth) const
-{
+{ 
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static G4RotationMatrix rotM;
+  static G4ThreadLocal G4RotationMatrix* rotM = 0;
+  if (!rotM )  { rotM = new G4RotationMatrix(); }
 
-  if(depth==0.0)
+  if(depth==0)
   {
     return &frot;
   }
   else
   {
-    rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
-    return &rotM;
+    *rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
+    return rotM;
   }
 }

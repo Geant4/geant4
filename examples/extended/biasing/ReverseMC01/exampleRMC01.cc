@@ -27,7 +27,7 @@
 /// \brief Main program of the biasing/ReverseMC01 example
 //
 //
-// $Id$
+// $Id: exampleRMC01.cc 76253 2013-11-08 11:26:50Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -102,7 +102,8 @@ int main(int argc,char** argv) {
   //                                        the adjoint tracking phase
   
   theAdjointSimManager->SetAdjointRunAction(theRunAction);
-  theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
+  //theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
+  theAdjointSimManager->SetAdjointEventAction(new RMC01EventAction);
   
 #ifdef G4VIS_USE
   // visualization manager

@@ -92,10 +92,10 @@
    static const G4int T12_8bfs[2][8][8];
    static const G4int T12_9bfs[2][9][9];
 
-   static G4double pipPtot[30];
-   static G4double pimPtot[30];
-   static G4double t12_dSigma_dMult[8][30];
-   static G4double t32_dSigma_dMult[8][30];
+   static G4ThreadLocal G4double pipPtot[30];
+   static G4ThreadLocal G4double pimPtot[30];
+   static G4ThreadLocal G4double t12_dSigma_dMult[8][30];
+   static G4ThreadLocal G4double t32_dSigma_dMult[8][30];
 
    static const G4float pipPCrossSections[74][30];
    static const G4float pimPCrossSections[101][30];

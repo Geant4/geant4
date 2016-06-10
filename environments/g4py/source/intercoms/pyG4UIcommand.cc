@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UIcommand.cc,v 1.1 2006-08-08 05:20:57 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4UIcommand.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4UIcommand.cc
 //
@@ -47,16 +46,16 @@ list f_GetStateList(G4UIcommand* acommand)
   list pyStateList;
   std::vector<G4ApplicationState>* stateList= acommand->GetStateList();
 
-  for(G4int i=0; i< stateList->size(); i++) {
+  for( size_t i=0; i< stateList->size(); i++) {
     pyStateList.append(&(*stateList)[i]);
   }
 
   return pyStateList;
 }
 
-};                                                                              
+}
 
-using namespace pyG4UIcommand;                                                  
+using namespace pyG4UIcommand;
 
 // ====================================================================
 // module definition
@@ -86,4 +85,3 @@ void export_G4UIcommand()
     .def("GetTitle",            &G4UIcommand::GetTitle)
     ;
 }
-

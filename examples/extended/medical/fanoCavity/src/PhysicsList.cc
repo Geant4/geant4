@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* det)
-: G4VModularPhysicsList(), fDetector(det)
+: G4VModularPhysicsList(),
+  fDetector(det),fMessenger(0),fEmName(" "),fEmPhysicsList(0)
 {
   G4LossTableManager::Instance();
   fMessenger = new PhysicsListMessenger(this); 

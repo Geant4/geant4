@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleChange.cc 68795 2013-04-05 13:24:46Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -276,6 +276,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
 
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
+  G4Track* pTrack = pStep->GetTrack();
   G4double     mass = theMassChange;
 
   // Set Mass/Charge/MagneticMoment 
@@ -284,8 +285,9 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->SetMagneticMoment(theMagneticMomentChange);  
  
   // calculate new kinetic energy
+  G4double preEnergy = pPreStepPoint->GetKineticEnergy();
   G4double energy = pPostStepPoint->GetKineticEnergy() 
-                    + (theEnergyChange - pPreStepPoint->GetKineticEnergy()); 
+                    + (theEnergyChange - preEnergy); 
 
   // update kinetic energy and momentum direction
   if (energy > 0.0) {
@@ -306,8 +308,16 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
     //pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));
     pPostStepPoint->SetKineticEnergy(0.0);
   }
-
-  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+  // calculate velocity
+  if (!isVelocityChanged) {
+    if(energy > 0.0) {
+      pTrack->SetKineticEnergy(energy);
+      theVelocityChange = pTrack->CalculateVelocity();
+      pTrack->SetKineticEnergy(preEnergy);
+    } else if(theMassChange > 0.0) {
+      theVelocityChange = 0.0;
+    }
+  }
   pPostStepPoint->SetVelocity(theVelocityChange);
 
   // update polarization
@@ -344,6 +354,7 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // momentum vector.
 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
+  G4Track* pTrack = pStep->GetTrack();
 
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
@@ -353,7 +364,16 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
   pPostStepPoint->SetKineticEnergy( theEnergyChange );
-  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+
+  // calculate velocity
+  pTrack->SetKineticEnergy( theEnergyChange );
+  if (!isVelocityChanged) {
+    if(theEnergyChange > 0.0) {
+      theVelocityChange = pTrack->CalculateVelocity();
+    } else if(theMassChange > 0.0) {
+      theVelocityChange = 0.0;
+    }
+  }
   pPostStepPoint->SetVelocity(theVelocityChange);
  
    // update polarization
@@ -487,7 +507,7 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
 {
   G4bool    exitWithError = false;
   G4double  accuracy;
-  static G4int nError = 0;
+  static G4ThreadLocal G4int nError = 0;
 #ifdef G4VERBOSE
   const  G4int maxError = 30;
 #endif

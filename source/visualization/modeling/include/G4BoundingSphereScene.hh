@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4BoundingSphereScene.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  7th June 1997
@@ -100,7 +100,6 @@ public:
   virtual void AddPrimitive (const G4Square&)     {}
   virtual void AddPrimitive (const G4Polymarker&) {}
   virtual void AddPrimitive (const G4Polyhedron&) {}
-  virtual void AddPrimitive (const G4NURBS&)      {}
 
 private:
   void Accrue (const G4VSolid& solid);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4AxesModel.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 // 
 // John Allison  3rd April 2001
@@ -41,7 +41,18 @@
 #include "G4ArrowModel.hh"
 #include "G4TextModel.hh"
 
-G4AxesModel::~G4AxesModel () {}
+G4AxesModel::~G4AxesModel ()
+{
+  delete fZAnnotationModel;
+  delete fZLabelModel;
+  delete fZAxisModel;
+  delete fYAnnotationModel;
+  delete fYLabelModel;
+  delete fYAxisModel;
+  delete fXAnnotationModel;
+  delete fXLabelModel;
+  delete fXAxisModel;
+}
 
 G4AxesModel::G4AxesModel
 (G4double x0, G4double y0, G4double z0, G4double length,
@@ -96,6 +107,7 @@ G4AxesModel::G4AxesModel
     va = new G4VisAttributes(xColour);
     text->SetVisAttributes(va);
     fXLabelModel = new G4TextModel(*text);
+    delete text;
     text = new G4Text(annotation,G4Point3D(x0+0.8*length, y0, z0));
     text->SetScreenSize(10.);
     text->SetOffset(5.,5.);
@@ -103,6 +115,7 @@ G4AxesModel::G4AxesModel
     va = new G4VisAttributes(xColour);
     text->SetVisAttributes(va);
     fXAnnotationModel = new G4TextModel(*text);
+    delete text;
   }
 
   G4Colour yColour(colour);
@@ -117,6 +130,7 @@ G4AxesModel::G4AxesModel
     va = new G4VisAttributes(yColour);
     text->SetVisAttributes(va);
     fYLabelModel = new G4TextModel(*text);
+    delete text;
     text = new G4Text(annotation,G4Point3D(x0, y0+0.8*length, z0));
     text->SetScreenSize(10.);
     text->SetOffset(5.,5.);
@@ -124,6 +138,7 @@ G4AxesModel::G4AxesModel
     va = new G4VisAttributes(yColour);
     text->SetVisAttributes(va);
     fYAnnotationModel = new G4TextModel(*text);
+    delete text;
   }
 
   G4Colour zColour(colour);
@@ -138,6 +153,7 @@ G4AxesModel::G4AxesModel
     va = new G4VisAttributes(zColour);
     text->SetVisAttributes(va);
     fZLabelModel = new G4TextModel(*text);
+    delete text;
     text = new G4Text(annotation,G4Point3D(x0, y0, z0+0.8*length));
     text->SetScreenSize(10.);
     text->SetOffset(5.,5.);
@@ -145,6 +161,7 @@ G4AxesModel::G4AxesModel
     va = new G4VisAttributes(zColour);
     text->SetVisAttributes(va);
     fZAnnotationModel = new G4TextModel(*text);
+    delete text;
   }
 }
 

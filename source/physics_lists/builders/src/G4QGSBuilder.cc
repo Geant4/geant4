@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4QGSBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -39,9 +39,7 @@
 #include "G4QGSBuilder.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4ProjectileDiffractiveChannel.hh"
 #include "G4TheoFSGenerator.hh"
-#include "G4QStringChipsParticleLevelInterface.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
@@ -51,16 +49,15 @@
 
 
 G4QGSBuilder::G4QGSBuilder(const G4String& aName, G4PreCompoundModel* p,
-			   G4bool quasiel, G4bool diff) 
+			   G4bool quasiel) 
   : G4VHadronModelBuilder(aName), 
     theQGStringModel(0), theQGStringDecay(0), theQuasiElastic(0), 
-    theProjectileDiffraction(0),thePreCompound(p),theQGSM(0), 
-    quasielFlag(quasiel), diffFlag(diff)
+    thePreCompound(p),theQGSM(0), 
+    quasielFlag(quasiel)
 {}
 
 G4QGSBuilder::~G4QGSBuilder() 
 {
-  delete theProjectileDiffraction;
   delete theQuasiElastic;
   delete theQGStringDecay;
   delete theQGStringModel;
@@ -80,19 +77,12 @@ G4HadronicInteraction* G4QGSBuilder::BuildModel()
     theQuasiElastic = new G4QuasiElasticChannel();
     theQGSModel->SetQuasiElasticChannel(theQuasiElastic);
   }
-  if ( diffFlag ) {
-    theProjectileDiffraction = new G4ProjectileDiffractiveChannel();
-    theQGSModel->SetProjectileDiffraction(theProjectileDiffraction);
-  } 
 
   if(!thePreCompound) {
     thePreCompound = new G4PreCompoundModel(new G4ExcitationHandler());
   }
 
-  if(GetName() == "QGSC") {
-    theQGSModel->SetTransport(new G4QStringChipsParticleLevelInterface());
-
-  } else if(GetName() == "QGSB") {
+  if(GetName() == "QGSB") {
     G4BinaryCascade* bic = new G4BinaryCascade();
     bic->SetDeExcitation(thePreCompound);
     theQGSModel->SetTransport(bic);

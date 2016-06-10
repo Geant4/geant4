@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SmoothTrajectoryPoint.hh 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 #ifndef G4SmoothTrajectoryPoint_h
 #define G4SmoothTrajectoryPoint_h 1
 
+#include "trkgdefs.hh"
 #include "G4VTrajectoryPoint.hh"
 #include "globals.hh"                // Include from 'global'
 #include "G4ThreeVector.hh"          // Include from 'geometry'
@@ -54,7 +55,7 @@ public: // without description
 // Constructor/Destructor
    G4SmoothTrajectoryPoint();
    // No auxiliary points setter, so must set the points in the
-   // constructor already (jacek 31/10/2002)
+   // constructor already
    G4SmoothTrajectoryPoint(G4ThreeVector pos,
 			   std::vector<G4ThreeVector>* auxiliaryPoints);
    G4SmoothTrajectoryPoint(G4ThreeVector pos);
@@ -91,23 +92,19 @@ public:
    std::vector<G4ThreeVector>* fAuxiliaryPointVector;
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
-#endif
+extern G4TRACKING_DLL G4ThreadLocal
+G4Allocator<G4SmoothTrajectoryPoint> *aSmoothTrajectoryPointAllocator;
 
 inline void* G4SmoothTrajectoryPoint::operator new(size_t)
 {
-   void *aTrajectoryPoint;
-   aTrajectoryPoint = (void *) aSmoothTrajectoryPointAllocator.MallocSingle();
-   return aTrajectoryPoint;
+  if (!aSmoothTrajectoryPointAllocator)
+  { aSmoothTrajectoryPointAllocator= new G4Allocator<G4SmoothTrajectoryPoint>; }
+  return (void *) aSmoothTrajectoryPointAllocator->MallocSingle();
 }
 
 inline void G4SmoothTrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-   aSmoothTrajectoryPointAllocator.FreeSingle((G4SmoothTrajectoryPoint *) aTrajectoryPoint);
+  aSmoothTrajectoryPointAllocator->FreeSingle((G4SmoothTrajectoryPoint *) aTrajectoryPoint);
 }
 
 #endif
-

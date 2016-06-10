@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04ExtraPhysics.cc 68751 2013-04-05 10:21:24Z gcosmo $
+//
 /// \file field/field04/src/F04ExtraPhysics.cc
 /// \brief Implementation of the F04ExtraPhysics class
 //
-//
+
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -57,10 +59,10 @@ void F04ExtraPhysics::ConstructProcess()
     G4cout << "F04ExtraPhysics:: Add Extra Physics Processes"
               << G4endl;
 
-    theParticleIterator->reset();
+    aParticleIterator->reset();
 
-    while ((*theParticleIterator)()) {
-        G4ParticleDefinition* particle = theParticleIterator->value();
+    while ((*aParticleIterator)()) {
+        G4ParticleDefinition* particle = aParticleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
         G4double charge = particle->GetPDGCharge();

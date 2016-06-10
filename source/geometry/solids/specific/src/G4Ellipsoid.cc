@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Ellipsoid.cc 73430 2013-08-27 11:04:49Z gcosmo $
 //
 // class G4Ellipsoid
 //
@@ -45,13 +45,12 @@
 #include "G4GeometryTolerance.hh"
 
 #include "meshdefs.hh"
-
 #include "Randomize.hh"
+
+#include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 using namespace CLHEP;
@@ -74,6 +73,9 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
   // to include a default for the cuts 
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+
+  halfCarTolerance = kCarTolerance*0.5;
+  halfRadTolerance = kRadTolerance*0.5;
 
   // Check Semi-Axis
   if ( (pxSemiAxis<=0.) || (pySemiAxis<=0.) || (pzSemiAxis<=0.) )
@@ -109,7 +111,8 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Ellipsoid::G4Ellipsoid( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), kRadTolerance(0.), fCubicVolume(0.),
+  : G4VSolid(a), fpPolyhedron(0), kRadTolerance(0.),
+    halfCarTolerance(0.), halfRadTolerance(0.), fCubicVolume(0.),
     fSurfaceArea(0.), xSemiAxis(0.), ySemiAxis(0.), zSemiAxis(0.),
     semiAxisMax(0.), zBottomCut(0.), zTopCut(0.)
 {
@@ -130,6 +133,8 @@ G4Ellipsoid::~G4Ellipsoid()
 G4Ellipsoid::G4Ellipsoid(const G4Ellipsoid& rhs)
   : G4VSolid(rhs),
     fpPolyhedron(0), kRadTolerance(rhs.kRadTolerance),
+    halfCarTolerance(rhs.halfCarTolerance),
+    halfRadTolerance(rhs.halfRadTolerance),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     xSemiAxis(rhs.xSemiAxis), ySemiAxis(rhs.ySemiAxis),
     zSemiAxis(rhs.zSemiAxis), semiAxisMax(rhs.semiAxisMax),
@@ -154,12 +159,26 @@ G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs)
    // Copy data
    //
    fpPolyhedron = 0; kRadTolerance = rhs.kRadTolerance;
+   halfCarTolerance = rhs.halfCarTolerance;
+   halfRadTolerance = rhs.halfRadTolerance;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
    xSemiAxis = rhs.xSemiAxis; ySemiAxis = rhs.ySemiAxis;
    zSemiAxis = rhs.zSemiAxis; semiAxisMax = rhs.semiAxisMax;
    zBottomCut = rhs.zBottomCut; zTopCut = rhs.zTopCut;
 
    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Dispatch to parameterisation for replication mechanism dimension
+// computation & modification.
+
+void G4Ellipsoid::ComputeDimensions(G4VPVParameterisation* p,
+                                    const G4int n,
+                                    const G4VPhysicalVolume* pRep)
+{
+  p->ComputeDimensions(*this,n,pRep);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -419,8 +438,6 @@ EInside G4Ellipsoid::Inside(const G4ThreeVector& p) const
            rad2oi;  // outside surface inner tolerance
   EInside in;
 
-  static const G4double halfRadTolerance=kRadTolerance*0.5;
-
   // check this side of z cut first, because that's fast
   //
   if (p.z() < zBottomCut-halfRadTolerance) { return in=kOutside; }
@@ -494,9 +511,6 @@ G4ThreeVector G4Ellipsoid::SurfaceNormal( const G4ThreeVector& p) const
 G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
                                     const G4ThreeVector& v  ) const
 {
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
-  static const G4double halfRadTolerance=kRadTolerance*0.5;
-
   G4double distMin = std::min(xSemiAxis,ySemiAxis);
   const G4double dRmax = 100.*std::min(distMin,zSemiAxis);
   distMin= kInfinity;
@@ -1058,13 +1072,6 @@ G4VisExtent G4Ellipsoid::GetExtent() const
   return G4VisExtent (-semiAxisMax, semiAxisMax,
                       -semiAxisMax, semiAxisMax,
                       -semiAxisMax, semiAxisMax);
-}
-
-G4NURBS* G4Ellipsoid::CreateNURBS () const
-{
-  // Box for now!!!
-  //
-  return new G4NURBSbox(semiAxisMax, semiAxisMax, semiAxisMax);
 }
 
 G4Polyhedron* G4Ellipsoid::CreatePolyhedron () const

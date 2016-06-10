@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TheRayTracer.cc 77479 2013-11-25 10:01:22Z gcosmo $
 //
 //
 //
@@ -53,6 +53,7 @@
 #include "G4TransportationManager.hh"
 #include "G4RegionStore.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4VVisManager.hh"
 
 G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
 			       G4VRTScanner* scanner)
@@ -66,7 +67,7 @@ G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
   theRayTracerStackingAction = 0;
   theRayTracerTrackingAction = 0;
   theRayTracerSteppingAction = 0;
-  theMessenger = G4RTMessenger::GetInstance(this,theRayTracerSteppingAction);
+  theMessenger = G4RTMessenger::GetInstance(this);
   theEventManager = G4EventManager::GetEventManager();
 
   nColumn = 640;
@@ -96,7 +97,7 @@ G4TheRayTracer::~G4TheRayTracer()
   delete theFigMaker;
 }
 
-void G4TheRayTracer::Trace(G4String fileName)
+void G4TheRayTracer::Trace(const G4String& fileName)
 {
   G4StateManager* theStateMan = G4StateManager::GetStateManager();
   G4ApplicationState currentState = theStateMan->GetCurrentState();
@@ -186,6 +187,9 @@ G4bool G4TheRayTracer::CreateBitMap()
   G4double viewSpanX = stepAngle*nColumn;
   G4double viewSpanY = stepAngle*nRow;
   G4bool succeeded;
+
+  G4VVisManager* visMan = G4VVisManager::GetConcreteInstance();
+  visMan->IgnoreStateChanges(true);
 
 // Confirm process(es) of Geantino is initialized
   G4VPhysicalVolume* pWorld =
@@ -281,10 +285,11 @@ G4bool G4TheRayTracer::CreateBitMap()
   }
 
   theStateMan->SetNewState(G4State_Idle); 
+  visMan->IgnoreStateChanges(false);
   return true;
 }
 
-void G4TheRayTracer::CreateFigureFile(G4String fileName)
+void G4TheRayTracer::CreateFigureFile(const G4String& fileName)
 {
   //G4cout << nColumn << " " << nRow << G4endl;
   theFigMaker->CreateFigureFile(fileName,nColumn,nRow,colorR,colorG,colorB);
@@ -316,7 +321,8 @@ G4bool G4TheRayTracer::GenerateColour(G4Event* anEvent)
   return true;
 }
 
-G4Colour G4TheRayTracer::GetMixedColour(G4Colour surfCol,G4Colour transCol,G4double weight)
+G4Colour G4TheRayTracer::GetMixedColour
+(const G4Colour& surfCol,const G4Colour& transCol,G4double weight)
 {
   G4double red   = weight*surfCol.GetRed() + (1.-weight)*transCol.GetRed();
   G4double green = weight*surfCol.GetGreen() + (1.-weight)*transCol.GetGreen();
@@ -344,24 +350,26 @@ G4Colour G4TheRayTracer::GetSurfaceColour(G4RayTrajectoryPoint* point)
 
   if(preVis)
   {
+    const G4Colour& preAttColour = preAtt->GetColour();
     G4double brill = (1.0-(-lightDirection).dot(normal))/2.0;
-    G4double red   = preAtt->GetColour().GetRed();
-    G4double green = preAtt->GetColour().GetGreen();
-    G4double blue  = preAtt->GetColour().GetBlue();
+    G4double red   = preAttColour.GetRed();
+    G4double green = preAttColour.GetGreen();
+    G4double blue  = preAttColour.GetBlue();
     preCol = G4Colour
-      (red*brill,green*brill,blue*brill,preAtt->GetColour().GetAlpha());
+      (red*brill,green*brill,blue*brill,preAttColour.GetAlpha());
   }
   else
   { preCol = transparent; }
 
   if(postVis)
   {
+    const G4Colour& postAttColour = postAtt->GetColour();
     G4double brill = (1.0-(-lightDirection).dot(-normal))/2.0;
-    G4double red   = postAtt->GetColour().GetRed();
-    G4double green = postAtt->GetColour().GetGreen();
-    G4double blue  = postAtt->GetColour().GetBlue();
+    G4double red   = postAttColour.GetRed();
+    G4double green = postAttColour.GetGreen();
+    G4double blue  = postAttColour.GetBlue();
     postCol = G4Colour
-      (red*brill,green*brill,blue*brill,postAtt->GetColour().GetAlpha());
+      (red*brill,green*brill,blue*brill,postAttColour.GetAlpha());
   }
   else
   { postCol = transparent; }
@@ -373,7 +381,8 @@ G4Colour G4TheRayTracer::GetSurfaceColour(G4RayTrajectoryPoint* point)
   return GetMixedColour(preCol,postCol,weight);
 }
 
-G4Colour G4TheRayTracer::Attenuate(G4RayTrajectoryPoint* point, G4Colour sourceCol)
+G4Colour G4TheRayTracer::Attenuate
+(G4RayTrajectoryPoint* point,const G4Colour& sourceCol)
 {
   const G4VisAttributes* preAtt = point->GetPreStepAtt();
 

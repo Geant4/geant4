@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronicProcessStore.cc 67989 2013-03-13 10:54:03Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 
 #include "G4HadronicProcessStore.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4Element.hh"
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
@@ -58,14 +59,14 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
 
-G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
+G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 {
   if(0 == theInstance) {
-    static G4HadronicProcessStore manager;
+    static G4ThreadLocal G4HadronicProcessStore *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4HadronicProcessStore  ;  G4HadronicProcessStore &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;
@@ -136,20 +137,21 @@ G4double G4HadronicProcessStore::GetCrossSectionPerAtom(
                                  const G4ParticleDefinition* part,
                                  G4double energy,
                                  const G4VProcess* proc,
-                                 const G4Element*  element)
+                                 const G4Element*  element,
+				 const G4Material* material)
 {
   G4double cross = 0.;    
   G4int subType = proc->GetProcessSubType();      
   if (subType == fHadronElastic)   
-    cross = GetElasticCrossSectionPerAtom(part,energy,element);
+    cross = GetElasticCrossSectionPerAtom(part,energy,element,material);
   else if (subType == fHadronInelastic)   
-    cross = GetInelasticCrossSectionPerAtom(part,energy,element);
+    cross = GetInelasticCrossSectionPerAtom(part,energy,element,material);
   else if (subType == fCapture)   
-    cross = GetCaptureCrossSectionPerAtom(part,energy,element);      
+    cross = GetCaptureCrossSectionPerAtom(part,energy,element,material);      
   else if (subType == fFission)   
-    cross = GetFissionCrossSectionPerAtom(part,energy,element); 
+    cross = GetFissionCrossSectionPerAtom(part,energy,element,material); 
   else if (subType == fChargeExchange)   
-    cross = GetChargeExchangeCrossSectionPerAtom(part,energy,element);
+    cross = GetChargeExchangeCrossSectionPerAtom(part,energy,element,material);
   return cross;
 }  	   
 
@@ -540,6 +542,7 @@ void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part) 
 {
@@ -552,6 +555,7 @@ void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::DumpHtml()
 {
@@ -598,6 +602,7 @@ void G4HadronicProcessStore::DumpHtml()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
                                        std::ofstream& outFile)
@@ -657,6 +662,8 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 {
 	G4String dirName(getenv("G4PhysListDocDir"));
@@ -675,93 +682,90 @@ void G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) c
 	outModel << "</html>\n";
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void G4HadronicProcessStore::Dump(G4int level)
 {
-  if(level > 0) {
-    G4cout << "=============================================================="
-	   << "=============================="
-	   << G4endl;
-      G4cout << "             HADRONIC PROCESSES SUMMARY (verbose level " << level
-	     << ")" << G4endl;
-  }
-  for(G4int i=0; i<n_part; ++i) {
+ if (level == 0) return;
+  
+ G4cout 
+   << "\n====================================================================\n"
+   << std::setw(60) << "HADRONIC PROCESSES SUMMARY (verbose level " << level
+   << ")" << G4endl;
+  
+ for (G4int i=0; i<n_part; ++i) {
     PD part = particle[i];
     G4String pname = part->GetParticleName();
     G4bool yes = false;
-    if(level >= 2) yes = true;
 
-    else if(level == 1 && (pname == "proton" || 
-			   pname == "neutron" ||
-			   pname == "pi+" ||
-			   pname == "pi-" ||
-                           pname == "gamma" ||
-                           pname == "e+" ||
-                           pname == "e-" ||
-                           pname == "mu+" ||
-                           pname == "mu-" ||
-			   pname == "kaon+" ||
-			   pname == "kaon-" ||
-			   pname == "lambda" ||
-			   pname == "GenericIon" ||
-			   pname == "anti_neutron" ||
-			   pname == "anti_proton")) yes = true;
-    if(yes) {
+    if (level == 1 && (pname == "proton" || 
+		       pname == "neutron" ||
+		       pname == "pi+" ||
+		       pname == "pi-" ||
+                       pname == "gamma" ||
+                       pname == "e+" ||
+                       pname == "e-" ||
+                       pname == "mu+" ||
+                       pname == "mu-" ||
+		       pname == "kaon+" ||
+		       pname == "kaon-" ||
+		       pname == "lambda" ||
+		       pname == "GenericIon" ||
+		       pname == "anti_neutron" ||
+		       pname == "anti_proton")) yes = true;
+    if (level > 1) yes = true;			   
+    if (yes) {
       // main processes
       std::multimap<PD,HP,std::less<PD> >::iterator it;
 
-      for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
-	if(it->first == part) {
+      for (it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
+	if (it->first == part) {
 	  HP proc = (it->second);
 	  G4int j=0;
-	  for(; j<n_proc; ++j) {
-	    if(process[j] == proc) {
-	      Print(j, i);
-	    }
+	  for (; j<n_proc; ++j) {
+	    if (process[j] == proc) { Print(j, i); }
 	  }
 	}
       }
+      
       // extra processes
       std::multimap<PD,G4VProcess*,std::less<PD> >::iterator itp;
       for(itp=ep_map.lower_bound(part); itp!=ep_map.upper_bound(part); ++itp) {
 	if(itp->first == part) {
 	  G4VProcess* proc = (itp->second);
-	  if(wasPrinted[i] == 0) {
+	  if (wasPrinted[i] == 0) {
+            G4cout << "\n---------------------------------------------------\n"  
+           << std::setw(50) << "Hadronic Processes for " 
+	   << part->GetParticleName() << "\n";	  
 	    wasPrinted[i] = 1;
-	    G4cout<<G4endl;
-	    G4cout << "                     Hadronic Processes for <" 
-		   <<part->GetParticleName() << ">" << G4endl; 
 	  }
-	  G4cout << "          " << proc->GetProcessName() << G4endl;
+	  G4cout << "\n  Process: " << proc->GetProcessName() << G4endl;
 	}
       }
     }
   }
-  if(level > 0) {
-    G4cout << "=============================================================="
-	   << "=============================="
-	   << G4endl;
-  }
+
+  G4cout << "\n================================================================"
+	 << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
 {
   G4HadronicProcess* proc = process[idxProc];
   const G4ParticleDefinition* part = particle[idxPart];
-  if(wasPrinted[idxPart] == 0) {
-    wasPrinted[idxPart] = 1;
-    G4cout<<G4endl;
-    G4cout << "                                  Hadronic Processes for <" 
-	   << part->GetParticleName() << ">" << G4endl;
-    G4cout << "                                  ------------------------"
-           << "-----------" << G4endl;
+  if (wasPrinted[idxPart] == 0) {
+    G4cout << "\n---------------------------------------------------\n"  
+           << std::setw(50) << "Hadronic Processes for " 
+	   << part->GetParticleName() << "\n";
+    wasPrinted[idxPart] = 1;	   
   }
+  
+  G4cout << "\n  Process: " << proc->GetProcessName();    
   HI hi = 0;
-  G4bool first;
   std::multimap<HP,HI,std::less<HP> >::iterator ih;
-  G4cout << std::setw(20) << proc->GetProcessName()  
-	 << "  Models: ";
-  first = true;
   for(ih=m_map.lower_bound(proc); ih!=m_map.upper_bound(proc); ++ih) {
     if(ih->first == proc) {
       hi = ih->second;
@@ -769,23 +773,16 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
       for(; i<n_model; ++i) {
 	if(model[i] == hi) { break; }
       }
-      if(!first) G4cout << "                              ";
-      first = false;
-      G4cout << std::setw(28) << modelName[i] 
-	     << ": Emin(GeV)= "  
-	     << std::setw(4) << hi->GetMinEnergy()/GeV
-	     << "  Emax(GeV)= " 
-	     << hi->GetMaxEnergy()/GeV
-	     << G4endl;
+      G4cout << "\n        Model: " << std::setw(25) << modelName[i] << ": "  
+	     << G4BestUnit(hi->GetMinEnergy(), "Energy")
+	     << " ---> " 
+	     << G4BestUnit(hi->GetMaxEnergy(), "Energy");
     }
   }
-
   G4cout << G4endl;
-  G4cout << std::setw(20) << proc->GetProcessName()
-         << "  Crs sctns: ";
+  
   G4CrossSectionDataStore* csds = proc->GetCrossSectionDataStore();
   csds->DumpPhysicsTable(*part);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -843,6 +840,8 @@ G4HadronicProcess* G4HadronicProcessStore::FindProcess(
   return hp;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void G4HadronicProcessStore::SetEpReportLevel(G4int level)
 {
   G4cout << " Setting energy/momentum report level to " << level 
@@ -851,6 +850,8 @@ void G4HadronicProcessStore::SetEpReportLevel(G4int level)
     process[i]->SetEpReportLevel(level);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::SetProcessAbsLevel(G4double abslevel)
 {
@@ -864,6 +865,8 @@ void G4HadronicProcessStore::SetProcessAbsLevel(G4double abslevel)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void G4HadronicProcessStore::SetProcessRelLevel(G4double rellevel)
 {
   G4cout << " Setting relative energy/momentum test level to " << rellevel << G4endl;
@@ -875,3 +878,5 @@ void G4HadronicProcessStore::SetProcessRelLevel(G4double rellevel)
     theProcess->SetEnergyMomentumCheckLevels(rellevel, abslevel);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -22,31 +22,34 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: EventAction.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file EventAction.cc
 /// @brief Describe event actions
 
-#include "EventAction.hh"
 #include "G4Event.hh"
 #include "Analysis.hh"
+#include "EventAction.hh"
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 EventAction::EventAction()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 EventAction::~EventAction()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void EventAction::BeginOfEventAction(const G4Event*)
-{
-}
-
-// --------------------------------------------------------------------------
-void EventAction::EndOfEventAction(const G4Event*)
 {
   Analysis* myana = Analysis::GetAnalysis();
   myana-> ClearIncidentFlag();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void EventAction::EndOfEventAction(const G4Event*)
+{
 }

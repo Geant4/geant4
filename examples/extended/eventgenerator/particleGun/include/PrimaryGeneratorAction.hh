@@ -27,7 +27,7 @@
 /// \brief Definition of the PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.hh 68734 2013-04-05 09:47:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -56,27 +56,27 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
   public:
-    G4ParticleGun* GetParticleGun() { return particleGun; };
+    G4ParticleGun* GetParticleGun() { return fParticleGun; };
     
-    void SelectAction(G4int i) { selectedAction = i; };    
-    G4int GetSelectedAction()  { return selectedAction; };    
-    PrimaryGeneratorAction1*  GetAction1() { return action1; };
-    PrimaryGeneratorAction2*  GetAction2() { return action2; };
-    PrimaryGeneratorAction3*  GetAction3() { return action3; };
-    PrimaryGeneratorAction4*  GetAction4() { return action4; };            
+    void SelectAction(G4int i) { fSelectedAction = i; };    
+    G4int GetSelectedAction()  { return fSelectedAction; };    
+    PrimaryGeneratorAction1*  GetAction1() { return fAction1; };
+    PrimaryGeneratorAction2*  GetAction2() { return fAction2; };
+    PrimaryGeneratorAction3*  GetAction3() { return fAction3; };
+    PrimaryGeneratorAction4*  GetAction4() { return fAction4; };            
     
   private:
-    G4ParticleGun*           particleGun;
-    PrimaryGeneratorAction1* action1;
-    PrimaryGeneratorAction2* action2;
-    PrimaryGeneratorAction3* action3;
-    PrimaryGeneratorAction4* action4;
-    G4int                    selectedAction;
+    G4ParticleGun*           fParticleGun;
+    PrimaryGeneratorAction1* fAction1;
+    PrimaryGeneratorAction2* fAction2;
+    PrimaryGeneratorAction3* fAction3;
+    PrimaryGeneratorAction4* fAction4;
+    G4int                    fSelectedAction;
         
-    PrimaryGeneratorMessenger* gunMessenger;     
+    PrimaryGeneratorMessenger* fGunMessenger;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

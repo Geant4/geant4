@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2009-09-22 15:18:20 maire Exp $
+$Id: README 69108 2013-04-18 13:10:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -105,14 +105,14 @@ $Id: README,v 1.11 2009-09-22 15:18:20 maire Exp $
      
      In order to control the accuracy of the deposition, the maximum  step size 
      of charged particles is computed automatically from the binning of 
-     histograms 1 and 8 (see HistoManager).
+     histograms 1 and 8 (see RunAction).
      
      As an example, this limitation is implemented as a 'full' process :
      see StepMax class and its Messenger. The 'StepMax process' is registered
      in the Physics List.
      
-     In RunAction::BeginOfRun() the stepMax value is passed from the 
-     HistoManager to the StepMax process. 
+     StepMax is evaluated in RunAction::BeginOfRun() and passed 
+     to the StepMax process. 
      A boolean UI command allows to desactivate this mechanism.
      Another UI command allows to define directly a stepMax value.
       	
@@ -130,17 +130,17 @@ $Id: README,v 1.11 2009-09-22 15:18:20 maire Exp $
       8 : normalized energy profile d(E/E0)/d(r/r0), where r0 is the range of
           the primary particle of energy E0
             
-   The histograms are managed by the HistoManager class and its Messenger. 
+   The histograms are managed by G4AnalysisManager class and its Messenger. 
    The histos can be individually activated with the command :
-   /testem/histo/setHisto id nbBins  valMin valMax unit 
+   /analysis/h1/set id nbBins  valMin valMax unit 
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
    One can control the name of the histograms file with the command:
-   /testem/histo/setFileName  name  (default testem12)
+   /analysis/setFileName  name  (default testem12)
     
    It is possible to choose the format of the histogram file : root (default),
    xml, csv, by using namespace in HistoManager.hh      
    
    It is also possible to print selected histograms on an ascii file:
-   /testem/histo/printHisto id
+   /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii  (default testem12) 

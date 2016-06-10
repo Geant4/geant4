@@ -40,7 +40,7 @@
 G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     : G4HadronicInteraction(name)
     , theTransport(0), theHighEnergyGenerator(0)
-    , theQuasielastic(0), theProjectileDiffraction(0)
+    , theQuasielastic(0)
  {
  theParticleChange = new G4HadFinalState;
 }
@@ -108,39 +108,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 	return theParticleChange;
      } 
   }
-  if ( theProjectileDiffraction) {
-  
-     if ( theProjectileDiffraction->GetFraction(theNucleus, *aPart) > G4UniformRand() )
-      // strictly, this returns fraction on inelastic, so quasielastic should 
-	//    already be substracted, ie. quasielastic should always be used
-	//     before diffractive
-     {
-       //G4cout << "____G4TheoFSGenerator: before Scatter (2) " << G4endl;
-       G4KineticTrackVector *result= theProjectileDiffraction->Scatter(theNucleus, *aPart);
-       //G4cout << "^^^^G4TheoFSGenerator: after Scatter (2) " << G4endl;
-	if (result)
-	{
-	    for(unsigned int  i=0; i<result->size(); i++)
-	    {
-	      G4DynamicParticle * aNew = 
-		 new G4DynamicParticle(result->operator[](i)->GetDefinition(),
-                        	       result->operator[](i)->Get4Momentum().e(),
-                        	       result->operator[](i)->Get4Momentum().vect());
-	      theParticleChange->AddSecondary(aNew);
-	      delete result->operator[](i);
-	    }
-	    delete result;
-	   
-	} else 
-	{
-	    theParticleChange->SetStatusChange(isAlive);
-	    theParticleChange->SetEnergyChange(thePrimary.GetKineticEnergy());
-	    theParticleChange->SetMomentumChange(thePrimary.Get4Momentum().vect().unit());
- 
-	}
-	return theParticleChange;
-     } 
-  }
+
   G4KineticTrackVector * theInitialResult =
                theHighEnergyGenerator->Scatter(theNucleus, *aPart);
 
@@ -157,7 +125,9 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   	  G4double init_mass= ionTable->GetIonMass(theNucleus.GetZ_asInt(),theNucleus.GetA_asInt());
           G4double init_E=aPart->Get4Momentum().e();
   	  // residual nucleus
+
   	  const std::vector<G4Nucleon> & thy = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
+
   	  G4int resZ(0),resA(0);
 	  G4double delta_m(0);
   	  for(size_t them=0; them<thy.size(); them++)
@@ -172,6 +142,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 	       }  
   	     }
 	  }
+
   	  G4double final_mass(0);
 	  if ( theNucleus.GetA_asInt() ) {
 	   final_mass=ionTable->GetIonMass(theNucleus.GetZ_asInt()-resZ,theNucleus.GetA_asInt()- resA);
@@ -183,6 +154,12 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   #endif
 
   G4ReactionProductVector * theTransportResult = NULL;
+
+// Uzhi Nov. 2012
+  G4V3DNucleus* theProjectileNucleus = theHighEnergyGenerator->GetProjectileNucleus(); 
+if(theProjectileNucleus == 0)                                       // Uzhi Nov. 2012
+{                                                                   // Uzhi Nov. 2012
+
   G4int hitCount = 0;
   const std::vector<G4Nucleon>& they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
   for(size_t them=0; them<they.size(); them++)
@@ -207,6 +184,19 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
        throw G4HadronicException(__FILE__, __LINE__, "Null ptr from decay propagate");
     }   
   }
+
+} else                                                              // Uzhi Nov. 2012
+{                                                                   // Uzhi Nov. 2012
+    theTransport->SetPrimaryProjectile(thePrimary);
+    theTransportResult = 
+    theTransport->PropagateNuclNucl(theInitialResult, 
+                            theHighEnergyGenerator->GetWoundedNucleus(),
+                            theHighEnergyGenerator->GetProjectileNucleus());
+    if ( !theTransportResult ) {
+       G4cout << "G4TheoFSGenerator: null ptr from transport propagate " << G4endl;
+       throw G4HadronicException(__FILE__, __LINE__, "Null ptr from transport propagate");
+    } 
+}                                                                   // Uzhi Nov. 2012
 
   // Fill particle change
   unsigned int i;

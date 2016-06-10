@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StateManager.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -35,10 +35,11 @@
 // ------------------------------------------------------------
 
 #include "G4StateManager.hh"
+#include "G4ios.hh"
 
 // Initialization of the static pointer of the single class instance
 //
-G4StateManager* G4StateManager::theStateManager = 0;
+G4ThreadLocal G4StateManager* G4StateManager::theStateManager = 0;
 
 G4StateManager::G4StateManager()
  : theCurrentState(G4State_PreInit),
@@ -48,6 +49,9 @@ G4StateManager::G4StateManager()
    msgptr(0),
    exceptionHandler(0)
 {
+#ifdef G4MULTITHREADED
+  G4iosInitialization();
+#endif
 }
 
 G4StateManager::~G4StateManager()
@@ -72,6 +76,9 @@ G4StateManager::~G4StateManager()
     } 
     if ( state )  { delete state; }
   } 
+#ifdef G4MULTITHREADED_DEACTIVATE
+  G4iosFinalization();
+#endif
 }
 
 // -------------------------------------------------------------------------

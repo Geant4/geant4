@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.hh 67235 2013-02-08 16:34:49Z vnivanch $
 //
 //---------------------------------------------------------------------------
 //
@@ -74,21 +74,21 @@ public: // Without description
 
   ~HistoManager();
 
-  void bookHisto();
-
   void BeginOfRun();
   void EndOfRun();
 
   void BeginOfEvent();
   void EndOfEvent();
 
-  void AddEnergy(G4double edep, G4Step*);
+  void AddEnergy(G4double edep, const G4Step*);
 
   inline void SetMaxEnergy(G4double value);
 
   inline void SetNumberBins(G4int value);
 
   inline void SetNumberBinsCluster(G4int value);
+
+  inline void SetEnergyPerChannel(G4double value);
 
   inline void SetVerbose(G4int value);
 
@@ -107,6 +107,8 @@ private:
   G4double fCluster;
   G4double fTotStepGas;
   G4double fTotCluster;
+  G4double fMeanCluster;
+  G4double fFactorALICE;
   G4double fEvt;
 
   G4int fBinsE; 
@@ -135,6 +137,11 @@ inline void HistoManager::SetNumberBins(G4int value)
 inline void HistoManager::SetNumberBinsCluster(G4int value)
 {
   fBinsCluster = value;
+}
+
+inline void HistoManager::SetEnergyPerChannel(G4double value)
+{
+  if(value > 0.0) { fFactorALICE = 1./value; }
 }
 
 inline void HistoManager::SetVerbose(G4int value)

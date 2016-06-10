@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ePolarizedIonisation.cc 76472 2013-11-11 10:34:07Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -89,14 +89,8 @@ G4ePolarizedIonisation::G4ePolarizedIonisation(const G4String& name)
 
 G4ePolarizedIonisation::~G4ePolarizedIonisation()
 {
-  if (theAsymmetryTable) {
-    theAsymmetryTable->clearAndDestroy();
-    delete theAsymmetryTable;
-  }
-  if (theTransverseAsymmetryTable) {
-    theTransverseAsymmetryTable->clearAndDestroy();
-    delete theTransverseAsymmetryTable;
-  }
+  delete theAsymmetryTable;
+  delete theTransverseAsymmetryTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

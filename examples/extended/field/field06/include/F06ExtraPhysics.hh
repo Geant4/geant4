@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F06ExtraPhysics.hh 68021 2013-03-13 13:36:07Z gcosmo $
+//
 /// \file field/field06/include/F06ExtraPhysics.hh
 /// \brief Definition of the F06ExtraPhysics class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

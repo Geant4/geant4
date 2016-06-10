@@ -1,0 +1,36 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+
+                                 HADR05
+
+                             W.Pokorski 
+		(based on Hadr00 by V. Ivantchenko)
+                       CERN, Geneva, Switzerland
+
+
+This example demonstrates the usage of G4GenericPhysicsList to build 
+the concrete physics list at the run time. The code is a copy of
+example Hadr00 with the only exception of the main file, where the
+physics list is handled using the G4GenericPhysicsList
+mechanism. Please refer to Hadr00 documentation for any other
+functionality. 
+
+The G4GenericPhysicsList class allows to build the physics list at the run
+time in two possible ways, either by processing a macro file
+containing the 'physics list' or by passing a vector of 'physics
+constructors' names to the constructor of the class.
+
+To run the example you can call
+
+Hadr05 hadr05.in FTFP_BERT.mac
+
+where FTFP_BERT.mac is the macro file containing the 'physics list'. 
+
+If you run this example by calling
+
+Hadr05 hadr05.in
+
+the physics list will be constructed by using a vector of the names of
+the different physics constructor defined in the Hard05.cc file.

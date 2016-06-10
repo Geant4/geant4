@@ -36,8 +36,12 @@
 /// \file hadronic/Hadr02/include/G4DPMJET2_5Interface.hh
 /// \brief Definition of the G4DPMJET2_5Interface class
 //
+// $Id: G4DPMJET2_5Interface.hh 77519 2013-11-25 10:54:57Z gcosmo $
+//
+
 #ifndef G4DPMJET2_5Interface_hh
 #define G4DPMJET2_5Interface_hh 1
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET2_5Interface.hh
@@ -115,12 +119,12 @@ struct ccdpm25diffra
 };
 struct ccdpm25diqsum
 {
-  G4int    ndvuu, ndvus, ndvss, nvduu, nvdus, nvdss,
-           ndsuu, ndsus, ndsss, nsduu, nsdus, nsdss,
-           ndzuu, ndzus, ndzss, nzduu, nzdus, nzdss,
-           nadvuu, nadvus, nadvss, navduu, navdus, navdss,
-           nadsuu, nadsus, nadsss, nasduu, nasdus, nasdss,
-           nadzuu, nadzus, nadzss, nazduu, nazdus, nazdss;
+  G4int ndvuu, ndvus, ndvss, nvduu, nvdus, nvdss,
+        ndsuu, ndsus, ndsss, nsduu, nsdus, nsdss,
+        ndzuu, ndzus, ndzss, nzduu, nzdus, nzdss,
+        nadvuu, nadvus, nadvss, navduu, navdus, navdss,
+        nadsuu, nadsus, nadsss, nasduu, nasdus, nasdss,
+        nadzuu, nadzus, nadzss, nazduu, nazdus, nazdss;
 };
 struct ccdpm25diquax
 {
@@ -129,8 +133,8 @@ struct ccdpm25diquax
 };
 struct ccdpm25diqrej
 {
-  G4int    idiqre[7], idvre[3], ivdre[3], idsre[3], isdre[3],
-           idzre[3], izdre[3], idiqrz[7];
+  G4int idiqre[7], idvre[3], ivdre[3], idsre[3], isdre[3],
+    idzre[3], izdre[3], idiqrz[7];
 };
 struct ccdpm25dprin
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4hCoulombScatteringModel.cc 76536 2013-11-12 15:17:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Proton.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
@@ -74,7 +75,7 @@ G4hCoulombScatteringModel::G4hCoulombScatteringModel(const G4String& nam)
 {
   fParticleChange = 0;
   fNistManager = G4NistManager::Instance();
-  theParticleTable = G4ParticleTable::GetParticleTable();
+  theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
 
@@ -223,30 +224,39 @@ void G4hCoulombScatteringModel::SampleSecondaries(
   // recoil sampling assuming a small recoil
   // and first order correction to primary 4-momentum
   G4double mom2 = wokvi->GetMomentumSquare();
-  G4double trec = mom2*(1.0 - cost)/(targetMass + (mass + kinEnergy)*(1.0 - cost));
-  G4double finalT = kinEnergy - trec; 
-  //G4cout<<"G4hCoulombScatteringModel: finalT= "<<finalT<<" Trec= "<<trec<<G4endl;
-  if(finalT <= lowEnergyThreshold) { 
-    trec = kinEnergy;  
-    finalT = 0.0;
-  } 
+  G4double trec = mom2*(1.0 - cost)
+    /(targetMass + (mass + kinEnergy)*(1.0 - cost));
 
-  fParticleChange->SetProposedKineticEnergy(finalT);
+  // the check likely not needed
+  if(trec > kinEnergy) { trec = kinEnergy; }
+  G4double finalT = kinEnergy - trec; 
+  G4double edep = 0.0;
+  //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "
+  //	<<trec << " Z= " << iz << " A= " << ia<<G4endl;
+
   G4double tcut = recoilThreshold;
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 
   if(trec > tcut) {
-    G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
+    G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
     G4ThreeVector dir = (direction*sqrt(mom2) - 
 			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
     G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
     fvect->push_back(newdp);
   } else {
-    fParticleChange->ProposeLocalEnergyDeposit(trec);
-    fParticleChange->ProposeNonIonizingEnergyDeposit(trec);
+    edep = trec;
+    fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
   }
- 
-  return;
+
+  // finelize primary energy and energy balance
+  // this threshold may be applied only because for low-enegry
+  // e+e- msc model is applied
+  if(finalT <= lowEnergyThreshold) { 
+    edep += finalT;  
+    finalT = 0.0;
+  } 
+  fParticleChange->SetProposedKineticEnergy(finalT);
+  fParticleChange->ProposeLocalEnergyDeposit(edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

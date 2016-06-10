@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BoldyshevTripletModel.cc 74822 2013-10-22 14:42:13Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 //
@@ -233,6 +233,12 @@ void G4BoldyshevTripletModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 	*(S - electron_mass_c2*electron_mass_c2)*sin(theta_re)*sin(theta_re);
       ener_re = electron_mass_c2 * (S + electron_mass_c2*electron_mass_c2)/sqrt(D2);
       
+      // New Recoil energy calculation 
+
+      G4double momentum_recoil = 2* (electron_mass_c2) * (std::cos(theta_re)/(std::sin(phi_re)*std::sin(phi_re)));
+      G4double ener_recoil = sqrt( momentum_recoil*momentum_recoil + electron_mass_c2*electron_mass_c2);
+      ener_re = ener_recoil;
+
       //      G4cout << "electron de retroceso " << ener_re << " " << theta_re << " " << phi_re << G4endl;
       
       // Recoil electron creation

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/MyMollerBhabhaModel.cc
 /// \brief Implementation of the MyMollerBhabhaModel class
 //
-// $Id$
+// $Id: MyMollerBhabhaModel.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

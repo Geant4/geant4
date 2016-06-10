@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm4/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 75839 2013-11-06 17:27:26Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,60 +42,55 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
+ : G4UserRunAction()
 {
-  // Create analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  // Open an output file
-  //
-  G4String fileName = "testem4";
-  analysisManager->OpenFile(fileName);    
-  analysisManager->SetVerboseLevel(1);
-  G4String extension = analysisManager->GetFileType();
-  fileName = fileName + "." + extension;
+  analysisManager->SetVerboseLevel(1);  
+  analysisManager->SetFirstHistoId(1);
     
   // Creating histograms
   //
-  analysisManager->SetFirstHistoId(1);  
   analysisManager->CreateH1("1","energy (MeV) deposited in C6F6",100,0.,10.);
-  
-  G4cout << "\n----> Histogram file is opened in " << fileName << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  analysisManager->Write();
-  analysisManager->CloseFile();
-
-  delete G4AnalysisManager::Instance();    
+   delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::BeginOfRunAction(const G4Run*)
 {
-  G4cout << "\n ### Run " << aRun->GetRunID() << " start." << G4endl;
-
   // save Rndm status
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  CLHEP::HepRandom::showEngineStatus();
+  G4Random::showEngineStatus();
+
+  
+   // Get analysis manager
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+  // Open an output file
+  //
+  G4String fileName = "testem4";
+  analysisManager->OpenFile(fileName);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  G4cout << "\n ### Run " << aRun->GetRunID() << " ended." << G4endl;
-  
+void RunAction::EndOfRunAction(const G4Run*)
+{  
   // show Rndm status
-  CLHEP::HepRandom::showEngineStatus();         
+  G4Random::showEngineStatus();         
+
+  //save histograms      
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Write();
+  analysisManager->CloseFile();
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

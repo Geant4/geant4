@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01TrackerHit.hh
 /// \brief Definition of the RE01TrackerHit class
 //
-// $Id$
+// $Id: RE01TrackerHit.hh 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #ifndef RE01TrackerHit_h
@@ -36,6 +36,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
+#include "G4Types.hh"
 
 class G4AttDef;
 class G4AttValue;
@@ -76,18 +77,18 @@ private:
 
 typedef G4THitsCollection<RE01TrackerHit> RE01TrackerHitsCollection;
 
-extern G4Allocator<RE01TrackerHit> RE01TrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<RE01TrackerHit> * RE01TrackerHitAllocator;
 
 inline void* RE01TrackerHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) RE01TrackerHitAllocator.MallocSingle();
-  return aHit;
+  if(!RE01TrackerHitAllocator)
+    RE01TrackerHitAllocator = new G4Allocator<RE01TrackerHit>;
+  return (void *) RE01TrackerHitAllocator->MallocSingle();
 }
 
 inline void RE01TrackerHit::operator delete(void *aHit)
 {
-  RE01TrackerHitAllocator.FreeSingle((RE01TrackerHit*) aHit);
+  RE01TrackerHitAllocator->FreeSingle((RE01TrackerHit*) aHit);
 }
 
 #endif

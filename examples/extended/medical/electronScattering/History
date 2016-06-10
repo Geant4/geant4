@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2011-01-05 18:40:54 vnivanch Exp $
+$Id: History 78107 2013-12-03 14:50:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,38 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-12-13 I.Hrivnacova (electronScattering-V09-06-09) 
+- Synchronized README and .README files
+
+11-07-13 I.Hrivnacova (electronScattering-V09-06-08) 
+- In HistoManager: use new analysis manager method SetH1Activation()   
+     
+07-06-13 mma (electronScattering-V09-06-07)
+- Cosmetic in SteppingAction.     
+     
+10-04-13 mma (electronScattering-V09-06-06)
+- HistoManager functionalities transfered to G4Analysis and its messenger.
+    - userAction classes and all macros affected
+         
+09-04-13 mma (electronScattering-V09-06-05)
+- cosmetics for histo 5 and 6 
+     
+01-04-13 A.Dotti (electronScattering-V09-06-04)
+- New interfaces for PhysicsLists needed by MT
+     
+28-03-13 L.Urban (electronScattering-V09-06-03)
+- add 2 histograms
+     
+25-03-13 mma (electronScattering-V09-06-02)
+- more on coding conventions
+     
+15-03-13 mma (electronScattering-V09-06-01)
+- G4 coding conventions
+
+11-12-12 V.Ivant (electronScattering-V09-06-00)
+- Used SetEmModel method in physics builders
+
 13-10-12 A. Dotti (electronScattering-V09-05-08)
 - Removing double include of system of units
 

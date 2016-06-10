@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: GammaRayTelAnalysisMessenger.hh 68794 2013-04-05 13:23:26Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -63,10 +63,6 @@ private:
   GammaRayTelAnalysis*       gammaRayTelAnalysis;
   G4UIdirectory*             gammaRayTelAnalysisDir;
   
-  G4UIcmdWithAString*        Histo1DDrawCmd;
-  G4UIcmdWithAString*        Histo2DDrawCmd;
-  G4UIcmdWithAString*        Histo1DSaveCmd;
-  G4UIcmdWithAString*        Histo2DSaveCmd;
   G4UIcmdWithAString*        Histo2DModeCmd;
 };
 #endif

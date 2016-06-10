@@ -44,7 +44,7 @@
  #include "G4Types.hh"
 
  // CM momentum (GeV/c)
- G4float G4AngularDistributionPP::pcm[NENERGY] = {
+ const G4float G4AngularDistributionPP::pcm[NENERGY] = {
      0.685E-01, 0.969E-01, 0.137, 0.181, 0.217, 0.237, 0.256,
      0.291, 0.321, 0.349, 0.363, 0.375, 0.400, 0.444,
      0.494, 0.540, 0.573, 0.613, 0.650, 0.685, 0.719, 0.751,
@@ -54,7 +54,7 @@
  };
  
  // Lab energy (GeV)
- G4float G4AngularDistributionPP::elab[NENERGY] = {
+ const G4float G4AngularDistributionPP::elab[NENERGY] = {
      0.100E-01, 0.200E-01, 0.400E-01, 0.700E-01, 0.100, 0.120, 0.140,
      0.180, 0.220, 0.260, 0.280, 0.300, 0.340, 0.420,
      0.520, 0.620, 0.700, 0.800, 0.900, 1.00, 1.10, 1.20,
@@ -64,7 +64,7 @@
  };
  
  // Max dSigma/domega-CM (mb/sr)
- G4float G4AngularDistributionPP::dsigmax[NENERGY] = {
+ const G4float G4AngularDistributionPP::dsigmax[NENERGY] = {
      63.9, 29.9, 14.5, 8.97, 7.23, 6.66, 6.30,
      5.89, 5.68, 5.57, 5.56, 5.57, 5.74, 6.38,
      7.66, 9.65, 12.4, 15.6, 18.0, 20.1, 22.0, 23.8,
@@ -74,7 +74,7 @@
  };
  
  // Total cross section
- G4float G4AngularDistributionPP::sigtot[NENERGY] = {
+ const G4float G4AngularDistributionPP::sigtot[NENERGY] = {
      396., 179., 80.7, 44.5, 32.8, 29.0, 26.9,
      24.9, 24.4, 24.3, 24.4, 24.4, 24.7, 25.5,
      26.4, 26.1, 25.6, 25.1, 24.4, 23.4, 22.4, 21.5,
@@ -83,7 +83,7 @@
      34.394, 33.885, 34.122, 33.603
  };
  
- G4float G4AngularDistributionPP::sig[NENERGY][NANGLE] = {
+ const G4float G4AngularDistributionPP::sig[NENERGY][NANGLE] = {
      //------------  0.01 GeV
      {0.00008,   0.00031,   0.00070,   0.00124,   0.00193,   0.00278,   0.00378,
      0.00494,   0.00624,   0.00770,   0.00932,   0.01108,   0.01299,   0.01506,

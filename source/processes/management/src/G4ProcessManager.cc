@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProcessManager.cc 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -53,8 +53,8 @@
 // ---------------------------------
 //  function members implementation
 // ---------------------------------
-G4ProcessManagerMessenger* G4ProcessManager::fProcessManagerMessenger = 0;
-G4int  G4ProcessManager::counterOfObjects = 0;
+G4ThreadLocal G4ProcessManagerMessenger* G4ProcessManager::fProcessManagerMessenger = 0;
+G4ThreadLocal G4int  G4ProcessManager::counterOfObjects = 0;
 
 // ///////////////////////////////////////
 G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):

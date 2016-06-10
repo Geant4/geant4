@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VModularPhysicsList.cc,v 1.4 2008-05-22 09:27:25 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VModularPhysicsList.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VModularPhysicsList.cc
 //
@@ -50,10 +49,10 @@ struct CB_G4VModularPhysicsList :
 };
 
 // GetPhysics()
-const G4VPhysicsConstructor* 
+const G4VPhysicsConstructor*
       (G4VModularPhysicsList::*f1_GetPhysics)(G4int) const
   = &G4VModularPhysicsList::GetPhysics;
-const G4VPhysicsConstructor* 
+const G4VPhysicsConstructor*
       (G4VModularPhysicsList::*f2_GetPhysics)(const G4String&) const
   = &G4VModularPhysicsList::GetPhysics;
 

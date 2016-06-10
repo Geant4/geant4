@@ -1,0 +1,41 @@
+$Id: History 78011 2013-12-02 11:32:48Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+December 2nd, 2013  A.Howard
+- Moved static methods in the initialiser to the body for G4GeometrySampler
+  and G4ImportanceConfigurator
+
+November 30th, 2013  A.Howard
+- Fixed coverity errors (uninitialised variables)
+
+November 24th, 2013  A.Howard
+- Fixed segmentation fault at the end of an MT run
+- caused by deleting fGhostStep in the destructor
+- removed RemoveProcess from the destructor (ClearSampling) of the configurators
+- also caused an out of range index with MT
+
+November 22nd, 2013  A.Howard
+- Migrated to MT - changed design to physics list orientation
+- kept backward compatability for single threaded use, except for singleton
+- Moved G4VProcessPlacer and G4ProcessPlacer to management
+
+October 10th, 2013  A.Howard
+- Subdirectory and history file created.
+
+

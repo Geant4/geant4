@@ -26,6 +26,8 @@
 /// \file electromagnetic/TestEm9/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
+// $Id: HistoManager.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   HistoManager
@@ -70,6 +72,10 @@ HistoManager* HistoManager::GetPointer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::HistoManager()
+ : fGamma(0),
+   fElectron(0),
+   fPositron(0),
+   fHisto(0)
 {
   fVerbose = 1;
   fEvt1    = -1;

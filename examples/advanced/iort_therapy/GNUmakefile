@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.18 2010/11/12 14:50:02 cirrone Exp $
+# $Id: GNUmakefile 68009 2013-03-13 11:31:34Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ G4EXLIB := true
 #CPPFLAGS += -g 
 
 ifndef G4INSTALL
-  G4INSTALL = ../..
+  G4INSTALL = ../../..
 endif
 
 .PHONY: all

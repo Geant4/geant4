@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RegionStore.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // class G4RegionStore
 //
@@ -112,8 +112,8 @@ class G4RegionStore : public std::vector<G4Region*>
   private:
 
     static G4RegionStore* fgInstance;
-    static G4VStoreNotifier* fgNotifier;
-    static G4bool locked;
+    static G4ThreadLocal G4VStoreNotifier* fgNotifier;
+    static G4ThreadLocal G4bool locked;
 };
 
 #endif

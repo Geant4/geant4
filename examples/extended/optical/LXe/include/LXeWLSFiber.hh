@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeWLSFiber.hh 77664 2013-11-27 10:13:53Z gcosmo $
+//
 /// \file optical/LXe/include/LXeWLSFiber.hh
 /// \brief Definition of the LXeWLSFiber class
 //
@@ -56,8 +58,6 @@ class LXeWLSFiber : public G4PVPlacement
 
     static G4LogicalVolume* fClad2_log;
 
-    G4bool fUpdated; //does the fiber need to be rebuilt
- 
     G4double fFiber_rmin;
     G4double fFiber_rmax;
     G4double fFiber_z;

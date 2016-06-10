@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbMaterialMgr.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgbMaterialMgr
@@ -47,7 +47,7 @@
 #include "G4NistManager.hh"
 
 
-G4tgbMaterialMgr* G4tgbMaterialMgr::theInstance = 0;
+G4ThreadLocal G4tgbMaterialMgr* G4tgbMaterialMgr::theInstance = 0;
 
 
 // -------------------------------------------------------------------------

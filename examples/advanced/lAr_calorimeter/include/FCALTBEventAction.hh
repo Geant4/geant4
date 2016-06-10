@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: FCALTBEventAction.hh 73002 2013-08-15 08:09:37Z gcosmo $
 //
 // 
 
@@ -38,7 +38,6 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 
-class FCALRunAction;
 class FCALTBEventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -57,13 +56,11 @@ class FCALTBEventAction : public G4UserEventAction
     void SetPrintModulo(G4int    val)  {printModulo = val;};
 
   private:
-    G4int                       calorimeterCollID;                
     G4String                    drawFlag;
     G4int                       printModulo;   
      
     FCALSteppingAction* StepAction;
     FCALTBEventActionMessenger*  eventMessenger;
-    FCALRunAction* runManager;
 
   private:
   G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;

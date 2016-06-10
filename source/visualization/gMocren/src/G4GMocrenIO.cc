@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GMocrenIO.cc 75179 2013-10-29 10:09:31Z gcosmo $
 //
 //
 // File I/O manager class for writing or reading calcuated dose
@@ -72,6 +72,7 @@ GMocrenDataPrimitive<T>::~GMocrenDataPrimitive () {
 
 template <typename T> GMocrenDataPrimitive<T> & 
 GMocrenDataPrimitive<T>::operator = (const GMocrenDataPrimitive<T> & _right) {
+  if (this == &_right) return *this;
   for(int i = 0; i < 3; i++) {
     kSize[i] = _right.kSize[i];
     kCenter[i] = _right.kCenter[i];
@@ -471,7 +472,7 @@ bool G4GMocrenIO::storeData4() {
   std::ofstream ofile(kFileName.c_str(),
 		      std::ios_base::out|std::ios_base::binary);
   if(DEBUG || kVerbose > 0)
-    G4cout << "         file open status: " << ofile << G4endl;
+    G4cout << "         file open status: " << ofile.rdbuf() << G4endl;
   
   // file identifier
   ofile.write("gMocren ", 8);
@@ -739,7 +740,7 @@ bool G4GMocrenIO::storeData4() {
       for(int i = 0; i < 13; i++) cdunit[i] = '\0';
       const char * cu = kDoseUnit.c_str();
       size_t lcu = std::strlen(cu);
-      if(lcu > 1024) lcu = 1024;
+      if(lcu > 12) lcu = 12;
       std::strncpy(cdunit, cu, lcu);
       ofile.write((char *)cdunit, 12);
       if(DEBUG || kVerbose > 0) {
@@ -1632,7 +1633,10 @@ bool G4GMocrenIO::retrieveData() {
 		  << G4endl;
 	G4cout << "         " << kFileName << G4endl;
       }
-      std::exit(-1);
+      G4Exception("G4GMocrenIO::retrieveDadta()",
+                  "gMocren2001", FatalException,
+                  "Error.");
+
     }
   } else if(std::strncmp(verid, "GRAPE", 5) == 0) {
     G4cout << ">>>>>>>  retrieve data (ver.2) <<<<<<<" << G4endl;
@@ -3584,7 +3588,10 @@ void G4GMocrenIO::getShortDoseDist(short * _data, int _z, int _num) {
 		<< "first argument is NULL pointer. "
 		<< "The argument must be allocated array."
 		<< G4endl;
-    std::exit(-1);
+    G4Exception("G4GMocrenIO::getShortDoseDist()",
+                "gMocren2002", FatalException,
+                "Error.");
+    return;
   }
 
   int size[3];
@@ -3913,7 +3920,9 @@ void G4GMocrenIO::getTrack(int _num, std::vector<float *> & _steps,
   if(_num > (int)kTracks.size()) {
     if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "ERROR in getTrack() : " << G4endl;
-    std::exit(-1);
+    G4Exception("G4GMocrenIO::getTrack()",
+                "gMocren2003", FatalException,
+                "Error.");
   }
   unsigned char * color = new unsigned char[3];
   kTracks[_num].getColor(color);
@@ -3973,7 +3982,10 @@ void G4GMocrenIO::getDetector(int _num, std::vector<float *> & _edges,
   if(_num > (int)kDetectors.size()) {
     if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "ERROR in getDetector() : " << G4endl;
-    std::exit(-1);
+    
+    G4Exception("G4GMocrenIO::getDetector()",
+                "gMocren2004", FatalException,
+                "Error.");
   }
 
   _detName = kDetectors[_num].getName();

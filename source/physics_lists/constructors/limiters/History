@@ -1,0 +1,66 @@
+$Id: History 77998 2013-12-02 08:14:57Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+    Hadronic physics-list/constructors/limiters History
+    ---------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+30-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-14)
+- Fixed coverity errors (uninitialised variables)
+
+22-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-13)
+- G4WeightWindowBiasing and G4ImportanceBiasing modified:
+- Added guard so that AddProcess only occurs for multithreaded builds
+- Makes the singlethreaded backward compatable/minimum interface change
+
+22-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-12)
+- Added G4WeightWindowBiasing
+
+21-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-11)
+- Added G4ImportanceBiasing
+
+09-Nov-2013, Andrea Dotti 	        (phys-ctor-limiters-V09-06-10)
+- Bug fix for gnumake builds: add processes/biasing/generic/include in
+  list of includes.
+
+08-Nov-2013, Marc Verderi               (phys-ctor-limiters-V09-06-09)
+- add G4GenericBiasingPhysics.
+
+07-Nov-2013, Alberto Ribon		(phys-ctor-limiters-V09-06-08)
+- Removed low_energy and high_energy from sources.cmake and GNUmakefile.
+
+08-May-2013, Andrea Dotti		(phys-ctor-limiters-V09-06-07)
+- Bug Fixing for MT (wasActivated flag is now TLS) in G4NeutronTrackingCut 
+
+15-May-2013, Makoto Asai                (phys-ctor-limiters-V09-06-06)
+- Making G4ParallelWorldPhysics work for layered mass geometry.
+
+15-May-2013, Gabriele Cosmo             (phys-ctor-limiters-V09-06-05)
+- Fixed GNUmakefile: added dependency on processes/scoring.
+
+14-May-2013, Makoto Asai                (phys-ctor-limiters-V09-06-04)
+- Introducing G4ParallelWorldPhysics.
+
+09-May-2013, Makoto Asai                (phys-ctor-limiters-V09-06-03)
+- In G4StepLimiterPhysics, objects of G4StepLimiter and G4UserSpecialCuts
+  are now instantiated in ConstructProcess() method so that these process
+  objects are thread-local.
+
+29-Mar-2013, Andrea Dotti		(phys-ctor-limiters-V09-06-02)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
+
+02-Feb-2013, V.Ivanchenko               (phys-ctor-limiters-V09-06-01)
+- added forgotten G4StepLimiterPhysics and fixed source.cmake 
+
+10-Jan-2013, Gunter Folger              (phys-ctor-limiters-V09-06-00)
+- new directory structure introduced. 
+   constructors/limiters classes

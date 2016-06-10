@@ -11,5 +11,4 @@
 /gps/pos/radius 25.0 cm
 /gps/energy 300.0 MeV
 
-/mysetrun/SetRunID 9999
 /run/beamOn 1

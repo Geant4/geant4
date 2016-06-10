@@ -23,31 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermoreComptonModel.hh 76220 2013-11-08 10:15:00Z gcosmo $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Sebastien Incerti
-//         30 October 2008
-//         on base of G4LowEnergyCompton developed by A.Forti and M.G.Pia
 //
-// Modified:
+// Author: Alexander Bagulya
+//         11 March 2012
+//         on the base of G4LivermoreComptonModel
+//
+// History:
 // --------
-// 30 May 2011   V Ivanchenko Migration to model design for deexcitation
 
 #ifndef G4LivermoreComptonModel_h
 #define G4LivermoreComptonModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4ShellData.hh"
-#include "G4DopplerProfile.hh"
+#include "G4LPhysicsFreeVector.hh"
 
 class G4ParticleChangeForGamma;
-class G4VCrossSectionHandler;
 class G4VAtomDeexcitation;
-class G4VEMDataSet;
+class G4ShellData;
+class G4DopplerProfile;
 
 class G4LivermoreComptonModel : public G4VEmModel
 {
-
 public:
 
   G4LivermoreComptonModel(const G4ParticleDefinition* p = 0, 
@@ -56,6 +55,11 @@ public:
   virtual ~G4LivermoreComptonModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel* masterModel);
+
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
 
   virtual G4double ComputeCrossSectionPerAtom( const G4ParticleDefinition*,
                                                G4double kinEnergy, 
@@ -70,27 +74,30 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-protected:
-
-  G4ParticleChangeForGamma* fParticleChange;
-
 private:
 
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
-  G4VEMDataSet* scatterFunctionData;
-  G4VCrossSectionHandler* crossSectionHandler;
+  void ReadData(size_t Z, const char* path = 0);
 
-  G4VAtomDeexcitation*    fAtomDeexcitation;
-
-  G4ShellData shellData;
-  G4DopplerProfile profileData;
+  G4double ComputeScatteringFunction(G4double x, G4int Z);
 
   G4LivermoreComptonModel & operator=(const  G4LivermoreComptonModel &right);
   G4LivermoreComptonModel(const  G4LivermoreComptonModel&);
+
+  G4bool isInitialised;
+  G4int verboseLevel;
+
+  G4double lowestEnergy;
+  
+  G4ParticleChangeForGamma* fParticleChange;
+  G4VAtomDeexcitation*      fAtomDeexcitation;
+
+  static G4ShellData*       shellData;
+  static G4DopplerProfile*  profileData;
+
+  static G4int maxZ;
+  static G4LPhysicsFreeVector* data[100];
+
+  static const G4double ScatFuncFitParam[101][9];
 
 };
 

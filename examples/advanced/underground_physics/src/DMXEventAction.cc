@@ -52,10 +52,7 @@
 // note DMXPmtHit.hh and DMXScintHit.hh are included in DMXEventAction.hh
 
 #include "DMXEventActionMessenger.hh"
-
-#ifdef G4ANALYSIS_USE
 #include "DMXAnalysisManager.hh"
-#endif
 
 #include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
@@ -150,6 +147,8 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 
   // check that both hits collections have been defined
   if(scintillatorCollID<0||pmtCollID<0) return;
+
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
 
   // address hits collections
   DMXScintHitsCollection* SHC = NULL;
@@ -246,27 +245,15 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
       aveTimePmtHits += time / (G4double)P_hits;
       ////      if (event_id == 0) {
       if(P_hits >= 0) {
-#ifdef G4ANALYSIS_USE
-	// pass first event for histogram record:
-	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-	analysis->HistTime(time);
-#endif
+	man->FillH1(7,time);
+      }
     }
-  }
   
     if (event_id%printModulo == 0 && P_hits > 0) {
       G4cout << "     Average light collection time: "
 	     << G4BestUnit(aveTimePmtHits,"Time") << G4endl;
       G4cout << "     Number of PMT hits (photoelectron equivalent): " 
-	     << P_hits << G4endl;
-      //#ifdef G4ANALYSIS_USE
-      // plot histograms, interactively:
-      //G4bool plotevent=runAct->Getplotevent();      
-      //if(plotevent) {
-      //	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-      //	analysis->PlotHistosInter(P_hits);
-      //}
-      //#endif
+	     << P_hits << G4endl;     
     }
     // write out (x,y,z) of PMT hits
     if (savePmtFlag)
@@ -301,10 +288,10 @@ void DMXEventAction::writeScintHitsToFile(void) {
   G4String filename=runAct->GetsavehitsFile();
   std::ofstream hitsfile(filename, std::ios::app);
   if(!event_id) {
-    std::ofstream hitsfile(filename);
-    hitsfile <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
+    std::ofstream hitsfileInit(filename);
+    hitsfileInit <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
 	     << G4endl;
-    hitsfile <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
+    hitsfileInit <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
 	     << G4endl
 	     << G4endl;
   }
@@ -344,13 +331,46 @@ void DMXEventAction::writeScintHitsToFile(void) {
       hitsfile.close();
     }
 
-#ifdef G4ANALYSIS_USE
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+    G4int firstparticleIndex = 0;
+    if(firstParticleName == "gamma") firstparticleIndex = 1;
+    else if (firstParticleName == "neutron") firstparticleIndex = 2;
+    else if(firstParticleName == "electron") firstparticleIndex = 3;
+    else if(firstParticleName == "positron") firstparticleIndex = 4;
+    else{
+      firstparticleIndex = 5;
+      man->FillH1(3,totEnergy);
+    }
+
+    man->FillH1(4,P_hits,10); //weight
+    man->FillH1(5,P_hits);
+
+    man->FillH1(1,energy_pri/keV);
+    man->FillH1(2,totEnergy/keV);
+    man->FillH1(6,aveTimePmtHits/ns);
+
     long seed1 = *seeds;
     long seed2 = *(seeds+1);    
-    // pass event summary to analysis manager for booking into histos and ntple
-    DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-    analysis->analyseScintHits(event_id,energy_pri,totEnergy,S_hits,firstLXeHitTime,P_hits,aveTimePmtHits,firstParticleName,firstParticleE,gamma_ev,neutron_ev,positron_ev,electron_ev,other_ev,seed1,seed2);
-#endif
+    
+    //Fill ntuple #2
+    man->FillNtupleDColumn(2,0,event_id);
+    man->FillNtupleDColumn(2,1,energy_pri/keV);
+    man->FillNtupleDColumn(2,2,totEnergy);
+    man->FillNtupleDColumn(2,3,S_hits);
+    man->FillNtupleDColumn(2,4,firstLXeHitTime);
+    man->FillNtupleDColumn(2,5,P_hits);
+    man->FillNtupleDColumn(2,6,aveTimePmtHits);
+    man->FillNtupleDColumn(2,7,firstparticleIndex);
+    man->FillNtupleDColumn(2,8,firstParticleE);
+    man->FillNtupleDColumn(2,9,gamma_ev);
+    man->FillNtupleDColumn(2,10,neutron_ev);
+    man->FillNtupleDColumn(2,11,positron_ev);
+    man->FillNtupleDColumn(2,12,electron_ev);
+    man->FillNtupleDColumn(2,13,other_ev);
+    man->FillNtupleDColumn(2,14,seed1);
+    man->FillNtupleDColumn(2,15,seed2);
+    man->AddNtupleRow(2);
+    
   }
 
 }
@@ -363,6 +383,7 @@ void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
   G4String filename=runAct->GetsavepmtFile();
   std::ofstream pmtfile(filename, std::ios::app);
   G4double x; G4double y; G4double z;
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
 
   if(pmtfile.is_open()) {
     pmtfile << "Hit#    X, mm   Y, mm   Z, mm" << G4endl;       
@@ -379,11 +400,20 @@ void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
 		<< x << "\t" 
 		<< y << "\t"
 		<< z << G4endl;
-#ifdef G4ANALYSIS_USE
-  	// pass pmt hit summary to analysis manager for booking in ntples
-	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-	analysis->analysePMTHits(event_id,i,x,y,z);
-#endif
+	
+	man->FillH2(1,x/mm, y/mm);  // fill(x,y)
+	if (event_id == 0 ) {
+	  man->FillH2(2,x,y);
+	}
+
+	//Fill ntuple #3
+	man->FillNtupleDColumn(3,0,event_id);
+	man->FillNtupleDColumn(3,1,(G4double) i);
+	man->FillNtupleDColumn(3,2,x);
+	man->FillNtupleDColumn(3,3,y);
+	man->FillNtupleDColumn(3,4,z);
+	man->AddNtupleRow(3);
+
       }
     if (event_id%printModulo == 0 && P_hits > 0) 
       G4cout << "     " << P_hits << " PMT hits in " << filename << G4endl;  

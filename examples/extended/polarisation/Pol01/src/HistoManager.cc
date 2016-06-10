@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.cc 73005 2013-08-15 08:14:21Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
+#ifdef G4ANALYSIS_USE
 :af(0),tree(0),factoryOn(false)
+#endif
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory

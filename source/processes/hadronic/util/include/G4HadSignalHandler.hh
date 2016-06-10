@@ -31,6 +31,7 @@
 #include <iostream>
 #include <signal.h>
 #include <vector>
+#include "G4Types.hh"
 
 // A simple, reasonably portable, but at present 
 // semantic-wise totally unsafe signalhandler prototype meant for SEGFAULT.
@@ -49,8 +50,8 @@ class G4HadSignalHandler
   
   ~G4HadSignalHandler();
       
-  static std::vector<sighandler_t> theCache;  
-  static bool registered;
+  static G4ThreadLocal std::vector<sighandler_t> *theCache_G4MT_TLS_;  
+  static G4ThreadLocal bool registered;
 };
 
  

@@ -29,9 +29,13 @@
 #define G4MPI_MANAGER_H
 
 #include "mpi.h"
-#include "globals.hh"
-#include <pthread.h>
 #include <fstream>
+#include <pthread.h>
+#include "globals.hh"
+
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
 
 class G4MPImessenger;
 class G4MPIsession;
@@ -41,13 +45,13 @@ class G4VMPIseedGenerator;
 class G4MPImanager {
 public:
   // MPI master rank
-  enum { RANK_MASTER = 0 };
-  
+  enum { kRANK_MASTER = 0 };
+
   enum { // MPI tag
-    TAG_G4COMMAND = 100,
-    TAG_G4STATUS = 200,
-    TAG_G4SEED = 300,
-    TAG_DATA = 1000
+    kTAG_G4COMMAND = 100,
+    kTAG_G4STATUS = 200,
+    kTAG_G4SEED = 300,
+    kTAG_DATA = 1000
   };
 
   G4MPImanager();
@@ -101,127 +105,129 @@ public:
   void ShowHelp() const;
 
 private:
-  static G4MPImanager* theManager;
-  G4MPImessenger* messenger;
-  G4MPIsession* session;
-
-  G4int verbose;
-  G4MPIstatus* status; // status for each node
-
-  // MPI rank
-  G4bool isMaster;
-  G4bool isSlave;
-  G4int rank;
-  G4int size;
-
-  // MPI communicator
-  MPI::Intracomm COMM_G4COMMAND;
-
-  // cout/cerr control
-  G4bool qfcout;
-  std::ofstream fscout;
-
-  // init/macro file
-  G4bool qinitmacro;
-  G4String initFileName;
-  G4bool qbatchmode;
-  G4String macroFileName;
+  DISALLOW_COPY_AND_ASSIGN(G4MPImanager);
 
   // internal use
   void Initialize();
   void ParseArguments(G4int argc, char** argv);
-  void Wait(G4int ausec) const;
   void UpdateStatus();
 
-  // for beamOn
-  pthread_t threadID;
+  static G4MPImanager* g4mpi_;
+  G4MPImessenger* messenger_;
+  G4MPIsession* session_;
 
   // seed generator
-  G4VMPIseedGenerator* seedGenerator;
+  G4VMPIseedGenerator* seed_generator_;
+
+  G4MPIstatus* status_; // status for each node
+
+  G4int verbose_;
+
+  // MPI rank
+  G4bool is_master_;
+  G4bool is_slave_;
+  G4int rank_;
+  G4int size_;
+
+  // MPI communicator
+  MPI::Intracomm COMM_G4COMMAND_;
+
+  // cout/cerr control
+  G4bool qfcout_;
+  std::ofstream fscout_;
+
+  // init/macro file
+  G4bool qinitmacro_;
+  G4String init_file_name_;
+  G4bool qbatchmode_;
+  G4String macro_file_name_;
+
+  // for beamOn
+  pthread_t thread_id_;
 
   // parallel parameters
-  G4double masterWeight;
+  G4double master_weight_;
 };
 
 // ====================================================================
 inline G4MPIsession* G4MPImanager::GetMPIsession() const
 {
-  return session;
+  return session_;
 }
 
 inline G4int G4MPImanager::GetVerbose() const
 {
-  return verbose;
+  return verbose_;
 }
 
 inline void G4MPImanager::SetVerbose(G4int iverbose)
 {
-  G4int lv=iverbose;
-  if(iverbose>1) lv=1;
-  if(iverbose<0) lv=0;
+  G4int lv = iverbose;
+  if( iverbose > 1 ) lv = 1;
+  if( iverbose < 0 ) lv = 0;
 
-  verbose= lv;
+  verbose_ = lv;
   return;
 }
 
 inline G4int G4MPImanager::GetRank() const
 {
-  return rank;
+  return rank_;
 }
 
 inline G4int G4MPImanager::GetSize() const
 {
-  return size;
+  return size_;
 }
 
 inline G4bool G4MPImanager::IsMaster() const
 {
-  return isMaster;
+  return is_master_;
 }
 
 inline G4bool G4MPImanager::IsSlave() const
 {
-  return isSlave;
+  return is_slave_;
 }
 
 inline G4bool G4MPImanager::IsInitMacro() const
 {
-  return qinitmacro;
+  return qinitmacro_;
 
 }
 
 inline const G4String& G4MPImanager::GetInitFileName() const
 {
-  return initFileName;
+  return init_file_name_;
 
 }
 
 inline G4bool G4MPImanager::IsBatchMode() const
 {
-  return qbatchmode;
+  return qbatchmode_;
 }
 
 inline const G4String& G4MPImanager::GetMacroFileName() const
 {
-  return macroFileName;
+  return macro_file_name_;
 }
 
 inline void G4MPImanager::SetMasterWeight(G4double aweight)
 {
-  masterWeight= aweight;
+  master_weight_ = aweight;
 
-  if(aweight<0.) masterWeight= 0.;
-  if(aweight>1.) masterWeight= 1.;
+  if( aweight < 0. ) master_weight_ = 0.;
+  if( aweight > 1. ) master_weight_ = 1.;
 }
 
 inline G4double G4MPImanager::GetMasterWeight() const
 {
-  return masterWeight;
+  return master_weight_;
 }
 
 inline G4VMPIseedGenerator* G4MPImanager::GetSeedGenerator() const
 {
-  return seedGenerator;
+  return seed_generator_;
 }
 
 #endif

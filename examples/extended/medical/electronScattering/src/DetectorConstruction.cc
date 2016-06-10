@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68393 2013-03-25 14:22:21Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,8 @@
 DetectorConstruction::DetectorConstruction()
 :fMaterial_World(0), fMaterial_Frame(0),
  fMaterial_ExitWindow(0), fMaterial_ScatterFoil(0), fMaterial_MonitorChbr(0),
- fMaterial_Bag(0), fMaterial_Gas(0), fMaterial_Ring(0) 
+ fMaterial_Bag(0), fMaterial_Gas(0), fMaterial_Ring(0),
+ fPvol_World(0), fPvol_Frame(0), fDetectorMessenger(0)
 {              
   // materials  
   DefineMaterials();
@@ -281,7 +282,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                                  "Frame",                 //its name
                                  lvol_World,              //its mother  volume
                                  false,                   //no boolean operation
-                                 0);                      //copy number                                 
+                                 0);                      //copy number
 
                                                 
   // ExitWindow
@@ -352,7 +353,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                                  "Bag",                   //name
                                  lvol_Frame,              //mother volume
                                  false,                   //no boolean operation
-                                 0);                      //copy number                                 
+                                 0);                      //copy number
                                  
                                                 
   // Gas
@@ -375,7 +376,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                                  "Gas",                   //name
                                  lvol_Bag,                //mother volume
                                  false,                   //no boolean operation
-                                 0);                      //copy number                                 
+                                 0);                      //copy number
 
 
   // Rings
@@ -407,7 +408,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                                  "Ring",                  //name
                                  lvol_Gas,                //mother volume
                                  false,                   //no boolean operation
-                                 2);                      //copy number                                 
+                                 2);                      //copy number
 
                                                 
   // ScatterFoil (only if it is not Air)
@@ -427,13 +428,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                                    
     zpos = fZfront_ScatterFoil + 0.5*fThickness_ScatterFoil - 0.5*fThickness_Frame;
   
-                   new G4PVPlacement(0,                    //no rotation
-                            G4ThreeVector(0,0,zpos),       //translation
-                                 lvol_ScatterFoil,         //logical volume
-                                 "ScatterFoil",            //name
-                                 lvol_Frame,               //mother volume
-                                 false,                    //no boolean operation
-                                 0);                       //copy number
+                   new G4PVPlacement(0,                  //no rotation
+                            G4ThreeVector(0,0,zpos),     //translation
+                                 lvol_ScatterFoil,       //logical volume
+                                 "ScatterFoil",          //name
+                                 lvol_Frame,             //mother volume
+                                 false,                  //no boolean operation
+                                 0);                     //copy number
   }                                 
                                         
    PrintGeometry();         

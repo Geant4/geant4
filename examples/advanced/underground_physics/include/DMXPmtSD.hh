@@ -49,7 +49,6 @@
 
 #include "DMXPmtHit.hh"
 
-class DMXDetectorConstruction;
 class G4Step;
 class G4HCofThisEvent;
 
@@ -57,7 +56,7 @@ class DMXPmtSD : public G4VSensitiveDetector {
 
    public:
   
-     DMXPmtSD(G4String, DMXDetectorConstruction*);
+     DMXPmtSD(G4String);
      ~DMXPmtSD();
   
      void Initialize(G4HCofThisEvent*);
@@ -70,7 +69,6 @@ class DMXPmtSD : public G4VSensitiveDetector {
   private:
   
      DMXPmtHitsCollection* pmtCollection;
-     DMXDetectorConstruction* DMXDetector;
      G4int HitID;
 };
 

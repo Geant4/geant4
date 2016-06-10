@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2009-09-22 14:20:31 maire Exp $
+$Id: README 77288 2013-11-22 10:52:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,7 @@ $Id: README,v 1.11 2009-09-22 14:20:31 maire Exp $
     - the number of divisions of each absorber (NbOfDivisions)
 	 	
  In addition a transverse uniform magnetic field can be applied.
+     eg: /globalField/setValue 0 0 5 tesla
  	
  The default geometry is constructed in DetectorConstruction class,
  but all of the above parameters can be changed interactively via
@@ -53,9 +54,24 @@ $Id: README,v 1.11 2009-09-22 14:20:31 maire Exp $
  Please, notice that options set through G4EmProcessOPtions are global, eg
  for all particle types. In G4 builders, it is shown how to set options per
  particle type.
-
  	 
- 3- AN EVENT : THE PRIMARY GENERATOR
+3- ACTION INITALIZATION
+
+ A newly introduced class, ActionInitialization, instantiates and registers 
+ to Geant4 kernel all user action classes.
+
+ While in sequential mode the action classes are instatiated just once,
+ via invoking the method:
+    ActionInitialization::Build() 
+ in multi-threading mode the same method is invoked for each thread worker
+ and so all user action classes are defined thread-local.
+
+ A run action class (if present) has to be instantiated both thread-local 
+ and global that's why its instance has to be created also in the method
+    ActionInitialization::BuildForMaster() 
+ which is invoked only in multi-threading mode.
+  	 
+3- AN EVENT : THE PRIMARY GENERATOR
  
  The primary kinematic consists of a single particle starting at the
  left face of the box. The type of the particle and its energy are set 

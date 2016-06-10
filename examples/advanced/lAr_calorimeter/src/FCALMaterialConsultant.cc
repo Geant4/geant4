@@ -176,8 +176,8 @@ FCALMaterialConsultant::FCALMaterialConsultant()
   density              = 1.e-5*g/cm3;
   G4double pressure    = 2.e-2*bar;
   G4double temperature = STP_Temperature;         //from PhysicalConstants.h
-  G4Material* Vacuum = new G4Material(name="Vacuum", density, nel=1,
-				    kStateGas,temperature,pressure);
+  Vacuum = new G4Material(name="Vacuum", density, nel=1,
+			  kStateGas,temperature,pressure);
   Vacuum->AddMaterial(Air, fractionmass=1.);
 
 

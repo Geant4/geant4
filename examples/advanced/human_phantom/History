@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2010-11-26 02:44:45 guatelli Exp $
+$Id: History 76462 2013-11-11 10:20:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 11, 2013, S. Guatelli tag human_phantom-V09-06-06
+- warning with CLANG removed
+
+Nov 6, 2013, S. Guatelli tag human_phantom-V09-06-05
+- Analysis working with MT and sequential mode
+
+Nov 6, 2013, S. Guatelli tag human_phantom-V09-06-04
+- Testes and Genitalia modelling added for MIRD model
+- MT mode 
+
+Jul 30, 2013, A. Dotti, tag human_phantom-V09-06-03
+- Bug fixing for compilation warning for clang32
+
+May 23, 2013, G. Cosmo, tag human_phantom-V09-06-02
+- Corrected typo in G4HumanPhantomAnalysisManager for printout of file name.
+
+May 17, 2013, S. Guatelli, tag human_phantom-V09-06-01
+- G4HumanPhantomPhysicsList is derived from G4VModularPhysics.
+- G4 analysis component introduced
+- G4 General Particle Source used
+- General cleaning in macro files
+- macro.C added to print the content of the ntuple generated 
+  in the simulation.
+
+December 12, 2012, V.Ivanchenko tag human_phantom-V09-06-00
+- G4HumanPhantomPhysicsList: substitute SetModel by SetEmModel
 
 November 28, 2012, G.Cosmo tag human_phantom-V09-05-05
 - Fixed cases of variable shadowing.

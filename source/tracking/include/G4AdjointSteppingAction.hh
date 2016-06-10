@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointSteppingAction.hh 75570 2013-11-04 11:41:10Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction
@@ -83,8 +83,11 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
     inline G4double GetLastWeight(){return last_weight;}
     inline void SetPrimWeight(G4double weight){prim_weight=weight;} 
     inline G4ParticleDefinition* GetLastPartDef(){return last_part_def;}
-    inline void SetUserAdjointSteppingAction( G4UserSteppingAction* anAction) {theUserAdjointSteppingAction = anAction;}
-     
+    inline void SetUserAdjointSteppingAction( G4UserSteppingAction* anAction) {
+    	                               theUserAdjointSteppingAction = anAction;}
+    inline void SetUserForwardSteppingAction( G4UserSteppingAction* anAction) {
+    	                                  theUserFwdSteppingAction = anAction;}
+    inline void SetAdjointTrackingMode(G4bool aBool){is_adjoint_tracking_mode =aBool;}
   private:
 
     G4double ext_sourceEMax;
@@ -98,6 +101,8 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
     G4double prim_weight ;
     G4ParticleDefinition* last_part_def;
     G4UserSteppingAction* theUserAdjointSteppingAction;
+    G4UserSteppingAction* theUserFwdSteppingAction;
+    G4bool is_adjoint_tracking_mode;
 
 };
 #endif

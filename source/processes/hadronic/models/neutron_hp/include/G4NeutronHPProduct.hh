@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPProduct_h
 #define G4NeutronHPProduct_h 1
@@ -64,7 +63,7 @@ class G4NeutronHPProduct
       G4double GetMassCode(){return theMassCode;};
       G4double GetMass(){return theMass;};
   
-  inline void Init(std::ifstream & aDataFile)
+  inline void Init(std::istream & aDataFile)
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;

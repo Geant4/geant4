@@ -26,8 +26,7 @@
 /// \file persistency/P02/include/ExP02PrimaryGeneratorAction.hh
 /// \brief Definition of the ExP02PrimaryGeneratorAction class
 //
-//
-// $Id$
+// $Id: ExP02PrimaryGeneratorAction.hh 71727 2013-06-21 07:55:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,12 +50,10 @@ class ExP02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     ExP02PrimaryGeneratorAction();    
    ~ExP02PrimaryGeneratorAction();
 
-  public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
   private:
     G4ParticleGun* fParticleGun;
-    ExP02DetectorConstruction* fMyDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

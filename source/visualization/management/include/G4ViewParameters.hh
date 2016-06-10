@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ViewParameters.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -98,11 +98,6 @@ public: // With description
     hlhsr       // Draw surfaces and edges - hidden removed.
   };
 
-  enum RepStyle {
-    polyhedron, // Use G4Polyhedron.
-    nurbs       // Use G4NURBS.
-  };
-
   enum CutawayMode {
     cutawayUnion,       // Union (addition) of result of each cutaway plane.
     cutawayIntersection // Intersection (multiplication) " .
@@ -129,7 +124,6 @@ public: // With description
   // Get and Is functions.
         DrawingStyle     GetDrawingStyle         () const;
         G4bool           IsAuxEdgeVisible        () const;
-        RepStyle         GetRepStyle             () const;
         G4bool           IsCulling               () const;
         G4bool           IsCullingInvisible      () const;
         G4bool           IsDensityCulling        () const;
@@ -201,7 +195,6 @@ public: // With description
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
   void SetAuxEdgeVisible       (G4bool);
-  void SetRepStyle             (G4ViewParameters::RepStyle style);
   void SetCulling              (G4bool);
   void SetCullingInvisible     (G4bool);
   void SetDensityCulling       (G4bool);
@@ -276,7 +269,6 @@ private:
 
   DrawingStyle fDrawingStyle;    // Drawing style.
   G4bool       fAuxEdgeVisible;  // Auxiliary edge visibility.
-  RepStyle     fRepStyle;        // Representation style.
   G4bool       fCulling;         // Culling requested.
   G4bool       fCullInvisible;   // Cull (don't Draw) invisible objects.
   G4bool       fDensityCulling;  // Density culling requested.  If so...

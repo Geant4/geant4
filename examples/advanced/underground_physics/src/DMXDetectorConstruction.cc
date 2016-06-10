@@ -584,20 +584,20 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   vessel_mt->AddProperty("REFLECTIVITY", vessel_PP, vessel_REFL, NUM);
   OpVesselSurface->SetMaterialPropertiesTable(vessel_mt);
 
-  G4LogicalBorderSurface* VesselTopSurface;
-  VesselTopSurface = new G4LogicalBorderSurface
+  // G4LogicalBorderSurface* VesselTopSurface = 
+  new G4LogicalBorderSurface
     ("VesselTop", GXe_phys, vesseltop_phys1, OpVesselSurface);
 
-  G4LogicalBorderSurface* VesselBottomSurface;
-  VesselBottomSurface = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* VesselBottomSurface = 
+  new G4LogicalBorderSurface
     ("VesselBottom", LXe_phys, vesselbottom_phys2, OpVesselSurface);
 
-  G4LogicalBorderSurface* GasVesselSurface;
-  GasVesselSurface = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* GasVesselSurface = 
+  new G4LogicalBorderSurface
     ("GasVessel", GXe_phys, gaslag_phys, OpVesselSurface);
 
-  G4LogicalBorderSurface* LiquidVesselSurface;
-  LiquidVesselSurface = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* LiquidVesselSurface =
+  new G4LogicalBorderSurface
     ("LiquidVessel", LXe_phys, liqLag_phys, OpVesselSurface);
 
 
@@ -632,8 +632,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double sigalpha;
   G4OpticalSurface* OpCuShieldSurface = new G4OpticalSurface
     ("ShieldSurface", unified, ground, dielectric_metal, sigalpha=30.0*deg);
-  G4LogicalBorderSurface* ShieldSurface;
-  ShieldSurface = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* ShieldSurface = 
+  new G4LogicalBorderSurface
     ("Shield", LXe_phys, CuShield_phys, OpCuShieldSurface);
 
   G4double CuShield_PP[NUM]   = { 7.0*eV, 7.50*eV };
@@ -669,15 +669,15 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // rings inside gas phase
   ring_phys_gas[0] = new G4PVPlacement(0, G4ThreeVector
     (0.*cm, 0.*cm, ringVPosition),"ring_phys0",ring_log,GXe_phys,false, 0);
-  G4LogicalBorderSurface* RingSurface_gas0;
-  RingSurface_gas0 = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* RingSurface_gas0 = 
+  new G4LogicalBorderSurface
     ("Ring", GXe_phys, ring_phys_gas[0], OpRingSurface);
 
   ring_phys_gas[1] = new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.0*mm),
      "ring_phys1",ring_log, GXe_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_gas1;
-  RingSurface_gas1 = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* RingSurface_gas1 = 
+  new G4LogicalBorderSurface
      ("Ring", GXe_phys, ring_phys_gas[1], OpRingSurface);
 
 
@@ -687,43 +687,43 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   ring_phys_liq[0] = new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=0.5*ringHeight),
      "ring_phys2",ring_log,LXe_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_liq0;
-  RingSurface_liq0 = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* RingSurface_liq0 = 
+  new G4LogicalBorderSurface
     ("Ring", LXe_phys, ring_phys_liq[0], OpRingSurface);
 
   ring_phys_liq[1] = new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
      "ring_phys3",ring_log, LXe_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_liq1;
-  RingSurface_liq1 = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* RingSurface_liq1 =
+  new G4LogicalBorderSurface
     ("Ring", LXe_phys, ring_phys_liq[1], OpRingSurface);
 
   ring_phys_liq[2]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight),
      "ring_phys4",ring_log, LXe_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_liq2;
-  RingSurface_liq2 = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* RingSurface_liq2 =
+  new G4LogicalBorderSurface
     ("Ring", LXe_phys, ring_phys_liq[2], OpRingSurface);
 
   ring_phys_liq[3]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight),
      "ring_phys5",ring_log, LXe_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_liq3;
-  RingSurface_liq3 = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* RingSurface_liq3 =
+  new G4LogicalBorderSurface
     ("Ring", LXe_phys, ring_phys_liq[3], OpRingSurface);
 
   ring_phys_liq[4]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
      "ring_phys6",ring_log, LXe_phys,false, 0);
-  G4LogicalBorderSurface* RingSurface_liq4;
-  RingSurface_liq4 = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* RingSurface_liq4 =
+  new G4LogicalBorderSurface
     ("Ring", LXe_phys, ring_phys_liq[4], OpRingSurface);
 
   ring_phys_liq[5]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
      "ring_phys7",ring_log, LXe_phys,false, 0);
-  G4LogicalBorderSurface* RingSurface_liq5;
-  RingSurface_liq5 = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* RingSurface_liq5 =
+  new G4LogicalBorderSurface
     ("Ring", LXe_phys, ring_phys_liq[5], OpRingSurface);
 
 
@@ -755,8 +755,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // mirror surface
   G4OpticalSurface * OpMirrorSurface = new G4OpticalSurface
     ("MirrorSurface", unified, ground, dielectric_metal, sigalpha=5.0*deg);
-  G4LogicalBorderSurface* MirrorSurface;
-  MirrorSurface = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* MirrorSurface = 
+  new G4LogicalBorderSurface
     ("Mirror", GXe_phys, mirror_phys, OpMirrorSurface);
 
   G4double mirror_PP[NUM]   = { 6.00*eV, 7.50*eV };
@@ -824,8 +824,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // alpha source HOLDER surface
   G4OpticalSurface* OpAlphaSurface = new G4OpticalSurface("AlphaSurface", 
   unified, ground, dielectric_metal, sigalpha=20.0*deg);
-  G4LogicalBorderSurface* AlphaSurface;
-  AlphaSurface = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* AlphaSurface =
+  new G4LogicalBorderSurface
     ("Alpha", LXe_phys, alpha_phys, OpAlphaSurface);
 
   G4double alpha_PP[NUM]   = { 6.00*eV, 7.50*eV };
@@ -856,8 +856,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // americium optical properties:
   G4OpticalSurface* OpAmericiumSurface = new G4OpticalSurface
     ("AmericiumSurface", unified, ground, dielectric_metal, sigalpha=5.0*deg);
-  G4LogicalBorderSurface* AmericiumSurface;
-  AmericiumSurface = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* AmericiumSurface =
+  new G4LogicalBorderSurface
     ("Americium", LXe_phys, americium_phys, OpAmericiumSurface);
 
   G4double americium_PP[NUM]   = { 6.00*eV, 7.50*eV };
@@ -894,8 +894,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4OpticalSurface* pmt_opsurf = new G4OpticalSurface
     ("pmt_opsurf",unified, polished, dielectric_dielectric);
-  G4LogicalBorderSurface* pmt_surf;
-  pmt_surf = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* pmt_surf = 
+  new G4LogicalBorderSurface
     ("pmt_surf", LXe_phys, pmt_phys, pmt_opsurf);
 
   G4VisAttributes* pmt_vat= new G4VisAttributes(blue);
@@ -919,8 +919,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4OpticalSurface*  phcath_opsurf = new G4OpticalSurface("phcath_opsurf",
      unified, polished, dielectric_dielectric);
-  G4LogicalBorderSurface* phcath_surf;
-  phcath_surf = new G4LogicalBorderSurface
+  //G4LogicalBorderSurface* phcath_surf = 
+  new G4LogicalBorderSurface
     ("phcath_surf", pmt_phys, phcath_phys, phcath_opsurf);
 
   G4double phcath_PP[NUM]   = { 6.00*eV, 7.50*eV };
@@ -991,13 +991,13 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
   G4String name="/DMXDet/LXeSD";
-  LXeSD = new DMXScintSD(name, this);
+  LXeSD = new DMXScintSD(name);
   SDman->AddNewDetector(LXeSD);
   LXe_log->SetSensitiveDetector(LXeSD);
 
   SDman = G4SDManager::GetSDMpointer();
   name="/DMXDet/pmtSD";
-  pmtSD = new DMXPmtSD(name, this);
+  pmtSD = new DMXPmtSD(name);
   SDman->AddNewDetector(pmtSD);
   phcath_log->SetSensitiveDetector(pmtSD);
 

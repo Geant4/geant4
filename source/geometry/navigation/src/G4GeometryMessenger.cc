@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GeometryMessenger.cc 73253 2013-08-22 13:24:02Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,6 +36,7 @@
 // --------------------------------------------------------------------
 
 #include <iomanip>
+
 #include "G4GeometryMessenger.hh"
 
 #include "G4TransportationManager.hh"
@@ -45,24 +46,18 @@
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
-#include "G4UIcmdWith3VectorAndUnit.hh"
-#include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-#include "G4GeomTestStreamLogger.hh"
 #include "G4GeomTestVolume.hh"
 
 //
 // Constructor
 //
 G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
-  : x(0,0,0), p(0,0,1), grdRes(100,100,100), cylRes(90,50,50),
-    cylfZ(0.8), cylfR(0.8), newtol(false), tol(1E-4),  // mm
-    recLevel(0), recDepth(-1), tmanager(tman), tlogger(0), tvolume(0)
+  : tol(0.0), recLevel(0), recDepth(-1), tmanager(tman), tvolume(0)
 {
   geodir = new G4UIdirectory( "/geometry/" );
   geodir->SetGuidance( "Geometry control commands." );
@@ -124,90 +119,26 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   testdir->SetGuidance( "Helps in detecting possible overlapping regions." );
 
   tolCmd = new G4UIcmdWithADoubleAndUnit( "/geometry/test/tolerance",this );
-  tolCmd->SetGuidance( "Set error tolerance value." );
-  tolCmd->SetGuidance( "Initial default value: 1E-4*mm." );
+  tolCmd->SetGuidance( "Define tolerance (in mm) by which overlaps reports" );
+  tolCmd->SetGuidance( "should be reported. By default, all overlaps are" );
+  tolCmd->SetGuidance( "reported, i.e. tolerance is set to: 0*mm." );
   tolCmd->SetParameterName( "Tolerance", true, true );
-  tolCmd->SetDefaultValue( 1E-4 );
+  tolCmd->SetDefaultValue( 0 );
   tolCmd->SetDefaultUnit( "mm" );
   tolCmd->SetUnitCategory( "Length" );
 
-  posCmd = new G4UIcmdWith3VectorAndUnit( "/geometry/test/position", this );
-  posCmd->SetGuidance( "Set starting position for the line_test." );
-  posCmd->SetParameterName( "X", "Y", "Z", true, true );
-  posCmd->SetDefaultUnit( "cm" );
+  verCmd = new G4UIcmdWithABool( "/geometry/test/verbosity", this );
+  verCmd->SetGuidance( "Specify if running in verbosity mode or not." );
+  verCmd->SetGuidance( "By default verbosity is set to ON (TRUE)." );
+  verCmd->SetParameterName("verbosity",true);
+  verCmd->SetDefaultValue(true);
+  verCmd->AvailableForStates(G4State_Idle);
 
-  dirCmd = new G4UIcmdWith3VectorAndUnit( "/geometry/test/direction", this );
-  dirCmd->SetGuidance( "Set momentum direction for the line_test." );
-  dirCmd->SetGuidance( "Direction needs not to be a unit vector." );
-  dirCmd->SetParameterName( "Px", "Py", "Pz", true, true );
-  dirCmd->SetRange( "Px != 0 || Py != 0 || Pz != 0" );
-
-  linCmd = new G4UIcmdWithABool( "/geometry/test/line_test", this );
-  linCmd->SetGuidance( "Performs test along a single specified direction/position." );
-  linCmd->SetGuidance( "Use position and direction commands to change default." );
-  linCmd->SetGuidance( "Initial default: position(0,0,0), direction(0,0,1)." );
-  linCmd->SetGuidance( "If recursion flag is set to TRUE, the intersection checks" );
-  linCmd->SetGuidance( "will be performed recursively in the geometry tree." );
-  linCmd->SetParameterName("recursionFlag",true);
-  linCmd->SetDefaultValue(false);
-  linCmd->AvailableForStates(G4State_Idle);
-
-  grzCmd = new G4UIcmdWith3Vector( "/geometry/test/grid_cells", this );
-  grzCmd->SetGuidance( "Define resolution of grid geometry as number of cells," );
-  grzCmd->SetGuidance( "specifying them for each dimension, X, Y and Z." );
-  grzCmd->SetGuidance( "Will be applied to grid_test and recursive_test commands." );
-  grzCmd->SetGuidance( "Initial default values: X=100, Y=100, Z=100." );
-  grzCmd->SetParameterName( "X", "Y", "Z", true, true );
-  grzCmd->SetDefaultValue( G4ThreeVector(100, 100, 100) );
-
-  grdCmd = new G4UIcmdWithABool( "/geometry/test/grid_test", this );
-  grdCmd->SetGuidance( "Start running the default grid test." );
-  grdCmd->SetGuidance( "A grid of lines parallel to a cartesian axis is used;" );
-  grdCmd->SetGuidance( "By default, only direct daughters of the mother volumes are checked." );
-  grdCmd->SetGuidance( "If recursion flag is set to TRUE, the intersection checks" );
-  grdCmd->SetGuidance( "will be performed recursively in the geometry tree." );
-  grdCmd->SetGuidance( "NOTE: the recursion may take a very long time," );
-  grdCmd->SetGuidance( "      depending on the geometry complexity !");
-  grdCmd->SetParameterName("recursionFlag",true);
-  grdCmd->SetDefaultValue(false);
-  grdCmd->AvailableForStates(G4State_Idle);
-
-  cyzCmd = new G4UIcmdWith3Vector( "/geometry/test/cylinder_geometry", this );
-  cyzCmd->SetGuidance( "Define details of the cylinder geometry, specifying:" );
-  cyzCmd->SetGuidance( "  nPhi - number of lines per Phi" );
-  cyzCmd->SetGuidance( "  nZ   - number of Z points" );
-  cyzCmd->SetGuidance( "  nRho - number of Rho points" );
-  cyzCmd->SetGuidance( "Will be applied to the cylinder_test command." );
-  cyzCmd->SetGuidance( "Initial default values: nPhi=90, nZ=50, nRho=50." );
-  cyzCmd->SetParameterName( "nPhi", "nZ", "nRho", true, true );
-  cyzCmd->SetDefaultValue( G4ThreeVector(90, 50, 50) );
-
-  cfzCmd = new G4UIcmdWithADouble( "/geometry/test/cylinder_scaleZ", this );
-  cfzCmd->SetGuidance( "Define the resolution of the cylinder geometry, specifying" );
-  cfzCmd->SetGuidance( "the fraction scale for points along Z." );
-  cfzCmd->SetGuidance( "Initial default values: fracZ=0.8" );
-  cfzCmd->SetParameterName("fracZ",true);
-  cfzCmd->SetDefaultValue(0.8);
-
-  cfrCmd = new G4UIcmdWithADouble( "/geometry/test/cylinder_scaleRho", this );
-  cfrCmd->SetGuidance( "Define the resolution of the cylinder geometry, specifying" );
-  cfrCmd->SetGuidance( "the fraction scale for points along Rho." );
-  cfrCmd->SetGuidance( "Initial default values: fracRho=0.8" );
-  cfrCmd->SetParameterName("fracRho",true);
-  cfrCmd->SetDefaultValue(0.8);
-
-  cylCmd = new G4UIcmdWithABool( "/geometry/test/cylinder_test", this );
-  cylCmd->SetGuidance( "Start running the cylinder test." );
-  cylCmd->SetGuidance( "A set of lines in a cylindrical pattern of gradually" );
-  cylCmd->SetGuidance( "increasing mesh size." );
-  cylCmd->SetGuidance( "By default, only direct daughters of the mother volumes are checked." );
-  cylCmd->SetGuidance( "If recursion flag is set to TRUE, the intersection checks" );
-  cylCmd->SetGuidance( "will be performed recursively in the geometry tree." );
-  cylCmd->SetGuidance( "NOTE: the recursion may take a very long time," );
-  cylCmd->SetGuidance( "      depending on the geometry complexity !");
-  cylCmd->SetParameterName("recursionFlag",true);
-  cylCmd->SetDefaultValue(false);
-  cylCmd->AvailableForStates(G4State_Idle);
+  rslCmd = new G4UIcmdWithAnInteger( "/geometry/test/resolution", this );
+  rslCmd->SetGuidance( "Set the number of points on surface to be generated for" );
+  rslCmd->SetGuidance( "checking overlaps." );
+  rslCmd->SetParameterName("resolution",true);
+  rslCmd->SetDefaultValue(10000);
 
   rcsCmd = new G4UIcmdWithAnInteger( "/geometry/test/recursion_start", this );
   rcsCmd->SetGuidance( "Set the initial level in the geometry tree for recursion." );
@@ -222,23 +153,21 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   rcdCmd->SetParameterName("recursion_depth",true);
   rcdCmd->SetDefaultValue(-1);
 
-  // Obsolete verification commands ...
+  errCmd = new G4UIcmdWithAnInteger( "/geometry/test/maximum_errors", this );
+  errCmd->SetGuidance( "Set the maximum number of overlap errors to report" );
+  errCmd->SetGuidance( "for each single volume being checked." );
+  errCmd->SetGuidance( "Once reached the maximum number specified, overlaps" );
+  errCmd->SetGuidance( "affecting that volume further than that are simply ignored." );
+  errCmd->SetParameterName("maximum_errors",true);
+  errCmd->SetDefaultValue(1);
 
-  runCmd = new G4UIcmdWithABool( "/geometry/test/run", this );
-  runCmd->SetGuidance( "Start running the default grid test." );
-  runCmd->SetGuidance( "Same as the grid_test command." );
-  runCmd->SetGuidance( "If recursion flag is set to TRUE, the intersection checks" );
-  runCmd->SetGuidance( "will be performed recursively in the geometry tree." );
-  runCmd->SetGuidance( "NOTE: the recursion may take a very long time," );
-  runCmd->SetGuidance( "      depending on the geometry complexity !");
-  runCmd->SetParameterName("recursionFlag",true);
-  runCmd->SetDefaultValue(false);
-  runCmd->AvailableForStates(G4State_Idle);
-
-  recCmd = new G4UIcmdWithoutParameter( "/geometry/test/recursive_test", this );
-  recCmd->SetGuidance( "Start running the recursive grid test." );
-  recCmd->SetGuidance( "A grid of lines along a cartesian axis is recursively" );
-  recCmd->SetGuidance( "to all daughters and daughters of daughters, etc." );
+  recCmd = new G4UIcmdWithoutParameter( "/geometry/test/run", this );
+  recCmd->SetGuidance( "Start running the recursive overlap check." );
+  recCmd->SetGuidance( "Volumes are recursively asked to verify for overlaps" );
+  recCmd->SetGuidance( "for points generated on the surface against their" );
+  recCmd->SetGuidance( "respective mother volume and sisters at the same" );
+  recCmd->SetGuidance( "level, performing for all daughters and daughters of" );
+  recCmd->SetGuidance( "daughters, etc." );
   recCmd->SetGuidance( "NOTE: it may take a very long time," );
   recCmd->SetGuidance( "      depending on the geometry complexity !");
   recCmd->AvailableForStates(G4State_Idle);
@@ -249,14 +178,12 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
 //
 G4GeometryMessenger::~G4GeometryMessenger()
 {
-  delete linCmd; delete posCmd; delete dirCmd;
-  delete grzCmd; delete grdCmd; delete recCmd; delete runCmd;
-  delete rcsCmd; delete rcdCmd;
-  delete cyzCmd; delete cfzCmd; delete cfrCmd; delete cylCmd;
+  delete verCmd; delete recCmd; delete rslCmd;
+  delete resCmd; delete rcsCmd; delete rcdCmd; delete errCmd;
   delete tolCmd;
-  delete resCmd; delete verbCmd; delete pchkCmd; delete chkCmd;
+  delete verbCmd; delete pchkCmd; delete chkCmd;
   delete geodir; delete navdir; delete testdir;
-  delete tvolume; delete tlogger;
+  delete tvolume;
 }
 
 //
@@ -265,23 +192,19 @@ G4GeometryMessenger::~G4GeometryMessenger()
 void
 G4GeometryMessenger::Init()
 {
-  // Clean old allocated loggers...
+  // Create checker...
   //
-  if (tlogger) delete tlogger;
-  if (tvolume) delete tvolume;
+  if (!tvolume)
+  {
+    // Get the world volume
+    //
+    G4VPhysicalVolume* world =
+      tmanager->GetNavigatorForTracking()->GetWorldVolume();
 
-  // Create a logger to send errors/output to cout
-  //
-  tlogger = new G4GeomTestStreamLogger(std::cout);
-
-  // Get the world volume
-  //
-  G4VPhysicalVolume* world =
-    tmanager->GetNavigatorForTracking()->GetWorldVolume();
-
-  // Test the actual detector...
-  //
-  tvolume = new G4GeomTestVolume(world, tlogger);
+    // Test the actual detector...
+    //
+    tvolume = new G4GeomTestVolume(world);
+  }
 }
 
 //
@@ -299,49 +222,19 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   else if (command == chkCmd) {
     SetCheckMode( newValues );
   }
-  else if (command == posCmd) {
-    x = posCmd->GetNew3VectorValue( newValues );
-  }
-  else if (command == dirCmd) {
-    p = dirCmd->GetNew3VectorValue( newValues );
-    if (p.mag() < DBL_MIN) {
-      G4cerr << "Please specify non-zero momentum!" << G4endl;
-      p = G4ThreeVector(0,0,1);
-    }
-  }
   else if (command == tolCmd) {
-    tol = tolCmd->GetNewDoubleValue( newValues );
-    newtol = true;
-  }
-  else if (command == linCmd) {
     Init();
-    if (linCmd->GetNewBoolValue( newValues ))
-      RecursiveLineTest();
-    else
-      LineTest();
+    tol = tolCmd->GetNewDoubleValue( newValues )
+        * tolCmd->GetNewUnitValue( newValues );
+    tvolume->SetTolerance(tol);
   }
-  else if ((command == grdCmd) || (command == runCmd)){
+  else if (command == verCmd) {
     Init();
-    if (grdCmd->GetNewBoolValue( newValues ) || runCmd->GetNewBoolValue( newValues ))
-      RecursiveGridTest();
-    else
-      GridTest();
+    tvolume->SetVerbosity(verCmd->GetNewBoolValue( newValues ));
   }
-  else if (command == grzCmd) {
-    grdRes = grzCmd->GetNew3VectorValue( newValues );
-    if (grdRes.mag() < DBL_MIN) {
-      G4cerr << "Please specify non-zero resolution!" << G4endl;
-      grdRes = G4ThreeVector(100,100,100);
-    }
-  }
-  else if (command == cyzCmd) {
-    cylRes = cyzCmd->GetNew3VectorValue( newValues );
-  }
-  else if (command == cfzCmd) {
-    cylfZ = cfzCmd->GetNewDoubleValue( newValues );
-  }
-  else if (command == cfrCmd) {
-    cylfR = cfrCmd->GetNewDoubleValue( newValues );
+  else if (command == rslCmd) {
+    Init();
+    tvolume->SetResolution(rslCmd->GetNewIntValue( newValues ));
   }
   else if (command == rcsCmd) {
     recLevel = rcsCmd->GetNewIntValue( newValues );
@@ -349,16 +242,15 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   else if (command == rcdCmd) {
     recDepth = rcdCmd->GetNewIntValue( newValues );
   }
+  else if (command == errCmd) {
+    Init();
+    tvolume->SetErrorsThreshold(errCmd->GetNewIntValue( newValues ));
+  }
   else if (command == recCmd) {
     Init();
-    RecursiveGridTest();
-  }
-  else if (command == cylCmd) {
-    Init();
-    if (cylCmd->GetNewBoolValue( newValues ))
-      RecursiveCylinderTest();
-    else
-      CylinderTest();
+    G4cout << "Running geometry overlaps check..." << G4endl;
+    RecursiveOverlapTest();
+    G4cout << "Geometry overlaps check completed !" << G4endl;
   }
 }
 
@@ -369,14 +261,8 @@ G4String
 G4GeometryMessenger::GetCurrentValue(G4UIcommand* command )
 {
   G4String cv = "";
-  if (command == posCmd) {
-    cv = posCmd->ConvertToString( x, "cm" );
-  }
-  else if (command == tolCmd) {
+  if (command == tolCmd) {
     cv = tolCmd->ConvertToString( tol, "mm" );
-  }
-  else if (command == dirCmd) {
-    cv = dirCmd->ConvertToString( p, "GeV" );
   }
   return cv;
 }
@@ -447,153 +333,16 @@ G4GeometryMessenger::SetPushFlag(G4String input)
 }
 
 //
-// LineTest
+// Recursive Overlap Test
 //
 void
-G4GeometryMessenger::LineTest()
+G4GeometryMessenger::RecursiveOverlapTest()
 {
   // Close geometry if necessary
   //
   CheckGeometry();
-
-  // Verify if error tolerance has changed
-  //
-  if (newtol) tvolume->SetTolerance(tol);
-
-  // Make test on single line supplied by user
-  //
-  tvolume->TestOneLine( x, p );
-
-  // Print out any errors, if found
-  //
-  tvolume->ReportErrors();
-}
-
-//
-// RecursiveLineTest
-//
-void
-G4GeometryMessenger::RecursiveLineTest()
-{
-  // Close geometry if necessary
-  //
-  CheckGeometry();
-
-  // Verify if error tolerance has changed
-  //
-  if (newtol) tvolume->SetTolerance(tol);
 
   // Make test on single line supplied by user recursively
   //
-  tvolume->TestRecursiveLine( x, p, recLevel, recDepth );
-
-  // Print out any errors, if found
-  //
-  tvolume->ReportErrors();
-}
-
-//
-// GridTest
-//
-void
-G4GeometryMessenger::GridTest()
-{
-  // Close geometry if necessary
-  //
-  CheckGeometry();
-
-  // Verify if error tolerance has changed
-  //
-  if (newtol) tvolume->SetTolerance(tol);
-
-  // Apply set of trajectories in a 3D grid pattern
-  //
-  tvolume->TestCartGridXYZ( G4int(grdRes.x()),
-                            G4int(grdRes.y()),
-                            G4int(grdRes.z()) );
-  
-  // Print out any errors, if found
-  //
-  tvolume->ReportErrors();
-}
-
-//
-// RecursiveGridTest
-//
-void
-G4GeometryMessenger::RecursiveGridTest()
-{
-  // Close geometry if necessary
-  //
-  CheckGeometry();
-
-  // Verify if error tolerance has changed
-  //
-  if (newtol) tvolume->SetTolerance(tol);
-
-  // Apply set of trajectories in a 3D grid pattern recursively
-  //
-  tvolume->TestRecursiveCartGrid( G4int(grdRes.x()),
-                                  G4int(grdRes.y()),
-                                  G4int(grdRes.z()),
-                                  recLevel, recDepth );
-  
-  // Print out any errors, if found
-  //
-  tvolume->ReportErrors();
-}
-
-//
-// CylinderTest
-//
-void
-G4GeometryMessenger::CylinderTest()
-{
-  // Close geometry if necessary
-  //
-  CheckGeometry();
-
-  // Verify if error tolerance has changed
-  //
-  if (newtol) tvolume->SetTolerance(tol);
-
-  // Apply default set of lines in a cylindrical pattern of gradually
-  // increasing mesh size of trajectories in a 3D grid pattern
-  //
-  tvolume->TestCylinder(G4int(cylRes.x()),
-                        G4int(cylRes.y()),
-                        G4int(cylRes.z()),
-                        cylfZ, cylfR, true);
-  
-  // Print out any errors, if found
-  //
-  tvolume->ReportErrors();
-}
-
-//
-// RecursiveCylinderTest
-//
-void
-G4GeometryMessenger::RecursiveCylinderTest()
-{
-  // Close geometry if necessary
-  //
-  CheckGeometry();
-
-  // Verify if error tolerance has changed
-  //
-  if (newtol) tvolume->SetTolerance(tol);
-
-  // Apply default set of lines in a cylindrical pattern of gradually
-  // increasing mesh size of trajectories in a 3D grid pattern recursively
-  //
-  tvolume->TestRecursiveCylinder(G4int(cylRes.x()),
-                                 G4int(cylRes.y()),
-                                 G4int(cylRes.z()),
-                                 cylfZ, cylfR, true,
-                                 recLevel, recDepth );
-  
-  // Print out any errors, if found
-  //
-  tvolume->ReportErrors();
+  tvolume->TestRecursiveOverlap( recLevel, recDepth );
 }

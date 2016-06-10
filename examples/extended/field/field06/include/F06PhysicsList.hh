@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F06PhysicsList.hh 69762 2013-05-14 08:08:54Z gcosmo $
+//
 /// \file field/field06/include/F06PhysicsList.hh
 /// \brief Definition of the F06PhysicsList class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,8 +47,8 @@ public:
     F06PhysicsList();
     virtual ~F06PhysicsList();
 
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
     void SetCuts();
 

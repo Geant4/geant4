@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: CheckVolumeSD.hh 67994 2013-03-13 11:05:39Z gcosmo $
+//
 /// \file medical/GammaTherapy/include/CheckVolumeSD.hh
 /// \brief Definition of the CheckVolumeSD class
 //

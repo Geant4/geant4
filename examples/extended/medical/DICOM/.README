@@ -22,6 +22,7 @@ And it has been deeply reviewed by Pedro Arce in December 2007. \n
 Very small changes by Stephane Chauvie in January 2008. \n
 Stephane Chauvie, Oct 2009: changed Physics list; changes in DICOM read.  \n
 Stephane Chauvie and Andrea Armando; June 2010 adapted for reading  whatever DICOM file \n
+Jonathan Madsen, Nov 2013: updated DICOM to utilize multithreading now available in Geant4.10 \n
 
 
 \section DICOM_s1 Introduction
@@ -36,9 +37,12 @@ In the application the phantom is placed on a table.
  - A standard Geant4 example GNUmakefile is provided            
  - Compile it with 'make'/'gmake' 
 
+ - A standard Geant4 example CMakeLists.txt is provided
+ - Configure via cmake with 'cmake -DGeant4_DIR=/path_to_geant4_install/lib/Geant4-x.x.x /path/to/DICOM/source' then make
+
 \section DICOM_s3 Run the example:
 
- - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
+ - To run the environment variable G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
 
  - batch mode:
 \verbatim
@@ -51,6 +55,20 @@ DICOM
 \endverbatim
    the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
 
+   
+ - Environment variables:
+   - DICOM_CHANGE_MATERIAL_DENSITY
+     - set to the minimum density difference before making a separate material
+     - e.g. if DenseBone is from > 1.496 to <= 1.654 and DICOM_CHANGE_MATERIAL_DENSITY=0.079
+         then DenseBone would be separated into DenseBone > 1.496 to <= 1.575 and DenseBone > 1.575 to <= 1.654
+   - DICOM_PARTIAL_PARAM
+     - set to 1 to build the partial build instead of regular or nested construction (see section 9)
+   - DICOM_NESTED_PARAM
+     - set to 1 to build the nested construction (see section 9; overridden by DICOM_PARTIAL_PARAM)
+   - DICOM_NTHREADS
+     - To set the number of threads (when G4MULTITHREADED is defined via GEANT4_BUILD_MULTITHREADED=ON during Geant4 source build)
+     - Needs to be set to the number of desired threads, e.g. DICOM_NTHREADS=8 (default is 4 threads)
+     
 \section DICOM_s4 Metadata:
 
  The file Data.dat has the following information
@@ -127,12 +145,14 @@ The same information is also used to fill a file in binary format, that contains
 
 There are four possible ways in GEANT4 to treat the navigation in regular voxelised volumes:
 
--# The 1D optimisation . It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
 -# The 3D optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
 -# Using G4NestedParameterisation. The search is done hierarchically in X, Y and Z. It is fast and does not require big memory
 -# Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit_RegNav scorer can be used (see below)
 
-You can select amont the four options in the following way:
+Obsolete option:
+-# The 1D optimisation . It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
+
+You can select among the four options in the following way:
 
 - By default the example will run with G4RegularNavigation
 
@@ -141,7 +161,10 @@ You can select amont the four options in the following way:
 patient_phys->SetRegularStructureId(0);
 \endverbatim
 
-- To use the second option apart from the change above at RegularDicomDetectorConstruction.cc you have to replace (i.e. use kUndefined)
+- To use the second option (Nested Parameterisation) you must set the enviromental variable DICOM_NESTED_PARAM to 1
+
+- To use the final, obsolete 1D-option, apart from the change above at RegularDicomDetectorConstructio\
+n.cc you need to replace (i.e. use kUndefined)
 \verbatim
 G4PVParameterised* patient_phys 
   = new G4PVParameterised("Patient",voxel_logic,container_logic,
@@ -154,10 +177,7 @@ G4PVParameterised * patient_phys
 			  kUndefined, nVoxelX*nVoxelY*nVoxelZ, param);
 \endverbatim
 
-- To use the third option you have to set the enviromental variable
-\verbatim
-DICOM_NESTED_PARAM to 1
-\endverbatim
+Note also you must *not* set the enviromental variable DICOM_NESTED_PARAM.
 
 
 \section DICOM_s10 Calculating dose in phantom voxels for regular navigation

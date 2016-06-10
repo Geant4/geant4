@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4OpenGL2PSAction.hh 70646 2013-06-03 15:07:58Z gcosmo $
 //
 
 #ifndef G4OpenGL2PSAction_h
@@ -57,8 +57,8 @@ protected:
  const char * fFileName;
  FILE* fFile;
  GLint fViewport[4];
- int fBufferSize;
- int fBufferSizeLimit;
+ GLint fBufferSize;
+ GLint fBufferSizeLimit;
 };
 
 #endif

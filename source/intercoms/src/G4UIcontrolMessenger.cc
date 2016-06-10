@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIcontrolMessenger.cc 68725 2013-04-05 09:27:45Z gcosmo $
 //
 
 #include <stdlib.h>
@@ -55,6 +55,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ExecuteCommand = new G4UIcmdWithAString("/control/execute",this);
   ExecuteCommand->SetGuidance("Execute a macro file.");
   ExecuteCommand->SetParameterName("fileName",false);
+  ExecuteCommand->SetToBeBroadcasted(false);
 
   loopCommand = new G4UIcommand("/control/loop",this);
   loopCommand->SetGuidance("Execute a macro file more than once.");
@@ -70,6 +71,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   G4UIparameter* param5 = new G4UIparameter("stepSize",'d',true);
   param5->SetDefaultValue(1.0);
   loopCommand->SetParameter(param5);
+  loopCommand->SetToBeBroadcasted(false);
 
   foreachCommand = new G4UIcommand("/control/foreach",this);
   foreachCommand->SetGuidance("Execute a macro file more than once.");
@@ -81,6 +83,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   foreachCommand->SetParameter(param7);
   G4UIparameter* param8 = new G4UIparameter("valueList",'s',false);
   foreachCommand->SetParameter(param8);
+  foreachCommand->SetToBeBroadcasted(false);
   
   suppressAbortionCommand = new G4UIcmdWithAnInteger("/control/suppressAbortion",this);
   suppressAbortionCommand->SetGuidance("Suppress the program abortion caused by G4Exception.");
@@ -146,12 +149,14 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ManualCommand->SetGuidance("Directory path should be given by FULL-PATH.");
   ManualCommand->SetParameterName("dirPath",true);
   ManualCommand->SetDefaultValue("/");
+  ManualCommand->SetToBeBroadcasted(false);
 
   HTMLCommand = new G4UIcmdWithAString("/control/createHTML",this);
   HTMLCommand->SetGuidance("Generate HTML files for all of sub-directories and commands.");
   HTMLCommand->SetGuidance("Directory path should be given by FULL-PATH.");
   HTMLCommand->SetParameterName("dirPath",true);
   HTMLCommand->SetDefaultValue("/");
+  HTMLCommand->SetToBeBroadcasted(false);
 
   maxStoredHistCommand = new G4UIcmdWithAnInteger("/control/maximumStoredHistory",this);
   maxStoredHistCommand->SetGuidance("Set maximum number of stored UI commands.");
@@ -170,6 +175,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ifCommand->SetParameter(rightParam);
   G4UIparameter* macroFileParam = new G4UIparameter("aliasValue",'s',false);
   ifCommand->SetParameter(macroFileParam);
+  ifCommand->SetToBeBroadcasted(false);
 
   addCommand = new G4UIcommand("/control/add",this);
   addCommand->SetGuidance("Define a new alias as the sum of two values.");

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68348 2013-03-22 10:00:19Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fPBox(0), fLBox(0), fMaterial(0)
+:G4VUserDetectorConstruction(),fPBox(0), fLBox(0), fMaterial(0),
+ fDetectorMessenger(0)
 {
   fBoxSize = 1*cm;
   DefineMaterials();
@@ -134,20 +135,20 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4SolidStore::GetInstance()->Clean();
 
   G4Box*
-  sBox = new G4Box("Container",                                //its name
+  sBox = new G4Box("Container",                              //its name
                    fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
 
   fLBox = new G4LogicalVolume(sBox,                        //its shape
-                             fMaterial,                        //its material
+                             fMaterial,                    //its material
                              fMaterial->GetName());        //its name
 
-  fPBox = new G4PVPlacement(0,                                //no rotation
-                             G4ThreeVector(),                //at (0,0,0)
-                           fLBox,                        //its logical volume                           
+  fPBox = new G4PVPlacement(0,                          //no rotation
+                             G4ThreeVector(),           //at (0,0,0)
+                           fLBox,                       //its logical volume
                            fMaterial->GetName(),        //its name
-                           0,                                //its mother  volume
-                           false,                        //no boolean operation
-                           0);                                //copy number
+                           0,                           //its mother  volume
+                           false,                       //no boolean operation
+                           0);                          //copy number
                            
   PrintParameters();
   

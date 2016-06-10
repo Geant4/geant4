@@ -26,11 +26,10 @@
 /// \file field/field02/include/F02CalorHit.hh
 /// \brief Definition of the F02CalorHit class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// $Id: F02CalorHit.hh 76247 2013-11-08 11:18:52Z gcosmo $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02CalorHit_h
 #define F02CalorHit_h 1
@@ -39,15 +38,16 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02CalorHit : public G4VHit
 {
   public:
 
       F02CalorHit();
-      ~F02CalorHit();
       F02CalorHit(const F02CalorHit&);
+      virtual ~F02CalorHit();
+
       const F02CalorHit& operator=(const F02CalorHit&);
       G4int operator==(const F02CalorHit&) const;
 
@@ -55,46 +55,46 @@ class F02CalorHit : public G4VHit
       inline void  operator delete(void*);
 
       virtual void Print();
-      
+
   public:
-  
-      void AddAbs(G4double de, G4double dl) {fEdepAbs += de; fTrackLengthAbs += dl;};
-      void AddGap(G4double de, G4double dl) {fEdepGap += de; fTrackLengthGap += dl;};      
-                 
-      G4double GetEdepAbs()     { return fEdepAbs; };
-      G4double GetTrackAbs()    { return fTrackLengthAbs; };
-      G4double GetEdepGap()     { return fEdepGap; };
-      G4double GetTrackGap()    { return fTrackLengthGap; };
-     
+
+      void AddAbs(G4double de, G4double dl)
+           {fEdepAbs += de; fTrackLengthAbs += dl;};
+      void AddGap(G4double de, G4double dl)
+           {fEdepGap += de; fTrackLengthGap += dl;};
+
+      G4double GetEdepAbs()    { return fEdepAbs; };
+      G4double GetTrackAbs()   { return fTrackLengthAbs; };
+      G4double GetEdepGap()    { return fEdepGap; };
+      G4double GetTrackGap()   { return fTrackLengthGap; };
+
   private:
-  
+
       G4double fEdepAbs, fTrackLengthAbs;
       G4double fEdepGap, fTrackLengthGap;
-      
+
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 typedef G4THitsCollection<F02CalorHit> F02CalorHitsCollection;
 
-extern G4Allocator<F02CalorHit> F02CalorHitAllocator;
+extern G4ThreadLocal G4Allocator<F02CalorHit>* F02CalorHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* F02CalorHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) F02CalorHitAllocator.MallocSingle();
-  return aHit;
+    if(!F02CalorHitAllocator)
+      F02CalorHitAllocator = new G4Allocator<F02CalorHit>;
+    return (void*) F02CalorHitAllocator->MallocSingle();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void F02CalorHit::operator delete(void* aHit)
 {
-  F02CalorHitAllocator.FreeSingle((F02CalorHit*) aHit);
+  F02CalorHitAllocator->FreeSingle((F02CalorHit*) aHit);
 }
 
 #endif
-
-

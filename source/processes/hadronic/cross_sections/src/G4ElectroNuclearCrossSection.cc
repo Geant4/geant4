@@ -23,267 +23,98 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ElectroNuclearCrossSection.cc 73758 2013-09-10 12:47:00Z gcosmo $
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-Oct-03
 
-//#define debug
-#define edebug
-//#define pdebug
-//#define ppdebug
-//#define tdebug
-//#define sdebug
+// A. Dotti 2-May-2013: I keep exactly the same algorithm, including the same
+//                      general assumptions about optimization (i.e. cache
+//                      and "lastSeen" reuse), but I rewrite the caching
+//                      mechanism and redue the use of TLS.
+//                      On simple setups this algo should be 40%
+//                      faster
+// W. Pokorski 29-08-2013: Major clean up, restructuring and speed up of the code. The calculation
+//                      of the cross section is stil the same but it is not done per isotope (Z, N),
+//                      but per element (Z). Average is taken for NIST.
 
 #include <iostream>
 
-#include "G4ElectroNuclearCrossSection.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4ElectroNuclearCrossSection.hh"
 
-// Initialization of statics
-// Last used in the cross section TheEnergy
-G4double G4ElectroNuclearCrossSection::lastE=0.;
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ElectroNuclearCrossSection);
 
-// Last used in the cross section TheFirstBin
-G4int G4ElectroNuclearCrossSection::lastF=0;
+//
+//A. Dotti 2-May-2013
+//Optimizing code
 
-// Last used in the cross section TheGamma
-G4double G4ElectroNuclearCrossSection::lastG=0.;
+// W. Pokorski 22-August-2013
+// Moved cache element to header file
+// all static variables moved to private members
 
-G4double  G4ElectroNuclearCrossSection::lastH=0.;  // Last value of the High Energy A-dependence
-G4double* G4ElectroNuclearCrossSection::lastJ1=0;  // Pointer to the last array of the J1 function
-G4double* G4ElectroNuclearCrossSection::lastJ2=0;  // Pointer to the last array of the J2 function
-G4double* G4ElectroNuclearCrossSection::lastJ3=0;  // Pointer to the last array of the J3 function
-G4int     G4ElectroNuclearCrossSection::lastL=0;   // Last used in the cross section TheLastBin
-G4int     G4ElectroNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
-G4int     G4ElectroNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4ElectroNuclearCrossSection::lastTH=0.; // Last energy threshold
-G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
+// removing all the static consts and putting them here
 
-// Vector of pointers to the J1 tabulated functions
-std::vector<G4double*> G4ElectroNuclearCrossSection::J1;
-
-// Vector of pointers to the J2 tabulated functions
-std::vector<G4double*> G4ElectroNuclearCrossSection::J2;
-
-// Vector of pointers to the J3 tabulated functions
-std::vector<G4double*> G4ElectroNuclearCrossSection::J3;
-
-
-G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& nam)
- : G4VCrossSectionDataSet(nam)
-{}
-
-G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
-{
-  std::vector<G4double*>::iterator pos;
-  for(pos=J1.begin(); pos<J1.end(); pos++)
-  { delete [] *pos; }
-  J1.clear();
-  for(pos=J2.begin(); pos<J2.end(); pos++)
-  { delete [] *pos; }
-  J2.clear();
-  for(pos=J3.begin(); pos<J3.end(); pos++)
-  { delete [] *pos; }
-  J3.clear();
-}
-
-void
-G4ElectroNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
-{
-  outFile << "G4ElectroNuclearCrossSection provides the total inelastic\n"
-          << "cross section for e- and e+ interactions with nuclei.  The\n"
-          << "cross sections are retrieved from a table which is\n"
-          << "generated using the equivalent photon approximation.  In\n"
-          << "this approximation real gammas are produced from the virtual\n"
-          << "ones generated at the electromagnetic vertex.  This cross\n"
-          << "section set is valid for incident electrons and positrons at\n"
-          << "all energies.\n";
-}
-
-G4bool
-G4ElectroNuclearCrossSection::IsIsoApplicable(
-          const G4DynamicParticle* aParticle, G4int /*Z*/,
-	  G4int /*A*/, const G4Element*, const G4Material*)
-{
-  G4bool result = false;
-  if (aParticle->GetDefinition() == G4Electron::ElectronDefinition())
-    result = true;
-  if (aParticle->GetDefinition() == G4Positron::PositronDefinition())
-    result = true;
-  return result;
-}
-
-G4double 
-G4ElectroNuclearCrossSection::GetIsoCrossSection(
-         const G4DynamicParticle* aPart,
-	 G4int ZZ, G4int AA,
-	 const G4Isotope*, const G4Element*, const G4Material*)
-{
-  static const G4int nE=336; // !!  If you change this, change it in GetFunctions() (*.hh) !!
-  static const G4int mL=nE-1;
-  static const G4double EMi=2.0612; // Minimum tabulated Energy of the Electron
-  static const G4double EMa=50000.; // Maximum tabulated Energy of the Electron
-  static const G4double lEMi=std::log(EMi);  // Minimum tabulated logarithmic Energy of the Electron
-  static const G4double lEMa=std::log(EMa);  // Maximum tabulated logarithmic Energy of the Electron
-  static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in the table for the electron Energy
-  static const G4double alop=1./137.036/3.14159265; //coef. for the calculated functions (Ee>50000.)
-  static const G4double mel=0.5109989;       // Mass of the electron in MeV
-  static const G4double lmel=std::log(mel);       // Log of the electron mass
-  // *** Begin of the Associative memory for acceleration of the cross section calculations
-  static std::vector <G4int> colN;       // Vector of N for calculated nucleus (isotop)
-  static std::vector <G4int> colZ;       // Vector of Z for calculated nucleus (isotop)
-  static std::vector <G4int> colF;       // Vector of Last StartPosition in the Ji-function tables
-  static std::vector <G4double> colTH;   // Vector of the energy thresholds for the eA->eX reactions
-  static std::vector <G4double> colH;    // Vector of HighEnergyCoefficients (functional calculations)
-  // *** End of Static Definitions (Associative Memory) ***
-
-  const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
-  const G4int targetAtomicNumber = AA;
-  const G4int targZ = ZZ;
-  const G4int targN = targetAtomicNumber-targZ; // @@ Get isotops (can change initial A)
-  if (Energy<=EMi) return 0.;              // Energy is below the minimum energy in the table
-
-  G4int PDG=aPart->GetDefinition()->GetPDGEncoding();
-  if (PDG == 11 || PDG == -11)            // @@ Now only for electrons, but can be fo muons
-  {
-    G4double A = targN + targZ;           // New A (can differ from G4double targetAtomicNumber)
-    if(targN!=lastN || targZ!=lastZ)      // This nucleus was not the last used isotop
-	{
-      lastE    = 0.;                       // New history in the electron Energy
-      lastG    = 0.;                       // New history in the photon Energy
-      lastN    = targN;                    // The last N of calculated nucleus
-      lastZ    = targZ;                    // The last Z of calculated nucleus
-      G4int n=colN.size();                 // Size of the Associative Memory DB in the heap
-      G4bool in=false;                     // "Found in AMDB" flag
-      if(n) for(G4int i=0; i<n; i++) if(colN[i]==targN && colZ[i]==targZ) // Calculated nuclei
-	  { // The nucleus is found in AMDB
-        in=true;                           // Rais the "Found in AMDB" flag
-        lastTH =colTH[i];                  // Last Energy threshold (A-dependent)
-        lastF  =colF[i];                   // Last ZeroPosition in the J-functions
-        lastH  =colH[i];                   // Last High Energy Coefficient (A-dependent)
-        lastJ1 =J1[i];                     // Pointer to the prepared J1 function
-        lastJ2 =J2[i];                     // Pointer to the prepared J2 function
-        lastJ3 =J3[i];                     // Pointer to the prepared J3 function
-	  }
-	  if(!in)                              // This nucleus has not been calculated previously
-	  {
-        lastJ1 = new G4double[nE];        // Allocate memory for the new J1 function
-        lastJ2 = new G4double[nE];        // Allocate memory for the new J2 function
-        lastJ3 = new G4double[nE];        // Allocate memory for the new J3 function
-        lastF   = GetFunctions(A,lastJ1,lastJ2,lastJ3); // new ZeroPos and filling of J-functions
-        lastH   = alop*A*(1.-.072*std::log(A));// corresponds to lastSP from G4PhotonuclearCrossSection 
-        lastTH  = ThresholdEnergy(targZ, targN); // The last Threshold Energy
-#ifdef pdebug
-        G4cout<<"G4ElNucCS::GetCrossSection: lastH="<<lastH<<",A="<<A<<G4endl;
-#endif
-        colN.push_back(targN);
-        colZ.push_back(targZ);
-        colF.push_back(lastF);
-        J1.push_back(lastJ1);
-        J2.push_back(lastJ2);
-        J3.push_back(lastJ3);
-        colH.push_back(lastH);
-        colTH.push_back(lastTH);
-	  } // End of creation of the new set of parameters
-    } // End of parameters udate
-
-    //    else if(std::abs((lastE-Energy)/Energy)<.001) return lastSig*millibarn; // Don't calc. same CS twice
-    else if(lastE == Energy) return lastSig*millibarn; // Don't calc. same CS twice
-    // ============================== NOW Calculate the Cross Section ==========================
-    lastE=Energy;                          // lastE - the electron energy
-    if (Energy<=lastTH)                    // Once more check that the eE is higher than the ThreshE
-    {
-      lastSig=0.;
-      return 0.;
-    }
-    G4double lE=std::log(Energy);               // std::log(eE) (it is necessary at this point for the fit)
-    lastG=lE-lmel;                         // Gamma of the electron (used to recover std::log(eE))
-    G4double dlg1=lastG+lastG-1.;
-    G4double lgoe=lastG/lastE;
-    if(lE<lEMa) // Linear fit is made explicitly to fix the last bin for the randomization
-	{
-      G4double shift=(lE-lEMi)/dlnE;
-      G4int    blast=static_cast<int>(shift);
-      if(blast<0)   blast=0;
-      if(blast>=mL) blast=mL-1;
-      shift-=blast;
-      lastL=blast+1;
-      G4double YNi=dlg1*lastJ1[blast]-lgoe*(lastJ2[blast]+lastJ2[blast]-lastJ3[blast]/lastE);
-      G4double YNj=dlg1*lastJ1[lastL]-lgoe*(lastJ2[lastL]+lastJ2[lastL]-lastJ3[lastL]/lastE);
-      lastSig= YNi+shift*(YNj-YNi);
-      if(lastSig>YNj)lastSig=YNj;
-#ifdef pdebug
-      G4cout<<"G4ElNucCS::GetCS:S="<<lastSig<<",E="<<lE<<",Yi="<<YNi<<",Yj="<<YNj<<",M="<<lEMa<<G4endl;
-      G4cout<<"G4EN::GCS:s="<<shift<<",Jb="<<lastJ1[blast]<<",J="<<lastJ1[lastL]<<",b="<<blast<<G4endl;
-#endif
-    }
-    else
-	{
-      lastL=mL;
-      G4double term1=lastJ1[mL]+lastH*HighEnergyJ1(lE);
-      G4double term2=lastJ2[mL]+lastH*HighEnergyJ2(lE);
-      G4double term3=lastJ3[mL]+lastH*HighEnergyJ3(lE);
-      lastSig=dlg1*term1-lgoe*(term2+term2-term3/lastE);
-#ifdef pdebug
-      G4cout<<"G4ElNucCS::GetCrossSec:S="<<lastSig<<",lE="<<lE<<",J1="<<lastH*HighEnergyJ1(lE)<<",Pm="
-            <<lastJ1[mL]<<",Fm="<<lastJ2[mL]<<",Fh="<<lastH*HighEnergyJ2(lE)<<",EM="<<lEMa<<G4endl;
-#endif
-	}
-  } // End of "sigma" calculation
-  else return 0.;
-  if(lastSig<0.) lastSig = 0.;
-  lastE=Energy;
-  return lastSig*millibarn;
-}
-
-// Gives the threshold energy for different nuclei (min of p- and n-threshold)
-G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
-{
-  // CHIPS - Direct GEANT
-  //static const G4double mNeut = G4QPDGCode(2112).GetMass();
-  //static const G4double mProt = G4QPDGCode(2212).GetMass();
-  static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1,0);
-  static const G4double mProt = G4NucleiProperties::GetNuclearMass(1,1);
-  // ---------
-  static const G4double infEn = 9.e27;
-
-  G4int A=Z+N;
-  if(A<1) return infEn;
-  else if(A==1) return 134.9766; // Pi0 threshold for the nucleon
-  // CHIPS - Direct GEANT
-  //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
-  G4double mT= 0.;
-  if(G4NucleiProperties::IsInStableTable(A,Z)) mT = G4NucleiProperties::GetNuclearMass(A,Z);
-  // If it is not in the Table of Stable Nuclei, then the Threshold=inf
-  else return infEn;              
-  // ---------
-  G4double mP= infEn;
-  //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
-  if(Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1)) mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1);
-  else return infEn;
-  G4double mN= infEn;
-  //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);
-  if(N&&G4NucleiProperties::IsInStableTable(A-1,Z)) mN = G4NucleiProperties::GetNuclearMass(A-1,Z);
-  else return infEn;
-  G4double dP= mP+mProt-mT;
-  G4double dN= mN+mNeut-mT;
-  if(dP<dN)dN=dP;
-  return dN;
-}
-
-
-// Calculate the functions for the std::log(A)
-G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4double* y, G4double* z)
-{
-  static const G4int nN=14;
-  static const G4int nE=336; // !!  If you change this, change it in GetCrossSection() (*.cc) !!
-  static G4int L[nN]={138, 2, 32, 75, 26, 41, 0, 67, 58, 46, 41, 38, 39, 36};
-  // !! @@ Change it from ln(A) to A approximation !!
-  static G4double A[nN]={1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.546,118.71,207.2,238.472};
-  static const G4double P00[nE]={
+// Parametrization of the PhotoNucCS
+static const G4double shd=1.0734;              // HE PomShadowing(D)
+static const G4double poc=0.0375;              // HE Pomeron coefficient
+static const G4double pos=16.5;                // HE Pomeron shift
+static const G4double reg=.11;                 // HE Reggeon slope
+static const G4double mel=0.5109989;           // Mass of an electron in MeV
+static const G4double mel2=mel*mel;     // Squared Mass of electron in MeV
+static const G4double lmel=std::log(mel);      // Log of an electron mass
+//
+static const G4int nE=336;
+static const G4int mL=nE-1;
+static const G4double EMi=2.0612; // Minimum tabulated Energy of the Electron
+static const G4double EMa=50000.; // Maximum tabulated Energy of the Electron
+static const G4double EMa2=EMa*EMa; // Maximum tabulated Energy of the Electron ^2
+static const G4double lEMi=std::log(EMi);  // Minimum tabulated logarithmic Energy of the Electron
+static const G4double lEMa=std::log(EMa);  // Maximum tabulated logarithmic Energy of the Electron
+static const G4double lEMa2=lEMa*lEMa;  // Maximum tabulated logarithmic Energy of the Electron ^2
+static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in the table for the electron Energy
+static const G4double alop=1./137.036/3.14159265; //coef. for the calculated functions (Ee>50000.)
+static const G4double le1=(lEMa-1.)*EMa;  // (std::log(E0)-1)*E0
+static const G4double leh=(lEMa-.5)*EMa2; // (std::log(E0)-.5)*E0^2
+//
+static const G4double ha=poc*.5;        // a/2
+static const G4double hab=ha*pos;    // a*b/2
+static const G4double ab=poc*pos;      // a*b
+static const G4double d1 = 1 - reg;
+static const G4double d2 = 2 - reg;
+static const G4double cd=shd/reg;    // c/d
+static const G4double cd1=shd/d1;    // c/d1
+static const G4double cd2=shd/d2;    // c/d2
+static const G4double ele=std::exp(-reg*lEMa); // E0^(-d)
+static const G4double ele1=std::exp(d1*lEMa); // E0^(-d1)
+static const G4double ele2=std::exp(d2*lEMa); // E0^(-d2)
+//
+static const G4double phte=poc*(lEMa-pos)+shd*ele; // CrossX on theHighTableEdge (small change)
+static const G4int    imax=27;   // Not more than "imax" steps to find the solution
+static const G4double eps=0.001; // Accuracy which satisfies the search
+//
+static const G4double infEn = 9.e27;
+//
+static const G4double dM=938.27+939.57; // Mean double nucleon mass = m_n+m_p (@@ no binding)
+static const G4double Q0=843.;          // Coefficient of the dipole nucleonic form-factor
+static const G4double Q02=Q0*Q0;        // Squared coefficient of the dipole nucleonic form-factor
+static const G4double blK0=std::log(185.);   // Coefficient of the b-function
+static const G4double bp=0.85;          // Power of the b-function
+static const G4double clK0=std::log(1390.);  // Coefficient of the c-function
+static const G4double cp=3.;            // Power of the c-function
+//
+static const G4int nN=14;
+//
+static const G4int L[nN]={138, 2, 32, 75, 26, 41, 0, 67, 58, 46, 41, 38, 39, 36};
+// !! @@ Change it from ln(A) to A approximation !!
+static const G4double A[nN]={1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.546,118.71,207.2,238.472};
+//
+static const G4double P00[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -332,7 +163,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     2.097884e-03,2.105894e-03,2.113901e-03,2.121904e-03,2.129905e-03,2.137903e-03,2.145898e-03,
     2.153892e-03,2.161884e-03,2.169874e-03,2.177863e-03,2.185852e-03,2.193839e-03,2.201827e-03,
     2.209815e-03,2.217803e-03,2.225791e-03,2.233781e-03,2.241771e-03,2.249764e-03,2.257757e-03};
-  static const G4double P10[nE]={
+static const G4double P10[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -381,7 +212,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     7.880607e+00,8.103173e+00,8.332447e+00,8.568639e+00,8.811968e+00,9.062659e+00,9.320945e+00,
     9.587066e+00,9.861271e+00,1.014381e+01,1.043496e+01,1.073499e+01,1.104417e+01,1.136281e+01,
     1.169119e+01,1.202964e+01,1.237847e+01,1.273802e+01,1.310862e+01,1.349063e+01,1.388442e+01};
-  static const G4double P20[nE]={
+static const G4double P20[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -430,7 +261,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.017437e+05,1.079281e+05,1.144938e+05,1.214646e+05,1.288658e+05,1.367242e+05,1.450685e+05,
     1.539289e+05,1.633378e+05,1.733295e+05,1.839405e+05,1.952096e+05,2.071781e+05,2.198898e+05,
     2.333914e+05,2.477325e+05,2.629658e+05,2.791474e+05,2.963371e+05,3.145981e+05,3.339980e+05};
-  static const G4double P01[nE]={
+static const G4double P01[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,2.954211e-05,9.596085e-05,1.664204e-04,2.410445e-04,
     3.199604e-04,4.032996e-04,4.911973e-04,5.837930e-04,6.812306e-04,7.836580e-04,8.913164e-04,
     1.004812e-03,1.124386e-03,1.250223e-03,1.382516e-03,1.521462e-03,1.667264e-03,1.820132e-03,
@@ -479,7 +310,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.299819e-02,1.301326e-02,1.302831e-02,1.304336e-02,1.305840e-02,1.307344e-02,1.308847e-02,
     1.310350e-02,1.311853e-02,1.313355e-02,1.314857e-02,1.316358e-02,1.317860e-02,1.319362e-02,
     1.320863e-02,1.322365e-02,1.323866e-02,1.325368e-02,1.326870e-02,1.328372e-02,1.329875e-02};
-  static const G4double P11[nE]={
+static const G4double P11[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,5.142599e-05,1.703905e-04,3.015318e-04,4.458151e-04,
     6.042723e-04,7.780058e-04,9.681932e-04,1.176093e-03,1.403047e-03,1.650491e-03,1.920179e-03,
     2.214927e-03,2.536789e-03,2.887800e-03,3.270133e-03,3.686105e-03,4.138189e-03,4.629026e-03,
@@ -528,7 +359,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.491454e+01,1.533306e+01,1.576417e+01,1.620828e+01,1.666579e+01,1.713713e+01,1.762273e+01,
     1.812306e+01,1.863856e+01,1.916973e+01,1.971706e+01,2.028107e+01,2.086229e+01,2.146127e+01,
     2.207856e+01,2.271477e+01,2.337048e+01,2.404633e+01,2.474296e+01,2.546103e+01,2.620123e+01};
-  static const G4double P21[nE]={
+static const G4double P21[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,8.952320e-05,3.026305e-04,5.467439e-04,8.257448e-04,
     1.143952e-03,1.506169e-03,1.917732e-03,2.384568e-03,2.913257e-03,3.511097e-03,4.186748e-03,
     4.952288e-03,5.818752e-03,6.797967e-03,7.903042e-03,9.148496e-03,1.055041e-02,1.212656e-02,
@@ -577,7 +408,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.915807e+05,2.032100e+05,2.155559e+05,2.286629e+05,2.425788e+05,2.573538e+05,2.730419e+05,
     2.896999e+05,3.073887e+05,3.261726e+05,3.461204e+05,3.673050e+05,3.898039e+05,4.136996e+05,
     4.390797e+05,4.660376e+05,4.946723e+05,5.250894e+05,5.574009e+05,5.917262e+05,6.281921e+05};
-  static const G4double P02[nE]={
+static const G4double P02[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -626,7 +457,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.226246e-02,1.228440e-02,1.230633e-02,1.232825e-02,1.235016e-02,1.237205e-02,1.239394e-02,
     1.241582e-02,1.243769e-02,1.245956e-02,1.248142e-02,1.250328e-02,1.252513e-02,1.254699e-02,
     1.256884e-02,1.259069e-02,1.261254e-02,1.263439e-02,1.265624e-02,1.267809e-02,1.269995e-02};
-  static const G4double P12[nE]={
+static const G4double P12[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -675,7 +506,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     2.186947e+01,2.247911e+01,2.310704e+01,2.375385e+01,2.442012e+01,2.510646e+01,2.581353e+01,
     2.654196e+01,2.729244e+01,2.806568e+01,2.886238e+01,2.968330e+01,3.052921e+01,3.140091e+01,
     3.229921e+01,3.322497e+01,3.417906e+01,3.516238e+01,3.617589e+01,3.722053e+01,3.829731e+01};
-  static const G4double P22[nE]={
+static const G4double P22[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -724,7 +555,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     2.797587e+05,2.966988e+05,3.146809e+05,3.337702e+05,3.540357e+05,3.755506e+05,3.983931e+05,
     4.226461e+05,4.483978e+05,4.757419e+05,5.047781e+05,5.356124e+05,5.683574e+05,6.031331e+05,
     6.400668e+05,6.792939e+05,7.209586e+05,7.652140e+05,8.122231e+05,8.621592e+05,9.152064e+05};
-  static const G4double P03[nE]={
+static const G4double P03[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -773,7 +604,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.454901e-02,1.457768e-02,1.460633e-02,1.463496e-02,1.466358e-02,1.469218e-02,1.472077e-02,
     1.474934e-02,1.477791e-02,1.480646e-02,1.483501e-02,1.486355e-02,1.489208e-02,1.492061e-02,
     1.494914e-02,1.497766e-02,1.500618e-02,1.503470e-02,1.506322e-02,1.509175e-02,1.512027e-02};
-  static const G4double P13[nE]={
+static const G4double P13[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -822,7 +653,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     2.884305e+01,2.963961e+01,3.046001e+01,3.130500e+01,3.217535e+01,3.307186e+01,3.399537e+01,
     3.494673e+01,3.592682e+01,3.693656e+01,3.797687e+01,3.904875e+01,4.015319e+01,4.129122e+01,
     4.246392e+01,4.367240e+01,4.491780e+01,4.620129e+01,4.752410e+01,4.888749e+01,5.029275e+01};
-  static const G4double P23[nE]={
+static const G4double P23[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -871,7 +702,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     3.664650e+05,3.885990e+05,4.120927e+05,4.370310e+05,4.635039e+05,4.916070e+05,5.214420e+05,
     5.531172e+05,5.867475e+05,6.224550e+05,6.603699e+05,7.006301e+05,7.433826e+05,7.887837e+05,
     8.369994e+05,8.882063e+05,9.425923e+05,1.000357e+06,1.061713e+06,1.126885e+06,1.196115e+06};
-  static const G4double P04[nE]={
+static const G4double P04[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -920,7 +751,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.998458e-02,2.002629e-02,2.006798e-02,2.010963e-02,2.015126e-02,2.019287e-02,2.023445e-02,
     2.027601e-02,2.031756e-02,2.035908e-02,2.040059e-02,2.044209e-02,2.048358e-02,2.052506e-02,
     2.056653e-02,2.060799e-02,2.064945e-02,2.069091e-02,2.073236e-02,2.077382e-02,2.081528e-02};
-  static const G4double P14[nE]={
+static const G4double P14[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -969,7 +800,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     4.208324e+01,4.324227e+01,4.443590e+01,4.566522e+01,4.693134e+01,4.823544e+01,4.957871e+01,
     5.096240e+01,5.238778e+01,5.385619e+01,5.536898e+01,5.692756e+01,5.853340e+01,6.018799e+01,
     6.189289e+01,6.364971e+01,6.546010e+01,6.732578e+01,6.924851e+01,7.123011e+01,7.327248e+01};
-  static const G4double P24[nE]={
+static const G4double P24[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1018,7 +849,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     5.344641e+05,5.666699e+05,6.008519e+05,6.371329e+05,6.756438e+05,7.165233e+05,7.599193e+05,
     8.059888e+05,8.548986e+05,9.068263e+05,9.619605e+05,1.020502e+06,1.082664e+06,1.148672e+06,
     1.218769e+06,1.293211e+06,1.372270e+06,1.456236e+06,1.545418e+06,1.640143e+06,1.740759e+06};
-  static const G4double P05[nE]={
+static const G4double P05[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1067,7 +898,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     2.595436e-02,2.600245e-02,2.605050e-02,2.609852e-02,2.614650e-02,2.619446e-02,2.624239e-02,
     2.629030e-02,2.633818e-02,2.638604e-02,2.643389e-02,2.648172e-02,2.652953e-02,2.657733e-02,
     2.662513e-02,2.667291e-02,2.672069e-02,2.676847e-02,2.681624e-02,2.686402e-02,2.691179e-02};
-  static const G4double P15[nE]={
+static const G4double P15[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1116,7 +947,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     4.891749e+01,5.025360e+01,5.162956e+01,5.304662e+01,5.450609e+01,5.600929e+01,5.755762e+01,
     5.915250e+01,6.079540e+01,6.248786e+01,6.423144e+01,6.602777e+01,6.787852e+01,6.978543e+01,
     7.175028e+01,7.377494e+01,7.586129e+01,7.801133e+01,8.022707e+01,8.251063e+01,8.486417e+01};
-  static const G4double P25[nE]={
+static const G4double P25[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1165,7 +996,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     6.166422e+05,6.537685e+05,6.931719e+05,7.349941e+05,7.793856e+05,8.265066e+05,8.765271e+05,
     9.296281e+05,9.860018e+05,1.045853e+06,1.109398e+06,1.176869e+06,1.248512e+06,1.324586e+06,
     1.405371e+06,1.491162e+06,1.582272e+06,1.679036e+06,1.781809e+06,1.890967e+06,2.006914e+06};
-  static const G4double P06[nE]={
+static const G4double P06[nE]={
     1.177941e-08,2.588247e-08,4.232501e-08,6.117863e-08,8.251710e-08,1.064164e-07,1.329550e-07,
     1.622136e-07,1.942754e-07,2.292262e-07,2.671543e-07,3.081509e-07,3.523099e-07,4.005143e-07,
     4.568609e-07,5.221504e-07,5.966563e-07,6.806607e-07,7.744541e-07,8.783361e-07,9.926154e-07,
@@ -1214,7 +1045,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     3.031327e-02,3.037388e-02,3.043444e-02,3.049496e-02,3.055544e-02,3.061588e-02,3.067628e-02,
     3.073665e-02,3.079699e-02,3.085730e-02,3.091759e-02,3.097785e-02,3.103809e-02,3.109832e-02,
     3.115854e-02,3.121874e-02,3.127894e-02,3.133912e-02,3.139931e-02,3.145949e-02,3.151968e-02};
-  static const G4double P16[nE]={
+static const G4double P16[nE]={
     1.804258e-08,4.051712e-08,6.777154e-08,1.002656e-07,1.384927e-07,1.829820e-07,2.343007e-07,
     2.930569e-07,3.599020e-07,4.355335e-07,5.206986e-07,6.161967e-07,7.228834e-07,8.436657e-07,
     9.900430e-07,1.165832e-06,1.373705e-06,1.616528e-06,1.897372e-06,2.219523e-06,2.586504e-06,
@@ -1263,7 +1094,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     6.190297e+01,6.358705e+01,6.532129e+01,6.710728e+01,6.894664e+01,7.084106e+01,7.279228e+01,
     7.480211e+01,7.687239e+01,7.900504e+01,8.120204e+01,8.346544e+01,8.579735e+01,8.819995e+01,
     9.067549e+01,9.322629e+01,9.585477e+01,9.856339e+01,1.013547e+02,1.042314e+02,1.071962e+02};
-  static const G4double P26[nE]={
+static const G4double P26[nE]={
     2.763953e-08,6.345949e-08,1.086410e-07,1.646514e-07,2.331424e-07,3.159704e-07,4.152194e-07,
     5.332258e-07,6.726060e-07,8.362873e-07,1.027541e-06,1.250021e-06,1.507800e-06,1.810470e-06,
     2.190769e-06,2.664122e-06,3.244155e-06,3.946134e-06,4.787143e-06,5.786279e-06,6.964869e-06,
@@ -1312,7 +1143,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     7.781503e+05,8.249455e+05,8.746091e+05,9.273193e+05,9.832659e+05,1.042650e+06,1.105687e+06,
     1.172603e+06,1.243642e+06,1.319059e+06,1.399130e+06,1.484145e+06,1.574413e+06,1.670262e+06,
     1.772044e+06,1.880129e+06,1.994914e+06,2.116817e+06,2.246287e+06,2.383799e+06,2.529858e+06};
-  static const G4double P07[nE]={
+static const G4double P07[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1361,7 +1192,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     4.551894e-02,4.559790e-02,4.567681e-02,4.575564e-02,4.583443e-02,4.591315e-02,4.599183e-02,
     4.607046e-02,4.614905e-02,4.622760e-02,4.630612e-02,4.638460e-02,4.646306e-02,4.654149e-02,
     4.661990e-02,4.669829e-02,4.677667e-02,4.685504e-02,4.693340e-02,4.701176e-02,4.709012e-02};
-  static const G4double P17[nE]={
+static const G4double P17[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1410,7 +1241,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     8.119494e+01,8.338901e+01,8.564834e+01,8.797497e+01,9.037104e+01,9.283874e+01,9.538033e+01,
     9.799814e+01,1.006946e+02,1.034722e+02,1.063335e+02,1.092812e+02,1.123179e+02,1.154467e+02,
     1.186703e+02,1.219918e+02,1.254143e+02,1.289411e+02,1.325755e+02,1.363208e+02,1.401808e+02};
-  static const G4double P27[nE]={
+static const G4double P27[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1459,7 +1290,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.015202e+06,1.076168e+06,1.140869e+06,1.209535e+06,1.282415e+06,1.359770e+06,1.441879e+06,
     1.529038e+06,1.621562e+06,1.719787e+06,1.824068e+06,1.934784e+06,2.052338e+06,2.177156e+06,
     2.309695e+06,2.450437e+06,2.599897e+06,2.758623e+06,2.927195e+06,3.106232e+06,3.296392e+06};
-  static const G4double P08[nE]={
+static const G4double P08[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1508,7 +1339,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     6.885334e-02,6.895618e-02,6.905893e-02,6.916159e-02,6.926418e-02,6.936669e-02,6.946912e-02,
     6.957150e-02,6.967381e-02,6.977607e-02,6.987829e-02,6.998045e-02,7.008258e-02,7.018467e-02,
     7.028673e-02,7.038876e-02,7.049077e-02,7.059277e-02,7.069475e-02,7.079672e-02,7.089869e-02};
-  static const G4double P18[nE]={
+static const G4double P18[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1557,7 +1388,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.065509e+02,1.094082e+02,1.123504e+02,1.153801e+02,1.185000e+02,1.217131e+02,1.250223e+02,
     1.284306e+02,1.319411e+02,1.355571e+02,1.392819e+02,1.431190e+02,1.470720e+02,1.511445e+02,
     1.553403e+02,1.596635e+02,1.641179e+02,1.687079e+02,1.734378e+02,1.783119e+02,1.833351e+02};
-  static const G4double P28[nE]={
+static const G4double P28[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1606,7 +1437,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.324048e+06,1.403444e+06,1.487699e+06,1.577115e+06,1.672012e+06,1.772733e+06,1.879639e+06,
     1.993117e+06,2.113574e+06,2.241448e+06,2.377201e+06,2.521325e+06,2.674344e+06,2.836814e+06,
     3.009326e+06,3.192510e+06,3.387034e+06,3.593610e+06,3.812994e+06,4.045989e+06,4.293452e+06};
-  static const G4double P09[nE]={
+static const G4double P09[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1655,7 +1486,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.109651e-01,1.111312e-01,1.112971e-01,1.114629e-01,1.116285e-01,1.117940e-01,1.119593e-01,
     1.121246e-01,1.122897e-01,1.124547e-01,1.126197e-01,1.127845e-01,1.129493e-01,1.131140e-01,
     1.132786e-01,1.134432e-01,1.136078e-01,1.137723e-01,1.139367e-01,1.141012e-01,1.142656e-01};
-  static const G4double P19[nE]={
+static const G4double P19[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1704,7 +1535,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.737129e+02,1.783272e+02,1.830781e+02,1.879699e+02,1.930070e+02,1.981940e+02,2.035356e+02,
     2.090368e+02,2.147025e+02,2.205380e+02,2.265486e+02,2.327400e+02,2.391178e+02,2.456880e+02,
     2.524567e+02,2.594302e+02,2.666150e+02,2.740179e+02,2.816459e+02,2.895062e+02,2.976061e+02};
-  static const G4double P29[nE]={
+static const G4double P29[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1753,7 +1584,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     2.144486e+06,2.272704e+06,2.408756e+06,2.553128e+06,2.706338e+06,2.868935e+06,3.041503e+06,
     3.224662e+06,3.419071e+06,3.625434e+06,3.844494e+06,4.077045e+06,4.323928e+06,4.586041e+06,
     4.864335e+06,5.159824e+06,5.473583e+06,5.806757e+06,6.160565e+06,6.536300e+06,6.935340e+06};
-  static const G4double P010[nE]={
+static const G4double P010[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1802,7 +1633,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     2.795578e-01,2.799225e-01,2.802868e-01,2.806506e-01,2.810141e-01,2.813772e-01,2.817400e-01,
     2.821025e-01,2.824646e-01,2.828265e-01,2.831881e-01,2.835495e-01,2.839107e-01,2.842716e-01,
     2.846324e-01,2.849930e-01,2.853535e-01,2.857138e-01,2.860740e-01,2.864341e-01,2.867942e-01};
-  static const G4double P110[nE]={
+static const G4double P110[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1851,7 +1682,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     3.886893e+02,3.988214e+02,4.092516e+02,4.199893e+02,4.310440e+02,4.424257e+02,4.541449e+02,
     4.662121e+02,4.786383e+02,4.914349e+02,5.046135e+02,5.181864e+02,5.321660e+02,5.465652e+02,
     5.613974e+02,5.766763e+02,5.924161e+02,6.086315e+02,6.253377e+02,6.425504e+02,6.602857e+02};
-  static const G4double P210[nE]={
+static const G4double P210[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1900,7 +1731,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     4.734475e+06,5.016015e+06,5.314705e+06,5.631606e+06,5.967849e+06,6.324634e+06,6.703234e+06,
     7.105007e+06,7.531392e+06,7.983922e+06,8.464224e+06,8.974029e+06,9.515176e+06,1.008962e+07,
     1.069945e+07,1.134686e+07,1.203421e+07,1.276399e+07,1.353888e+07,1.436168e+07,1.523540e+07};
-  static const G4double P011[nE]={
+static const G4double P011[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1949,7 +1780,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     5.752004e-01,5.758403e-01,5.764794e-01,5.771176e-01,5.777552e-01,5.783920e-01,5.790281e-01,
     5.796636e-01,5.802985e-01,5.809328e-01,5.815666e-01,5.821998e-01,5.828326e-01,5.834650e-01,
     5.840970e-01,5.847286e-01,5.853599e-01,5.859909e-01,5.866216e-01,5.872521e-01,5.878823e-01};
-  static const G4double P111[nE]={
+static const G4double P111[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -1998,7 +1829,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     6.924079e+02,7.101869e+02,7.284863e+02,7.473223e+02,7.667118e+02,7.866722e+02,8.072215e+02,
     8.283782e+02,8.501616e+02,8.725913e+02,8.956879e+02,9.194725e+02,9.439667e+02,9.691932e+02,
     9.951752e+02,1.021937e+03,1.049502e+03,1.077898e+03,1.107150e+03,1.137285e+03,1.168332e+03};
-  static const G4double P211[nE]={
+static const G4double P211[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -2047,7 +1878,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     8.343775e+06,8.837797e+06,9.361836e+06,9.917747e+06,1.050750e+07,1.113320e+07,1.179707e+07,
     1.250148e+07,1.324894e+07,1.404213e+07,1.488389e+07,1.577725e+07,1.672542e+07,1.773181e+07,
     1.880006e+07,1.993402e+07,2.113780e+07,2.241576e+07,2.377254e+07,2.521307e+07,2.674259e+07};
-  static const G4double P012[nE]={
+static const G4double P012[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -2096,7 +1927,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.161166e+00,1.162220e+00,1.163272e+00,1.164324e+00,1.165373e+00,1.166422e+00,1.167469e+00,
     1.168515e+00,1.169560e+00,1.170604e+00,1.171647e+00,1.172688e+00,1.173729e+00,1.174769e+00,
     1.175809e+00,1.176847e+00,1.177885e+00,1.178923e+00,1.179959e+00,1.180996e+00,1.182031e+00};
-  static const G4double P112[nE]={
+static const G4double P112[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -2145,7 +1976,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.158151e+03,1.187440e+03,1.217582e+03,1.248602e+03,1.280530e+03,1.313394e+03,1.347222e+03,
     1.382046e+03,1.417896e+03,1.454806e+03,1.492808e+03,1.531936e+03,1.572228e+03,1.613719e+03,
     1.656447e+03,1.700453e+03,1.745775e+03,1.792457e+03,1.840541e+03,1.890072e+03,1.941097e+03};
-  static const G4double P212[nE]={
+static const G4double P212[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -2194,7 +2025,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.380440e+07,1.461824e+07,1.548140e+07,1.639693e+07,1.736806e+07,1.839823e+07,1.949109e+07,
     2.065053e+07,2.188068e+07,2.318592e+07,2.457091e+07,2.604061e+07,2.760029e+07,2.925554e+07,
     3.101232e+07,3.287695e+07,3.485616e+07,3.695711e+07,3.918738e+07,4.155507e+07,4.406876e+07};
-  static const G4double P013[nE]={
+static const G4double P013[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -2243,7 +2074,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.135289e+00,1.136484e+00,1.137677e+00,1.138868e+00,1.140058e+00,1.141247e+00,1.142434e+00,
     1.143619e+00,1.144803e+00,1.145986e+00,1.147168e+00,1.148349e+00,1.149528e+00,1.150707e+00,
     1.151884e+00,1.153061e+00,1.154237e+00,1.155413e+00,1.156587e+00,1.157761e+00,1.158935e+00};
-  static const G4double P113[nE]={
+static const G4double P113[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -2292,7 +2123,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.315045e+03,1.348248e+03,1.382416e+03,1.417580e+03,1.453770e+03,1.491019e+03,1.529361e+03,
     1.568829e+03,1.609460e+03,1.651289e+03,1.694355e+03,1.738697e+03,1.784354e+03,1.831369e+03,
     1.879785e+03,1.929646e+03,1.980999e+03,2.033889e+03,2.088367e+03,2.144482e+03,2.202288e+03};
-  static const G4double P213[nE]={
+static const G4double P213[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -2341,268 +2172,396 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
     1.566710e+07,1.658970e+07,1.756817e+07,1.860597e+07,1.970674e+07,2.087440e+07,2.211307e+07,
     2.342715e+07,2.482132e+07,2.630054e+07,2.787009e+07,2.953558e+07,3.130298e+07,3.317862e+07,
     3.516924e+07,3.728200e+07,3.952452e+07,4.190489e+07,4.443171e+07,4.711414e+07,4.996191e+07};
-  static const G4double* P0[nN]={P00,P01,P02,P03,P04,P05,P06,P07,P08,P09,P010,P011,P012,P013};
-  static const G4double* P1[nN]={P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P110,P111,P112,P113};
-  static const G4double* P2[nN]={P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P210,P211,P212,P213};
-  // --------------------------------
-  G4int r=-1;                             // Low channel for J-functions
-  if(a<=.9999 || a>238.49)                // Plutonium 244 is forbidden
-  {
-    G4cout<<"***G4ElectroNuclearCrossSection::GetFunctions: A="<<a<<"(?). No CS returned!"<<G4endl;
+static const G4double* P0[nN]={P00,P01,P02,P03,P04,P05,P06,P07,P08,P09,P010,P011,P012,P013};
+static const G4double* P1[nN]={P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P110,P111,P112,P113};
+static const G4double* P2[nN]={P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P210,P211,P212,P213};
+//
+
+G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection():G4VCrossSectionDataSet(Default_Name()),
+currentN(0), currentZ(0), lastZ(0),
+lastE(0), lastSig(0), lastG(0), lastL(0), mNeut(G4NucleiProperties::GetNuclearMass(1,0)), mProt(G4NucleiProperties::GetNuclearMass(1,1))
+{
+    //Initialize caches
+    lastUsedCacheEl = new cacheEl_t;
+    nistmngr = G4NistManager::Instance();
+    
+    for (G4int i=0;i<120;i++)
+    {
+        cache.push_back(0);
+    }
+    
+}
+
+G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
+{
+     std::vector<cacheEl_t*>::iterator it = cache.begin();
+     while ( it != cache.end() )
+     {
+     delete[] (*it)->J1; (*it)->J1 = 0;
+     delete[] (*it)->J2; (*it)->J2 = 0;
+     delete[] (*it)->J3; (*it)->J3 = 0;
+     ++it;
+     }
+     cache.clear();
+}
+
+inline G4double G4ElectroNuclearCrossSection::HighEnergyJ1(G4double lE)
+{
+    return ha*(lE*lE-lEMa2)-ab*(lE-lEMa)-cd*(std::exp(-reg*lE)-ele);
+}
+
+inline G4double G4ElectroNuclearCrossSection::HighEnergyJ2(G4double lE, G4double E)
+{
+    return poc*((lE-1.)*E-le1)-ab*(E-EMa)+cd1*(std::exp(d1*lE)-ele1);
+}
+
+inline G4double G4ElectroNuclearCrossSection::HighEnergyJ3(G4double lE, G4double E2)
+{
+    return ha*((lE-.5)*E2-leh)-hab*(E2-EMa2)+cd2*(std::exp(d2*lE)-ele2);
+}
+
+inline G4double
+G4ElectroNuclearCrossSection::DFun(G4double x)
+{
+    G4double y=std::exp(x-lastG-lmel);             // y for the x
+    G4double flux=lastG*(2.-y*(2.-y))-1.;          // flux factor
+    return (poc*(x-pos)+shd*std::exp(-reg*x))*flux;
+}
+
+inline G4double
+G4ElectroNuclearCrossSection::Fun(G4double x)
+{
+    // Integrated PhoNuc cross section
+    G4double dlg1=lastG+lastG-1.;
+    G4double lgoe=lastG/lastE;
+    G4double HE2=HighEnergyJ2(x, std::exp(x));
+    return dlg1*HighEnergyJ1(x)-lgoe*(HE2+HE2-HighEnergyJ3(x, std::exp(2*x))/lastE);
+}
+
+void
+G4ElectroNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+    outFile << "G4ElectroNuclearCrossSection provides the total inelastic\n"
+    << "cross section for e- and e+ interactions with nuclei.  The\n"
+    << "cross sections are retrieved from a table which is\n"
+    << "generated using the equivalent photon approximation.  In\n"
+    << "this approximation real gammas are produced from the virtual\n"
+    << "ones generated at the electromagnetic vertex.  This cross\n"
+    << "section set is valid for incident electrons and positrons at\n"
+    << "all energies.\n";
+}
+
+G4bool G4ElectroNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*aParticle*/, G4int /*Z*/, const G4Material*)
+{
+    return true;
+}
+
+
+G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ, const G4Material*)
+{
+    const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
+
+    if (Energy<=EMi) return 0.;              // Energy is below the minimum energy in the table
+    
+    if(ZZ!=lastZ)      // This nucleus was not the last used element
+    {
+        lastE    = 0.;                       // New history in the electron Energy
+        lastG    = 0.;                       // New history in the photon Energy
+        lastZ = ZZ;
+        
+        //key to search in cache
+        if(!cache[ZZ]){
+            lastUsedCacheEl->J1 = new G4double[nE];  // Allocate memory for the new J1 function
+            lastUsedCacheEl->J2 = new G4double[nE];  // Allocate memory for the new J2 function
+            lastUsedCacheEl->J3 = new G4double[nE];  // Allocate memory for the new J3 function
+            G4double Aa = nistmngr->GetAtomicMassAmu(ZZ); // average A
+            G4int N = (G4int)Aa - ZZ;
+            lastUsedCacheEl->F  = GetFunctions(Aa,lastUsedCacheEl->J1,lastUsedCacheEl->J2,lastUsedCacheEl->J3); // new ZeroPos and filling of J-functions
+            lastUsedCacheEl->H  = alop*Aa*(1.-.072*std::log(Aa));// corresponds to lastSP from G4PhotonuclearCrossSection
+            lastUsedCacheEl->TH = ThresholdEnergy(ZZ, N); // The last Threshold Energy
+            cacheEl_t* new_el = new cacheEl_t(*lastUsedCacheEl);
+            cache[ZZ] = new_el;
+        }
+        else
+        { //found in cache
+            const cacheEl_t& el = *(cache[ZZ]);
+            lastUsedCacheEl->F  = el.F;
+            lastUsedCacheEl->TH = el.TH;
+            lastUsedCacheEl->H  = el.H;
+            lastUsedCacheEl->J1 = el.J1;
+            lastUsedCacheEl->J2 = el.J2;
+            lastUsedCacheEl->J3 = el.J3;
+        }
+    }
+    else
+    { //current isotope is the same as previous one
+        if ( lastE == Energy ) return lastSig*millibarn; // Don't calc. same CS twice
+    }
+    //End of optimization: now lastUsedCacheEl structure contains the correct data for this isotope
+
+    // ============================== NOW Calculate the Cross Section ==========================
+    lastE=Energy;                          // lastE - the electron energy
+    
+    if ( Energy <= lastUsedCacheEl->TH ) // check that the eE is higher than the ThreshE
+    {
+        lastSig=0.;
+        return 0.;
+    }
+    
+    G4double lE=std::log(Energy);               // std::log(eE) (it is necessary at this point for the fit)
+
+    lastG=lE-lmel;                         // Gamma of the electron (used to recover std::log(eE))
+    G4double dlg1=lastG+lastG-1.;
+    G4double lgoe=lastG/lastE;
+    if(lE<lEMa) // Linear fit is made explicitly to fix the last bin for the randomization
+	{
+        G4double shift=(lE-lEMi)/dlnE;
+        G4int    blast=static_cast<int>(shift);
+        if(blast<0)   blast=0;
+        if(blast>=mL) blast=mL-1;
+        shift-=blast;
+        lastL=blast+1;
+        G4double YNi=dlg1*lastUsedCacheEl->J1[blast]-lgoe*(lastUsedCacheEl->J2[blast]+lastUsedCacheEl->J2[blast]-lastUsedCacheEl->J3[blast]/lastE);
+        G4double YNj=dlg1*lastUsedCacheEl->J1[lastL]-lgoe*(lastUsedCacheEl->J2[lastL]+lastUsedCacheEl->J2[lastL]-lastUsedCacheEl->J3[lastL]/lastE);
+        lastSig= YNi+shift*(YNj-YNi);
+        if(lastSig>YNj)lastSig=YNj;
+    }
+    else
+	{
+        lastL=mL;
+        
+        G4double term1=lastUsedCacheEl->J1[mL]+lastUsedCacheEl->H*HighEnergyJ1(lE);
+        
+        G4double term2=lastUsedCacheEl->J2[mL]+lastUsedCacheEl->H*HighEnergyJ2(lE, Energy);
+        
+        G4double En2 = Energy*Energy;
+        G4double term3=lastUsedCacheEl->J3[mL]+lastUsedCacheEl->H*HighEnergyJ3(lE, En2);
+
+        lastSig=dlg1*term1-lgoe*(term2+term2-term3/lastE);
+    }
+    
+    if(lastSig<0.) lastSig = 0.;
+
+    return lastSig*millibarn;
+}
+
+// Gives the threshold energy for different nuclei (min of p- and n-threshold)
+G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
+{
+    // ---------
+    
+    G4int Aa=Z+N;
+    if(Aa<1) return infEn;
+    else if(Aa==1) return 134.9766; // Pi0 threshold for the nucleon
+    
+    G4double mT= 0.;
+    if(G4NucleiProperties::IsInStableTable(Aa,Z)) mT = G4NucleiProperties::GetNuclearMass(Aa,Z);
+    // If it is not in the Table of Stable Nuclei, then the Threshold=inf
+    else return infEn;
+    // ---------
+    G4double mP= infEn;
+    //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
+    if(Z&&G4NucleiProperties::IsInStableTable(Aa-1,Z-1)) mP = G4NucleiProperties::GetNuclearMass(Aa-1,Z-1);
+    else return infEn;
+    G4double mN= infEn;
+    //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);
+    if(N&&G4NucleiProperties::IsInStableTable(Aa-1,Z)) mN = G4NucleiProperties::GetNuclearMass(Aa-1,Z);
+    else return infEn;
+    G4double dP= mP+mProt-mT;
+    G4double dN= mN+mNeut-mT;
+    if(dP<dN)dN=dP;
+    return dN;
+}
+
+
+// Calculate the functions for the std::log(A)
+G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* xx, G4double* yy, G4double* zz)
+{
+    // --------------------------------
+    G4int r=-1;                             // Low channel for J-functions
+    if(a<=.9999 || a>238.49)                // Plutonium 244 is forbidden
+    {
+        G4cout<<"***G4ElectroNuclearCrossSection::GetFunctions: A="<<a<<"(?). No CS returned!"<<G4endl;
+        return r;
+    }
+    G4int iA=static_cast<G4int>(a+.499);    // Make the round integer of the atomic number
+    G4double ai=iA;
+    if(a!=ai) a=ai;
+    for(G4int i=0; i<nN; i++)
+    {
+        if(std::abs(a-A[i])<.0005)                 // A coincide with one of the basic A's -> get from Tab
+        {
+            for(G4int k=0; k<nE; k++)
+            {
+                xx[k]=P0[i][k];                    // J0
+                yy[k]=P1[i][k];                    // J1
+                zz[k]=P2[i][k];                    // J2
+            }
+            r=L[i];                             // Low channel for the J-functions
+        }
+        if(r<0)                               // Not the basic A-value -> must be calculated
+        {
+            G4int k=0;                          // !! To be good for different compilers !!
+            for(k=1; k<nN; k++)if(a<A[k]) break;// Find the top basic A-value
+            if(k<1) k=1;                        // Extrapolation from the first bin (D)
+            if(k>=nN) k=nN-1;                   // Extrapolation from the last bin (U)
+            G4int     k1=k-1;
+            G4double  xi=A[k1];
+            G4double   b=(a-xi)/(A[k]-xi);
+            for(G4int q=0; q<nE; q++)
+            {
+                xi=P0[k1][q];
+                xx[q]=xi+(P0[k][q]-xi)*b;
+                G4double yi=P1[k1][q];
+                yy[q]=yi+(P1[k][q]-yi)*b;
+                G4double zi=P2[k1][q];
+                zz[q]=zi+(P2[k][q]-zi)*b;
+            }
+            r=L[k];
+            if(L[k1]<r) r=L[k1];
+        }
+    }
     return r;
-  }
-  G4int iA=static_cast<G4int>(a+.499);    // Make the round integer of the atomic number
-  G4double ai=iA;
-  if(a!=ai) a=ai;
-  for(G4int i=0; i<nN; i++)
-  {
-    if(std::abs(a-A[i])<.0005)                 // A coincide with one of the basic A's -> get from Tab
-    {
-      for(G4int k=0; k<nE; k++)
-      {
-        x[k]=P0[i][k];                    // J0
-        y[k]=P1[i][k];                    // J1
-        z[k]=P2[i][k];                    // J2
-	  }
-      r=L[i];                             // Low channel for the J-functions
-    }
-    if(r<0)                               // Not the basic A-value -> must be calculated
-    {
-      G4int k=0;                          // !! To be good for different compilers !!
-      for(k=1; k<nN; k++)if(a<A[k]) break;// Find the top basic A-value
-      if(k<1) k=1;                        // Extrapolation from the first bin (D)
-      if(k>=nN) k=nN-1;                   // Extrapolation from the last bin (U)
-      G4int     k1=k-1;
-      G4double  xi=A[k1];
-      G4double   b=(a-xi)/(A[k]-xi);
-      for(G4int q=0; q<nE; q++)
-      {
-        xi=P0[k1][q];
-        x[q]=xi+(P0[k][q]-xi)*b;
-        G4double yi=P1[k1][q];
-        y[q]=yi+(P1[k][q]-yi)*b;
-        G4double zi=P2[k1][q];
-        z[q]=zi+(P2[k][q]-zi)*b;
-      }
-      r=L[k];
-      if(L[k1]<r) r=L[k1];
-    }
-  }
-  return r;
 }
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
 {
-  if(lastSig <= 0.0) { return 0.0; }  // VI
-
-  // All constants are the copy of that from GetCrossSection funct.
-  //  => Make them general.
-  static const G4int nE=336; // !!  If you change this, change it in 
-                             //     GetFunctions() (*.hh) !!
-  static const G4int mL=nE-1;
-  static const G4double EMi=2.0612;          // Minimum Energy
-  static const G4double EMa=50000.;          // Maximum Energy
-  static const G4double lEMi=std::log(EMi);  // Minimum logarithmic Energy
-  static const G4double lEMa=std::log(EMa);  // Maximum logarithmic Energy
-  static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in Energy
-  static const G4double mel=0.5109989;       // Mass of electron in MeV
-  static const G4double lmel=std::log(mel);  // Log of electron mass
-  G4double phLE=0.;                   // Prototype of the std::log(nu=E_gamma)
-  G4double Y[nE];                     // Prepare the array for randomization
-
-#ifdef debug
-  G4cout << "G4ElectroNuclearCrossSection::GetEguPhotE:B="
-         << lastF<<",l=" << lastL << ",J1=" << lastJ1[lastL]
-         << ",J2=" << lastJ2[lastL] << ",J3=" << lastJ3[lastL] << ",S="
-         << lastSig << ",E=" << lastE << G4endl;
-#endif
-
-  G4double lastLE=lastG+lmel;   // recover std::log(eE) from the gamma (lastG)
-  G4double dlg1=lastG+lastG-1.;
-  G4double lgoe=lastG/lastE;
-  for (G4int i=lastF;i<=lastL;i++) {
-    Y[i] = dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
-    if(Y[i] < 0.0) { Y[i] = 0.0; }
-  }
-  // Tempory IF of H.P.: delete it if the *HP* err message does not 
-  // show up M.K.
-  if(lastSig>0.99*Y[lastL] && lastL<mL && Y[lastL]<1.E-30)
-  {
-    G4cerr << "*HP*G4ElNucCS::GetEqPhotE:S=" << lastSig <<">" << Y[lastL]
-           << ",l=" << lastL << ">" << mL << G4endl;
     if(lastSig <= 0.0) { return 0.0; }  // VI
-
-    //return 3.0*MeV; // quick and dirty workaround @@@ HP.
-                    // (now can be not necessary M.K.)
-  }
-  G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it
-                                        // is in the funct. region
-#ifdef debug
-  G4cout<<"G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy: "<<ris<<",Y="<<Y[lastL]<<G4endl;
-#endif
-  if(ris<Y[lastL])                      // Search in the table
-  {
-	G4int j=lastF;
-    G4double Yj=Y[j];                   // It mast be 0 (some times just very small)
-    while (ris>Yj && j<lastL)           // Associative search
-	{
-      j++;
-      Yj=Y[j];                          // High value
-	}
-    G4int j1=j-1;
-    G4double Yi=Y[j1];                  // Low value
-    phLE=lEMi+(j1+(ris-Yi)/(Yj-Yi))*dlnE;
-#ifdef debug
-	G4cout<<"G4EleNucCS::E="<<phLE<<",l="<<lEMi<<",j="<<j<<",ris="<<ris<<",Yi="<<Yi<<",Y="<<Yj<<G4endl;
-#endif
-  }
-  else                                  // Search with the function
-  {
-    if(lastL<mL)G4cerr<<"**G4EleNucCS::GetEfPhE:L="<<lastL<<",S="<<lastSig<<",Y="<<Y[lastL]<<G4endl;
-    G4double f=(ris-Y[lastL])/lastH;    // The scaled residual value of the cross-section integral
-#ifdef pdebug
-	G4cout<<"G4EleNucCS::GetEfPhE:HighEnergy f="<<f<<",ris="<<ris<<",lastH="<<lastH<<G4endl;
-#endif
-    phLE=SolveTheEquation(f);           // Solve the equation to find theLog(phE) (compare with lastLE)
-#ifdef pdebug
-	G4cout<<"G4EleNucCS::GetEfPhE:HighEnergy lphE="<<phLE<<G4endl;
-#endif
-  }
-  if(phLE>lastLE)
-  {
-    G4cerr<<"***G4ElectroNuclearCS::GetEquPhotE:N="<<lastN<<",Z="<<lastZ<<", lpE"<<phLE<<">leE"<<lastLE
-          <<",Sig="<<lastSig<<",rndSig="<<ris<<",Beg="<<lastF<<",End="<<lastL<<",Y="<<Y[lastL]<<G4endl;
-    if(lastLE<7.2) phLE=std::log(std::exp(lastLE)-.511);
-    else phLE=7.;
-  }
-  return std::exp(phLE);
+    G4double phLE = 0.;                        // Prototype of the std::log(nu=E_gamma)
+    G4double Y[nE] = {0.0};                    // Prepare the array for randomization
+    
+    G4double lastLE=lastG+lmel;   // recover std::log(eE) from the gamma (lastG)
+    G4double dlg1=lastG+lastG-1.;
+    G4double lgoe=lastG/lastE;
+    for (G4int i=lastUsedCacheEl->F;i<=lastL;i++) {
+        Y[i] = dlg1*lastUsedCacheEl->J1[i]-lgoe*(lastUsedCacheEl->J2[i]+lastUsedCacheEl->J2[i]-lastUsedCacheEl->J3[i]/lastE);
+        if(Y[i] < 0.0) { Y[i] = 0.0; }
+    }
+    // Tempory IF of H.P.: delete it if the *HP* err message does not
+    // show up M.K.
+    if(lastSig>0.99*Y[lastL] && lastL<mL && Y[lastL]<1.E-30)
+    {
+        G4cerr << "*HP*G4ElNucCS::GetEqPhotE:S=" << lastSig <<">" << Y[lastL]
+        << ",l=" << lastL << ">" << mL << G4endl;
+        if(lastSig <= 0.0) { return 0.0; }  // VI
+    }
+    G4double ris = lastSig*G4UniformRand(); // Sig can be > Y[lastL = mL], then it
+    // is in the funct. region
+    
+    if (ris < Y[lastL]) {               // Search the table
+        G4int j = lastUsedCacheEl->F;
+        G4double Yj = Y[j];               // It must be 0 (sometimes just very small)
+        while (ris > Yj && j < lastL) {   // Associative search
+            j++;
+            Yj = Y[j];                      // Yj is first value above ris
+        }
+        G4int j1 = j-1;
+        G4double Yi = Y[j1];              // Previous value is below ris
+        phLE = lEMi + (j1 + (ris-Yi)/(Yj-Yi) )*dlnE;
+    } else {                            // Search with the function
+        if (lastL < mL) G4cerr << "**G4EleNucCS::GetEfPhE:L=" << lastL << ",S="
+            << lastSig << ",Y=" << Y[lastL] << G4endl;
+        G4double f = (ris-Y[lastL])/lastUsedCacheEl->H;    // The scaled residual value of the cross-section integral
+        phLE=SolveTheEquation(f);           // Solve the equation to find theLog(phE) (compare with lastLE)
+    }
+    
+    if (phLE>lastLE) {
+        G4cerr << "***G4ElectroNuclearCS::GetEquPhotE:N=" << currentN << ",Z="
+        << currentZ << ", lpE" << phLE << ">leE" << lastLE << ",Sig="
+        << lastSig << ",rndSig=" << ris << ",Beg=" << lastUsedCacheEl->F << ",End="
+        << lastL << ",Y=" << Y[lastL] << G4endl;
+        if(lastLE<7.2) phLE=std::log(std::exp(lastLE)-.511);
+        else phLE=7.;
+    }
+    return std::exp(phLE);
 }
+
 
 G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
 {
-  // This parameters must correspond to the G4PhotonuclearCrossSection::GetCrossSection parameters
-  static const G4double shd=1.0734;                    // HE PomShadowing(D)
-  static const G4double poc=0.0375;                    // HE Pomeron coefficient
-  static const G4double pos=16.5;                      // HE Pomeron shift
-  static const G4double reg=.11;                       // HE Reggeon slope
-  static const G4double EMa=50000.;                    // Maximum Energy
-  static const G4double mel=0.5109989;                 // Mass of electron in MeV
-  static const G4double lmel=std::log(mel);                 // Log of electron mass
-  static const G4double z=std::log(EMa);                    // Initial argument
-  static const G4double p=poc*(z-pos)+shd*std::exp(-reg*z); // CrossX on theHighTableEdge (small change)
-  static const G4int    imax=27;   // Not more than "imax" steps to find the solution
-  static const G4double eps=0.001; // Accuracy which satisfies the search
-  G4double lastLE=lastG+lmel;                          // recover std::log(eE) from the gamma (lastG)
-  G4double topLim=lastLE-.001;                         // maximum std::log(phE) for equivalent photons
-  G4double rE=EMa/std::exp(lastLE);                         // r=EMa/Eel to make the firs guess
-  G4double x=z+f/p/(lastG*(2.-rE*(2.-rE))-1.);         // First guess (the first step from the edge)
-#ifdef pdebug
-  G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastG="<<lastG<<",x="<<x<<G4endl;
-#endif
-  if(x>topLim) x=topLim;
-  for(G4int i=0; i<imax; i++)
-  {
-    G4double fx=Fun(x);
-    G4double df=DFun(x);
-    G4double d=(f-fx)/df;
-    x=x+d;
-#ifdef pdebug
-    G4cout<<"G4ElNucCS::SolveTheEq: i="<<i<<",d="<<d<<",x="<<x<<",fx="<<fx<<",df="<<df<<G4endl;
-#endif
-    if(x>=lastLE)
-	{
-      G4cerr<<"*G4ElNCS::SolveTheEq:*Correction*"<<i<<",d="<<d<<",x="<<x<<">lE="<<lastLE<<",f="<<f
-            <<",fx="<<fx<<",df="<<df<<",A(Z="<<lastZ<<",N="<<lastN<<")"<<G4endl;
-      x=topLim;
-      //if(i)G4Exception("G4ElectroNuclearCrossSection::SolveTheEquation()","009",FatalException,"E>eE");
+    G4double lastLE=lastG+lmel;                          // recover std::log(eE) from the gamma (lastG)
+    G4double topLim=lastLE-.001;                         // maximum std::log(phE) for equivalent photons
+    G4double rE=EMa/std::exp(lastLE);                         // r=EMa/Eel to make the firs guess
+    G4double x=lEMa+f/phte/(lastG*(2.-rE*(2.-rE))-1.);         // First guess (the first step from the edge)
+    if(x>topLim) x=topLim;
+    for(G4int i=0; i<imax; i++)
+    {
+        G4double fx=Fun(x);
+        G4double df=DFun(x);
+        G4double d=(f-fx)/df;
+        x=x+d;
+        if(x>=lastLE)
+        {
+            G4cerr<<"*G4ElNCS::SolveTheEq:*Correction*"<<i<<",d="<<d<<",x="<<x<<">lE="<<lastLE<<",f="<<f
+            <<",fx="<<fx<<",df="<<df<<",A(Z="<<currentZ<<",N="<<currentN<<")"<<G4endl;
+            x=topLim;
+        }
+        if(std::abs(d)<eps) break;
+        if(i+1>=imax) G4cerr<<"*G4ElNucCS::SolveTheEq:"<<i+2<<">"<<imax<<"->Use bigger max. ln(eE)="
+            <<lastLE<<",Z="<<currentZ<<", N="<<currentN<<G4endl;
     }
-    if(std::abs(d)<eps) break;
-    if(i+1>=imax) G4cerr<<"*G4ElNucCS::SolveTheEq:"<<i+2<<">"<<imax<<"->Use bigger max. ln(eE)="
-                        <<lastLE<<",Z="<<lastZ<<", N="<<lastN<<G4endl;
-  }
-  return x;
+    return x;
 }
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
 {
-  if(lastG <= 0.0 || lastE <= 0.0) { return 0.; } // VI
-  if(lastSig <= 0.0) { return 0.0; }  // VI
-  static const G4double mel=0.5109989;    // Mass of electron in MeV
-  static const G4double mel2=mel*mel;     // Squared Mass of electron in MeV
-  G4double y=nu/lastE;                    // Part of energy carried by the equivalent pfoton
-  if(y>=1.-1./(lastG+lastG)) return 0.;   // The region where the method does not work
-  G4double y2=y*y;                        // Squared photonic part of energy
-  G4double ye=1.-y;                       // Part of energy carried by the secondary electron
-  G4double Qi2=mel2*y2/ye;                // Minimum Q2
-  G4double Qa2=4*lastE*lastE*ye;          // Maximum Q2
-  G4double iar=Qi2/Qa2;                   // Q2min/Q2max ratio
-  G4double Dy=ye+.5*y2;                   // D(y) function
-  G4double Py=ye/Dy;                      // P(y) function
-  G4double ePy=1.-std::exp(Py);                // 1-std::exp(P(y)) part
-  G4double Uy=Py*(1.-iar);                // U(y) function
-  G4double Fy=(ye+ye)*(1.+ye)*iar/y2;     // F(y) function
-  G4double fr=iar/(1.-ePy*iar);           // Q-fraction
-  if(Fy<=-fr)
-  {
-#ifdef edebug
-    G4cerr<<"***G4ElectroNucCrossSec::GetEquPhQ2:Fy="<<Fy<<"+fr="<<fr<<" <0"<<",iar="<<iar<<G4endl;
-#endif
-    return 0.;
-  }    
-  G4double LyQa2=std::log(Fy+fr);              // L(y,Q2max) function
-  G4bool cond=true;
-  G4int maxTry=3;
-  G4int cntTry=0;
-  G4double Q2=Qi2;
-  while(cond&&cntTry<maxTry)             // The loop to avoid x>1.
-  {
-    G4double R=G4UniformRand();           // Random number (0,1)
-    Q2=Qi2*(ePy+1./(std::exp(R*LyQa2-(1.-R)*Uy)-Fy));
-    cntTry++;
-    cond = Q2>1878.*nu;
-  }
-  if(Q2<Qi2)
-  {
-#ifdef edebug
-    G4cerr<<"***G4ElectroNucCrossSec::GetEquPhQ2:Q2="<<Q2<<" < Q2min="<<Qi2<<G4endl;
-#endif
-    return Qi2;
-  }  
-  if(Q2>Qa2)
-  {
-#ifdef edebug
-    G4cerr<<"***G4ElectroNucCrossSec::GetEquPhQ2:Q2="<<Q2<<" > Q2max="<<Qi2<<G4endl;
-#endif
-    return Qa2;
-  }  
-  return Q2;
+    if(lastG <= 0.0 || lastE <= 0.0) { return 0.; } // VI
+    if(lastSig <= 0.0) { return 0.0; }  // VI
+    G4double y=nu/lastE;                    // Part of energy carried by the equivalent pfoton
+    if(y>=1.-1./(lastG+lastG)) return 0.;   // The region where the method does not work
+    G4double y2=y*y;                        // Squared photonic part of energy
+    G4double ye=1.-y;                       // Part of energy carried by the secondary electron
+    G4double Qi2=mel2*y2/ye;                // Minimum Q2
+    G4double Qa2=4*lastE*lastE*ye;          // Maximum Q2
+    G4double iar=Qi2/Qa2;                   // Q2min/Q2max ratio
+    G4double Dy=ye+.5*y2;                   // D(y) function
+    G4double Py=ye/Dy;                      // P(y) function
+    G4double ePy=1.-std::exp(Py);                // 1-std::exp(P(y)) part
+    G4double Uy=Py*(1.-iar);                // U(y) function
+    G4double Fy=(ye+ye)*(1.+ye)*iar/y2;     // F(y) function
+    G4double fr=iar/(1.-ePy*iar);           // Q-fraction
+    if(Fy<=-fr)
+    {
+        return 0.;
+    }
+    G4double LyQa2=std::log(Fy+fr);              // L(y,Q2max) function
+    G4bool cond=true;
+    G4int maxTry=3;
+    G4int cntTry=0;
+    G4double Q2=Qi2;
+    while(cond&&cntTry<maxTry)             // The loop to avoid x>1.
+    {
+        G4double R=G4UniformRand();           // Random number (0,1)
+        Q2=Qi2*(ePy+1./(std::exp(R*LyQa2-(1.-R)*Uy)-Fy));
+        cntTry++;
+        cond = Q2>1878.*nu;
+    }
+    if(Q2<Qi2)
+    {
+        return Qi2;
+    }
+    if(Q2>Qa2)
+    {
+        return Qa2;
+    }
+    return Q2;
 }
 
 G4double G4ElectroNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2)
 {
-  if(nu <= 0.0 || Q2 <= 0.0) { return 0.0; }
-  static const G4double dM=938.27+939.57; // Mean double nucleon mass = m_n+m_p (@@ no binding)
-  static const G4double Q0=843.;          // Coefficient of the dipole nucleonic form-factor
-  static const G4double Q02=Q0*Q0;        // Squared coefficient of the dipole nucleonic form-factor
-  static const G4double blK0=std::log(185.);   // Coefficient of the b-function
-  static const G4double bp=0.85;          // Power of the b-function
-  static const G4double clK0=std::log(1390.);  // Coefficient of the c-function
-  static const G4double cp=3.;            // Power of the c-function
-  //G4double x=Q2/dM/nu;                  // Direct x definition
-  G4double K=nu-Q2/dM;                    // K=nu*(1-x)
-  if(K <= 0.) // VI
-  {
-#ifdef edebug
-    G4cerr<<"**G4ElectroNucCrossSec::GetVirtFact:K="<<K<<",nu="<<nu<<",Q2="<<Q2<<",dM="<<dM<<G4endl;
-#endif
-    return 0.;
-  }
-  G4double lK=std::log(K);                     // ln(K)
-  G4double x=1.-K/nu;                     // This definitin saves one div.
-  G4double GD=1.+Q2/Q02;                  // Reversed nucleonic form-factor
-  G4double b=std::exp(bp*(lK-blK0));           // b-factor
-  G4double c=std::exp(cp*(lK-clK0));           // c-factor
-  G4double r=.5*std::log(Q2+nu*nu)-lK;         // r=.5*std::log((Q^2+nu^2)/K^2)
-  G4double ef=std::exp(r*(b-c*r*r));           // exponential factor
-  return (1.-x)*ef/GD/GD;
+    if(nu <= 0.0 || Q2 <= 0.0) { return 0.0; }
+    //G4double x=Q2/dM/nu;                  // Direct x definition
+    G4double K=nu-Q2/dM;                    // K=nu*(1-x)
+    if(K <= 0.) // VI
+    {
+        return 0.;
+    }
+    G4double lK=std::log(K);                     // ln(K)
+    G4double x=1.-K/nu;                     // This definitin saves one div.
+    G4double GD=1.+Q2/Q02;                  // Reversed nucleonic form-factor
+    G4double b=std::exp(bp*(lK-blK0));           // b-factor
+    G4double c=std::exp(cp*(lK-clK0));           // c-factor
+    G4double r=.5*std::log(Q2+nu*nu)-lK;         // r=.5*std::log((Q^2+nu^2)/K^2)
+    G4double ef=std::exp(r*(b-c*r*r));           // exponential factor
+    return (1.-x)*ef/GD/GD;
 }

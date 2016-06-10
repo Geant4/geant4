@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2008-09-01 17:12:40 vnivanch Exp $
+# $Id: GNUmakefile 76309 2013-11-08 13:48:42Z gcosmo $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic stopping library.  G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -27,7 +27,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
-            -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
             -I$(G4BASE)/processes/hadronic/models/management/include \

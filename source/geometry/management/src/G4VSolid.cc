@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VSolid.cc 72936 2013-08-14 13:17:11Z gcosmo $
 //
 // class G4VSolid
 //
@@ -203,7 +203,7 @@ G4double G4VSolid::GetCubicVolume()
 G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 {
   G4int iInside=0;
-  G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,volume;
+  G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,volume,halfepsilon;
   G4ThreeVector p;
   EInside in;
 
@@ -222,17 +222,19 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 
   if(nStat < 100)    nStat   = 100;
   if(epsilon > 0.01) epsilon = 0.01;
+  halfepsilon = 0.5*epsilon;
 
   for(G4int i = 0; i < nStat; i++ )
   {
-    px = minX+(maxX-minX)*G4UniformRand();
-    py = minY+(maxY-minY)*G4UniformRand();
-    pz = minZ+(maxZ-minZ)*G4UniformRand();
+    px = minX-halfepsilon+(maxX-minX+epsilon)*G4UniformRand();
+    py = minY-halfepsilon+(maxY-minY+epsilon)*G4UniformRand();
+    pz = minZ-halfepsilon+(maxZ-minZ+epsilon)*G4UniformRand();
     p  = G4ThreeVector(px,py,pz);
     in = this->Inside(p);
     if(in != kOutside) iInside++;    
   }
-  volume = (maxX-minX)*(maxY-minY)*(maxZ-minZ)*iInside/nStat;
+  volume = (maxX-minX+epsilon)*(maxY-minY+epsilon)
+         * (maxZ-minZ+epsilon)*iInside/nStat;
   return volume;
 }
 
@@ -635,11 +637,6 @@ G4VisExtent G4VSolid::GetExtent () const
 }
 
 G4Polyhedron* G4VSolid::CreatePolyhedron () const
-{
-  return 0;
-}
-
-G4NURBS* G4VSolid::CreateNURBS () const
 {
   return 0;
 }

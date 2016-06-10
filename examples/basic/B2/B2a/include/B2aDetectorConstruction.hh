@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B2aDetectorConstruction.hh 73722 2013-09-09 10:23:05Z gcosmo $
 //
 /// \file B2aDetectorConstruction.hh
 /// \brief Definition of the B2aDetectorConstruction class
@@ -33,20 +33,18 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "tls.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4Material;
 class G4UserLimits;
+class G4GlobalMagFieldMessenger;
 
 class B2aDetectorMessenger;
-class B2MagneticField;
 
-/// Detector construction class to define materials and geometry.
-///
-/// In addition a transverse uniform magnetic field is defined in
-/// SetMagField() method which can be activated via a command
-/// defined in the B2aDetectorMessenger class. 
+/// Detector construction class to define materials, geometry
+/// and global uniform magnetic field.
 
 class B2aDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -56,9 +54,9 @@ class B2aDetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
     // Set methods
-    void SetMagField(G4double );
     void SetTargetMaterial (G4String );
     void SetChamberMaterial(G4String );
     void SetMaxStep (G4double );
@@ -81,7 +79,9 @@ class B2aDetectorConstruction : public G4VUserDetectorConstruction
     G4UserLimits* fStepLimit;            // pointer to user step limits
 
     B2aDetectorMessenger*  fMessenger;   // messenger
-    B2MagneticField*      fMagField;     // magnetic field
+
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+                                         // magnetic field messenger
     
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps 
 };

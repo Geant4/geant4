@@ -24,17 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NavigationLevelRep.icc 67974 2013-03-13 10:17:37Z gcosmo $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
 // ----------------------------------------------------------------------
 
-#if defined G4GEOM_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
-#endif
+extern G4GEOM_DLL G4ThreadLocal
+G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator;
 
 // Accessors
 // --------------
@@ -42,33 +39,33 @@
 inline
 G4VPhysicalVolume*
 G4NavigationLevelRep::GetPhysicalVolume()
-{ 
+{
   return sPhysicalVolumePtr; 
 }
 
 inline
 const G4AffineTransform&
 G4NavigationLevelRep::GetTransform() const 
-{ 
+{
   return sTransform; 
 } 
 
 inline
 const G4AffineTransform*
 G4NavigationLevelRep::GetTransformPtr() const 
-{ 
+{
   return &sTransform; 
 } 
 
 inline
 EVolume G4NavigationLevelRep::GetVolumeType() const 
-{ 
+{
   return sVolumeType; 
 }
 
 inline
 G4int G4NavigationLevelRep::GetReplicaNo() const 
-{ 
+{
   return sReplicaNo; 
 }
 
@@ -91,11 +88,15 @@ G4bool G4NavigationLevelRep::RemoveAReference()
 inline
 void* G4NavigationLevelRep::operator new(size_t)
 {
-  return (void *) aNavigLevelRepAllocator.MallocSingle();
+  if (!aNavigLevelRepAllocator)
+  {
+    aNavigLevelRepAllocator = new G4Allocator<G4NavigationLevelRep>;
+  }
+  return (void *) aNavigLevelRepAllocator->MallocSingle();
 }
 
 inline
 void G4NavigationLevelRep::operator delete(void *aLevelRep)
 {
-  aNavigLevelRepAllocator.FreeSingle((G4NavigationLevelRep *) aLevelRep);
+  aNavigLevelRepAllocator->FreeSingle((G4NavigationLevelRep *) aLevelRep);
 }

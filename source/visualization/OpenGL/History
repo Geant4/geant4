@@ -1,4 +1,4 @@
-$Id: History,v 1.196 2011-01-07 09:47:23 allison Exp $
+$Id: History 77557 2013-11-26 08:57:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,175 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th November 2013 Laurent Garnier  (opengl-V09-06-12)
+- G4OpenGLQtViewer : Fix a bug with endsWith that I have introduce in last revision
+
+20th November 2013 Laurent Garnier  (opengl-V09-06-11)
+- G4OpenGLQtViewer : 
+  o When saving file in Qt the extention was always append. Now it is done only when it is
+    not present
+  o Add a variable to remember last used settings for image type and target directory
+  o Make PNG the default export format instead of BPM.
+  o Add another protection against iterator outside of std::map
+
+19th November 2013 Laurent Garnier (opengl-V09-06-10)
+- G4OpenGLQtViewer : 
+  o Best fix for JIRA DEV-62, thanks John.
+
+19th November 2013 Laurent Garnier
+- G4OpenGLQtViewer : 
+  o Remove a printf without #ifdef
+  o Fix a bug in the sceneTree viewer (probably JIRA DEV-62). A std::map iterator
+    was incremented without checking if it going outside the std::map or not.
+
+13th November 2013 Laurent Garnier
+- G4OpenGLQtViewer : Better solution implementation for layouts management (does not fix any problems)
+
+7th November 2013 Laurent Garnier (opengl-V09-06-09)
+- Better solution for JIRA-Dev28 problem, also fix text justification in Qt
+
+7th November 2013 Laurent Garnier
+- Fix the JIRA-Dev28 problem : Text displays in wrong position in Qt
+
+31th October 2013  Laurent Garnier (opengl-V09-06-08)
+- Cleanup in the code, in particular Wt driver
+
+31th October 2013  Laurent Garnier
+- G4OpenGLWtDrawer : Move some function in an OpenGL generic way rather than only
+  WebGL
+- G4OpenGLImmediateWtViewer : Removed unused functions
+- G4OpenGLSceneHandler :
+  o Remove DrawText for OpenGL2 version for the moment
+  o Better implementation of optimize vertex+indices for G4Cons
+  o Enable/Disable VertexAttribArray not only for WebGL viewer
+
+30th October 2013  Laurent Garnier
+- G4OpenGLSceneHandler : Better emulation of GL_QUADS (and optimization)
+
+30th October 2013  Laurent Garnier
+- G4OpenGLViewer.hh, G4OpenGLSceneHandler.hh : 
+  o Add a setWtDrawer function to set the Wt drawer only when the 
+    OpenGLImmediateWtViewer is build
+  o Move a lot of OpenGL2 functions and attributes from OpenGLImmediateWtViewer
+    to be generic for all OpenGL drivers
+- G4OpenGLImmediateWtViewer : 
+  o Move a lot of OpenGL2 functions and attributes from OpenGLImmediateWtViewer
+    to be generic for all OpenGL drivers
+  o At initialization, now set the WtDrawer for the OpenGLViewer and the SceneHandler 
+- G4OpenGLImmediateWt : Get rid of an include that could be done in a next step
+- G4OpenGLWtDrawer : Add more methods for OpenGL
+- G4OpenGLSceneHandler : Add some debug statements (WILL HAVE TO BE REMOVED)
+
+26th October 2013  Laurent Garnier
+- Introduce work for Wt driver. the major change is that with "normal" OpenGL,
+  functions are statics and accessible everywhere. This is not the case for
+  Wt OpenGL functions. They are only member functions of the WGLWidget because
+  they have to be redefined to javascript commands to be send to all browsers
+  using the applications. In term of changes in OpenGL library, this only one
+  is the introduction of a G4OpenGLWtDrawer which is used to map static GL 
+  functions into member functions of WGLWidget object :
+  o G4OpenGLViewer : Introduction of a pointer to to WtDrawer
+  o G4OpenGL.hh : Include G4OpenGLWtDrawer
+- Other changes in Wt component :
+  o G4OpenGLImmediateWtViewer : Add methods to handle transformations on 
+    vertex position
+- sources.cmake : Add G4OpenGLWtDrawer support
+- Beginning of OpenGL >1.1 implementation : Alternative for glBegin/glEnd calls
+  Will not change anything until G4OPENGL_VERSION_2 is not set (and only set
+  for Wt driver for the moment)
+  o G4OpenGLSceneHandler : Beginning of OpenGL >1.1 implementation
+
+25th October 2013  Laurent Garnier
+- G4OpenGLQtViewer :
+  o Fix a problem on mouse right clic. It was first calling
+    mouse left clic. This could cause some problems when switching between
+    rotate/move/pick modes.
+  o Fix typo in shortcuts
+
+24th October 2013 : Ben Morgan (opengl-V09-06-07 : coworks with cmake-V09-06-30))
+- sources.cmake : Update Wt configuration to use new configuration
+  variables. This makes configuration more local to the G4OpenGL module.
+
+23th October 2013  Laurent Garnier (co-works with cmake-V09-06-29)
+- sources.cmake : Remove Qt5 configuration, it is now include in cmake.
+
+17th October 2013  Laurent Garnier
+- G4OpenGLSceneHandler : Find a better way to draw cubes using drawElements
+- G4OpenGLImmediateWtViewer
+  G4OpenGLViewer
+  G4OpenGLQtViewer
+  G4OpenGLSceneHandler
+  o Add preliminary support for Vertex Buffer Object and Index Buffer Object
+
+16th October 2013  Laurent Garnier
+- G4OpenGLQtViewer : Fix a problem when MouseRightClick on mac, LeftClic was
+  called before and cause some troubles
+
+15th October 2013  Laurent Garnier
+- G4OpenGLSceneHandler : Wt driver has now triangles faces in the good way
+
+14th October 2013  Laurent Garnier
+- G4OpenGLImmediateViewer,
+  G4OpenGLImmediateSceneHandler,
+  G4OpenGLViewer,
+  G4OpenGLStoredViewer,
+  G4OpenGLStoredSceneHandler,
+  G4OpenGLSceneHandler,
+  G4OpenGLImmediateWtViewer,
+  o prepare all theses class to work with Wt driver (and OpenGL_3), lot
+    of #ifdef statement will be removed
+
+10th September 2013  Laurent Garnier
+- G4OpenGLImmediateWtViewer:
+  o Add color and point size on Wt driver
+
+23th September 2013  Laurent Garnier
+- G4OpenGLWtViewer G4OpenGLImmediateWtViewer G4OpenGLImmediateWt :
+   o Wt driver progress. All definitions should be set. Only drawing lines
+     is implemented for now.
+
+4th July 2013  Laurent Garnier
+- G4OpenGLQtViewer:
+   o Better margin control and adding a tooltip on scene tree colour item
+   o Add a parseSceneTreeAndSaveState() in order to save the scene tree state
+
+17th June 2013  John Allison  (opengl-V09-06-06)
+- G4OpenGLQtViewer: Commented out skeleton code below.
+
+10th June 2013  John Allison  (opengl-V09-06-05)
+- G4OpenGLQtViewer: Skeleton implementation of
+    const std::vector<G4ModelingParameters::VisAttributesModifier>*
+    G4OpenGLQtViewer::GetPrivateVisAttributesModifiers() const
+
+1st May 2013 - Laurent Garnier
+- Improvments about Wt driver configuration
+
+25th April 2013  Laurent Garnier
+- Add cmake configuration for Wt and Qt5, 
+  check in the code : "!!! ONLY QT4 to be comment with QT5" 
+- G4OpenGLQtViewer.cc : Add Qt5 support
+
+26th March 2013  John Allison  (opengl-V09-06-04)
+- G4OpenGLStoredQtSceneHandler.cc:
+  o Commented out unused typedefs that give warnings with gcc-4.8.0.
+
+21th March 2013  Laurent Garnier  (opengl-V09-06-03)
+- G4OpenGLViewer : remove bad "printf" statement
+
+20th March 2013  Laurent Garnier
+- G4OpenGLQtExportDialog : change "TRUE" by "true"
+- G4OpenGLViewer : add "const" on getWin...()
+- G4OpenGLSceneHandler : Null pointer fix (thanks to XCode analyzer)
+
+29th January 2013  John Allison  (opengl-V09-06-02)
+- More Coverity fixes and un-doing of some previous ones.
+
+13th January 2013  John Allison  (opengl-V09-06-01)
+- Coverity fixes.
+
+2nd December 2012  John Allison  (opengl-V09-06-00)
+- Remove NURBS.
 
 13th November 2012  Laurent Garnier (opengl-V09-05-53)
 - G4OpenGLQtViewer

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id$
+// $Id: EventAction.hh 68996 2013-04-15 09:19:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 #include "globals.hh"
 
 class RunAction;
-class HistoManager;
 class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,12 +45,12 @@ class EventActionMessenger;
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction(RunAction*, HistoManager*);
+    EventAction(RunAction*);
    ~EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
         
     void SetDrawFlag(G4String val) {fDrawFlag = val;};
     void SetPrintModulo(G4int val) {fPrintModulo = val;};
@@ -61,7 +60,6 @@ class EventAction : public G4UserEventAction
     RunAction*             fRunAct;
     G4String               fDrawFlag;
     G4int                  fPrintModulo;
-    HistoManager*          fHistoManager;                        
     EventActionMessenger*  fEventMessenger;
 };
 

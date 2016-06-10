@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2008-03-26 14:54:40 gcosmo Exp $
+$Id: History 68056 2013-03-13 14:44:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 27, 2013, M. Verderi (param-V09-06-00)
+- remove unused field 'fOnBoundary' in G4FastSimulationManagerProcess.hh
+  as this was causing a warning from clang.
 
 July 10, 2012, G. Cosmo (param-V09-05-00)
 - Explicitly use inclusion of headers for system of units and physical

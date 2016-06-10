@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.hh 77254 2013-11-22 10:08:02Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -65,8 +65,6 @@ public:
 
   void SetTargetRadius(G4double val);
   void SetTargetLength(G4double val);
-
-  void UpdateGeometry();
 
 private:
 

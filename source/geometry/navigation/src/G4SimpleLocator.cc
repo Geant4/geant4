@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4SimpleLocator.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // Class G4SimpleLocator implementation
 //
@@ -115,7 +115,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 
   // Statistics for substeps
   //
-  static G4int max_no_seen= -1; 
+  static G4ThreadLocal G4int max_no_seen= -1; 
 
   NormalAtEntry = GetSurfaceNormal( CurrentE_Point, validNormalAtE); 
 

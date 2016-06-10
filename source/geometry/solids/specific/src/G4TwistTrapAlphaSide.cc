@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TwistTrapAlphaSide.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -205,8 +205,8 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
                                               G4bool         isvalid[],
                                               EValidate      validate)
 {
-  static const G4double ctol = 0.5 * kCarTolerance;
   static const G4double pihalf = pi/2 ;
+  const G4double ctol = 0.5 * kCarTolerance;
 
   G4bool IsParallel = false ;
   G4bool IsConverged =  false ;
@@ -698,7 +698,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
                                               G4double       distance[],
                                               G4int          areacode[])
 {  
-  static const G4double ctol = 0.5 * kCarTolerance;
+  const G4double ctol = 0.5 * kCarTolerance;
 
   fCurStat.ResetfDone(kDontValidate, &gp);
 
@@ -799,7 +799,7 @@ G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector &xx, G4bool withTol)
    // We must use the function in local coordinate system.
    // See the description of DistanceToSurface(p,v).
    
-   static const G4double ctol = 0.5 * kCarTolerance;
+   const G4double ctol = 0.5 * kCarTolerance;
 
    G4double phi ;
    G4double yprime ;

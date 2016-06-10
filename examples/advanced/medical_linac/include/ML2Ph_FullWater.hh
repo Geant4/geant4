@@ -77,7 +77,6 @@ private:
 
     CML2SDWithVoxels *sensDet;
     G4ThreeVector centre, halfSize;
-    G4double surfaceToTargetZValue;
 };
 
 

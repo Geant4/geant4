@@ -41,7 +41,7 @@
 // |                                                                   |
 // | J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin,    |
 // | "A low energy bound atomic electron Compton scattering model      |
-// |  for Geant4", IEEE Transactions on Nuclear Science, submitted.    |
+// |  for Geant4", NIMA, submitted 2013.                               |
 // |                                                                   |
 // | The author acknowledges the work of the Geant4 collaboration      |
 // | in developing the following algorithms that have been employed    |
@@ -60,9 +60,11 @@
 // | Nov. 2011 JMCB       - First version                              |
 // | Feb. 2012 JMCB       - Migration to Geant4 9.5                    |
 // | Sep. 2012 JMCB       - Final fixes for Geant4 9.6                 |
+// | Feb. 2013 JMCB       - Geant4 9.6 FPE fix for bug 1426            |
 // |                                                                   |
 // *********************************************************************
 
+#include <limits>
 #include "G4LowEPComptonModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -75,7 +77,7 @@
 #include "G4CompositeEMDataSet.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4Gamma.hh"
-#include "G4HadTmpUtil.hh"
+
 //****************************************************************************
 
 using namespace std;
@@ -287,15 +289,15 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // Scatter photon energy and Compton electron direction - Method based on:
   // J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin'
   // "A low energy bound atomic electron Compton scattering model for Geant4"
-  // TNS ISSUE, PG, 2012
+  // NIMA ISSUE, PG, 2013
   
   // Set constants and initialize scattering parameters
 
-  G4double vel_c = 299792458;
-  G4double momentum_au_to_nat = (pi/2.0)*1.992851740*std::pow(10.,-24.);
-  G4double e_mass_kg = 9.10938188 * std::pow(10.,-31.);
+  const G4double vel_c = c_light / (m/s);
+  const G4double momentum_au_to_nat = halfpi* hbar_Planck / Bohr_radius / (kg*m/s);
+  const G4double e_mass_kg =  electron_mass_c2 / c_squared / kg ;
     
-  G4int maxDopplerIterations = 1000;  
+  const G4int maxDopplerIterations = 1000;  
   G4double bindingE = 0.; 
   G4double pEIncident = photonEnergy0 ;
   G4double pERecoil =  -1.;
@@ -305,7 +307,6 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
  
   G4double CE_emission_flag = 0.;
   G4double ePAU = -1;
-  //G4double Alpha=0;
   G4int shellIdx = 0;
   G4double u_temp = 0;
   G4double cosPhiE =0;
@@ -333,21 +334,18 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
       shellIdx = shellData.SelectRandomShell(Z);
       bindingE = shellData.BindingEnergy(Z,shellIdx)/MeV; 
       
-      //G4cout << "New sample" << G4endl;
       
       // Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
       ePAU = profileData.RandomSelectMomentum(Z,shellIdx);  
 
-      // Convert to SI units
-      
+      // Convert to SI units     
       G4double ePSI = ePAU * momentum_au_to_nat;
       
       //Calculate bound electron velocity and normalise to natural units
-      
-      u_temp = sqrt( ((ePSI*ePSI)*(vel_c*vel_c)) / ((e_mass_kg*e_mass_kg)*(vel_c*vel_c)+(ePSI*ePSI)))/vel_c;  
-      
+      u_temp = sqrt( ((ePSI*ePSI)*(vel_c*vel_c)) / ((e_mass_kg*e_mass_kg)*(vel_c*vel_c)+(ePSI*ePSI)) )/vel_c;  
+
       // Sample incident electron direction, amorphous material, to scattering photon scattering plane      
-      
+
       e_alpha = pi*G4UniformRand();
       e_beta = twopi*G4UniformRand();   
       
@@ -423,35 +421,29 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
       G4double var_Z1 = (var_A*var_D - var_F*var_C)*(var_A*var_D - var_F*var_C);
       G4double var_Z2 = (var_G*var_G)*(var_C*var_C) - (var_G*var_G)*(var_A*var_A);
       G4double var_Z = var_Z1 + var_Z2;
-      
-      G4double diff = ((var_Y*var_Y)-4*var_W*var_Z);
-      
-      
-     // Check if diff has FPE, if so set var_Y*var_Y and 4*var_W*var_Z to six significant figures to fix
-     if (diff < 0.0)    
-     {
-
-      G4double funorder = 0.0;
-      G4double sf = 6.0;
-      
       G4double diff1 = var_Y*var_Y;
-      funorder = abs(G4lrint(std::log10(static_cast<double>(abs(diff1)))+std::numeric_limits<double>::epsilon()))+sf;      
-      diff1 = G4lrint(diff1*std::pow(10.0,funorder))/(1.0*std::pow(10.0,funorder));
+      G4double diff2 = 4*var_W*var_Z;      
+      G4double diff = diff1 - diff2;
       
-      G4double diff2 = 4*var_W*var_Z;
-      funorder = abs(G4lrint(std::log10(static_cast<double>(abs(diff2)))+std::numeric_limits<double>::epsilon()))+sf;      
-      diff2 = G4lrint(diff2*std::pow(10.0,funorder))/(1.0*std::pow(10.0,funorder));     
       
-      diff = diff1 -diff2; 
-
+     // Check if diff is less than zero, if so ensure it is due to FPE
+      
+     //Determine number of digits (in decimal base) that G4double can accurately represent
+     G4double g4d_order = G4double(numeric_limits<G4double>::digits10);      
+     G4double g4d_limit = std::pow(10.,-g4d_order);
+     //Confirm that diff less than zero is due FPE, i.e if abs of diff / diff1 and diff/ diff2 is less 
+     //than 10^(-g4d_order), then set diff to zero
+     
+     if ((diff < 0.0) && (abs(diff / diff1) < g4d_limit) && (abs(diff / diff2) < g4d_limit) )    
+     {
+	   diff = 0.0;         
      }
 
   
       // Plus and minus of quadratic
-      
       G4double X_p = (-var_Y + sqrt (diff))/(2*var_W);
       G4double X_m = (-var_Y - sqrt (diff))/(2*var_W);
- 
+
 
       // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
       G4double ThetaE = 0.;
@@ -477,16 +469,6 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
       // Trigs
       cosPhiE = (var_C - var_B*cosThetaE)*(ivar_A*iSinThetaE); 
       
-      
-      // Check if cosPhiE has FPE, if so set to four significant figures to fix
-      if (abs(cosPhiE) > 1.0)
-      {
-      G4double funorder = 0.0;
-      G4double sf = 4.0;
-      funorder = abs(G4lrint(std::log10(static_cast<double>(abs(cosPhiE)))+std::numeric_limits<double>::epsilon()))+sf;      
-      cosPhiE = G4lrint(cosPhiE*std::pow(10.0,funorder))/(1.0*std::pow(10.0,funorder));
-
-      }
      // End of calculation of ejection Compton electron direction
      
       //Fix for floating point errors

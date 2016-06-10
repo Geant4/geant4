@@ -32,9 +32,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id$
+// $Id: BrachyMaterial.cc 69765 2013-05-14 10:11:22Z gcosmo $
 //
-
 #include "globals.hh"
 #include "Randomize.hh"  
 #include "G4PhysicalConstants.hh"
@@ -148,7 +147,7 @@ void BrachyMaterial::DefineMaterials()
  
   // Air material
   d = 1.290*mg/cm3;
-  G4Material* matAir = new G4Material("Air",d,2);
+  matAir = new G4Material("Air",d,2);
   matAir->AddElement(elN,0.7);
   matAir->AddElement(elO,0.3);
 
@@ -158,7 +157,6 @@ void BrachyMaterial::DefineMaterials()
   matH2O->AddElement(elH,2);
   matH2O->AddElement(elO,1);
   matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
-
 
   //soft tissue(http://www.nist.gov)
   d = 1.0*g/cm3;
@@ -206,8 +204,7 @@ void BrachyMaterial::DefineMaterials()
   G4double pressure = 3.e-18*pascal;
   G4double temperature = 2.73*kelvin;
   A=1.01*g/mole;
-  Vacuum = new G4Material("Galactic", Z = 1., A,
-				     density,kStateGas,temperature,pressure);
+  Vacuum = new G4Material("Galactic", Z = 1., A,density,kStateGas,temperature,pressure);
   
   //compact bone (http://www.NIST.gov)
   d = 1.85*g/cm3;

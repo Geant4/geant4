@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CollisionOutput.cc 71954 2013-06-29 04:40:40Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Introduced bug checking i3 for valid tuning pair
@@ -56,6 +56,7 @@
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
 //		Add optional stream argument to printCollisionOutput
 // 20121002  M. Kelsey -- Add strangeness calculation
+// 20130628  M. Kelsey -- Support multiple recoil fragments (for G4Fissioner)
 
 #include <algorithm>
 
@@ -72,6 +73,9 @@
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4Fragment>::iterator fragmentIterator;
+
+const G4Fragment G4CollisionOutput::emptyFragment;		// All zeros
 
 
 G4CollisionOutput::G4CollisionOutput()
@@ -87,7 +91,7 @@ G4CollisionOutput& G4CollisionOutput::operator=(const G4CollisionOutput& right)
     verboseLevel = right.verboseLevel;
     outgoingParticles = right.outgoingParticles;
     outgoingNuclei = right.outgoingNuclei; 
-    theRecoilFragment = right.theRecoilFragment;
+    recoilFragments = right.recoilFragments;
     eex_rest = right.eex_rest;
     on_shell = right.on_shell;
   }
@@ -97,7 +101,17 @@ G4CollisionOutput& G4CollisionOutput::operator=(const G4CollisionOutput& right)
 void G4CollisionOutput::reset() {
   outgoingNuclei.clear();
   outgoingParticles.clear();
-  removeRecoilFragment();
+  recoilFragments.clear();
+  eex_rest = 0.;
+  on_shell = false;
+}
+
+
+// Get requested recoil fragment from list, or return dummy version
+
+const G4Fragment& G4CollisionOutput::getRecoilFragment(G4int index) const {
+  return ( (index >= 0 && index < numberOfFragments())
+	   ? recoilFragments[index] : emptyFragment);
 }
 
 
@@ -106,7 +120,9 @@ void G4CollisionOutput::reset() {
 void G4CollisionOutput::add(const G4CollisionOutput& right) {
   addOutgoingParticles(right.outgoingParticles);
   addOutgoingNuclei(right.outgoingNuclei);
-  theRecoilFragment = right.theRecoilFragment;
+  recoilFragments = right.recoilFragments;	// Replace, don't combine
+  eex_rest = 0.;
+  on_shell = false;
 }
 
 
@@ -199,12 +215,14 @@ void G4CollisionOutput::removeOutgoingNucleus(const G4InuclNuclei& nuclei) {
   if (pos != outgoingNuclei.end()) outgoingNuclei.erase(pos);
 }
 
-// Remove current recoil fragment from buffer
+// Remove specified recoil fragment(s) from buffer
 
-void G4CollisionOutput::removeRecoilFragment() {
-  static const G4Fragment emptyFragment;	// Default ctor is all zeros
-  theRecoilFragment = emptyFragment;
+void G4CollisionOutput::removeRecoilFragment(G4int index) {
+  if (index < 0) recoilFragments.clear();
+  else if (index < numberOfFragments()) 
+    recoilFragments.erase(recoilFragments.begin()+(size_t)index);
 }
+
 
 // Kinematics of final state, for recoil and conservation checks
 
@@ -214,13 +232,15 @@ G4LorentzVector G4CollisionOutput::getTotalOutputMomentum() const {
 
   G4LorentzVector tot_mom;
   G4int i(0);
-  for(i=0; i < G4int(outgoingParticles.size()); i++) {
+  for(i=0; i < numberOfOutgoingParticles(); i++) {
     tot_mom += outgoingParticles[i].getMomentum();
   }
-  for(i=0; i < G4int(outgoingNuclei.size()); i++) {
+  for(i=0; i < numberOfOutgoingNuclei(); i++) {
     tot_mom += outgoingNuclei[i].getMomentum();
   }
-  tot_mom += theRecoilFragment.GetMomentum()/GeV;	// Need Bertini units!
+  for(i=0; i < numberOfFragments(); i++) {
+    tot_mom += recoilFragments[i].GetMomentum()/GeV;	// Need Bertini units!
+  }
 
   return tot_mom;
 }
@@ -231,13 +251,15 @@ G4int G4CollisionOutput::getTotalCharge() const {
 
   G4int charge = 0;
   G4int i(0);
-  for(i=0; i < G4int(outgoingParticles.size()); i++) {
+  for(i=0; i < numberOfOutgoingParticles(); i++) {
     charge += G4int(outgoingParticles[i].getCharge());
   }
-  for(i=0; i < G4int(outgoingNuclei.size()); i++) {
+  for(i=0; i < numberOfOutgoingNuclei(); i++) {
     charge += G4int(outgoingNuclei[i].getCharge());
   }
-  charge += theRecoilFragment.GetZ_asInt();
+  for(i=0; i < numberOfFragments(); i++) {
+    charge += recoilFragments[i].GetZ_asInt();
+  }
 
   return charge;
 }
@@ -248,13 +270,15 @@ G4int G4CollisionOutput::getTotalBaryonNumber() const {
 
   G4int baryon = 0;
   G4int i(0);
-  for(i=0; i < G4int(outgoingParticles.size()); i++) {
+  for(i=0; i < numberOfOutgoingParticles(); i++) {
     baryon += outgoingParticles[i].baryon();
   }
-  for(i=0; i < G4int(outgoingNuclei.size()); i++) {
+  for(i=0; i < numberOfOutgoingNuclei(); i++) {
     baryon += G4int(outgoingNuclei[i].getA());
   }
-  baryon += theRecoilFragment.GetA_asInt();
+  for(i=0; i < numberOfFragments(); i++) {
+    baryon += recoilFragments[i].GetA_asInt();
+  }
 
   return baryon;
 }
@@ -265,7 +289,7 @@ G4int G4CollisionOutput::getTotalStrangeness() const {
 
   G4int strange = 0;
   G4int i(0);
-  for(i=0; i < G4int(outgoingParticles.size()); i++) {
+  for(i=0; i < numberOfOutgoingParticles(); i++) {
     strange += outgoingParticles[i].getStrangeness();
   }
 
@@ -275,17 +299,17 @@ G4int G4CollisionOutput::getTotalStrangeness() const {
 
 void G4CollisionOutput::printCollisionOutput(std::ostream& os) const {
   os << " Output: " << G4endl
-     << " Outgoing Particles: " << outgoingParticles.size() << G4endl;
+     << " Outgoing Particles: " << numberOfOutgoingParticles() << G4endl;
 
   G4int i(0);
-  for(i=0; i < G4int(outgoingParticles.size()); i++)
+  for(i=0; i < numberOfOutgoingParticles(); i++)
     os << outgoingParticles[i] << G4endl;
 
-  os << " Outgoing Nuclei: " << outgoingNuclei.size() << G4endl;      
-  for(i=0; i < G4int(outgoingNuclei.size()); i++)
+  os << " Outgoing Nuclei: " << numberOfOutgoingNuclei() << G4endl;      
+  for(i=0; i < numberOfOutgoingNuclei(); i++)
     os << outgoingNuclei[i] << G4endl;
-
-  if (theRecoilFragment.GetA() > 0) os << theRecoilFragment << G4endl;
+  for(i=0; i < numberOfFragments(); i++)
+    os << recoilFragments[i] << G4endl;
 }
 
 
@@ -295,25 +319,25 @@ void G4CollisionOutput::boostToLabFrame(const G4LorentzConvertor& convertor) {
   if (verboseLevel > 1)
     G4cout << " >>> G4CollisionOutput::boostToLabFrame" << G4endl;
 
-  if (!outgoingParticles.empty()) { 
-    particleIterator ipart = outgoingParticles.begin();
-    for(; ipart != outgoingParticles.end(); ipart++) {
-      ipart->setMomentum(boostToLabFrame(ipart->getMomentum(), convertor));
-    }
-
-    std::sort(outgoingParticles.begin(), outgoingParticles.end(),
-	      G4ParticleLargerEkin());
+  particleIterator ipart = outgoingParticles.begin();
+  for(; ipart != outgoingParticles.end(); ipart++) {
+    ipart->setMomentum(boostToLabFrame(ipart->getMomentum(), convertor));
   }
   
-  if (!outgoingNuclei.empty()) { 
-    nucleiIterator inuc = outgoingNuclei.begin();
-    for (; inuc != outgoingNuclei.end(); inuc++) {
-      inuc->setMomentum(boostToLabFrame(inuc->getMomentum(), convertor)); 
-    }
+  std::sort(outgoingParticles.begin(), outgoingParticles.end(),
+	    G4ParticleLargerEkin());
+  
+  nucleiIterator inuc = outgoingNuclei.begin();
+  for (; inuc != outgoingNuclei.end(); inuc++) {
+    inuc->setMomentum(boostToLabFrame(inuc->getMomentum(), convertor)); 
   }
 
-  if (theRecoilFragment.GetA() > 0.) {
-    theRecoilFragment.SetMomentum(boostToLabFrame(theRecoilFragment.GetMomentum(), convertor));
+  // NOTE: Fragment momentum must be converted to and from Bertini units
+  G4LorentzVector fmom;
+  fragmentIterator ifrag = recoilFragments.begin();
+  for (; ifrag != recoilFragments.end(); ifrag++) {
+    fmom = ifrag->GetMomentum() / GeV;
+    ifrag->SetMomentum(boostToLabFrame(fmom, convertor)*GeV);
   }
 }
 
@@ -342,11 +366,11 @@ void G4CollisionOutput::rotateEvent(const G4LorentzRotation& rotate) {
   for (; inuc != outgoingNuclei.end(); inuc++)
     inuc->setMomentum(inuc->getMomentum()*=rotate);
 
-  if (theRecoilFragment.GetA() > 0.) {
-    G4LorentzVector mom = theRecoilFragment.GetMomentum();	// Need copy
-    theRecoilFragment.SetMomentum(mom*=rotate);
+  fragmentIterator ifrag = recoilFragments.begin();
+  for (; ifrag != recoilFragments.end(); ifrag++) {
+    G4LorentzVector mom = ifrag->GetMomentum();		// Need copy
+    ifrag->SetMomentum(mom*=rotate);
   }
-
 }
 
 
@@ -418,13 +442,16 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 
   if (verboseLevel > 2) G4cout << " re-balancing four-momenta" << G4endl;
 
-  G4int npart = outgoingParticles.size();
-  G4int nnuc = outgoingNuclei.size();
+  G4int npart = numberOfOutgoingParticles();
+  G4int nnuc = numberOfOutgoingNuclei();
+  G4int nfrag = numberOfFragments();
+
+  G4LorentzVector last_mom;		// Buffer to reduce memory churn
 
   if (npart > 0) {
     for (G4int ip=npart-1; ip>=0; ip--) {
       if (outgoingParticles[ip].getKineticEnergy()+enc > 0.) {
-	G4LorentzVector last_mom = outgoingParticles[ip].getMomentum(); 
+	last_mom = outgoingParticles[ip].getMomentum(); 
 	last_mom += mom_non_cons;
 	outgoingParticles[ip].setMomentum(last_mom);
 	break;
@@ -433,18 +460,21 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   } else if (nnuc > 0) {
     for (G4int in=nnuc-1; in>=0; in--) {
       if (outgoingNuclei[in].getKineticEnergy()+enc > 0.) {
-	G4LorentzVector last_mom = outgoingNuclei[in].getMomentum();
+	last_mom = outgoingNuclei[in].getMomentum();
 	last_mom += mom_non_cons;
 	outgoingNuclei[in].setMomentum(last_mom);
 	break;
       }
     }
-  } else if (theRecoilFragment.GetA() > 0.) {
-    // NOTE:  G4Fragment does not use Bertini units!
-    G4LorentzVector last_mom = theRecoilFragment.GetMomentum()/GeV;
-    if ((last_mom.e()-last_mom.m())+enc > 0.) {
-      last_mom += mom_non_cons;
-      theRecoilFragment.SetMomentum(last_mom*GeV);
+  } else if (nfrag > 0) {
+    for (G4int ifr=nfrag-1; ifr>=0; ifr--) {
+      // NOTE:  G4Fragment does not use Bertini units!
+      last_mom = recoilFragments[ifr].GetMomentum()/GeV;
+      if ((last_mom.e()-last_mom.m())+enc > 0.) {
+	last_mom += mom_non_cons;
+	recoilFragments[ifr].SetMomentum(last_mom*GeV);
+	break;
+      }
     }
   }
 
@@ -464,22 +494,24 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   G4bool need_hard_tuning = true;
   
   G4double encMeV = mom_non_cons.e() / GeV;	// Excitation below is in MeV
-  if (theRecoilFragment.GetA() > 0.) {
-    G4double eex = theRecoilFragment.GetExcitationEnergy();
-    if (eex > 0.0 && eex + encMeV >= 0.0) {
-      // NOTE:  G4Fragment doesn't have function to change excitation energy
-      // ==> theRecoilFragment.SetExcitationEnergy(eex+encMeV);
+  if (nfrag > 0) {
+    for (G4int i=0; i < nfrag; i++) {
+      G4double eex = recoilFragments[0].GetExcitationEnergy();
+      if (eex > 0.0 && eex + encMeV >= 0.0) {
+	// NOTE:  G4Fragment doesn't have function to change excitation energy
+	// ==> theRecoilFragment.SetExcitationEnergy(eex+encMeV);
 
-      G4LorentzVector fragMom = theRecoilFragment.GetMomentum();
-      G4double newMass = fragMom.m() + encMeV;		// .m() includes eex
-      fragMom.setVectM(fragMom.vect(), newMass);
-      need_hard_tuning = false;
+	G4LorentzVector fragMom = recoilFragments[i].GetMomentum();
+	G4double newMass = fragMom.m() + encMeV;	// .m() includes eex
+	fragMom.setVectM(fragMom.vect(), newMass);
+	need_hard_tuning = false;
+	break;
+      }
     }
-  } else if (outgoingNuclei.size() > 0) {
-    for (G4int i=0; i < G4int(outgoingNuclei.size()); i++) {
+  } else if (nnuc > 0) {
+    for (G4int i=0; i < nnuc; i++) {
       G4double eex = outgoingNuclei[i].getExitationEnergy();
-      
-      if(eex > 0.0 && eex + encMeV >= 0.0) {
+      if (eex > 0.0 && eex + encMeV >= 0.0) {
 	outgoingNuclei[i].setExitationEnergy(eex+encMeV);
 	need_hard_tuning = false;
 	break;
@@ -599,10 +631,12 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 // Returns excitation energy in GeV
 
 void G4CollisionOutput::setRemainingExitationEnergy() { 
-  eex_rest = theRecoilFragment.GetExcitationEnergy() / GeV;
-
-  for(G4int i=0; i < G4int(outgoingNuclei.size()); i++) 
+  eex_rest = 0.;
+  G4int i(0);
+  for (i=0; i < numberOfOutgoingNuclei(); i++) 
     eex_rest += outgoingNuclei[i].getExitationEnergyInGeV();
+  for (i=0; i < numberOfFragments(); i++) 
+    eex_rest += recoilFragments[i].GetExcitationEnergy() / GeV;
 }
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StateManager.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -131,7 +131,7 @@ private:
 
 private:
 
-  static G4StateManager* theStateManager;
+  static G4ThreadLocal G4StateManager* theStateManager;
   G4ApplicationState theCurrentState;
   G4ApplicationState thePreviousState;
   std::vector<G4VStateDependent*> theDependentsList;

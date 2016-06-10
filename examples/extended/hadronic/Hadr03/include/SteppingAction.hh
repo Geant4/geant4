@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.hh 73011 2013-08-15 08:48:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,6 @@
 #include <map>
 
 class G4ParticleDefinition;
-class PrimaryGeneratorAction;
 class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,13 +46,12 @@ class RunAction;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(PrimaryGeneratorAction*, RunAction*);
+    SteppingAction(RunAction*);
    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
     
   private:
-    PrimaryGeneratorAction* fPrimary;
     RunAction*              fRunAction;
     std::map<G4ParticleDefinition*,G4int> fParticleFlag;    
 };

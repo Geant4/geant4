@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EqEMFieldWithSpin.hh 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 // class G4EqEMFieldWithSpin
@@ -41,6 +41,7 @@
 #ifndef G4EQEMFIELDWITHSPIN_hh
 #define G4EQEMFIELDWITHSPIN_hh
 
+#include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
 
 class G4ElectroMagneticField;
@@ -53,7 +54,7 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
     ~G4EqEMFieldWithSpin();
 
-    void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
+    void  SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                 G4double MomentumXc,
                                 G4double mass);
 
@@ -69,14 +70,13 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
   private:
 
+    G4double charge, mass, magMoment, spin;
+
     G4double fElectroMagCof ;
     G4double fMassCof;
-    G4double omegac;
-    G4double anomaly;
-    G4double pcharge;
-    G4double E;
-    G4double gamma;
-    G4double beta;
+
+    G4double omegac, anomaly;
+    G4double beta, gamma;
 
 };
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2010-11-11 11:51:56 ldesorgh Exp $
+$Id: History 75591 2013-11-04 12:33:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,42 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+     ---------------------------------------------------------
+
+31 Oct 2013: L.Desorgher (emadjoint-V09-06-09)
+- Modifications for limitation of convergence peak
+- G4AdjointBremsstrahlungModel - biased the gamma->e.- reverse brem CS by factor 100
+- G4AdjointComptonModel -biased the CS by  a factor 0.1
+
+19 Oct 2013: V.Ivanchenko (emadjoint-V09-06-08)
+- G4AdjointBremsstrahlungModel - removed unused obsolete headers
+
+21 Jul 2013: V.Ivanchenko (emadjoint-V09-06-07)
+- G4AdjointhMultipleScattering - use G4UrbanMscModel instead of
+    G4UrbanMscModel95
+
+03 Jul 2013: V.Ivanchenko (emadjoint-V09-06-06)
+- G4ContinuousGainOfEnergy - changed interface to G4VEmFluctuation
+
+17 Jun 2013: G.Cosmo (emadjoint-V09-06-05)
+- Cleanup from automatica changes for MT in G4AdjointInterpolator.
+
+24 Jan 2013: V.Ivanchenko (emadjoint-V09-06-04)
+- G4AdjointPhotoElectricModel - define current G4MaterialCutsCouple
+    for the direct model
+     
+22 Feb 2013: L.Desorgher (emadjoint-V09-06-03)
+-Remove of unused variables detected by compilation warnings.     
+
+23 Jan 2013: V.Ivanchenko (emadjoint-V09-06-02)
+11 Jan 2013: V.Ivanchenko (emadjoint-V09-06-01)
+- G4AdjointhMultipleScattering - use msc95 instead of msc90
+- G4AdjointeIonisationModel - removed unused obsolete header
+
+12 Dec 2012: V.Ivanchenko (emadjoint-V09-06-00)
+- G4AdjointPhotoElectricModel use G4PEEffectFluoModel instead of obsolete
+    G4PEEffectModel
+
 30 Oct 2012: L. Desorgher (emadjoint-V09-05-04)
 -Inclusion of headers for system of units and physical constants in G4AdjointBremsstrahlungModel
 

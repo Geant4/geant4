@@ -23,11 +23,7 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find Pythia6 (required package)
 #
-find_package(Pythia6 QUIET)
-if(NOT PYTHIA6_FOUND)
-  message(STATUS "G4 Examples: Pythia6 package not found. --> decayer6 example disabled")  
-  return()
-endif()
+find_package(Pythia6 REQUIRED)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project

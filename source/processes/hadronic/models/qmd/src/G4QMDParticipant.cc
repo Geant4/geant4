@@ -32,6 +32,7 @@ G4QMDParticipant::G4QMDParticipant( G4ParticleDefinition* pd , G4ThreeVector p ,
 , position ( r )
 , projectile ( false )
 , target ( false )
+, hit ( false )
 {
    ; 
 }

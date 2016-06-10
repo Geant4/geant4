@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DiffuseElastic.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 // Author: V. Grichine (Vladimir,Grichine@cern.ch)
 //

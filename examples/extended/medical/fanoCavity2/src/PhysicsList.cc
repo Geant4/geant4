@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc 72961 2013-08-14 14:35:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,15 +63,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(DetectorConstruction* det)
-: G4VModularPhysicsList(), fDetector(det)
+PhysicsList::PhysicsList()
+: G4VModularPhysicsList(), fMessenger(0), fEmPhysicsList(0)
 {
   G4LossTableManager::Instance();
   fMessenger = new PhysicsListMessenger(this); 
    
   // EM physics
   fEmName = G4String("standard_opt3");
-  fEmPhysicsList = new PhysListEmStandard_option3(fEmName,fDetector);
+  fEmPhysicsList = new PhysListEmStandard_option3(fEmName);
       
   defaultCutValue = 10*km;
 
@@ -150,31 +150,31 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard_option0(name,fDetector);
+    fEmPhysicsList = new PhysListEmStandard_option0(name);
     
   } else if (name == "standard_opt3") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard_option3(name,fDetector);
+    fEmPhysicsList = new PhysListEmStandard_option3(name);
         
   } else if (name == "standard_GS") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard_GS(name,fDetector);    
+    fEmPhysicsList = new PhysListEmStandard_GS(name);    
         
   } else if (name == "standard_WVI") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard_WVI(name,fDetector);
+    fEmPhysicsList = new PhysListEmStandard_WVI(name);
             
   } else if (name == "standard_SS") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard_SS(name,fDetector);
+    fEmPhysicsList = new PhysListEmStandard_SS(name);
         
   } else {
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FieldManagerStore.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // class G4FieldManagerStore
 //
@@ -80,8 +80,8 @@ class G4FieldManagerStore : public std::vector<G4FieldManager*>
 
   private:
 
-    static G4FieldManagerStore* fgInstance;
-    static G4bool locked;
+    static G4ThreadLocal G4FieldManagerStore* fgInstance;
+    static G4ThreadLocal G4bool locked;
 };
 
 #endif

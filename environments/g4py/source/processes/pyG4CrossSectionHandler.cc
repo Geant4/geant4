@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4CrossSectionHandler.cc,v 1.1 2008-12-03 06:56:18 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4CrossSectionHandler.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4CrossSectionHandler.cc
 //

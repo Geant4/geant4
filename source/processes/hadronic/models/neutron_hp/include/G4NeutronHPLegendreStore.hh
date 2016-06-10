@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPLegendreStore_h
 #define G4NeutronHPLegendreStore_h 1
@@ -76,7 +75,7 @@ class G4NeutronHPLegendreStore
   G4double SampleMax (G4double energy);
   G4double Integrate(G4int k, G4double costh);
   
-  void InitInterpolation(std::ifstream & aDataFile)
+  void InitInterpolation(std::istream & aDataFile)
   {
     theManager.Init(aDataFile);
   }

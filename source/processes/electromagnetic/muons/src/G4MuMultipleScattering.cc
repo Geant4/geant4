@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuMultipleScattering.cc 68035 2013-03-13 14:12:34Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -47,7 +47,7 @@
 #include "G4MuMultipleScattering.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4WentzelVIModel.hh"
-#include "G4UrbanMscModel95.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +79,7 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   // Modification of parameters between runs
   if(isInitialized) { return; }
-  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel95(), 1); }
+  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel(), 1); }
   AddEmModel(1, EmModel(1));
   isInitialized = true;
 }

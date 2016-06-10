@@ -28,7 +28,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Tet.hh 76263 2013-11-08 11:41:52Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -50,6 +50,15 @@
 // --------------------------------------------------------------------
 #ifndef G4TET_HH
 #define G4TET_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UTET 1
+#endif
+
+#if defined(G4GEOM_USE_UTET)
+  #define G4UTet G4Tet
+  #include "G4UTet.hh"
+#else
 
 #include "G4VSolid.hh"
 
@@ -107,7 +116,6 @@ class G4Tet : public G4VSolid
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent          () const;
     G4Polyhedron* CreatePolyhedron   () const;
-    G4NURBS*      CreateNURBS        () const;
     G4Polyhedron* GetPolyhedron      () const;
 
   public:   // without description
@@ -122,7 +130,7 @@ class G4Tet : public G4VSolid
       // Copy constructor and assignment operator.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.11 2010-10-20 08:54:18 gcosmo Exp $"; }
+      { return "$Id: G4Tet.hh 76263 2013-11-08 11:41:52Z gcosmo $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)
@@ -162,5 +170,7 @@ class G4Tet : public G4VSolid
     G4double fXMin, fXMax, fYMin, fYMax, fZMin, fZMax;
     G4double fDx, fDy, fDz, fTol, fMaxSize;
 };
+
+#endif
 
 #endif

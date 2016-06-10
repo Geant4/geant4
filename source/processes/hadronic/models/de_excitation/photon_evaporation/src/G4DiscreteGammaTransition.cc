@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DiscreteGammaTransition.cc 74869 2013-10-23 09:26:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -57,24 +57,27 @@
 //              Removed unphysical corretions of gamma energy; fixed default particle 
 //              as gamma; do not subtract bounding energy in case of electron emmision
 //
-//		  03 November 2011, L. Desorgher
-//				Extend the use of the code for Z>100 by not calling G4AtomicShells::GetBindingEnergy for Z>100
-//				For Z>100 the binding energy is set to 0, the atomic relaxation is not simulated in G4RadDecay
+//	  3 November 2011, L. Desorgher
+//		Extend the use of the code for Z>100 by not calling 
+//              G4AtomicShells::GetBindingEnergy for Z>100
+//		For Z>100 the binding energy is set to 0, the atomic relaxation is 
+//              not simulated in G4RadDecay
 //
 // -------------------------------------------------------------------
 
 #include "G4DiscreteGammaTransition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include "G4RandGeneralTmp.hh"
 #include "G4AtomicShells.hh"
 #include "G4NuclearLevel.hh"
 #include "G4NuclearLevelStore.hh"
 #include "G4Pow.hh"
+#include "G4Log.hh"
 
-G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A): 
-  _nucleusZ(Z), _orbitE(-1), _bondE(0.), _aGamma(true), _icm(false), _gammaEnergy(0.), 
-  _level(level), _excitation(0.),  _gammaCreationTime(0.),_A(A),_Z(Z)
+G4DiscreteGammaTransition::
+G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int /*A*/)
+ : _nucleusZ(Z), _orbitE(-1), _bondE(0.), _aGamma(true), _icm(false),
+   _gammaEnergy(0.), _level(level), _excitation(0.), _gammaCreationTime(0.)
 {
   _levelManager = 0;
   _verbose = 0;
@@ -218,7 +221,7 @@ void G4DiscreteGammaTransition::SelectGamma()
       //09.05.2010 VI rewrite samling of decay time 
       //              assuming ordinary exponential low
       _gammaCreationTime = 0.;      
-      if(tau > 0.0) {  _gammaCreationTime = -tau*std::log(G4UniformRand()); }
+      if(tau > 0.0) {  _gammaCreationTime = -tau*G4Log(G4UniformRand()); }
 
     }
   return;

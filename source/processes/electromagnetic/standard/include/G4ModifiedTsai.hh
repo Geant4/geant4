@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ModifiedTsai.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -58,7 +58,6 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VBremAngularDistribution.hh"
 #include "G4VEmAngularDistribution.hh"
 
 class G4ModifiedTsai : public G4VEmAngularDistribution

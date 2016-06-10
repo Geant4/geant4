@@ -43,22 +43,22 @@ public:
   const std::vector<G4long>& GetSeedList() const;
 
 protected:
-  G4long masterSeed;
-  std::vector<G4long> seedList;
+  G4long master_seed_;
+  std::vector<G4long> seed_list_;
 
   // generate seeds for MPI nodes
-  virtual void GenerateSeeds()=0;
+  virtual void GenerateSeeds() = 0;
 };
 
 // ====================================================================
 inline G4long G4VMPIseedGenerator::GetMasterSeed() const
 {
-  return masterSeed;
+  return master_seed_;
 }
 
-inline const std::vector<G4long>& G4VMPIseedGenerator::GetSeedList() const  
+inline const std::vector<G4long>& G4VMPIseedGenerator::GetSeedList() const
 {
-  return seedList;
+  return seed_list_;
 }
 
 #endif

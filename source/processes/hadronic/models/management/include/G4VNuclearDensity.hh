@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VNuclearDensity.hh 66785 2013-01-12 15:10:13Z gcosmo $
 //
 #ifndef G4VNuclearDensity_h
 #define G4VNuclearDensity_h 1

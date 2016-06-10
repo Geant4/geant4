@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4GeometryManager.cc,v 1.1 2008-12-03 07:21:56 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4GeometryManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4GeometryManager.cc
 //
@@ -41,10 +40,10 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4GeometryManager {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CloseGeometry, CloseGeometry, 0, 3);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_OpenGeometry, OpenGeometry, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CloseGeometry, CloseGeometry, 0, 3)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_OpenGeometry, OpenGeometry, 0, 1)
 
-};
+}
 
 using namespace pyG4GeometryManager;
 
@@ -59,7 +58,7 @@ void export_G4GeometryManager()
          return_value_policy<reference_existing_object>())
     .staticmethod("GetInstance")
     // ---
-    .def("CloseGeometry",         &G4GeometryManager::CloseGeometry, 
+    .def("CloseGeometry",         &G4GeometryManager::CloseGeometry,
          f_CloseGeometry())
     .def("OpenGeometry",          &G4GeometryManager::OpenGeometry,
          f_OpenGeometry())

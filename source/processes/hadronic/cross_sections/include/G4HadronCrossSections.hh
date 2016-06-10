@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
 // GEANT4 Hadron physics class -- header file
 // F.W. Jones, TRIUMF, 03-DEC-96
 //  
@@ -83,11 +80,13 @@ class G4HadronCrossSections
     G4double GetFissionCrossSection(const G4DynamicParticle*, G4int /*ZZ*/,
                                     G4int /*AA*/);
 
+  /*
     static void SetCorrectInelasticNearZero(G4bool value)
       {correctInelasticNearZero = value;}
 
     static G4bool GetCorrectInelasticNearZero()
       {return correctInelasticNearZero;}
+  */
 
     void SetVerboseLevel(G4int value) {verboseLevel = value;}
 
@@ -100,20 +99,20 @@ class G4HadronCrossSections
     void CalcScatteringCrossSections(const G4DynamicParticle*, 
                                      G4int /*ZZ*/, G4int /*AA*/);
 
-    static G4HadronCrossSections* theInstance;
+    static G4ThreadLocal G4HadronCrossSections* theInstance;
 
     G4Pow* g4pow;
 
     G4double sigelastic;
     G4double siginelastic;
     G4ParticleDefinition* prevParticleDefinition;
-    G4Element* prevElement;
+//    G4Element* prevElement;
     G4int prevZZ;
     G4int prevAA;
     G4double prevKineticEnergy;
     G4double lastEkx, lastEkxPower;
 
-    static G4bool correctInelasticNearZero;
+    G4bool correctInelasticNearZero;
 
     G4int verboseLevel;
 
@@ -121,30 +120,30 @@ class G4HadronCrossSections
     // They are initialized in G4HadronCrossSections.cc, thus providing some 
     // data hiding.
 
-    static G4float plab[TSIZE];
-    static G4float csel[NPARTS][TSIZE];
-    static G4float csin[NPARTS][TSIZE];
+    static const G4float plab[TSIZE];
+    static const G4float csel[NPARTS][TSIZE];
+    static const G4float csin[NPARTS][TSIZE];
 
-    static G4float cspiel[3][TSIZE];
-    static G4float cspiin[3][TSIZE];
+    static const G4float cspiel[3][TSIZE];
+    static const G4float cspiin[3][TSIZE];
 
-    static G4float cspnel[3][TSIZE];
-    static G4float cspnin[3][TSIZE];
+    static const G4float cspnel[3][TSIZE];
+    static const G4float cspnin[3][TSIZE];
 
-    static G4float elab[NELAB];
-    static G4float cnlwat[NCNLW], cnlwel[NCNLW][NELAB], cnlwin[NCNLW][NELAB];
+    static const G4float elab[NELAB];
+    static const G4float cnlwat[NCNLW], cnlwel[NCNLW][NELAB], cnlwin[NCNLW][NELAB];
 
-    static G4float cscap[100];
+    static const G4float cscap[100];
 
-    static G4float ekfiss[NFISS], csfiss[4][NFISS];
+    static const G4float ekfiss[NFISS], csfiss[4][NFISS];
 
-    static G4float alpha[NPARTS], alphac[TSIZE];
+    static const G4float alpha[NPARTS], alphac[TSIZE];
 
-    static G4float partel[35], partin[35];
-    static G4int   icorr[35], intrc[35];
+    static const G4float partel[35], partin[35];
+    static const G4int   icorr[35], intrc[35];
 
-    static G4float csa[4];
-    static G4int ipart2[7];
+    static const G4float csa[4];
+    static const G4int ipart2[7];
 };
 #endif
 

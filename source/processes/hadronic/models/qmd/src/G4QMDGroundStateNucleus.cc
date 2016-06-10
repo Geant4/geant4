@@ -36,28 +36,20 @@
 #include "Randomize.hh"
 
 G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
-: r00 ( 1.124 )  // radius parameter for Woods-Saxon [fm] 
+: maxTrial ( 1000 )
+, r00 ( 1.124 )  // radius parameter for Woods-Saxon [fm] 
 , r01 ( 0.5 )    // radius parameter for Woods-Saxon 
 , saa ( 0.2 )    // diffuse parameter for initial Woods-Saxon shape
 , rada ( 0.9 )   // cutoff parameter
 , radb ( 0.3 )   // cutoff parameter
 , dsam ( 1.5 )   // minimum distance for same particle [fm]
 , ddif ( 1.0 )   // minimum distance for different particle
+, edepth ( 0.0 )
 , epse ( 0.000001 )  // torelance for energy in [GeV]
+, meanfield ( NULL ) 
 {
 
    //std::cout << " G4QMDGroundStateNucleus( G4int z , G4int a ) Begin " << z << " " << a << std::endl;
-
-   if ( z == 1 && a == 1 ) // Hydrogen  Case or proton primary
-   {
-      SetParticipant( new G4QMDParticipant( G4Proton::Proton() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
-      return;
-   }
-   else if ( z == 0 && a == 1 ) // Neutron primary
-   {
-      SetParticipant( new G4QMDParticipant( G4Neutron::Neutron() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
-      return;
-   }
 
    dsam2 = dsam*dsam;
    ddif2 = ddif*ddif;
@@ -77,7 +69,7 @@ G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
    csp = parameters->Get_csp();
    clp = parameters->Get_clp();
 
-   edepth = 0.0; 
+   //edepth = 0.0; 
 
    for ( int i = 0 ; i < a ; i++ )
    {
@@ -106,7 +98,19 @@ G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
    radm = radious - rada * ( gamm - 1.0 ) + radb;
    rmax = 1.0 / ( 1.0 + std::exp ( -rt00/saa ) );
 
-   maxTrial = 1000;
+   //maxTrial = 1000;
+   
+   //Nucleon primary or target case;
+   if ( z == 1 && a == 1 ) {  // Hydrogen  Case or proton primary 
+      SetParticipant( new G4QMDParticipant( G4Proton::Proton() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
+      return;
+   }
+   else if ( z == 0 && a == 1 ) { // Neutron primary 
+      SetParticipant( new G4QMDParticipant( G4Neutron::Neutron() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
+      return;
+   }
+
+   
    meanfield = new G4QMDMeanField();
    meanfield->SetSystem( this );
 
@@ -415,7 +419,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
    if ( isThisOK == false )
    {
-      std::cout << "GroundStateNucleus state cannot be created. Try again with another parameters." << std::endl;
+      G4cout << "GroundStateNucleus state cannot be created. Try again with another parameters." << G4endl;
    } 
 
    //std::cout << "packNucleons End" << std::endl;
@@ -451,7 +455,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
    if ( n0Try > maxTrial )
    {
-      std::cout << "GroundStateNucleus state cannot be created. Try again with another parameters." << std::endl;
+      G4cout << "GroundStateNucleus state cannot be created. Try again with another parameters." << G4endl;
       return; 
    }
    
@@ -470,7 +474,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
          rho_a[ i ] += meanfield->GetRHA( j , i ); 
          G4int k = 0; 
-         if ( participants[i]->GetDefinition() != participants[i]->GetDefinition() )
+         if ( participants[i]->GetDefinition() != participants[j]->GetDefinition() )
          {
             k = 1;
          } 
@@ -527,7 +531,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
    if ( n1Try > maxTrial )
    {
-      std::cout << "GroundStateNucleus state cannot be created. Try again with another parameters." << std::endl;
+      G4cout << "GroundStateNucleus state cannot be created. Try again with another parameters." << G4endl;
       return; 
    }
    
@@ -842,9 +846,9 @@ G4bool G4QMDGroundStateNucleus::samplingMomentum( G4int i )
                   if ( phase[j] * cpc > 0.2 ) 
                   { 
 /*
-         std::cout << "TKDB Check Pauli Principle A i , j " << i << " , " << j << std::endl;
-         std::cout << "TKDB Check Pauli Principle phase[j] " << phase[j] << std::endl;
-         std::cout << "TKDB Check Pauli Principle phase[j]*cpc > 0.2 " << phase[j]*cpc << std::endl;
+         G4cout << "TKDB Check Pauli Principle A i , j " << i << " , " << j << G4endl;
+         G4cout << "TKDB Check Pauli Principle phase[j] " << phase[j] << G4endl;
+         G4cout << "TKDB Check Pauli Principle phase[j]*cpc > 0.2 " << phase[j]*cpc << G4endl;
 */
                      isThisOK = false;
                      break;
@@ -852,10 +856,10 @@ G4bool G4QMDGroundStateNucleus::samplingMomentum( G4int i )
                   if ( ( phase_g[j] + phase[j] ) * cpc > 0.5 ) 
                   { 
 /*
-         std::cout << "TKDB Check Pauli Principle B i , j " << i << " , " << j << std::endl;
-         std::cout << "TKDB Check Pauli Principle B phase_g[j] " << phase_g[j] << std::endl;
-         std::cout << "TKDB Check Pauli Principle B phase[j] " << phase[j] << std::endl;
-         std::cout << "TKDB Check Pauli Principle B phase_g[j] + phase[j] ) * cpc > 0.5  " <<  ( phase_g[j] + phase[j] ) * cpc << std::endl;
+         G4cout << "TKDB Check Pauli Principle B i , j " << i << " , " << j << G4endl;
+         G4cout << "TKDB Check Pauli Principle B phase_g[j] " << phase_g[j] << G4endl;
+         G4cout << "TKDB Check Pauli Principle B phase[j] " << phase[j] << G4endl;
+         G4cout << "TKDB Check Pauli Principle B phase_g[j] + phase[j] ) * cpc > 0.5  " <<  ( phase_g[j] + phase[j] ) * cpc << G4endl;
 */
                      isThisOK = false;
                      break;
@@ -865,9 +869,9 @@ G4bool G4QMDGroundStateNucleus::samplingMomentum( G4int i )
                   if ( phase[i] * cpc > 0.3 ) 
                   { 
 /*
-         std::cout << "TKDB Check Pauli Principle C i , j " << i << " , " << j << std::endl;
-         std::cout << "TKDB Check Pauli Principle C phase[i] " << phase[i] << std::endl;
-         std::cout << "TKDB Check Pauli Principle C phase[i] * cpc > 0.3 " <<  phase[i] * cpc << std::endl;
+         G4cout << "TKDB Check Pauli Principle C i , j " << i << " , " << j << G4endl;
+         G4cout << "TKDB Check Pauli Principle C phase[i] " << phase[i] << G4endl;
+         G4cout << "TKDB Check Pauli Principle C phase[i] * cpc > 0.3 " <<  phase[i] * cpc << G4endl;
 */
                      isThisOK = false;
                      break;

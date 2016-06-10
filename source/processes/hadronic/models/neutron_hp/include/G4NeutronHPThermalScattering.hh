@@ -72,7 +72,10 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
       G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
       virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
-      //G4int GetNiso() {return theElastic[0].GetNiso();}
+
+      //For user prepared thermal files 
+                              //Name of G4Element , Name of NDL file
+      void AddUserThermalScatteringFile( G4String , G4String );
 
    private:
 
@@ -87,21 +90,15 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
       //         ElementID          temp        aFS for this temp (and this element)
       std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* > incoherentFSs;
       std::map < G4double , std::vector < E_isoAng* >* >* readAnIncoherentFSDATA( G4String );
-      E_isoAng* readAnE_isoAng ( std::ifstream* );
+      E_isoAng* readAnE_isoAng ( std::istream* );
 
       // Inelastic 
       //         ElementID          temp         aFS for this temp (and this element) 
       std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* > inelasticFSs;
       std::map < G4double , std::vector < E_P_E_isoAng* >* >* readAnInelasticFSDATA( G4String );
-      E_P_E_isoAng* readAnE_P_E_isoAng ( std::ifstream* );
+      E_P_E_isoAng* readAnE_P_E_isoAng ( std::istream* );
   
-
       G4NeutronHPThermalScatteringData* theXSection;
-      G4double * xSec;
-      //G4String dirName;
-      G4int numEle;
-
-
 
       G4NeutronHPElastic* theHPElastic;
       
@@ -119,6 +116,8 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
       std::map < std::pair < const G4Material* , const G4Element* > , G4int > dic;   
       void buildPhysicsTable();
       G4int getTS_ID( const G4Material* , const G4Element* );
+
+      size_t sizeOfMaterialTable;
 
 };
 

@@ -27,7 +27,7 @@
 /// \brief Main program of the hadronic/Hadr00 example
 //
 //
-// $Id$
+// $Id: Hadr00.cc 75840 2013-11-06 17:28:38Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr00
@@ -45,6 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -52,9 +53,7 @@
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-
-#include "RunAction.hh"
-#include "EventAction.hh"
+#include "ActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -69,10 +68,23 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+  G4Random::setTheEngine(new CLHEP::RanecuEngine());
 
-  //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager();
+#ifdef G4MULTITHREADED  
+  G4MTRunManager * runManager = new G4MTRunManager(); 
+
+  // Number of threads can be defined via 3rd argument
+  if (argc==4) {
+    G4int nThreads = G4UIcommand::ConvertToInt(argv[3]);
+    runManager->SetNumberOfThreads(nThreads);
+  }
+  G4cout << "##### Hadr00 started for " << runManager->GetNumberOfThreads() 
+         << " threads" << " #####" << G4endl;
+#else
+  G4RunManager * runManager = new G4RunManager(); 
+  G4cout << "##### Hadr00 started in sequential mode" 
+         << " #####" << G4endl;
+#endif
 
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
@@ -82,7 +94,7 @@ int main(int argc,char** argv) {
   G4String physName = "";
 
   // Physics List name defined via 3nd argument
-  if (argc==3) { physName = argv[2]; }
+  if (argc>=3) { physName = argv[2]; }
 
   // Physics List is defined via environment variable PHYSLIST
   if("" == physName) {
@@ -100,11 +112,8 @@ int main(int argc,char** argv) {
 
   runManager->SetUserInitialization(phys);
 
-  runManager->SetUserAction(new PrimaryGeneratorAction());
-
   //set user action classes
-  runManager->SetUserAction(new RunAction());
-  runManager->SetUserAction(new EventAction());
+  runManager->SetUserInitialization(new ActionInitialization());
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -127,9 +136,9 @@ int main(int argc,char** argv) {
     }
   else           // Batch mode
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UImanager->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);
     }
 
   //job termination

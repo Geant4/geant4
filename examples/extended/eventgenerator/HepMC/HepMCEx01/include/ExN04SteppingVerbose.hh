@@ -26,37 +26,28 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04SteppingVerbose.hh
 /// \brief Definition of the ExN04SteppingVerbose class
 //
+// $Id: ExN04SteppingVerbose.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-// $Id$
-//
-//   This class manages the verbose outputs in G4SteppingManager. 
+//   This class manages the verbose outputs in G4SteppingManager.
 //   It inherits from G4SteppingVerbose.
 //   It shows how to extract informations during the tracking of a particle.
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class ExN04SteppingVerbose;
-
 #ifndef ExN04SteppingVerbose_h
 #define ExN04SteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class ExN04SteppingVerbose;
 
-class ExN04SteppingVerbose : public G4SteppingVerbose 
-{
- public:
-   
+
+class ExN04SteppingVerbose : public G4SteppingVerbose {
+public:
   ExN04SteppingVerbose();
- ~ExN04SteppingVerbose();
+  ~ExN04SteppingVerbose();
 
   void StepInfo();
   void TrackingStarted();
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

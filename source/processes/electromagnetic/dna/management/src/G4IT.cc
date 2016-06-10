@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.cc 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4IT.cc 71125 2013-06-11 15:39:09Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -40,7 +40,7 @@
 
 using namespace std;
 
-G4Allocator<G4IT> aITAllocator;
+G4ThreadLocal G4Allocator<G4IT> *aITAllocator = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 ///
 // Static functions
@@ -52,7 +52,7 @@ G4IT* GetIT(const G4Track* track)
 
 G4IT* GetIT(const G4Track& track)
 {
-    return (dynamic_cast<G4IT*>(track.GetUserInformation()));
+   return (dynamic_cast<G4IT*>(track.GetUserInformation()));
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 ///
@@ -64,6 +64,7 @@ G4IT::G4IT() : G4VUserTrackInformation("G4IT"),
     fTrackingInformation()
 //    fpTrackingInformation(new G4TrackingInformation())
 {
+    if (!aITAllocator) aITAllocator = new G4Allocator<G4IT>;
     fpITBox=0;
     fpKDNode = 0 ;
     fpTrackNode = 0;
@@ -113,6 +114,7 @@ G4IT::G4IT(G4Track * aTrack) : G4VUserTrackInformation("G4IT"),
     fTrackingInformation()
 //    fpTrackingInformation(new G4TrackingInformation())
 {
+    if (!aITAllocator) aITAllocator = new G4Allocator<G4IT>;
     fpITBox = 0;
     fpTrack = aTrack;
     fpKDNode = 0 ;

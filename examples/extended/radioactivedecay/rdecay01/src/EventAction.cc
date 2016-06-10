@@ -26,7 +26,7 @@
 /// \file radioactivedecay/rdecay01/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 68030 2013-03-13 13:51:27Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:fPrintModulo(10000),fEventMessenger(0)
+:G4UserEventAction(),
+ fPrintModulo(10000),fDecayChain(),fEventMessenger(0)
 {
   fEventMessenger = new EventMessenger(this);
 }

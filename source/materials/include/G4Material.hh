@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Material.hh 68070 2013-03-13 15:03:06Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -118,7 +118,6 @@ enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 class G4Material
 {
 public:  // with description
-
   //
   // Constructor to create a material from single element
   //
@@ -232,7 +231,7 @@ public:  // with description
   const G4Material* GetBaseMaterial()     const {return fBaseMaterial;}
   
   // material components:
-  inline 
+  inline
   std::map<G4Material*,G4double> GetMatComponents() const 
                                                {return fMatComponents;}
 					       
@@ -253,7 +252,7 @@ public:  // with description
 
   //the (static) Table of Materials:
   //
-  static const G4MaterialTable* GetMaterialTable();
+  static G4MaterialTable* GetMaterialTable();
       
   static size_t GetNumberOfMaterials();
   
@@ -342,8 +341,8 @@ private:
   G4double  fNuclInterLen;                // Nuclear interaction length  
   
   G4IonisParamMat* fIonisation;           // ionisation parameters
-  G4SandiaTable*   fSandiaTable;          // Sandia table
-  
+  G4SandiaTable*   fSandiaTable;          // Sandia table         
+
   // utilities
   //         
   const G4Material* fBaseMaterial;        // Pointer to the base material

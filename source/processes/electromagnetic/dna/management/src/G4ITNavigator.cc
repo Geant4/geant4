@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITNavigator.cc 64376 2012-10-31 16:39:40Z gcosmo $
+// $Id: G4ITNavigator.cc 66872 2013-01-15 01:25:57Z japost $
 // 
 // class G4ITNavigator Implementation
 //
@@ -732,7 +732,7 @@ G4double G4ITNavigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
 
-  static G4int sNavCScalls=0;
+  static G4ThreadLocal G4int sNavCScalls=0;
   sNavCScalls++;
 
   fLastTriedStepComputation= true; 
@@ -1684,7 +1684,7 @@ void G4ITNavigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
               << fAccuracyForException/mm << " mm.";
 
       suggestion << " ";
-      static G4int warnNow = 0;
+      static G4ThreadLocal G4int warnNow = 0;
       if( ((++warnNow % 100) == 1) )
       {
         message << G4endl

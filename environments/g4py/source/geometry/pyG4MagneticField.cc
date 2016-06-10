@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4MagneticField.cc,v 1.4 2006-06-29 15:32:10 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4MagneticField.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4MagneticField.cc
 //
@@ -48,15 +47,15 @@ public:
   virtual G4ThreeVector GetFieldValue(const G4ThreeVector& pos,
 				      const G4double time) const = 0;
 
-  virtual void GetFieldValue(const G4double Point[4], 
+  virtual void GetFieldValue(const G4double Point[4],
 			     G4double* Bfield) const {
 
-    const G4ThreeVector& bfield= 
+    const G4ThreeVector& bfield=
       GetFieldValue(G4ThreeVector(Point[0], Point[1], Point[2]), Point[3]);
-    
+
     Bfield[0]= bfield.x();
     Bfield[1]= bfield.y();
-    Bfield[2]= bfield.z();    
+    Bfield[2]= bfield.z();
   }
 
 };
@@ -69,7 +68,7 @@ namespace pyG4MagneticField {
 struct CB_PyG4MagneticField :
     PyG4MagneticField, wrapper<PyG4MagneticField> {
 
-  G4ThreeVector GetFieldValue(const G4ThreeVector& pos, 
+  G4ThreeVector GetFieldValue(const G4ThreeVector& pos,
 			      const G4double time) const {
     return get_override("GetFieldValue")(pos, time);
   }
@@ -77,10 +76,10 @@ struct CB_PyG4MagneticField :
 };
 
 G4ThreeVector(PyG4MagneticField::*f1_GetFieldValue)
-  (const G4ThreeVector&, const G4double) const 
+  (const G4ThreeVector&, const G4double) const
   = &PyG4MagneticField::GetFieldValue;
 
-};
+}
 
 using namespace pyG4MagneticField;
 
@@ -93,7 +92,7 @@ void export_G4MagneticField()
     ("__G4MagneticField", "dummy class of magnetic field", no_init)
     ;
 
-  class_<CB_PyG4MagneticField, boost::noncopyable, 
+  class_<CB_PyG4MagneticField, boost::noncopyable,
     bases<G4Field, G4MagneticField> >
     ("G4MagneticField", "base class of magnetic field")
     // ---

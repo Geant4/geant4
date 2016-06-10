@@ -27,7 +27,7 @@
 /// \brief Definition of the PrimaryGeneratorAction2 class
 //
 //
-// $Id$
+// $Id: PrimaryGeneratorAction2.hh 68024 2013-03-13 13:42:01Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -51,7 +51,7 @@ class PrimaryGeneratorAction2
    ~PrimaryGeneratorAction2();
 
   public:
-    void GeneratePrimaries(G4Event*);
+   void GeneratePrimaries(G4Event*);
 
   public:        
     G4double RejectAccept();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AllITManager.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4AllITManager.cc 71827 2013-06-25 15:58:24Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -37,7 +37,7 @@
 
 using namespace std;
 
-auto_ptr<G4AllITManager> G4AllITManager::fInstance(0);
+G4ThreadLocal G4AllITManager* G4AllITManager::fpInstance = 0;
 
 G4AllITManager::G4AllITManager()
 {
@@ -45,14 +45,14 @@ G4AllITManager::G4AllITManager()
 }
 
 G4AllITManager* G4AllITManager::Instance()
-{
-    if(fInstance.get() == 0) fInstance = auto_ptr<G4AllITManager>(new G4AllITManager());
-    return fInstance.get() ;
+{  
+    if (!fpInstance) fpInstance = new G4AllITManager();
+    return fpInstance ;
 }
 
 void G4AllITManager::DeleteInstance()
 {
-    fInstance.reset();
+    if(fpInstance) delete fpInstance;
 }
 
 G4AllITManager::~G4AllITManager()
@@ -67,7 +67,7 @@ G4AllITManager::~G4AllITManager()
         it++;
         fITSubManager.erase(it_tmp);
     }
-    fInstance.release();
+    fpInstance = 0;
 }
 
 void  G4AllITManager::UpdatePositionMap()

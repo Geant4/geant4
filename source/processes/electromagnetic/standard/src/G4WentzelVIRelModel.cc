@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WentzelVIRelModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +63,8 @@
 #include "G4LossTableManager.hh"
 #include "G4Pow.hh"
 #include "G4NistManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -285,7 +287,7 @@ G4double G4WentzelVIRelModel::ComputeGeomPathLength(G4double truelength)
       e1 = 0.5*(e1 + preKinEnergy);
       cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial);
       lambdaeff = GetTransportMeanFreePath(particle,e1);
-      zPathLength = lambdaeff*(1.0 - exp(-tPathLength/lambdaeff));
+      zPathLength = lambdaeff*(1.0 - G4Exp(-tPathLength/lambdaeff));
     }
   } else { lambdaeff = DBL_MAX; }
   //G4cout<<"Comp.geom: zLength= "<<zPathLength<<" tLength= "<<tPathLength<<G4endl;
@@ -313,7 +315,7 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
   } else {
 
     // small step use only single scattering
-    const G4double singleScatLimit = 1.0e-7;
+    static const G4double singleScatLimit = 1.0e-7;
     if(geomStepLength < lambdaeff*singleScatLimit*(1.0 - cosTetMaxNuc)) {
       singleScatteringMode = true;
       cosThetaMin = 1.0;
@@ -339,7 +341,7 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
 	lambdaeff = GetTransportMeanFreePath(particle,e1);
 	tau = zPathLength/lambdaeff;
       
-	if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
+	if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
 	else               { tPathLength = currentRange; }
       }
     }
@@ -365,7 +367,7 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
       lambdaeff = 1./cross; 
       G4double tau = zPathLength*cross;
       if(tau < numlimit) { tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); } 
-      else if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
+      else if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
       else                    { tPathLength = currentRange; }
 
       if(tPathLength > currentRange) { tPathLength = currentRange; }
@@ -385,7 +387,7 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreeVector& 
-G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
+G4WentzelVIRelModel::SampleScattering(const G4ThreeVector& oldDirection,
 				      G4double safety)
 {
   fDisplacement.set(0.0,0.0,0.0);
@@ -393,8 +395,7 @@ G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
   //	 << particle->GetParticleName() << G4endl;
 
   // ignore scattering for zero step length and energy below the limit
-  G4double tkin = dynParticle->GetKineticEnergy();
-  if(tkin < lowEnergyLimit || tPathLength <= 0.0) 
+  if(preKinEnergy < lowEnergyLimit || tPathLength <= 0.0) 
     { return fDisplacement; }
   
   G4double invlambda = 0.0;
@@ -411,7 +412,7 @@ G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
   // step limit due msc
   G4double x0 = tPathLength;
   //  const G4double thinlimit = 0.5; 
-  const G4double thinlimit = 0.1; 
+  static const G4double thinlimit = 0.1; 
   G4int nMscSteps = 1;
   // large scattering angle case - two step approach
   if(tPathLength*invlambda > thinlimit && safety > tlimitminfix) { 
@@ -421,7 +422,7 @@ G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // step limit due to single scattering
   G4double x1 = 2*tPathLength;
-  if(0.0 < xtsec) { x1 = -log(G4UniformRand())/xtsec; }
+  if(0.0 < xtsec) { x1 = -G4Log(G4UniformRand())/xtsec; }
 
   const G4ElementVector* theElementVector = 
     currentMaterial->GetElementVector();
@@ -429,7 +430,6 @@ G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // geometry
   G4double sint, cost, phi;
-  G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector temp(0.0,0.0,1.0);
 
   // current position and direction relative to the end point
@@ -480,7 +480,7 @@ G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
       dir = temp;
 
       // new proposed step length
-      x1  = -log(G4UniformRand())/xtsec; 
+      x1  = -G4Log(G4UniformRand())/xtsec; 
       x2 -= step; 
       if(x2 <= 0.0) { --nMscSteps; }
 
@@ -500,8 +500,8 @@ G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
         if(z0 > 5.0) { z = G4UniformRand(); }
 	else {
 	  G4double zzz = 0.0;
-	  if(z0 > 0.01) { zzz = exp(-1.0/z0); }
-	  z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand());
+	  if(z0 > 0.01) { zzz = G4Exp(-1.0/z0); }
+	  z = -z0*G4Log(1.0 - (1.0 - zzz)*G4UniformRand());
 	  //  /(1.0 - (1.0/z0 + 1.0)*zzz); 
 	}
 

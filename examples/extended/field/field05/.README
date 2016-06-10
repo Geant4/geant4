@@ -11,9 +11,9 @@
  applying an electric field.
 
  - 1) beta is muon velocity,
- - 2) B is an uniform magnetic field and \vec{beta}.\vec{B}=0,
+ - 2) B is an uniform magnetic field and vec{beta}.vec{B}=0,
     "." means scalar product,
- - 3) Radial electric field (E) in the lab frame and \vec{beta}.\vec{E}=0,
+ - 3) Radial electric field (E) in the lab frame and vec{beta}.vec{E}=0,
  - 4) a=(g-2)/2 is muon anomalous magnetic moment.
 
  The required electric field to cancel the g-2 precession is,

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4IntersectionSolid.cc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -51,8 +51,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "HepPolyhedronProcessor.h"
-#include "G4NURBS.hh"
-// #include "G4NURBSbox.hh"
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -546,16 +544,4 @@ G4IntersectionSolid::CreatePolyhedron () const
   G4Polyhedron* result = new G4Polyhedron(*top);
   if (processor.execute(*result)) { return result; }
   else { return 0; }
-}
-
-/////////////////////////////////////////////////////////
-//
-//
-
-G4NURBS*      
-G4IntersectionSolid::CreateNURBS      () const 
-{
-  // Take into account boolean operation - see CreatePolyhedron.
-  // return new G4NURBSbox (1.0, 1.0, 1.0);
-  return 0;
 }

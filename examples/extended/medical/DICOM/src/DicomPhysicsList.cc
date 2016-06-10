@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomPhysicsList.cc 75679 2013-11-05 09:08:41Z gcosmo $
+//
 /// \file medical/DICOM/src/DicomPhysicsList.cc
 /// \brief Implementation of the DicomPhysicsList class
 //
-// $Id$
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -171,23 +172,28 @@ void DicomPhysicsList::ConstructEM()
     if (particleName == "gamma") {
 
 
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
+      G4PhotoElectricEffect* thePhotoElectricEffect =
+                                                   new G4PhotoElectricEffect();
+      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel
+                                         = new G4LivermorePhotoElectricModel();
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermoreComptonModel* theLivermoreComptonModel = new G4LivermoreComptonModel();
+      G4LivermoreComptonModel* theLivermoreComptonModel =
+                                                 new G4LivermoreComptonModel();
       theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
       pmanager->AddDiscreteProcess(theComptonScattering);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
+      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel
+                                       = new G4LivermoreGammaConversionModel();
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
       pmanager->AddDiscreteProcess(theGammaConversion);
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+      G4LivermoreRayleighModel* theRayleighModel
+                                              = new G4LivermoreRayleighModel();
       theRayleigh->AddEmModel(0, theRayleighModel);
       pmanager->AddDiscreteProcess(theRayleigh);
       
@@ -201,7 +207,8 @@ void DicomPhysicsList::ConstructEM()
       
       // Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->AddEmModel(0, new G4LivermoreIonisationModel(), new G4UniversalFluctuation() );
+      eIoni->AddEmModel(0, new G4LivermoreIonisationModel(),
+                           new G4UniversalFluctuation() );
       eIoni->SetStepFunction(0.2, 100*um); //     
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
       
@@ -262,19 +269,18 @@ void DicomPhysicsList::ConstructEM()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4HadronElasticProcess.hh"
-#include "G4LElastic.hh"
+#include "G4HadronElastic.hh"
 
 #include "G4AlphaInelasticProcess.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4TripathiCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
-#include "G4LEAlphaInelastic.hh"
 
 void DicomPhysicsList::ConstructHad()
 {
 
   G4HadronElasticProcess * theElasticProcess = new G4HadronElasticProcess;
-  theElasticProcess->RegisterMe( new G4LElastic() );
+  theElasticProcess->RegisterMe( new G4HadronElastic() );
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
@@ -282,47 +288,41 @@ void DicomPhysicsList::ConstructHad()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pManager = particle->GetProcessManager();
 
-    if (particle->GetParticleName() == "alpha") 
-       { 
+    if (particle->GetParticleName() == "alpha") { 
 
-           // INELASTIC SCATTERING
-          // Binary Cascade
-            G4BinaryLightIonReaction* theBC = new G4BinaryLightIonReaction();
-            theBC -> SetMinEnergy(80.*MeV);
-            theBC -> SetMaxEnergy(40.*GeV);
+      // INELASTIC SCATTERING
+      // Binary Cascade
+      G4BinaryLightIonReaction* theBC = new G4BinaryLightIonReaction();
+      // DHW - change lower limit from 80 MeV to zero because
+      //       G4LEDeuteronInelastic is deprecated
+      theBC->SetMinEnergy(0.*MeV);
+      theBC->SetMaxEnergy(40.*GeV);
   
-            // TRIPATHI CROSS SECTION
-            // Implementation of formulas in analogy to NASA technical paper 3621 by 
-            // Tripathi, et al. Cross-sections for ion ion scattering
-            G4TripathiCrossSection* TripathiCrossSection = new G4TripathiCrossSection;
+      // TRIPATHI CROSS SECTION
+      // Implementation of formulas in analogy to NASA technical paper 3621 by 
+      // Tripathi, et al. Cross-sections for ion ion scattering
+      G4TripathiCrossSection* TripathiCrossSection = new G4TripathiCrossSection;
   
-            // IONS SHEN CROSS SECTION
-            // Implementation of formulas 
-            // Shen et al. Nuc. Phys. A 491 130 (1989) 
-            // Total Reaction Cross Section for Heavy-Ion Collisions
-            G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
+      // IONS SHEN CROSS SECTION
+      // Implementation of formulas 
+      // Shen et al. Nuc. Phys. A 491 130 (1989) 
+      // Total Reaction Cross Section for Heavy-Ion Collisions
+      G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
   
-            // Final state production model for Alpha inelastic scattering below 20 GeV
-            G4LEAlphaInelastic* theAIModel = new G4LEAlphaInelastic;
-            theAIModel -> SetMaxEnergy(100.*MeV);
+      G4AlphaInelasticProcess* theIPalpha = new G4AlphaInelasticProcess;                  
+      theIPalpha->AddDataSet(TripathiCrossSection);
+      theIPalpha->AddDataSet(aShen);
 
-          G4AlphaInelasticProcess * theIPalpha = new G4AlphaInelasticProcess;                  
-          theIPalpha->AddDataSet(TripathiCrossSection);
-          theIPalpha->AddDataSet(aShen);
-
-          // Register the Alpha Inelastic and Binary Cascade Model
-          theIPalpha->RegisterMe(theAIModel);
-          theIPalpha->RegisterMe(theBC);
+      // Register the Binary Cascade Model
+      theIPalpha->RegisterMe(theBC);
           
-          // Activate the alpha inelastic scattering using the alpha inelastic and binary cascade model
-          pManager -> AddDiscreteProcess(theIPalpha);
+      // Activate the alpha inelastic scattering using the binary cascade model
+      pManager -> AddDiscreteProcess(theIPalpha);
           
-          // Activate the Hadron Elastic Process
-          pManager -> AddDiscreteProcess(theElasticProcess); 
-            
-       }
+      // Activate the Hadron Elastic Process
+      pManager -> AddDiscreteProcess(theElasticProcess);           
+    }
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

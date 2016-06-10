@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GMocrenFileSceneHandler.cc 71551 2013-06-18 07:27:24Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -128,25 +128,29 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
     kFlagInModeling(false),
     kFlagSaving_g4_gdd(false),
     kFlagParameterization(0),
-    kFLagProcessedInteractiveScorer(false) {
+    kFlagProcessedInteractiveScorer(false) {
 
   // g4.gdd filename and its directory
-  if(getenv("G4GMocrenFile_DEST_DIR") == NULL) {
+  if(std::getenv("G4GMocrenFile_DEST_DIR") == NULL) {
     kGddDestDir[0] = '\0';
     //std::strcpy(kGddDestDir , "");                    // output dir
     //std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename
-    std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME)); // filename
+    std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME,
+		 std::strlen(DEFAULT_GDD_FILE_NAME));   // filename
   } else {
-    const char * env = getenv("G4GMocrenFile_DEST_DIR");
-    std::strncpy(kGddDestDir, env, std::strlen(env)); // output dir
-    std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME)); // filename 
+    const char * env = std::getenv("G4GMocrenFile_DEST_DIR");
+    std::strncpy(kGddDestDir, env, std::strlen(env));  // output dir
+    std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME,
+		 std::strlen(DEFAULT_GDD_FILE_NAME));  // filename 
   }
 		
   // maximum number of g4.gdd files in the dest directory
   kMaxFileNum = FR_MAX_FILE_NUM ; // initialization
   if ( std::getenv( "G4GMocrenFile_MAX_FILE_NUM" ) != NULL ) {	
-		
-    std::sscanf( getenv("G4GMocrenFile_MAX_FILE_NUM"), "%d", &kMaxFileNum ) ;
+    char * pcFileNum = getenv("G4GMocrenFile_MAX_FILE_NUM");
+    char c10FileNum[10];
+    std::strncpy(c10FileNum, pcFileNum, 10);
+    kMaxFileNum = std::atoi(c10FileNum);
 
   } else {
     kMaxFileNum = FR_MAX_FILE_NUM ;
@@ -169,6 +173,8 @@ G4GMocrenFileSceneHandler::~G4GMocrenFileSceneHandler ()
     // close g4.gdd
     GFEndModeling();
   }
+  if(kgMocrenIO != NULL) delete kgMocrenIO;
+
 }
 
 //----- initialize all parameters
@@ -226,7 +232,8 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
     // check validity of the file name
     std::ifstream fin(kGddFileName); 
     if(GFDEBUG)
-      G4cout << "FILEOPEN: " << i << " : " << kGddFileName << fin.fail() << G4endl;
+      G4cout << "FILEOPEN: " << i << " : " << kGddFileName << fin.fail()
+	     << G4endl;
     if(!fin) { 
       // new file	
       fin.close();
@@ -611,20 +618,6 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
   }
 
 } // G4GMocrenFileSceneHandler::AddPrimitive (polyline)
-
-
-//----- Add nurbes
-void G4GMocrenFileSceneHandler::AddPrimitive (const G4NURBS&)
-{
-  //----- 
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
-    G4cout << "***** AddPrimitive( G4NURBS )" << G4endl;
-
-  //----- Initialize if necessary
-  GFBeginModeling();
-
-}
-
 
 
 //----- Add text
@@ -1243,7 +1236,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 
 
   // processing geometry construction based on the interactive PS
-  if(!kFLagProcessedInteractiveScorer) {
+  if(!kFlagProcessedInteractiveScorer) {
 
 
     // get the dimension of the geometry defined in G4VScoringMesh
@@ -1339,7 +1332,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 
 
     //
-    kFLagProcessedInteractiveScorer = true;
+    kFlagProcessedInteractiveScorer = true;
   }  
 
 
@@ -1569,7 +1562,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
 	("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
 	 "gMocren0013", FatalException, "Not a G4TrajectoriesModel.");
     } else {
-      traj.DrawTrajectory(pTrModel->GetDrawingMode());
+      traj.DrawTrajectory();
 
       const G4VTrajectory * trj = pTrModel->GetCurrentTrajectory();
       G4cout << "------ track" << G4endl;

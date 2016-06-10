@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Region.cc 67975 2013-03-13 10:19:44Z gcosmo $
 //
 // 
 // class G4Region Implementation
@@ -40,6 +40,26 @@
 #include "G4VUserRegionInformation.hh"
 #include "G4Material.hh"
 
+// This static member is thread local. For each thread, it points to the
+// array of G4RegionData instances.
+//
+template <class G4RegionData> G4ThreadLocal
+G4RegionData* G4GeomSplitter<G4RegionData>::offset = 0;  
+
+// This new field helps to use the class G4RegionManager
+//
+G4RegionManager G4Region::subInstanceManager;
+
+// *******************************************************************
+// GetSubInstanceManager:
+//  - Returns the private data instance manager.
+// *******************************************************************
+//
+const G4RegionManager& G4Region::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
+
 // *******************************************************************
 // Constructor:
 //  - Adds self to region Store
@@ -47,10 +67,14 @@
 //
 G4Region::G4Region(const G4String& pName)
   : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
-    fFieldManager(0), fFastSimulationManager(0), fWorldPhys(0),
-    fRegionalSteppingAction(0),
+    fFieldManager(0), fWorldPhys(0),
     fInMassGeometry(false), fInParallelGeometry(false)
 {
+
+  instanceID = subInstanceManager.CreateSubInstance();
+  G4MT_fsmanager = 0;
+  G4MT_rsaction = 0;
+
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
   {
@@ -74,10 +98,13 @@ G4Region::G4Region(const G4String& pName)
 //
 G4Region::G4Region( __void__& )
   : fName(""), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
-    fFieldManager(0), fFastSimulationManager(0), fWorldPhys(0),
-    fRegionalSteppingAction(0),
+    fFieldManager(0), fWorldPhys(0),
     fInMassGeometry(false), fInParallelGeometry(false)
 {
+  instanceID = subInstanceManager.CreateSubInstance();
+  G4MT_fsmanager = 0;
+  G4MT_rsaction = 0;
+
   // Register to store
   //
   G4RegionStore::GetInstance()->Register(this);
@@ -360,7 +387,7 @@ void G4Region::ClearFastSimulationManager()
   {
     if (isUnique)
     {
-      fFastSimulationManager = parent->GetFastSimulationManager();
+      G4MT_fsmanager = parent->GetFastSimulationManager();
     }
     else
     {
@@ -372,12 +399,12 @@ void G4Region::ClearFastSimulationManager()
               << "to have fast-simulation assigned.";
       G4Exception("G4Region::ClearFastSimulationManager()",
                   "GeomMgt1002", JustWarning, message);
-      fFastSimulationManager = 0;
+      G4MT_fsmanager = 0;
     }
   }
   else
   {
-    fFastSimulationManager = 0;
+    G4MT_fsmanager = 0;
   }
 }
 

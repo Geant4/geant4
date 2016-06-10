@@ -85,11 +85,11 @@ G4bool G4hICRU49p::HasMaterial(const G4Material* material)
 
   // ICRU Report N49, 1993. Power's model for He.
   const size_t numberOfMolecula = 11 ;    
-  static G4String name[numberOfMolecula] = {
-    "Al_2O_3",                 "CO_2",                      "CH_4",  
+  static const G4String name[numberOfMolecula] = {
+    "Al_2O_3",                 "CO_2",            "CH_4",  
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",  
-    "C_3H_8",                  "SiO_2",                     "H_2O",
-    "H_2O-Gas",                "Graphite" } ;      
+    "C_3H_8",          "SiO_2",                  "H_2O",
+    "H_2O-Gas",                "Graphite"};      
   
   // Special treatment for water in gas state
   const G4State theState = material->GetState() ;
@@ -129,7 +129,7 @@ G4double G4hICRU49p::StoppingPower(const G4Material* material,
 
     G4double T = kineticEnergy/(keV*protonMassAMU) ; 
 
-     static G4double a[11][5] = {
+     static const G4double a[11][5] = {
    {1.187E+1, 1.343E+1, 1.069E+4, 7.723E+2, 2.153E-2}, 
    {7.802E+0, 8.814E+0, 8.303E+3, 7.446E+2, 7.966E-3}, 
    {7.294E+0, 8.284E+0, 5.010E+3, 4.544E+2, 8.153E-3}, 
@@ -194,7 +194,7 @@ G4double G4hICRU49p::ElectronicStoppingPower(G4double z,
 
   G4double T = kineticEnergy/(keV*protonMassAMU) ; 
   
-  static G4double a[92][5] = {
+  static const G4double a[92][5] = {
    {1.254E+0, 1.440E+0, 2.426E+2, 1.200E+4, 1.159E-1},
    {1.229E+0, 1.397E+0, 4.845E+2, 5.873E+3, 5.225E-2},
    {1.411E+0, 1.600E+0, 7.256E+2, 3.013E+3, 4.578E-2},

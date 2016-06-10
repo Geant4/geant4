@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-10-26 09:33:11 gcosmo Exp $
+# $Id: sources.cmake 73616 2013-09-02 10:18:24Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -22,6 +22,7 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -29,6 +30,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
 #

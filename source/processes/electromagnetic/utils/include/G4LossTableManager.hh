@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LossTableManager.hh 76333 2013-11-08 14:31:50Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 // 18-06-07 Move definition of msc parameters to G4EmProcessOptions (V.Ivanchenko)
 // 12-04-10 Added PreparePhsyicsTables and BuildPhysicsTables entries (V.Ivanchenko)
+// 04-06-13 Adaptation for MT mode, new method LocalPhysicsTables (V.Ivanchenko)  
 //
 // Class Description:
 //
@@ -80,7 +81,7 @@
 #include <vector>
 #include "globals.hh"
 #include "G4VEnergyLossProcess.hh"
-#include "G4EnergyLossTables.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 class G4PhysicsTable;
 class G4MaterialCutsCouple;
@@ -99,6 +100,8 @@ class G4Region;
 class G4LossTableManager
 {
 
+friend class G4ThreadLocalSingleton<G4LossTableManager>;
+
 public:
 
   static G4LossTableManager* Instance();
@@ -116,19 +119,22 @@ public:
   //-------------------------------------------------
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-			   G4VEnergyLossProcess* p);
+			   G4VEnergyLossProcess* p, G4bool theMaster);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-			   G4VEmProcess* p);
+			   G4VEmProcess* p, G4bool theMaster);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-			   G4VMultipleScattering* p);
+			   G4VMultipleScattering* p, G4bool theMaster);
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle, 
 			 G4VEnergyLossProcess* p);
 
+  void LocalPhysicsTables(const G4ParticleDefinition* aParticle, 
+			  G4VEnergyLossProcess* p);
+  
   //-------------------------------------------------
   // Run time access to DEDX, range, energy for a given particle, 
   // energy, and G4MaterialCutsCouple
@@ -193,9 +199,6 @@ public:
 
   void DeRegister(G4VEmFluctuationModel* p);
 
-  void RegisterIon(const G4ParticleDefinition* aParticle, 
-		   G4VEnergyLossProcess* p);
-
   void RegisterExtraParticle(const G4ParticleDefinition* aParticle, 
 			     G4VEnergyLossProcess* p);
 
@@ -253,6 +256,8 @@ public:
 
   G4bool SplineFlag() const;
 
+  G4bool IsMaster() const;
+
   G4double BremsstrahlungTh() const;
 
   G4double FactorForAngleLimit() const;
@@ -306,7 +311,7 @@ private:
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
 
-  static G4LossTableManager* theInstance;
+  //static G4ThreadLocal G4LossTableManager* theInstance;
 
   typedef const G4ParticleDefinition* PD;
 
@@ -329,6 +334,7 @@ private:
   G4VEnergyLossProcess* currentLoss;
   PD                    currentParticle;
   PD                    theElectron;
+  PD                    theGenericIon;
   PD                    firstParticle;
 
   G4int n_loss;
@@ -349,6 +355,7 @@ private:
   G4bool stepFunctionActive;
   G4bool flagLPM;
   G4bool splineFlag;
+  G4bool isMaster;
 
   G4double minSubRange;
   G4double maxRangeVariation;

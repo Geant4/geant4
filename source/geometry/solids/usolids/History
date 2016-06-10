@@ -1,0 +1,67 @@
+$Id: History 74238 2013-10-02 08:51:17Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all directory-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 29, 2013  G.Cosmo                geom-usolids-V09-06-11
+- Corrected library name in GNUmakefile and fixed comment in sources.cmake.
+
+November 21, 2013  G.Cosmo                geom-usolids-V09-06-10
+- Fixed compilation warning for type conversion in UVCSGfaceted
+  constructor.
+
+November 20, 2013  T.Mikitina             geom-usolids-V09-06-09
+- Fixed Coverity defects.
+
+November 14, 2013  T.Mikitina             geom-usolids-V09-06-08
+- Corrected visualization methods in bridge G4USolid.
+- Corrected returned type string from USolids and added Reset()
+  method to UPolycone.
+
+November 13, 2013  G.Cosmo                geom-usolids-V09-06-07
+- Removed useless dependency on UMultiUnion in UPolycone.
+
+November 13, 2013  G.Cosmo                geom-usolids-V09-06-06
+- Leave out UMultiUnion, as not yet ready for release.
+
+November 12, 2013  T.Nikitina             geom-usolids-V09-06-05
+- Corrected passing of parameters for normal in G4USolid::DistanceToOut(p,v).
+
+November 7, 2013  G.Cosmo                 geom-usolids-V09-06-04
+- Moved wrappers to associated modules.
+- Added missing accessor method to UTrd.
+
+November 5, 2013  G.Cosmo                 geom-usolids-V09-06-03
+- Code cleanup and added banners to USolids files.
+
+November 1, 2013  G.Cosmo                 geom-usolids-V09-06-02
+- Fixed compilation error and warnings on SLC6.
+
+November 1, 2013  G.Cosmo                 geom-usolids-V09-06-01
+- Added wrappers for Ubox, Ucons, UGenericPolycone, UMultiUnion, UOrb,
+  UPolycone, UPolyhedra, USphere, UTet, UTrd, UTubs.
+  Removed all other shapes not covered by the wrappers (will be included
+  in a later stage).
+- Updated CMake script accordingly.
+
+October 29, 2013  G.Cosmo                 geom-usolids-V09-06-00
+- Imported classes from the AIDA Unified Solids Library
+  (see https://aidasoft.web.cern.ch/USolids).
+  Shapes provided: Ubox, Ucons, UGenericPolycone, UMultiUnion, UOrb,
+  UPolycone, UPolyhedra, USphere, UTet, UTrd, UTubs (including also
+  shapes not foreseen to be wrapped as first stage).
+- Includes bridge class G4USolid and first wrapper class G4UBox.

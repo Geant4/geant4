@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VUserPhysicsList.cc,v 1.5 2006-06-29 15:35:30 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VUserPhysicsList.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VUserPhysicsList.cc
 //
@@ -75,10 +74,10 @@ void (G4VUserPhysicsList::*f2_SetParticleCuts)(G4double,
 
 // StorePhysicsTable
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_StorePhysicsTable,
-				       StorePhysicsTable, 0, 1);
+				                               StorePhysicsTable, 0, 1)
 // SetParticleCuts
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetParticleCuts,
-				       SetParticleCuts, 2, 3);
+				                               SetParticleCuts, 2, 3)
 
 }
 
@@ -104,10 +103,10 @@ void export_G4VUserPhysicsList()
     // ---
     .def("StorePhysicsTable",     &G4VUserPhysicsList::StorePhysicsTable,
 	 f_StorePhysicsTable())
-    .def("IsPhysicsTableRetrieved", 
+    .def("IsPhysicsTableRetrieved",
          &G4VUserPhysicsList::IsPhysicsTableRetrieved)
     .def("IsStoredInAscii",       &G4VUserPhysicsList::IsStoredInAscii)
-    .def("GetPhysicsTableDirectory", 
+    .def("GetPhysicsTableDirectory",
          &G4VUserPhysicsList::GetPhysicsTableDirectory,
          return_value_policy<return_by_value>())
     .def("SetStoredInAscii",      &G4VUserPhysicsList::SetStoredInAscii)
@@ -116,7 +115,7 @@ void export_G4VUserPhysicsList()
     .def("DumpList",              &G4VUserPhysicsList::DumpList)
 
     .def("DumpCutValuesTable",    &G4VUserPhysicsList::DumpCutValuesTable)
-    .def("DumpCutValuesTableIfRequested", 
+    .def("DumpCutValuesTableIfRequested",
          &G4VUserPhysicsList::DumpCutValuesTableIfRequested)
     .def("SetCutValue",           f1_SetCutValue)
     .def("SetCutValue",           f2_SetCutValue)

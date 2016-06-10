@@ -26,9 +26,7 @@
 /// \file runAndEvent/RE03/include/RE03DetectorConstruction.hh
 /// \brief Definition of the RE03DetectorConstruction class
 //
-//
-// $Id$
-//
+// $Id: RE03DetectorConstruction.hh 68780 2013-04-05 13:06:07Z gcosmo $
 // 
 
 #ifndef RE03DetectorConstruction_h
@@ -48,6 +46,7 @@ class RE03DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
      
   private:
     void DefineMaterials();

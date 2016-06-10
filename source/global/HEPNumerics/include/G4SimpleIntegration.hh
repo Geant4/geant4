@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SimpleIntegration.hh 69546 2013-05-08 09:50:34Z gcosmo $
 //
 // Class description:
 //
@@ -114,7 +114,7 @@ class G4SimpleIntegration
 
         function fFunction ;
         G4double fTolerance ;
-        static G4int fMaxDepth ;
+        const G4int fMaxDepth ;
 };
 
 #endif

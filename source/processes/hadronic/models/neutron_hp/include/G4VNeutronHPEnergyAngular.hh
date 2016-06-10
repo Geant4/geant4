@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 080718 Add ClearHistories() method by T. Koi
 //
@@ -51,7 +50,7 @@ class G4VNeutronHPEnergyAngular
   
   public:
   
-  virtual void Init(std::ifstream & aDataFile) = 0;
+  virtual void Init(std::istream & aDataFile) = 0;
   virtual G4ReactionProduct * Sample(G4double anEnergy, 
                                      G4double massCode, 
                                      G4double mass) = 0;

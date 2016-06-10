@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2011-01-05 19:02:39 vnivanch Exp $
+$Id: History 77600 2013-11-26 17:07:41Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,79 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+26-11-13 mma (testem5-V09-06-18)
+- revert to testem5-V09-06-16
 
+26-11-13 V.Ivanchenko (testem5-V09-06-17)
+- DetectorConstruction - use UI to set primary generator position
+
+25-11-13 I.Hrivnacova (testem5-V09-06-16)
+- Put back cleaning volumes and solid stores in ConstructGeometry()
+
+24-11-13 I.Hrivnacova (testem5-V09-06-15)
+- Fixed DetectorConstruction:
+  Added calling ComputeCalorParameters() in methods which modify
+  calorimeter parameters; this makes sure that correct values are used even
+  before ReinitializeGeometry() really happens
+
+21-11-13 Andrea Dotti (testem5-V09-06-14)
+- Use G4GlobalMagFieldMessenger instead of local one
+
+20-11-13 Andrea Dotti (testem5-V09-06-13)
+- Introduced new messenger FieldMessenger (thread-private)
+- Use new G4RunManager::ReinitializeGeometry (requires run-V09-06-128)
+  to trigger geometry rebuild when geometry changes
+- Remove DetectorConstruction::Update and corresponding UI command that
+  is not needed anymore
+- Set "ToBeBroadcasted == false" for UI commands that modify physics lsit
+  and detector since these should be executed only by master     
+
+19-11-13 mma (testem5-V09-06-12)
+- reverted to tag 10
+ 
+18-11-13 V.Ivanchenko (testem5-V09-06-11)
+- DetectorConstruction - fixed UpdateGeometry method 
+     
+09-11-13 mma (testem5-V09-06-10) 
+- MT: commit ActionInitialization, Run
+     
+09-11-13 mma (testem5-V09-06-09) 
+- MT: TestEm5.cc + ActionInitialization + RunAction + Run
+  --> EventAction, TrackingAction, StackingAction
+- remove EventMessenger
+- remove hbook tools
+     
+28-07-13 P.Gumplinger (testem5-V09-06-08)
+- fix clang32 compilation warning
+
+11-07-13 I.Hrivnacova (testem5-V09-06-07) 
+- Updated CMakeLists.txt and SharedFilesList.txt for added classes
+  in Hbook analysis code
+- In HistoManager: use new analysis manager method SetH1Activation()   
+     
+18-06-13 mma (testem5-V09-06-06)
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep() .
+
+06-06-13 mma (testem5-V09-06-05)
+- Cosmetic in SteppingAction.
+     
+14-04-13 I.Hrivnacova (testem5-V09-06-04)
+- Removed ExG4HbookAnalysisManager and related files and updated CMake/GNUmake
+  files to use it from extended/common
+       
+01-04-13 A. Dotti (testem5-V09-06-02,testem5-V09-06-03)
+- Change use of theParticleIterator -> aParticleIterator (needed for G4MT)
+     
+20-03-13 mma (testem5-V09-06-01)
+- PhysListEmStandard : use default G4UrbanMscModel
+
+13-02-13 I.Hrivnacova 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+11-12-12 V.Ivant (testem5-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
+          
 15-11-12 I. Hrivnacova (testem5-V09-05-12)
 - Synchronized .README with changes in README
 

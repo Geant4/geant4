@@ -13,6 +13,32 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 26, 2013 M. Asai (exampleRE04-V09-06-06)
+- Remove old local physics list and use FTFP_BERT and physics
+  constructor for G4ParallelWOrldProcess.
+
+Nov 21, 2013 M. Asai (exampleRE04-V09-06-05)
+- Fix incorrect material names used in the parallel world.
+
+Oct 25, 2013 M. Asai (exampleRE04-V09-06-04)
+- MT migration
+
+Aug 27, 2013 G. Cosmo (exampleRE04-V09-06-03)
+- Added G4Ellipsoid among solids enabled for parameterisation
+
+Apr 05, 2013 A. Dotti (exampleRE04-V09-06-02)
+  Migration to new API of physics list needed for G4MT  
+
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members initialization)
+
+Feb 01, 2013 V.Ivanchenko (exampleRE04-V09-06-01)
+  Migration to new physics_lists directory structure
+
+Dec 02, 2012 J.Allison (exampleRE04-V09-06-00)
+  Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o RE04Trajectory.cc: Removed DrawTrajectory(G4int i_mode).
+
 Oct. 24, 2012 A.Ribon (exampleRE04-V09-05-01)
 - Migrated to the new stopping physics.
 

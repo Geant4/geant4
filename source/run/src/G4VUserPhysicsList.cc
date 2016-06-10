@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VUserPhysicsList.cc 73604 2013-09-02 09:31:25Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -44,14 +44,26 @@
 //       Modify PreparePhysicsList        18 Jan 2006 by H.Kurashige
 //       Added PhysicsListHelper           29 APr. 2011 H.Kurashige
 //       Added default impelmentation of SetCuts 10 June 2011 H.Kurashige 
-//           SetCuts is not 'pure virtual' any more 
+//           SetCuts is not 'pure virtual' any more
+//       Transformation for G4MT         26 Mar 2013 A. Dotti
+//           PL is shared by threads. Adding a method for workers
+//           To initialize thread specific data
 // ------------------------------------------------------------
 
+#include <iomanip>
+#include <fstream>
+
+#include "G4PhysicsListHelper.hh"
 #include "G4VUserPhysicsList.hh"
+
+//Andrea Dotti (Jan 13, 2013), transformation for G4MT
+#include "G4VMultipleScattering.hh"
+#include "G4VEnergyLossProcess.hh"
+ 
 
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4PhysicsListHelper.hh"
+#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTable.hh"
@@ -66,9 +78,30 @@
 #include "G4ProductionCuts.hh"
 #include "G4MaterialCutsCouple.hh"
 
-#include "G4ios.hh"
-#include <iomanip>
-#include <fstream>
+// This static member is thread local. For each thread, it holds the array
+// size of G4VUPLData instances.
+//
+template <class G4VUPLData> G4ThreadLocal
+G4int G4VUPLSplitter<G4VUPLData>::slavetotalspace = 0;
+
+// This static member is thread local. For each thread, it points to the
+// array of G4VUPLData instances.
+//
+template <class G4VUPLData> G4ThreadLocal
+G4VUPLData* G4VUPLSplitter<G4VUPLData>::offset = 0;
+
+// This field helps to use the class G4VUPLManager
+//
+G4VUPLManager G4VUserPhysicsList::subInstanceManager;
+
+void G4VUPLData::initialize()
+{
+    _theParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
+    _theMessenger = 0;
+    _thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+    _fIsPhysicsTableBuilt = false;
+    _fDisplayThreshold = 0;
+}
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
@@ -80,16 +113,17 @@ G4VUserPhysicsList::G4VUserPhysicsList()
    fIsCheckedForRetrievePhysicsTable(false),
    fIsRestoredCutValues(false),
    directoryPhysicsTable("."),
-   fDisplayThreshold(0),
-   fIsPhysicsTableBuilt(false),
+   //fDisplayThreshold(0),
+   //fIsPhysicsTableBuilt(false),
    fDisableCheckParticleList(false)
 {
+    g4vuplInstanceID = subInstanceManager.CreateSubInstance(); //AND
   // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
 
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
-  theParticleIterator = theParticleTable->GetIterator();
+  //theParticleIterator = theParticleTable->GetIterator();
 
   // pointer to the cuts table
   fCutsTable =  G4ProductionCutsTable::GetProductionCutsTable();
@@ -98,20 +132,33 @@ G4VUserPhysicsList::G4VUserPhysicsList()
   fCutsTable->SetEnergyRange(0.99*keV, 100*TeV);
 
   // UI Messenger
-  theMessenger = new G4UserPhysicsListMessenger(this);
+  //theMessenger = new G4UserPhysicsListMessenger(this);
+    G4MT_theMessenger = new G4UserPhysicsListMessenger(this); //AND
  
   // PhysicsListHelper
-  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-  thePLHelper->SetVerboseLevel(verboseLevel);
+  //thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  //thePLHelper->SetVerboseLevel(verboseLevel);
+    //G4MT_thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper(); //AND
+    G4MT_thePLHelper->SetVerboseLevel(verboseLevel); //AND
 
+    fIsPhysicsTableBuilt = false;
+    fDisplayThreshold = 0;
+
+}
+
+void G4VUserPhysicsList::InitializeWorker()
+{
+    //Remember messengers are per-thread, so this needs to be done by each worker
+    //and due to the presence of "this" cannot be done in G4VUPLData::initialize()
+    G4MT_theMessenger = new G4UserPhysicsListMessenger(this);
 }
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::~G4VUserPhysicsList()
 {
-  if (theMessenger != 0) {
-    delete theMessenger;
-    theMessenger = 0;
+  if (G4MT_theMessenger != 0) {
+    delete G4MT_theMessenger;
+    G4MT_theMessenger = 0;
   }
   RemoveProcessManager();
 
@@ -130,24 +177,29 @@ G4VUserPhysicsList::G4VUserPhysicsList(const G4VUserPhysicsList& right)
    fIsCheckedForRetrievePhysicsTable(right.fIsCheckedForRetrievePhysicsTable),
    fIsRestoredCutValues(right.fIsRestoredCutValues),
    directoryPhysicsTable(right.directoryPhysicsTable),
-   fDisplayThreshold(right.fDisplayThreshold),
-   fIsPhysicsTableBuilt(right.fIsPhysicsTableBuilt),
+   //fDisplayThreshold(right.fDisplayThreshold),
+   //fIsPhysicsTableBuilt(right.fIsPhysicsTableBuilt),
    fDisableCheckParticleList(right.fDisableCheckParticleList)
 {
+  g4vuplInstanceID = subInstanceManager.CreateSubInstance(); //AND
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
   theParticleIterator = theParticleTable->GetIterator();
-
   // pointer to the cuts table
   fCutsTable =  G4ProductionCutsTable::GetProductionCutsTable();
 
   // UI Messenger
-  theMessenger = new G4UserPhysicsListMessenger(this);
+  //theMessenger = new G4UserPhysicsListMessenger(this);
+  G4MT_theMessenger = new G4UserPhysicsListMessenger(this); //AND
  
   // PhysicsListHelper
-  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-  thePLHelper->SetVerboseLevel(verboseLevel);
-
+  //thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  //thePLHelper->SetVerboseLevel(verboseLevel);
+    G4MT_thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper(); //AND
+    G4MT_thePLHelper->SetVerboseLevel(verboseLevel); //AND
+    
+    fIsPhysicsTableBuilt = right.GetSubInstanceManager().offset[right.GetInstanceID()]._fIsPhysicsTableBuilt;
+    fDisplayThreshold = right.GetSubInstanceManager().offset[right.GetInstanceID()]._fDisplayThreshold;
 }
 
 
@@ -163,8 +215,10 @@ G4VUserPhysicsList & G4VUserPhysicsList::operator=(const G4VUserPhysicsList & ri
     fIsCheckedForRetrievePhysicsTable = right.fIsCheckedForRetrievePhysicsTable;
     fIsRestoredCutValues = right.fIsRestoredCutValues;
     directoryPhysicsTable = right.directoryPhysicsTable;
-    fDisplayThreshold = right.fDisplayThreshold;
-    fIsPhysicsTableBuilt = right.fIsPhysicsTableBuilt;
+    //fDisplayThreshold = right.fDisplayThreshold;
+      fIsPhysicsTableBuilt = right.GetSubInstanceManager().offset[right.GetInstanceID()]._fIsPhysicsTableBuilt;
+      fDisplayThreshold = right.GetSubInstanceManager().offset[right.GetInstanceID()]._fDisplayThreshold;
+      //fIsPhysicsTableBuilt = right.fIsPhysicsTableBuilt;
     fDisableCheckParticleList = right.fDisableCheckParticleList;
   }
   return *this;
@@ -172,111 +226,114 @@ G4VUserPhysicsList & G4VUserPhysicsList::operator=(const G4VUserPhysicsList & ri
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
-					   G4ProcessManager*     newManager)
+					   G4ProcessManager*    )
 {
   if (newParticle == 0) return;
-  if (newParticle->GetProcessManager() != 0) {
-#ifdef G4VERBOSE
-    if (verboseLevel >1){
-      G4cout << "G4VUserPhysicsList::AddProcessManager: "
-	     << newParticle->GetParticleName()
-	     << " already has ProcessManager " << G4endl;
-    }
-#endif
-    return;
-  }
-
-  // create new process manager if newManager  == 0
-  if (newManager  == 0){
-    // Add ProcessManager
-    if (newParticle->GetParticleType() == "nucleus") {
-      // Create a copy of the process manager of "GenericIon" in case of "nucleus"
-      G4ParticleDefinition* genericIon =
-	   (G4ParticleTable::GetParticleTable())->FindParticle("GenericIon");
-
-      if (genericIon != 0) {
-	G4ProcessManager* ionMan = genericIon->GetProcessManager();
-	if (ionMan != 0) {
-	  newManager = new G4ProcessManager(*ionMan);
-	} else {
-	  // no process manager has been registered yet
-	  newManager = new G4ProcessManager(newParticle);
-	  G4Exception("G4VUserPhysicsList::AddProcessManager",
-		      "Run0251", RunMustBeAborted,
-		      "GenericIon has no ProcessMamanger"); 	
-	}
-      } else {
-	// "GenericIon" does not exist
-	newManager = new G4ProcessManager(newParticle);
-	G4Exception("G4VUserPhysicsList::AddProcessManager",
-		    "Run0252", RunMustBeAborted,
-		    "GenericIon does not exist"); 	
-      }
-
-    } else {
-      // create process manager for particles other than "nucleus"
-      newManager = new G4ProcessManager(newParticle);
-    }
-  }
-
-  // set particle type
-  newManager->SetParticleType(newParticle);
-
-  // add the process manager
-  newParticle->SetProcessManager(newManager);
-
-#ifdef G4VERBOSE
- if (verboseLevel >2){
-    G4cout << "G4VUserPhysicsList::AddProcessManager: "
-	   << "adds ProcessManager to "
-	   << newParticle->GetParticleName() << G4endl;
-    newManager->DumpInfo();
-  }
-#endif
-  if ( fIsPhysicsTableBuilt
-       && (newParticle->GetParticleType() == "nucleus")) {
-    PreparePhysicsTable(newParticle);
-    BuildPhysicsTable(newParticle);
-  }
+  G4Exception("G4VUserPhysicsList::AddProcessManager",
+	      "Run0252", JustWarning,
+	      "This method is obsolete"); 	
 }
 
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::InitializeProcessManager()
 {
+  //Request lock for particle table accesses. Some changes are inside
+  //this critical region.
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
+  G4ParticleTable::lockCount++;
+#endif
+  G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
+
     if  (pmanager==0) {
-      // create process manager if the particle has no its one
+      // create process manager if the particle does not have its own.
       pmanager = new G4ProcessManager(particle);
       particle->SetProcessManager(pmanager);
+      if( particle->GetMasterProcessManager() == 0 ) particle->SetMasterProcessManager(pmanager);
+#ifdef G4VERBOSE
+      if (verboseLevel >2){
+        G4cout << "G4VUserPhysicsList::InitializeProcessManager: creating ProcessManager to "
+          << particle->GetParticleName() << G4endl;
+      }
+#endif
     }
   }
+
+  if(gion)
+  {
+    G4ProcessManager* gionPM = gion->GetProcessManager();
+    // loop over all particles once again (this time, with all general ions)
+    theParticleIterator->reset(false);
+    while( (*theParticleIterator)() ){
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      if(particle->IsGeneralIon())
+      {
+        particle->SetProcessManager(gionPM);
+#ifdef G4VERBOSE
+        if (verboseLevel >2){
+          G4cout << "G4VUserPhysicsList::InitializeProcessManager: copying ProcessManager to "
+            << particle->GetParticleName() << G4endl;
+        }
+#endif
+      }
+    }
+  }
+
+  //release lock for particle table accesses.
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+#endif
+//  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+
 }
 
 /////////////////////////////////////////////////////////
 void G4VUserPhysicsList::RemoveProcessManager()
 {
+  //Request lock for particle table accesses. Some changes are inside
+  //this critical region.
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
+  G4ParticleTable::lockCount++;
+#endif
+//  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if  (pmanager!=0) delete pmanager;
-    particle->SetProcessManager(0);
+    if (particle->GetInstanceID() < G4ParticleDefinitionSubInstanceManager::slavetotalspace)
+    {
+      if(particle->GetParticleSubType()!="generic" || particle->GetParticleName()=="GenericIon")
+      {
+        G4ProcessManager* pmanager = particle->GetProcessManager();
+        if  (pmanager!=0) delete pmanager;
 #ifdef G4VERBOSE
-    if (verboseLevel >2){
-      G4cout << "G4VUserPhysicsList::RemoveProcessManager: "
-	     << "remove ProcessManager from "
-	     << particle->GetParticleName() << G4endl;
-    }
+        if (verboseLevel >2){
+          G4cout << "G4VUserPhysicsList::RemoveProcessManager: ";
+          G4cout  << "remove ProcessManager from ";
+          G4cout  << particle->GetParticleName() << G4endl;
+        }
 #endif
+      }
+      particle->SetProcessManager(0);
+    }
   }
-}
 
+  //release lock for particle table accesses.
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+#endif
+//  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+
+}
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::SetCuts()
@@ -507,7 +564,6 @@ void G4VUserPhysicsList::BuildPhysicsTable()
   G4ParticleDefinition* ProtonP = theParticleTable->FindParticle("proton");
   if(ProtonP) BuildPhysicsTable(ProtonP);
 
-
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -524,8 +580,14 @@ void G4VUserPhysicsList::BuildPhysicsTable()
 
 }
 ///////////////////////////////////////////////////////////////
+//Change in order to share physics tables for two kind of process.
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
+  if(!(particle->GetMasterProcessManager())) {
+    G4cout << "#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(" 
+           << particle->GetParticleName() << ") skipped..." << G4endl;
+    return;
+  }
   if (fRetrievePhysicsTable) {
     if ( !fIsRestoredCutValues){
       // fail to retreive cut tables
@@ -577,6 +639,10 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 		  "No process manager");
       return;
     }
+
+    //Get processes from master thread;
+    G4ProcessManager* pManagerShadow = particle->GetMasterProcessManager();
+
     G4ProcessVector* pVector = pManager->GetProcessList();
     if (!pVector) {
 #ifdef G4VERBOSE
@@ -591,15 +657,45 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 		  "No process Vector");
       return;
     }
-    for (G4int j=0; j < pVector->size(); ++j) {
-      (*pVector)[j]->BuildPhysicsTable(*particle);
+#ifdef G4VERBOSE
+    if (verboseLevel>2){
+      G4cout << "G4VUserPhysicsList::BuildPhysicsTable %%%%%% " << particle->GetParticleName() << G4endl;
+      G4cout << " ProcessManager : " << pManager << " ProcessManagerShadow : " << pManagerShadow << G4endl;
+      for(G4int iv1=0;iv1<pVector->size();iv1++)
+      { G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName() << G4endl; }
+      G4cout << "--------------------------------------------------------------" << G4endl;
+      G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
+
+      for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
+      { G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName() << G4endl; }
     }
-  }
+#endif
+    for (G4int j=0; j < pVector->size(); ++j) {
+        //Andrea July 16th 2013 : migration to new interface...
+        //Infer if we are in a worker thread or master thread
+        //Master thread is the one in which the process manager
+        // and process manager shadow pointers are the same
+        if ( pManagerShadow == pManager )
+        {
+            (*pVector)[j]->BuildPhysicsTable(*particle);
+        }
+        else
+        {
+            (*pVector)[j]->BuildWorkerPhysicsTable(*particle);
+        }
+
+    } //End loop on processes vector
+  } //End if short-lived
 }
 
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
 {
+  if(!(particle->GetMasterProcessManager())) {
+////    G4cout << "#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(" 
+////           << particle->GetParticleName() << ") skipped..." << G4endl;
+    return;
+  }
   // Prepare the physics tables for every process for this particle type
   // if particle is not ShortLived
   if(!particle->IsShortLived()) {
@@ -620,6 +716,11 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       return;
     }
     
+    //Get processes from master thread
+    G4ProcessManager* pManagerShadow = particle->GetMasterProcessManager();
+    //Andrea Dotti 15 Jan 2013: Change of interface of MSC
+    //G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
+
     G4ProcessVector* pVector = pManager->GetProcessList();
     if (!pVector) {
 #ifdef G4VERBOSE
@@ -635,11 +736,24 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       return;
     }
     for (G4int j=0; j < pVector->size(); ++j) {
-      (*pVector)[j]->PreparePhysicsTable(*particle);
-    }
-  }
+
+        //Andrea July 16th 2013 : migration to new interface...
+        //Infer if we are in a worker thread or master thread
+        //Master thread is the one in which the process manager
+        // and process manager shadow pointers are the same
+        if ( pManagerShadow == pManager )
+        {
+            (*pVector)[j]->PreparePhysicsTable(*particle);
+        }
+        else
+        {
+            (*pVector)[j]->PrepareWorkerPhysicsTable(*particle);
+        }
+    } //End loop on processes vector
+  } //End if pn ShortLived
 }
 
+//TODO Should we change this function?
 ///////////////////////////////////////////////////////////////
 void  G4VUserPhysicsList::BuildIntegralPhysicsTable(G4VProcess* process,
 						    G4ParticleDefinition* particle)
@@ -825,27 +939,27 @@ G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
 void G4VUserPhysicsList::CheckParticleList()
 {
   if (! fDisableCheckParticleList ){
-    thePLHelper->CheckParticleList();
+    G4MT_thePLHelper->CheckParticleList();
   }
 }
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::AddTransportation()
 {   
-  thePLHelper->AddTransportation();
+  G4MT_thePLHelper->AddTransportation();
 }
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::UseCoupledTransportation(G4bool vl)
 { 
-  thePLHelper->UseCoupledTransportation(vl);
+  G4MT_thePLHelper->UseCoupledTransportation(vl);
 }
 
 ////////////////////////////////////////////////////////
 G4bool G4VUserPhysicsList::RegisterProcess(G4VProcess*            process,
 					  G4ParticleDefinition*  particle)
 {
-  return thePLHelper->RegisterProcess(process, particle);
+  return G4MT_thePLHelper->RegisterProcess(process, particle);
 }
 
 ////////////////////////////////////////////////////////
@@ -855,7 +969,7 @@ void G4VUserPhysicsList::SetVerboseLevel(G4int value)
   // set verboseLevel for G4ProductionCutsTable same as one for G4VUserPhysicsList: 
   fCutsTable->SetVerboseLevel(verboseLevel);
 
-  thePLHelper->SetVerboseLevel(verboseLevel);
+  G4MT_thePLHelper->SetVerboseLevel(verboseLevel);
 
 #ifdef G4VERBOSE
   if (verboseLevel >1){

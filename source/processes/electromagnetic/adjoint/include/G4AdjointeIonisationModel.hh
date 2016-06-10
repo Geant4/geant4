@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointeIonisationModel.hh 68044 2013-03-13 14:29:07Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4AdjointeIonisationModel
@@ -48,7 +48,6 @@
 
 #include "globals.hh"
 #include "G4VEmAdjointModel.hh"
-#include "G4PEEffectModel.hh"
 
 class G4AdjointeIonisationModel: public G4VEmAdjointModel
 {

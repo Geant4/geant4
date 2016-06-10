@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/StackingMessenger.hh
 /// \brief Definition of the StackingMessenger class
 //
-// $Id$
+// $Id: StackingMessenger.hh 68803 2013-04-05 13:59:55Z gcosmo $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ public:
   StackingMessenger(StackingAction*);
   virtual ~StackingMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
     

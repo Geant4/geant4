@@ -602,8 +602,8 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
  207.24, 209.00, 209.00, 210.00, 222.00, 223.00, 226.00, 227.00,  232.00,
  231.00, 237.98};
 			 
- static G4bool NeedInit=true;		     
- static G4double A75[92];
+ static G4ThreadLocal G4bool NeedInit=true;		     
+ static G4ThreadLocal G4double A75[92];
  if ( NeedInit )
  {
     for (G4int i=0; i<92; ++i)

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeSteppingMessenger.cc 70256 2013-05-28 07:29:30Z gcosmo $
+//
 /// \file optical/LXe/src/LXeSteppingMessenger.cc
 /// \brief Implementation of the LXeSteppingMessenger class
 //
@@ -39,7 +41,8 @@ LXeSteppingMessenger::LXeSteppingMessenger(LXeSteppingAction* step)
  : fStepping(step)
 {
   fOneStepPrimariesCmd = new G4UIcmdWithABool("/LXe/oneStepPrimaries",this);
-  fOneStepPrimariesCmd->SetGuidance("Only allows primaries to go one step in the scintillator volume before being killed.");
+  fOneStepPrimariesCmd->
+      SetGuidance("Only allows primaries to go one step before being killed.");
 
 }
 

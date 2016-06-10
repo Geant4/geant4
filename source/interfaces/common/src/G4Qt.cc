@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Qt.cc 74547 2013-10-14 12:51:17Z gcosmo $
 //
 // L. Garnier
 
@@ -36,6 +36,7 @@
 #include "G4ios.hh"
 
 #include "G4Qt.hh"
+#include "G4UImanager.hh"
 #include <qwidget.h>
 
 #include <qapplication.h>
@@ -124,7 +125,11 @@ G4Qt::G4Qt (
       new QApplication (*p_argn, args);
       if(!qApp) {
         
-        G4cout        << "G4Qt : Unable to init Qt." << G4endl;
+        G4UImanager* UImanager = G4UImanager::GetUIpointer();
+        G4int verbose = UImanager->GetVerboseLevel();
+        if (verbose >= 2) {
+          G4cout        << "G4Qt : Unable to init Qt." << G4endl;
+        }
       } else {
         QtInited  = TRUE;
         if (a_argn != 0) {
@@ -168,22 +173,11 @@ G4bool G4Qt::Inited (
   return QtInited;
 }
 /***************************************************************************/
-/**
-  Si j'ai bien compris, cette fonction ne sert à rien
- */
 void* G4Qt::GetEvent (
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-//FIXME
-//   G4cout        << "G4Qt : Rien compris a cette fonction G4Qt::GetEvent." << G4endl;
-//  static XEvent  event;
-//  if(appContext==NULL) return NULL;
-//  if(mainApp==NULL) return NULL;
-//  QtAppNextEvent (appContext, &event);
-//  return         &event;
-  printf("*");
   return 0;
 }
 /***************************************************************************/
@@ -192,7 +186,6 @@ void G4Qt::FlushAndWaitExecution (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  //  printf("G4Qt::FlushAndWaitExecution ::  Flush ....\n");
   if(!qApp) return;
   qApp->processEvents();
 }

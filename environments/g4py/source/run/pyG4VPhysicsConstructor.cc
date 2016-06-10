@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VPhysicsConstructor.cc,v 1.3 2006-06-29 15:35:24 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VPhysicsConstructor.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VPhysicsConstructor.cc
 //
@@ -41,12 +40,12 @@ using namespace boost::python;
 namespace pyG4VPhysicsConstructor {
 
 class CB_G4VPhysicsConstructor :
-    public G4VPhysicsConstructor, 
+    public G4VPhysicsConstructor,
     public wrapper<G4VPhysicsConstructor> {
 
 public:
   CB_G4VPhysicsConstructor(): G4VPhysicsConstructor() { }
-  CB_G4VPhysicsConstructor(const G4String& name) 
+  CB_G4VPhysicsConstructor(const G4String& name)
     : G4VPhysicsConstructor(name) { }
 
   void ConstructParticle() {
@@ -61,9 +60,9 @@ public:
 
 // SetPhysicsName()
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetPhysicsName,
-				       SetPhysicsName, 0, 1);
+				                               SetPhysicsName, 0, 1)
 
-};
+}
 
 using namespace pyG4VPhysicsConstructor;
 
@@ -76,8 +75,8 @@ void export_G4VPhysicsConstructor()
     ("G4VPhysicsConstructor",
      "base class of user physics constructor")
     // ----
-    .def(init<const G4String&>())    
-    // ---    
+    .def(init<const G4String&>())
+    // ---
     .def("ConstructParticle",
          pure_virtual(&G4VPhysicsConstructor::ConstructParticle))
     .def("ConstructProcess",

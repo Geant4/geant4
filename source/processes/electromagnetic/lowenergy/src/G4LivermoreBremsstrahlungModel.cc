@@ -23,358 +23,365 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermoreBremsstrahlungModel.cc 76220 2013-11-08 10:15:00Z gcosmo $
 //
-// Author: Luciano Pandola
-//         on base of G4LowEnergyBremsstrahlung developed by A.Forti and V.Ivanchenko
+// -------------------------------------------------------------------
 //
-// History:
-// --------
-// 03 Mar 2009   L Pandola    Migration from process to model 
-// 12 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
-//                  - apply internal high-energy limit only in constructor 
-//                  - do not apply low-energy limit (default is 0)
-//                  - added MinEnergyCut method
-//                  - do not change track status
-//                  - do not initialize element selectors
-//                  - use cut value from the interface 
-//                  - fixed bug in sampling of angles between keV and MeV
-// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
-//                            Initialise(), since they might be checked later on
+// GEANT4 Class file
 //
+//
+// File name:     G4LivermoreBremsstrahlungModel
+//
+// Author:        Vladimir Ivanchenko use inheritance from Andreas Schaelicke
+//                base class implementing ultra relativistic bremsstrahlung
+//                model 
+//
+// Creation date: 04.10.2011
+//
+// Modifications:
+//
+// -------------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4LivermoreBremsstrahlungModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4MaterialCutsCouple.hh"
-
-#include "G4DynamicParticle.hh"
-#include "G4Element.hh"
-#include "G4Gamma.hh"
 #include "G4Electron.hh"
-#include "G4SemiLogInterpolation.hh"
-//
-#include "G4VEmAngularDistribution.hh"
-#include "G4ModifiedTsai.hh"
+#include "G4Positron.hh"
+#include "G4Gamma.hh"
+#include "Randomize.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
+#include "G4ElementVector.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4ParticleChangeForLoss.hh"
 #include "G4Generator2BS.hh"
-//#include "G4Generator2BN.hh"
-//
-#include "G4BremsstrahlungCrossSectionHandler.hh"
-//
-#include "G4VEnergySpectrum.hh"
-#include "G4eBremsstrahlungSpectrum.hh"
-#include "G4VEMDataSet.hh"
+
+#include "G4Physics2DVector.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+
+#include "G4ios.hh"
+#include <fstream>
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+using namespace std;
 
-G4LivermoreBremsstrahlungModel::G4LivermoreBremsstrahlungModel(const G4ParticleDefinition*,
-							       const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
-   crossSectionHandler(0),energySpectrum(0)
+G4Physics2DVector* G4LivermoreBremsstrahlungModel::dataSB[] = {0};
+G4double G4LivermoreBremsstrahlungModel::ylimit[] = {0.0};
+G4double G4LivermoreBremsstrahlungModel::expnumlim = -12.;
+
+static const G4double emaxlog = 4*G4Log(10.);
+static const G4double alpha = CLHEP::twopi*CLHEP::fine_structure_const; 
+static const G4double epeaklimit= 300*CLHEP::MeV; 
+static const G4double elowlimit = 20*CLHEP::keV; 
+
+G4LivermoreBremsstrahlungModel::G4LivermoreBremsstrahlungModel(
+  const G4ParticleDefinition* p, const G4String& nam)
+  : G4eBremsstrahlungRelModel(p,nam),useBicubicInterpolation(false)
 {
-  fIntrinsicLowEnergyLimit = 10.0*eV;
-  fIntrinsicHighEnergyLimit = 100.0*GeV;
-  fNBinEnergyLoss = 360;
-  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
-  SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
-  //
-  verboseLevel = 0;
+  SetLowEnergyLimit(10.0*eV);
+  SetLPMFlag(false);
+  nwarn = 0;
+  idx = idy = 0;
   SetAngularDistribution(new G4Generator2BS());
-  //
-  //generatorName = "tsai";
-  //angularDistribution = new G4ModifiedTsai("TsaiGenerator"); //default generator
-  //
-  //TsaiAngularDistribution = new G4ModifiedTsai("TsaiGenerator");
-  //
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreBremsstrahlungModel::~G4LivermoreBremsstrahlungModel()
 {
-  if (crossSectionHandler) delete crossSectionHandler;
-  if (energySpectrum) delete energySpectrum;
-  energyBins.clear();
-  //delete angularDistribution;
-  //delete TsaiAngularDistribution;
+  if(IsMaster()) {
+    for(size_t i=0; i<101; ++i) { 
+      if(dataSB[i]) {
+	delete dataSB[i]; 
+	dataSB[i] = 0;
+      } 
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* particle,
+void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 						const G4DataVector& cuts)
 {
-  //Check that the Livermore Bremsstrahlung is NOT attached to e+
-  if (particle != G4Electron::Electron())
-    {
-      G4Exception("G4LivermoreBremsstrahlungModel::Initialise",
-		    "em0002",FatalException,"Livermore Bremsstrahlung Model is applicable only to electrons");
-    }
-  //Prepare energy spectrum
-  if (energySpectrum) 
-    {
-      delete energySpectrum;
-      energySpectrum = 0;
-    }
+  // Access to elements
+  if(IsMaster()) {
 
-  energyBins.clear();
-  for(size_t i=0; i<15; i++) 
-    {
-      G4double x = 0.1*((G4double)i);
-      if(i == 0)  x = 0.01;
-      if(i == 10) x = 0.95;
-      if(i == 11) x = 0.97;
-      if(i == 12) x = 0.99;
-      if(i == 13) x = 0.995;
-      if(i == 14) x = 1.0;
-      energyBins.push_back(x);
-    }
-  const G4String dataName("/brem/br-sp.dat");
-  energySpectrum = new G4eBremsstrahlungSpectrum(energyBins,dataName);
-  
-  if (verboseLevel > 0)
-    G4cout << "G4eBremsstrahlungSpectrum is initialized" << G4endl;
+    // check environment variable
+    // Build the complete string identifying the file with the data set
+    char* path = getenv("G4LEDATA");
 
-  //Initialize cross section handler
-  if (crossSectionHandler) 
-    {
-      delete crossSectionHandler;
-      crossSectionHandler = 0;
+    const G4ElementTable* theElmTable = G4Element::GetElementTable();
+    size_t numOfElm = G4Element::GetNumberOfElements();
+    if(numOfElm > 0) {
+      for(size_t i=0; i<numOfElm; ++i) {
+	G4int Z = G4int(((*theElmTable)[i])->GetZ());
+	if(Z < 1)        { Z = 1; }
+	else if(Z > 100) { Z = 100; }
+	//G4cout << "Z= " << Z << G4endl;
+	// Initialisation
+	if(!dataSB[Z]) { ReadData(Z, path); }
+      }
     }
-  G4VDataSetAlgorithm* interpolation = 0;//new G4SemiLogInterpolation();
-  crossSectionHandler = new G4BremsstrahlungCrossSectionHandler(energySpectrum,interpolation);
-  crossSectionHandler->Initialise(0,LowEnergyLimit(),HighEnergyLimit(),
-				  fNBinEnergyLoss);
-  crossSectionHandler->Clear();
-  crossSectionHandler->LoadShellData("brem/br-cs-");
-  //This is used to retrieve cross section values later on
-  G4VEMDataSet* p = crossSectionHandler->BuildMeanFreePathForMaterials(&cuts);
-  delete p;  
- 
-  if (verboseLevel > 0)
-    {
-      G4cout << "Livermore Bremsstrahlung model is initialized " << G4endl
-	     << "Energy range: "
-	     << LowEnergyLimit() / keV << " keV - "
-	     << HighEnergyLimit() / GeV << " GeV"
-	     << G4endl;
-    }
+  }
 
-  if (verboseLevel > 1)
-    {
-      G4cout << "Cross section data: " << G4endl; 
-      crossSectionHandler->PrintData();
-      G4cout << "Parameters: " << G4endl;
-      energySpectrum->PrintData();
-    }
-
-  if(isInitialised) return;
-  fParticleChange = GetParticleChangeForLoss();
-  isInitialised = true; 
+  G4eBremsstrahlungRelModel::Initialise(p, cuts);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LivermoreBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
-						      const G4MaterialCutsCouple*)
+G4String G4LivermoreBremsstrahlungModel::DirectoryPath() const
 {
-  return 250.*eV;
+  return "/livermore/brem/br";
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LivermoreBremsstrahlungModel::ReadData(G4int Z, const char* path)
+{
+  //  G4cout << "ReadData Z= " << Z << G4endl;
+  // G4cout << "Status for Z= " << dataSB[Z] << G4endl;
+  //if(path) { G4cout << path << G4endl; }
+  if(dataSB[Z]) { return; }
+  const char* datadir = path;
+
+  if(!datadir) {
+    datadir = getenv("G4LEDATA");
+    if(!datadir) {
+      G4Exception("G4LivermoreBremsstrahlungModel::ReadData()","em0006",
+		  FatalException,"Environment variable G4LEDATA not defined");
+      return;
+    }
+  }
+  std::ostringstream ost;
+  ost << datadir << DirectoryPath() << Z;
+  std::ifstream fin(ost.str().c_str());
+  if( !fin.is_open()) {
+    G4ExceptionDescription ed;
+    ed << "Bremsstrahlung data file <" << ost.str().c_str()
+       << "> is not opened!";
+    G4Exception("G4LivermoreBremsstrahlungModel::ReadData()","em0003",
+		FatalException,ed,
+		"G4LEDATA version should be G4EMLOW6.23 or later.");
+    return;
+  } 
+  //G4cout << "G4LivermoreBremsstrahlungModel read from <" << ost.str().c_str() 
+  //	 << ">" << G4endl;
+  G4Physics2DVector* v = new G4Physics2DVector();
+  if(v->Retrieve(fin)) { 
+    if(useBicubicInterpolation) { v->SetBicubicInterpolation(true); }
+    dataSB[Z] = v; 
+    ylimit[Z] = v->Value(0.97, emaxlog, idx, idy);
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Bremsstrahlung data file <" << ost.str().c_str()
+       << "> is not retrieved!";
+    G4Exception("G4LivermoreBremsstrahlungModel::ReadData()","em0005",
+                FatalException,ed,
+		"G4LEDATA version should be G4EMLOW6.23 or later.");
+    delete v;
+  }
+  // G4cout << dataSB[Z] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double 
-G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-							   G4double energy,
-							   G4double Z, G4double,
-							   G4double cutEnergy, 
-							   G4double)
+G4LivermoreBremsstrahlungModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
 {
-  G4int iZ = (G4int) Z;
-  if (!crossSectionHandler)
-    {
-      G4Exception("G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom",
-		    "em1007",FatalException,"The cross section handler is not correctly initialized");
-      return 0;
-    }
+
+  if(gammaEnergy < 0.0 || kinEnergy <= 0.0) { return 0.0; }
+  G4double x = gammaEnergy/kinEnergy;
+  G4double y = G4Log(kinEnergy/MeV);
+  G4int Z = G4lrint(currentZ);
+
+  //G4cout << "G4LivermoreBremsstrahlungModel::ComputeDXSectionPerAtom Z= " << Z
+  //	 << " x= " << x << " y= " << y << " " << dataSB[Z] << G4endl;
+  if(!dataSB[Z]) { InitialiseForElement(0, Z); }
+  /*
+    G4ExceptionDescription ed;
+    ed << "Bremsstrahlung data for Z= " << Z
+       << " are not initialized!";
+    G4Exception("G4LivermoreBremsstrahlungModel::ComputeDXSectionPerAtom()",
+                "em0005", FatalException, ed,
+		"G4LEDATA version should be G4EMLOW6.23 or later.");
+  }
+  */
+  G4double invb2 = 
+    totalEnergy*totalEnergy/(kinEnergy*(kinEnergy + 2*particleMass));
+  G4double cross = dataSB[Z]->Value(x,y,idx,idy)*invb2*millibarn/bremFactor;
   
-  //The cut is already included in the crossSectionHandler
-  G4double cs = 
-    crossSectionHandler->GetCrossSectionAboveThresholdForElement(energy,cutEnergy,iZ);
-
-  if (verboseLevel > 1)
-    {
-      G4cout << "G4LivermoreBremsstrahlungModel " << G4endl;
-      G4cout << "Cross section for gamma emission > " << cutEnergy/keV << " keV at " <<
-	energy/keV << " keV and Z = " << iZ << " --> " << cs/barn << " barn" << G4endl;
+  if(!isElectron) {
+    G4double invbeta1 = sqrt(invb2);
+    G4double e2 = kinEnergy - gammaEnergy;
+    if(e2 > 0.0) {
+      G4double invbeta2 = (e2 + particleMass)/sqrt(e2*(e2 + 2*particleMass));
+      G4double xxx = alpha*currentZ*(invbeta1 - invbeta2);
+      if(xxx < expnumlim) { cross = 0.0; }
+      else { cross *= G4Exp(xxx); }
+    } else {
+      cross = 0.0;
     }
-  return cs;
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LivermoreBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* material,
-                             		   const G4ParticleDefinition* ,
-                               		   G4double kineticEnergy,
-                               		   G4double cutEnergy)
-{
-  G4double sPower = 0.0;
-
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  size_t NumberOfElements = material->GetNumberOfElements() ;
-  const G4double* theAtomicNumDensityVector =
-                    material->GetAtomicNumDensityVector();
-
-  // loop for elements in the material
-  for (size_t iel=0; iel<NumberOfElements; iel++ ) 
-    {
-      G4int iZ = (G4int)((*theElementVector)[iel]->GetZ());
-      G4double e = energySpectrum->AverageEnergy(iZ, 0.0,cutEnergy,
-						 kineticEnergy);
-      G4double cs= crossSectionHandler->FindValue(iZ,kineticEnergy);
-      sPower   += e * cs * theAtomicNumDensityVector[iel];
-    }
-
-  if (verboseLevel > 2)
-    {
-      G4cout << "G4LivermoreBremsstrahlungModel " << G4endl;
-      G4cout << "Stopping power < " << cutEnergy/keV << " keV at " << 
-	kineticEnergy/keV << " keV = " << sPower/(keV/mm) << " keV/mm" << G4endl;
-    }
-    
-  return sPower;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LivermoreBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-					      const G4MaterialCutsCouple* couple,
-					      const G4DynamicParticle* aDynamicParticle,
-					      G4double energyCut,
-					      G4double)
-{
+  }
   
-  G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
-
-  // this is neede for pathalogical cases of no ionisation
-  if (kineticEnergy <= fIntrinsicLowEnergyLimit)
-    {
-      fParticleChange->SetProposedKineticEnergy(0.);
-      fParticleChange->ProposeLocalEnergyDeposit(kineticEnergy);
-      return;
-    }
-
-  //Sample material
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple, kineticEnergy);
-
-  //Sample gamma energy
-  G4double tGamma = energySpectrum->SampleEnergy(Z, energyCut, kineticEnergy, kineticEnergy);
-  //nothing happens
-  if (tGamma == 0.) { return; }
-
-  G4double totalEnergy = kineticEnergy + electron_mass_c2;
-  G4double finalEnergy = kineticEnergy - tGamma; // electron final energy  
-
-  //Sample gamma direction
-  G4ThreeVector gammaDirection = 
-    GetAngularDistribution()->SampleDirection(aDynamicParticle, 
-					      totalEnergy-tGamma,
-					      Z, 
-					      couple->GetMaterial());
-
-  G4ThreeVector electronDirection = aDynamicParticle->GetMomentumDirection();
-
-  //Update the incident particle    
-  if (finalEnergy < 0.) 
-    {
-      // Kinematic problem
-      tGamma = kineticEnergy;
-      fParticleChange->SetProposedKineticEnergy(0.);
-    }
-  else
-    {
-      G4double momentum = std::sqrt((totalEnergy + electron_mass_c2)*kineticEnergy);
-      G4double finalX = momentum*electronDirection.x() - tGamma*gammaDirection.x();
-      G4double finalY = momentum*electronDirection.y() - tGamma*gammaDirection.y();
-      G4double finalZ = momentum*electronDirection.z() - tGamma*gammaDirection.z();
-      G4double norm = 1./std::sqrt(finalX*finalX + finalY*finalY + finalZ*finalZ);
-      
-      fParticleChange->ProposeMomentumDirection(finalX*norm, finalY*norm, finalZ*norm);
-      fParticleChange->SetProposedKineticEnergy(finalEnergy);
-    }
-
-  //Generate the bremsstrahlung gamma
-  G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),
-						    gammaDirection, tGamma);
-  fvect->push_back(aGamma);
-
-  if (verboseLevel > 1)
-    {
-      G4cout << "-----------------------------------------------------------" << G4endl;
-      G4cout << "Energy balance from G4LivermoreBremsstrahlung" << G4endl;
-      G4cout << "Incoming primary energy: " << kineticEnergy/keV << " keV" << G4endl;
-      G4cout << "-----------------------------------------------------------" << G4endl;
-      G4cout << "Outgoing primary energy: " << finalEnergy/keV << " keV" << G4endl;
-      G4cout << "Gamma ray " << tGamma/keV << " keV" << G4endl;
-      G4cout << "Total final state: " << (finalEnergy+tGamma)/keV << " keV" << G4endl;
-      G4cout << "-----------------------------------------------------------" << G4endl;
-    }
-  if (verboseLevel > 0)
-    {
-      G4double energyDiff = std::fabs(finalEnergy+tGamma-kineticEnergy);
-      if (energyDiff > 0.05*keV)
-	G4cout << "G4LivermoreBremsstrahlung WARNING: problem with energy conservation: " 
-	       << (finalEnergy+tGamma)/keV << " keV (final) vs. " 
-	       << kineticEnergy/keV << " keV (initial)" << G4endl;
-    }
-  return;
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
+
 void 
-G4LivermoreBremsstrahlungModel::SetAngularGenerator(G4VBremAngularDistribution* distribution)
+G4LivermoreBremsstrahlungModel::SampleSecondaries(
+                                        std::vector<G4DynamicParticle*>* vdp, 
+					const G4MaterialCutsCouple* couple,
+					const G4DynamicParticle* dp,
+					G4double cutEnergy,
+					G4double maxEnergy)
 {
-  if(angularDistribution == distribution) return;
-  if(angularDistribution) delete angularDistribution;
-  angularDistribution = distribution;
-  angularDistribution->PrintGeneratorInformation();
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- /*
-void G4LivermoreBremsstrahlungModel::SetAngularGenerator(const G4String& theGenName)
-{
-  if(theGenName == generatorName) return;
-  if (theGenName == "tsai") 
-    {
-      delete angularDistribution;
-      angularDistribution = new G4ModifiedTsai("TsaiGenerator");
-      generatorName = theGenName;
+  G4double kineticEnergy = dp->GetKineticEnergy();
+  G4double cut  = std::min(cutEnergy, kineticEnergy);
+  G4double emax = std::min(maxEnergy, kineticEnergy);
+  if(cut >= emax) { return; }
+
+  SetupForMaterial(particle, couple->GetMaterial(), kineticEnergy);
+
+  const G4Element* elm = 
+    SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
+  SetCurrentElement(elm->GetZ());
+  G4int Z = G4int(currentZ);
+
+  totalEnergy = kineticEnergy + particleMass;
+  densityCorr = densityFactor*totalEnergy*totalEnergy;
+  G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
+  /*
+  G4cout << "G4LivermoreBremsstrahlungModel::SampleSecondaries E(MeV)= " 
+	 << kineticEnergy/MeV
+	 << " Z= " << Z << " cut(MeV)= " << cut/MeV 
+	 << " emax(MeV)= " << emax/MeV << " corr= " << densityCorr << G4endl;
+  */
+  G4double xmin = G4Log(cut*cut + densityCorr);
+  G4double xmax = G4Log(emax*emax  + densityCorr);
+  G4double y = G4Log(kineticEnergy/MeV);
+
+  G4double gammaEnergy, v; 
+
+  // majoranta
+  G4double x0 = cut/kineticEnergy;
+  G4double vmax = dataSB[Z]->Value(x0, y, idx, idy)*1.02;
+  //  G4double invbeta1 = 0;
+
+  // majoranta corrected for e-
+  if(isElectron && x0 < 0.97 && 
+     ((kineticEnergy > epeaklimit) || (kineticEnergy < elowlimit))) {
+    G4double ylim = std::min(ylimit[Z],1.1*dataSB[Z]->Value(0.97,y,idx,idy));
+    if(ylim > vmax) { vmax = ylim; }
+  }
+  if(x0 < 0.05) { vmax *= 1.2; }
+
+  //G4cout<<"y= "<<y<<" xmin= "<<xmin<<" xmax= "<<xmax
+  //<<" vmax= "<<vmax<<G4endl;
+  //  G4int ncount = 0;
+  do {
+    //++ncount;
+    G4double x = G4Exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
+    if(x < 0.0) { x = 0.0; }
+    gammaEnergy = sqrt(x);
+    G4double x1 = gammaEnergy/kineticEnergy;
+    v = dataSB[Z]->Value(x1, y, idx, idy);
+
+    // correction for positrons        
+    if(!isElectron) {
+      G4double e1 = kineticEnergy - cut;
+      G4double invbeta1 = (e1 + particleMass)/sqrt(e1*(e1 + 2*particleMass));
+      G4double e2 = kineticEnergy - gammaEnergy;
+      G4double invbeta2 = (e2 + particleMass)/sqrt(e2*(e2 + 2*particleMass));
+      G4double xxx = twopi*fine_structure_const*currentZ*(invbeta1 - invbeta2);
+
+      if(xxx < expnumlim) { v = 0.0; }
+      else { v *= G4Exp(xxx); }
     }
-  else if (theGenName == "2bn")
-    {
-      delete angularDistribution;
-      angularDistribution = new G4Generator2BN("2BNGenerator");
-      generatorName = theGenName;
-    }
-  else if (theGenName == "2bs")
-    {
-      delete angularDistribution;
-      angularDistribution = new G4Generator2BS("2BSGenerator");
-      generatorName = theGenName;
-    }
-  else
-    {
-      G4cout << "### G4LivermoreBremsstrahlungModel::SetAngularGenerator WARNING:"
-	     << " generator <" << theGenName << "> is not known" << G4endl;
-      return; 
+   
+    if (v > 1.05*vmax && nwarn < 5) {
+      ++nwarn;
+      G4ExceptionDescription ed;
+      ed << "### G4LivermoreBremsstrahlungModel Warning: Majoranta exceeded! "
+	 << v << " > " << vmax << " by " << v/vmax
+	 << " Egamma(MeV)= " << gammaEnergy
+	 << " Ee(MeV)= " << kineticEnergy
+	 << " Z= " << Z << "  " << particle->GetParticleName();
+     
+      if ( 20 == nwarn ) {
+	ed << "\n ### G4LivermoreBremsstrahlungModel Warnings stopped";
+      }
+      G4Exception("G4LivermoreBremsstrahlungModel::SampleScattering","em0044",
+		  JustWarning, ed,"");
 
     }
+  } while (v < vmax*G4UniformRand());
 
-  angularDistribution->PrintGeneratorInformation();
+  //
+  // angles of the emitted gamma. ( Z - axis along the parent particle)
+  // use general interface
+  //
+
+  G4ThreeVector gammaDirection = 
+    GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
+					      Z, couple->GetMaterial());
+
+  // create G4DynamicParticle object for the Gamma
+  G4DynamicParticle* gamma = 
+    new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
+  vdp->push_back(gamma);
+  
+  G4ThreeVector direction = (totMomentum*dp->GetMomentumDirection()
+			     - gammaEnergy*gammaDirection).unit();
+
+  /*
+  G4cout << "### G4SBModel: v= "
+	 << " Eg(MeV)= " << gammaEnergy
+	 << " Ee(MeV)= " << kineticEnergy
+	 << " DirE " << direction << " DirG " << gammaDirection
+	 << G4endl;
+  */
+  // energy of primary
+  G4double finalE = kineticEnergy - gammaEnergy;
+
+  // stop tracking and create new secondary instead of primary
+  if(gammaEnergy > SecondaryThreshold()) {
+    fParticleChange->ProposeTrackStatus(fStopAndKill);
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    G4DynamicParticle* el = 
+      new G4DynamicParticle(const_cast<G4ParticleDefinition*>(particle),
+			    direction, finalE);
+    vdp->push_back(el);
+
+    // continue tracking
+  } else {
+    fParticleChange->SetProposedMomentumDirection(direction);
+    fParticleChange->SetProposedKineticEnergy(finalE);
+  }
 }
- */
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex LivermoreBremsstrahlungModelMutex = G4MUTEX_INITIALIZER; }
+void G4LivermoreBremsstrahlungModel::InitialiseForElement(
+                                     const G4ParticleDefinition*, 
+				     G4int Z)
+{
+  G4AutoLock l(&LivermoreBremsstrahlungModelMutex);
+  //G4cout << "G4LivermoreBremsstrahlungModel::InitialiseForElement Z= " 
+  //<< Z << G4endl;
+  if(!dataSB[Z]) { ReadData(Z); }
+  l.unlock();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+

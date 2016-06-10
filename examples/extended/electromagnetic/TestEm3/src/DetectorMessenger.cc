@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+:G4UImessenger(),Detector(Det),
+ fTestemDir(0),
+ fDetDir(0),
+ fSizeYZCmd(0),
+ fNbLayersCmd(0),
+ fNbAbsorCmd(0),
+ fAbsorCmd(0),
+ fMagFieldCmd(0),
+ fUpdateCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance("UI commands specific to this example");

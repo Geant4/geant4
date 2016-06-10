@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Mag_SpinEqRhs.cc 71664 2013-06-20 08:36:05Z gcosmo $
 //
 // This is the standard right-hand side for equation of motion.
 // This version of the right-hand side includes the three components
@@ -43,8 +43,8 @@
 #include "G4ThreeVector.hh"
 
 G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ), omegac(0.), anomaly(0.0011659208),
-    pcharge(0.), E(0.), gamma(0.), beta(0.)
+  : G4Mag_EqRhs( MagField ), charge(0.), mass(0.), magMoment(0.),
+    spin(0.), omegac(0.), anomaly(0.0011659208), beta(0.), gamma(0.)
 {
 }
 
@@ -53,23 +53,28 @@ G4Mag_SpinEqRhs::~G4Mag_SpinEqRhs()
 }
 
 void
-G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
+G4Mag_SpinEqRhs::SetChargeMomentumMass(G4ChargeState particleCharge,
                                        G4double MomentumXc,
                                        G4double particleMass)
 {
-   //  To set fCof_val 
-   G4Mag_EqRhs::SetChargeMomentumMass(particleCharge, MomentumXc, particleMass);
+   charge = particleCharge.GetCharge();
+   mass      = particleMass;
+   magMoment = particleCharge.GetMagneticDipoleMoment();
+   spin      = particleCharge.GetSpin();
 
-   omegac = (eplus/particleMass)*c_light;
+   omegac = (eplus/mass)*c_light;
 
-   pcharge = particleCharge;
+   G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
 
-   E = std::sqrt(sqr(MomentumXc)+sqr(particleMass));
+   G4double g_BMT;
+   if ( spin != 0. ) g_BMT = (magMoment/muB)/spin;
+   else g_BMT = 2.;
+
+   anomaly = (g_BMT - 2.)/2.;
+
+   G4double E = std::sqrt(sqr(MomentumXc)+sqr(mass));
    beta  = MomentumXc/E;
-   gamma = E/particleMass;
-
-   G4double neutronAnomaly = -2.913042725;
-   if (pcharge==0.) SetAnomaly(neutronAnomaly);
+   gamma = E/mass;
 }
 
 void
@@ -85,7 +90,7 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
    dydx[1] = y[4] * inv_momentum_magnitude;       //  (d/ds)y = Vy/V
    dydx[2] = y[5] * inv_momentum_magnitude;       //  (d/ds)z = Vz/V
 
-   if (pcharge == 0.) {
+   if (charge == 0.) {
       dydx[3] = 0.;
       dydx[4] = 0.;
       dydx[5] = 0.;
@@ -108,12 +113,12 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
 
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
-   G4ThreeVector dSpin;
+   G4double pcharge;
+   if (charge == 0.) pcharge = 1.;
+   else pcharge = charge;
 
-   if (pcharge == 0.) {
-      // dSpin = (3.8260837/2.)*omegac*(Spin.cross(BField));
-      dSpin = omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
-   } else {
+   G4ThreeVector dSpin(0.,0.,0.);
+   if (Spin.mag2() != 0.) {
       dSpin = pcharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
    }
 

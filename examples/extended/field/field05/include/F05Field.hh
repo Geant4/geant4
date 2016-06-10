@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F05Field.hh 75672 2013-11-05 08:47:41Z gcosmo $
+//
 /// \file field/field05/include/F05Field.hh
 /// \brief Definition of the F05Field class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,11 +38,6 @@
 #include "globals.hh"
 #include "G4ElectroMagneticField.hh"
 
-class G4EqEMFieldWithSpin;
-class G4MagIntegratorStepper;
-class G4ChordFinder;
-class G4PropagatorInField;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F05Field : public G4ElectroMagneticField
@@ -52,23 +46,15 @@ class F05Field : public G4ElectroMagneticField
 public:
 
   F05Field();
-  ~F05Field();
+  virtual ~F05Field();
 
   /// DoesFieldChangeEnergy() returns true.
-  G4bool DoesFieldChangeEnergy() const { return true; };
+  virtual G4bool DoesFieldChangeEnergy() const { return true; };
 
   /// GetFieldValue() returns the field value at a given point[].
   /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
   /// point[] is in global coordinates: x,y,z,t.
-  void GetFieldValue( const G4double Point[3],  G4double* Bfield ) const;
-
-private:
-
-  G4EqEMFieldWithSpin*    fEquation;
-  G4MagIntegratorStepper* fStepper;
-  G4ChordFinder*          fChordFinder;
-  G4PropagatorInField*    fieldPropagator;
-
+  virtual void GetFieldValue(const G4double Point[4], G4double* Bfield) const;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

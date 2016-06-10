@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: rdecay02.cc 68007 2013-03-13 11:28:03Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/rdecay02.cc
 /// \brief Main program of the radioactivedecay/rdecay02 example
 //

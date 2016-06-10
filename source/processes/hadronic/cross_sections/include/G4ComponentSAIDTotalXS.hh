@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ComponentSAIDTotalXS.hh 67988 2013-03-13 10:52:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,7 +65,8 @@ enum G4SAIDCrossSectionType
   saidGN_PINP = 9,
   saidGN_PI0N = 10,
   saidGP_ETAP = 11,
-  saidGP_ETAPP = 12
+  saidGP_ETAPP = 12,
+  numberOfSaidXS = 13
 };
 
 class G4PhysicsVector;
@@ -135,11 +136,9 @@ private:
   G4ComponentSAIDTotalXS & operator=(const G4ComponentSAIDTotalXS &right);
   G4ComponentSAIDTotalXS(const G4ComponentSAIDTotalXS&);
 
-  G4int numberOfSaidXS;
-
-  static G4String fnames[13];
-  static G4PhysicsVector* elastdata[13];
-  static G4PhysicsVector* inelastdata[13];
+  static const G4String fnames[numberOfSaidXS];
+  G4PhysicsVector* elastdata[numberOfSaidXS];
+  G4PhysicsVector* inelastdata[numberOfSaidXS];
 
 };
 

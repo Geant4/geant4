@@ -25,11 +25,12 @@
 //
 #ifndef G4V_CASCADE_COLLIDER_HH
 #define G4V_CASCADE_COLLIDER_HH
-// $Id$
+// $Id: G4VCascadeCollider.hh 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately
 // 20100711  M. Kelsey -- Allow name to be changed after ctor, by self
 // 20100714  M. Kelsey -- Move concrete functions to G4CascadeColliderBase
+// 20130620  Address Coverity complaint about missing copy actions
 
 #include "globals.hh"
 
@@ -52,6 +53,11 @@ protected:
   G4int verboseLevel;
 
   virtual void setName(const char* name) { theName = name; }
+
+private:
+  // Copying of modules is forbidden
+  G4VCascadeCollider(const G4VCascadeCollider&);
+  G4VCascadeCollider& operator=(const G4VCascadeCollider&);
 };        
 
 #endif	/* G4V_CASCADE_COLLIDER_HH */

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 68996 2013-04-15 09:19:55Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,15 +49,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin, 
-                     HistoManager* histo)
-:fDetector(det),fKinematic(kin),fProcCounter(0),fHistoManager(histo)
-{ }
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+:fDetector(det),fKinematic(kin),fProcCounter(0),fHistoManager(0),
+ fMateWall(0),fMateCavity(0)
+{
+ fHistoManager = new HistoManager(); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+ delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,7 +69,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
-  // save Rndm status
+  // do not save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
   
@@ -110,8 +114,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //histograms
   //
-  fHistoManager->book();
-    
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -371,7 +377,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   delete fProcCounter;
   
   // save histograms
-  fHistoManager->save();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }      
  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

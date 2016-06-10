@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1SteppingAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
 //
 /// \file B1SteppingAction.cc
 /// \brief Implementation of the B1SteppingAction class
@@ -89,4 +89,7 @@ void B1SteppingAction::Reset()
 {
   fEnergy = 0.;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 

@@ -27,7 +27,6 @@
 /// \brief Implementation of the StepMaxMessenger class
 //
 // $Id: fStepMaxMessenger.cc,v 1.3 2006-06-29 16:53:21 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +40,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:fStepMax(stepM)
+:G4UImessenger(),fStepMax(stepM),
+ fStepMaxDir(0),    
+ fStepMaxCmd(0)
 {
   fStepMaxDir = new G4UIdirectory("/testem/stepMax/");
   fStepMaxDir->SetGuidance("histograms control");

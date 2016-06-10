@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Particles.hh,v 1.3 2006-06-29 15:37:05 gunter Exp $
+// $Id: Particles.hh 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   Particles.hh
 //

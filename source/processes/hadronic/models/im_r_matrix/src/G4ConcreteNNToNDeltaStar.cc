@@ -31,17 +31,14 @@
 #include "G4ConcreteNNToNDeltaStar.hh"
 #include "G4NDeltastarBuilder.hh"
 
-G4XNDeltastarTable G4ConcreteNNToNDeltaStar::theSigmaTable;
+G4ThreadLocal G4XNDeltastarTable *G4ConcreteNNToNDeltaStar::theSigmaTable_G4MT_TLS_ = 0;
 
 G4ConcreteNNToNDeltaStar::G4ConcreteNNToNDeltaStar(const G4ParticleDefinition* aPrimary,
 					   const G4ParticleDefinition* bPrimary,
 					   const G4ParticleDefinition* aSecondary,
-					   const G4ParticleDefinition* bSecondary)
-  : G4ConcreteNNTwoBodyResonance(aPrimary, bPrimary, aSecondary, bSecondary,
-                                 G4NDeltastarBuilder(bSecondary->GetParticleName(), theSigmaTable))
-{
+					   const G4ParticleDefinition* bSecondary):G4ConcreteNNTwoBodyResonance(NULL, NULL, NULL, NULL, NULL, NULL, NULL){  ;;;   if (!theSigmaTable_G4MT_TLS_) theSigmaTable_G4MT_TLS_ = new G4XNDeltastarTable  ; G4XNDeltastarTable &theSigmaTable = *theSigmaTable_G4MT_TLS_;  ;;;  establish_G4MT_TLS_G4ConcreteNNTwoBodyResonance(aPrimary,bPrimary,aSecondary,bSecondary,G4NDeltastarBuilder(bSecondary->GetParticleName(),theSigmaTable));
 }
 
 G4ConcreteNNToNDeltaStar::~G4ConcreteNNToNDeltaStar()
-{ 
+{ if (!theSigmaTable_G4MT_TLS_) theSigmaTable_G4MT_TLS_ = new G4XNDeltastarTable  ; 
 }

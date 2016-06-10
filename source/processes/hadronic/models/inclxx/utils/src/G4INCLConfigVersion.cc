@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -39,7 +37,7 @@
 /** \file G4INCLConfigVersion.cc
  * \brief The Config::getVersionID() method.
  *
- * This method is split out from G4INCLConfig.cc in order to avoid having to
+ * This methods are split out from G4INCLConfig.cc in order to avoid having to
  * recompile the whole file every time the G4INCLVersion.hh header is updated.
  *
  * \date 18 March 2011
@@ -53,5 +51,7 @@
 namespace G4INCL {
 
   std::string const Config::getVersionID() { return G4INCL_VERSION_ID; }
+
+  std::string const Config::getVersionHash() { return G4INCL_GIT_HASH; }
 
 }

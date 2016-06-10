@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2010-12-15 13:47:10 gcosmo Exp $
+$Id: History 77330 2013-11-22 14:46:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,123 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-19)
+-----------------------------
+- Fixed compiler warning intruduced with previous update
+
+November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-18)
+-----------------------------
+- Removed checks for existence of G4TransportationManager
+  from G4GlobalMagFieldMessenger as they do not work as expected
+
+September 9th, 2013 - G.Cosmo  (geomnav-V09-06-17)
+-----------------------------
+- Relaxed condition for reported move in G4PathFinder::Locate() to exclude
+  reports for intentional pushes.
+
+September 3rd, 2013 - I.Hrivnacova  (geomnav-V09-06-16)
+----------------------------------
+- Added new messenger class G4GlobalMagFieldMessenger defining UI commands
+  for creating/deleting the global uniform magnetic field and
+  activating/inactivating it according to the set field value.
+
+August 27th, 2013 - G.Cosmo  (geomnav-V09-06-15)
+---------------------------
+- Added G4Ellipsoid among solids enabled for parameterisation in
+  G4PhantomParameterisation.
+
+August 22nd, 2013 - G.Cosmo  (geomnav-V09-06-14)
+---------------------------
+- Added ability to set maximum number of errors to report for overlaps
+  from a volume in G4GeometryMessenger.
+  Added new UI command "/geometry/test/maximum_errors [int]" to fix the
+  threshold. By default, for each volume, reports stop after the first
+  error reported.
+
+August 21st, 2013 - G.Cosmo  (geomnav-V09-06-13)
+---------------------------
+- Rationalised implementation of VolumeType() and CharacteriseDaughters()
+  in G4Navigator, to use implementation now provided in G4VPhysicalVolume
+  and G4LogicalVolume respectively.
+
+July 15th, 2013 - J.Apostolakis  (geomnav-V09-06-12)
+-------------------------------
+- G4SafetyHelper: fixed compilation warning; take out unused variable
+  and cleanup. 
+
+July 12th, 2013 - J.Apostolakis  (geomnav-V09-06-11)
+-------------------------------
+- G4SafetyHelper: protection against storing 'fake' safety, in case
+  'maxLength' is used ( not DBL_MAX ).
+
+June 4th, 2013 - J.Apostolakis  (geomnav-V09-06-10)
+------------------------------
+- G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().  
+  Issue identified by Coverity. 
+
+Jun 3rd, 2013 - G.Cosmo (geomnav-V09-06-09)
+-----------------------
+- Corrected deletion of commands in destructor and removed unused pointer.
+- Made copy-ctor and assignment operator private in G4Navigator, as not
+  supposed to be copied or cloned.
+
+May 23rd, 2013 - G.Cosmo (geomnav-V09-06-08)
+------------------------
+- Archived GeomTest* classes for overlaps checking through grid/cylinder
+  lines. UI commands are replaced with calls to built-in overlaps checking
+  based on random points located in surface. Defined commands are:
+    /geometry/test/tolerance [double] [unit]
+       -- to define tolerance by which overlaps should not be reported.
+          Default is '0'.
+    /geometry/test/verbosity [bool]
+       -- to set verbosity mode. Default is 'true'.
+    /geometry/test/resolution [int]
+       -- to establish the number of points on surface to be generated
+          and checked for each volume. Default is '10000'.
+    /geometry/test/recursion_start [int]
+       -- to set the starting depth level in the volumes tree from where
+          checking overlaps. Default is level '0'.
+    /geometry/test/recursion_depth [int]
+       -- to set the total depth in the volume tree for checking overlaps.
+          Default is '-1', which means checking the whole tree.
+    /geometry/test/run
+       -- to start the overlaps checking recursively through the volumes tree.
+
+May 7th, 2013 - P.Gumplinger (geomnav-V09-06-07, geomnav-V09-06-06)
+----------------------------
+- G4PropagatorInField: deleted SetChargeMomentumMass method.
+
+May 7th, 2013 - J.Apostolakis  (geomnav-V09-06-05)
+------------------------------
+- G4Navigator: Added new helper object G4VoxelSafety.
+    A helper object is owned by a Navigator instance.
+    To avoid including header it is stored as pointer.
+    Resolves issue with Multi-threading (thanks to Andrea Dotti 
+         for identifying and reporting the issue.)
+
+Apr 17th, 2013 - G.Cosmo (geomnav-V09-06-04)
+------------------------
+- Minor code cleanup.
+
+Apr 16th, 2013 - J.Apostolakis  (geomnav-V09-06-03)
+------------------------------
+- G4Navigator: made new safety (from G4VoxelSafety) the default.
+
+Apr 16th, 2013 - J.Apostolakis  (geomnav-V09-06-02)
+------------------------------
+- G4VoxelSafety: corrected calculation of edges of voxels.
+  Identified when point's coordinate is beyond the range of voxels. 
+
+Mar 19th, 2013 - G.Cosmo  (geomnav-V09-06-01)
+------------------------
+- Cleanup of MT changes in G4PathFinder, G4RegularNavigationHelper
+  and G4TransportationManager.
+
+Dec 10th, 2012 - G.Cosmo  (geomnav-V09-06-00)
+------------------------
+- Cleared left-over debug check in G4VoxelNavigation.
+  Addressing problem report #1406.
 
 Nov 20th, 2012 - G.Cosmo  (geomnav-V09-05-45)
 ------------------------

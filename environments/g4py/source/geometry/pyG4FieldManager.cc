@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4FieldManager.cc,v 1.5 2008-03-13 07:32:18 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4FieldManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4FieldManager.cc
 //
@@ -58,10 +57,10 @@ namespace pyG4FieldManager {
 
 G4ChordFinder*(G4FieldManager::*f1_GetChordFinder)()
   = &G4FieldManager::GetChordFinder;
-const G4ChordFinder*(G4FieldManager::*f2_GetChordFinder)() const 
+const G4ChordFinder*(G4FieldManager::*f2_GetChordFinder)() const
   = &G4FieldManager::GetChordFinder;
 
-};
+}
 
 using namespace pyG4FieldManager;
 
@@ -92,7 +91,7 @@ void export_G4FieldManager()
     .def("ConfigureForTrack",     &G4FieldManager::ConfigureForTrack)
     .def("GetDeltaIntersection",  &G4FieldManager::GetDeltaIntersection)
     .def("GetDeltaOneStep",       &G4FieldManager::GetDeltaOneStep)
-    .def("SetAccuraciesWithDeltaOneStep", 
+    .def("SetAccuraciesWithDeltaOneStep",
 	 &G4FieldManager::SetAccuraciesWithDeltaOneStep)
     .def("SetDeltaOneStep",       &G4FieldManager::SetDeltaOneStep)
     .def("SetDeltaIntersection",  &G4FieldManager::SetDeltaIntersection)

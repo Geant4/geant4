@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,10 +56,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fDefaultMaterial(0),fSolidWorld(0),fLogicWorld(0),fPhysiWorld(0),
+:G4VUserDetectorConstruction(),
+ fDefaultMaterial(0),fSolidWorld(0),fLogicWorld(0),fPhysiWorld(0),
  fSolidCalor(0),fLogicCalor(0),fPhysiCalor(0),
  fSolidLayer(0),fLogicLayer(0),fPhysiLayer(0),
- fMagField(0)
+ fMagField(0),fDetectorMessenger(0)
 {
   // default parameter values of the calorimeter
   fNbOfAbsor = 2;

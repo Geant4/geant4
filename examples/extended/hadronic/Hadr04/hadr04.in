@@ -1,0 +1,24 @@
+# $Id$
+#
+# Macro file for "Hadr04.cc"
+# (can be run in batch, without graphic)
+#
+# neutron 2 MeV; all processes
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setMat Water_ts
+/testhadr/det/setSize 1 m
+#
+/run/initialize
+#
+/process/list
+#
+###/particle/createAllIsomer
+/gun/particle neutron
+/gun/energy 2 MeV
+#
+/run/printProgress 100
+#
+/run/beamOn 1000

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: field04.cc 78002 2013-12-02 08:25:49Z gcosmo $
+//
 /// \file field/field04/field04.cc
 /// \brief Main program of the field/field04 example
 //
@@ -41,21 +43,21 @@
 #include <unistd.h>
 #endif
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "F04SteppingVerbose.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-
-#include "Randomize.hh"
+#endif
 
 #include "F04PhysicsList.hh"
 #include "F04DetectorConstruction.hh"
-#include "F04PrimaryGeneratorAction.hh"
 
-#include "F04RunAction.hh"
-#include "F04EventAction.hh"
-#include "F04TrackingAction.hh"
-#include "F04SteppingAction.hh"
-#include "F04StackingAction.hh"
-#include "F04SteppingVerbose.hh"
+#include "F04ActionInitialization.hh"
+
+#include "G4UImanager.hh"
+
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -70,17 +72,29 @@
 // argv[0] is always the name of the program
 // argv[1] points to the first argument, and so on
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int main(int argc,char** argv)
 {
-  G4String physName = "QGSP_BERT_EMV";
-
-  G4int seed = 123;
-  if (argc  > 2) seed = atoi(argv[argc-1]);
-
   // Choose the Random engine
+  //
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheSeed(seed);
+  G4int myseed = 1234;
+  if (argc  > 2) myseed = atoi(argv[argc-1]);
+
+  // Construct the default run manager
+  //
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+#else
+  G4VSteppingVerbose::SetInstance(new F04SteppingVerbose);
+  G4RunManager * runManager = new G4RunManager;
+#endif
+
+  G4Random::setTheSeed(myseed);
+
+  G4String physicsList = "QGSP_BERT_HP";
 
 #ifndef WIN32
   G4int c = 0;
@@ -89,8 +103,8 @@ int main(int argc,char** argv)
      switch (c)
      {
        case 'p':
-         physName = optarg;
-         G4cout << "Physics List used is " <<  physName << G4endl;
+         physicsList = optarg;
+         G4cout << "Physics List used is " <<  physicsList << G4endl;
          break;
        case ':':       /* -p without operand */
          fprintf(stderr,"Option -%c requires an operand\n", optopt);
@@ -101,48 +115,32 @@ int main(int argc,char** argv)
   }
 #endif
 
-  // My Verbose output class
-
-  G4VSteppingVerbose::SetInstance(new F04SteppingVerbose);
-
-  // Construct the default run manager
-
-  G4RunManager * runManager = new G4RunManager;
-
   // Set mandatory initialization classes
-
+  //
+  // Detector construction
   F04DetectorConstruction* detector = new F04DetectorConstruction();
-
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new F04PhysicsList(physName));
+  // Physics list
+  runManager->SetUserInitialization(new F04PhysicsList(physicsList));
+  // User action initialization
+  runManager->SetUserInitialization(new F04ActionInitialization(detector));
+
+  // Initialize G4 kernel
+  //
+  //runManager->Initialize();
 
 #ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new G4VisExecutive();
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-
 #endif
 
-  // Set mandatory user action class
-
-  runManager->SetUserAction( new F04PrimaryGeneratorAction(detector) );
-
-  F04RunAction* runAction = new F04RunAction();
-  F04EventAction* eventAction = new F04EventAction(runAction);
-
-  runManager->SetUserAction(runAction);
-  runManager->SetUserAction(eventAction);
-  runManager->SetUserAction( new F04TrackingAction() );
-  runManager->SetUserAction( new F04SteppingAction() );
-  runManager->SetUserAction( new F04StackingAction() );
-
-  // runManager->Initialize();
-
   // Get the pointer to the User Interface manager
-
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();
+  //
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
 #ifndef WIN32
   G4int optmax = argc;
@@ -158,26 +156,39 @@ int main(int argc,char** argv)
      }
   }
 #else  // Simple UI for Windows runs, no possibility of additional arguments
-  if (argc!=1)
+  if (argc!=1)   // batch mode
   {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UImanager->ApplyCommand(command+fileName);
   }
 #endif
-  else  {
+  else
+  {
      // Define (G)UI terminal for interactive mode
 #ifdef G4UI_USE
      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
 #ifdef G4VIS_USE
-     UImanager->ApplyCommand("/control/execute vis.mac");
+//     UImanager->ApplyCommand("/control/execute vis.mac");
+     G4cout << "At the prompt, issue commands to set up detector & field, then:"
+         << G4endl;
+     G4cout << "/run/initialize" << G4endl;
+     G4cout << "Then if you want a viewer:"<< G4endl;
+     G4cout << "/control/execute vis.mac" << G4endl;
+     G4cout << "Then: " << G4endl;
+     G4cout << "/run/beamOn … etc." << G4endl;
 #endif
+     if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
      ui->SessionStart();
      delete ui;
 #endif
   }
 
-  // job termination
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
 
 #ifdef G4VIS_USE
   delete visManager;
@@ -186,3 +197,5 @@ int main(int argc,char** argv)
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

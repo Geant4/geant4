@@ -38,35 +38,57 @@
 #ifndef HadrontherapyDetectorROGeometry_h
 #define HadrontherapyDetectorROGeometry_h 
 
-#include "G4VReadOutGeometry.hh"
+//#include "G4VReadOutGeometry.hh"
+#include "G4VUserParallelWorld.hh"
+#include "G4ThreeVector.hh"
+#include "G4Box.hh"
 
-class HadrontherapyDetectorROGeometry : public G4VReadOutGeometry
+class HadrontherapyDetectorROGeometry : public G4VUserParallelWorld
 {
 public:
-  HadrontherapyDetectorROGeometry(G4String aString,
-				  G4ThreeVector detectorPos,
-				  G4double detectorDimX,
-				  G4double detectorDimY,
-				  G4double detectorDimZ,
-				  G4int numberOfVoxelsX,
-				  G4int numberOfVoxelsY,
-				  G4int numberOfVoxelsZ);
-
+  HadrontherapyDetectorROGeometry(G4String);
   ~HadrontherapyDetectorROGeometry();
 
-private:
-  G4VPhysicalVolume* Build();
+  void Initialize(G4ThreeVector detectorPos,
+		  G4double detectorDimX,
+		  G4double detectorDimY,
+		  G4double detectorDimZ,
+		  G4int numberOfVoxelsX,
+		  G4int numberOfVoxelsY,
+		  G4int numberOfVoxelsZ);
+
+  void UpdateROGeometry();
+
+  virtual void Construct();
+  virtual void ConstructSD();
 
 private:  
-  const G4ThreeVector detectorToWorldPosition; 
-  const G4double detectorSizeX;
-  const G4double detectorSizeY; 
-  const G4double detectorSizeZ;
+  //Parameters used for the construction
+  G4ThreeVector detectorToWorldPosition; 
+  G4double detectorSizeX;
+  G4double detectorSizeY; 
+  G4double detectorSizeZ;
 
-  const G4int numberOfVoxelsAlongX;
-  const G4int numberOfVoxelsAlongY; 
-  const G4int numberOfVoxelsAlongZ; 
+  G4int numberOfVoxelsAlongX;
+  G4int numberOfVoxelsAlongY; 
+  G4int numberOfVoxelsAlongZ; 
   
-  G4VPhysicalVolume *RODetectorZDivisionPhys;
+  //Solids that are updated on-the fly
+  G4Box* RODetector;
+  G4Box* RODetectorXDivision;
+  G4Box* RODetectorYDivision;
+  G4Box* RODetectorZDivision;
+
+  //Logical volumes used for the re-build on-the-fly
+  G4LogicalVolume* worldLogical;
+  G4LogicalVolume* RODetectorLog;
+  G4LogicalVolume* RODetectorXDivisionLog;
+  G4LogicalVolume* RODetectorYDivisionLog;
+  G4LogicalVolume* RODetectorZDivisionLog;
+  G4LogicalVolume* sensitiveLogicalVolume;
+
+
+  G4bool isBuilt;
+  G4bool isInitialized;
 };
 #endif

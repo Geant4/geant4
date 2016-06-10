@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeSteppingAction.cc 73915 2013-09-17 07:32:26Z gcosmo $
+//
 /// \file optical/LXe/src/LXeSteppingAction.cc
 /// \brief Implementation of the LXeSteppingAction class
 //
@@ -67,7 +69,10 @@ LXeSteppingAction::~LXeSteppingAction() {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
+
   G4Track* theTrack = theStep->GetTrack();
+
+  if ( theTrack->GetCurrentStepNumber() == 1 ) fExpectedNextStatus = Undefined;
  
   LXeUserTrackInformation* trackInformation
     =(LXeUserTrackInformation*)theTrack->GetUserInformation();
@@ -82,7 +87,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
   G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
 
   G4OpBoundaryProcessStatus boundaryStatus=Undefined;
-  static G4OpBoundaryProcess* boundary=NULL;
+  static G4ThreadLocal G4OpBoundaryProcess* boundary=NULL;
 
   //find the boundary process only once
   if(!boundary){
@@ -129,6 +134,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
   }
 
   if(!thePostPV){//out of world
+    fExpectedNextStatus=Undefined;
     return;
   }
 
@@ -151,7 +157,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
     }
 
     boundaryStatus=boundary->GetStatus();
- 
+
     //Check to see if the partcile was actually at a boundary
     //Otherwise the boundary status may not be valid
     //Prior to Geant4.6.0-p1 this would not have been enough to check

@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.125 2010-11-24 10:54:13 gcosmo Exp $
+# $Id: architecture.gmk 76241 2013-11-08 11:07:59Z gcosmo $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -138,6 +138,11 @@ else
     CPPFLAGS += -DG4OPTIMISE
     G4OPTIMISE := 1
   endif
+endif
+
+ifdef G4MULTITHREADED
+  CPPFLAGS += -DG4MULTITHREADED
+  G4MULTITHREADED := 1
 endif
 
 # CLHEP path, etc.
@@ -341,6 +346,10 @@ SORT := sort
 # Default touch used with source/GNUmakefile.  Changed for WIN32.
 #
 TOUCH := touch
+
+# Include geometry specific setup...
+#
+include $(G4INSTALL)/config/geomconf.gmk
 
 # Include architecture dependent setups...
 #

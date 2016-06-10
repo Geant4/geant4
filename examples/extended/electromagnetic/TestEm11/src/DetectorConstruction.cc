@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 77288 2013-11-22 10:52:58Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,12 +51,16 @@
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
+#include "G4RunManager.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fDefaultMaterial(0),fPhysiWorld(0),fMagField(0)
+:G4VUserDetectorConstruction(),fDefaultMaterial(0),fPhysiWorld(0),
+ fDetectorMessenger(0)
 {
   // default parameter values of the absorbers
   fNbOfAbsor = 1;
@@ -96,26 +100,24 @@ void DetectorConstruction::DefineMaterials()
 {
   G4NistManager* man = G4NistManager::Instance();
   
-  G4bool isotopes = false;
+  man->FindOrBuildMaterial("G4_Al");
+  man->FindOrBuildMaterial("G4_Si");
+  man->FindOrBuildMaterial("G4_Fe");
+  man->FindOrBuildMaterial("G4_Cu");  
+  man->FindOrBuildMaterial("G4_Ge");
+  man->FindOrBuildMaterial("G4_Mo");
+  man->FindOrBuildMaterial("G4_Ta");
+  man->FindOrBuildMaterial("G4_W");
+  man->FindOrBuildMaterial("G4_Au");
+  man->FindOrBuildMaterial("G4_Pb");  
+  man->FindOrBuildMaterial("G4_PbWO4");
+  man->FindOrBuildMaterial("G4_SODIUM_IODIDE");
   
-  man->FindOrBuildMaterial("G4_Al", isotopes);
-  man->FindOrBuildMaterial("G4_Si", isotopes);
-  man->FindOrBuildMaterial("G4_Fe", isotopes);
-  man->FindOrBuildMaterial("G4_Cu", isotopes);  
-  man->FindOrBuildMaterial("G4_Ge", isotopes);
-  man->FindOrBuildMaterial("G4_Mo", isotopes);
-  man->FindOrBuildMaterial("G4_Ta", isotopes);
-  man->FindOrBuildMaterial("G4_W" , isotopes);
-  man->FindOrBuildMaterial("G4_Au", isotopes);
-  man->FindOrBuildMaterial("G4_Pb", isotopes);  
-  man->FindOrBuildMaterial("G4_PbWO4", isotopes);
-  man->FindOrBuildMaterial("G4_SODIUM_IODIDE", isotopes);
+  man->FindOrBuildMaterial("G4_AIR");
+  man->FindOrBuildMaterial("G4_WATER");
   
-  man->FindOrBuildMaterial("G4_AIR"  , isotopes);
-  man->FindOrBuildMaterial("G4_WATER", isotopes);
-  
-  G4Element* H = man->FindOrBuildElement("H", isotopes); 
-  G4Element* O = man->FindOrBuildElement("O", isotopes);
+  G4Element* H = man->FindOrBuildElement("H"); 
+  G4Element* O = man->FindOrBuildElement("O");
   
   G4Material* H2O = 
   new G4Material("Water", 1.000*g/cm3, 2);
@@ -163,22 +165,22 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // World
   //
   G4Box* solidWorld =
-    new G4Box("World",                                                //name
-               fAbsorSizeX/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);        //size
+    new G4Box("World",                                             //name
+               fAbsorSizeX/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);       //size
 
   G4LogicalVolume* logicWorld =
-    new G4LogicalVolume(solidWorld,                //solid
+    new G4LogicalVolume(solidWorld,              //solid
                         fDefaultMaterial,        //material
                         "World");                //name
 
   fPhysiWorld = 
     new G4PVPlacement(0,                        //no rotation
-                        G4ThreeVector(),                //at (0,0,0)
-                      logicWorld,                //logical volume
-                      "World",                        //name
-                       0,                        //mother volume
-                       false,                        //no boolean operation
-                       0);                       //copy number
+                        G4ThreeVector(),        //at (0,0,0)
+                      logicWorld,               //logical volume
+                      "World",                  //name
+                       0,                       //mother volume
+                       false,                   //no boolean operation
+                       0);                      //copy number
                                  
   //
   // Absorbers
@@ -193,21 +195,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
       new G4Box(matname,fAbsorThickness[k]/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);
 
     G4LogicalVolume* logicAbsor =
-      new G4LogicalVolume(solidAbsor,            // solid
-                          material,                 // material
+      new G4LogicalVolume(solidAbsor,           // solid
+                          material,             // material
                           matname);             // name
                                      
     fXfront[k] = fXfront[k-1] + fAbsorThickness[k-1];    
     G4double xcenter = fXfront[k]+0.5*fAbsorThickness[k];
     G4ThreeVector position = G4ThreeVector(xcenter,0.,0.);
   
-      new G4PVPlacement(0,                           //no rotation
-                              position,                   //position
-                        logicAbsor,             //logical volume        
-                        matname,                   //name
-                        logicWorld,                //mother
-                        false,                     //no boulean operat
-                        k);                       //copy number
+      new G4PVPlacement(0,                     //no rotation
+                              position,        //position
+                        logicAbsor,            //logical volume        
+                        matname,               //name
+                        logicWorld,            //mother
+                        false,                 //no boulean operat
+                        k);                    //copy number
     
     // divisions, if any
     //
@@ -216,16 +218,16 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
       new G4Box(matname,LayerThickness/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);
                        
     G4LogicalVolume* logicLayer =
-      new G4LogicalVolume(solidLayer,        //solid
+      new G4LogicalVolume(solidLayer,      //solid
                           material,        //material
-                          matname);         //name
+                          matname);        //name
                                        
-      new G4PVReplica(matname,                        //name
-                            logicLayer,                //logical volume
-                            logicAbsor,                //mother
-                      kXAxis,                        //axis of replication
-                      fNbOfDivisions[k],                //number of replica
-                      LayerThickness);                //witdth of replica    
+      new G4PVReplica(matname,             //name
+                            logicLayer,    //logical volume
+                            logicAbsor,    //mother
+                      kXAxis,              //axis of replication
+                      fNbOfDivisions[k],   //number of replica
+                      LayerThickness);     //witdth of replica    
   }
 
 
@@ -265,11 +267,12 @@ void DetectorConstruction::SetNbOfAbsor(G4int ival)
       return;
     }
   fNbOfAbsor = ival;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetAbsorMaterial(G4int iabs, const G4String& material)
+void DetectorConstruction::SetAbsorMaterial(G4int iabs,const G4String& material)
 {
   // search the material by its name
   //
@@ -281,7 +284,10 @@ void DetectorConstruction::SetAbsorMaterial(G4int iabs, const G4String& material
 
   G4Material* pttoMaterial = 
     G4NistManager::Instance()->FindOrBuildMaterial(material);
-  if (pttoMaterial) fAbsorMaterial[iabs] = pttoMaterial;
+  if (pttoMaterial) {
+      fAbsorMaterial[iabs] = pttoMaterial;
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -301,6 +307,7 @@ void DetectorConstruction::SetAbsorThickness(G4int iabs,G4double val)
       return;
     }
   fAbsorThickness[iabs] = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -315,6 +322,7 @@ void DetectorConstruction::SetAbsorSizeYZ(G4double val)
       return;
     }
   fAbsorSizeYZ = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -335,39 +343,26 @@ void DetectorConstruction::SetNbOfDivisions(G4int iabs, G4int ival)
       return;
     }
   fNbOfDivisions[iabs] = ival;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-void DetectorConstruction::SetMagField(G4double fieldValue)
+void DetectorConstruction::ConstructSDandField()
 {
-  //apply a global uniform magnetic field along Z axis
-  //
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if(fMagField) delete fMagField;                //delete the existing magn field
-
-  if(fieldValue!=0.)                        // create a new one if non nul
-  { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(fMagField);
-    fieldMgr->CreateChordFinder(fMagField);
-  } else {
-    fMagField = 0;
-    fieldMgr->SetDetectorField(fMagField);
-  }
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

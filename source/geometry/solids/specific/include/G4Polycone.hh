@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Polycone.hh 76510 2013-11-12 10:28:06Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -41,10 +41,12 @@
 //   G4Polycone( const G4String& name, 
 //               G4double phiStart,     // initial phi starting angle
 //               G4double phiTotal,     // total phi angle
-//               G4int numZPlanes,     // number of z planes
+//               G4int numZPlanes,      // number of z planes
 //               const G4double zPlane[],  // position of z planes
 //               const G4double rInner[],  // tangent distance to inner surface
 //               const G4double rOuter[])  // tangent distance to outer surface
+//
+//   Alternative constructor, but limited to increasing-only Z sections:
 //
 //   G4Polycone( const G4String& name, 
 //               G4double phiStart,   // initial phi starting angle
@@ -56,31 +58,25 @@
 // Author: 
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4Polycone_hh
 #define G4Polycone_hh
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UPOLYCONE 1
+#endif
+
+#if defined(G4GEOM_USE_UPOLYCONE)
+  #define G4UPolycone G4Polycone
+  #include "G4UPolycone.hh"
+#else
+
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
+#include "G4PolyconeHistorical.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 class G4VCSGface;
-class G4PolyconeHistorical
-{
-  public:
-    G4PolyconeHistorical();
-    ~G4PolyconeHistorical();
-    G4PolyconeHistorical( const G4PolyconeHistorical& source );
-    G4PolyconeHistorical& operator=( const G4PolyconeHistorical& right );
-
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
-};
 
 class G4Polycone : public G4VCSGfaceted 
 {
@@ -123,7 +119,6 @@ class G4Polycone : public G4VCSGfaceted
   std::ostream& StreamInfo(std::ostream& os) const;
 
   G4Polyhedron* CreatePolyhedron() const;
-  G4NURBS*      CreateNURBS() const;
 
   G4bool Reset();
 
@@ -132,7 +127,6 @@ class G4Polycone : public G4VCSGfaceted
   inline G4double GetStartPhi()  const;
   inline G4double GetEndPhi()    const;
   inline G4bool IsOpen()         const;
-  inline G4bool IsGeneric()      const;
   inline G4int  GetNumRZCorner() const;
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
   inline G4PolyconeHistorical* GetOriginalParameters() const;
@@ -153,7 +147,7 @@ class G4Polycone : public G4VCSGfaceted
 
   // Generic initializer, called by all constructors
 
-  inline void SetOriginalParameters();
+  G4bool SetOriginalParameters(G4ReduciblePolygon *rz);
 
   void Create( G4double phiStart,        // initial phi starting angle
                G4double phiTotal,        // total phi angle
@@ -188,7 +182,6 @@ class G4Polycone : public G4VCSGfaceted
   G4double startPhi;    // Starting phi value (0 < phiStart < 2pi)
   G4double endPhi;      // end phi value (0 < endPhi-phiStart < 2pi)
   G4bool   phiIsOpen;   // true if there is a phi segment
-  G4bool   genericPcon; // true if created through the 2nd generic constructor
   G4int   numCorner;    // number RZ points
   G4PolyconeSideRZ *corners;  // corner r,z points
   G4PolyconeHistorical  *original_parameters;  // original input parameters
@@ -200,5 +193,7 @@ class G4Polycone : public G4VCSGfaceted
 };
 
 #include "G4Polycone.icc"
+
+#endif
 
 #endif

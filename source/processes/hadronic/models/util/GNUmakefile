@@ -1,4 +1,5 @@
-# $Id: GNUmakefile,v 1.2 2003-10-17 17:23:43 lara Exp $
+# $Id: GNUmakefile 67984 2013-03-13 10:44:01Z gcosmo $
+#
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------

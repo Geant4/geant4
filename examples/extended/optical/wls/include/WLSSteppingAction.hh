@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSSteppingAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSSteppingAction.hh
 /// \brief Definition of the WLSSteppingAction class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -51,9 +50,9 @@ class WLSSteppingAction : public G4UserSteppingAction
   public:
 
     WLSSteppingAction(WLSDetectorConstruction*);
-    ~WLSSteppingAction();
+    virtual ~WLSSteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
  
     // Set the bounce limit, 0 for no limit
     void  SetBounceLimit(G4int);
@@ -68,47 +67,40 @@ class WLSSteppingAction : public G4UserSteppingAction
   private:
 
     // Artificially kill the photon after it has bounced more than this number
-    G4int bounceLimit;
+    G4int fBounceLimit;
     // number of photons that reach the end
-    G4int counterEnd;
+    G4int fCounterEnd;
     // number of photons that didn't make it to the end
-    G4int counterMid;
+    G4int fCounterMid;
     // total number of bounces that a photon been through
-    G4int counterBounce;
+    G4int fCounterBounce;
     // number of bounces that a photon been through within the fibre
-    G4int counterWLSBounce;
+    G4int fCounterWLSBounce;
     // number of bounces that a photon been through from Cladding 1 to 2
-    G4int counterClad1Bounce;
+    G4int fCounterClad1Bounce;
     // number of bounces that a photon been through from Cladding 2 to World
-    G4int counterClad2Bounce;
+    G4int fCounterClad2Bounce;
 
-    // The starting position of the photon
-    G4double initZ;
     // initial gamma of the photon
-    G4double initGamma;
+    G4double fInitGamma;
     // initial theta of the photon
-    G4double initTheta;
+    G4double fInitTheta;
 
-    G4OpBoundaryProcess* opProcess;
+    G4OpBoundaryProcess* fOpProcess;
 
     // maximum number of save states
-    static G4int maxRndmSave;
+    static G4int fMaxRndmSave;
  
-    WLSDetectorConstruction* detector;
+    WLSDetectorConstruction* fDetector;
 
-    WLSSteppingActionMessenger* steppingMessenger;
+    WLSSteppingActionMessenger* fSteppingMessenger;
 
     inline void ResetCounters()
     { 
-      counterBounce = counterWLSBounce =
-      counterClad1Bounce = counterClad2Bounce = 0;
-      initGamma = initTheta = -1;
+      fCounterBounce = fCounterWLSBounce =
+      fCounterClad1Bounce = fCounterClad2Bounce = 0;
+      fInitGamma = fInitTheta = -1;
     }
-
-    void UpdateHistogramSuccess(G4StepPoint*, G4Track*);
-    void UpdateHistogramReflect(G4StepPoint*, G4Track*);
-    void UpdateHistogramEscape(G4StepPoint*, G4Track*);
-    void UpdateHistogramAbsorb(G4StepPoint*, G4Track*);
 
     // save the random status into a sub-directory
     // Pre: subDir must be empty or ended with "/"

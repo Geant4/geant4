@@ -25,7 +25,7 @@
 //
 //
 
-// $Id$
+// $Id: G4DNACrossSectionDataSet.cc 70171 2013-05-24 13:34:18Z gcosmo $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 // Code review by MGP October 2007: removed inheritance from concrete class

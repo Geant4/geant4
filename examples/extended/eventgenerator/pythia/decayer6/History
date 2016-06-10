@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2010-12-05 21:13:57 gcosmo Exp $
+$Id: History 78019 2013-12-02 15:52:19Z gcosmo $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,17 @@ modifications introduced in the code and keep track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02/12/2013 - I.Hrivnacova (p6decayer-V09-06-01)
+-------------------------
+- Fixed warnings about shadowed variables; removed tabulations
+
+11/07/2013 - I.Hrivnacova (p6decayer-V09-06-00)
+-------------------------
+- Fixed use of particle iterator in P6DExtDecayerPhysics.cc
+  (which was changed with changes for MT)
+
 24/08/2012 - I.Hrivnacova (p6decayer-V09-05-02)
+-------------------------
 - Fixed documentation files
 
 05/06/2012 - I.Hrivnacova (p6decayer-V09-05-01)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PhysListEmStandard.cc 68530 2013-04-01 21:30:05Z adotti $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -40,7 +40,6 @@
 #include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel96.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -86,9 +85,9 @@ void PhysListEmStandard::ConstructProcess()
   
   // Add standard EM Processes
   //
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
@@ -96,15 +95,13 @@ void PhysListEmStandard::ConstructProcess()
       ////ph->RegisterProcess(new G4RayleighScattering, particle);      
       ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
       G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
+      cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion, particle);
      
     } else if (particleName == "e-") {
     
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc -> AddEmModel(0, new G4UrbanMscModel96());    
-      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);
       //            
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
@@ -114,9 +111,7 @@ void PhysListEmStandard::ConstructProcess()
             
     } else if (particleName == "e+") {
     
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc -> AddEmModel(0, new G4UrbanMscModel96());    
-      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);
       //     
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      

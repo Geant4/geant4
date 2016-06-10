@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4StatMFMacroNucleon.hh 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -39,46 +38,39 @@ class G4StatMFMacroNucleon : public G4VStatMFMacroCluster {
 
 public:
 
-    // Default constructor
-    G4StatMFMacroNucleon() : 
-	G4VStatMFMacroCluster(1), _NeutronMeanMultiplicity(0.0),_ProtonMeanMultiplicity(0.0)
-	 {};
+  G4StatMFMacroNucleon(); 
 
-    // Destructor
-    ~G4StatMFMacroNucleon() {};
+  ~G4StatMFMacroNucleon();
 	
+  G4double CalcMeanMultiplicity(const G4double FreeVol, const G4double mu, 
+				const G4double nu, const G4double T);
+	
+  inline G4double CalcZARatio(const G4double ) 
+  { 
+    theZARatio = 0.0;
+    if (_ProtonMeanMultiplicity+_NeutronMeanMultiplicity > 0.0) {
+      theZARatio = _ProtonMeanMultiplicity/
+	(_ProtonMeanMultiplicity+_NeutronMeanMultiplicity);
+    }
+    return theZARatio; 
+  }					
+						
+  G4double CalcEnergy(const G4double T);
+	
+  G4double CalcEntropy(const G4double T, const G4double FreeVol);
 
 private:
 
-    // Copy constructor
-    G4StatMFMacroNucleon(const G4StatMFMacroNucleon & right);
+  // Copy constructor
+  G4StatMFMacroNucleon(const G4StatMFMacroNucleon & right);
 
-    // operators
-    G4StatMFMacroNucleon & operator=(const G4StatMFMacroNucleon & right);
-    G4bool operator==(const G4StatMFMacroNucleon & right) const;
-    G4bool operator!=(const G4StatMFMacroNucleon & right) const;
+  // operators
+  G4StatMFMacroNucleon & operator=(const G4StatMFMacroNucleon & right);
+  G4bool operator==(const G4StatMFMacroNucleon & right) const;
+  G4bool operator!=(const G4StatMFMacroNucleon & right) const;
 
-public:
-
-    G4double CalcMeanMultiplicity(const G4double FreeVol, const G4double mu, 
-				  const G4double nu, const G4double T);
-	
-    G4double CalcZARatio(const G4double ) 
-	{ if (_ProtonMeanMultiplicity+_NeutronMeanMultiplicity > 0.0)
-	    return theZARatio = _ProtonMeanMultiplicity/
-		(_ProtonMeanMultiplicity+_NeutronMeanMultiplicity);
-	else return 0.0; }
-						
-						
-    G4double CalcEnergy(const G4double T);
-	
-    G4double CalcEntropy(const G4double T, const G4double FreeVol);
-
-	
-private:
-
-    G4double _NeutronMeanMultiplicity;
-    G4double _ProtonMeanMultiplicity;
+  G4double _NeutronMeanMultiplicity;
+  G4double _ProtonMeanMultiplicity;
 
 };
 

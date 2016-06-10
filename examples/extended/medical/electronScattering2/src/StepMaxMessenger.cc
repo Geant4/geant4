@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: StepMaxMessenger.cc 70735 2013-06-05 10:13:16Z gcosmo $
+//
 /// \file medical/electronScattering2/src/StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
-//
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMaxMessenger.hh"
 
@@ -39,27 +36,27 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:fStepMax(stepM)
-{ 
-  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
-  fStepMaxCmd->SetGuidance("Set max allowed step length");
-  fStepMaxCmd->SetParameterName("mxStep",false);
-  fStepMaxCmd->SetRange("mxStep>0.");
-  fStepMaxCmd->SetUnitCategory("Length");
+: G4UImessenger(), fStepMax(stepM), fStepMaxCmd(0) 
+{
+    fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+    fStepMaxCmd->SetGuidance("Set max allowed step length");
+    fStepMaxCmd->SetParameterName("mxStep",false);
+    fStepMaxCmd->SetRange("mxStep>0.");
+    fStepMaxCmd->SetUnitCategory("Length");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::~StepMaxMessenger()
 {
-  delete fStepMaxCmd;
+    delete fStepMaxCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if (command == fStepMaxCmd)
+{
+    if (command == fStepMaxCmd)
     { fStepMax->SetMaxStep(fStepMaxCmd->GetNewDoubleValue(newValue));}
 }
 

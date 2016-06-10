@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomPrimaryGeneratorAction.hh 73076 2013-08-16 07:45:30Z gcosmo $
+//
 /// \file medical/DICOM/include/DicomPrimaryGeneratorAction.hh
 /// \brief Definition of the DicomPrimaryGeneratorAction class
 //
@@ -59,7 +61,7 @@ public:
   DicomPrimaryGeneratorAction();
   ~DicomPrimaryGeneratorAction();
   
-  void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
   
 private:
   G4ParticleGun* fParticleGun;

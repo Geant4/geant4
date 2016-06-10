@@ -1,5 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2010-01-11 16:40:31 gcosmo Exp $
-# GEANT4 tag $Name: not supported by cvs2svn $
+# $Id: GNUmakefile 68804 2013-04-05 14:01:29Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module 
 # --------------------------------------------------------------

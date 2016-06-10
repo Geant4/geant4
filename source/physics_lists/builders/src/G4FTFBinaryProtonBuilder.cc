@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4FTFBinaryProtonBuilder.cc 68750 2013-04-05 10:19:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@ G4FTFBinaryProtonBuilder::
 G4FTFBinaryProtonBuilder(G4bool quasiElastic) 
 {
   theMin = 4*GeV;
+  theMax = 100*TeV;
   theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
@@ -63,7 +64,7 @@ G4FTFBinaryProtonBuilder(G4bool quasiElastic)
 
   theModel->SetHighEnergyGenerator(theStringModel);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
 
   if (quasiElastic)
   {
@@ -78,6 +79,7 @@ void G4FTFBinaryProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
   aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
 }

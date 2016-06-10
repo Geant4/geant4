@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4MagIntegratorDriver.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // 
 //
@@ -153,7 +153,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   G4double startCurveLength;
 
   G4int  noFullIntegr=0, noSmallIntegr = 0 ;
-  static G4int  noGoodSteps =0 ;  // Bad = chord > curve-len 
+  static G4ThreadLocal G4int  noGoodSteps =0 ;  // Bad = chord > curve-len 
   const  G4int  nvar= fNoVars;
 
   G4FieldTrack yStartFT(y_current);
@@ -431,7 +431,7 @@ G4MagInt_Driver::WarnSmallStepSize( G4double hnext, G4double hstep,
                                     G4double h, G4double xDone,
                                     G4int nstp)
 {
-  static G4int noWarningsIssued =0;
+  static G4ThreadLocal G4int noWarningsIssued =0;
   const  G4int maxNoWarnings =  10;   // Number of verbose warnings
   std::ostringstream message;
   if( (noWarningsIssued < maxNoWarnings) || fVerboseLevel > 10 )
@@ -481,7 +481,7 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
                                      G4double  eps,
                                      G4int     dbg)
 {
-  static G4double maxRelError=0.0;
+  static G4ThreadLocal G4double maxRelError=0.0;
   G4bool isNewMax, prNewMax;
 
   isNewMax = endPointDist > (1.0 + maxRelError) * h;
@@ -491,7 +491,7 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
   if( dbg && (h > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) 
           && ( (dbg>1) || prNewMax || (endPointDist >= h*(1.+eps) ) ) )
   { 
-    static G4int noWarnings = 0;
+    static G4ThreadLocal G4int noWarnings = 0;
     std::ostringstream message;
     if( (noWarnings ++ < 10) || (dbg>2) )
     {
@@ -549,7 +549,7 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 
   G4int iter;
 
-  static G4int tot_no_trials=0; 
+  static G4ThreadLocal G4int tot_no_trials=0; 
   const G4int max_trials=100; 
 
   G4ThreeVector Spin(y[9],y[10],y[11]);
@@ -663,7 +663,7 @@ G4bool  G4MagInt_Driver::QuickAdvance(
   G4double s_start;
   G4double dyerr_mom_sq, vel_mag_sq, inv_vel_mag_sq;
 
-  static G4int no_call=0; 
+  static G4ThreadLocal G4int no_call=0; 
   no_call ++; 
 
   // Move data into array
@@ -845,7 +845,7 @@ void G4MagInt_Driver::PrintStatus(
                   G4int                subStepNo)
 {
     G4int verboseLevel= fVerboseLevel;
-    static G4int noPrecision= 5;
+    static G4ThreadLocal G4int noPrecision= 5;
     G4int oldPrec= G4cout.precision(noPrecision);
     // G4cout.setf(ios_base::fixed,ios_base::floatfield);
 
@@ -951,9 +951,9 @@ void G4MagInt_Driver::PrintStat_Aux(
     G4cout << std::setw( 7) << aFieldTrack.GetKineticEnergy();
     G4cout << std::setw(12) << step_len << " ";
 
-    static G4double oldCurveLength= 0.0;
-    static G4double oldSubStepLength= 0.0;
-    static G4int oldSubStepNo= -1;
+    static G4ThreadLocal G4double oldCurveLength= 0.0;
+    static G4ThreadLocal G4double oldSubStepLength= 0.0;
+    static G4ThreadLocal G4int oldSubStepNo= -1;
 
     G4double subStep_len=0.0;
     if( curveLen > oldCurveLength )

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmPhysicsList.cc 73290 2013-08-23 10:04:20Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmPhysicsList.cc
 /// \brief Implementation of the exrdmPhysicsList class
 //
@@ -33,7 +35,9 @@
 
 #include "exrdmPhysListParticles.hh"
 #include "G4EmStandardPhysics.hh"
-#include "exrdmPhysListEmLowEnergy.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "exrdmPhysListHadron.hh"
 #include "G4RegionStore.hh"
 #include "G4Region.hh"
@@ -49,13 +53,14 @@
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
 
-#include "HadronPhysicsQGSP_BERT.hh"
-#include "HadronPhysicsQGSP_BIC.hh"
-#include "HadronPhysicsQGSP_BERT_HP.hh"
-#include "HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BIC.hh"
+#include "G4HadronPhysicsQGSP_BERT_HP.hh"
+#include "G4HadronPhysicsQGSP_BIC_HP.hh"
 
 #include "G4EmExtraPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsHP.hh"
 #include "G4StoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
@@ -69,8 +74,13 @@
 exrdmPhysicsList::exrdmPhysicsList() :
  G4VModularPhysicsList(),
  fCutForGamma(1.*mm), fCutForElectron(1.*mm),
- fCutForPositron(1.*mm), fHadPhysicsList(0),
- fNhadcomp(0),fDetectorCuts(0), fTargetCuts(0)
+ fCutForPositron(1.*mm), 
+ fEmPhysicsList(0),
+ fRaddecayList(0),
+ fParticleList(0),
+ fHadPhysicsList(0),
+ fNhadcomp(0),
+ fPMessenger(0),fDetectorCuts(0), fTargetCuts(0)
 {
   G4LossTableManager::Instance();
   defaultCutValue =1.*mm;
@@ -87,9 +97,6 @@ exrdmPhysicsList::exrdmPhysicsList() :
 
   // EM physics
   fEmPhysicsList = new G4EmStandardPhysics();
-  
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,22 +154,28 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
     fHadPhysicsList = new exrdmPhysListHadron("hadron");
   } else if (name == "QGSP_BERT") {
     AddExtraBuilders(false);
-    fHadPhysicsList = new HadronPhysicsQGSP_BERT("std-hadron");
+    fHadPhysicsList = new G4HadronPhysicsQGSP_BERT(verboseLevel);
   } else if (name == "QGSP_BIC" && !fHadPhysicsList) {
     AddExtraBuilders(false);
-    fHadPhysicsList = new HadronPhysicsQGSP_BIC("std-hadron");
+    fHadPhysicsList = new G4HadronPhysicsQGSP_BIC(verboseLevel);
   } else if (name == "QGSP_BERT_HP"  && !fHadPhysicsList) {
     AddExtraBuilders(true);
-    fHadPhysicsList = new HadronPhysicsQGSP_BERT_HP("std-hadron");
+    fHadPhysicsList = new G4HadronPhysicsQGSP_BERT_HP(verboseLevel);
   } else if (name == "QGSP_BIC_HP"  && !fHadPhysicsList) {
     AddExtraBuilders(true);
-    fHadPhysicsList = new HadronPhysicsQGSP_BIC_HP("std-hadron");
-  } else if (name == "LowEnergy_EM") {
+    fHadPhysicsList = new G4HadronPhysicsQGSP_BIC_HP(verboseLevel);
+  } else if (name == "emlivermore") {
       delete fEmPhysicsList;
-      fEmPhysicsList = new exrdmPhysListEmLowEnergy("lowe-em");
-  } else if (name == "Standard_EM") {
+      fEmPhysicsList = new G4EmLivermorePhysics(verboseLevel);
+  } else if (name == "empenelope") {
       delete fEmPhysicsList;
-      fEmPhysicsList = new G4EmStandardPhysics();
+      fEmPhysicsList = new G4EmPenelopePhysics(verboseLevel);
+  } else if (name == "emstandard") {
+      delete fEmPhysicsList;
+      fEmPhysicsList = new G4EmStandardPhysics(verboseLevel);
+  } else if (name == "emstandard_opt4") {
+      delete fEmPhysicsList;
+      fEmPhysicsList = new G4EmStandardPhysics_option4(verboseLevel);
   } else {
       G4cout << "exrdmPhysicsList WARNING wrong or unkonwn <" 
              << name << "> Physics " << G4endl;
@@ -174,12 +187,15 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
 void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
 {
   fNhadcomp = 5;
-  fHadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
-  fHadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
-                                                   flagHP));
-  fHadronPhys.push_back( new G4StoppingPhysics("stopping",verboseLevel));
-  fHadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
-  fHadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
+  fHadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
+  if(flagHP) {
+    fHadronPhys.push_back( new G4HadronElasticPhysicsHP(verboseLevel));
+  } else {
+    fHadronPhys.push_back( new G4HadronElasticPhysics(verboseLevel));
+  }
+  fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
+  fHadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
+  fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

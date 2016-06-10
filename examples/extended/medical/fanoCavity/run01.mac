@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.8 2010-01-19 17:28:20 maire Exp $
+# $Id: run01.mac 68996 2013-04-15 09:19:55Z gcosmo $
 #
 /control/verbose 2
 /run/verbose 2
@@ -14,18 +14,18 @@
 #
 /testem/phys/crossSectionFactor 1000
 #
-/testem/histo/setFileName fanocavity
-/testem/histo/setHisto  1 120 -6 +6 mm		#interaction point
-/testem/histo/setHisto  2 125  0  1250 keV	#energy spectrum
-/testem/histo/setHisto  3 100  0  100 deg	#theta distribution
-/testem/histo/setHisto  4 120 -6 +6 mm		#vertex of e- in cav
-/testem/histo/setHisto  5 125  0  1250 keV	#energy spectrum at entrance
-/testem/histo/setHisto  6 100  0  100 deg	#theta dist before entrance
-/testem/histo/setHisto  7 100  0  100 deg	#theta dist after entrance
-/testem/histo/setHisto  8 100  0  10 mm		#track segment in cavity
-/testem/histo/setHisto  9 100  0  1 mm		#step size in wall
-/testem/histo/setHisto 10 100  0  3 mm		#step size in cavity
-/testem/histo/setHisto 11 100  0  3000 eV	#edep in cavity
+/analysis/setFileName fanocavity
+/analysis/h1/set  1 120 -6 +6 mm	#interaction point
+/analysis/h1/set  2 125  0  1250 keV	#energy spectrum
+/analysis/h1/set  3 100  0  100 deg	#theta distribution
+/analysis/h1/set  4 120 -6 +6 mm	#vertex of e- in cav
+/analysis/h1/set  5 125  0  1250 keV	#energy spectrum at entrance
+/analysis/h1/set  6 100  0  100 deg	#theta dist before entrance
+/analysis/h1/set  7 100  0  100 deg	#theta dist after entrance
+/analysis/h1/set  8 100  0  10 mm	#track segment in cavity
+/analysis/h1/set  9 100  0  1 mm	#step size in wall
+/analysis/h1/set 10 100  0  3 mm	#step size in cavity
+/analysis/h1/set 11 100  0  3000 eV	#edep in cavity
 #
 /testem/event/printModulo 1000
 #

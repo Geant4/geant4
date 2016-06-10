@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.6 2009-09-22 14:20:31 maire Exp $
+# $Id: run01.mac 74997 2013-10-25 10:52:13Z gcosmo $
 #
 # limit the step size from histo 1
 #
@@ -26,6 +26,6 @@
 #
 /testem/applyAutomaticStepMax true
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000

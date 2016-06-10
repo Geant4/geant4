@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4TrajectoryDrawByParticleID.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 
@@ -46,14 +46,6 @@ G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name,
 }
 
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
-
-void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& object,
-				   const G4int&,
-				   const G4bool& visible) const
-{
-  Draw(object, visible);
-}
 
 void
 G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4bool& visible) const

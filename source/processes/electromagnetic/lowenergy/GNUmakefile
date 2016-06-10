@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2009-06-18 16:18:41 mantero Exp $
+# $Id: GNUmakefile 71326 2013-06-13 17:08:23Z gcosmo $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -21,7 +21,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/processes/electromagnetic/standard/include \
-	    -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/bosons/include \
             -I$(G4BASE)/particles/leptons/include \

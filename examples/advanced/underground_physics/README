@@ -1,22 +1,5 @@
 ------------------------------Advanced Example---------------------------------					README FILE
 
-
-NB: The documentation for this example is in the process of being updated.
-Please go to http://www.ge.infn.it/geant4/examples/ for the most up-to-date
-description, manual, design documentation and users requirement/traceability.
-
-JUNE 2002:
-The underground physics example has been updated since the December Geant4.0
-release to include:  1) Analysis, using AIDA 2.2 and tested against Anaphe 4.0
-		     2) Full lab geometry - important for neutron scattering
-		     3) Updated macros/messengers
-		     4) Correction of a few minor features
-
-The messengers can be seen from typing help within the UI.
-Additional file handling and time/energy cut messengers have been implemented.
-
-(1) and (2) are discussed more fully below
-
 Note: Due to the importation of data files during the initialisation stage of
 Geant4, load-time may be in excess of 5 minutes.
 
@@ -164,22 +147,13 @@ allow forward compatibility should the GPS change.
 
 ANALYSIS:
 
-In order to use the AIDA 3.2.1 compliant analysis set the environment variable
-G4ANALYSIS_USE before building.  If a previous build exists a gmake clean has
-to be executed.  
-
-setenv G4ANALYSIS_USE 1
-
-then gmake
-
-The program should then produce hbook histogram files 
-
-Using AIDA 3.2.1 interfaces three different analysis packages can be utilised:
-Java Analysis Studio (JAS)
-OpenScientist
-PI
-
-Please for more information look at http://aida.freehep.org 
+The program should produce ROOT-based histogram files. It is possible to 
+produce the output in XML-compliant format by editing the file 
+  include/DMXAnalysisManager.hh
+and by commenting out
+ #include "g4root.hh"
+and uncommenting
+ #include "g4xml.hh"
 
 SEEDS:
 

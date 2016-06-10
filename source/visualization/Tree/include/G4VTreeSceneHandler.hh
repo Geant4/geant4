@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VTreeSceneHandler.hh 66870 2013-01-14 23:38:59Z adotti $
 //
 // 
 // John Allison  5th April 2001
@@ -63,7 +63,6 @@ public:
   virtual void AddPrimitive (const G4Circle&)     {}
   virtual void AddPrimitive (const G4Square&)     {}
   virtual void AddPrimitive (const G4Polyhedron&) {}
-  virtual void AddPrimitive (const G4NURBS&)      {}
   virtual void AddPrimitive (const G4Polymarker&) {}
   virtual void AddPrimitive (const G4Scale&)      {}
 

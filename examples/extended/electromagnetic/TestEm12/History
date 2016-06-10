@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2011-01-05 19:07:50 vnivanch Exp $
+$Id: History 77092 2013-11-21 10:50:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,44 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-11-13 V.Ivanchenko (testem12-V09-06-11)
+- PhysListEmStandardWVI and PhysListEmStandardSS - reduced low-energy 
+    threashold for the single scattering model to 10 eV 
+
+28-07-13 P.Gumplinger (testem12-V09-06-10)
+- fix clang32 compilation warning
+
+11-07-13 I.Hrivnacova (testem12-V09-06-09) 
+- In HistoManager: use new analysis manager method SetH1Activation()   
      
+20-06-13 mma (testem12-V09-06-08)
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().
+
+07-06-13 mma (testem12-V09-06-07)
+- Cosmetic in SteppingAction.
+     
+18-04-13 mma (testem12-V09-06-06)
+- use G4AnalysisManager
+     
+01-04-13 A.Dotti (testem12-V09-06-03,testem12-V09-06-04,testem12-V09-06-05)
+- New G4VUserPhysicsList interface needed for MT
+     
+22-03-13 mma (testem12-V09-06-02)  
+- PhysListEmStandard: suppress Msc96
+     
+28-02-13 I. Hrivnacova (testem12-V09-06-01) 
+- When building materials with NistManager
+  do not set fromIsotopes argument (which was set to false), 
+  as since 9.6 all materials have to be built from isotopes.
+  (Thanks to V. Ivantchenko for pointing at this.)
+
+13-02-13 I.Hrivnacova 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+11-12-12 V.Ivant (testem12-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
+
 20-10-12 mma (testem12-V09-05-09)
 - PhysListEmStandard: use G4UrbanMsc96
       

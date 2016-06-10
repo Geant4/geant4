@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: field06.cc 75572 2013-11-04 11:46:08Z gcosmo $
+//
 /// \file field/field06/field06.cc
 /// \brief Main program of the field/field06 example
 //
@@ -36,16 +38,20 @@
 #include <unistd.h>
 #endif
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-
-#include "Randomize.hh"
-
 #include "F06PhysicsList.hh"
 #include "F06DetectorConstruction.hh"
-#include "F06PrimaryGeneratorAction.hh"
+#include "F06ActionInitialization.hh"
 
-#include "G4SteppingVerbose.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
+
+#include "G4UImanager.hh"
+#include "G4UIcommand.hh"
+
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -56,73 +62,120 @@
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+namespace {
+  void PrintUsage() {
+    G4cerr << " Usage: " << G4endl;
+    G4cerr << " field06 [-m macro ] [-u UIsession] [-t nThreads] [-r seed] "
+           << G4endl;
+    G4cerr << "   note: -t option is available only for multi-threaded mode."
+           << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
-  G4int seed = 1234;
-  if (argc  > 2) seed = atoi(argv[argc-1]);
+  // Evaluate arguments
+  //
+  if ( argc > 9 ) {
+    PrintUsage();
+    return 1;
+  }
+
+  G4String macro;
+  G4String session;
+#ifdef G4MULTITHREADED
+  G4int nThreads = 0;
+#endif
+
+  G4long myseed = 1234;
+  for ( G4int i=1; i<argc; i=i+2 ) {
+     if      ( G4String(argv[i]) == "-m" ) macro   = argv[i+1];
+     else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
+     else if ( G4String(argv[i]) == "-r" ) myseed  = atoi(argv[i+1]);
+#ifdef G4MULTITHREADED
+     else if ( G4String(argv[i]) == "-t" ) {
+                    nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
+    }
+#endif
+    else {
+      PrintUsage();
+      return 1;
+    }
+  }
 
   // Choose the Random engine
   //
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheSeed(seed);
-  
-  // User Verbose output class
-  //
-  G4VSteppingVerbose::SetInstance(new G4SteppingVerbose());
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
   //
+#ifdef G4MULTITHREADED 
+  G4MTRunManager * runManager = new G4MTRunManager;
+  if ( nThreads > 0 ) runManager->SetNumberOfThreads(nThreads);
+#else
   G4RunManager * runManager = new G4RunManager;
+#endif
+
+  // Seed the random number generator manually
+  G4Random::setTheSeed(myseed);
 
   // Set mandatory initialization classes
   //
+  // Detector construction
   runManager->SetUserInitialization(new F06DetectorConstruction());
-  //
+  // Physics list
   runManager->SetUserInitialization(new F06PhysicsList());
-
-#ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new G4VisExecutive();
-  visManager->Initialize();
-
-#endif
-    
-  // Set mandatory user action class
-  //
-  runManager->SetUserAction( new F06PrimaryGeneratorAction() );
+  // User action initialization
+  runManager->SetUserInitialization(new F06ActionInitialization());
 
   // Initialize G4 kernel
   //
   runManager->Initialize();
-  
+
+#ifdef G4VIS_USE
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
+#endif
+
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
-  if (argc!=1)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
-    }
+ 
+  if ( macro.size() ) {
+     // batch mode
+     G4String command = "/control/execute ";
+     UImanager->ApplyCommand(command+macro); 
+  }
   else
-    {  // interactive mode : define UI session
+  {  // interactive mode : define UI session
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv, session);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+     UImanager->ApplyCommand("/control/execute vis.mac");
+#else
+     UImanager->ApplyCommand("/control/execute field06.in");
 #endif
-      ui->SessionStart();
-      delete ui;
+     if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
+     ui->SessionStart();
+     delete ui;
 #endif
-    }
+  }
+
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
   
 #ifdef G4VIS_USE
   delete visManager;
-#endif                
+#endif
   delete runManager;
 
   return 0;

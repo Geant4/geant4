@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Ellipsoid.hh 73430 2013-08-27 11:04:49Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -81,6 +81,10 @@ class G4Ellipsoid : public G4VSolid
 
     // Solid standard methods
    
+    void ComputeDimensions(G4VPVParameterisation* p,
+                           const G4int n,
+                           const G4VPhysicalVolume* pRep);
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
@@ -111,7 +115,6 @@ class G4Ellipsoid : public G4VSolid
     void DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent() const;
     G4Polyhedron* CreatePolyhedron() const;
-    G4NURBS*      CreateNURBS() const;
        
   public:  // without description
 
@@ -134,6 +137,7 @@ class G4Ellipsoid : public G4VSolid
   private:
 
     G4double kRadTolerance;
+    G4double halfCarTolerance, halfRadTolerance;
 
     G4double fCubicVolume;
     G4double fSurfaceArea;

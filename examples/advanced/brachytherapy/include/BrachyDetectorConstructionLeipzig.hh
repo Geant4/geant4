@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: BrachyDetectorConstructionLeipzig.hh 69765 2013-05-14 10:11:22Z gcosmo $
 //
 //
 //    ************************************************
@@ -33,7 +33,9 @@
 //    *                                              *
 //    ************************************************
 //
-// Management of Leipzig applicator 
+// Management and modelling of Leipzig applicator 
+//
+// Code by S. Guatelli
 //
 #ifndef BrachyDetectorConstructionLeipzig_H
 #define BrachyDetectorConstructionLeipzig_H 1
@@ -43,6 +45,10 @@
 
 class G4VPhysicalVolume;
 class BrachyMaterial;
+class G4Sphere;
+class G4Tubs;
+class G4LogicalVolume;
+class G4VisAttributes;
 
 class BrachyDetectorConstructionLeipzig
 {
@@ -50,15 +56,33 @@ public:
   BrachyDetectorConstructionLeipzig();
   ~BrachyDetectorConstructionLeipzig(); 
   void ConstructLeipzig(G4VPhysicalVolume*);
+  void CleanLeipzigApplicator();
 
 private:
+  
+  BrachyMaterial* pMaterial; 
+  
+  G4Tubs* capsule;
+  G4Sphere* capsuleTip;
+  G4Tubs* iridiumCore;   
+  G4Tubs* applicator1;
+  G4Tubs* applicator2;
+  
+  G4LogicalVolume* capsuleLog;
+  G4LogicalVolume* capsuleTipLog;
+  G4LogicalVolume* iridiumCoreLog;
+  G4LogicalVolume* applicator1Log;
+  G4LogicalVolume* applicator2Log;
+ 
   G4VPhysicalVolume* capsulePhys;
   G4VPhysicalVolume* capsuleTipPhys;
   G4VPhysicalVolume* iridiumCorePhys;
   G4VPhysicalVolume* applicator1Phys;
   G4VPhysicalVolume* applicator2Phys;
 
-  BrachyMaterial* pMaterial;   
+  G4VisAttributes* simpleCapsuleVisAtt;
+  G4VisAttributes* simpleCapsuleTipVisAtt;
+  G4VisAttributes* applicatorVisAtt;
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B3DetectorConstruction.cc 71323 2013-06-13 16:54:23Z gcosmo $
 //
 /// \file B3DetectorConstruction.cc
 /// \brief Implementation of the B3DetectorConstruction class
@@ -50,7 +50,6 @@
 
 B3DetectorConstruction::B3DetectorConstruction()
 : G4VUserDetectorConstruction(),
-  fLogicCryst(0),fLogicPatient(0),
   fCheckOverlaps(true)
 {
   DefineMaterials();
@@ -99,7 +98,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   G4double detector_dZ = nb_rings*cryst_dX;
   //
   G4NistManager* nist = G4NistManager::Instance();
-  G4Material* default_mat = nist->FindOrBuildMaterial("G4_AIR", false);
+  G4Material* default_mat = nist->FindOrBuildMaterial("G4_AIR");
   G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2SiO5");
         
   //     
@@ -145,10 +144,10 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   G4double dX = cryst_dX - gap, dY = cryst_dY - gap;
   G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, cryst_dZ/2);
                      
-  fLogicCryst = 
+  G4LogicalVolume* logicCryst = 
     new G4LogicalVolume(solidCryst,          //its solid
                         cryst_mat,           //its material
-                        "crystal");          //its name
+                        "CrystalLV");        //its name
                
   // place crystals within a ring 
   //
@@ -162,7 +161,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
     G4Transform3D transform = G4Transform3D(rotm,position);
                                     
     new G4PVPlacement(transform,             //rotation,position
-                      fLogicCryst,           //its logical volume
+                      logicCryst,            //its logical volume
                       "crystal",             //its name
                       logicRing,             //its mother  volume
                       false,                 //no boolean operation
@@ -214,22 +213,22 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   //
   G4double patient_radius = 8*cm;
   G4double patient_dZ = 10*cm;  
-  G4Material* patient_mat = nist->FindOrBuildMaterial("G4_BRAIN_ICRP", false);
+  G4Material* patient_mat = nist->FindOrBuildMaterial("G4_BRAIN_ICRP");
     
   G4Tubs* solidPatient =
     new G4Tubs("Patient", 0., patient_radius, 0.5*patient_dZ, 0., twopi);
       
-  fLogicPatient =                         
+  G4LogicalVolume* logicPatient =                         
     new G4LogicalVolume(solidPatient,        //its solid
                         patient_mat,         //its material
-                        "Patient");          //its name
+                        "PatientLV");        //its name
                
   //
   // place patient in world
   //                    
   new G4PVPlacement(0,                       //no rotation
                     G4ThreeVector(),         //at (0,0,0)
-                    fLogicPatient,           //its logical volume
+                    logicPatient,            //its logical volume
                     "Patient",               //its name
                     logicWorld,              //its mother  volume
                     false,                   //no boolean operation
@@ -243,11 +242,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   // Print materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl; 
-    
-  //
-  CreateScorers();
-                                                                                
-  //
+
   //always return the physical World
   //
   return physWorld;
@@ -255,26 +250,23 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B3DetectorConstruction::CreateScorers()
+void B3DetectorConstruction::ConstructSDandField()
 {
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  SDman->SetVerboseLevel(2);
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
   
   // declare crystal as a MultiFunctionalDetector scorer
   //  
   G4MultiFunctionalDetector* cryst = new G4MultiFunctionalDetector("crystal");
   G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
-  SDman->AddNewDetector(cryst);
-  fLogicCryst->SetSensitiveDetector(cryst);
+  SetSensitiveDetector("CrystalLV",cryst);
   
   // declare patient as a MultiFunctionalDetector scorer
   //  
   G4MultiFunctionalDetector* patient = new G4MultiFunctionalDetector("patient");
   G4VPrimitiveScorer* primitiv2 = new G4PSDoseDeposit("dose");
   patient->RegisterPrimitive(primitiv2);
-  SDman->AddNewDetector(patient);
-  fLogicPatient->SetSensitiveDetector(patient);  
+  SetSensitiveDetector("PatientLV",patient);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -256,7 +256,6 @@ private:
   G4double           SampleThickness;
   G4double           SampleSizeXY;
   G4double           grainDia;
-  G4double           SiSizeXY; 
   G4double           Dia1Thickness;
   G4double           Dia1SizeXY;
   G4double           Dia3Thickness;

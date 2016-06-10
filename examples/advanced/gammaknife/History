@@ -7,6 +7,20 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
+10.11.2013 F.Romano       Tag: gammaknife-V09-06-03
+	   - Revised README file
+
+08.11.2013 L.Pandola       Tag: gammaknife-V09-06-02
+	   - Restored G4RunManager::GetRunManager()->BeamOn(n_event) 
+             after the fix from the run category.
+
+07.11.2013 F.Romano, A.Varisano, L.Pandola Tag: gammaknife-V09-06-01
+	   - Migrated to MT. 
+
+30.07.2013 A.Dotti;        Tag: gammaknife-V09-06-00
+           - Removing unused data members (clang32 compilation 
+	     warning)
+
 16.11.2012 J.Allison;      Tag: gammaknife-V09-05-06
            - gammaknife.cc: Removed unnecessary #include "G4UIXm.hh".
 

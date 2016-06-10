@@ -23,25 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: field03.cc 77485 2013-11-25 10:12:45Z gcosmo $
+//
 /// \file field/field03/field03.cc
 /// \brief Main program of the field/field03 example
 //
-// $Id$
 //
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "Randomize.hh"
-
-#include "F03DetectorConstruction.hh"
-#include "F03PhysicsList.hh"
-#include "F03PrimaryGeneratorAction.hh"
-#include "F03RunAction.hh"
-#include "F03EventAction.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "F03SteppingVerbose.hh"
-
 #include "G4RunManager.hh"
+#endif
+
+#include "F03PhysicsList.hh"
+#include "F03DetectorConstruction.hh"
+
+#include "F03ActionInitialization.hh"
+
 #include "G4UImanager.hh"
+
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -52,73 +58,71 @@
 #include "G4UIExecutive.hh"
 #endif
 
-int main(int argc,char** argv) 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+int main(int argc,char** argv)
 {
+  // Choose the Random engine
+  //
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  //choose the Random engine
-
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-
-  G4VSteppingVerbose::SetInstance(new F03SteppingVerbose);
-  
   // Construct the default run manager
-
+  //
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+#else
+  G4VSteppingVerbose::SetInstance(new F03SteppingVerbose);
   G4RunManager * runManager = new G4RunManager;
+#endif
 
   // Set mandatory initialization classes
-
-  F03DetectorConstruction* detector;
-  detector = new F03DetectorConstruction;
+  //
+  // Detector construction
+  F03DetectorConstruction* detector = new F03DetectorConstruction();
   runManager->SetUserInitialization(detector);
+  // Physics list
   runManager->SetUserInitialization(new F03PhysicsList(detector));
-  
-  // Set user action classes
+  // User action initialization
+  runManager->SetUserInitialization(new F03ActionInitialization(detector));
 
-  runManager->SetUserAction(new F03PrimaryGeneratorAction(detector));
-
-  F03RunAction* runAction = new F03RunAction;
-
-  runManager->SetUserAction(runAction);
-
-  F03EventAction* eventAction = new F03EventAction(runAction);
-
-  runManager->SetUserAction(eventAction);
-  
-  // Initialize G4 kernel, physics tables ...
-
+  // Initialize G4 kernel
+  //
   runManager->Initialize();
-    
+
 #ifdef G4VIS_USE
-
-  // visualization manager
-
+  // Initialize visualization
+  //
   G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
+#endif
 
-#endif 
- 
-  // Get the pointer to the User Interface manager 
+  // Get the pointer to the User Interface manager
+  //
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
- 
   if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);
     }
   else
     {  // interactive mode : define UI session
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+     if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
+     ui->SessionStart();
+     delete ui;
 #endif
     }
 
-  // job termination
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
 
 #ifdef G4VIS_USE
   delete visManager;
@@ -127,3 +131,5 @@ int main(int argc,char** argv)
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ionEffectiveCharge.cc 74376 2013-10-04 08:25:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -56,6 +56,9 @@
 #include "G4UnitsTable.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -71,7 +74,7 @@ G4ionEffectiveCharge::G4ionEffectiveCharge()
   lastMat          = 0;
   lastKinEnergy    = 0.0;
   effCharge        = eplus;
-  nist = G4NistManager::Instance();
+  g4pow = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,10 +119,9 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Helium ion case
   if( Zi < 2.5 ) {
 
-    static G4double c[6] = {0.2865,  0.1266, -0.001429,
-			    0.02402,-0.01135, 0.001475} ;
+    static const G4double c[6] = {0.2865,0.1266,-0.001429,0.02402,-0.01135,0.001475};
 
-    G4double Q = std::max(0.0,std::log(reducedEnergy*massFactor));
+    G4double Q = std::max(0.0,G4Log(reducedEnergy*massFactor));
     G4double x = c[0];
     G4double y = 1.0;
     for (G4int i=1; i<6; i++) {
@@ -128,13 +130,13 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     }
     G4double ex;
     if(x < 0.2) ex = x * (1 - 0.5*x);
-    else        ex = 1. - std::exp(-x);
+    else        ex = 1. - G4Exp(-x);
 
     G4double tq = 7.6 - Q;
     G4double tq2= tq*tq;
     G4double tt = ( 0.007 + 0.00005 * z );
     if(tq2 < 0.2) tt *= (1.0 - tq2 + 0.5*tq2*tq2);
-    else          tt *= std::exp(-tq2);
+    else          tt *= G4Exp(-tq2);
 
     effCharge = charge*(1.0 + tt) * std::sqrt(ex);
 
@@ -142,9 +144,9 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   } else {
     
     G4double y;
-    //    = nist->GetZ13(z);
+    //    = g4pow->A13(Zi);
     //G4double z23  = y*y;
-    G4double zi13 = nist->GetZ13(Zi);
+    G4double zi13 = g4pow->A13(Zi);
     G4double zi23 = zi13*zi13;
     //    G4double e = std::max(reducedEnergy,energyBohr/z23);
     //G4double e = reducedEnergy;
@@ -167,13 +169,13 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4double q;
     G4double y3 = std::pow(y, 0.3) ;
     // G4cout<<"y= "<<y<<" y3= "<<y3<<" v1= "<<v1<<" vF= "<<vF<<G4endl; 
-    q = 1.0 - std::exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
+    q = 1.0 - G4Exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
     
     //y *= 0.77;
     //y *= (0.75 + 0.52/Zi);
 
     //if( y < 0.2 ) q = y*(1.0 - 0.5*y);
-    //else          q = 1.0 - std::exp(-y);
+    //else          q = 1.0 - G4Exp(-y);
 
     G4double qmin = minCharge/Zi;
     if(q < qmin) q = qmin;
@@ -181,7 +183,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     effCharge = q*charge;
 
     /*
-    G4double x1 = 1.0*effCharge*(1.0 - 0.132*std::log(y))/(y*std::sqrt(z));
+    G4double x1 = 1.0*effCharge*(1.0 - 0.132*G4Log(y))/(y*std::sqrt(z));
     G4double x2 = 0.1*effCharge*effCharge*energyBohr/reducedEnergy;
 
     chargeCorrection = 1.0 + x1 - x2;
@@ -189,27 +191,21 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4cout << "x1= "<<x1<<" x2= "<< x2<<" corr= "<<chargeCorrection<<G4endl;
     */
     
-    G4double tq = 7.6 - std::log(reducedEnergy/keV);
+    G4double tq = 7.6 - G4Log(reducedEnergy/keV);
     G4double tq2= tq*tq;
-    G4double sq = ( 0.18 + 0.0015 * z ) / (Zi*Zi);
-    if(tq2 < 0.2) sq *= (1.0 - tq2 + 0.5*tq2*tq2);
-    else          sq *= std::exp(-tq2);
-    sq += 1.0;
+    G4double sq = 1.0 + ( 0.18 + 0.0015 * z )*G4Exp(-tq2)/ (Zi*Zi);
+ 
     //    G4cout << "sq= " << sq << G4endl;
 
     // Screen length according to
     // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
-    G4double lambda = 10.0 * vF / (zi13 * (6.0 + q));
-    if(q < 0.2) lambda *= (1.0 - 0.66666667*q - q*q/9.0);
-    else        lambda *= std::pow(1.0-q, 0.666666);
+    G4double lambda = 10.0 * vF *g4pow->A23(1.0 - q)/ (zi13 * (6.0 + q));
 
     G4double lambda2 = lambda*lambda;
 
-    G4double xx = (0.5/q - 0.5)/vFsq;
-    if(lambda2 < 0.2) xx *= lambda2*(1.0 - 0.5*lambda2);
-    else              xx *= std::log(1.0 + lambda2); 
+    G4double xx = (0.5/q - 0.5)*G4Log(1.0 + lambda2)/vFsq;
 
     chargeCorrection = sq * (1.0 + xx);
     

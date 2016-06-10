@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ProcessManager.cc,v 1.4 2006-06-29 15:34:55 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4ProcessManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4ProcessManager.cc
 //
@@ -54,7 +53,7 @@ list f_GetProcessList(const G4ProcessManager* procMgr)
 }
 
 // GetProcessVector()
-list f_GetProcessVector(const G4ProcessManager* procMgr, 
+list f_GetProcessVector(const G4ProcessManager* procMgr,
 			G4ProcessVectorDoItIndex idx,
 			G4ProcessVectorTypeIndex typ= typeGPIL )
 {
@@ -68,10 +67,10 @@ list f_GetProcessVector(const G4ProcessManager* procMgr,
 }
 
 BOOST_PYTHON_FUNCTION_OVERLOADS(g_GetProcessVector,
-				f_GetProcessVector, 2, 3);
+				f_GetProcessVector, 2, 3)
 
 // GetAtRestProcessVector()
-list f_GetAtRestProcessVector(const G4ProcessManager* procMgr, 
+list f_GetAtRestProcessVector(const G4ProcessManager* procMgr,
 			      G4ProcessVectorTypeIndex typ= typeGPIL )
 {
   list procList;
@@ -84,10 +83,10 @@ list f_GetAtRestProcessVector(const G4ProcessManager* procMgr,
 }
 
 BOOST_PYTHON_FUNCTION_OVERLOADS(g_GetAtRestProcessVector,
-				f_GetAtRestProcessVector, 1, 2);
+				f_GetAtRestProcessVector, 1, 2)
 
 // GetAlongStepProcessVector()
-list f_GetAlongStepProcessVector(const G4ProcessManager* procMgr, 
+list f_GetAlongStepProcessVector(const G4ProcessManager* procMgr,
 				 G4ProcessVectorTypeIndex typ= typeGPIL )
 {
   list procList;
@@ -100,10 +99,10 @@ list f_GetAlongStepProcessVector(const G4ProcessManager* procMgr,
 }
 
 BOOST_PYTHON_FUNCTION_OVERLOADS(g_GetAlongStepProcessVector,
-				f_GetAlongStepProcessVector, 1, 2);
+				f_GetAlongStepProcessVector, 1, 2)
 
 // GetPostStepProcessVector()
-list f_GetPostStepProcessVector(const G4ProcessManager* procMgr, 
+list f_GetPostStepProcessVector(const G4ProcessManager* procMgr,
 				G4ProcessVectorTypeIndex typ= typeGPIL )
 {
   list procList;
@@ -116,32 +115,31 @@ list f_GetPostStepProcessVector(const G4ProcessManager* procMgr,
 }
 
 BOOST_PYTHON_FUNCTION_OVERLOADS(g_GetPostStepProcessVector,
-				f_GetPostStepProcessVector, 1, 2);
-
+				f_GetPostStepProcessVector, 1, 2)
 
 // GetProcessVectorIndex...
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetProcessVectorIndex,
-				       GetProcessVectorIndex, 2, 3);
+				       GetProcessVectorIndex, 2, 3)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetAtRestIndex,
-				       GetAtRestIndex, 1, 2);
+				       GetAtRestIndex, 1, 2)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetAlongStepIndex,
-				       GetAlongStepIndex, 1, 2);
+				       GetAlongStepIndex, 1, 2)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetPostStepIndex,
-				       GetPostStepIndex, 1, 2);
+				       GetPostStepIndex, 1, 2)
 // AddProcess...
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AddProcess, AddProcess, 1, 4);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AddRestProcess, 
-				       AddRestProcess, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AddDiscreteProcess, 
-				       AddDiscreteProcess, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AddContinuousProcess, 
-				       AddContinuousProcess, 1, 2);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AddProcess, AddProcess, 1, 4)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AddRestProcess,
+				       AddRestProcess, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AddDiscreteProcess,
+				       AddDiscreteProcess, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AddContinuousProcess,
+				       AddContinuousProcess, 1, 2)
 // SetProcessOrdering
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetProcessOrdering, 
-				       SetProcessOrdering, 2, 3);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetProcessOrdering,
+				       SetProcessOrdering, 2, 3)
 
 // RemoveProcess...
 G4VProcess*(G4ProcessManager::*f1_RemoveProcess)(G4VProcess*)
@@ -163,7 +161,7 @@ G4bool(G4ProcessManager::*f1_GetProcessActivation)(G4VProcess*) const
 G4bool(G4ProcessManager::*f2_GetProcessActivation)(G4int) const
   = &G4ProcessManager::GetProcessActivation;
 
-};
+}
 
 using namespace pyG4ProcessManager;
 
@@ -173,12 +171,12 @@ using namespace pyG4ProcessManager;
 void export_G4ProcessManager()
 {
   class_<G4ProcessManager, G4ProcessManager*, boost::noncopyable>
-    ("G4ProcessManager", "process manager class", no_init)    
+    ("G4ProcessManager", "process manager class", no_init)
     // ---
     .def("GetProcessList",            f_GetProcessList)
     .def("GetProcessListLength",      &G4ProcessManager::GetProcessListLength)
     .def("GetProcessIndex",           &G4ProcessManager::GetProcessIndex)
-    .def("GetProcessVector",          f_GetProcessVector, 
+    .def("GetProcessVector",          f_GetProcessVector,
 	                              g_GetProcessVector())
     .def("GetAtRestProcessVector",    f_GetAtRestProcessVector,
 	                              g_GetAtRestProcessVector())
@@ -186,7 +184,7 @@ void export_G4ProcessManager()
 	                              g_GetAlongStepProcessVector())
     .def("GetPostStepProcessVector",  f_GetPostStepProcessVector,
 	                              g_GetPostStepProcessVector())
-    .def("GetProcessVectorIndex",     
+    .def("GetProcessVectorIndex",
 	 &G4ProcessManager::GetProcessVectorIndex,
 	 f_GetProcessVectorIndex())
     .def("GetAtRestIndex",            &G4ProcessManager::GetAtRestIndex,
@@ -207,10 +205,10 @@ void export_G4ProcessManager()
     // ---
     .def("GetProcessOrdering",    &G4ProcessManager::GetProcessOrdering)
     .def("SetProcessOrdering",    &G4ProcessManager::SetProcessOrdering,
-             	                  f_SetProcessOrdering()) 
-    .def("SetProcessOrderingToFirst", 
+             	                  f_SetProcessOrdering())
+    .def("SetProcessOrderingToFirst",
 	 &G4ProcessManager::SetProcessOrderingToFirst)
-    .def("SetProcessOrderingToLast", 
+    .def("SetProcessOrderingToLast",
 	 &G4ProcessManager::SetProcessOrderingToLast)
     // ---
     .def("RemoveProcess",         f1_RemoveProcess,

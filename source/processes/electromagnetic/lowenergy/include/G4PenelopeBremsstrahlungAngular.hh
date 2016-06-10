@@ -25,7 +25,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id$
+// $Id: G4PenelopeBremsstrahlungAngular.hh 74452 2013-10-07 15:08:00Z gcosmo $
 //
 // Author: L.Pandola
 //
@@ -36,6 +36,7 @@
 // 13 Mar 2012  L. Pandola       Made a derived class of G4VEmAngularDistribution
 //                               and update the interface accordingly
 // 18 Jul 2012  L. Pandola       Migrate to the new interface of G4VEmAngularDistribution
+// 03 Oct 2013  L. Pandola       Migration to MT
 //
 // Class description:
 // Calculation of angular distribution for Penelope Bremsstrahlung
@@ -59,8 +60,6 @@ public:
   G4PenelopeBremsstrahlungAngular(); 
   ~G4PenelopeBremsstrahlungAngular();
 
-  //! The Initialize() method forces the cleaning of tables
-  void Initialize();
   
   //! Old interface, backwards compatibility. Will not work in this case
   //! it will produce a G4Exception().
@@ -69,7 +68,6 @@ public:
 		      const G4int Z);
 
   //! Samples the direction of the outgoing photon (in global coordinates). 
-  //! Forces the calculation of tables, if they are not available
   G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
 				 G4double out_energy,
 				 G4int Z,
@@ -79,11 +77,20 @@ public:
   void SetVerbosityLevel(G4int vl){verbosityLevel = vl;};
   G4int GetVerbosityLevel(){return verbosityLevel;};
 
-private:
-  void PrepareInterpolationTables(G4double Zeq);
-  void ClearTables();
+  //! Reserved for Master Model
+  //! The Initialize() method forces the cleaning of tables
+  void Initialize();
+  //! Reserved for Master Model
+  void PrepareTables(const G4Material* material,
+		     G4bool isMaster);
 
-  G4double GetEffectiveZ(const G4Material* material);
+
+private:
+  
+  void ClearTables();
+ 
+  G4double CalculateEffectiveZ(const G4Material* material);
+  
   std::map<const G4Material*,G4double> *theEffectiveZSq;
 
   //Tables containing the Lorentz sampling coefficients 

@@ -27,7 +27,7 @@
 /// \brief Definition of the G01DetectorConstruction class
 //
 //
-// $Id$
+// $Id: G01DetectorConstruction.hh 68025 2013-03-13 13:43:46Z gcosmo $
 //
 //
 
@@ -47,7 +47,7 @@ class G01DetectorConstruction : public G4VUserDetectorConstruction
       fWorld = setWorld;
     }
 
-    G4VPhysicalVolume *Construct()
+    virtual G4VPhysicalVolume *Construct()
     {
       return fWorld;
     }

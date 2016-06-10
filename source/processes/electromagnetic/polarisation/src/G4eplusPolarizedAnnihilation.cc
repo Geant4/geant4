@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eplusPolarizedAnnihilation.cc 76472 2013-11-11 10:34:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -86,14 +86,8 @@ G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
 
 G4eplusPolarizedAnnihilation::~G4eplusPolarizedAnnihilation()
 {
-  if (theAsymmetryTable) {
-    theAsymmetryTable->clearAndDestroy();
-    delete theAsymmetryTable;
-  }
-  if (theTransverseAsymmetryTable) {
-    theTransverseAsymmetryTable->clearAndDestroy();
-    delete theTransverseAsymmetryTable;
-  }
+  delete theAsymmetryTable;
+  delete theTransverseAsymmetryTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

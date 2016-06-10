@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4KL3DecayChannel.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -171,18 +171,18 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
 #endif
 
   // fill parent particle and its mass
-  if (parent == 0) {
+  if (G4MT_parent == 0) {
     FillParent();
   }
-  massK = parent->GetPDGMass();
+  massK = G4MT_parent->GetPDGMass();
 
   // fill daughter particles and their mass
-  if (daughters == 0) {
+  if (G4MT_daughters == 0) {
     FillDaughters();
   }
-  daughterM[idPi] = daughters[idPi]->GetPDGMass();
-  daughterM[idLepton] = daughters[idLepton]->GetPDGMass();
-  daughterM[idNutrino] = daughters[idNutrino]->GetPDGMass();
+  daughterM[idPi] = G4MT_daughters[idPi]->GetPDGMass();
+  daughterM[idLepton] = G4MT_daughters[idLepton]->GetPDGMass();
+  daughterM[idNutrino] = G4MT_daughters[idNutrino]->GetPDGMass();
 
   // determine momentum/energy of daughters 
   //  according to DalitzDensity 
@@ -205,7 +205,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
 #endif
    //create parent G4DynamicParticle at rest
   G4ThreeVector* direction = new G4ThreeVector(1.0,0.0,0.0);
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, *direction, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, *direction, 0.0);
   delete direction;
 
   //create G4Decayproducts
@@ -225,7 +225,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   direction = new G4ThreeVector(sintheta*cosphi,sintheta*sinphi,costheta);
   G4ThreeVector momentum0 =  (*direction)*daughterP[0]; 
   G4DynamicParticle * daughterparticle 
-       = new G4DynamicParticle( daughters[0], momentum0);
+       = new G4DynamicParticle( G4MT_daughters[0], momentum0);
   products->PushProducts(daughterparticle);
 
   // neutrino
@@ -239,13 +239,13 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   direction->setZ( -sinthetan*cosphin*sintheta + costhetan*costheta);
 
   G4ThreeVector momentum2 =  (*direction)*daughterP[2]; 
-  daughterparticle = new G4DynamicParticle( daughters[2], momentum2);
+  daughterparticle = new G4DynamicParticle( G4MT_daughters[2], momentum2);
   products->PushProducts(daughterparticle);
 
   //lepton
   G4ThreeVector momentum1 = (momentum0 + momentum2) * (-1.0);
   daughterparticle = 
-       new G4DynamicParticle( daughters[1], momentum1);
+       new G4DynamicParticle( G4MT_daughters[1], momentum1);
   products->PushProducts(daughterparticle);
 
 #ifdef G4VERBOSE

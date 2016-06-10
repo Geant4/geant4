@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopoleFieldSetup.cc
 /// \brief Implementation of the G4MonopoleFieldSetup class
 //
-// $Id$
+// $Id: G4MonopoleFieldSetup.cc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,17 +72,16 @@ G4MonopoleFieldSetup* G4MonopoleFieldSetup::fMonopoleFieldSetup=0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopoleFieldSetup::G4MonopoleFieldSetup()
+ : fFieldManager(0),
+   fChordFinder(0),
+   fEquation(0),
+   fMonopoleEquation(0),
+   fMagneticField(0),
+   fStepper(0),
+   fMonopoleStepper(0),
+   fMinStep(0.0),
+   fMonopoleFieldMessenger(0)
 {
-  fFieldManager = 0;
-  fChordFinder = 0;
-  fEquation = 0;
-  fMonopoleEquation = 0;
-  fMagneticField = 0;
-  fStepper = 0;
-  fMonopoleStepper = 0;
-
-  fMinStep = 0.0;
-   
   fMonopoleFieldMessenger = new G4MonopoleFieldMessenger(this);
 }
 

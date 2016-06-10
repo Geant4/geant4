@@ -28,10 +28,9 @@
 //
 //
 // $Id: TestEm1.cc,v 1.16 2010-04-06 11:11:24 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -60,10 +59,10 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
+
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
+
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -73,47 +72,47 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(det = new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
-      
+ 
   // set user action classes
   RunAction*   run;
   
-  runManager->SetUserAction(run = new RunAction(det,prim)); 
+  runManager->SetUserAction(run = new RunAction(det,prim));
   runManager->SetUserAction(new EventAction());
-  runManager->SetUserAction(new SteppingAction(prim,run));
-     
-  // get the pointer to the User Interface manager 
+  runManager->SetUserAction(new SteppingAction(run));
+ 
+  // get the pointer to the User Interface manager
     G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode  
+  if (argc!=1)   // batch mode
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
     }
-    
+
   else           //define visualization and UI terminal for interactive mode
-    { 
+    {
 #ifdef G4VIS_USE
    G4VisManager* visManager = new G4VisExecutive;
    visManager->Initialize();
-#endif    
-     
+#endif
+
 #ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
       ui->SessionStart();
       delete ui;
 #endif
-          
+
 #ifdef G4VIS_USE
      delete visManager;
-#endif     
+#endif
     }
 
-  // job termination 
+  // job termination
   //
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

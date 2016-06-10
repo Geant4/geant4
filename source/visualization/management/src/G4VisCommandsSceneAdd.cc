@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsSceneAdd.cc 77479 2013-11-25 10:01:22Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -36,6 +36,7 @@
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
 #include "G4DigiModel.hh"
+#include "G4MagneticFieldModel.hh"
 #include "G4PSHitsModel.hh"
 #include "G4TrajectoriesModel.hh"
 #include "G4ScaleModel.hh"
@@ -43,10 +44,8 @@
 #include "G4ArrowModel.hh"
 #include "G4AxesModel.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
-#include "G4VGlobalFastSimulationManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4FlavoredParallelWorldModel.hh"
 #include "G4ApplicationState.hh"
 #include "G4VUserVisAction.hh"
 #include "G4CallbackModel.hh"
@@ -57,14 +56,12 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4Tokenizer.hh"
 #include "G4RunManager.hh"
 #include "G4StateManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
-#include "G4IdentityTrajectoryFilter.hh"
-#include "G4TransportationManager.hh"
-#include "G4PropagatorInField.hh"
 #include "G4Trajectory.hh"
 #include "G4TrajectoryPoint.hh"
 #include "G4RichTrajectory.hh"
@@ -266,7 +263,14 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand = new G4UIcommand ("/vis/scene/add/axes", this);
   fpCommand -> SetGuidance ("Add axes.");
   fpCommand -> SetGuidance
-    ("Draws axes at (x0, y0, z0) of given length and colour.");
+  ("Draws axes at (x0, y0, z0) of given length and colour.");
+  fpCommand -> SetGuidance
+  ("If \"unitcolour\" is \"auto\", x, y and z will be red, green and blue"
+   "\n  respectively.  Otherwise choose from the pre-defined text-specified"
+   "\n  colours - see information printed by the vis manager at start-up or"
+   "\n  use \"/vis/list\".");
+  fpCommand -> SetGuidance
+  ("If \"length\" is negative, it is set to about 25% of scene extent.");
   G4UIparameter* parameter;
   parameter =  new G4UIparameter ("x0", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
@@ -279,20 +283,12 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("length", 'd', omitable = true);
   parameter->SetDefaultValue (-1.);
-  parameter->SetGuidance
-    ("If negative, length automatic, about 25% of scene extent.");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
   parameter->SetDefaultValue ("m");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unitcolour", 's', omitable = true);
   parameter->SetDefaultValue  ("auto");
-  parameter->SetGuidance
-    ("If \"auto\", x, y and z will be red, green and blue respectively.");
-  parameter->SetGuidance
-    ("Otherwise choose from the pre-defined text-specified colours - "
-     "\n  see information printed by the vis manager at start-up or"
-     "\n  use \"/vis/list\".");
   fpCommand->SetParameter (parameter);
 }
 
@@ -361,6 +357,9 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/date", this);
   fpCommand -> SetGuidance ("Adds date to current scene.");
+  fpCommand -> SetGuidance
+  ("If \"date\"is omitted, the current date and time is drawn."
+   "\nOtherwise, the string, including the rest of the line, is drawn.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("size", 'i', omitable = true);
   parameter -> SetGuidance ("Screen size of text in pixels.");
@@ -368,7 +367,7 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("x-position", 'd', omitable = true);
   parameter -> SetGuidance ("x screen position in range -1 < x < 1.");
-  parameter -> SetDefaultValue (0.0);  // Would prefer 0.95 right.
+  parameter -> SetDefaultValue (0.95);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("y-position", 'd', omitable = true);
   parameter -> SetGuidance ("y screen position in range -1 < y < 1.");
@@ -376,13 +375,9 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("layout", 's', omitable = true);
   parameter -> SetGuidance ("Layout, i.e., adjustment: left|centre|right.");
-  parameter -> SetDefaultValue ("left");  // Would prefer right.
+  parameter -> SetDefaultValue ("right");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("date", 's', omitable = true);
-  parameter -> SetGuidance
-  ("The date you want to appear on the view of the scene (this includes the"
-   "\nrest of the line, including spaces).  The default, \'-\', writes the"
-   "\ndate and time of the moment of drawing.");
   parameter -> SetDefaultValue ("-");
   fpCommand -> SetParameter (parameter);
 }
@@ -719,120 +714,6 @@ void G4VisCommandSceneAddFrame::Frame::operator()
   sceneHandler.AddPrimitive(frame);
   sceneHandler.EndPrimitives2D();
 }
-
-////////////// /vis/scene/add/ghosts ///////////////////////////////////////
-
-G4VisCommandSceneAddGhosts::G4VisCommandSceneAddGhosts () {
-  G4bool omitable;
-  fpCommand = new G4UIcmdWithAString ("/vis/scene/add/ghosts", this);
-  fpCommand -> SetGuidance
-    ("Adds ghost volumes (G4FlavoredParallelWorld) to the current scene.");
-  fpCommand -> SetGuidance ("Selects by particle.");
-  fpCommand -> SetParameterName ("particle", omitable = true);
-  fpCommand -> SetDefaultValue ("all");
-}
-
-G4VisCommandSceneAddGhosts::~G4VisCommandSceneAddGhosts () {
-  delete fpCommand;
-}
-
-G4String G4VisCommandSceneAddGhosts::GetCurrentValue (G4UIcommand*) {
-  return "";
-}
-
-void G4VisCommandSceneAddGhosts::SetNewValue(G4UIcommand*, G4String newValue) {
-
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
-
-  G4Scene* pScene = fpVisManager->GetCurrentScene();
-  if (!pScene) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
-    }
-    return;
-  }
-  const G4String& currentSceneName = pScene -> GetName ();
-
-  // Gets the G4GlobalFastSimulationManager pointer if any.
-  G4VGlobalFastSimulationManager* theGlobalFastSimulationManager;
-  if(!(theGlobalFastSimulationManager = 
-       G4VGlobalFastSimulationManager::GetConcreteInstance ())){
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: no G4GlobalFastSimulationManager" << G4endl;
-    }
-    return;
-  }
-  
-  // Gets the G4ParticleTable pointer.
-  G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
-  
-  // If "all" (the default) loops on all known particles
-  if(newValue=="all") 
-    {
-      G4VFlavoredParallelWorld* CurrentFlavoredWorld = 0;
-      G4bool successful = false;
-      for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
-	   iParticle++)
-	{
-	  CurrentFlavoredWorld = theGlobalFastSimulationManager->
-	    GetFlavoredWorldForThis(theParticleTable->GetParticle(iParticle));
-	  
-	  if(CurrentFlavoredWorld)
-	    successful = successful || pScene -> 
-	      AddRunDurationModel(new G4FlavoredParallelWorldModel 
-				  (CurrentFlavoredWorld), warn);
-	}
-      if (successful) 
-	{
-	  if (verbosity >= G4VisManager::confirmations) 
-	    G4cout << "Ghosts have been added to scene \""
-		   << currentSceneName << "\"."
-		   << G4endl;
-	  UpdateVisManagerScene (currentSceneName);
-	}
-      else 
-	{
-	  G4cout << "ERROR: There are no ghosts."<<G4endl;
-	  G4VisCommandsSceneAddUnsuccessful(verbosity);
-	}
-      return;
-    }
-  
-  // Given a particle name looks just for the concerned Ghosts, if any.
-  G4ParticleDefinition* currentParticle = 
-    theParticleTable->FindParticle(newValue);
-  
-  if (currentParticle == NULL) 
-    {
-      if (verbosity >= G4VisManager::errors) 
-	G4cout << "ERROR: \"" << newValue
-	       << "\": not found this particle name!" << G4endl;
-      return;
-    }
-  
-  G4VFlavoredParallelWorld* worldForThis =
-    theGlobalFastSimulationManager->GetFlavoredWorldForThis(currentParticle);
-  if(worldForThis) 
-    {
-      G4bool successful = pScene -> AddRunDurationModel
-	(new G4FlavoredParallelWorldModel (worldForThis), warn);
-      if (successful) {
-	if (verbosity >= G4VisManager::confirmations) 
-	  G4cout << "Ghosts have been added to scene \""
-		 << currentSceneName << "\"."
-		 << G4endl;
-	UpdateVisManagerScene (currentSceneName);
-      }
-    }
-  else 
-    if (verbosity >= G4VisManager::errors) 
-      {
-	G4cout << "ERROR: There are no ghosts for \""<<newValue<<"\""<<G4endl;
-	G4VisCommandsSceneAddUnsuccessful(verbosity);
-      }
-}
-
 
 ////////////// /vis/scene/add/hits ///////////////////////////////////////
 
@@ -1192,21 +1073,23 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/logo", this);
   fpCommand -> SetGuidance ("Adds a G4 logo to the current scene.");
+  fpCommand -> SetGuidance
+  ("If \"unit\" is \"auto\", height is roughly one tenth of scene extent.");
+  fpCommand -> SetGuidance
+  ("\"direction\" is that of outward-facing normal to front face of logo."
+   "\nIf \"direction\" is \"auto\", logo faces the user in the current viewer.");
+  fpCommand -> SetGuidance
+  ("\nIf \"placement\" is \"auto\", logo is placed at bottom right of screen"
+   "\n  when viewed from logo direction.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("height", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetGuidance
-    ("auto or valid length unit - defaults to auto."
-     "\nIf auto, height is roughly one tenth of scene extent.");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
-  parameter->SetGuidance
-    ("auto|[-]x|[-]y|[-]z - defaults to auto."
-     "\nDirection of outward-facing normal to front face of logo."
-     "\nIf automatic, logo faces the user in the current viewer.");
+  parameter->SetGuidance ("auto|[-]x|[-]y|[-]z");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
@@ -1218,13 +1101,7 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter =  new G4UIparameter ("blue", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
-  parameter->SetGuidance
-    ("Automatic placement or manual placement at (xmid,ymid,zmid).");
-  parameter->SetGuidance
-    ("If automatic, placed at bottom right of screen when viewed from");
-  parameter->SetGuidance
-    ("logo direction.");
+  parameter =  new G4UIparameter ("placement", 's', omitable = true);
   parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
@@ -1484,7 +1361,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
 (G4double height, const G4VisAttributes& visAtts):
-  fHeight(height),
   fVisAtts(visAtts)
  {
   const G4double& h =  height;
@@ -1648,6 +1524,71 @@ void G4VisCommandSceneAddLogo2D::Logo2D::operator()
   sceneHandler.EndPrimitives2D();
 }
 
+////////////// /vis/scene/add/magneticField ///////////////////////////////////////
+
+G4VisCommandSceneAddMagneticField::G4VisCommandSceneAddMagneticField () {
+  G4bool ommitable;
+  fpCommand = new G4UIcmdWithAnInteger ("/vis/scene/add/magneticField", this);
+  fpCommand->SetParameterName("nDataPointsPerHalfScene",ommitable=true);
+  fpCommand->SetDefaultValue(10);
+  fpCommand -> SetGuidance
+  ("Adds magnetic field representation to current scene.");
+  fpCommand -> SetGuidance
+  ("The parameter is no. of data points per half scene.  So, possibly, at"
+   "\nmaximum, the number of data points sampled is (2*n+1)^3, which can grow"
+   "\nlarge--be warned!"
+   "\nYou might find that your scene is cluttered by thousands of arrows for"
+   "\nthe default number of data points, so try reducing to 2 or 3, e.g:"
+   "\n  /vis/scene/add/magneticField 3"
+   "\nor, if only a small part of the scene has a field:"
+   "\n  /vis/scene/add/magneticField 50 # or more");
+  fpCommand -> SetGuidance
+  ("In the arrow representation, the length of the arrow is proporational"
+   "\nto the magnitude of the field and the colour is mapped onto the range"
+   "\nas a fraction of the maximum magnitude: 0->0.5->1 is blue->green->red.");
+}
+
+G4VisCommandSceneAddMagneticField::~G4VisCommandSceneAddMagneticField () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddMagneticField::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddMagneticField::SetNewValue
+(G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4int nDataPointsPerHalfScene = fpCommand->GetNewIntValue(newValue);
+  
+  G4MagneticFieldModel* model =
+  new G4MagneticFieldModel(nDataPointsPerHalfScene);
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Magnetic field, if any, will be drawn in scene \""
+      << currentSceneName
+      << "\"\n  with "
+      << nDataPointsPerHalfScene << " data points per half scene."
+      << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
 ////////////// /vis/scene/add/psHits ///////////////////////////////////////
 
 G4VisCommandSceneAddPSHits::G4VisCommandSceneAddPSHits () {
@@ -1711,23 +1652,25 @@ void G4VisCommandSceneAddPSHits::SetNewValue
 G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/scale", this);
-  fpCommand -> SetGuidance 
-    ("Adds an annotated scale line to the current scene.");
+  fpCommand -> SetGuidance
+  ("Adds an annotated scale line to the current scene.");
+  fpCommand -> SetGuidance
+  ("If \"unit\" is \"auto\", length is roughly one tenth of the scene extent.");
+  fpCommand -> SetGuidance
+  ("If \"direction\" is \"auto\", scale is roughly in the plane of the current view.");
+  fpCommand -> SetGuidance
+  ("If \"placement\" is \"auto\", scale is placed at bottom left of current view."
+   "\n  Otherwise placed at (xmid,ymid,zmid).");
   fpCommand -> SetGuidance (G4Scale::GetGuidanceString());
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("length", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetGuidance
-  ("auto or valid length unit - defaults to auto."
-   "\nIf auto, length is roughly one tenth of the scene extent.");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
-  parameter->SetGuidance
-  ("auto|x|y|z - defaults to auto."
-   "\nIf auto, scale is roughly in the plane of the current view.");
+  parameter->SetGuidance ("auto|x|y|z");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
@@ -1739,10 +1682,7 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter =  new G4UIparameter ("blue", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
-  parameter->SetGuidance
-  ("Automatic placement or manual placement at (xmid,ymid,zmid)."
-   "\nIf automatic, scale is placed at bottom left of current view.");
+  parameter =  new G4UIparameter ("placement", 's', omitable = true);
   parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
@@ -2086,15 +2026,12 @@ G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("x", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("x");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("y", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("y");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("z", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("z");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
   parameter->SetDefaultValue ("m");
@@ -2185,11 +2122,9 @@ G4VisCommandSceneAddText2D::G4VisCommandSceneAddText2D () {
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("x", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("x");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("y", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("y");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("font_size", 'd', omitable = true);
   parameter->SetDefaultValue (12);
@@ -2330,55 +2265,34 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4bool smooth = false, rich = false;
+  G4bool smooth = false;
+  G4bool rich = false;
   if (newValue.find("smooth") != std::string::npos) smooth = true;
   if (newValue.find("rich") != std::string::npos) rich = true;
+  if (newValue.size() && !(rich || smooth)) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Unrecognised parameter \"" << newValue << "\""
+      "\n  No action taken."
+      << G4endl;
+    }
+    return;
+  }
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
   G4int newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  G4PropagatorInField* propagatorInField =
-    G4TransportationManager::GetTransportationManager()->
-    GetPropagatorInField();
-  propagatorInField->SetTrajectoryFilter(0); // Switch off smooth trajectories.
-  static G4IdentityTrajectoryFilter auxiliaryPointsFilter;
   G4String defaultTrajectoryType;
-  G4bool i_mode_found = false;
-  G4int i_mode = 0;
   if (smooth && rich) {
-    UImanager->ApplyCommand("/tracking/storeTrajectory 3");
-    propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
+    UImanager->ApplyCommand("/tracking/storeTrajectory 4");
     defaultTrajectoryType = "G4RichTrajectory configured for smooth steps";
   } else if (smooth) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 2");
-    propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
     defaultTrajectoryType = "G4SmoothTrajectory";
   } else if (rich) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
     defaultTrajectoryType = "G4RichTrajectory";
   } else {
-    if (!newValue.empty()) {
-      std::istringstream iss(newValue);
-      iss >> i_mode;
-      if (iss) {
-	i_mode_found = true;
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout <<
-  "WARNING: Integer parameter " << i_mode << " found."
-  "\n  DEPRECATED - its use in this command will be removed at a future major"
-  "\n  release.  Use \"/vis/modeling/trajectories\" commands."
-		 << G4endl;
-	}
-      } else {
-	if (verbosity >= G4VisManager::errors) {
-	  G4cout << "ERROR: Unrecognised parameter \"" << newValue << "\""
-	    "\n  No action taken."
-		 << G4endl;
-	}
-	return;
-      }
-    }
     UImanager->ApplyCommand("/tracking/storeTrajectory 1");
     defaultTrajectoryType = "G4Trajectory";
   }
@@ -2403,12 +2317,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     }
   }
 
-  G4TrajectoriesModel* model = 0;
-  if (i_mode_found) {
-    model = new G4TrajectoriesModel(i_mode);
-  } else {
-    model = new G4TrajectoriesModel();
-  }
+  G4TrajectoriesModel* model = new G4TrajectoriesModel();
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddEndOfEventModel (model, warn);
 

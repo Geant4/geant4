@@ -49,38 +49,38 @@
 
 class G4LEpp : public G4HadronicInteraction
 {
- private:
+private:
 
-   enum { NENERGY=40, NENERGYC=22, NANGLE=180 };
+  enum { NENERGY=40, NENERGYC=22, NANGLE=180 };
 
- public:
+public:
 
-   G4LEpp();
+  G4LEpp();
 
-   ~G4LEpp();
+  ~G4LEpp();
  
-   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-                                  G4Nucleus& targetNucleus);
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+				 G4Nucleus& targetNucleus);
 
-   void SetCoulombEffects(G4int State);
+  void SetCoulombEffects(G4int State);
   
- private:
+private:
 
-  G4float * sig[NANGLE];
-  G4float * elab;
+  const G4float * sig[NANGLE];
+  const G4float * elab;
 
- // The following arrays are declared static to allow the use of initializers.
- // They are initialized in G4LEppData.hh
+  // The following arrays are declared static to allow the use of initializers.
+  // They are initialized in G4LEppData.hh
 
- // Coulomb effects suppressed:
-   static G4float Sig[NENERGY][NANGLE];
-   static G4float Pcm[NENERGY], Elab[NENERGY], 
-     dSigmax[NENERGY], Sigtot[NENERGY];
+  // Coulomb effects suppressed:
+  static const G4float Sig[NENERGY][NANGLE];
+  static const G4float Pcm[NENERGY], Elab[NENERGY], 
+    dSigmax[NENERGY], Sigtot[NENERGY];
 
- // Coulomb effects not suppressed:
-   static G4float SigCoul[NENERGYC][NANGLE];
-   static G4float PcmCoul[NENERGYC], ElabCoul[NENERGYC], 
-     dSigmaxCoul[NENERGYC], SigtotCoul[NENERGYC];
+  // Coulomb effects not suppressed:
+  static const G4float SigCoul[NENERGYC][NANGLE];
+  static const G4float PcmCoul[NENERGYC], ElabCoul[NENERGYC], 
+    dSigmaxCoul[NENERGYC], SigtotCoul[NENERGYC];
 
 };
 

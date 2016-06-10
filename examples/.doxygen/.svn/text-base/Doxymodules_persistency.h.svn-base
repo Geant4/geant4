@@ -116,6 +116,7 @@
  *  @{
  */
 
+  class ExTGActionInitialization {};
   class ExTGDetectorConstruction {};
   class ExTGDetectorConstructionWithCpp {};
   class ExTGDetectorConstructionWithCuts {};

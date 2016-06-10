@@ -50,7 +50,7 @@
 class G4Electron_aq : public G4MoleculeDefinition
 {
 private:
-    static G4Electron_aq* theInstance;
+    static /*G4ThreadLocal*/ G4Electron_aq* theInstance;
     G4Electron_aq() {}
     virtual ~G4Electron_aq() {}
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: FCALTBEventAction.cc 73002 2013-08-15 08:09:37Z gcosmo $
 //
 // 
 
@@ -31,13 +31,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "FCALTBEventAction.hh"
-
 #include "FCALTBEventActionMessenger.hh"
-
 #include "FCALRunAction.hh"
-
 #include "FCALCalorHit.hh"
-
 #include <vector>
 
 #include "G4Event.hh"
@@ -57,17 +53,14 @@
 #include <fstream>
 #include <iostream>
 
-#ifdef G4ANALYSIS_USE
-  #include <AIDA/AIDA.h>
-#endif
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALTBEventAction::FCALTBEventAction(FCALSteppingAction* SA)
-  :calorimeterCollID(-1),drawFlag("all"),printModulo(10), StepAction(SA), eventMessenger(0)
+  :drawFlag("all"),printModulo(10), StepAction(SA), eventMessenger(0)
 {
   eventMessenger = new FCALTBEventActionMessenger(this);
-  runManager = new FCALRunAction();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -76,8 +69,6 @@ FCALTBEventAction::~FCALTBEventAction()
 {
   delete eventMessenger;
   eventMessenger = 0;
-  delete  runManager;
-  runManager = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,9 +92,8 @@ void FCALTBEventAction::BeginOfEventAction(const G4Event* evt)
 
 void FCALTBEventAction::EndOfEventAction(const G4Event*)
 {
-#ifdef G4ANALYSIS_USE
-    FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-#endif
+  // Fill histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
 
   G4int i,j;
   NTracksOutOfWorld = StepAction->GetOutOfWorldTracks(0, 0); 
@@ -135,9 +125,7 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   } 
   OutTracks.close();
 
-#ifdef G4ANALYSIS_USE
-    analysis->getfhisto_1()->fill(NTracksOutOfWorld);
-#endif
+  man->FillH1(1,NTracksOutOfWorld);
 
   NSecondaries = StepAction->GetSecondaries(0,0);
   G4cout << "N Scondaries " << NSecondaries << G4endl;   
@@ -168,9 +156,7 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   }
   SecndTracks.close();
   
-#ifdef G4ANALYSIS_USE
-    analysis->getfhisto_2()->fill(NSecondaries);
-#endif
+  man->FillH1(2,NSecondaries);
 
   // Write Edep in FCAL1 and FCAL2 
   G4String FileName3 = "EdepFCAL_802_1mm.dat";
@@ -192,13 +178,12 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   EdepFCAL << std::endl;
   EdepFCAL.close();
 
-#ifdef G4ANALYSIS_USE
-  analysis->getfhisto_3()->fill(EmEdep);
-  analysis->getfhisto_4()->fill(HadEdep);
-#endif
+  man->FillH1(3,EmEdep/MeV);
+  man->FillH1(4,HadEdep/MeV);
 
-  G4cout<<"EmEdep is="<<EmEdep<<G4endl;
-  G4cout<<"HadEdep is="<<HadEdep<<G4endl;
+
+  G4cout<<"EmEdep is="<<EmEdep/MeV << " MeV " << G4endl;
+  G4cout<<"HadEdep is="<<HadEdep << " MeV" << G4endl;
 
   G4cout << "Edep in FCAL1 FCAl2 : " << StepAction->GetEdepFCAL("FCALEm") << " ";
   G4cout << StepAction->GetEdepFCAL("FCALHad") << G4endl;

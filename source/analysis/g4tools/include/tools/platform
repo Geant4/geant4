@@ -1,0 +1,101 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_platform
+#define tools_platform
+
+// We do not byteswap on intel (LE) (common platform).
+// We have then a better compression on these machines.
+// NOTE : this is the contrary to what is done in ROOT (and Rio).
+
+namespace tools {
+
+inline bool is_little_endian() {
+  unsigned int i = 1;
+  unsigned char* b = (unsigned char*)&i;
+  // BE = Big Endian, LE = Little Endian.
+  // The Intels x86 are LE.
+  // Mac PPC b[3] is 1 (BE)
+  // Mac Intel b[0] is 1 (LE)
+  // Linux i386 b[0] is 1 (LE)
+  // Linux x86_64 b[0] is 1 (LE)
+  return (b[0]==1?true:false);
+}
+
+}
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+namespace tools {
+namespace device {
+
+#if TARGET_OS_IPHONE
+inline bool is_iOS() {return true;}
+#else
+inline bool is_iOS() {return false;}
+#endif
+
+#if ANDROID
+inline bool is_Android() {return true;}
+#else
+inline bool is_Android() {return false;}
+#endif
+
+
+#if ANDROID || TARGET_OS_IPHONE
+inline bool small_screen()           {return true;}
+inline bool no_cursor()              {return true;}
+inline bool stop_app_button()        {return true;}
+#else
+inline bool small_screen()     {return false;}
+inline bool no_cursor()        {return false;}
+inline bool stop_app_button()  {return false;}
+#endif
+#if TARGET_OS_IPHONE
+inline bool slow_cpu()         {return true;}
+#else
+inline bool slow_cpu()         {return false;}
+#endif
+
+inline unsigned int tex_mem_limit() {
+  // glGet(GL_MAX_TEXTURE_SIZE) :
+  //   MacBookPro : it returns 8192.
+  //   SGS : it returns 2048.
+  //   iPad1 : it returns 2048.
+  //   iPod : it returns ?
+  //   Nexus 10 : it returns ?
+
+  // 1024*1024  //*3 =   3 145 728
+  // 2048*2048  //*3 =  12 582 912
+  // 4096*4096  //*3 =  50 331 648
+  // 8192*8192  //*3 = 201 326 592
+  // 8192*4096  //*3 = 100 663 296
+  if(small_screen()) {
+    //iOS : Apple says that max 2D tex size is 1024*1024 with two units
+    //      texture available. From doc on PowerVR MBX.
+    return 2048*2048*3;
+  } else {
+    //limit = 4096*4096*3; //=8192*2048 //permit to pass ATLAS big image.
+    //permit to pass fete_science_2010/power2/image_0.jpg
+    return 8192*4096*3;
+  }
+}
+
+}}
+
+#endif
+
+
+/* We prefer to handle endianity dynamically, but with cpp macro
+   it would looks like (from luaconf.h) :
+#if defined(__i386__) || defined(__i386) || \
+    defined(__X86__)  || defined (__x86_64)
+#define TOOLS_IS_BE 0
+#define TOOLS_IS_LE 1
+#elif defined(__POWERPC__) || defined(__ppc__)
+#define TOOLS_IS_BE 1
+#define TOOLS_IS_LE 0
+#endif
+*/

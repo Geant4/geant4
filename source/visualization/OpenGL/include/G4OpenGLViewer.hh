@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLViewer.hh 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -41,6 +41,9 @@
 class G4OpenGLSceneHandler;
 class G4OpenGL2PSAction;
 class G4Text;
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#include "G4OpenGLWtDrawer.hh"
+#endif
 
 // Base class for various OpenGLView classes.
 class G4OpenGLViewer: virtual public G4VViewer {
@@ -55,6 +58,15 @@ public:
   void ClearView  ();
 //////////////////////////////Vectored PostScript production functions///
   void printEPS();
+
+  // Special case for Wt, we want to have acces to the drawer
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  inline G4OpenGLWtDrawer* getWtDrawer() {return fWtDrawer;}
+  
+  // Associate the Wt drawer to the OpenGLViewer and the OpenGLSceneHandler
+  void setWtDrawer(G4OpenGLWtDrawer* drawer);
+  G4OpenGLWtDrawer* fWtDrawer;
+#endif
 
 protected:
   G4OpenGLViewer (G4OpenGLSceneHandler& scene);
@@ -94,8 +106,8 @@ protected:
   // set print filename. 
   // if inc, then the filename will be increment by one each time
   std::string getRealPrintFilename();
-  unsigned int getWinWidth();
-  unsigned int getWinHeight();
+  unsigned int getWinWidth() const;
+  unsigned int getWinHeight() const;
   G4bool sizeHasChanged();
   // return true if size has change since last redraw
   GLdouble getSceneNearWidth();
@@ -126,6 +138,47 @@ protected:
   G4double     fRot_sens;        // Rotation sensibility in degrees
   G4double     fPan_sens;        // Translation sensibility
 
+public :
+#ifdef G4OPENGL_VERSION_2
+  // define the shaders for vertex and fragment in plain text format
+  std::string vertexShader_;
+  std::string fragmentShader_;
+
+
+  // define the keyword shader to handle it in a better way for OpenGL and WebGL
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  #define Shader Wt::WGLWidget::Shader
+#else
+  #define Shader GLuint
+#endif
+  
+  // define some attributes and variables for OpenGL and WebGL
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  Wt::WGLWidget::Program shaderProgram_;
+
+  // Program and related variables
+  Wt::WGLWidget::AttribLocation vertexPositionAttribute_;
+  Wt::WGLWidget::AttribLocation vertexNormalAttribute_;
+  Wt::WGLWidget::UniformLocation pMatrixUniform_;
+  Wt::WGLWidget::UniformLocation cMatrixUniform_;
+  Wt::WGLWidget::UniformLocation mvMatrixUniform_;
+  Wt::WGLWidget::UniformLocation nMatrixUniform_;
+  Wt::WGLWidget::UniformLocation tMatrixUniform_;
+#else
+  GLuint shaderProgram_;
+
+  // Program and related variables
+  GLuint vertexPositionAttribute_;
+  GLuint vertexNormalAttribute_;
+  GLuint pMatrixUniform_;
+  GLuint cMatrixUniform_;
+  GLuint mvMatrixUniform_;
+  GLuint nMatrixUniform_;
+  GLuint tMatrixUniform_;
+#endif
+  
+#endif
+  
 private :
   static G4int                             fPrintSizeX;
   static G4int                             fPrintSizeY;

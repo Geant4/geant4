@@ -1,0 +1,97 @@
+$Id: History 78112 2013-12-03 15:01:19Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example ParN02 History file
+                    ---------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+December 3rd, 2013 I.Hrivnacova - ParN02-V09-06-01
+-------------------------
+- Fixed .README.N02
+
+August 27th, 2013 G.Cosmo - ParN02-V09-06-00
+-------------------------
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+August 30th, 2012 G.Cosmo - ParN02-V09-05-01
+-------------------------
+- Simplified GNUmake scripts.
+
+August 24th, 2012 I.Hrivnacova - ParN02-V09-05-00
+------------------------------
+- Migration to "new" G4Exception  
+- Fixing ParGNUmakefile to get the example compiled with standard 
+  Geant4 environment setting
+- Renaming documentation files to README, README.N02 (to be consistent
+  with all examples)
+- Adding .README files for Doxygen  
+
+April 13, 2011 - G.Cosmo - ParN02-V09-04-00
+------------------------
+- Synchronised with current version of novice example N02.
+  Includes fixes and missing migrations...
+
+November 5, 2010 - J.Allison - ParN02-V09-03-01
+----------------------------
+- Introduced G4UIExecutive.
+
+June 2, 2010 - J.Perl - ParN02-V09-03-00
+-------------------------
+- Updated vis usage
+
+Jul 5th, 2006  G.Cosmo - ParN02-V08-01-00
+----------------------
+- Brought up to date with latest fixes introduced in exampleN02.
+
+Nov 28th, 2005  G.Cooperman - ParN02-V07-01-01
+---------------------------
+- Updated in sync with the last kernel code.
+
+Nov 15th, 2005  G.Cosmo - ParN02-V07-01-00
+-----------------------
+- Migration to <sstream> from deprecated <strstream>.
+
+May 3rd, 2005  J.Allison
+------------------------
+- Replaced vis manager with G4VisExecutive.
+
+Nov 22nd, 2004  G.Cooperman - ParN02-V07-00-00
+---------------------------
+- Added annotated files.
+
+Nov 22nd, 2004  G.Cooperman and V.H.Nguyen - ParN02-V06-02-00
+------------------------------------------
+- New version of marshaling/unmarshaling code, generated from
+  annotations using Marshalgen.
+
+June 20th, 2004  G.Cooperman
+----------------------------
+- Fixed bug in ParRunManager class, showing up with Geant4 6.1.
+
+Dec 2nd, 2003  G.Cosmo
+----------------------
+- Brought up-to-date classes from exampleN02.
+
+Nov 13th, 2003  J.Allison
+-------------------------
+- Removed OPACS from Vis Manager.
+
+July 4th, 2003  G.Cosmo
+-----------------------
+- Cleared pedantic compilation warnings ...
+
+March 5th, 2002  G.Cosmo - ParN02-V04-00-00
+------------------------
+- Created from original version of Gene Cooperman.
+  Parallel version of example/novice/N02.
+

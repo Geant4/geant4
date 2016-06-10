@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointCrossSurfChecker.hh 66872 2013-01-15 01:25:57Z japost $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -91,7 +91,7 @@ class G4AdjointCrossSurfChecker
    G4int FindRegisteredSurface(const G4String& name);
    
  private: 
-   static G4AdjointCrossSurfChecker* instance;
+   static G4ThreadLocal G4AdjointCrossSurfChecker* instance;
   
    std::vector<G4String> ListOfSurfaceName;
    std::vector<G4String> ListOfSurfaceType;

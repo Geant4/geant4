@@ -1,4 +1,4 @@
-$Id: History,v 1.126 2010-12-27 12:29:28 allison Exp $
+$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,92 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+15th November 2013  John Allison  (modeling-V09-06-22)
+- Some changes as suggested by PVS.
+
+6th November 2013  John Allison  (modeling-V09-06-21)
+- G4ArrowModel.cc: Tidied.
+
+30th October 2013  Tatiana Nikitina  (modeling-V09-06-20)
+- Make use of G4GenericPolycone in G4ArrowModel.
+  Coworks with tag "geom-specific-V09-06-22".
+
+30th September 2013  John Allison  (modeling-V09-06-19)
+- Re-tagged after clean-up by Gunter and Mke.
+
+27th September 2013  Michael Kelsey (modeling-V09-06-18)
+- G4MagneticFieldModel.hh:  Remove expanded '$'Id'$' value and re-commit to
+  (hopefully!) synchronize SVN state and eliminate "Modified" warnings in
+  CDash.
+
+21st September 2013  John Allison  (modeling-V09-06-17)
+- G4MagneticFieldModel: Fix compiler warnings.
+
+20th September 2013  John Allison  (modeling-V09-06-16)
+- G4MagneticFieldModel: Added '$'Id'$' functionality.
+
+2nd September 2013  John Allison
+- G4MagneticFieldModel.cc:
+  o Allowed for scene with extent not necessarily equal in x, y and z.
+
+30th August 2013  John Allison  (modeling-V09-06-15)
+- GNUmakefile: Added geometry/magneticfield/include.
+
+29th August 2013  John Allison  (modeling-V09-06-14)
+- G4MagneticFieldModel.cc: Fixed a corrupted file (SVN glitch?).
+
+27th August 2013  John Allison  (modeling-V09-06-13)
+- G4MagneticFieldModel:
+  o Removed diagnostic print statements.
+  o Note: Remaining print statements need converting to G4Exception.
+
+26th August 2013  John Allison  (modeling-V09-06-12)
+- G4MagneticFieldModel: Variable no. of data points per half scene.
+
+25th August 2013  John Allison  (modeling-V09-06-11)
+- G4MagneticFieldModel: Bug fix.
+
+25th August 2013  John Allison  (modeling-V09-06-10)
+- G4MagneticFieldModel: First attempt.
+
+24th August 2013  John Allison  (modeling-V09-06-09 coworks visman-V09-06-11)
+- Removed G4FlavoredParallelWorldModel.
+
+18th August 2013  John Allison  (modeling-V09-06-08 requires greps-V09-06-06)
+- Added skeleton G4MagneticFieldModel.
+
+16th June 2013  John Allison  (modeling-V09-06-07)
+- G4ModelingParameters: Small bug fix to previous tag.
+
+10th June 2013  John Allison  (modeling-V09-06-06)
+- G4ModelingParameters:
+  o Replaced PVNameCopyNoPathNotEqual by appropriate operator!=.
+  o Replaced VAMSNotEqual by appropriate operator!=.
+
+29th May 2013  John Allison  (modeling-V09-06-05)
+- G4PhysicalVolumeModel.cc: Bug fix for vis attribute modifying (VAM).
+  (The boolean copyForVAM was not being reset after use.)
+
+26th March 2013  John Allison  (modeling-V09-06-04)
+- G4TrajectoryDrawByAttribute.cc: Improved G4Exception messages.
+
+24th February 2013  John Allison  (modeling-V09-06-03)
+- G4FlavoredParallelWorldModel:
+  o Removed unused field as warned by new clang compiler.
+
+14th January 2013  John Allison  (modeling-V09-06-02)
+- G4ArrowModel, G4AxesModel:
+  o Coverity fixes.
+
+12th January 2013  John Allison  (modeling-V09-06-01)
+- Coverity fixes:
+  o G4PhysicalVolumeModel, G4TrajectoriesModel.
+- Added verbosity flag for G4PhysicalVolumeSearchScene to reduce verbiage:
+  o G4PhysicalVolumeModel, G4PhysicalVolumeSearchScene.
+
+2nd December 2012  John Allison  (modeling-V09-06-00)
+  o Removed NURBS and references to i_mode.
 
 24th October 2012  John Allison  (modeling-V09-05-22)
 - G4ModelingParameters:

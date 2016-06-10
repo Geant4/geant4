@@ -35,11 +35,13 @@
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyInteractionParameters.hh"
+#include "HadrontherapyDetectorROGeometry.hh"
 
 #include "PassiveProtonBeamLine.hh"
 #include "PassiveCarbonBeamLine.hh"
 #include "G4RunManager.hh"
-
+#include "G4VUserParallelWorld.hh"
+#include "G4ThreeVector.hh"
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyGeometryController::HadrontherapyGeometryController()
 {}
@@ -56,12 +58,16 @@ void HadrontherapyGeometryController::SetGeometry(G4String name)
     
      if(name == "default") 
     {
+        
 	registerGeometry(new PassiveProtonBeamLine());
+        
+
     } 
 
     else if(name == "Carbon")
     {
-        registerGeometry(new PassiveCarbonBeamLine());
+        
+          registerGeometry(new PassiveCarbonBeamLine());
     }
 
     else
@@ -74,6 +80,7 @@ void HadrontherapyGeometryController::SetGeometry(G4String name)
 void HadrontherapyGeometryController::registerGeometry(G4VUserDetectorConstruction *detector)
 {
 	G4RunManager *runManager = G4RunManager::GetRunManager();
+
 	runManager->SetUserInitialization(detector);
 	runManager->GeometryHasBeenModified();
 }

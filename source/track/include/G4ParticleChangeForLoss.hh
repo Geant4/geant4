@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleChangeForLoss.hh 68795 2013-04-05 13:24:46Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -79,35 +79,35 @@ public:
   void InitializeForPostStep(const G4Track&);
   //Initialize all propoerties by using G4Track information
 
-  void AddSecondary(G4DynamicParticle* aParticle);
+  //  void AddSecondary(G4DynamicParticle* aParticle);
   // Add next secondary
 
-  G4double GetProposedCharge() const;
-  void SetProposedCharge(G4double theCharge);
+  inline G4double GetProposedCharge() const;
+  inline void SetProposedCharge(G4double theCharge);
   //   Get/Set theCharge
 
-  G4double GetCharge() const;
-  void ProposeCharge(G4double finalCharge);
+  inline G4double GetCharge() const;
+  inline void ProposeCharge(G4double finalCharge);
   //   Get/Propose the final dynamical Charge in G4DynamicParticle
 
-  G4double GetProposedKineticEnergy() const;
-  void SetProposedKineticEnergy(G4double proposedKinEnergy);
+  inline G4double GetProposedKineticEnergy() const;
+  inline void SetProposedKineticEnergy(G4double proposedKinEnergy);
   // Get/Set the final kinetic energy of the current particle.
 
-  const G4ThreeVector& GetProposedMomentumDirection() const;
-  void SetProposedMomentumDirection(const G4ThreeVector& dir);
-  const G4ThreeVector& GetMomentumDirection() const;
-  void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
-  void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
+  inline const G4ThreeVector& GetProposedMomentumDirection() const;
+  inline void SetProposedMomentumDirection(const G4ThreeVector& dir);
+  inline const G4ThreeVector& GetMomentumDirection() const;
+  inline void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
+  inline void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
   // Get/Propose the MomentumDirection vector: it is the final momentum direction.
 
-  const G4ThreeVector& GetProposedPolarization() const;
-  void ProposePolarization(const G4ThreeVector& dir);
-  void ProposePolarization(G4double Px, G4double Py, G4double Pz);
+  inline const G4ThreeVector& GetProposedPolarization() const;
+  inline void ProposePolarization(const G4ThreeVector& dir);
+  inline void ProposePolarization(G4double Px, G4double Py, G4double Pz);
 
-  const G4Track* GetCurrentTrack() const;
+  inline const G4Track* GetCurrentTrack() const;
 
-  void SetLowEnergyLimit(G4double elimit);
+  inline void SetLowEnergyLimit(G4double elimit);
 
   virtual void DumpInfo() const;
 
@@ -236,7 +236,7 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
   theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
-  isParentWeightProposed = false;
+  //  isParentWeightProposed = false;
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
 }
@@ -248,7 +248,7 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
-  isParentWeightProposed = false;
+  // isParentWeightProposed = false;
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
   proposedMomentumDirection = track.GetMomentumDirection();
@@ -256,7 +256,7 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   currentTrack = &track;
 }
 
-
+/*
 inline void G4ParticleChangeForLoss::AddSecondary(G4DynamicParticle* aParticle)
 {
   //  create track
@@ -269,7 +269,7 @@ inline void G4ParticleChangeForLoss::AddSecondary(G4DynamicParticle* aParticle)
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
 }
-
+*/
 inline void G4ParticleChangeForLoss::SetLowEnergyLimit(G4double elimit)
 {
   lowEnergyLimit = elimit;

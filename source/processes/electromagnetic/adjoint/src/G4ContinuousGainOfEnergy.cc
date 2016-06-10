@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ContinuousGainOfEnergy.cc 75591 2013-11-04 12:33:11Z gcosmo $
 //
 
 #include "G4ContinuousGainOfEnergy.hh"
@@ -35,9 +35,10 @@
 #include "G4VEmModel.hh"
 #include "G4VEmFluctuationModel.hh"
 #include "G4VParticleChange.hh"
-#include "G4UnitsTable.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4LossTableManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 ///////////////////////////////////////////////////////
 //
@@ -201,8 +202,8 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
   	
 	G4double deltaE =0.;
   	if (lossFluctuationFlag ) {
-      		deltaE = currentModel->GetModelOfFluctuations()->
-      						SampleFluctuations(currentMaterial,dynParticle,tmax,dlength,degain)-degain;
+      	  deltaE = currentModel->GetModelOfFluctuations()->
+      	    SampleFluctuations(currentCouple,dynParticle,tmax,dlength,degain)-degain;
   	}
 	
 	G4double egain=degain+deltaE;

@@ -25,11 +25,16 @@
 //
 #ifndef G4VCASCADE_DEEXCITATION_HH
 #define G4VCASCADE_DEEXCITATION_HH
-// $Id$
+// $Id: G4VCascadeDeexcitation.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Base class to define a common interface for post-cascade processing.
+//
+// 20130620  Address Coverity complaint about missing copy actions
+// 20130621  Implement collide() here to throw exception, use reference
+//		instead of pointer for deExcite()
+// 20130622  Promote to direct base of G4VCascadeCollider
 
-#include "G4CascadeColliderBase.hh"
+#include "G4VCascadeCollider.hh"
 #include "globals.hh"
 #include "G4CollisionOutput.hh"
 
@@ -37,21 +42,23 @@ class G4InuclParticle;
 class G4Fragment;
 
 
-class G4VCascadeDeexcitation : public G4CascadeColliderBase {
+class G4VCascadeDeexcitation : public G4VCascadeCollider {
 public:
-  G4VCascadeDeexcitation(const char* name) : G4CascadeColliderBase(name) {}
+  G4VCascadeDeexcitation(const char* name) : G4VCascadeCollider(name) {}
   virtual ~G4VCascadeDeexcitation() {}
 
-  // Standard Collider interface (bullet is not used in this case)
-  virtual void collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
-		       G4CollisionOutput& globalOutput) = 0;
+  // Standard Collider interface should not be used (will end job)
+  virtual void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+		       G4CollisionOutput& globalOutput);
 
   // Interface specific to pre-compound (post-cascade) processing
-  virtual void deExcite(G4Fragment* fragment,
-			G4CollisionOutput& globalOutput) = 0;
+  virtual void deExcite(const G4Fragment& fragment,
+			G4CollisionOutput& output) = 0;
 
-protected:
-  G4CollisionOutput output;	// Local buffer for de-excitation stages
+private:
+  // Copying of modules is forbidden
+  G4VCascadeDeexcitation(const G4VCascadeDeexcitation&);
+  G4VCascadeDeexcitation& operator=(const G4VCascadeDeexcitation&);
 };
 
 #endif	/* G4CASCADE_DEEXCITATION_HH */

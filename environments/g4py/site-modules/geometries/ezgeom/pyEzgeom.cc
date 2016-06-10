@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyEzgeom.cc,v 1.1 2008-12-01 07:07:34 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyEzgeom.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyEZgeom.cc
 //
@@ -80,14 +79,14 @@ void SetWorldVisibility(G4bool qvis)
 
 
 // CreateTubeVolume
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateTubeVolume, 
-				       CreateTubeVolume, 4, 6);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateTubeVolume,
+				       CreateTubeVolume, 4, 6)
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateConeVolume, 
-				       CreateConeVolume, 6, 8);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateConeVolume,
+				       CreateConeVolume, 6, 8)
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateSphereVolume, 
-				       CreateSphereVolume, 3, 7);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateSphereVolume,
+				       CreateSphereVolume, 3, 7)
 
 // PlaceIt
 G4VPhysicalVolume*(G4EzVolume::*f1_PlaceIt)
@@ -96,17 +95,17 @@ G4VPhysicalVolume*(G4EzVolume::*f1_PlaceIt)
 G4VPhysicalVolume*(G4EzVolume::*f2_PlaceIt)
   (const G4Transform3D&, G4int, G4EzVolume*) = &G4EzVolume::PlaceIt;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_PlaceIt, PlaceIt, 1, 3);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_PlaceIt, PlaceIt, 1, 3)
 
 // ReplicateIt
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ReplicateIt, ReplicateIt, 4, 5);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ReplicateIt, ReplicateIt, 4, 5)
 
 // SetColor
 void (G4EzVolume::*f1_SetColor)(const G4Color&) = &G4EzVolume::SetColor;
-void (G4EzVolume::*f2_SetColor)(G4double, G4double, G4double) 
+void (G4EzVolume::*f2_SetColor)(G4double, G4double, G4double)
   = &G4EzVolume::SetColor;
 
-};
+}
 
 using namespace pyEZgeom;
 
@@ -120,11 +119,11 @@ BOOST_PYTHON_MODULE(ezgeom) {
     .def(init<const G4String&>())
     // ---
     .def("CreateBoxVolume",     &G4EzVolume::CreateBoxVolume)
-    .def("CreateTubeVolume",    &G4EzVolume::CreateTubeVolume, 
+    .def("CreateTubeVolume",    &G4EzVolume::CreateTubeVolume,
 	                        f_CreateTubeVolume())
-    .def("CreateConeVolume",    &G4EzVolume::CreateConeVolume, 
+    .def("CreateConeVolume",    &G4EzVolume::CreateConeVolume,
 	                        f_CreateConeVolume())
-    .def("CreateShpereVolume",  &G4EzVolume::CreateSphereVolume, 
+    .def("CreateShpereVolume",  &G4EzVolume::CreateSphereVolume,
 	                        f_CreateSphereVolume())
     .def("CreateOrbVolume",     &G4EzVolume::CreateOrbVolume)
     // ---
@@ -135,11 +134,11 @@ BOOST_PYTHON_MODULE(ezgeom) {
     .def("GetMaterial",         &G4EzVolume::GetMaterial,
          return_value_policy<reference_existing_object>())
     // ---
-    .def("PlaceIt", f1_PlaceIt, 
+    .def("PlaceIt", f1_PlaceIt,
 	 f_PlaceIt()[return_value_policy<reference_existing_object>()])
-    .def("PlaceIt", f2_PlaceIt, 
+    .def("PlaceIt", f2_PlaceIt,
 	 f_PlaceIt()[return_value_policy<reference_existing_object>()])
-    .def("ReplicateIt", &G4EzVolume::ReplicateIt, 
+    .def("ReplicateIt", &G4EzVolume::ReplicateIt,
 	 f_ReplicateIt()[return_value_policy<reference_existing_object>()])
     .def("VoxelizeIt",          &G4EzVolume::VoxelizeIt)
     // ---

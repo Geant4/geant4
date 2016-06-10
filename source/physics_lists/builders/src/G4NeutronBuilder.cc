@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,12 +42,15 @@
 #include "G4ProcessManager.hh"
 
 G4NeutronBuilder::
-G4NeutronBuilder(): wasActivated(false) 
+G4NeutronBuilder(G4bool fissionFlag): wasActivated(false), isFissionActivated(fissionFlag) 
 {
   theNeutronInelastic = new G4NeutronInelasticProcess;
   theNeutronCapture = new G4HadronCaptureProcess;
-  theNeutronFission = new G4HadronFissionProcess;
-  
+  if ( isFissionActivated ) {
+    theNeutronFission = new G4HadronFissionProcess;
+  } else {
+    theNeutronFission = 0;
+  } 
 }
 
 G4NeutronBuilder::
@@ -56,7 +58,7 @@ G4NeutronBuilder::
 {
   delete theNeutronInelastic;
   delete theNeutronCapture;
-  delete theNeutronFission;
+  if ( isFissionActivated ) delete theNeutronFission;
 }
 
 void G4NeutronBuilder::
@@ -68,11 +70,11 @@ Build()
   {
     (*i)->Build(theNeutronInelastic);
     (*i)->Build(theNeutronCapture);
-    (*i)->Build(theNeutronFission);
+    if ( isFissionActivated ) (*i)->Build(theNeutronFission);
   }
   G4ProcessManager * theProcMan = G4Neutron::Neutron()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theNeutronInelastic);
   theProcMan->AddDiscreteProcess(theNeutronCapture);
-  theProcMan->AddDiscreteProcess(theNeutronFission);
+  if ( isFissionActivated ) theProcMan->AddDiscreteProcess(theNeutronFission);
 }
 // 2002 by J.P. Wellisch

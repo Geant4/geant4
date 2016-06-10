@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4SauterGavrilaAngularDistribution.cc 68797 2013-04-05 13:27:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,7 +57,7 @@ G4SauterGavrilaAngularDistribution::SampleDirection(
        const G4DynamicParticle* dp, G4double, G4int, const G4Material*)
 {
   G4double tau = dp->GetKineticEnergy()/electron_mass_c2;
-  const G4double taulimit = 30.0;
+  static const G4double taulimit = 30.0;
 
   if (tau > taulimit) {
     fLocalDirection = dp->GetMomentumDirection(); 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeRayleighModel.hh 75573 2013-11-04 11:48:15Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -31,6 +31,7 @@
 // -----------
 // 03 Dec 2009   L. Pandola   1st implementation. 
 // 25 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 27 Sep 2013   L. Pandola  Migration to MT paradigm
 //
 // -------------------------------------------------------------------
 //
@@ -64,7 +65,9 @@ public:
   virtual ~G4PenelopeRayleighModel();
   
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-  
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel *masterModel);
+
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
                                               G4double kinEnergy,
                                               G4double Z,
@@ -86,11 +89,14 @@ public:
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
-  
+  const G4ParticleDefinition* fParticle;
+
 private:
   G4PenelopeRayleighModel& operator=(const G4PenelopeRayleighModel &right);
   G4PenelopeRayleighModel(const G4PenelopeRayleighModel&);
     
+  void SetParticle(const G4ParticleDefinition*);
+
   //Intrinsic energy limits of the model: cannot be extended by 
   //the parent process
   G4double fIntrinsicLowEnergyLimit;
@@ -120,6 +126,9 @@ private:
 
   G4double GetFSquared(const G4Material*,const G4double);
   void InitializeSamplingAlgorithm(const G4Material*);
+
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
 
 };
 

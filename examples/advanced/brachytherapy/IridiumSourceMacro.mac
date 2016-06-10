@@ -1,5 +1,6 @@
 # The iridium source is the default option
 /control/verbose 1
+/tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
 #
@@ -15,11 +16,18 @@
 /score/close
 #
 /score/list  
+##### Primary radiation Field
+# Generate emitted photons
+/control/execute iridium_source_primary.mac
+#
+# Alternatively generated Ir decay
+#/control/execute iridium_decay.mac
+################################################
 /run/beamOn  1000
 #
 # Dump scores to a file
 #
-/score/dumpQuantityToFile boxMesh_1 eDep EnergyDeposition.out
+/score/dumpQuantityToFile boxMesh_1 eDep EnergyDeposition_iridium.out
 #
 
 

@@ -49,6 +49,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "G4UIcommand.hh"
+
 class G4String;
 namespace CLHEP {
   class Hep3Vector;
@@ -156,14 +158,14 @@ private:
     }
     /** ToString */
     virtual std::string ToString() const {
-      std::stringstream s;
-      s << fRef;
-      return s.str();
+      std::stringstream ss;
+      ss << fRef;
+      return ss.str();
     }
     /** FromString */
     virtual void FromString(const std::string& val) {
-      std::stringstream s(val);
-      s >> fRef;
+      std::stringstream ss(val);
+      ss >> fRef;
     }
     /** representation */
     ValueType& fRef;
@@ -178,9 +180,19 @@ private:
  * Specializations
  */
 
-template<> void G4AnyType::Ref<bool>::FromString(const std::string& val);
-template<> void G4AnyType::Ref<G4String>::FromString(const std::string& val);
-template<> void G4AnyType::Ref<CLHEP::Hep3Vector>::FromString(const std::string& val);
+template <> inline void G4AnyType::Ref<bool>::FromString(const std::string& val)  {
+  fRef = G4UIcommand::ConvertToBool(val.c_str());
+}
+
+template <> inline void G4AnyType::Ref<G4String>::FromString(const std::string& val)  {
+  if (val[0] == '"' ) fRef = val.substr(1,val.size()-2);
+  else fRef = val;
+}
+
+template <> inline void G4AnyType::Ref<G4ThreeVector>::FromString(const std::string& val)  {
+  fRef = G4UIcommand::ConvertTo3Vector(val.c_str());
+}
+
 
 /**
  * @class G4BadAnyCast G4AnyType.h Reflex/G4AnyType.h

@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02EventAction class
 //
 //
-// $Id$
+// $Id: RE02EventAction.cc 68026 2013-03-13 13:45:22Z gcosmo $
 //
  
 #include "RE02EventAction.hh"
@@ -39,6 +39,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02EventAction::RE02EventAction()
+ : G4UserEventAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

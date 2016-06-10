@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 70760 2013-06-05 12:28:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -47,6 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
   fParticleGun  = new G4ParticleGun(1);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));

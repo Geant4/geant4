@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SolidStore.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // class G4SolidStore
 //
@@ -88,8 +88,8 @@ class G4SolidStore : public std::vector<G4VSolid*>
   private:
 
     static G4SolidStore* fgInstance;
-    static G4VStoreNotifier* fgNotifier;
-    static G4bool locked;
+    static G4ThreadLocal G4VStoreNotifier* fgNotifier;
+    static G4ThreadLocal G4bool locked;
 };
 
 #endif

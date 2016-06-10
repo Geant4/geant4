@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2011-01-03 14:34:46 lgarnier Exp $
+$Id: History 75179 2013-10-29 10:09:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,38 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+29th June 2013  Gabriele Cosmo (gMocren-V09-06-07)
+- Commmented out private declaration of G4GMocrenFileSceneHandler::operator=()
+  to overcome compilation error on MacOSX 10.9 Mavericks.
+- Fixed streaming on cout of ofstream content in G4GMocrenIO::storeData4().
+  Clears a compilation error detected on Windows/VC++12.
+
+17th June 2013  John Allison (gMocren-V09-06-06)
+- G4GMocrenFileSceneHandler.cc: Reverted snprintf to sprintf.
+  o snprintf not in cstdlib on Windows.
+  o Mark as "intentional" on next Coverity analysis.
+
+15th June 2013  Akinori Kimura (gMocren-V09-06-05)
+- G4GMocrenIO.cc and G4GMocrenFileSceneHandler.{cc,hh}: Fixed warnings of 
+  Coverity.
+
+4th June 2013  Akinori Kimura (gMocren-V09-06-04)
+- G4GMocrenIO: Fixed an inconsistency of the length check of the unit string.
+
+24th February 2013  John Allison (gMocren-V09-06-03)
+- G4GMocrenFileViewer, G4GMocrenMessenger:
+  o Removed unused fields as warned by new clang compiler.
+
+22nd January 2013  Akinori Kimura (gMocren-V09-06-02)
+- Fixed wrong parameters of G4Exception() in G4GMocrenIO.cc.
+
+22nd January 2013  Akinori Kimura (gMocren-V09-06-01)
+- Replaced exit() with G4Exception() in G4GMocrenIO.cc.
+
+2nd December 2012  John Allison  (gMocren-V09-06-00)
+- Remove NURBS.
+- Remove references to i_mode.
 
 8th August 2012  John Allison  (gMocren-V09-05-05)
 - G4GMocrenFileSceneHandler.cc:

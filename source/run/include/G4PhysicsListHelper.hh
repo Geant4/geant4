@@ -97,11 +97,11 @@ class G4PhysicsListHelper
 
   ////////////////////////////////////////////////////////////////////////
   private:
-    static G4PhysicsListHelper* pPLHelper;
+    static G4ThreadLocal G4PhysicsListHelper* pPLHelper;
 
     // the particle table has the complete List of existing particle types
     G4ParticleTable* theParticleTable;
-    G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+    G4ParticleTable::G4PTblDicIterator* aParticleIterator;
 
     G4bool useCoupledTransportation;
     G4VProcess* theTransportationProcess;

@@ -26,10 +26,11 @@
 /// \file electromagnetic/TestEm9/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
+// $Id: EventAction.hh 66586 2012-12-21 10:48:39Z ihrivnac $
+//
+
 #ifndef EventAction_h
 #define EventAction_h 1
-
-// $Id$
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

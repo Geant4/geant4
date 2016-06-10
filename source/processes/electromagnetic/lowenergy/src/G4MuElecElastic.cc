@@ -46,6 +46,16 @@ G4MuElecElastic::G4MuElecElastic(const G4String& processName,
     isInitialised(false)
 {
   SetProcessSubType(51);
+  
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The name of the class G4MuElecElastic is changed to G4MicroElecElastic. " << G4endl;
+   G4cout << "   The obsolete class will be REMOVED with the next release of Geant4. " << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,10 +78,10 @@ void G4MuElecElastic::InitialiseProcess(const G4ParticleDefinition*)
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    if(!Model()) SetModel(new G4MuElecElasticModel);
-    Model()->SetLowEnergyLimit(5*eV);
-    Model()->SetHighEnergyLimit(100*MeV);
-    AddEmModel(1, Model());
+    if(!EmModel()) SetEmModel(new G4MuElecElasticModel);
+    EmModel()->SetLowEnergyLimit(5*eV);
+    EmModel()->SetHighEnergyLimit(100*MeV);
+    AddEmModel(1, EmModel());
   } 
 }
 
@@ -79,9 +89,14 @@ void G4MuElecElastic::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4MuElecElastic::PrintInfo()
 {
+  // V.I. printout of models is perfored by model manager
+  //      if this extra printout is needed it should be 
+  //      protected by verbosity level
+  /*
   G4cout
-    << " Total cross sections computed from " << Model()->GetName() << " model"
+    << " Total cross sections computed from " << EmModel()->GetName() << " model"
     << G4endl;
+  */
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -274,7 +274,7 @@ class ExtPolyhedron : public HepPolyhedron {
 // ----------------------------------------- Boolean processor class ---
 class BooleanProcessor {
  private:
-  static int ishift; //G.Barrand
+  static G4ThreadLocal int ishift; //G.Barrand
   std::vector<ExtNode> nodes;        // vector of nodes //G.Barrand
   std::vector<ExtEdge> edges;        // vector of edges //G.Barrand
   std::vector<ExtFace> faces;        // vector of faces //G.Barrand
@@ -366,7 +366,7 @@ class BooleanProcessor {
 
   void dump(); //G.Barrand
   static int get_shift(); //G.Barrand
-  static void set_shift(int); //G.Barrand
+  static void set_shift(int a_shift); //G.Barrand
   static int get_num_shift(); //G.Barrand
 };
 
@@ -1969,7 +1969,7 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
   return polyhedron;
 }
 
-int BooleanProcessor::ishift = 0; //G.Barrand
+G4ThreadLocal int BooleanProcessor::ishift = 0; //G.Barrand
 int BooleanProcessor::get_shift() { return ishift;} //G.Barrand
 void BooleanProcessor::set_shift(int a_shift) { ishift = a_shift;} //G.Barrand
 #define NUM_SHIFT 8
@@ -1990,7 +1990,7 @@ HepPolyhedron BooleanProcessor::execute(int op,
 {
   //static int ishift = 0; //G.Barrand
   //static double shift[8][3] = {
-  static double shift[NUM_SHIFT][3] = { //G.Barrand
+  static const double shift[NUM_SHIFT][3] = { //G.Barrand
     {  31,  23,  17},
     { -31, -23, -17},
     { -23,  17,  31},

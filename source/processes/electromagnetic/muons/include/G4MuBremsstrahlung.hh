@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuBremsstrahlung.hh 72942 2013-08-14 13:37:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -90,8 +90,9 @@ public:
 				    const G4Material*, 
 				    G4double cut);
 
-  // Print out of the class parameters
   virtual void PrintInfo();
+
+  inline void SetLowestKineticEnergy(G4double e);
 
 protected:
 
@@ -103,8 +104,7 @@ private:
   G4MuBremsstrahlung & operator=(const G4MuBremsstrahlung &right);
   G4MuBremsstrahlung(const G4MuBremsstrahlung&);
 
-  const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
+protected:
 
   G4double  lowestKinEnergy;
   G4bool    isInitialised;
@@ -112,5 +112,12 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4MuBremsstrahlung::SetLowestKineticEnergy(G4double e) 
+{
+  lowestKinEnergy = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

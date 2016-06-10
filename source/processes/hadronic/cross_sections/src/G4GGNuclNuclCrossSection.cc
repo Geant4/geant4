@@ -45,10 +45,12 @@ G4_DECLARE_XS_FACTORY(G4GGNuclNuclCrossSection);
 
 G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection() 
  : G4VCrossSectionDataSet(Default_Name()),
-   fUpperLimit(100000*GeV), fLowerLimit(0.1*MeV),
+//   fUpperLimit(100000*GeV),
+   fLowerLimit(0.1*MeV),
    fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
    fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
-   fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
+   fDiffractionXsc(0.0)
+// , fHadronNucleonXsc(0.0)
 {
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
@@ -57,7 +59,9 @@ G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection()
 
 
 G4GGNuclNuclCrossSection::~G4GGNuclNuclCrossSection()
-{}
+{
+  delete hnXsc;
+}
 
 void
 G4GGNuclNuclCrossSection::CrossSectionDescription(std::ostream& outFile) const
@@ -151,6 +155,9 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
 
     G4double npInXsc = hnXsc->GetInelasticHadronNucleonXsc();
 
+      delete dProton;
+      delete dNeutron;
+      
     // G4cout<<"ppInXsc = "<<ppInXsc/millibarn<<"; npInXsc = "<<npInXsc/millibarn<<G4endl;
     // G4cout<<"npTotXsc = "<<hnXsc->GetTotalHadronNucleonXsc()/millibarn<<"; npElXsc = "
     //                      <<hnXsc->GetElasticHadronNucleonXsc()/millibarn<<G4endl;
@@ -192,6 +199,7 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
     fElasticXsc    = 0.;
     fProductionXsc = 0.;
   }
+    
   return fInelasticXsc;   // xsection; 
 }
 

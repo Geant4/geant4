@@ -26,37 +26,35 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04DetectorConstruction.hh
 /// \brief Definition of the ExN04DetectorConstruction class
 //
+// $Id: ExN04DetectorConstruction.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #ifndef ExN04DetectorConstruction_h
 #define ExN04DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4VUserDetectorConstruction.hh"
 
 class G4VPhysicalVolume;
 class G4Material;
 
-class ExN04DetectorConstruction : public G4VUserDetectorConstruction
-{
-  public:
-    ExN04DetectorConstruction();
-    ~ExN04DetectorConstruction();
+class ExN04DetectorConstruction : public G4VUserDetectorConstruction {
+public:
+  ExN04DetectorConstruction();
+  ~ExN04DetectorConstruction();
 
-  public:
-     G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
-  private:
-     void DefineMaterials();
+private:
+  void DefineMaterials();
 
 #include "ExN04DetectorParameterDef.hh"
 
-  G4Material* Air;
-  G4Material* Ar;
-  G4Material* Silicon;
-  G4Material* Scinti;
-  G4Material* Lead;
-
+  G4Material* fAir;
+  G4Material* fAr;
+  G4Material* fSilicon;
+  G4Material* fScinti;
+  G4Material* fLead;
 };
 
 #endif
-

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PolarizationManager.cc 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -47,7 +47,7 @@
 
 #include "G4LogicalVolume.hh"
 
-G4PolarizationManager * G4PolarizationManager::instance = 0;
+G4ThreadLocal G4PolarizationManager * G4PolarizationManager::instance = 0;
 
 G4PolarizationManager* G4PolarizationManager::GetInstance()
 {

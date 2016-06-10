@@ -27,7 +27,7 @@
 /// \brief Implementation of the G02PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: G02PrimaryGeneratorAction.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02PrimaryGeneratorAction implementation
 //
@@ -42,6 +42,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G02PrimaryGeneratorAction::G02PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0),
+   fParticleTable(0)
+   
 {
   // Particle gun and particle table 
   //

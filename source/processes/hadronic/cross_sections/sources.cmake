@@ -11,8 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-11-29 17:44:25 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: sources.cmake 68777 2013-04-05 12:52:17Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -110,6 +109,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4UPiNuclearCrossSection.hh
 	G4VComponentCrossSection.hh
 	G4VCrossSectionDataSet.hh
+	G4CrossSectionFactoryRegistry.hh
     SOURCES
 	G4BGGNucleonElasticXS.cc
 	G4BGGNucleonInelasticXS.cc
@@ -175,6 +175,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4UPiNuclearCrossSection.cc
 	G4VComponentCrossSection.cc
 	G4VCrossSectionDataSet.cc
+	G4CrossSectionFactoryRegistry.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

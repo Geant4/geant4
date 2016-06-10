@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: SteppingAction.cc 73008 2013-08-15 08:43:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,6 @@
 #include "RunAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "EventAction.hh"
-#include "HistoManager.hh"
 
 #include "G4Step.hh"
 
@@ -42,11 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
-                               PrimaryGeneratorAction* prim, EventAction* evt,
-			       HistoManager* hist)
-:G4UserSteppingAction(),detector(det),runAct(run),primary(prim),eventAct(evt),
- histoManager(hist) 
+SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* evt)
+:G4UserSteppingAction(),detector(det),eventAct(evt)
 {
   first = true;
   lvol_world = lvol_module = lvol_layer = lvol_fiber = 0;

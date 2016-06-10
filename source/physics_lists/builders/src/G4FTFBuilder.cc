@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4FTFBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -40,7 +40,6 @@
 #include "G4FTFModel.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4TheoFSGenerator.hh"
-#include "G4QStringChipsParticleLevelInterface.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4BinaryCascade.hh"
@@ -74,10 +73,7 @@ G4HadronicInteraction* G4FTFBuilder::BuildModel()
     fPreCompound = new G4PreCompoundModel();
   }
 
-  if(GetName() == "FTFC") {
-    theFTFModel->SetTransport(new G4QStringChipsParticleLevelInterface());
-
-  } else if(GetName() == "FTFB") {
+  if(GetName() == "FTFB") {
     G4BinaryCascade* bic = new G4BinaryCascade(fPreCompound);
     theFTFModel->SetTransport(bic);
 

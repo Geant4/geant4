@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.hh 73010 2013-08-15 08:46:58Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,9 +40,7 @@
 
 class DetectorConstruction;
 class RunAction;
-class EventAction;
 class TrackingAction;
-class HistoManager;
 
 class G4VPhysicalVolume;
 
@@ -51,18 +49,15 @@ class G4VPhysicalVolume;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,RunAction*,EventAction*,
-                                        TrackingAction*,HistoManager*);
+    SteppingAction(DetectorConstruction*,RunAction*,TrackingAction*);
    ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
     
   private:
     DetectorConstruction* fDetector;
     RunAction*            fRunAction;
-    EventAction*          fEventAction;
     TrackingAction*       fTrackAction;        
-    HistoManager*         fHistoManager;
     
     G4VPhysicalVolume*    fWall;
     G4VPhysicalVolume*    fCavity;

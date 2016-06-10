@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:40:46 bmorgan Exp $
+# $Id: sources.cmake 66356 2012-12-18 09:02:32Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -45,8 +45,6 @@ GEANT4_DEFINE_MODULE(NAME G4geombias
         G4IStore.hh
         G4ImportanceAlgorithm.hh
         G4Nsplit_Weight.hh
-        G4VCellScorer.hh
-        G4VCellScorerStore.hh
         G4VGCellFinder.hh
         G4VIStore.hh
         G4VImportanceAlgorithm.hh
@@ -64,8 +62,6 @@ GEANT4_DEFINE_MODULE(NAME G4geombias
         G4IStore.cc
         G4ImportanceAlgorithm.cc
         G4Nsplit_Weight.cc
-        G4VCellScorer.cc
-        G4VCellScorerStore.cc
         G4VGCellFinder.cc
         G4VIStore.cc
         G4VImportanceAlgorithm.cc

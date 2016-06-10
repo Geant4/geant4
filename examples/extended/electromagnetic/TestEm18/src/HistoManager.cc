@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: HistoManager.cc 72242 2013-07-12 08:44:19Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +71,7 @@ void HistoManager::Book()
                   "energy spectrum of gamma",                     //5
                   "step size"                                     //6
                  };
-	    
+            
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
   G4double vmin = 0.;
@@ -81,7 +81,7 @@ void HistoManager::Book()
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
-    analysisManager->SetActivation(G4VAnalysisManager::kH1, ih, false);
+    analysisManager->SetH1Activation(ih, false);
   }
 }
 

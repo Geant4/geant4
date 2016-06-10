@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.149 2010-11-23 13:21:37 gcosmo Exp $
+# $Id: binmake.gmk 76321 2013-11-08 14:09:58Z gcosmo $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -45,7 +45,12 @@ ifndef INCFLAGS
   INCFLAGS := -I$(G4INCLUDE)
  else
   INCFLAGS := \
-              -I$(G4BASE)/analysis/include \
+              -I$(G4BASE)/analysis/g4tools/include \
+              -I$(G4BASE)/analysis/management/include \
+              -I$(G4BASE)/analysis/hntools/include \
+              -I$(G4BASE)/analysis/csv/include \
+              -I$(G4BASE)/analysis/root/include \
+              -I$(G4BASE)/analysis/xml/include \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \
@@ -63,12 +68,25 @@ ifndef INCFLAGS
               -I$(G4BASE)/particles/shortlived/include \
               -I$(G4BASE)/physics_lists/lists/include \
               -I$(G4BASE)/physics_lists/builders/include \
+              -I$(G4BASE)/physics_lists/constructors/decay/include \
+              -I$(G4BASE)/physics_lists/constructors/electromagnetic/include \
+              -I$(G4BASE)/physics_lists/constructors/factory/include \
+              -I$(G4BASE)/physics_lists/constructors/gamma_lepto_nuclear/include \
+              -I$(G4BASE)/physics_lists/constructors/hadron_elastic/include \
+              -I$(G4BASE)/physics_lists/constructors/hadron_inelastic/include \
+              -I$(G4BASE)/physics_lists/constructors/ions/include \
+              -I$(G4BASE)/physics_lists/constructors/limiters/include \
+              -I$(G4BASE)/physics_lists/constructors/stopping/include \
+              -I$(G4BASE)/physics_lists/util/include \
               -I$(G4BASE)/processes/management/include \
               -I$(G4BASE)/processes/cuts/include \
-              -I$(G4BASE)/processes/biasing/include \
+              -I$(G4BASE)/processes/biasing/generic/include \
+              -I$(G4BASE)/processes/biasing/importance/include \
+              -I$(G4BASE)/processes/biasing/management/include \
               -I$(G4BASE)/processes/scoring/include \
               -I$(G4BASE)/processes/decay/include \
               -I$(G4BASE)/processes/optical/include \
+              -I$(G4BASE)/processes/phonon/include \
               -I$(G4BASE)/processes/transportation/include \
               -I$(G4BASE)/processes/parameterisation/include \
               -I$(G4BASE)/processes/electromagnetic/adjoint/include \
@@ -88,16 +106,10 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/polarisation/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
               -I$(G4BASE)/processes/hadronic/management/include \
+              -I$(G4BASE)/processes/hadronic/models/abla/include \
               -I$(G4BASE)/processes/hadronic/models/abrasion/include \
               -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
               -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-              -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
-              -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/fragmentation/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/processes/include \
               -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
@@ -110,22 +122,19 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
               -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
-              -I$(G4BASE)/processes/hadronic/models/high_energy/include \
+              -I$(G4BASE)/processes/hadronic/models/fission/include \
               -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
-              -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
               -I$(G4BASE)/processes/hadronic/models/lend/include \
-              -I$(G4BASE)/processes/hadronic/models/lll_fission/include \
-              -I$(G4BASE)/processes/hadronic/models/low_energy/include \
+              -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/management/include \
               -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
-              -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
               -I$(G4BASE)/processes/hadronic/models/qmd/include \
               -I$(G4BASE)/processes/hadronic/models/quasi_elastic/include \
@@ -139,8 +148,8 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/management/include \
               -I$(G4BASE)/geometry/solids/CSG/include \
               -I$(G4BASE)/geometry/solids/specific/include \
-              -I$(G4BASE)/geometry/solids/BREPS/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
+              -I$(G4BASE)/geometry/solids/usolids/include \
               -I$(G4BASE)/geometry/divisions/include \
               -I$(G4BASE)/geometry/volumes/include \
               -I$(G4BASE)/geometry/navigation/include \

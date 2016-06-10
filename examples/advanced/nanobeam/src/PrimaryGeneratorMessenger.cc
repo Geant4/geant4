@@ -23,26 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "PrimaryGeneratorMessenger.hh"
 #include "PrimaryGeneratorAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
-                                                   PrimaryGeneratorAction* Gun)
-:Action(Gun)
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun)
+:fAction(Gun)
 { 
-  gunDir = new G4UIdirectory("/beam/");
-  gunDir->SetGuidance("beam control");
+  fGunDir = new G4UIdirectory("/beam/");
+  fGunDir->SetGuidance("beam control");
 
-  emissionCmd = new G4UIcmdWithAnInteger("/beam/emission",this);
-  emissionCmd->SetGuidance("Select emission model.");
-  emissionCmd->SetParameterName("emission",false);
-  emissionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fEmissionCmd = new G4UIcmdWithAnInteger("/beam/emission",this);
+  fEmissionCmd->SetGuidance("Select emission model.");
+  fEmissionCmd->SetParameterName("emission",false);
+  fEmissionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
 }
 
@@ -50,19 +48,15 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
 
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
-  delete emissionCmd;
-  delete gunDir;
+  delete fEmissionCmd;
+  delete fGunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-                                               G4String newValue)
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if (command == emissionCmd)
-   {Action->SetEmission(emissionCmd->GetNewIntValue(newValue));}   
+  if (command == fEmissionCmd)
+  {fAction->SetEmission(fEmissionCmd->GetNewIntValue(newValue));}   
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXePMTHit.hh 72250 2013-07-12 08:59:26Z gcosmo $
+//
 /// \file optical/LXe/include/LXePMTHit.hh
 /// \brief Definition of the LXePMTHit class
 //
@@ -38,6 +40,8 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
+
+#include "tls.hh"
 
 class G4VTouchable;
 
@@ -88,16 +92,16 @@ class LXePMTHit : public G4VHit
 
 typedef G4THitsCollection<LXePMTHit> LXePMTHitsCollection;
 
-extern G4Allocator<LXePMTHit> LXePMTHitAllocator;
+extern G4ThreadLocal G4Allocator<LXePMTHit>* LXePMTHitAllocator;
 
 inline void* LXePMTHit::operator new(size_t){
-  void *aHit;
-  aHit = (void *) LXePMTHitAllocator.MallocSingle();
-  return aHit;
+  if(!LXePMTHitAllocator)
+      LXePMTHitAllocator = new G4Allocator<LXePMTHit>;
+  return (void *) LXePMTHitAllocator->MallocSingle();
 }
 
 inline void LXePMTHit::operator delete(void *aHit){
-  LXePMTHitAllocator.FreeSingle((LXePMTHit*) aHit);
+  LXePMTHitAllocator->FreeSingle((LXePMTHit*) aHit);
 }
 
 #endif

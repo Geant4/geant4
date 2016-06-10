@@ -25,9 +25,8 @@
 //
 /// \file electromagnetic/TestEm1/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
-//
 // 
-// $Id$
+// $Id: PhysicsList.cc 74734 2013-10-21 09:00:00Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +54,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* p) 
-: G4VModularPhysicsList()
+: G4VModularPhysicsList(),
+  fEmPhysicsList(0),
+  fDet(0),
+  fMessenger(0)
 {
   G4LossTableManager::Instance();
   fDet = p;
@@ -282,11 +284,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4Decay.hh"
 
 void PhysicsList::AddDecay()
-{ 
+{
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+    
   // Decay Process
   //
   G4Decay* fDecayProcess = new G4Decay();
@@ -294,17 +298,8 @@ void PhysicsList::AddDecay()
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle)) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
+    if (fDecayProcess->IsApplicable(*particle)) 
+      ph->RegisterProcess(fDecayProcess, particle);    
   }
 }
 
@@ -326,6 +321,7 @@ void PhysicsList::AddRadioactiveDecay()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4ProcessManager.hh"
 #include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
@@ -357,7 +353,9 @@ void PhysicsList::SetCuts()
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
-
+  // fixe lower limit for cut
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(10*eV, 1*GeV);
+  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(fCutForGamma, "gamma");

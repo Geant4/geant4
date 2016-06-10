@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EnergyLossMessenger.cc 74376 2013-10-04 08:25:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -244,6 +244,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   ver1Cmd->SetDefaultValue(1);
   ver1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  ver2Cmd = new G4UIcmdWithAnInteger("/process/em/workerVerbose",this);
+  ver2Cmd->SetGuidance("Set worker verbose level for EM physics");
+  ver2Cmd->SetParameterName("verb2",true);
+  ver2Cmd->SetDefaultValue(1);
+  ver2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   lllCmd = new G4UIcmdWithADouble("/process/eLoss/linLossLimit",this);
   lllCmd->SetGuidance("Set linearLossLimit parameter");
   lllCmd->SetParameterName("linlim",true);
@@ -387,6 +393,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete latCmd;
   delete verCmd;
   delete ver1Cmd;
+  delete ver2Cmd;
   delete mscCmd;
   delete dedxCmd;
   delete deCmd;
@@ -495,9 +502,11 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     opt->SetMscLateralDisplacement(latCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == verCmd) {
-    opt->SetVerbose(verCmd->GetNewIntValue(newValue));
+    opt->SetVerbose(verCmd->GetNewIntValue(newValue),"all",false);
   } else if (command == ver1Cmd) {
-    opt->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
+    opt->SetVerbose(ver1Cmd->GetNewIntValue(newValue),"all",false);
+  } else if (command == ver2Cmd) {
+    opt->SetVerbose(ver2Cmd->GetNewIntValue(newValue),"all",true);
   } else if (command == lllCmd) {
     opt->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
   } else if (command == labCmd) {

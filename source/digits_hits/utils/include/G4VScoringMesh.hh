@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VScoringMesh.hh 68735 2013-04-05 09:49:13Z gcosmo $
 //
 
 #ifndef G4VScoringMesh_h
@@ -35,6 +35,7 @@
 #include "G4RotationMatrix.hh"
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 class G4MultiFunctionalDetector;
 class G4VPrimitiveScorer;
 class G4VSDFilter;
@@ -58,6 +59,9 @@ class G4VScoringMesh
   public: // with description
   // a pure virtual function to construct this mesh geometry
   virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
+
+  virtual void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
+
   // list infomration of this mesh 
   virtual void List() const;
   
@@ -75,7 +79,9 @@ class G4VScoringMesh
   inline MeshShape GetShape() const
   { return fShape; }
   // accumulate hits in a registered primitive scorer
-  inline void Accumulate(G4THitsMap<G4double> * map);
+  void Accumulate(G4THitsMap<G4double> * map);
+  // merge same kind of meshes
+  void Merge(const G4VScoringMesh * scMesh);
   // dump information of primitive socrers registered in this mesh
   void Dump();
   // draw a projected quantity on a current viewer
@@ -147,7 +153,8 @@ class G4VScoringMesh
   inline void SetVerboseLevel(G4int vl) 
   { verboseLevel = vl; }
   // get the primitive scorer map
-  MeshScoreMap GetScoreMap() {return fMap;}
+  inline MeshScoreMap GetScoreMap() const 
+  { return fMap; }
   // get whether this mesh setup has been ready
   inline G4bool ReadyForQuantity() const
   { return (sizeIsSet && nMeshIsSet); }
@@ -181,28 +188,15 @@ protected:
   G4String fDrawPSName;
 
   G4String fDivisionAxisNames[3];
+
+  G4LogicalVolume * fMeshElementLogical;
+
+public:
+  inline void SetMeshElementLogical(G4LogicalVolume* val)
+  { fMeshElementLogical = val; }
+  inline G4LogicalVolume* GetMeshElementLogical() const
+  { return fMeshElementLogical; }
 };
-
-void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
-{
-  G4String psName = map->GetName();
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  *(fMapItr->second) += *map;
-
-  if(verboseLevel > 9) {
-    G4cout << G4endl;
-    G4cout << "G4VScoringMesh::Accumulate()" << G4endl;
-    G4cout << "  PS name : " << psName << G4endl;
-    if(fMapItr == fMap.end()) {
-      G4cout << "  "
-	     << psName << " was not found." << G4endl;
-    } else {
-      G4cout << "  map size : " << map->GetSize() << G4endl;
-      map->PrintAllHits();
-    }
-    G4cout << G4endl;
-  }
-}
 
 #endif
 

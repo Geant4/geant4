@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exrdmRunAction.cc 68030 2013-03-13 13:51:27Z gcosmo $
+//
 /// \file radioactivedecay/rdecay02/src/exrdmRunAction.cc
 /// \brief Implementation of the exrdmRunAction class
 //
@@ -39,6 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmRunAction::exrdmRunAction()
+ : G4UserRunAction()
 {
 }
 

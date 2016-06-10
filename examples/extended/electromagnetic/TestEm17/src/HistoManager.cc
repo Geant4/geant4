@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id$
+// $Id: HistoManager.cc 69011 2013-04-15 09:35:47Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -35,10 +35,13 @@
 #include "HistoManager.hh"
 #include "HistoMessenger.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
+ : fHistoMessenger(0)
 {
   fileName[0]  = "testem17";
   factoryOn = false;
@@ -110,13 +113,14 @@ void HistoManager::book()
 void HistoManager::save()
 {
   if (factoryOn) {
+    G4cout << "\n----> HistoManager::save " << G4endl;
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
     analysisManager->Write();
     analysisManager->CloseFile();
     saveAscii();                    // Write fAscii file, if any
     G4cout << "\n----> Histograms are saved in " << fileName[1] << G4endl;
       
-    delete G4AnalysisManager::Instance();
+    //    delete G4AnalysisManager::Instance();
     factoryOn = false;
   }         
 }
@@ -145,18 +149,24 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                 "10", "11", "12", "13", "14", "15"};
   const G4String title[] = 
-                { "dummy",                                                //0
-                  "log10(Etransfert/Emu) muIonization",                        //1
-                  "log10(Etransfert/Emu) muPair",                        //2
-                  "log10(Etransfert/Emu) muBrems",                        //3
-                  "log10(Etransfert/Emu) muNuclear",                        //4
-                  "log10(Etransfert/Emu) hIonization",                        //5
-                  "log10(Etransfert/Emu) hPair",                        //6
-                  "log10(Etransfert/Emu) hBrems",                         //7
-                  "dummy",                                                //8
-                  "dummy"                                                //9
+                { "dummy",                                           //0
+                  "log10(Etransfert/Emu) muIonization",              //1
+                  "log10(Etransfert/Emu) muPair",                    //2
+                  "log10(Etransfert/Emu) muBrems",                   //3
+                  "log10(Etransfert/Emu) muNuclear",                 //4
+                  "log10(Etransfert/Emu) hIonization",               //5
+                  "log10(Etransfert/Emu) hPair",                     //6
+                  "log10(Etransfert/Emu) hBrems",                    //7
+                  "dummy",                                           //8
+                  "dummy",                                           //9
+                  "dummy",                                           //10
+                  "log10(Etransfert/Emu) muIonization",              //11
+                  "log10(Etransfert/Emu) muPair",                    //12
+                  "log10(Etransfert/Emu) muBrems",                   //13
+                  "log10(Etransfert/Emu) muNuclear"                  //14
                  };
 
   G4String titl = title[ih];

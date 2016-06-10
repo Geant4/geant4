@@ -25,8 +25,9 @@ The geometry is very simplified. The major idea of this example is to
 implement an external magnetic field grid and test if the deviation of 
 electrons are as expected in this particular field. The data (position, 
 energy and momentum) are collected in a measurement volume.The data is 
-stored in a HBOOK file if the user has set up the AIDA 3.0 environment 
-and Anaphe is available.
+stored in a CSV file (or, optionally in a ROOT, or a XML file, by 
+commenting/uncommenting the appropriate #includes in PurgMagAnalysisManager.hh)
+
  
   
 1. Setting up the environment variables
@@ -40,14 +41,7 @@ G4SYSTEM = linux-g++
 
 The following environment variables need to be set:                     
 
-G4LEDATA: points to low energy data base - G4EMLOW2.3                   
-
-setup for analysis: AIDA 3.2.1, PI 1.2.1                                
-
-Users can download the analysis tools from:
-                                                                        
-http://aida.freehep.org/
-http://www.cern.ch/PI
+G4LEDATA: points to low energy data base 
 
 The required data-file for the field map can be downloaded from:
    http://cern.ch/geant4/source/source/PurgMag3D.TABLE.gz
@@ -69,7 +63,8 @@ type the following at the "idle>" prompt:
 idle> run/beamOn  NumberOfEvents
 idle> exit
 
-- Simulation histogram output is stored in purgmag.hbk
+- Simulation histogram output is stored in purgmag_101.cvs (e-), 
+ purgmag_102.cvs (gammas), purgman_103.cvs (e+) 
 
 1)Ntuple with position, energy and momentum for electrons
 2)Ntuple with position, energy and momentum for photons 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Event.cc 69010 2013-04-15 09:34:16Z gcosmo $
 //
 
 // G4Event
@@ -37,7 +37,7 @@
 #include "G4VDigiCollection.hh"
 #include "G4ios.hh"
 
-G4Allocator<G4Event> anEventAllocator;
+G4ThreadLocal G4Allocator<G4Event> *anEventAllocator = 0;
 
 G4Event::G4Event()
 :eventID(0),
@@ -46,7 +46,8 @@ G4Event::G4Event()
  randomNumberStatus(0),validRandomNumberStatus(false),
  randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
  keepTheEvent(false)
-{;}
+{
+}
 
 G4Event::G4Event(G4int evID)
 :eventID(evID),
@@ -55,10 +56,11 @@ G4Event::G4Event(G4int evID)
  randomNumberStatus(0),validRandomNumberStatus(false),
  randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
  keepTheEvent(false)
-{;}
+{
+}
 
 G4Event::~G4Event()
-{ 
+{
   if(thePrimaryVertex) delete thePrimaryVertex;
   if(HC) delete HC;
   if(DC) delete DC;
@@ -119,4 +121,3 @@ void G4Event::Draw() const
     }
   }
 }
-

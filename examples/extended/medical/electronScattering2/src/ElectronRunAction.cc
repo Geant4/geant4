@@ -23,34 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ElectronRunAction.cc 75702 2013-11-05 13:08:48Z gcosmo $
+//
 /// \file medical/electronScattering2/src/ElectronRunAction.cc
 /// \brief Implementation of the ElectronRunAction class
-//
 
 #include "ElectronRunAction.hh"
 #include "ElectronRun.hh"
 #include "G4Run.hh"
 #include <assert.h>
 
-ElectronRunAction::ElectronRunAction(G4String &outputFile) {
-  fOutputFileSpec = outputFile;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ElectronRunAction::~ElectronRunAction() {}
+ElectronRunAction::ElectronRunAction(const G4String& outputFile):
+G4UserRunAction(), fOutputFileSpec(outputFile)
+{;}
 
-void ElectronRunAction::BeginOfRunAction(const G4Run*) {}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ElectronRunAction::~ElectronRunAction()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run*  ElectronRunAction::GenerateRun()
 {
-  return new ElectronRun("MyDetector");
+    return new ElectronRun();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ElectronRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4cout <<"Number of Events Processed:" <<aRun->GetNumberOfEvent() <<G4endl;
-
-  const ElectronRun* theRun = dynamic_cast<const ElectronRun*>(aRun);
-  assert (0 != theRun);
-
-  theRun->DumpData(fOutputFileSpec);
+    
+    G4cout <<"Number of Events Processed:" <<aRun->GetNumberOfEvent() <<G4endl;
+    
+    const ElectronRun* theRun = dynamic_cast<const ElectronRun*>(aRun);
+    assert (0 != theRun);
+    
+    theRun->DumpData(fOutputFileSpec);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

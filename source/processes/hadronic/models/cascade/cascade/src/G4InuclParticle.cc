@@ -23,12 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InuclParticle.cc 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
 // 20110721  M. Kelsey -- Add model ID as optional ctor argument (so subclasses
 //		don't have to call SetModel()).
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
+// 20130620  M. Kelsey -- Address Coverity #37504, check self in op=()
+// 20130806  M. Kelsey -- Per A. Dotti, move empty G4DynPart to file scope to
+//		address thread-collision problem.
 
 #include <cmath>
 
@@ -48,20 +51,24 @@ G4InuclParticle::G4InuclParticle(G4ParticleDefinition* pd,
 
 // Assignment operator for use with std::sort()
 G4InuclParticle& G4InuclParticle::operator=(const G4InuclParticle& right) {
-  pDP = right.pDP;
-  modelId = right.modelId;
+  if (this != &right) {
+    pDP = right.pDP;
+    modelId = right.modelId;
+  }
 
   return *this;
 }
 
 
 // Set particle definition allowing for null pointer to erase DynPart content
+
+namespace {
+  static const G4DynamicParticle empty;		// To zero out everything
+}
+
 void G4InuclParticle::setDefinition(G4ParticleDefinition* pd) {
   if (pd) pDP.SetDefinition(pd);
-  else {
-    static const G4DynamicParticle empty;	// To zero out everything
-    pDP = empty;
-  }
+  else pDP = empty;
 }
 
 

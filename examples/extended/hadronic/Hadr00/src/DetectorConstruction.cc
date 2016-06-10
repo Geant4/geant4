@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 77254 2013-11-22 10:08:02Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -67,16 +67,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
+: G4VUserDetectorConstruction(),
+  fTargetMaterial(0), fWorldMaterial(0),
+  fLogicTarget(0), fLogicWorld(0),
+  fDetectorMessenger(0)
 {
-  fLogicTarget = 0;
-  fLogicWorld  = 0;
   fDetectorMessenger = new DetectorMessenger(this);
 
   fRadius = 5.*cm;
   fLength = 10.*cm;
 
   fTargetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-  fWorldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  fWorldMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -161,20 +164,11 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DetectorConstruction::SetTargetRadius(G4double val)  
 {
   if(val > 0.0 && val != fRadius) {
     fRadius = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+      G4RunManager::GetRunManager()->ReinitializeGeometry();
   } 
 }
 
@@ -184,7 +178,7 @@ void DetectorConstruction::SetTargetLength(G4double val)
 {
   if(val > 0.0 && val != fLength) {
     fLength = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+      G4RunManager::GetRunManager()->ReinitializeGeometry();
   } 
 }
 

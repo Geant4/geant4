@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VFlavoredParallelWorld.hh 67965 2013-03-13 09:35:29Z gcosmo $
 //
 // 
 // Abstract interface for GEANT4 Flavored Parallel World.

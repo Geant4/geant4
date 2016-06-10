@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4XXXStoredViewer.cc 68732 2013-04-05 09:44:10Z gcosmo $
 //
 // 
 // John Allison  7th March 2006
@@ -102,7 +102,6 @@ void G4XXXStoredViewer::KernelVisitDecision () {
   // of either the scene handler or this viewer, trigger a rebuild.
 
   typedef std::list<G4String> Store;
-  typedef std::list<G4String>::iterator StoreIterator;
   Store& store =
     static_cast<G4XXXStoredSceneHandler&>(fSceneHandler).fStore;
   if (store.empty() || CompareForKernelVisit(fLastVP)) {
@@ -117,7 +116,6 @@ G4bool G4XXXStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
       (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
-      (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||

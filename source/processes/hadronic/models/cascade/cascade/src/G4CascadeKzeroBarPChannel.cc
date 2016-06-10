@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeKzeroBarPChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -716,7 +716,7 @@ namespace {
       0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.10, 0.11, 0.11, 0.11, 0.13} };
 }
 
-G4CascadeKzeroBarPChannelData::data_t
+const G4CascadeKzeroBarPChannelData::data_t
 G4CascadeKzeroBarPChannelData::data(kzbp2bfs, kzbp3bfs, kzbp4bfs,
 				    kzbp5bfs, kzbp6bfs, kzbp7bfs,
 				    kzbpCrossSections, k0b*pro, "KzeroBarP");

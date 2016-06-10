@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(): fPrintModulo(10000)
+EventAction::EventAction()
+ : G4UserEventAction(),
+   fPrintModulo(10000),
+   fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }

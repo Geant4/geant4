@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: FCALCalorHit.hh 67976 2013-03-13 10:23:17Z gcosmo $
 //
 // 
 

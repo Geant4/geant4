@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PenelopeBremsstrahlungAngular.cc 76220 2013-11-08 10:15:00Z gcosmo $
 // 
 // --------------------------------------------------------------
 //
@@ -41,6 +41,9 @@
 //                               and update the interface accordingly
 // 18 Jul 2012  L. Pandola       Migrated to the new basic interface of G4VEmAngularDistribution
 //                               Now returns a G4ThreeVector and takes care of the rotation
+// 03 Oct 2013  L. Pandola       Migrated to MT: only the master model handles tables  
+// 17 Oct 2013  L. Pandola       Partially revert MT migration. The angular generator is kept as 
+//                                thread-local, and each worker has full access to it.
 //
 //----------------------------------------------------------------
 
@@ -88,7 +91,7 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
       for (j=theLorentzTables1->begin(); j != theLorentzTables1->end(); j++)
         {
 	  G4PhysicsTable* tab = j->second;
-          tab->clearAndDestroy();
+          //tab->clearAndDestroy();
           delete tab;
         }
       delete theLorentzTables1;
@@ -100,7 +103,7 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
       for (j=theLorentzTables2->begin(); j != theLorentzTables2->end(); j++)
         {
 	  G4PhysicsTable* tab = j->second;
-          tab->clearAndDestroy();
+          //tab->clearAndDestroy();
           delete tab;
         }
       delete theLorentzTables2;
@@ -168,8 +171,17 @@ void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
+void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G4bool /*isMaster*/ )
 {
+  //Unused at the moment: the G4PenelopeBremsstrahlungAngular is thread-local, so each worker 
+  //builds its own version of the tables.
+  /*
+    if (!isMaster)    
+    //Should not be here!
+    G4Exception("G4PenelopeBremsstrahlungAngular::PrepareTables()",
+    "em0100",FatalException,"Worker thread in this method");  
+  */
+
   //Check if data file has already been read
   if (!dataRead)
     {
@@ -178,6 +190,13 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
 	G4Exception("G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables()",
 		    "em2001",FatalException,"Unable to build interpolation table");
     }
+  
+  if (!theLorentzTables1)
+      theLorentzTables1 = new std::map<G4double,G4PhysicsTable*>;
+  if (!theLorentzTables2)
+    theLorentzTables2 = new std::map<G4double,G4PhysicsTable*>;
+
+  G4double Zmat = CalculateEffectiveZ(material);
 
   const G4int reducedEnergyGrid=21;
   //Support arrays. 
@@ -197,9 +216,7 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
       for (j=0;j<NumberofKPoints;j++)
 	{
 	  G4PhysicsFreeVector* QQ1vector = new G4PhysicsFreeVector(NumberofZPoints);
-	  QQ1vector->SetSpline(true);
 	  G4PhysicsFreeVector* QQ2vector = new G4PhysicsFreeVector(NumberofZPoints);
-	  QQ2vector->SetSpline(true);
 
 	  //fill vectors
 	  for (k=0;k<NumberofZPoints;k++)
@@ -207,6 +224,9 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
 	      QQ1vector->PutValue(k,pZ[k],std::log(QQ1[k][i][j]));
 	      QQ2vector->PutValue(k,pZ[k],QQ2[k][i][j]);
 	    }
+
+	  QQ1vector->SetSpline(true);
+	  QQ2vector->SetSpline(true);
 	  
 	  Q1[i][j]= std::exp(QQ1vector->Value(Zmat));	  
 	  Q2[i][j]=QQ2vector->Value(Zmat);
@@ -267,10 +287,8 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
   for (j=0;j<reducedEnergyGrid;j++)   
     {
       G4PhysicsFreeVector* thevec = new G4PhysicsFreeVector(NumberofEPoints);
-      thevec->SetSpline(true);
       theTable1->push_back(thevec);
       G4PhysicsFreeVector* thevec2 = new G4PhysicsFreeVector(NumberofEPoints);
-      thevec2->SetSpline(true);
       theTable2->push_back(thevec2);
     }  
 
@@ -283,6 +301,8 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
 	  thevec->PutValue(i,betas[i],Q1E[i][j]);
 	  thevec2->PutValue(i,betas[i],Q2E[i][j]);
 	}
+      thevec->SetSpline(true);
+      thevec2->SetSpline(true);
     }
 
   if (theLorentzTables1 && theLorentzTables2)
@@ -318,7 +338,26 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
       return fLocalDirection;
     }
   
-  G4double Zmat = GetEffectiveZ(material);
+  //Retrieve the effective Z
+  G4double Zmat = 0;
+
+  if (!theEffectiveZSq)
+    {
+      G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
+		  "em2040",FatalException,"EffectiveZ table not available");
+      return fLocalDirection;
+    }
+
+  //found in the table: return it 
+  if (theEffectiveZSq->count(material))
+    Zmat = theEffectiveZSq->find(material)->second; 
+  else
+    {
+      G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
+		  "em2040",FatalException,"Material not found in the effectiveZ table");
+      return fLocalDirection;
+    }
+
   if (verbosityLevel > 0)
     {
       G4cout << "Effective <Z> for material : " << material->GetName() << 
@@ -357,16 +396,6 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
       return fLocalDirection;
     }
   
-  //Else, retrieve tables and go through the full thing
-  if (!theLorentzTables1)
-      theLorentzTables1 = new std::map<G4double,G4PhysicsTable*>;
-  if (!theLorentzTables2)
-    theLorentzTables2 = new std::map<G4double,G4PhysicsTable*>;
-
-  //Check if tables exist for the given Zmat
-  if (!(theLorentzTables1->count(Zmat)))
-    PrepareInterpolationTables(Zmat);
-
   if (!(theLorentzTables1->count(Zmat)) || !(theLorentzTables2->count(Zmat)))
     {
       G4ExceptionDescription ed;
@@ -376,8 +405,8 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
     }
     
   //retrieve actual tables
-  G4PhysicsTable* theTable1 = theLorentzTables1->find(Zmat)->second;
-  G4PhysicsTable* theTable2 = theLorentzTables2->find(Zmat)->second;
+  const G4PhysicsTable* theTable1 = theLorentzTables1->find(Zmat)->second;
+  const G4PhysicsTable* theTable2 = theLorentzTables2->find(Zmat)->second;
       
   G4double RK=20.0*eGamma/ePrimary;
   G4int ik=std::min((G4int) RK,19);
@@ -386,15 +415,15 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
   G4double P20=0,P21=0,P2=0;
 
   //First coefficient
-  G4PhysicsFreeVector* v1 = (G4PhysicsFreeVector*) (*theTable1)[ik];
-  G4PhysicsFreeVector* v2 = (G4PhysicsFreeVector*) (*theTable1)[ik+1];
+  const G4PhysicsFreeVector* v1 = (G4PhysicsFreeVector*) (*theTable1)[ik];
+  const G4PhysicsFreeVector* v2 = (G4PhysicsFreeVector*) (*theTable1)[ik+1];
   P10 = v1->Value(beta);
   P11 = v2->Value(beta);
   P1=P10+(RK-(G4double) ik)*(P11-P10);
   
   //Second coefficient
-  G4PhysicsFreeVector* v3 = (G4PhysicsFreeVector*) (*theTable2)[ik];
-  G4PhysicsFreeVector* v4 = (G4PhysicsFreeVector*) (*theTable2)[ik+1];
+  const G4PhysicsFreeVector* v3 = (G4PhysicsFreeVector*) (*theTable2)[ik];
+  const G4PhysicsFreeVector* v4 = (G4PhysicsFreeVector*) (*theTable2)[ik+1];
   P20=v3->Value(beta); 
   P21=v4->Value(beta);
   P2=P20+(RK-(G4double) ik)*(P21-P20);
@@ -449,16 +478,15 @@ G4double G4PenelopeBremsstrahlungAngular::PolarAngle(const G4double ,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopeBremsstrahlungAngular::GetEffectiveZ(const G4Material* material)
+G4double G4PenelopeBremsstrahlungAngular::CalculateEffectiveZ(const G4Material* material)
 {
   if (!theEffectiveZSq)    
     theEffectiveZSq = new std::map<const G4Material*,G4double>;
     
-  //found in the table: return it 
+  //Already exists: return it
   if (theEffectiveZSq->count(material))
-    return theEffectiveZSq->find(material)->second; 
+    return theEffectiveZSq->find(material)->second;
 
-  //not found: calculate and return
   //Helper for the calculation
   std::vector<G4double> *StechiometricFactors = new std::vector<G4double>;
   G4int nElements = material->GetNumberOfElements();

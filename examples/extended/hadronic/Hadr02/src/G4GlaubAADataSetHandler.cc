@@ -36,6 +36,8 @@
 /// \file hadronic/Hadr02/src/G4GlaubAADataSetHandler.cc
 /// \brief Implementation of the G4GlaubAADataSetHandler class
 //
+// $Id: G4GlaubAADataSetHandler.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4GlaubAADataSetHandler.cc
@@ -59,6 +61,8 @@
 #include "G4Isotope.hh"
 #include "G4Element.hh"
 #include "G4StableIsotopes.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4HadronicException.hh"
 
@@ -134,13 +138,15 @@ G4GlaubAADataSetHandler* G4GlaubAADataSetHandler::getInstance ()
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
-G4int G4GlaubAADataSetHandler::GetIndexID (const G4int AP, const G4int AT) const
+G4int 
+G4GlaubAADataSetHandler::GetIndexID (const G4int AP, const G4int AT) const
 {
   return AP*1000 + AT;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
-G4String G4GlaubAADataSetHandler::GetProjectileStringID (const G4int AP) const
+G4String 
+G4GlaubAADataSetHandler::GetProjectileStringID (const G4int AP) const
 {
   std::ostringstream os;
   os <<"ap" <<AP;
@@ -180,8 +186,8 @@ G4VGlauberDataSet *G4GlaubAADataSetHandler::LoadGlauberDataReturnPtr
   G4ParamType1GlaubAADataSet *glauberData = 0;
 //
 //
-// Check whether an file with an appropriate name exists in the directory, which
-// will probably contain the Glauber data.
+// Check whether an file with an appropriate name exists in the directory, 
+// which will probably contain the Glauber data.
 //
   G4String glauberID = GetStringID(AP,AT);
   G4String filename  = glauberDataSetDir + "/" + glauberID + ".glaubaadat";
@@ -191,7 +197,7 @@ G4VGlauberDataSet *G4GlaubAADataSetHandler::LoadGlauberDataReturnPtr
 //
 // File exists, so read data into an appropriate object type.  Do a double-
 // check and make sure we want to retain Glauber data relating to this target.
-// Note that this GDS handler only deals with parameterised sets (type 1).  Also
+// Note that this GDS handler only deals with parameterised sets (type 1). Also
 // note that peek returns an ASCII charater code, and therefore since values of
 // '0' to '9' and 'A' to 'Z' are acceptable, these must be decoded.
 //
@@ -331,9 +337,9 @@ G4bool G4GlaubAADataSetHandler::IsGlauberDataSetAvailable (const G4int AP,
 //
 // CheckIfSpace
 //
-// This member function reads the contents of the file GluaberIndex.dat, and then
-// proceeds to read all Glauber functions.  This can deal with both full
-// Glauber data sets and parameterised data sets.
+// This member function reads the contents of the file GluaberIndex.dat, 
+// and then proceeds to read all Glauber functions. This can deal with both 
+// full Glauber data sets and parameterised data sets.
 //
 G4bool G4GlaubAADataSetHandler::CheckIfSpace () const
 {
@@ -376,7 +382,7 @@ void G4GlaubAADataSetHandler::SetMaxGlauberDataSets (const G4int n)
 // SetCurrentGlauberDataSet
 //
 // Called from G4DPMJET2_5Model to identifies a pointer to the appropriate
-// Glauber data set, based in the AP and AT provided.  If the apprproate dataset
+// Glauber data set, based in the AP and AT provided. If the apprproate dataset
 // is not already loaded, an attempt will be made to find it and load if there
 // is space.
 //
@@ -394,7 +400,8 @@ G4bool G4GlaubAADataSetHandler::SetCurrentGlauberDataSet (const G4int AP,
 // Have we exceeded any limits for the maximum number of data sets loaded?
 // If not, try to locate the data and load it.
 //
-    theCurrentGlauberDataSet = (G4ParamType1GlaubAADataSet*) LoadGlauberDataReturnPtr(AP,AT);
+    theCurrentGlauberDataSet = 
+      (G4ParamType1GlaubAADataSet*) LoadGlauberDataReturnPtr(AP,AT);
     if (theCurrentGlauberDataSet != 0) {
       ppnCurrent        = ppn;
 

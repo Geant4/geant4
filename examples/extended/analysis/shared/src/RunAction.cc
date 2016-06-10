@@ -27,7 +27,7 @@
 /// \brief Implementation of the RunAction class
 //
 //
-// $Id$
+// $Id: RunAction.cc 74272 2013-10-02 14:48:50Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(HistoManager* histo)
-:fHistoManager(histo)
+: G4UserRunAction(),
+  fHistoManager(histo),
+  fSumEAbs(0.), fSum2EAbs(0.),
+  fSumEGap(0.), fSum2EGap(0.),
+  fSumLAbs(0.), fSum2LAbs(0.),
+  fSumLGap(0.), fSum2LGap(0.)    
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

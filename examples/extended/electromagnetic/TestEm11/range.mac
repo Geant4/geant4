@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.5 2009-09-22 14:20:31 maire Exp $
+# $Id: range.mac 74997 2013-10-25 10:52:13Z gcosmo $
 #
 # Macro file for "TestEm11.cc"
 # 
@@ -29,8 +29,8 @@
 /gun/energy 600 keV
 #
 /analysis/setFileName range
-/analysis/h1/se 3 200 0 4 mm	# csda range
+/analysis/h1/set 3 200 0 4 mm	# csda range
 #	 
-/testem/event/printModulo 2000
+/run/printProgress 2000
 #
 /run/beamOn 20000

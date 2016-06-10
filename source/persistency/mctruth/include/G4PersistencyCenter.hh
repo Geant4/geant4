@@ -63,13 +63,7 @@ class G4PersistencyCenterMessenger;
 class G4PersistencyCenter
 {
     public: // With description
-      G4PersistencyCenter();
-      // Constructor
 
-      ~G4PersistencyCenter();
-      // Destructor
-
-    public: // With description
       static G4PersistencyCenter* GetPersistencyCenter();
       // returns the pointer of singleton G4PersistencyCenter
 
@@ -149,15 +143,19 @@ class G4PersistencyCenter
       // Return verbose level.
 
     private:
+
+      G4PersistencyCenter();
+      // Constructor
+
+      ~G4PersistencyCenter();
+      // Destructor
+
       std::string PadString(std::string name, unsigned int width);
       // truncate or pad a string up to the width.
 
     private:
-      G4PersistencyCenterMessenger* f_G4PersistencyCenterMessenger;
-
-    private:
       G4PersistencyCenterMessenger* f_theMessenger;
-      static G4PersistencyCenter*   f_thePointer;
+      static G4ThreadLocal G4PersistencyCenter* f_thePointer;
       G4PersistencyManager*         f_currentManager;
       std::string                 f_currentSystemName;
       PMap                          f_theCatalog;

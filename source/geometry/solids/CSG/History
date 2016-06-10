@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2010-11-23 14:46:11 gcosmo Exp $
+$Id: History 77239 2013-11-22 09:52:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 22, 2013  G.Cosmo               geom-csg-V09-06-09
+- Correction to USolids wrappers for proper setting of name to base class.
+
+November 20, 2013  T.Mikitina            geom-csg-V09-06-08
+- Fixed Coverity defects to USolids wrappers.
+
+November 14, 2013  T.Nikitina            geom-csg-V09-06-07
+- Corrections to G4U* wrappers to allow for visualization of parameterisations.
+
+November 7, 2013  G.Cosmo                geom-csg-V09-06-06
+- Moved wrappers from usolids module.
+  Fixed internal dispatcher method for parameterisation in all wrappers.
+- Added switching mechanism for G4Box, G4Cons, G4Orb, G4Sphere, G4Trd
+  and G4Tubs.
+- Defined temporary class G4OTubs to be used internally by G4CutTubs,
+  in provision to have UCutTubs in the USolids library.
+
+November 6, 2013  G.Cosmo                geom-csg-V09-06-05
+- Added switch mechanism for USolids (box, cons, orb, sphere, trd, tubs).
+  Renamed related G4 types to 'G4O'.
+- Moved wrappers from USolids module.
+
+October 2, 2013  G.Cosmo                 geom-csg-V09-06-04
+- Correctly initialise fSPhi to zero in G4Sphere constructor.
+
+August 14, 2013  G.Cosmo                 geom-csg-V09-06-03
+- Move function-scoped 'static const' values for half-tolerances to private
+  data members of classes, to overcome false-positive race-conditions defects
+  reported by Valgrind in MT mode.
+- Corrected sanity check for wrong/small dimensions in G4Box constructor.
+
+April 16, 2013  T.Nikitina               geom-csg-V09-06-02
+- Fix in G4Cons::DistanceToIn(p,v) for initialisation of dRmax for the
+  case of shape with Rmin1=Rmax1=0.
+
+December 14, 2012  G.Cosmo               geom-csg-V09-06-01
+- Restored SVN id headers.
+
+Dec 02, 2012  J.Allison                  geom-csg-V09-06-00
+- Removed NURBS.
 
 Nov 14, 2012   P. Mato                   geom-csg-V09-05-09
 - Added #undef NDEBUG in unit tests to ensure that assert always works

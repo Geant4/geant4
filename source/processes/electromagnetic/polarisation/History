@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2010-11-12 10:38:56 schaelic Exp $
+$Id: History 77295 2013-11-22 11:02:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 November 13: V.Ivanchenko (empolar-V09-06-08)
+- G4PolarizedPairProductionCrossSection, G4PolarizedBremsstrahlungCrossSection
+    removed G4ThreadLocal
+
+09 November 13: V.Ivanchenko (empolar-V09-06-07)
+- G4eplusPolarizedAnnihilation - correct destruction
+
+08 November 13: V.Ivanchenko (empolar-V09-06-06)
+08 November 13: V.Ivanchenko (empolar-V09-06-05)
+- G4ePolarizedIonisation, G4PolarizedCompton - correct destruction
+
+30 October 13: V.Ivanchenko (empolar-V09-06-04)
+28 October 13: V.Ivanchenko (empolar-V09-06-03)
+28 October 13: V.Ivanchenko (empolar-V09-06-02)
+28 October 13: V.Ivanchenko (empolar-V09-06-01)
+- G4ePolarizedBremsstrahlungModel - substitute G4eBremsstrahlungModel 
+    by G4SeltzerBergerModel
+
+25 February 13: V.Ivanchenko (empolar-V09-06-00)
+- G4PolarizedComptonCrossSection - removed unused class memebers:
+     gammaPol0, electronPol1, epsilon
 
 20 October 12: V.Ivanchenko (empolar-V09-05-02)
 - G4PolarizedPhotoElectricEffect, G4PolarizedPEEffectModel - substitute 

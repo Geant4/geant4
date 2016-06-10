@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VRML1File.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // G4VRML1File.cc
 // Satoshi Tanaka & Yasuhide Sawada

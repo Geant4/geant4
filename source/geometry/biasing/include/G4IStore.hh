@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4IStore.hh 77780 2013-11-28 07:50:59Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4IStore
@@ -42,20 +42,43 @@
 // should be applied between this cell and it's nighbors.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
+//
+// Alex Howard (alexander.howard@cern.ch):
+// Changed class to a `singleton', with access via the static method
+// G4IStore::GetInstance().
+//
+// Member data:
+//
+//   static G4IStore* fInstance
+//     - Ptr to the unique instance of class
 // ----------------------------------------------------------------------
 #ifndef G4IStore_hh
 #define G4IStore_hh G4IStore_hh 
 
 #include "G4VIStore.hh"
 #include "G4GeometryCellImportance.hh"
+#include "G4TransportationManager.hh"
 
 class G4IStore : public G4VIStore
 {
 
-public:  // with description
+public:
 
-  explicit G4IStore(const G4VPhysicalVolume &worldvolume);
+  //  static G4ThreadLocal G4IStore* GetInstance();
+  static G4IStore* GetInstance();
+  // Return ptr to singleton instance of the class.
+  //  static G4ThreadLocal G4IStore* GetInstance(G4String ParallelWorldName);
+  static G4IStore* GetInstance(G4String ParallelWorldName);
+  // Return ptr to singleton instance of the class.
+
+protected:
+
+  explicit G4IStore();
     // initialise the importance store for the given geometry
+  explicit G4IStore(G4String ParallelWorldName);
+    // initialise the importance store for the given geometry
+
+public:  // with description
 
   virtual ~G4IStore();
     // destruct
@@ -67,9 +90,25 @@ public:  // with description
   virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
     // returns true if the gCell is in the store, else false 
 
+  void Clear();
 
-  virtual const G4VPhysicalVolume &GetWorldVolume() const;
-    // return a reference to the wolrd volume of the 
+  void SetWorldVolume();
+    // set a reference to the world volume of the 
+    // "importance" geometry
+
+  void SetParallelWorldVolume(G4String paraName);
+    // set a reference to the parallel world volume of the 
+    // "importance" geometry
+
+  virtual const G4VPhysicalVolume& GetWorldVolume() const;
+    // return a reference to the world volume of the 
+    // "importance" geometry
+
+  // virtual const G4VPhysicalVolume& GetParallelWorldVolume() const;
+  //   // return a reference to the world volume of the 
+  //   // "importance" geometry
+  virtual const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
+    // return a pointer to the world volume of the 
     // "importance" geometry
 
   void AddImportanceGeometryCell(G4double importance,
@@ -97,10 +136,16 @@ private:
   
 private:
  
-  const G4VPhysicalVolume &fWorldVolume;
+  const G4VPhysicalVolume* fWorldVolume;
+  //  const G4VPhysicalVolume* fParallelWorldVolume;
+  //  G4bool fParaFlag;
   G4GeometryCellImportance fGeometryCelli;
 
   mutable G4GeometryCellImportance::const_iterator fCurrentIterator;
+
+  //  static G4ThreadLocal G4IStore* fInstance;
+  static G4IStore* fInstance;
+
 };
 
 #endif

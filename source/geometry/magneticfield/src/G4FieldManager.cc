@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FieldManager.cc 68055 2013-03-13 14:43:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -74,6 +74,53 @@ G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
    fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
    // Add to store
    G4FieldManagerStore::Register(this);
+}
+
+G4FieldManager* G4FieldManager::Clone() const
+{
+    G4Field* aField = 0;
+    G4FieldManager* aFM = 0;
+    G4ChordFinder* aCF = 0;
+    try {
+        if ( this->fDetectorField )
+            aField = this->fDetectorField->Clone();
+
+        //Create a new field manager, note that we do not set any chordfinder now.
+        aFM = new G4FieldManager( aField , 0 , this->fFieldChangesEnergy );
+
+        //Check if orignally we have the fAllocatedChordFinder variable set, in case, call chord
+        //constructor
+        if ( this->fAllocatedChordFinder )
+        {
+            aFM->CreateChordFinder( dynamic_cast<G4MagneticField*>(aField) );
+        }
+        else
+        {
+            //Chord was specified by user, should we clone?
+            //TODO: For the moment copy pointer, to be understood if cloning of ChordFinder is needed
+            aCF = this->fChordFinder;/*->Clone*/
+            aFM->fChordFinder = aCF;
+        }
+        //Copy values of other variables
+        aFM->fEpsilonMax = this->fEpsilonMax;
+        aFM->fEpsilonMin = this->fEpsilonMin;
+        aFM->fDefault_Delta_Intersection_Val = this->fDefault_Delta_Intersection_Val;
+        aFM->fDefault_Delta_One_Step_Value = this->fDefault_Delta_One_Step_Value;
+        aFM->fDelta_Intersection_Val = this->fDelta_Intersection_Val;
+        aFM->fDelta_One_Step_Value = this->fDelta_One_Step_Value;
+        //TODO: Should we really add to the store the cloned FM? Who will use this?
+    }
+    catch ( ... )
+    {
+        //Failed creating clone: probably user did not implement Clone method
+        //in derived classes?
+        //Perform clean-up after ourselves...
+        delete aField;
+        delete aFM;
+        delete aCF;
+        throw;
+    }
+    return aFM;
 }
 
 void G4FieldManager::ConfigureForTrack( const G4Track * ) 

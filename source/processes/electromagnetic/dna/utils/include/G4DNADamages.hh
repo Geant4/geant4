@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADamages.hh 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4DNADamages.hh 66872 2013-01-15 01:25:57Z japost $
 //
 #ifndef G4DNADAMAGES_HH
 #define G4DNADAMAGES_HH 1
@@ -91,7 +91,7 @@ public:
 
 protected :
     G4DNADamages();
-    static G4DNADamages* fpInstance;
+    static G4ThreadLocal G4DNADamages* fpInstance;
     virtual ~G4DNADamages();
 
     G4bool fJustCountDamage;

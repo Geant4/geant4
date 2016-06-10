@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InuclElementaryParticle.cc 69638 2013-05-09 04:26:00Z mkelsey $
 // Geant4 tag: $Name:  $
 //
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers,
@@ -38,41 +38,13 @@
 //		reuse of objects as buffers; c.f. G4InuclNuclei.
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20130508  D. Wright -- Add lepton construction, use wrapper header
 
 #include "G4InuclElementaryParticle.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4PionZero.hh"
-#include "G4Gamma.hh"
-#include "G4KaonPlus.hh"
-#include "G4KaonMinus.hh"
-#include "G4KaonZero.hh"
-#include "G4KaonZeroLong.hh"
-#include "G4KaonZeroShort.hh"
-#include "G4AntiKaonZero.hh"
-#include "G4Lambda.hh"
-#include "G4SigmaPlus.hh"
-#include "G4SigmaZero.hh"
-#include "G4SigmaMinus.hh"
-#include "G4XiZero.hh"
-#include "G4XiMinus.hh"
-#include "G4OmegaMinus.hh"
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4He3.hh"
-#include "G4Alpha.hh"
-#include "G4AntiProton.hh"
-#include "G4AntiNeutron.hh"
-#include "G4AntiDeuteron.hh"
-#include "G4AntiTriton.hh"
-#include "G4AntiHe3.hh"
-#include "G4AntiAlpha.hh"
-#include "G4Deuteron.hh"
+#include "G4ParticleTypes.hh"
 #include "G4Diproton.hh"
 #include "G4UnboundPN.hh"
 #include "G4Dineutron.hh"
@@ -118,8 +90,22 @@ G4InuclElementaryParticle::makeDefinition(G4int ityp) {
   case diproton:    return G4Diproton::Definition(); break;
   case unboundPN:   return G4UnboundPN::Definition(); break;
   case dineutron:   return G4Dineutron::Definition(); break;
+    // Leptons are included for muon capture and future tau/neutrino physics
+  case electron:    return G4Electron::Definition(); break;
+  case positron:    return G4Positron::Definition(); break;
+  case electronNu:  return G4NeutrinoE::Definition(); break;
+  case antiElectronNu: return G4AntiNeutrinoE::Definition(); break;
+  case muonMinus:   return G4MuonMinus::Definition(); break;
+  case muonPlus:    return G4MuonPlus::Definition(); break;
+  case muonNu:      return G4NeutrinoMu::Definition(); break;
+  case antiMuonNu:  return G4AntiNeutrinoMu::Definition(); break;
+  case tauMinus:    return G4TauMinus::Definition(); break;
+  case tauPlus:     return G4TauPlus::Definition(); break;
+  case tauNu:       return G4NeutrinoTau::Definition(); break;
+  case antiTauNu:   return G4AntiNeutrinoTau::Definition(); break;
   default:
-    G4cerr << " uups, unknown particle type " << ityp << G4endl;
+    G4cerr << "G4InuclElementaryParticle::makeDefinition: unknown particle type "
+           << ityp << G4endl;
   }
   
   return 0;
@@ -162,6 +148,19 @@ G4int G4InuclElementaryParticle::type(const G4ParticleDefinition *pd) {
   if (pd == G4Diproton::Definition())     return diproton;
   if (pd == G4UnboundPN::Definition())    return unboundPN;
   if (pd == G4Dineutron::Definition())    return dineutron;
+
+  if (pd == G4Electron::Definition())     return electron;
+  if (pd == G4Positron::Definition())     return positron;
+  if (pd == G4NeutrinoE::Definition())    return electronNu;
+  if (pd == G4AntiNeutrinoE::Definition()) return antiElectronNu;
+  if (pd == G4MuonMinus::Definition())    return muonMinus;
+  if (pd == G4MuonPlus::Definition())     return muonPlus;
+  if (pd == G4NeutrinoMu::Definition())   return muonNu;
+  if (pd == G4AntiNeutrinoMu::Definition()) return antiMuonNu;
+  if (pd == G4TauMinus::Definition())     return tauMinus;
+  if (pd == G4TauPlus::Definition())      return tauPlus;
+  if (pd == G4NeutrinoTau::Definition())  return tauNu;
+  if (pd == G4AntiNeutrinoTau::Definition()) return antiTauNu;
 
   // Weak neutral kaons must be mixed back to strong (strangeness states)
   if (pd==G4KaonZeroShort::Definition() || pd==G4KaonZeroLong::Definition()) {

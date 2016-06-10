@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HepRepSceneHandler.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 
 /**
@@ -96,7 +96,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void AddPrimitive (const G4Circle&);
         void AddPrimitive (const G4Square&);
         void AddPrimitive (const G4Polyhedron&);
-        void AddPrimitive (const G4NURBS&);
 
         void AddPrimitive (const G4Polymarker&);
         void AddPrimitive (const G4Scale& scale);
@@ -112,9 +111,9 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void closeFile();
 
     private:
+        G4HepRepSceneHandler (const G4HepRepSceneHandler&);
+        G4HepRepSceneHandler& operator= (const G4HepRepSceneHandler&);
         static G4int sceneIdCount;
-        const G4ModelingParameters* originalMP;  // Keeps pointer to original.
-        G4ModelingParameters* nonCullingMP;      // For temporary non-culling.
 
         G4Transform3D transform;
 

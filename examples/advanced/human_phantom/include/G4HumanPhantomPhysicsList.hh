@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4HumanPhantomPhysicsList.hh 70025 2013-05-22 08:43:05Z gcosmo $
 //
 // Authors: S. Guatelli, G. Guerrieri and M. G. Pia 
 //
@@ -37,10 +37,10 @@
 #ifndef G4HumanPhantomPhysicsList_h
 #define G4HumanPhantomPhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class G4HumanPhantomPhysicsList: public G4VUserPhysicsList
+class G4HumanPhantomPhysicsList: public G4VModularPhysicsList
 {
 public:
   G4HumanPhantomPhysicsList();
@@ -50,17 +50,11 @@ protected:
   // Construct particle and physics
   void ConstructParticle();
   void ConstructProcess();
-  void ConstructBosons();
-  void ConstructLeptons();
-
   void SetCuts();
 
 private:
-
-  // These methods construct physics processes and register them
-  void ConstructEM();
+  G4VPhysicsConstructor* emPhysicsList;
 };
-
 #endif
 
 

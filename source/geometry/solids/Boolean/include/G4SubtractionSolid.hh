@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SubtractionSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
 //
 //
 // class G4SubtractionSolid
@@ -115,7 +115,6 @@ class G4SubtractionSolid : public G4BooleanSolid
                                    
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
-    G4NURBS*      CreateNURBS      () const ;
 
 };
 

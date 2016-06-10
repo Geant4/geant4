@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2010-11-08 10:38:44 maire Exp $
+# $Id: GNUmakefile 72312 2013-07-15 16:01:02Z gcosmo $
 # --------------------------------------------------------------
 #
 
@@ -8,17 +8,18 @@ ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 
-GLOBLIBS = libG4global.lib
+GLOBLIBS = libG4intercoms.lib libG4global.lib
+ifdef G4LIB_BUILD_ZLIB
+  GLOBLIBS += libG4zlib.lib
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/analysis/include
-            
-include $(G4INSTALL)/config/common.gmk
+SUBDIRS  = management hntools csv root xml
+SUBLIBS  = G4analysismng G4hntools G4csv G4root G4xml
 
-.PHONY: global
+include $(G4INSTALL)/config/globlib.gmk
 
-global: lib
-
+includes:: 
+	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) $@ ); done
+	cd g4tools; make includes

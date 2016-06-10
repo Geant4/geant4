@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHP2NPInelasticFS_h
 #define G4NeutronHP2NPInelasticFS_h 1

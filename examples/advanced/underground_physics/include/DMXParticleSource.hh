@@ -106,7 +106,7 @@ class DMXParticleSource : public G4VPrimaryGenerator {
      G4String VolName;
      G4String AngDistType;
      G4double MinTheta, MaxTheta, MinPhi, MaxPhi;
-     G4double Theta, Phi;
+     G4double Phi;
      G4String EnergyDisType;
      G4double MonoEnergy;
 

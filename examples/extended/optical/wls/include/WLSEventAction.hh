@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSEventAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSEventAction.hh
 /// \brief Definition of the WLSEventAction class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -47,36 +46,36 @@ class WLSEventAction : public G4UserEventAction
   public:
 
     WLSEventAction(WLSRunAction*);
-    ~WLSEventAction();
+    virtual ~WLSEventAction();
 
   public:
 
-    void   BeginOfEventAction(const G4Event*);
-    void     EndOfEventAction(const G4Event*);
+    virtual void   BeginOfEventAction(const G4Event*);
+    virtual void     EndOfEventAction(const G4Event*);
 
     G4int GetEventNo();
     void SetEventVerbose(G4int);
 
-    void SetDrawFlag(G4String val)  { drawFlag = val; };
-    void SetPrintModulo(G4int val)  { printModulo = val; };
+    void SetDrawFlag(G4String val)  { fDrawFlag = val; };
+    void SetPrintModulo(G4int val)  { fPrintModulo = val; };
 
-    void SetForceDrawPhotons(G4bool b){forcedrawphotons=b;}
-    void SetForceDrawNoPhotons(G4bool b){forcenophotons=b;}
+    void SetForceDrawPhotons(G4bool b){fForceDrawPhotons=b;}
+    void SetForceDrawNoPhotons(G4bool b){fForceNoPhotons=b;}
  
   private:
 
-    WLSRunAction* runaction;
-    WLSEventActionMessenger* eventMessenger;
+    WLSRunAction* fRunAction;
+    WLSEventActionMessenger* fEventMessenger;
 
-    G4int verboselevel;
-    G4int printModulo;
+    G4int fVerboseLevel;
+    G4int fPrintModulo;
  
-    G4int mppcCollID;
+    G4int fMPPCCollID;
  
-    G4String drawFlag;
+    G4String fDrawFlag;
 
-    G4bool forcedrawphotons;
-    G4bool forcenophotons;
+    G4bool fForceDrawPhotons;
+    G4bool fForceNoPhotons;
 
 };
 

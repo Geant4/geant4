@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VIntersectionLocator.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // Class G4VIntersectionLocator implementation
 //
@@ -267,8 +267,8 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
 #else
   // Statistics on the RMS value of the corrections
 
-  static G4int    noCorrections=0;
-  static G4double sumCorrectionsSq = 0;
+  static G4ThreadLocal G4int    noCorrections=0;
+  static G4ThreadLocal G4double sumCorrectionsSq = 0;
   noCorrections++; 
   if( goodAdvance )
   {

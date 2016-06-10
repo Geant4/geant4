@@ -23,54 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.13 2010-12-02 08:24:22 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyPhysicsLists.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyPhysicsLists.cc
 //
 //                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "G4Version.hh"
 #include <vector>
 #include <algorithm>
-
-#include "G4HadronCaptureProcess.hh"
-#include "G4HadronQElasticPhysics.hh"
-
-#include "CHIPS.hh"
-#include "CHIPS_HP.hh"
-#include "FTFP_BERT.hh"
-//#include "FTFP_BERT_EMV.hh"
-#include "FTFP_BERT_EMX.hh"
-#include "FTFP_BERT_TRV.hh"
 #include "FTF_BIC.hh"
+#include "FTFP_BERT.hh"
+#include "FTFP_BERT_HP.hh"
+#include "FTFP_BERT_TRV.hh"
+#include "FTFP_INCLXX.hh"
+#include "FTFP_INCLXX_HP.hh"
 #include "LBE.hh"
-#include "LHEP.hh"
-#include "LHEP_EMV.hh"
 #include "QBBC.hh"
-#include "QGSC_BERT.hh"
-#include "QGSC_CHIPS.hh"
-#include "QGSP.hh"
+#include "QGS_BIC.hh"
 #include "QGSP_BERT.hh"
-#include "QGSP_BERT_95.hh"
-#include "QGSP_BERT_95XS.hh"
-#include "QGSP_BERT_CHIPS.hh"
-#include "QGSP_BERT_EMV.hh"
-#include "QGSP_BERT_EMX.hh"
 #include "QGSP_BERT_HP.hh"
-#include "QGSP_BERT_NOLEP.hh"
-#include "QGSP_BERT_TRV.hh"
 #include "QGSP_BIC.hh"
-#include "QGSP_BIC_EMY.hh"
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_FTFP_BERT.hh"
-#include "QGSP_FTFP_BERT_95.hh"
-#include "QGSP_FTFP_BERT_95XS.hh"
 #include "QGSP_INCLXX.hh"
-//#include "QGSP_QEL.hh"
-#include "QGS_BIC.hh"
-
+#include "QGSP_INCLXX_HP.hh"
+#include "Shielding.hh"
 
 // macro for adding physics lists
 #define ADD_PHYSICS_LIST(plname) \
@@ -98,7 +76,7 @@ void ListPhysicsList() {
   }
 }
 
-};
+}
 
 using namespace pyPhysicsLists;
 
@@ -109,39 +87,24 @@ void export_PhysicsLists()
 {
   def("ListPhysicsList",   ListPhysicsList);
 
-  ADD_PHYSICS_LIST(CHIPS);  
-  ADD_PHYSICS_LIST(CHIPS_HP);
-  ADD_PHYSICS_LIST(FTFP_BERT);
-  //ADD_PHYSICS_LIST(FTFP_BERT_EMV);
-  ADD_PHYSICS_LIST(FTFP_BERT_EMX);
-  ADD_PHYSICS_LIST(FTFP_BERT_TRV);
   ADD_PHYSICS_LIST(FTF_BIC);
+  ADD_PHYSICS_LIST(FTFP_BERT);
+  ADD_PHYSICS_LIST(FTFP_BERT_HP);
+  ADD_PHYSICS_LIST(FTFP_BERT_TRV);
+  ADD_PHYSICS_LIST(FTFP_INCLXX);
+  ADD_PHYSICS_LIST(FTFP_INCLXX_HP);
   ADD_PHYSICS_LIST(LBE);
-  ADD_PHYSICS_LIST(LHEP);
-  ADD_PHYSICS_LIST(LHEP_EMV);
   ADD_PHYSICS_LIST(QBBC);
-  ADD_PHYSICS_LIST(QGSC_BERT);
-  ADD_PHYSICS_LIST(QGSC_CHIPS);
-  ADD_PHYSICS_LIST(QGSP);
+  ADD_PHYSICS_LIST(QGS_BIC);
   ADD_PHYSICS_LIST(QGSP_BERT);
-  ADD_PHYSICS_LIST(QGSP_BERT_95);
-  ADD_PHYSICS_LIST(QGSP_BERT_95XS);
-  ADD_PHYSICS_LIST(QGSP_BERT_CHIPS);
-  ADD_PHYSICS_LIST(QGSP_BERT_EMV);
-  ADD_PHYSICS_LIST(QGSP_BERT_EMX);
   ADD_PHYSICS_LIST(QGSP_BERT_HP);
-  ADD_PHYSICS_LIST(QGSP_BERT_NOLEP);
-  ADD_PHYSICS_LIST(QGSP_BERT_TRV);
   ADD_PHYSICS_LIST(QGSP_BIC);
-  ADD_PHYSICS_LIST(QGSP_BIC_EMY);
   ADD_PHYSICS_LIST(QGSP_BIC_HP);
   ADD_PHYSICS_LIST(QGSP_FTFP_BERT);
-  ADD_PHYSICS_LIST(QGSP_FTFP_BERT_95);
-  ADD_PHYSICS_LIST(QGSP_FTFP_BERT_95XS);
   ADD_PHYSICS_LIST(QGSP_INCLXX);
-  //ADD_PHYSICS_LIST(QGSP_QEL);
-  ADD_PHYSICS_LIST(QGS_BIC);
-  
+  ADD_PHYSICS_LIST(QGSP_INCLXX_HP);
+  ADD_PHYSICS_LIST(Shielding);
+
   // sort PL vector
   std::sort(plList.begin(), plList.end());
 }

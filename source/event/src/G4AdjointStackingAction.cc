@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointStackingAction.cc 76257 2013-11-08 11:31:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -51,8 +51,7 @@ G4AdjointStackingAction::~G4AdjointStackingAction()
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4ClassificationOfNewTrack  G4AdjointStackingAction::ClassifyNewTrack(const G4Track * aTrack)
-{  
-   G4ClassificationOfNewTrack classification = fUrgent;
+{  G4ClassificationOfNewTrack classification = fUrgent;
    if ( kill_tracks) classification=fKill;
    else if (!adjoint_mode && theFwdStackingAction)   classification =  theFwdStackingAction->ClassifyNewTrack(aTrack); 
    else if (adjoint_mode && theUserAdjointStackingAction)   classification =  theUserAdjointStackingAction->ClassifyNewTrack(aTrack);

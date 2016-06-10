@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "PrimaryGeneratorAction.hh"
 #include "PrimaryGeneratorMessenger.hh"
@@ -34,27 +33,29 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:detector(DC)
+:fDetector(DC)
 {
-  angleMax = 0.09;
-  emission =0;
+  fAngleMax = 0.09;
+  
+  // Default
+  fEmission = 1;
 
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  fParticleGun  = new G4ParticleGun(n_particle);
   
   G4ParticleDefinition* particle =
     G4ParticleTable::GetParticleTable()->FindParticle("proton");
-      particleGun->SetParticleDefinition(particle);
+      fParticleGun->SetParticleDefinition(particle);
     
-  particleGun->SetParticleEnergy(3*MeV);
+  fParticleGun->SetParticleEnergy(3*MeV);
 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   
-  gunMessenger = new PrimaryGeneratorMessenger(this);  
+  fGunMessenger = new PrimaryGeneratorMessenger(this);  
   
   // Matrix
   
-  beamMatrix = CLHEP::HepMatrix(32,32);
+  fBeamMatrix = CLHEP::HepMatrix(32,32);
 
 }
 
@@ -62,8 +63,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
-  delete gunMessenger;
+  delete fParticleGun;
+  delete fGunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -71,18 +72,21 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4int numEvent;
+  
   numEvent=anEvent->GetEventID()+1;
+  
   G4double x0,y0,z0,theta,phi,xMom0,yMom0,zMom0,e0,de;
-  shoot=false;
+  
+  fShoot=false;
 
   x0=0; y0=0; z0=0; theta=0; phi=0; e0=0;
 
 // Coefficient computation
 
-if (emission==1)
+if (fEmission==1)
 {
-	detector->SetCoef();
-	shoot=true;
+	fDetector->SetCoef(1);
+	fShoot=true;
 	de = 0;
 
 	if (numEvent==	1)  {theta =	-0.00500; phi =	-0.00500; de = -0.0050; }
@@ -118,8 +122,8 @@ if (emission==1)
 	if (numEvent==	31) {theta =	 0.005/3; phi =	 0.00500; de =  0.0050; }
 	if (numEvent==	32) {theta =	 0.00500; phi =	 0.00500; de =  0.0050; }
 
-	theta=theta*200*angleMax*1e-3;
-	phi=phi*200*angleMax*1e-3;
+	theta=theta*200*fAngleMax*1e-3;
+	phi=phi*200*fAngleMax*1e-3;
 
 	de=de/100;
 	e0 = 3*MeV + 2*de*3*MeV;
@@ -139,74 +143,100 @@ if (emission==1)
 
         // Matrix filling up
        
-        beamMatrix(numEvent,1) = cte;
+        fBeamMatrix(numEvent,1) = cte;
       
-        beamMatrix(numEvent,2) = theta;
-        beamMatrix(numEvent,3) = phi;
-        beamMatrix(numEvent,4) = DE;
+        fBeamMatrix(numEvent,2) = theta;
+        fBeamMatrix(numEvent,3) = phi;
+        fBeamMatrix(numEvent,4) = DE;
 
-        beamMatrix(numEvent,5) = theta * theta;	
-        beamMatrix(numEvent,6) = theta * phi;	
-        beamMatrix(numEvent,7) = phi * phi;	
-        beamMatrix(numEvent,8) = theta * DE;
-        beamMatrix(numEvent,9) = phi * DE;
+        fBeamMatrix(numEvent,5) = theta * theta;	
+        fBeamMatrix(numEvent,6) = theta * phi;	
+        fBeamMatrix(numEvent,7) = phi * phi;	
+        fBeamMatrix(numEvent,8) = theta * DE;
+        fBeamMatrix(numEvent,9) = phi * DE;
 
-        beamMatrix(numEvent,10) = theta * theta * theta;	
-        beamMatrix(numEvent,11) = theta * theta * phi;	
-        beamMatrix(numEvent,12) = theta * phi * phi;	
-        beamMatrix(numEvent,13) = phi *  phi *  phi;
-        beamMatrix(numEvent,14) = theta * theta * DE;
-        beamMatrix(numEvent,15) = theta * phi * DE;		
-        beamMatrix(numEvent,16) = phi *  phi * DE;
+        fBeamMatrix(numEvent,10) = theta * theta * theta;	
+        fBeamMatrix(numEvent,11) = theta * theta * phi;	
+        fBeamMatrix(numEvent,12) = theta * phi * phi;	
+        fBeamMatrix(numEvent,13) = phi *  phi *  phi;
+        fBeamMatrix(numEvent,14) = theta * theta * DE;
+        fBeamMatrix(numEvent,15) = theta * phi * DE;		
+        fBeamMatrix(numEvent,16) = phi *  phi * DE;
 
-        beamMatrix(numEvent,17) = theta * theta * theta * phi;	
-        beamMatrix(numEvent,18) = theta * theta * phi * phi;	
-        beamMatrix(numEvent,19) = theta * phi * phi * phi;	
-        beamMatrix(numEvent,20) = theta * theta * theta * DE;
-        beamMatrix(numEvent,21) = theta * theta * phi *  DE;
-        beamMatrix(numEvent,22) = theta * phi * phi * DE;
-        beamMatrix(numEvent,23) = phi * phi * phi * DE;
+        fBeamMatrix(numEvent,17) = theta * theta * theta * phi;	
+        fBeamMatrix(numEvent,18) = theta * theta * phi * phi;	
+        fBeamMatrix(numEvent,19) = theta * phi * phi * phi;	
+        fBeamMatrix(numEvent,20) = theta * theta * theta * DE;
+        fBeamMatrix(numEvent,21) = theta * theta * phi *  DE;
+        fBeamMatrix(numEvent,22) = theta * phi * phi * DE;
+        fBeamMatrix(numEvent,23) = phi * phi * phi * DE;
 
-        beamMatrix(numEvent,24) = theta * theta * theta * phi * phi;	
-        beamMatrix(numEvent,25) = theta * theta * phi * phi * phi;	
-        beamMatrix(numEvent,26) = theta * theta * theta * phi * DE;	
-        beamMatrix(numEvent,27) = theta * theta * phi * phi * DE;	
-        beamMatrix(numEvent,28) = theta * phi * phi * phi * DE;
+        fBeamMatrix(numEvent,24) = theta * theta * theta * phi * phi;	
+        fBeamMatrix(numEvent,25) = theta * theta * phi * phi * phi;	
+        fBeamMatrix(numEvent,26) = theta * theta * theta * phi * DE;	
+        fBeamMatrix(numEvent,27) = theta * theta * phi * phi * DE;	
+        fBeamMatrix(numEvent,28) = theta * phi * phi * phi * DE;
 
-        beamMatrix(numEvent,29) = theta * theta * theta * phi * phi * phi;	
-        beamMatrix(numEvent,30) = theta * theta * theta * phi * phi * DE;
-        beamMatrix(numEvent,31) = theta * theta * phi * phi * phi * DE;	
+        fBeamMatrix(numEvent,29) = theta * theta * theta * phi * phi * phi;	
+        fBeamMatrix(numEvent,30) = theta * theta * theta * phi * phi * DE;
+        fBeamMatrix(numEvent,31) = theta * theta * phi * phi * phi * DE;	
 
-        beamMatrix(numEvent,32) = theta * theta * theta * phi * phi * phi * DE;	
+        fBeamMatrix(numEvent,32) = theta * theta * theta * phi * phi * phi * DE;	
 
        //	            
 		            
         phi = phi / 1000;
         theta = theta / 1000;
 
+        /*
+        G4cout << fDetector->GetG1() << G4endl;
+        G4cout << fDetector->GetG2() << G4endl;
+        G4cout << fDetector->GetG3() << G4endl;
+        G4cout << fDetector->GetG4() << G4endl;
+        G4cout << fDetector->GetModel() << G4endl;
+        G4cout << fDetector->GetCoef() << G4endl;
+        G4cout << fDetector->GetGrid() << G4endl;
+        */
+
 } // end coefficient
 
 // Full beam
 
-if (emission==2)
+if (fEmission==2)
 {
-	shoot=false;
+	fDetector->SetCoef(0);
+	fShoot=false;
+	
 	G4double aR, angle, rR;
 	aR = -1;
+	
 	e0= G4RandGauss::shoot(3*MeV,5.0955e-5*MeV);  // AIFIRA ENERGY RESOLUTION
+	
 	while (aR < 0) aR = G4RandGauss::shoot(0.10e-3 , 0.06e-3/2.35) * rad; // old =0.08e-3 displacement
+	
 	angle = G4UniformRand() * 2 * CLHEP::pi *rad;
+	
 	theta = aR * std::cos(angle);
+	
 	phi = aR * std::sin(angle);
+	
 	rR = XYofAngle(aR);
+	
 	x0 = rR*std::cos(angle);
+	
 	y0 = rR*std::sin(angle);
+	
 	x0 = G4RandGauss::shoot(x0,220/2.35) *micrometer;
+	
 	theta = G4RandGauss::shoot(theta,0.03e-3/2.35);
+	
 	y0 = G4RandGauss::shoot(y0,220/2.35) *micrometer;
+	
 	phi = G4RandGauss::shoot(phi,0.03e-3/2.35);
+	
 	z0 = (-9120+250)*mm;  //position C0
-	if (std::sqrt(x0*x0+y0*y0)/micrometer<2000) shoot=true;
+	
+	if (std::sqrt(x0*x0+y0*y0)/micrometer<2000) fShoot=true;
 
 	/*
 	xMom0 = std::sin(theta);
@@ -218,28 +248,30 @@ if (emission==2)
 
 // shoot
 
-if (shoot)
+if (fShoot)
 {
   
   G4cout << "-> Event= " << numEvent<< ": X0(mm)= " << x0/mm << " X0(mm) = " << y0/mm << " Z0(m) = " << z0/m  
          << " THETA(mrad)= " << theta/mrad << " PHI(mrad)= " <<	phi/mrad << " E0(MeV)= " << e0/MeV << G4endl;
   
   xMom0 = std::sin(theta);
+  
   yMom0 = std::sin(phi);
+  
   zMom0 = std::sqrt(1.-xMom0*xMom0-yMom0*yMom0);  
 
-  particleGun->SetParticleEnergy(e0);
+  fParticleGun->SetParticleEnergy(e0);
 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(xMom0,yMom0,zMom0));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xMom0,yMom0,zMom0));
 
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   
   G4ParticleDefinition* particle=
     G4ParticleTable::GetParticleTable()->FindParticle("proton");
   
-  particleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleDefinition(particle);
   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 // end shoot
@@ -250,7 +282,7 @@ if (shoot)
 
 void PrimaryGeneratorAction::SetEmission(G4int value)
 {
-  emission = value;
+  fEmission = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

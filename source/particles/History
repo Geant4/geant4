@@ -1,4 +1,4 @@
-$Id: History,v 1.203 2010-12-22 07:09:20 kurasige Exp $
+$Id: History 77701 2013-11-27 16:39:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,290 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 27. Nov. 2013  Gabriele Cosmo (particles-V09-06-64)
+- Correction in G4PDefSplitter::FreeSlave() to use free() instead of
+  delete for releasing offset.
+- Fix in G4ExcitedBaryonConstructor::GetCharge() and in
+  G4ExcitedMesonConstructor::GetCharge() to replace G4ThreadLocal
+  specification with 'static const' for local variable; also fixing
+  compilation error in MT mode on the icc compiler.
+
+- 21. Nov. 2013  Hisaya Kurashige (particles-V09-06-63)
+- Fix defects by Coverity
+   G4NuclideTable.cc G4ParticleTable.cc G4VDecayChannel.cc 
+   G4IonTable.cc G4IsomerTable.cc
+   
+- 5. Nov. 2013  Hisaya Kurashige (particles-V09-06-62)
+- Fix G4NeutronBetaDecayChannel (Bug #1532)
+
+- 30. Oct. 2013  Makoto Asai (particles-V09-06-61)
+- Fix the static access method to G4NuclideTable that has caused 
+  a problem on Windows.
+
+- 28. Oct. 2013  Makoto Asai (particles-V09-06-60)
+- Correct the energy tolerance for G4IonTable::FindIon(Z,A,E).
+
+- 25. Oct. 2013  Makoto Asai (particles-V09-06-59)
+- Fix search logic in G4NuclideTable.
+
+- 25. Oct. 2013  Makoto Asai (particles-V09-06-58)
+- Additional cout for the case G4IsotopeProperty is not found.
+
+- 25. Oct. 2013  Makoto Asai (particles-V09-06-57)
+- Temporary tag.
+
+- 25. Oct. 2013  Makoto Asai (particles-V09-06-56)
+- Remove unnecessary G4cout.
+
+- 24. Oct. 2013  Makoto Asai (particles-V09-06-55)
+- Protect G4IonTable against rare cases when only the excited states are
+  preloaded while the ground state with non-zero epsilon energy is
+  created on the fly.
+
+- 24. Oct. 2013  Makoto Asai (particles-V09-06-54)
+- Fix G4IonTable so that it properly uses iosomer levels defined by 
+  G4NuclideTable even if other physics processes may set their own
+  isomer tables.
+
+- 23. Oct. 2013  Michael Kelsey
+- Add new G4Phonon{Long,TransSlow,TransFast} particles to bosons/ category.
+  These will NOT be built as part of G4BosonConstructor; user physics lists
+  must create them explicitly.
+
+- 23. Oct. 2013  Makoto Asai (particles-V09-06-53)
+- Fixed uninitialized pointer.
+- Extend G4NuclideTable class to allow reading a data file if needed.
+
+- 22. Oct. 2013  Makoto Asai (particles-V09-06-52)
+- Introducing G4NuclideTable class. Ground state and isomer are
+  pre-loaded from this table before the first beamOn.
+
+- 21. Oct. 2013  Makoto Asai (particles-V09-06-51)
+- Naming convention of isomers and general excited nuclides has been
+  unified. They always appear with excitation energy in unit of keV.
+
+- 1. Oct. 2013  Makoto Asai (particles-V09-06-50)
+- Protect a G4PhaseSpaceDecayChannel::current_parent_mass to be
+  thread local.
+
+- 9. Sep. 2013  Makoto Asai (particles-V09-06-49)
+- Remove split class mechanism from G4VDecayChannel class.
+
+- 8. Sep. 2013  Makoto Asai (particles-V09-06-48)
+- G4ParticleTable: Update thread-local disctionaries when a particle
+  is created during an event loop.
+
+- 6. Sep. 2013  Makoto Asai (particles-V09-06-47)
+- Fix the use of Mutex in G4IonTable.
+
+- 5. Sep. 2013  Makoto Asai (particles-V09-06-46)
+- Particle table and ion table in the master thread are properly updated
+  even if a particle is instantiated during an event loop.
+
+- 1. Sep. 2013  Makoto Asai (particles-V09-06-45)
+- Ditto for Linux and Windows.
+
+- 1. Sep. 2013  Makoto Asai (particles-V09-06-44)
+- Further protection.
+
+- 31. Aug. 2013  Makoto Asai (particles-V09-06-43)
+- G4ParticleDefinition::SetProcessManager() now checks the readiness of
+  TLS pointer and sets it up if it isn't. This fix is required for unit
+  tests that do not use Run Manager.
+
+- 28. Aug. 2013  Makoto Asai (particles-V09-06-42)
+- Retagged.
+
+- 28. Aug. 2013  Makoto Asai (particles-V09-06-41)
+- Split class mechanism of G4ParticleDefinition has been changed. Now all
+  general ions share the object ID with GenericIon so that TLS pointers
+  to G4ProcessManager are not created for such ions.
+
+- 15. Aug. 2013  Makoto Asai (particles-V09-06-40)
+- G4IonTable.cc: Fix the initialiaztion of IsomerTableList for
+  worker thread.
+
+- 14. Aug. 2013  Makoto Asai (particles-V09-06-39)
+- ParticleTableIterator skips general ions unless it is reset with 
+  "false" as its parameter.
+- Add warning message if a process manager is to be registered to
+  a particle during the event loop.
+- G4ParticleMessenger : /particle/createAllIon and /particle/createAllIsomer
+  won't propagate to worker threads as all ions and isomers are created
+  in the master thread and particle table and ion table of worker threads
+  inherit those of masther thread.
+
+- 3. Aug. 2013 Hisaya Kurashige (particles-V09-06-38)
+- Do not copy IsotopeTable of G4Iontable to Worker thread
+- Clean up methods of G4ParticleTable 
+
+- 31 July 2013  Dennis Wright (particles-V09-06-37)
+- Add GetIon(Z,A,level) to G4ParticleTable
+
+- 29. Jul. 2013 Hisaya Kurashige (particles-V09-06-36)
+- Revert EncodingDictionary in G4ParticleTable
+
+- 29. Jul. 2013 Hisaya Kurashige (particles-V09-06-35)
+- Add DNA particles for setting isGeneralIon flag in G4Ions constructor 
+
+- 26. Jul. 2013 Hisaya Kurashige (particles-V09-06-34)
+- Fix bug in  G4ParticlePropertyTable::SetParticleProperty [Problem1506]
+- Fix G4IonTable::WorkerG4IonTable() (process manager was added for proton) 
+- Fix G4ParticleTable::WorkerG4ParticleTable() (fIterator was not created)
+- G4IsomerTbale::isomerTable is changed to static const (was static G4ThreadLocal)
+- G4NucleiPropertiesTableAME03 and G4NucleiPropertiesTheoreticalTable 
+  are changed to static const (was static G4ThreadLocal)
+- Add isomer level to G4IsonTable::GetNucleusMass 
+- Add G4ParticleDefinition::IsGeneralIon method
+- Add G4Exception for G4IonTable::CreateIon methods with excited energy
+  (This method will be removed in the next releasae)
+- Remove ShortLivedDictionary and EncodingDictionary in G4ParticleTable
+
+- 11. Jul. 2013 Gabriele Cosmo (particles-V09-06-33)
+- Simplified use of allocator for G4DynamicParticle.
+
+- 01. Jul. 2013 Makoto Asai (particles-V09-06-32)
+- Generic ions except GenericIon itself no longer use /run/particle/addProcessManager
+  UI command to make the shallow copy of process manager.
+
+- 20. Jun. 2013 Andrea Dotti (particles-V09-06-31)
+- Bug fix for MT: set static TLS pointer G4PDefSplitter::offset to 0 after
+  delete in split-class mechanism G4PDefSplitter::FreeSlave
+
+- 11. Jun. 2013 Makoto Asai (particles-V09-06-30)
+- Fix for MT: change ions and isomers to be created after BuildPhysics()
+  so that they properly inherit the process manager of GenericIon.
+
+- 08. Jun. 2013 Hisaya Kurasige (particles-V09-06-29)
+- Fix the name of Upsilon meson.
+
+- 29. May  2013 Gabriele Cosmo, Andrea Dotti (particles-V09-06-28)
+- Revert back changes done by V.I. in G4IonTable::FindIon(), which turned
+  out to be wrong.
+- Consistently use wrappers and typedefs from G4Threading for pthreads
+  functions and types in G4ParticleTable and G4IonTable, to allow for porting
+  on Windows.
+- Add back initialization of light (anti-)ions static variables. Now
+  enabled only for MT and introduced initialization method called by 
+  MTRunManager. Should also solve performance loss observed in global
+  tag ref-04c.
+
+- 23. May  2013 Vladimir Ivantchenko
+- G4IonTable: modified FindIon(), when find an ion use continue instead
+  of break.
+
+- 05. May  2013 Hisaya Kurashige (particles-V09-06-25i, -27)
+  (-26 tag is removed and reverted back as -27 tag)
+- Add G4IsomerTable to create isomers (including ground state)
+- Modify GetIon methods with isomer level 
+  - the ion name has isomer level in the bracket (only for excited state)	
+  !!NOTE  
+    - GetIon methods with excited enregy can be used still (as before)
+    - If no isomers with matched excitation energy is found in IsomerTable,
+      an ion will be created with isomer level = 9 
+      and the ion name has excited energy in the bracket   
+- G4IonTable::CreateIon() is now can be used in Pre_init state
+
+- 02. May  2013 Hisaya Kurashige (particles-V09-06-22)
+- Add Isomer Level to G4Ions
+   - Assign level = 0 for ground state
+   - Assign level = 1 for excited states except for giving its level explicitly 
+   - Add level = 0 in constructors for light ions (proton, deuteron ....etc))  
+- Add following methods of using isomer level to GetIon 
+  !!NOTE  Currently these methods are relevant only for isomer level ==0 (ground state)
+  - G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int lvl=0);
+  - G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4int lvl);
+- Modify following methods. The last argument is now interpreted to Isomer level
+  - static G4int GetNucleusEncoding
+  - static G4bool GetNucleusByEncoding
+- Add Isomer Level to G4IsotopeProperty and add following methods to G4VIsotopeTable
+  - void              DumpTable(G4int Zmin=1, G4int Zmax=118);
+  - const G4String&   GetName() const;
+- Add /particle/createAllIsomer commnd for future (currently it gives NO effects)
+- Modify G4IsotopeMagneticMomentTable to deal with isomer level.
+ - Modify G4IsotopeMagneticMoment.table
+
+- 29. Apr. 2013 Hisaya Kurashige (particles-V09-06-21)
+- Fix a bug to avoid creatiing ions with same name
+ 
+- 27. Apr. 2013 Hisaya Kurashige (particles-V09-06-20)
+- Modify G4IonTable::GetIonName to use a static TLS for the ostringstream object.
+
+- 27. Apr. 2013 Hisaya Kurashige (particles-V09-06-19)
+- Modify G4IonTable::GetIon and CreateIon
+  - remove string comparison in GetIon 
+  - compare excited energy with precion of 0.1 keV in GetIon
+  - set excitation energy consistent with mass and AtomicMass in CreateIon  
+- Modify element name for Z>111
+
+- 23. Apr. 2013 Hisaya Kurashige (particles-V09-06-17)
+- Fix bug in G4IonTable::FindIon for light ions
+
+- 10. Apr. 2013 Hisaya Kurashige (particles-V09-06-16)
+- remove G4Exceptions which added in G4ParticleTable
+  (it is not problem.)
+
+- 9. Apr. 2013 Hisaya Kurashige (particles-V09-06-15)
+- Merged developents from 09 to 12
+- remove G4cerr 
+- Modify G4IonTable::FindIon to remove EnergyTorelance
+
+- 4. Apr. 2013 A. Ribon (particles-V09-06-14)
+- Reproducibility fix in G4IonTable: re-use an already created ion
+  only if the excitation energy is the same (no tolerance).
+
+- 2. Apr. 2013 A. Dotti (particles-V09-06-13)
+- Merging with particles-V09-06-08
+(lost modification from 09 to 12)
+
+- 2. Apr. 2013 Hisay Kurashige (particles-V09-06-12)
+- Fix bug of using ProcessManager in G4ParticleDefinition
+- Fix bug in leptons
+
+- 30 Mar. 2013 Hisay Kurashige (particles-V09-06-11)
+- Fix bug of using thePDGMass
+
+- 26 Mar. 2013 Hisay Kurashige (particles-V09-06-10)
+- Fix bugs in leptons for setting magnetic moment
+
+- 23 Mar. 2013 Hisay Kurashige (particles-V09-06-09)
+- Fix bugs in G4MuonPlus for setting magnetic moment
+- Update magnetic moment for proton and charged leptons.
+- Add G4Excepen if G4ParticleDefintion::CalculateAnomaly is invoked
+
+- 21 Mar. 2013 A. Dotti (particles-V09-06-08)
+- Adding G4ParticleDefinition::SetMasterProcessManager method needed for MT
+
+- 14 Mar. 2013 G.Cosmo (particles-V09-06-07)
+- Simplified implementation for IsIon() and IsAntiIon() in G4IonTable.
+  Use workaround for local thread-local pointers.
+
+- 12 Mar. 2013 G.Cosmo (particles-V09-06-06)
+- Added public accessors for MT data to G4ParticleDefinition and
+  G4VDecayChannel.
+
+- 11 Mar. 2013 G.Cosmo (particles-V09-06-05)
+- Redefined G4DLL_API to G4PART_DLL to avoid cases of macro redefinition.
+
+- 08 Mar. 2013 G. Cosmo (particles-V09-06-04)
+- Moved G4MTTransitoryParticle class from "global" to management module
+  and renamed to G4PDefSplitter.
+- Adapted split classes (G4ParticleDefinition and G4VDecayChannel) to the
+  change and made code cleanup.
+- Code cleanup from MT changes on most classes under management.
+
+- 25 Feb. 2013 A. Dotti (particles-V09-06-03)
+- Removed "extern" lockCount and particleTable global variables, they are now static
+  data member of the G4ParticleTable class (needed for G4MT)
+
+- 25 Feb. 2013 H.Kurashige (particles-V09-06-02)
+- Update trunk to geant4-09-06-ref-02 for following files 
+  in order to resolve compiler errors 
+   G4DynamicParticle.icc G4DynamicParticle.cc G4IonTable.cc G4ParticleTable.cc
+   
+- 24 Feb. 2013 H.Kurashige (particles-V09-06-01)
+- Remove unused variable of thePDGiSpin from G4PDGCodeChecker
 
 - 9 Sep. 2012 G.Cosmo (particles-V09-05-07)
 - Fix constructor of G4PhaseSpaceDecayChannel

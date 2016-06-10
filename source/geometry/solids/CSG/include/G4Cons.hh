@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Cons.hh 76263 2013-11-08 11:41:52Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -63,9 +63,17 @@
 // 19.3.94 P.Kent: Old C++ code converted to tolerant geometry
 // 13.9.96 V.Grichine: Final modifications to commit
 // --------------------------------------------------------------------
-
 #ifndef G4Cons_HH
 #define G4Cons_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UCONS 1
+#endif
+
+#if defined(G4GEOM_USE_UCONS)
+  #define G4UCons G4Cons
+  #include "G4UCons.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -147,7 +155,6 @@ class G4Cons : public G4CSGSolid
 
     void          DescribeYourselfTo( G4VGraphicsScene& scene ) const;
     G4Polyhedron* CreatePolyhedron() const;
-    G4NURBS*      CreateNURBS() const;
 
   public:  // without description
        
@@ -221,8 +228,14 @@ class G4Cons : public G4CSGSolid
     G4bool fPhiFullCone;
       //
       // Flag for identification of section or full cone
+
+    G4double halfCarTolerance, halfRadTolerance, halfAngTolerance;
+      //
+      // Cached half tolerance values
 };
 
 #include "G4Cons.icc"
+
+#endif
 
 #endif

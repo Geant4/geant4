@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FukuiRendererSceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:19:19 JST 1996
@@ -60,7 +60,6 @@ public:
 	//----- overriding base class methods
   void AddPrimitive (const G4Polyline& line);
   void AddPrimitive (const G4Polyhedron& p);
-  void AddPrimitive (const G4NURBS& nurb);
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);

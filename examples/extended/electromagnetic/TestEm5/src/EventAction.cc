@@ -26,45 +26,38 @@
 /// \file electromagnetic/TestEm5/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 76464 2013-11-11 10:22:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
 
-#include "RunAction.hh"
-#include "EventMessenger.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 
+#include "G4RunManager.hh"
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* RA)
-:fRunAction(RA),
- fDrawFlag("none"),fPrintModulo(10000)
-{
-  fEventMessenger = new EventMessenger(this);
-}
+EventAction::EventAction()
+:G4UserEventAction(),
+ fEnergyDeposit(0.),
+ fTrakLenCharged(0.), fTrakLenNeutral(0.),
+ fNbStepsCharged(0), fNbStepsNeutral(0),
+ fTransmitFlag(0), fReflectFlag(0)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+void EventAction::BeginOfEventAction(const G4Event* )
 {
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-
  // initialisation per event
  fEnergyDeposit  = 0.;
  fTrakLenCharged = fTrakLenNeutral = 0.; 
@@ -76,15 +69,18 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
- fRunAction->AddEnergy(fEnergyDeposit);
- fRunAction->AddTrakLenCharg(fTrakLenCharged);
- fRunAction->AddTrakLenNeutr(fTrakLenNeutral);
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+              
+ run->AddEnergy(fEnergyDeposit);
+ run->AddTrakLenCharg(fTrakLenCharged);
+ run->AddTrakLenNeutr(fTrakLenNeutral);
 
- fRunAction->CountStepsCharg(fNbStepsCharged);
- fRunAction->CountStepsNeutr(fNbStepsNeutral);
+ run->CountStepsCharg(fNbStepsCharged);
+ run->CountStepsNeutr(fNbStepsNeutral);
 
- fRunAction->CountTransmit (fTransmitFlag);
- fRunAction->CountReflect  (fReflectFlag);
+ run->CountTransmit (fTransmitFlag);
+ run->CountReflect  (fReflectFlag);
 
  G4AnalysisManager::Instance()->FillH1(1,fEnergyDeposit);
 }

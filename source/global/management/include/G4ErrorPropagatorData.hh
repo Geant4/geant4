@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ErrorPropagatorData.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -92,7 +92,7 @@ private:
 
 private:
 
-  static G4ErrorPropagatorData* theErrorPropagatorData;
+  static G4ThreadLocal G4ErrorPropagatorData* fpInstance;
 
   G4ErrorMode theMode;
 
@@ -102,7 +102,7 @@ private:
 
   G4ErrorTarget* theTarget;
 
-  static G4int theVerbosity;
+  static G4ThreadLocal G4int theVerbosity;
 
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenInventorSceneHandler.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -50,7 +50,6 @@
 #include <Inventor/nodes/SoNormal.h>
 #include <Inventor/nodes/SoNormalBinding.h>
 #include <Inventor/nodes/SoComplexity.h>
-#include <Inventor/nodes/SoNurbsSurface.h>
 #include <Inventor/nodes/SoTranslation.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoResetTransform.h>
@@ -75,7 +74,6 @@ typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "SoG4MarkerSet.h"
 
 #include "G4Scene.hh"
-#include "G4NURBS.hh"
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorTransform3D.hh"
 #include "G4ThreeVector.hh"
@@ -583,87 +581,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
   soPolyhedron->solid.setValue(fModelingSolid);
   soPolyhedron->reducedWireFrame.setValue(fReducedWireFrame?TRUE:FALSE);
   fCurrentSeparator->addChild(soPolyhedron);  
-}
-
-//
-// Method for handling G4NURBS objects for drawing solids.
-// Knots and Ctrl Pnts MUST be arrays of GLfloats.
-//
-void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
-
-  if (fProcessing2D) {
-    static G4bool warned = false;
-    if (!warned) {
-      warned = true;
-      G4Exception
-	("G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS&)",
-	 "OpenInventor-0006", JustWarning,
-	 "2D NURBS not implemented.  Ignored.");
-    }
-    return;
-  }
-
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-  fpViewer -> GetApplicableVisAttributes (nurb.GetVisAttributes ());
-
-  AddProperties(pVA);  // Colour, etc.
-  AddTransform();      // Transformation
-
-  G4float *u_knot_array, *u_knot_array_ptr;
-  u_knot_array = u_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::U)];
-  G4NURBS::KnotsIterator u_iterator (nurb, G4NURBS::U);
-  while (u_iterator.pick (u_knot_array_ptr++)){}
-
-  G4float *v_knot_array, *v_knot_array_ptr;
-  v_knot_array = v_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::V)];
-  G4NURBS::KnotsIterator v_iterator (nurb, G4NURBS::V);
-  while (v_iterator.pick (v_knot_array_ptr++)){}
-
-  G4float *ctrl_pnt_array, *ctrl_pnt_array_ptr;
-  ctrl_pnt_array = ctrl_pnt_array_ptr =
-    new G4float [nurb.GettotalnbrCtrlPts () * G4NURBS::NofC*sizeof(G4float)];
-  G4NURBS::CtrlPtsCoordsIterator c_p_iterator (nurb);
-  while (c_p_iterator.pick (ctrl_pnt_array_ptr++)){}
-  
-  SoSeparator *surfSep = new SoSeparator();
-
-  //
-  // Set up NURBS
-  //
-  SoComplexity *complexity = new SoComplexity;
-  SoCoordinate4 *ctlPts = new SoCoordinate4;
-  SoNurbsSurface *oi_nurb = new SoNurbsSurface;
-  
-  complexity->value = (float)0.6;
-  G4int    nPoints = nurb.GettotalnbrCtrlPts ();
-  SbVec4f* points  = new SbVec4f[nPoints];
-  for (G4int iPoint = 0; iPoint < nPoints ; iPoint++) {
-    points[iPoint].setValue(
-                            ctrl_pnt_array[iPoint*4 + 0],
-                            ctrl_pnt_array[iPoint*4 + 1],
-                            ctrl_pnt_array[iPoint*4 + 2],
-                            ctrl_pnt_array[iPoint*4 + 3]);
-  }
-  ctlPts->point.setValues (0,nPoints,points);
-  oi_nurb->numUControlPoints = nurb.GetnbrCtrlPts(G4NURBS::U);
-  oi_nurb->numVControlPoints = nurb.GetnbrCtrlPts(G4NURBS::V);
-  oi_nurb->uKnotVector.setValues(0,nurb.GetnbrKnots(G4NURBS::U),u_knot_array);
-  oi_nurb->vKnotVector.setValues(0,nurb.GetnbrKnots(G4NURBS::V),v_knot_array);
-
-  surfSep->addChild(complexity);
-  surfSep->addChild(ctlPts);
-  surfSep->addChild(oi_nurb);
-  
-  fCurrentSeparator->addChild(surfSep);
-
-  //
-  // Clean-up
-  //
-  delete [] u_knot_array;
-  delete [] v_knot_array;
-  delete [] ctrl_pnt_array;
-  delete [] points;
 }
 
 void G4OpenInventorSceneHandler::GeneratePrerequisites()

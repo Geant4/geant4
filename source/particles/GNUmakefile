@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2008-11-06 13:17:36 kurasige Exp $
+# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
 # --------------------------------------------------------------
 # GNUmakefile for particles library.  Gabriele Cosmo, 4/4/97.
 # --------------------------------------------------------------

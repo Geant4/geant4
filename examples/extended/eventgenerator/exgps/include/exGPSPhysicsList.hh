@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSPhysicsList.hh 71234 2013-06-12 13:19:12Z gcosmo $
+//
 /// \file eventgenerator/exgps/include/exGPSPhysicsList.hh
 /// \brief Definition of the exGPSPhysicsList class
 //
@@ -45,19 +47,14 @@ class exGPSPhysicsList: public G4VUserPhysicsList
     // Construct particle and physics
     virtual void ConstructParticle();
     virtual void ConstructProcess();
-    void SetCuts();
+    virtual void SetCuts();
 
-  public:
-     
-  protected:
     // these methods Construct particles 
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
     void ConstructBaryons();
     void ConstructNuclei();
-
-  private:
 };
 
 #endif

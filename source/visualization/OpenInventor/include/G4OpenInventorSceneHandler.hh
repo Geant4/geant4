@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenInventorSceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // J Kallenbach  27th Aug 1996
@@ -62,7 +62,6 @@ public:
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Polyhedron& p);
-  void AddPrimitive (const G4NURBS& nurb);
   void AddPrimitive (const G4Polymarker&);
   ////////////////////////////////////////////////////////////////
   // Explicitly invoke base class methods to avoid warnings about

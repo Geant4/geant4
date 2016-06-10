@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GNASHTransitions.cc 69581 2013-05-08 14:02:06Z gcosmo $
 //
 // 20.08.2010 V.Ivanchenko move constructor and destructor to the source 
 
@@ -34,20 +34,24 @@
 #include "G4HadronicException.hh"
 
 G4GNASHTransitions::G4GNASHTransitions()
-{}
+{
+  theParameters = new G4PreCompoundParameters();
+}
 
 G4GNASHTransitions::~G4GNASHTransitions()
-{}
+{
+  delete theParameters;
+}
 
 G4double G4GNASHTransitions::
 CalculateProbability(const G4Fragment & aFragment)
 {
-  const G4double k = 135.0 * MeV*MeV*MeV;
+  static const G4double k = 135.0 * MeV*MeV*MeV;
   G4double E = aFragment.GetExcitationEnergy();
   G4double P = aFragment.GetNumberOfParticles();
   G4double H = aFragment.GetNumberOfHoles();
   G4double N = P + H;
-  G4double A = aFragment.GetA();
+  G4double A = aFragment.GetA_asInt();
 
   G4double theMatrixElement(k*N/(A*A*A*E));
   G4double x = E/N;
@@ -57,7 +61,7 @@ CalculateProbability(const G4Fragment & aFragment)
   else x *= std::sqrt(15.0*MeV/x);
 
   // gg = (6.0/pi2)*a*A
-  G4double gg =  (6.0/pi2)*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*A;
+  G4double gg =  (6.0/pi2)*theParameters->GetLevelDensity()*A;
 
   G4double Epauli = ((P+1.0)*(P+1.0) + (H+1.0)*(H+1.0) + (P+1.0) - 3.0*(H-1.0))/4.0;
 
@@ -72,7 +76,7 @@ void G4GNASHTransitions::PerformTransition(G4Fragment & result)
 {
   result.SetNumberOfParticles(result.GetNumberOfParticles()+1);
   result.SetNumberOfHoles(result.GetNumberOfHoles()+1);
-  if (G4UniformRand() <= result.GetZ()/result.GetA())
+  if (G4UniformRand()*result.GetA_asInt() <= G4double(result.GetZ_asInt()))
     {
       result.SetNumberOfCharged(result.GetNumberOfCharged()+1);
     }

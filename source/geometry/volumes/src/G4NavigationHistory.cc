@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NavigationHistory.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // 
 // G4NavigationHistory Implementation
@@ -40,9 +40,9 @@
   // Initialise static data for the specialized memory pool
   // for the internal STL vector of histories  ...
   //
-  G4ChunkIndexType* G4AllocStats::allocStat = 0;
-  G4int             G4AllocStats::totSpace = 0;
-  G4int             G4AllocStats::numCat = 0;
+  G4ThreadLocal G4ChunkIndexType* G4AllocStats::allocStat = 0;
+  G4ThreadLocal G4int             G4AllocStats::totSpace = 0;
+  G4ThreadLocal G4int             G4AllocStats::numCat = 0;
 #endif
 
 G4NavigationHistory::G4NavigationHistory()

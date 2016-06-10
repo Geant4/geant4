@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -62,12 +60,17 @@
 
 namespace G4INCL {
 
-  const G4double BinaryCollisionAvatar::cutNN = 1910;
-  const G4double BinaryCollisionAvatar::cutNNSquared = cutNN*cutNN;
+  // WARNING: if you update the default cutNN value, make sure you update the
+  // cutNNSquared variable, too.
+  G4ThreadLocal G4double BinaryCollisionAvatar::cutNN = 1910.0;
+  G4ThreadLocal G4double BinaryCollisionAvatar::cutNNSquared = 3648100.0; // 1910.0 * 1910.0
 
   BinaryCollisionAvatar::BinaryCollisionAvatar(G4double time, G4double crossSection,
       G4INCL::Nucleus *n, G4INCL::Particle *p1, G4INCL::Particle *p2)
-    : InteractionAvatar(time, n, p1, p2), theCrossSection(crossSection)
+    : InteractionAvatar(time, n, p1, p2), theCrossSection(crossSection),
+    isParticle1Spectator(false),
+    isParticle2Spectator(false),
+    isElastic(false)
   {
     setType(CollisionAvatarType);
   }
@@ -75,17 +78,17 @@ namespace G4INCL {
   BinaryCollisionAvatar::~BinaryCollisionAvatar() {
   }
 
-  G4INCL::IChannel* BinaryCollisionAvatar::getChannel() const {
+  G4INCL::IChannel* BinaryCollisionAvatar::getChannel() {
     // We already check cutNN at avatar creation time, but we have to check it
     // again here. For composite projectiles, we might have created independent
     // avatars with no cutNN before any collision took place.
     if(particle1->isNucleon()
         && particle2->isNucleon()
-        && theNucleus->getStore()->getBook()->getAcceptedCollisions()!=0) {
+        && theNucleus->getStore()->getBook().getAcceptedCollisions()!=0) {
       const G4double energyCM2 = KinematicsUtils::squareTotalEnergyInCM(particle1, particle2);
       // Below a certain cut value we don't do anything:
       if(energyCM2 < cutNNSquared) {
-        DEBUG("CM energy = sqrt(" << energyCM2 << ") MeV < sqrt(" << cutNNSquared
+        INCL_DEBUG("CM energy = sqrt(" << energyCM2 << ") MeV < sqrt(" << cutNNSquared
             << ") MeV = cutNN" << "; returning a NULL channel" << std::endl);
         InteractionAvatar::restoreParticles();
         return NULL;
@@ -116,7 +119,7 @@ namespace G4INCL {
     const G4double betaDotX = boostVector.dot(minimumDistance);
     const G4double minDist = Math::tenPi*(minimumDistance.mag2() + betaDotX*betaDotX / (1.-boostVector.mag2()));
     if(minDist > theCrossSection) {
-      DEBUG("CM distance of approach is too small: " << minDist << ">" <<
+      INCL_DEBUG("CM distance of approach is too small: " << minDist << ">" <<
         theCrossSection <<"; returning a NULL channel" << std::endl);
       InteractionAvatar::restoreParticles();
       return NULL;
@@ -128,19 +131,19 @@ namespace G4INCL {
       G4double deltaProductionCX = CrossSections::deltaProduction(particle1,
           particle2);
 
-      G4bool isElastic = true;
       if(elasticCX/(elasticCX + deltaProductionCX) < Random::shoot()) {
         // NN -> N Delta channel is chosen
         isElastic = false;
-      }
+      } else
+        isElastic = true;
 
       if(isElastic) { // Elastic NN channel
-        DEBUG("NN interaction: elastic channel chosen" << std::endl);
-        return new ElasticChannel(theNucleus, particle1, particle2);
+        INCL_DEBUG("NN interaction: elastic channel chosen" << std::endl);
+        return new ElasticChannel(particle1, particle2);
       } else { // Delta production
         // Inelastic NN channel
-        DEBUG("NN interaction: inelastic channel chosen" << std::endl);
-        return new DeltaProductionChannel(particle1, particle2, theNucleus);
+        INCL_DEBUG("NN interaction: inelastic channel chosen" << std::endl);
+        return new DeltaProductionChannel(particle1, particle2);
       }
     } else if((particle1->isNucleon() && particle2->isDelta()) ||
 	      (particle1->isDelta() && particle2->isNucleon())) {
@@ -149,27 +152,29 @@ namespace G4INCL {
       G4double recombinationCX = CrossSections::recombination(particle1,
           particle2);
 
-      G4bool isElastic = true;
       if(elasticCX/(elasticCX + recombinationCX) < Random::shoot()) {
         // N Delta -> NN channel is chosen
         isElastic = false;
-      }
+      } else
+        isElastic = true;
 
       if(isElastic) { // Elastic N Delta channel
-        DEBUG("NDelta interaction: elastic channel chosen" << std::endl);
-        return new ElasticChannel(theNucleus, particle1, particle2);
+        INCL_DEBUG("NDelta interaction: elastic channel chosen" << std::endl);
+        return new ElasticChannel(particle1, particle2);
       } else { // Recombination
-        DEBUG("NDelta interaction: recombination channel chosen" << std::endl);
-        return new RecombinationChannel(theNucleus, particle1, particle2);
+        INCL_DEBUG("NDelta interaction: recombination channel chosen" << std::endl);
+        return new RecombinationChannel(particle1, particle2);
       }
     } else if(particle1->isDelta() && particle2->isDelta()) {
-        DEBUG("DeltaDelta interaction: elastic channel chosen" << std::endl);
-        return new ElasticChannel(theNucleus, particle1, particle2);
+      isElastic = true;
+      INCL_DEBUG("DeltaDelta interaction: elastic channel chosen" << std::endl);
+      return new ElasticChannel(particle1, particle2);
     } else if((particle1->isNucleon() && particle2->isPion()) ||
 	      (particle1->isPion() && particle2->isNucleon())) {
-      return new PionNucleonChannel(particle1, particle2, theNucleus, shouldUseLocalEnergy());
+      isElastic = false;
+      return new PionNucleonChannel(particle1, particle2, theNucleus);
     } else {
-      DEBUG("BinaryCollisionAvatar can only handle nucleons (for the moment)."
+      INCL_DEBUG("BinaryCollisionAvatar can only handle nucleons (for the moment)."
 	      << std::endl
 	      << particle1->print()
 	      << std::endl
@@ -181,6 +186,8 @@ namespace G4INCL {
   }
 
   void BinaryCollisionAvatar::preInteraction() {
+    isParticle1Spectator = particle1->isTargetSpectator();
+    isParticle2Spectator = particle2->isTargetSpectator();
     InteractionAvatar::preInteraction();
   }
 
@@ -191,18 +198,35 @@ namespace G4INCL {
 
     switch(fs->getValidity()) {
       case PauliBlockedFS:
-        theNucleus->getStore()->getBook()->incrementBlockedCollisions();
+        theNucleus->getStore()->getBook().incrementBlockedCollisions();
         break;
       case NoEnergyConservationFS:
       case ParticleBelowFermiFS:
       case ParticleBelowZeroFS:
         break;
       case ValidFS:
-        theNucleus->getStore()->getBook()->incrementAcceptedCollisions();
-        if(theNucleus->getStore()->getBook()->getAcceptedCollisions() == 1) {
-          G4double t = theNucleus->getStore()->getBook()->getCurrentTime();
-          theNucleus->getStore()->getBook()->setFirstCollisionTime(t);
-          theNucleus->getStore()->getBook()->setFirstCollisionXSec(oldXSec);
+        theNucleus->getStore()->getBook().incrementAcceptedCollisions();
+        if(theNucleus->getStore()->getBook().getAcceptedCollisions() == 1) {
+          // Store time and cross section of the first collision
+          G4double t = theNucleus->getStore()->getBook().getCurrentTime();
+          theNucleus->getStore()->getBook().setFirstCollisionTime(t);
+          theNucleus->getStore()->getBook().setFirstCollisionXSec(oldXSec);
+
+          // Store position and momentum of the spectator on the first
+          // collision
+          if((isParticle1Spectator && isParticle2Spectator) || (!isParticle1Spectator && !isParticle2Spectator)) {
+            INCL_ERROR("First collision must be within a target spectator and a non-target spectator");
+          }
+          if(isParticle1Spectator) {
+            theNucleus->getStore()->getBook().setFirstCollisionSpectatorPosition(backupParticle1->getPosition().mag());
+            theNucleus->getStore()->getBook().setFirstCollisionSpectatorMomentum(backupParticle1->getMomentum().mag());
+          } else {
+            theNucleus->getStore()->getBook().setFirstCollisionSpectatorPosition(backupParticle2->getPosition().mag());
+            theNucleus->getStore()->getBook().setFirstCollisionSpectatorMomentum(backupParticle2->getMomentum().mag());
+          }
+
+          // Store the elasticity of the first collision
+          theNucleus->getStore()->getBook().setFirstCollisionIsElastic(isElastic);
         }
     }
     return fs;

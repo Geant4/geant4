@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -42,9 +40,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLIPropagationModel.hh"
-#include "G4INCLEventAction.hh"
-#include "G4INCLPropagationAction.hh"
-#include "G4INCLAvatarAction.hh"
+#include "G4INCLCascadeAction.hh"
 #include "G4INCLEventInfo.hh"
 #include "G4INCLGlobalInfo.hh"
 #include "G4INCLLogger.hh"
@@ -57,6 +53,12 @@ namespace G4INCL {
       INCL(Config const * const config);
 
       ~INCL();
+
+      /// \brief Dummy copy constructor to silence Coverity warning
+      INCL(const INCL &rhs);
+
+      /// \brief Dummy assignment operator to silence Coverity warning
+      INCL &operator=(const INCL &rhs);
 
       G4bool prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z);
       G4bool initializeTarget(const G4int A, const G4int Z);
@@ -78,8 +80,6 @@ namespace G4INCL {
       void finalizeGlobalInfo();
       const GlobalInfo &getGlobalInfo() const { return theGlobalInfo; }
 
-      std::string configToString() { return theConfig->echo(); }
-
     private:
       IPropagationModel *propagationModel;
       G4int theA, theZ;
@@ -88,11 +88,10 @@ namespace G4INCL {
       G4double maxUniverseRadius;
       G4double maxInteractionDistance;
       G4double fixedImpactParameter;
-      EventAction *eventAction;
-      PropagationAction *propagationAction;
-      AvatarAction *avatarAction;
+      CascadeAction *cascadeAction;
       Config const * const theConfig;
       Nucleus *nucleus;
+      G4bool forceTransparent;
 
       EventInfo theEventInfo;
       GlobalInfo theGlobalInfo;
@@ -112,9 +111,15 @@ namespace G4INCL {
             nucleus(n),
             outgoingParticles(n->getStore()->getOutgoingParticles()),
             theEventInfo(ei) {
-              for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
+              for(ParticleIter p=outgoingParticles.begin(), e=outgoingParticles.end(); p!=e; ++p) {
                 particleMomenta.push_back((*p)->getMomentum());
                 particleKineticEnergies.push_back((*p)->getKineticEnergy());
+              }
+              ProjectileRemnant * const aPR = n->getProjectileRemnant();
+              if(aPR && aPR->getA()>0) {
+                particleMomenta.push_back(aPR->getMomentum());
+                particleKineticEnergies.push_back(aPR->getKineticEnergy());
+                outgoingParticles.push_back(aPR);
               }
             }
           virtual ~RecoilFunctor() {}
@@ -139,7 +144,7 @@ namespace G4INCL {
           /// \brief Pointer to the nucleus
           Nucleus *nucleus;
           /// \brief List of final-state particles.
-          ParticleList const &outgoingParticles;
+          ParticleList outgoingParticles;
           // \brief Reference to the EventInfo object
           EventInfo const &theEventInfo;
           /// \brief Initial momenta of the outgoing particles
@@ -156,7 +161,7 @@ namespace G4INCL {
             ThreeVector pBalance = nucleus->getIncomingMomentum();
             std::list<ThreeVector>::const_iterator iP = particleMomenta.begin();
             std::list<G4double>::const_iterator iE = particleKineticEnergies.begin();
-            for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP, ++iE)
+            for( ParticleIter i = outgoingParticles.begin(), e = outgoingParticles.end(); i!=e; ++i, ++iP, ++iE)
             {
               const G4double mass = (*i)->getMass();
               const G4double newKineticEnergy = (*iE) * rescale;
@@ -191,9 +196,15 @@ namespace G4INCL {
             outgoingParticles(n->getStore()->getOutgoingParticles()),
             theEventInfo(ei) {
               thePTBoostVector = nucleus->getIncomingMomentum()/nucleus->getInitialEnergy();
-              for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
+              for(ParticleIter p=outgoingParticles.begin(), e=outgoingParticles.end(); p!=e; ++p) {
                 (*p)->boost(thePTBoostVector);
                 particleCMMomenta.push_back((*p)->getMomentum());
+              }
+              ProjectileRemnant * const aPR = n->getProjectileRemnant();
+              if(aPR && aPR->getA()>0) {
+                aPR->boost(thePTBoostVector);
+                particleCMMomenta.push_back(aPR->getMomentum());
+                outgoingParticles.push_back(aPR);
               }
             }
           virtual ~RecoilCMFunctor() {}
@@ -222,7 +233,7 @@ namespace G4INCL {
           /// \brief Incoming momentum
           ThreeVector theIncomingMomentum;
           /// \brief List of final-state particles.
-          ParticleList const &outgoingParticles;
+          ParticleList outgoingParticles;
           // \brief Reference to the EventInfo object
           EventInfo const &theEventInfo;
           /// \brief Initial CM momenta of the outgoing particles
@@ -236,7 +247,7 @@ namespace G4INCL {
             // Rescale the CM momenta of the outgoing particles.
             ThreeVector remnantMomentum = theIncomingMomentum;
             std::list<ThreeVector>::const_iterator iP = particleCMMomenta.begin();
-            for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP)
+            for( ParticleIter i = outgoingParticles.begin(), e = outgoingParticles.end(); i!=e; ++i, ++iP)
             {
               (*i)->setMomentum(*iP * rescale);
               (*i)->adjustEnergyFromMomentum();
@@ -330,6 +341,9 @@ namespace G4INCL {
        * live in.
        */
       void initUniverseRadius(ParticleSpecies const &p, const G4double kineticEnergy, const G4int A, const G4int Z);
+
+      /// \brief Update global counters and other members of theGlobalInfo object
+      void updateGlobalInfo();
   };
 }
 

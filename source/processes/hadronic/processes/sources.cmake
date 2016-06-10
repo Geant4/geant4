@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:08:07 bmorgan Exp $
+# $Id: sources.cmake 66499 2012-12-19 09:16:35Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -80,7 +80,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4SigmaMinusInelasticProcess.hh
         G4SigmaPlusInelasticProcess.hh
         G4TritonInelasticProcess.hh
-        G4WHadronElasticProcess.hh
         G4XiMinusInelasticProcess.hh
         G4XiZeroInelasticProcess.hh
     SOURCES
@@ -119,7 +118,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4SigmaMinusInelasticProcess.cc
         G4SigmaPlusInelasticProcess.cc
         G4TritonInelasticProcess.cc
-        G4WHadronElasticProcess.cc
         G4XiMinusInelasticProcess.cc
         G4XiZeroInelasticProcess.cc
     GRANULAR_DEPENDENCIES

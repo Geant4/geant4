@@ -37,9 +37,11 @@
 
 
 G4HadronNucleonXsc::G4HadronNucleonXsc() 
-: fUpperLimit( 10000 * GeV ),
+: 
+// fUpperLimit( 10000 * GeV ),
   fLowerLimit( 0.03 * MeV ),
-  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fHadronNucleonXsc(0.0)
+  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0)
+// , fHadronNucleonXsc(0.0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();
@@ -392,6 +394,11 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
   G4double eta1 = 0.458;
   G4double eta2 = 0.458;
   G4double B    = 0.308;
+  G4double minLogP = 3.5;       // min of (lnP-minLogP)^2 
+  G4double cofLogE = .0557;     // elastic (lnP-minLogP)^2 
+  G4double cofLogT = .3;        // total (lnP-minLogP)^2 
+  G4double pMin = .1;        // fast LE calculation 
+  G4double pMax = 1000.;     // fast HE calculation 
 
 
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
@@ -882,33 +889,135 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
       fTotalXsc = hpXsc;
     }
   } 
-  else if( theParticle == theKPlus && pORn ) 
+  else if( (theParticle == theKMinus || theParticle == theK0S) && proton )   // Kmp/K0p /////////////////////////////////
   {
-    if( proton )
+    if( pLab < pMin)
     {
-      xsection  = 17.91 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 7.14*std::pow(sMand,-eta1) - 13.45*std::pow(sMand,-eta2);
+      G4double psp = pLab*std::sqrt(pLab);
+      fElasticXsc  = 5.2/psp;
+      fTotalXsc    = 14./psp;
     }
-    if( neutron )
+    else if( pLab > pMax )
     {
-      xsection = 17.87 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 5.17*std::pow(sMand,-eta1) - 7.23*std::pow(sMand,-eta2);
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = cofLogE*ld2 + 2.23;
+      fTotalXsc           = 1.1*cofLogT*ld2 + 19.7;
     }
-    fTotalXsc = xsection;
-  } 
-  else if( theParticle == theKMinus && pORn ) 
+    else
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      G4double sp  = std::sqrt(pLab);
+      G4double psp = pLab*sp;
+      G4double p2  = pLab*pLab;
+      G4double p4  = p2*p2;
+      G4double lm  = pLab - .39;
+      G4double md  = lm*lm + .000356;
+
+      G4double lh1  = pLab - 0.78;
+      G4double hd1  = lh1*lh1 + .00166;
+ 
+      G4double lh  = pLab - 1.01;
+      G4double hd  = lh*lh + .011;
+
+      G4double lh2  = pLab - 1.63;
+      G4double hd2  = lh2*lh2 + .007;
+
+      fElasticXsc  = 5.2/psp + (1.1*cofLogE*ld2 + 2.23)/(1. - .7/sp + .075/p4) 
+	             + .004/md + 0.005/hd1+ 0.01/hd2 +.15/hd; // small peaks were added
+
+      fTotalXsc    = 14./psp + (1.1*cofLogT*ld2 + 19.5)/(1. - .21/sp + .52/p4) 
+	             + .006/md  + 0.01/hd1+ 0.02/hd2 + .20/hd ;
+    }
+  }
+  else if( (theParticle == theKMinus || theParticle == theK0S) && neutron )   // Kmn/K0n //////////////////////////////
   {
-    if( proton )
+    if( pLab > pMax )
     {
-      xsection  = 17.91 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 7.14*std::pow(sMand,-eta1) + 13.45*std::pow(sMand,-eta2);
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = cofLogE*ld2 + 2.23;
+      fTotalXsc           = 1.1*cofLogT*ld2 + 19.7;
     }
-    if( neutron )
+    else
     {
-      xsection = 17.87 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 5.17*std::pow(sMand,-eta1) + 7.23*std::pow(sMand,-eta2);
+ 
+      G4double lh  = pLab - 0.98;
+      G4double hd  = lh*lh + .021;
+
+      G4double LogPlab = std::log( pLab );
+      G4double sqrLogPlab = LogPlab * LogPlab;
+
+      fElasticXsc  = // 5.2/psp + (cofLogE*ld2 + 2.23)/(1. - .7/sp + .075/p4) + .004/md 
+                     5.0 +  8.1*std::pow(pLab,-1.8 ) + 0.16*sqrLogPlab - 1.3*LogPlab + .15/hd;
+      fTotalXsc    = // 14./psp + 
+                     //  (1.1*cofLogT*ld2 + 19.5)/(1. - .21/sp + .52/p4) 
+                     25.2 +  0. *std::pow(pLab, 0.  ) + 0.38*sqrLogPlab - 2.9*LogPlab	             
+                     //       + .006/md  + 0.01/hd1+ 0.02/hd2 
+                        + 0.30/hd ;
     }
-    fTotalXsc = xsection;
+  }
+  else if(  (theParticle == theKPlus || theParticle == theK0L) && proton  )  // Kpp/aKp ////////////////////////
+  {
+    if( pLab < pMin )
+    {
+      G4double lr = pLab - .38;
+      G4double lm = pLab - 1.;
+      G4double md = lm*lm + .392;   
+      fElasticXsc = .7/(lr*lr + .076) + 2./md;
+      fTotalXsc   = .7/(lr*lr + .076) + 2.6/md;
+    }
+    else if( pLab > pMax )
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = cofLogE*ld2 + 2.23;
+      fTotalXsc           = cofLogT*ld2 + 19.2;
+    }
+    else
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      G4double lr  = pLab - .38;
+      G4double LE  = .7/(lr*lr + .076);
+      G4double sp  = std::sqrt(pLab);
+      G4double p2  = pLab*pLab;
+      G4double p4  = p2*p2;
+      G4double lm  = pLab - 1.;
+      G4double md  = lm*lm + .392;
+      fElasticXsc  = LE + (cofLogE*ld2 + 2.23)/(1. - .7/sp + .1/p4) + 2./md;
+      fTotalXsc    = LE + (cofLogT*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) + 2.6/md;
+    }
+  }
+  else if(  (theParticle == theKPlus || theParticle == theK0L) && neutron  )  // Kpn/aKn ///////////////////////
+  {
+    if( pLab < pMin )
+    {
+      G4double lm = pLab - 0.94;
+      G4double md = lm*lm + .392;   
+      fElasticXsc = 2./md;
+      fTotalXsc   = 4.6/md;
+    }
+    else if( pLab > pMax )
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = cofLogE*ld2 + 2.23;
+      fTotalXsc           = cofLogT*ld2 + 19.2;
+    }
+    else
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      G4double sp  = std::sqrt(pLab);
+      G4double p2  = pLab*pLab;
+      G4double p4  = p2*p2;
+      G4double lm  = pLab - 0.94;
+      G4double md  = lm*lm + .392;
+      fElasticXsc  = (cofLogE*ld2 + 2.23)/(1. - .7/sp + .1/p4) + 2./md;
+      fTotalXsc    = (cofLogT*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) + 4.6/md;
+    }
   }
   else if( theParticle == theSMinus && pORn ) 
   {
@@ -935,6 +1044,170 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
     }
     fTotalXsc = xsection;
   } 
+  fTotalXsc   *= millibarn; // parametrised in mb
+  fElasticXsc *= millibarn; // parametrised in mb
+
+  if( proton && aParticle->GetDefinition()->GetPDGCharge() > 0. )
+  {
+    G4double cB = GetCoulombBarrier(aParticle, nucleon);
+    fTotalXsc   *= cB;
+    fElasticXsc *= cB; 
+  }
+  fInelasticXsc = fTotalXsc - fElasticXsc;
+  if( fInelasticXsc < 0. ) fInelasticXsc = 0.;
+
+  // G4cout<<fTotalXsc/millibarn<<"; "<<fElasticXsc/millibarn<<"; "<<fInelasticXsc/millibarn<<G4endl;
+
+  return fTotalXsc;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Returns kaon-nucleon cross-section based on smoothed NS for GG model
+
+G4double 
+G4HadronNucleonXsc::GetKaonNucleonXscGG(const G4DynamicParticle* aParticle, 
+                                          const G4ParticleDefinition* nucleon  )
+{
+  G4double pLab = aParticle->GetMomentum().mag();
+
+  pLab /= GeV;
+  G4double LogPlab = std::log( pLab );
+  G4double sqrLogPlab = LogPlab * LogPlab;
+
+  G4double minLogP = 3.5;       // min of (lnP-minLogP)^2 
+  G4double cofLogE = .0557;     // elastic (lnP-minLogP)^2 
+  G4double cofLogT = .3;        // total (lnP-minLogP)^2 
+  G4double pMin = .1;        // fast LE calculation 
+  G4double pMax = 1000.;     // fast HE calculation 
+
+  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
+
+  G4bool proton = (nucleon == theProton);
+  G4bool neutron = (nucleon == theNeutron);
+
+  if(  (theParticle == theKMinus || theParticle == theK0S) && proton ) // (K-,K0)on p ////////////////////////////
+  {
+
+    if( pLab < pMin)
+    {
+      G4double psp = pLab*std::sqrt(pLab);
+      fElasticXsc  = 5.2/psp;
+      fTotalXsc    = 14./psp;
+    }
+    else if( pLab > pMax )
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = cofLogE*ld2 + 2.23;
+      fTotalXsc           = 1.1*cofLogT*ld2 + 19.7;
+    }
+    else
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      G4double sp  = std::sqrt(pLab);
+      G4double psp = pLab*sp;
+      G4double p2  = pLab*pLab;
+      G4double p4  = p2*p2;
+ 
+      G4double lh  = pLab - 0.98;
+      G4double hd  = lh*lh + .045;
+
+
+      fElasticXsc  = 5.2/psp + (cofLogE*ld2 + 2.23)/(1. - .7/sp + .075/p4) // + .004/md 
+               + .15/hd;
+      fTotalXsc    = 14./psp + (1.1*cofLogT*ld2 + 19.5)/(1. - .21/sp + .52/p4) 
+	              //  + .006/md  + 0.01/hd1 + 0.02/hd2 
+                     + .60/hd;
+    }
+  }
+  else if( (theParticle == theKMinus || theParticle == theK0S) && neutron )   // Kmn/K0n /////////////////////////////
+  {
+    if( pLab > pMax )
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = cofLogE*ld2 + 2.23;
+      fTotalXsc           = 1.1*cofLogT*ld2 + 19.7;
+    }
+    else
+    {
+ 
+      G4double lh  = pLab - 0.98;
+      G4double hd  = lh*lh + .045;
+
+      fElasticXsc  = // 5.2/psp + (cofLogE*ld2 + 2.23)/(1. - .7/sp + .075/p4) + .004/md 
+                     5.0 +  8.1*std::pow(pLab,-1.8 ) + 0.16*sqrLogPlab - 1.3*LogPlab + .15/hd;
+      fTotalXsc    = // 14./psp + 
+                     //  (1.1*cofLogT*ld2 + 19.5)/(1. - .21/sp + .52/p4) 
+                     25.2 +  0. *std::pow(pLab, 0.  ) + 0.38*sqrLogPlab - 2.9*LogPlab	             
+                     //       + .006/md  + 0.01/hd1+ 0.02/hd2 
+                        + 0.60/hd ;
+    }
+  }
+  else if(  (theParticle == theKPlus || theParticle == theK0L) && proton )  // Kpp/aKp //////////////////////
+  {
+    if( pLab < pMin )
+    {
+      G4double lr = pLab - .38;
+      G4double lm = pLab - 1.;
+      G4double md = lm*lm + .392;   
+      fElasticXsc = .7/(lr*lr + .076) + 2./md;
+      fTotalXsc   = // .7/(lr*lr + .076) + 
+                2.6/md;
+    }
+    else if( pLab > pMax )
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = cofLogE*ld2 + 2.23;
+      fTotalXsc           = cofLogT*ld2 + 19.2;
+    }
+    else
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      G4double lr  = pLab - .38;
+      G4double LE  = .7/(lr*lr + .076);
+      G4double sp  = std::sqrt(pLab);
+      G4double p2  = pLab*pLab;
+      G4double p4  = p2*p2;
+      G4double lm  = pLab - 0.8;
+      G4double md  = lm*lm + .652;
+      fElasticXsc  = LE + (cofLogE*ld2 + 2.23)/(1. - .7/sp + .1/p4) + 2./md;
+      fTotalXsc    = (cofLogT*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) + 7.6/md; // + LE;
+    }
+  }
+  else if( (theParticle == theKPlus || theParticle == theK0L) && neutron )  // Kpn/aKn //////////////////////////////////
+  {
+    if( pLab < pMin )
+    {
+      G4double lm = pLab - 0.94;
+      G4double md = lm*lm + .392;   
+      fElasticXsc = 2./md;
+      fTotalXsc   = 4.6/md;
+    }
+    else if( pLab > pMax )
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = cofLogE*ld2 + 2.23;
+      fTotalXsc           = cofLogT*ld2 + 19.2;
+    }
+    else
+    {
+      G4double ld  = std::log(pLab) - minLogP;
+      G4double ld2 = ld*ld;
+      G4double sp  = std::sqrt(pLab);
+      G4double p2  = pLab*pLab;
+      G4double p4  = p2*p2;
+      G4double lm  = pLab - 0.8;
+      G4double md  = lm*lm + .652;
+      fElasticXsc  = (cofLogE*ld2 + 2.23)/(1. - .7/sp + .1/p4) + 2./md;
+      fTotalXsc    = (cofLogT*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) + 7.6/md;
+    }
+  }
   fTotalXsc   *= millibarn; // parametrised in mb
   fElasticXsc *= millibarn; // parametrised in mb
 

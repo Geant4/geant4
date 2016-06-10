@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -58,34 +58,35 @@ G4MIRDLeftBreast::~G4MIRDLeftBreast()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDLeftBreast::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
-						    const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
+					       const G4String& colourName, G4bool wireFrame, G4bool)
 {
-  G4cout << "Construct " << volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
 
- G4double ax= 4.95* cm;
- G4double by= 4.35* cm;
- G4double cz= 4.15*cm;
+  G4double ax= 4.95* cm;
+  G4double by= 4.35* cm;
+  G4double cz= 4.15*cm;
 
- G4Ellipsoid* oneLeftBreast = new G4Ellipsoid("OneLeftBreast",
-				      ax, by, cz);
+  G4Ellipsoid* oneLeftBreast = new G4Ellipsoid("OneLeftBreast",
+					       ax, by, cz);
 
- G4double dx= 20.* cm;
- G4double dy= 10.* cm;
- G4double dz= 35.*cm;
+  G4double dx= 20.* cm;
+  G4double dy= 10.* cm;
+  G4double dz= 35.*cm;
 
- G4EllipticalTube* Trunk = new G4EllipticalTube("Trunk",dx, dy, dz );
+  G4EllipticalTube* Trunk = new G4EllipticalTube("Trunk",dx, dy, dz );
 
  
 					       
- G4RotationMatrix* rm_relative = new G4RotationMatrix();
- rm_relative -> rotateX(90. * degree);
+  G4RotationMatrix* rm_relative = new G4RotationMatrix();
+  rm_relative -> rotateX(90. * degree);
 
- G4SubtractionSolid* breast = new G4SubtractionSolid("LeftBreast",
+  G4SubtractionSolid* breast = new G4SubtractionSolid("LeftBreast",
 						      oneLeftBreast,
 						      Trunk,
 						      rm_relative,
@@ -99,19 +100,16 @@ G4VPhysicalVolume* G4MIRDLeftBreast::Construct(const G4String& volumeName,G4VPhy
 
     
   // Define rotation and position here!
-  G4VPhysicalVolume* physLeftBreast = new G4PVPlacement(0,G4ThreeVector(10*cm, 52.* cm, 8.66 *cm),
-      			       "physicalLeftBreast",
-  			       logicLeftBreast,
-			       mother,
-			       false,
-			       0, true);
-
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicLeftBreast->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm->rotateX(90.*degree);
+  rm->rotateY(0.*degree);
+  rm->rotateZ(16.*degree);
+  G4VPhysicalVolume* physLeftBreast = new G4PVPlacement(rm,G4ThreeVector(10*cm, 9.1 *cm, 52.* cm),
+							"physicalLeftBreast",
+							logicLeftBreast,
+							mother,
+							false,
+							0, true);
 
   // Visualization Attributes
   //G4VisAttributes* LeftBreastVisAtt = new G4VisAttributes(G4Colour(1.0,0.41,0.71));

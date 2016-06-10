@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeDefinition.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4MoleculeDefinition.cc 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -113,7 +113,6 @@ void G4MoleculeDefinition::AddExcitedState(const G4String& val)
     }
 
     fDecayTable->AddExcitedState(val);
-
 }
 //___________________________________________________________________________
 const G4String& G4MoleculeDefinition::GetExcitedState(const G4ElectronOccupancy* occ) const
@@ -193,7 +192,7 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4MoleculeDefinition& right):
     {
         fDecayTable = new G4MolecularDecayTable(*(right.fDecayTable));
     }
-    else fDecayTable =0;
+    else fDecayTable = 0;
 }
 
 //___________________________________________________________________________

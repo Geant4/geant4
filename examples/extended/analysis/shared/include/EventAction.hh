@@ -27,7 +27,7 @@
 /// \brief Definition of the EventAction class
 //
 //
-// $Id$
+// $Id: EventAction.hh 68015 2013-03-13 13:27:27Z gcosmo $
 //
 // 
 
@@ -51,8 +51,8 @@ public:
   EventAction(RunAction*, HistoManager*);
   virtual ~EventAction();
 
-  void  BeginOfEventAction(const G4Event*);
-  void    EndOfEventAction(const G4Event*);
+  virtual void  BeginOfEventAction(const G4Event*);
+  virtual void    EndOfEventAction(const G4Event*);
     
   void AddAbs(G4double de, G4double dl) {fEnergyAbs += de; fTrackLAbs += dl;};
   void AddGap(G4double de, G4double dl) {fEnergyGap += de; fTrackLGap += dl;};

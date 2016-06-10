@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4AtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -158,7 +157,7 @@ std::map<G4int,std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
  
 }
 
-G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
+G4ThreadLocal G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
 
 G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
 {

@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE01RunAction class
 //
 //
-// $Id$
+// $Id: RE01RunAction.cc 75295 2013-10-30 09:32:52Z gcosmo $
 // 
 
 #include "RE01RunAction.hh"
@@ -45,7 +45,7 @@ RE01RunAction::RE01RunAction()
 RE01RunAction::~RE01RunAction()
 {;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;

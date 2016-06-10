@@ -30,7 +30,7 @@
 
 #include "G4VPDigitIO.hh"
 
-G4VPDigitIO* G4VPDigitIO::f_G4VPDigitIO = 0;
+G4ThreadLocal G4VPDigitIO* G4VPDigitIO::f_G4VPDigitIO = 0;
 
 // Implementation of Constructor #1
 G4VPDigitIO::G4VPDigitIO()

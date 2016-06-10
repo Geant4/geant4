@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DetectorConstruction.cc 67994 2013-03-13 11:05:39Z gcosmo $
+//
 /// \file medical/GammaTherapy/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
@@ -399,7 +401,7 @@ void DetectorConstruction::SetTarget1Material(const G4String& mat)
 {
   // search the material by its name
   G4Material* pttoMaterial = 
-    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
+    G4NistManager::Instance()->FindOrBuildMaterial(mat);
   if(!pttoMaterial) {
     G4cout << "Material " << mat << " is not found out!" << G4endl;
   } else if (pttoMaterial != fTarget1Material) {
@@ -415,7 +417,7 @@ void DetectorConstruction::SetTarget2Material(const G4String& mat)
 {
   // search the material by its name
   G4Material* pttoMaterial = 
-    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
+    G4NistManager::Instance()->FindOrBuildMaterial(mat);
 
   if(!pttoMaterial) {
     G4cout << "Material " << mat << " is not found out!" << G4endl;

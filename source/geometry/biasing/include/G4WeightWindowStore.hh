@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4WeightWindowStore.hh 77780 2013-11-28 07:50:59Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightWindowStore
@@ -36,6 +36,16 @@
 // See G4VWeightWindowStore.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
+//
+// Alex Howard (alexander.howard@cern.ch):
+// Changed class to a `singleton', with access via the static method
+// G4WeightWindowStore::GetInstance().
+//
+// Member data:
+//
+//   static G4WeightWindowStore* fInstance
+//     - Ptr to the unique instance of class
+//
 // ----------------------------------------------------------------------
 #ifndef G4WeightWindowStore_hh
 #define G4WeightWindowStore_hh G4WeightWindowStore_hh 
@@ -50,24 +60,48 @@ class G4WeightWindowStore: public G4VWeightWindowStore
 
 public:  // with description
 
-  explicit G4WeightWindowStore(const G4VPhysicalVolume &worldvolume);
+  static G4WeightWindowStore* GetInstance();
+  // Return ptr to singleton instance of the class.
+
+  static G4WeightWindowStore* GetInstance(G4String ParallelWorldName);
+  // Return ptr to singleton instance of the class.
+
+protected:
+
+  explicit G4WeightWindowStore();
+    // initialise the weight window store for the given geometry
+  explicit G4WeightWindowStore(G4String ParallelWorldName);
     // initialise the weight window store for the given geometry
 
-  ~G4WeightWindowStore();
+public:  // with description
+
+  virtual ~G4WeightWindowStore();
     // destructor
 
-  G4double GetLowerWeight(const G4GeometryCell &gCell, 
+  virtual G4double GetLowerWeight(const G4GeometryCell &gCell, 
 			                G4double partEnergy) const;
     // derive a lower weight bound value of a "cell" addresed by a 
     // G4GeometryCell and the coresponding energy from the store.
 
-  G4bool IsKnown(const G4GeometryCell &gCell) const;
+  virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
     // returns true if the gCell is in the store, else false 
 
+  void Clear();
 
-  const G4VPhysicalVolume &GetWorldVolume() const;
-    // return a reference to the wolrd volume of the 
-    // geometry
+  void SetWorldVolume();
+    // set a pointer to the world volume of the 
+    // weightwindow geometry
+  void SetParallelWorldVolume(G4String paraName);
+    // set a pointer to the parallel world volume of the 
+    // weightwindow geometry
+
+
+  virtual const G4VPhysicalVolume &GetWorldVolume() const;
+    // return a reference to the world volume of the 
+    // weightwindow geometry
+  virtual const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
+    // return a pointer to the parallel world volume of the 
+    // weightwindow geometry
 
   void AddLowerWeights(const G4GeometryCell &gCell,
 		       const std::vector<G4double> &lowerWeights);
@@ -89,10 +123,14 @@ private:
   
 private:
 
-  const G4VPhysicalVolume &fWorldVolume;  
+  const G4VPhysicalVolume* fWorldVolume;  
+  //  G4bool fParaFlag;
+
   std::set<G4double, std::less<G4double> > fGeneralUpperEnergyBounds;
   G4GeometryCellWeight fCellToUpEnBoundLoWePairsMap;
   mutable G4GeometryCellWeight::const_iterator fCurrentIterator;
+
+  static G4WeightWindowStore* fInstance;
   
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UImessenger.cc 74278 2013-10-02 15:04:18Z gcosmo $
 //
 
 #include "G4UImessenger.hh"
@@ -40,10 +40,11 @@ G4UImessenger::G4UImessenger()
 { 
 }
 
-G4UImessenger::G4UImessenger(const G4String& path, const G4String& dsc)
+G4UImessenger::G4UImessenger(const G4String& path, const G4String& dsc,
+                             G4bool commandsToBeBroadcasted)
   : baseDir(NULL), baseDirName("")
 {
-  CreateDirectory(path, dsc);
+  CreateDirectory(path, dsc, commandsToBeBroadcasted);
 }
 
 G4UImessenger::~G4UImessenger()
@@ -120,7 +121,8 @@ void G4UImessenger::AddUIcommand(G4UIcommand * newCommand)
          << newCommand->GetCommandPath() << ">." << G4endl;
 }
 
-void G4UImessenger::CreateDirectory(const G4String& path, const G4String& dsc)
+void G4UImessenger::CreateDirectory(const G4String& path, const G4String& dsc,
+                             G4bool commandsToBeBroadcasted)
 {
   G4UImanager* ui = G4UImanager::GetUIpointer();
 
@@ -131,7 +133,7 @@ void G4UImessenger::CreateDirectory(const G4String& path, const G4String& dsc)
   if (tree) {
     baseDirName = tree-> GetPathName();
   } else {
-    baseDir = new G4UIdirectory(fullpath.c_str());
+    baseDir = new G4UIdirectory(fullpath.c_str(),commandsToBeBroadcasted);
     baseDirName = fullpath;
     baseDir-> SetGuidance(dsc.c_str());
   }

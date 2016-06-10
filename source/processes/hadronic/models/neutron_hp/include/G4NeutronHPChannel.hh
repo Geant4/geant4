@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -50,12 +49,14 @@
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4NeutronHPFinalState.hh"
 #include "G4Element.hh"
+#include "G4WendtFissionFragmentGenerator.hh"
 
 class G4NeutronHPChannel
 {
 public:
 
   G4NeutronHPChannel()
+  : wendtFissionGenerator(getenv("G4NEUTRON_HP_USE_WENDT_FISSION_MODEL") == NULL ? NULL : G4WendtFissionFragmentGenerator::GetInstance())
   {
     theChannelData = new G4NeutronHPVector; 
     theBuffer = 0;
@@ -128,6 +129,7 @@ public:
   
   inline G4double GetN(G4int i) {return theFinalStates[i]->GetN();}
   inline G4double GetZ(G4int i) {return theFinalStates[i]->GetZ();}
+  inline G4double GetM(G4int i) {return theFinalStates[i]->GetM();}
   
   inline G4bool HasDataInAnyFinalState()
   {
@@ -156,6 +158,8 @@ private:
   G4Element * theElement;
   
   G4int registerCount;
+
+  G4WendtFissionFragmentGenerator* const wendtFissionGenerator;
     
 };
 

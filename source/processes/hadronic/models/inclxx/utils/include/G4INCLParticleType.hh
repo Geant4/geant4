@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -49,7 +47,7 @@
 namespace G4INCL {
 
   enum ParticleType {
-    Proton,
+    Proton = 0,
     Neutron,
     PiPlus,
     PiMinus,
@@ -59,6 +57,9 @@ namespace G4INCL {
     DeltaZero,
     DeltaMinus,
     Composite,
+    // WARNING: if you add more particle types, you MUST add them BEFORE the
+    // UnknownParticle type! This is because UnknownParticle is used as a
+    // counter of the number of available particle types.
     UnknownParticle
   };
 

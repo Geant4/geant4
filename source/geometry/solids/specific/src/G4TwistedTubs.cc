@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TwistedTubs.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -56,10 +56,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
-#include "G4NURBS.hh"
-#include "G4NURBStube.hh"
-#include "G4NURBScylinder.hh"
-#include "G4NURBStubesector.hh"
 
 #include "Randomize.hh"
 
@@ -567,13 +563,11 @@ void G4TwistedTubs::AddPolyToExtent( const G4ThreeVector &v0,
 EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
 {
 
-   static const G4double halftol
+   const G4double halftol
      = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
    // static G4int timerid = -1;
    // G4Timer timer(timerid, "G4TwistedTubs", "Inside");
    // timer.Start();
-   
-
 
    G4ThreeVector *tmpp;
    EInside       *tmpinside;
@@ -1123,17 +1117,6 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
   delete[] faces;
 
   return ph;
-}
-
-//=====================================================================
-//* CreateNUBS --------------------------------------------------------
-
-G4NURBS* G4TwistedTubs::CreateNURBS () const 
-{
-   G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
-   G4double maxEndInnerRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
-   return new G4NURBStube(maxEndInnerRad, maxEndOuterRad, fZHalfLength); 
-   // Tube for now!!!
 }
 
 //=====================================================================

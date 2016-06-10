@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // $Id: G4VFermiBreakUp.cc,v 1.5 2006-06-29 20:13:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -610,7 +609,7 @@ G4FermiFragmentsPool::GetConfigurationList(G4int Z, G4int A, G4double mass)
     v->push_back(conf);
     ++nconf;
     if(verbose > 0) { 
-      G4cout<<"Total number of configurations = "<<nconf<<G4cout;
+      G4cout<<"Total number of configurations = "<<nconf<<G4endl;
       G4double ExEn= mass -G4NucleiProperties::GetNuclearMass(A,Z);
       G4cout<<"Total number of configurations = "<<nconf<<" for A= "
 	    <<A<<"   Z= "<<Z<<"   E*= "<< ExEn<<" MeV"<<G4endl;

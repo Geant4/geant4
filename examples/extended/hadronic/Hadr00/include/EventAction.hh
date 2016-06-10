@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id$
+// $Id: EventAction.hh 70760 2013-06-05 12:28:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -71,7 +71,7 @@ private:
   EventAction(const EventAction&);
 
   EventActionMessenger* fEventMessenger;
-  G4UImanager*          UI;
+  G4UImanager*          fUI;
   std::vector<G4int>    fSelectedEvents;
 
   G4int        fPrintModulo;
@@ -81,16 +81,22 @@ private:
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline void EventAction::SetPrintModulo(G4int val)   
 { 
   fPrintModulo = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 inline void EventAction::AddEventToDebug(G4int val)  
 { 
   fSelectedEvents.push_back(val);
   ++fSelected;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
 

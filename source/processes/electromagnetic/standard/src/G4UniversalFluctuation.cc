@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UniversalFluctuation.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,8 +73,11 @@
 #include "G4Poisson.hh"
 #include "G4Step.hh"
 #include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Pow.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,6 +99,7 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
     = e1Fluct = e2Fluct = e1LogFluct = e2LogFluct = ipotLogFluct = e0 = esmall 
     = e1 = e2 = 0;
 
+  g4pow = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,11 +119,12 @@ void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
-						    const G4DynamicParticle* dp,
-						    G4double& tmax,
-						    G4double& length,
-						    G4double& averageLoss)
+G4double 
+G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
+					   const G4DynamicParticle* dp,
+					   G4double tmax,
+					   G4double length,
+					   G4double averageLoss)
 {
   // Calculate actual loss from the mean loss.
   // The model used to get the fluctuations is essentially the same
@@ -142,6 +147,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   G4double beta2 = tau*(tau + 2.0)/gam2;
 
   G4double loss(0.), siga(0.);
+
+  const G4Material* material = couple->GetMaterial();
   
   // Gaussian regime
   // for heavy particles only and conditions
@@ -174,7 +181,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       } else {
 
 	G4double neff = sn*sn;
-	loss = meanLoss*CLHEP::RandGamma::shoot(neff,1.0)/neff;
+	loss = meanLoss*G4RandGamma::shoot(neff,1.0)/neff;
       }
       //G4cout << "Gauss: " << loss << G4endl;
       return loss;
@@ -220,7 +227,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     G4double a1 = 0. , a2 = 0., a3 = 0. ;
 
     if(tmax > ipotFluct) {
-      G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
+      G4double w2 = G4Log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
       if(w2 > ipotLogFluct)  {
 	G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
@@ -231,7 +238,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 	if(a1 < nmaxCont) { 
 	  //small energy loss
 	  G4double sa1 = sqrt(a1);
-	  if(G4UniformRand() < exp(-sa1))
+	  if(G4UniformRand() < g4pow->expA(-sa1))
 	    {
 	      e1 = esmall;
 	      a1 = meanLoss*(1.-rate)/e1;
@@ -257,7 +264,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
     G4double w1 = tmax/e0;
     if(tmax > e0) {
-      a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*log(w1));
+      a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*G4Log(w1));
     }
     //'nearly' Gaussian fluctuation if a1>nmaxCont&&a2>nmaxCont&&a3>nmaxCont  
     G4double emean = 0.;
@@ -311,7 +318,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       if(a3 > nmaxCont)
 	{
 	  alfa            = w1*(nmaxCont+a3)/(w1*nmaxCont+a3);
-	  G4double alfa1  = alfa*log(alfa)/(alfa-1.);
+	  G4double alfa1  = alfa*G4Log(alfa)/(alfa-1.);
 	  G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
 	  emean          += namean*e0*alfa1;
 	  sig2e          += e0*e0*namean*(alfa-alfa1*alfa1);
@@ -322,7 +329,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       G4double w  = (tmax-w2)/tmax;
       G4int nb = G4Poisson(p3);
       if(nb > 0) {
-	for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
+	for (G4int k=0; k<nb; k++) { lossc += w2/(1.-w*G4UniformRand()); }
       }
     }
 
@@ -348,8 +355,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 G4double G4UniversalFluctuation::Dispersion(
                           const G4Material* material,
                           const G4DynamicParticle* dp,
- 				G4double& tmax,
-			        G4double& length)
+ 				G4double tmax,
+			        G4double length)
 {
   if(!particle) { InitialiseMe(dp->GetDefinition()); }
 

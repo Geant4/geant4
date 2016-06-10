@@ -32,13 +32,11 @@
 //    *                            *
 //    ******************************
 //
-// $Id$
+// $Id: PurgMagRunAction.hh 72967 2013-08-14 14:57:48Z gcosmo $
 //
 
 #ifndef PurgMagRunAction_h
 #define PurgMagRunAction_h 1
-
-#include "PurgMagDetectorConstruction.hh"
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
@@ -52,7 +50,7 @@ class PurgMagRunAction : public G4UserRunAction
 {
 public:
   
-  PurgMagRunAction(PurgMagDetectorConstruction*);
+  PurgMagRunAction();
   ~PurgMagRunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -63,8 +61,6 @@ public:
 
 
 private:
-
-  PurgMagDetectorConstruction* Detector;    
   G4int saveRndm;
 
 };

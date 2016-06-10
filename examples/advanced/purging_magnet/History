@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2010-11-18 13:10:47 allison Exp $
+$Id: History 72967 2013-08-14 14:57:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,18 @@ $Id: History,v 1.13 2010-11-18 13:10:47 allison Exp $
 
                       Category History file
                       ---------------------
+
+30.07.2013 - Andrea Dotti   (purmag-V09-06-02)
+- Bug fixing for unused variables (compilation warning clang32)
+
+17.07.2013 - Gabriele Cosmo (purmag-V09-06-01)
+- Explicitly use G4CsvAnalysisManager to be compliant with restructure of
+  analysis module.
+
+17.04.2013 - Luciano Pandola (purmag-V09-06-00)
+- Migrate analysis from AIDA to g4analysis (remove the 
+  external AIDA dependency). Some clean-up in other 
+  classe (RunAction, EventAction, StepAction)
 
 06.11.2012 - Luciano Pandola (purmag-V09-05-03)
 - Fix syntax in CMakeLists.txt

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeTrajectory.cc 72349 2013-07-16 12:13:16Z gcosmo $
+//
 /// \file optical/LXe/src/LXeTrajectory.cc
 /// \brief Implementation of the LXeTrajectory class
 //
@@ -40,7 +42,7 @@
 #include "G4VVisManager.hh"
 #include "G4Polymarker.hh"
 
-G4Allocator<LXeTrajectory> LXeTrajectoryAllocator;
+G4ThreadLocal G4Allocator<LXeTrajectory>* LXeTrajectoryAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,20 +76,17 @@ LXeTrajectory::~LXeTrajectory() {}
 
 void LXeTrajectory::DrawTrajectory() const
 {
-  // Invoke the default implementation in G4VTrajectory...
-  G4VTrajectory::DrawTrajectory();
-  // ... or override with your own code here.
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void LXeTrajectory::DrawTrajectory(G4int i_mode) const{
+  // i_mode is no longer available as an argument of G4VTrajectory.
+  // In this exampple it was always called with an argument of 50.
+  const G4int i_mode = 50;
+  // Consider using commands /vis/modeling/trajectories.
+  
   //Taken from G4VTrajectory and modified to select colours based on particle
   //type and to selectively eliminate drawing of certain trajectories.
 
   if(!fForceDraw && (!fDrawit || fForceNoDraw))
     return;
- 
+
   // If i_mode>=0, draws a trajectory as a polyline and, if i_mode!=0,
   // adds markers - yellow circles for step points and magenta squares
   // for auxiliary points, if any - whose screen size in pixels is

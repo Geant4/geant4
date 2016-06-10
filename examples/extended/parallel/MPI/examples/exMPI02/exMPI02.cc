@@ -23,32 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 /// @file exMPI02.cc
+// $Id: exMPI02.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @brief A MPI example code
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-
-// my application
-#include "DetectorConstruction.hh"
-#include "MedicalBeam.hh"
-#include "FTFP_BERT.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-
-// MPI session
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
+
+#include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
+#include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "FTFP_BERT.hh"
+
 int main(int argc, char** argv)
 {
-  // random engine
-  //CLHEP::Ranlux64Engine randomEngine;
-  //CLHEP::HepRandom::setTheEngine(&randomEngine);
-
   // --------------------------------------------------------------------
   // MPI session
   // --------------------------------------------------------------------
@@ -68,14 +67,17 @@ int main(int argc, char** argv)
   // --------------------------------------------------------------------
   // user application setting
   // --------------------------------------------------------------------
-  G4RunManager* runManager= new G4RunManager();
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager();
+  runManager-> SetNumberOfThreads(4);
+#else
+  G4RunManager* runManager = new G4RunManager();
+#endif
 
   // setup your application
   runManager-> SetUserInitialization(new DetectorConstruction);
   runManager-> SetUserInitialization(new FTFP_BERT);
-  runManager-> SetUserAction(new MedicalBeam);
-  runManager-> SetUserAction(new RunAction);
-  runManager-> SetUserAction(new EventAction);
+  runManager-> SetUserInitialization(new ActionInitialization);
 
   runManager-> Initialize();
 
@@ -92,8 +94,9 @@ int main(int argc, char** argv)
   // --------------------------------------------------------------------
   session-> SessionStart();
 
-
+  // --------------------------------------------------------------------
   // termination
+  // --------------------------------------------------------------------
 #ifdef G4VIS_USE
   delete visManager;
 #endif
@@ -102,5 +105,5 @@ int main(int argc, char** argv)
 
   delete runManager;
 
-  return 0;
+  return EXIT_SUCCESS;
 }

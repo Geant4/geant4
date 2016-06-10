@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PrimaryVertex.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 //
 
@@ -33,9 +33,11 @@
 #define G4PrimaryVertex_h 1
 
 #include "globals.hh"
+#include "pwdefs.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 #include "G4PrimaryParticle.hh"
+
 class G4VUserPrimaryVertexInformation;
 
 // class description:
@@ -99,22 +101,20 @@ class G4PrimaryVertex
 
 };
 
-#if defined G4PARTICLES_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
-#endif
+extern G4PART_DLL G4ThreadLocal G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator;
 
 inline void * G4PrimaryVertex::operator new(size_t)
 {
-  void * aPrimaryVertex;
-  aPrimaryVertex = (void *) aPrimaryVertexAllocator.MallocSingle();
-  return aPrimaryVertex;
+  if (!aPrimaryVertexAllocator)
+  {
+    aPrimaryVertexAllocator = new G4Allocator<G4PrimaryVertex>;
+  }
+  return (void *) aPrimaryVertexAllocator->MallocSingle();
 }
 
 inline void G4PrimaryVertex::operator delete(void * aPrimaryVertex)
 {
-  aPrimaryVertexAllocator.FreeSingle((G4PrimaryVertex *) aPrimaryVertex);
+  aPrimaryVertexAllocator->FreeSingle((G4PrimaryVertex *) aPrimaryVertex);
 }
 
 inline G4ThreeVector  G4PrimaryVertex::GetPosition() const
@@ -150,7 +150,8 @@ inline void G4PrimaryVertex::SetPrimary(G4PrimaryParticle * pp)
 }
 
 
-inline void G4PrimaryVertex::SetNext(G4PrimaryVertex* nv){ 
+inline void G4PrimaryVertex::SetNext(G4PrimaryVertex* nv)
+{ 
   if(nextVertex == 0) { nextVertex = nv; }
   else                { tailVertex->SetNext(nv); }
   tailVertex = nv;

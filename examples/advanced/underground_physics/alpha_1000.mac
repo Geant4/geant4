@@ -51,7 +51,7 @@
 /tracking/storeTrajectory 0
 #
 /dmx/hitsfile alpha_1000.out
-/dmx/histogramfile alpha_1000.his
+/dmx/histogramfile alpha_1000
 
 /run/beamOn 1000
 #

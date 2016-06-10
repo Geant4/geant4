@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: ExTGTrackerHit.cc 76943 2013-11-19 09:57:34Z gcosmo $
 //
-/// \file ExTGTrackerHit.cc
+/// \file persistency/P03/src/ExTGTrackerHit.cc
 /// \brief Implementation of the ExTGTrackerHit class
 
 #include "ExTGTrackerHit.hh"
@@ -36,7 +36,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-G4Allocator<ExTGTrackerHit> ExTGTrackerHitAllocator;
+G4ThreadLocal G4Allocator<ExTGTrackerHit>* ExTGTrackerHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGTrackerHit::ExTGTrackerHit()

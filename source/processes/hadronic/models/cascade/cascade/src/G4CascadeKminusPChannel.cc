@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeKminusPChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -860,7 +860,7 @@ namespace {
       0.02, 0.02, 0.02, 0.02, 0.03, 0.03, 0.03, 0.02, 0.02, 0.02, 0.01} };
 }
 
-G4CascadeKminusPChannelData::data_t
+const G4CascadeKminusPChannelData::data_t
 G4CascadeKminusPChannelData::data(kmp2bfs, kmp3bfs, kmp4bfs,
 				  kmp5bfs, kmp6bfs, kmp7bfs,
 				  kmpCrossSections, kmi*pro, "KminusP");

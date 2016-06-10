@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4CollisionComposite.hh 72269 2013-07-12 13:08:09Z gcosmo $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -121,7 +121,7 @@ private:
   std::vector<G4CrossSectionBuffer> theBuffer;
   
   static const G4int nPoints;
-  static G4double theT[];
+  static const G4double theT[];
   
 };
 

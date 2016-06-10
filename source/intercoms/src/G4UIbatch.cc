@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UIbatch.cc 67965 2013-03-13 09:35:29Z gcosmo $
 //
 // ====================================================================
 //   G4UIbatch.cc
@@ -96,7 +96,7 @@ G4String G4UIbatch::ReadCommand()
 /////////////////////////////////
 {
   enum { BUFSIZE= 4096 };
-  static char linebuf[BUFSIZE];
+  static G4ThreadLocal char *linebuf = 0 ; if (!linebuf) linebuf = new  char [BUFSIZE];
   const char ctrM = 0x0d;
 
   G4String cmdtotal= "";

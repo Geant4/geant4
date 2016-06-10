@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4FTFBinaryNeutronBuilder.cc 68750 2013-04-05 10:19:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@ G4FTFBinaryNeutronBuilder::
 G4FTFBinaryNeutronBuilder(G4bool quasiElastic) 
 {
   theMin = 4*GeV;
+  theMax = 100*TeV;
   theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
@@ -59,7 +60,7 @@ G4FTFBinaryNeutronBuilder(G4bool quasiElastic)
   theCascade = new G4BinaryCascade;
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -98,6 +99,7 @@ void G4FTFBinaryNeutronBuilder::
 Build(G4NeutronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-      aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
+  aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
 }

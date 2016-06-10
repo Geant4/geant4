@@ -36,6 +36,8 @@
 /// \file hadronic/Hadr02/src/G4DPMJET2_5Model.cc
 /// \brief Implementation of the G4DPMJET2_5Model class
 //
+// $Id: G4DPMJET2_5Model.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET2_5Model.cc
@@ -79,6 +81,8 @@
 #include "G4LorentzVector.hh"
 #include "G4HadTmpUtil.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <fstream>
 
@@ -93,6 +97,9 @@
 // done in the member function Initialise(), which is dedicated to
 // initialising variables in DPMJET-II.5 to class-default values.
 //
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4DPMJET2_5Model::G4DPMJET2_5Model () : G4HadronicInteraction("DPMJET2_5")
 {
 //
@@ -107,7 +114,8 @@ G4DPMJET2_5Model::G4DPMJET2_5Model () : G4HadronicInteraction("DPMJET2_5")
 #endif
 //
 //
-// Send message to stdout to advise that the G4DPMJET2_5Model model is being used.
+// Send message to stdout to advise that the G4DPMJET2_5Model model 
+// is being used.
 //
   theInitType = DEFAULT;
   PrintWelcomeMessage();
@@ -123,6 +131,9 @@ G4DPMJET2_5Model::G4DPMJET2_5Model () : G4HadronicInteraction("DPMJET2_5")
 //
   SetMinEnergy(5.0*GeV);
   SetMaxEnergy(1000.0*TeV);
+
+  SetEnergyMomentumCheckLevels(100*perCent, 1*TeV);
+
 //
 //
 // Initialise the DPMJET model - this effectively does what the DPMJET
@@ -146,10 +157,18 @@ G4DPMJET2_5Model::G4DPMJET2_5Model () : G4HadronicInteraction("DPMJET2_5")
   theGlauberDataSetHandler->SetMaxGlauberDataSets(-1);
   
   theParticleTable = G4ParticleTable::GetParticleTable();
-  theIonTable      = const_cast <G4IonTable *> (theParticleTable->GetIonTable());
+  theIonTable = const_cast <G4IonTable *> (theParticleTable->GetIonTable());
 //
 //
 }
+
+const std::pair<G4double, G4double> 
+G4DPMJET2_5Model::GetFatalEnergyCheckLevels() const
+{
+  // default level of Check
+  return std::pair<G4double, G4double>(100.*perCent, 500 * GeV);
+}
+
 /////////////////////////////////////////////////////////////////////////////////
 //
 // Constructor with DPMJET-II.5 initialisation type
@@ -174,7 +193,8 @@ G4DPMJET2_5Model::G4DPMJET2_5Model (const G4DPMJET2_5InitialisationType initType
 #endif
 //
 //
-// Send message to stdout to advise that the G4DPMJET2_5Model model is being used.
+// Send message to stdout to advise that the G4DPMJET2_5Model model 
+// is being used.
 //
   theInitType = initType;
   PrintWelcomeMessage();
@@ -237,7 +257,8 @@ G4DPMJET2_5Model::G4DPMJET2_5Model (G4ExcitationHandler *aExcitationHandler,
 //
   SetVerboseLevel(1);
 //
-// Send message to stdout to advise that the G4DPMJET2_5Model model is being used.
+// Send message to stdout to advise that the G4DPMJET2_5Model model 
+// is being used.
 //
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>0) {
@@ -291,7 +312,8 @@ G4DPMJET2_5Model::G4DPMJET2_5Model (G4ExcitationHandler *aExcitationHandler,
 //
 // This constructor uses the user-provided pre-equilibrium model.  However, it
 // is possible for the use to provide a NULL pointer, in which case, it is
-// assumed that the user doesn't want to simulate pre-equilibrium. - USER, BEWARE!
+// assumed that the user doesn't want to simulate pre-equilibrium. - USER, 
+// BEWARE!
 //
 // The member function initialises the variables (including the de-excitation),
 // but note that much of the work is done in the member function Initialise(),
@@ -305,7 +327,8 @@ G4DPMJET2_5Model::G4DPMJET2_5Model (G4VPreCompoundModel *aPreComp,
 //
   SetVerboseLevel(1);
 //
-// Send message to stdout to advise that the G4DPMJET2_5Model model is being used.
+// Send message to stdout to advise that the G4DPMJET2_5Model model 
+// is being used.
 //
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>0) {
@@ -445,8 +468,10 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
   G4int ZP   = G4int(definitionP->GetPDGCharge()/eplus+0.5);
   G4double M          = definitionP->GetPDGMass();
   G4ThreeVector pP    = theTrack.Get4Momentum().vect();
-  G4double T          = theTrack.GetKineticEnergy()/G4double(AP);   // Units are MeV/nuc 
-  G4double E          = theTrack.GetTotalEnergy()/G4double(AP);            // Units are MeV/nuc
+  G4double T          = theTrack.GetKineticEnergy()/G4double(AP);   
+  // Units are MeV/nuc 
+  G4double E          = theTrack.GetTotalEnergy()/G4double(AP);            
+  // Units are MeV/nuc
   G4int AT         = theTarget.GetA_asInt();
   G4int ZT         = theTarget.GetZ_asInt();
   G4double mpnt  = theTarget.AtomicMass(AT, ZT);
@@ -523,7 +548,7 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
 // used in DPMJET-II.5.
 //
   G4double epn   = E / GeV;
-  G4double mpn   = M / (GeV*AP);                // Projectile mass per nucleon in GeV/(c2*nuc)
+  G4double mpn   = M / (GeV*AP); // Projectile mass per nucleon in GeV/(c2*nuc)
 //  G4double gamma = epn / mpn;
 //  G4double elab  = epn * M / GeV;             // ELAB   = EPN * AMPRO_P
 
@@ -534,13 +559,13 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
 
 //  G4double amu_c2GeV = amu_c2 / GeV;
   G4double ppn   = std::sqrt((epn-mpn)*(epn+mpn));
-                                                // Units of GeV/(c*nuc)
-                                                // PPN    = SQRT( (EPN-AMPROJ)*(EPN+AMPROJ) )
+// Units of GeV/(c*nuc)
+// PPN    = SQRT( (EPN-AMPROJ)*(EPN+AMPROJ) )
 //
 //
 // Before setting the remainder of the variables for DPMJET-II.5, check for
-// appropriate Glauber data.  If the value returned is false, then set the change
-// object to the source particle.
+// appropriate Glauber data.  If the value returned is false, then set the 
+// change object to the source particle.
 //
   if (!(theGlauberDataSetHandler->SetCurrentGlauberDataSet(AP1,AT1,ppn))) {
     theParticleChange.SetStatusChange(isAlive);
@@ -558,12 +583,12 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
 //
   nncms_.pproj   = ppn;                         // PPROJ  = PPN
   nncms_.eproj   = epn;                         // EPROJ  = EPN
-  mpnt          /= (AT * GeV);                  // Mass per nuclon of target in GeV/(c2*nuc)
+  mpnt          /= (AT * GeV); // Mass per nuclon of target in GeV/(c2*nuc)
   nncms_.umo     = std::sqrt(mpn*mpn + mpnt*mpnt + 2.0*mpnt*epn);
-                                                // UMO    = SQRT( AMPROJ**2 + AMTAR**2 +2.D0*AMTAR*EPROJ )
-                                                // Note I believe this equation is only correct
-                                                // if the subsequent equations (for pTthr) 
-                                                // needs the Ecm for the NUCLEON-NUCLEON system 
+// UMO    = SQRT( AMPROJ**2 + AMTAR**2 +2.D0*AMTAR*EPROJ )
+// Note I believe this equation is only correct
+// if the subsequent equations (for pTthr) 
+// needs the Ecm for the NUCLEON-NUCLEON system 
   user2_.cmener  = nncms_.umo;                  // CMENER = UMO
   collis_.s      = nncms_.umo * nncms_.umo;
                                                 // SS     = UMO**2
@@ -571,26 +596,26 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
   if (strufu_.istrut == 1)
   {
     collis_.ptthr = 2.1 + 0.15*std::pow(std::log10(user2_.cmener/50.),3.0);
-                                                // PTTHR  = 2.1D0+0.15D0*(LOG10(CMENER/50.))**3
+    // PTTHR  = 2.1D0+0.15D0*(LOG10(CMENER/50.))**3
   }
   else if (strufu_.istrut == 2)
   {
     collis_.ptthr = 2.5 + 0.12*std::pow(std::log10(user2_.cmener/50.),3.0);
-                                                // PTTHR  = 2.5D0+0.12D0*(LOG10(CMENER/50.))**3
+    // PTTHR  = 2.5D0+0.12D0*(LOG10(CMENER/50.))**3
   }
   collis_.ptthr2 = collis_.ptthr;               // PTTHR2 = PTTHR
   nncms_.gamcm   = (epn + mpnt) / nncms_.umo;
-                                                // GAMCM  = (EPROJ+AMTAR)/UMO
-                                                // Note I believe this equation is only correct
-                                                // if the subsequent equations (for pTthr)
-                                                // need the Ecm for the NUCLEON-NUCLEON system 
+  // GAMCM  = (EPROJ+AMTAR)/UMO
+  // Note I believe this equation is only correct
+  // if the subsequent equations (for pTthr)
+  // need the Ecm for the NUCLEON-NUCLEON system 
   nncms_.bgcm    = ppn / nncms_.umo;                // PPROJ/UMO
   nncms_.pcm     = nncms_.gamcm*ppn - nncms_.bgcm*epn;
-                                                // PCM    = GAMCM*PPROJ - BGCM*EPROJ
+  // PCM    = GAMCM*PPROJ - BGCM*EPROJ
   sigma_.sigsof  = 37.8 * std::pow(collis_.s,0.076);
-                                                // ALFA   = 1.076D0
-                                                // A      = 37.8D0
-                                                // SIGSOF = A * SS**(ALFA-1.D0)
+  // ALFA   = 1.076D0
+  // A      = 37.8D0
+  // SIGSOF = A * SS**(ALFA-1.D0)
   seasu3_.seasq  = SEASQ;                       // SEASQ  = 0.50D0
   xseadi_.ssmima = SSMIMA;                      // SSMIMA = 1.201D0
   xseadi_.ssmimq = xseadi_.ssmima * xseadi_.ssmima;
@@ -620,7 +645,9 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
   else if ( theInitType == DPM2_5 ) {
     final_.ifinal  = 0;                         // IFINAL = 0
     evappp_.ievap  = 0;                         // IEVAP  = 0
-    parevt_.levprt = LTRUE;                     // LEVPRT = .TRUE. NOTE: THIS IS AT ODDS WITH WHAT'S IN DPMJET-II.5, BUT IF NOT SET, ALL EVENTS GET REJECTED.
+    parevt_.levprt = LTRUE;                     
+// LEVPRT = .TRUE. NOTE: THIS IS AT ODDS WITH WHAT'S IN DPMJET-II.5, 
+// BUT IF NOT SET, ALL EVENTS GET REJECTED.
     parevt_.ilvmod = 1;                         // ILVMOD = 1
     parevt_.ldeexg = LFALSE;                    // LDEEXG = .FALSE.
     parevt_.lheavy = LFALSE;                    // LHEAVY = .FALSE.
@@ -630,7 +657,9 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
   else if ( theInitType == DPM3 ) {
     final_.ifinal  = 0;                         // IFINAL = 0
     evappp_.ievap  = 0;                         // IEVAP  = 0
-    parevt_.levprt = LTRUE;                     // LEVPRT = .TRUE. NOTE: THIS IS AT ODDS WITH WHAT'S IN DPMJET-II.5, BUT IF NOT SET, ALL EVENTS GET REJECTED.
+    parevt_.levprt = LTRUE;                     
+// LEVPRT = .TRUE. NOTE: THIS IS AT ODDS WITH WHAT'S IN DPMJET-II.5, 
+// BUT IF NOT SET, ALL EVENTS GET REJECTED.
     parevt_.ilvmod = 1;                         // ILVMOD = 1
     parevt_.ldeexg = LFALSE;                    // LDEEXG = .FALSE.
     parevt_.lheavy = LFALSE;                    // LHEAVY = .FALSE.
@@ -655,7 +684,8 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
   collap_.ijtalu1 = collis_.ijtalu;             // IJTALU1 = IJTALU
   collap_.ptthr3  = collis_.ptthr2;             // PTTHR3  = PTTHR2
 
-  G4int iiipro          = nucc_.ijproj;         // IIPROJ = IJPROJ & IIIPRO = IIPROJ
+  G4int iiipro          = nucc_.ijproj;         
+  // IIPROJ = IJPROJ & IIIPRO = IIPROJ
   G4int iiitar          = nucc_.ijtarg;         // IITARG = IJTARG
   G4int kkmat           = 1;
   G4int nhkkh1          = 1;                    // NHKKH1 = 1
@@ -764,16 +794,16 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
 // and load into the particle change if you can identify the particles.
 //  
   G4int n              = hkkevt_.nhkk;
-  G4int m              = 0;
+  G4int M1             = 0;
   G4Fragment *fragment = 0;
   if (verboseLevel >= 2) DumpVerboseInformation1 (n);
 //
 //
 // Now go through each of the secondaries and add to theParticleChange.
 //
-  for (G4int i=0; i<n; i++)
+  for (G4int ii=0; ii<n; ii++)
   {
-    if (hkkevt_.isthkk[i]==1 || hkkevt_.isthkk[i]==-1)
+    if (hkkevt_.isthkk[ii]==1 || hkkevt_.isthkk[ii]==-1)
     {
 //
 // Particle is a final state secondary and not a nucleus.
@@ -813,21 +843,21 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
       G4int nucA = extevt_.idres[i];
       G4int nucZ = extevt_.idxres[i];
       if (nucA>0 && nucZ>0) {
-        m++;
+        M1++;
         fragment           = 0;
         G4double px        = hkkevt_.phkk[i][0] * GeV;
         G4double py        = hkkevt_.phkk[i][1] * GeV;
         G4double pz        = hkkevt_.phkk[i][2] * GeV;
         G4double ionMass   = theIonTable->GetIonMass(nucZ,nucA);
-//                         GetIonMass(nucZ,nucA) + nucex[i];  // check how to get this energy
+	//GetIonMass(nucZ,nucA) + nucex[i];  // check how to get this energy
         G4double dpmMass   = hkkevt_.phkk[i][4] * GeV;
         if (dpmMass > ionMass) ionMass = dpmMass;
         G4double et        = std::sqrt(px*px + py*py + pz*pz + ionMass*ionMass);
-//        G4LorentzVector lv = transformToLab * G4LorentzVector(px,py,pz,et+1.0*eV);
         G4LorentzVector lv = G4LorentzVector(px,py,pz,et+1.0*eV);
         fragment           = new G4Fragment(nucA, nucZ, lv);
         if (verboseLevel >= 2)
-          DumpVerboseInformation3 (m, nucA, nucZ, lv.vect(), et, et-ionMass, pP);
+          DumpVerboseInformation3 (M1, nucA, nucZ, lv.vect(), 
+				   et, et-ionMass, pP);
 //
 //
 // Now we can decay the nuclear fragment if present.  The secondaries are
@@ -850,14 +880,20 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
               new G4DynamicParticle((*iter)->GetDefinition(),
               (*iter)->GetTotalEnergy(), (*iter)->GetMomentum());
             theParticleChange.AddSecondary (secondary);
-            G4String particleName = (*iter)->GetDefinition()->GetParticleName();
+            G4String particleName = 
+	      (*iter)->GetDefinition()->GetParticleName();
             delete (*iter);
             if (verboseLevel >= 2) {
               if (particleName.find("[",0) < particleName.size())
-                DumpVerboseInformation4 (m, particleName, secondary->GetMomentum(),
-                secondary->GetTotalEnergy(), secondary->GetKineticEnergy(), pP);
-              else DumpVerboseInformation2 (particleName, secondary->GetMomentum(),
-                secondary->GetTotalEnergy(), secondary->GetKineticEnergy(), pP);
+                DumpVerboseInformation4 (m, particleName, 
+					 secondary->GetMomentum(),
+					 secondary->GetTotalEnergy(),
+					 secondary->GetKineticEnergy(), pP);
+              else DumpVerboseInformation2 (particleName, 
+					    secondary->GetMomentum(),
+					    secondary->GetTotalEnergy(),
+					    secondary->GetKineticEnergy(), 
+					    pP);
             }
           }
           delete products;
@@ -1147,6 +1183,63 @@ void G4DPMJET2_5Model::DumpVerboseInformation1 (const G4int n) const
   G4cout.setf(std::ios::fixed);
   G4cout <<" THE FOLLOWING LISTS ONLY THE FINAL-STATE SECONDARIES" <<G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4DPMJET2_5Model::DumpVerboseInformation2
+  (const G4String particleName, const G4ThreeVector p,
+  const G4double E, const G4double T, const G4ThreeVector pinit) const
+{
+  G4cout <<"Name = " <<particleName <<G4endl;
+  G4cout <<"            Momentum          = " <<p/MeV <<" MeV/c" <<G4endl;
+  G4cout <<"            T. Energy         = " <<E/MeV <<" MeV"   <<G4endl;
+  G4cout <<"            K. Energy         = " <<T/MeV <<" MeV"   <<G4endl;
+  if (verboseLevel >= 3)
+  {
+    G4ThreeVector axis = pinit.unit();
+    G4double pz = p.dot(axis);
+    G4cout <<"            Transverse mass   = " <<std::sqrt(E*E-pz*pz)/MeV 
+	   <<" MeV"
+           <<G4endl;
+    G4cout <<"            Rapidity          = "
+           <<0.5*std::log((E+pz)/(E-pz)) <<G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4DPMJET2_5Model::DumpVerboseInformation3 (const G4int i,
+  const G4int A, const G4int Z, const G4ThreeVector p,
+  const G4double E, const G4double T, const G4ThreeVector pinit) const
+{
+  G4cout <<"----------------------------------------" 
+         <<"----------------------------------------" <<G4endl;
+  G4cout <<"The nuclear fragment #" <<i <<" before" <<G4endl;
+  G4cout <<"----------------------------------------"
+         <<"----------------------------------------" <<G4endl;
+
+  std::ostringstream tmpStream;
+  tmpStream <<"(A = " <<A <<", Z = " <<Z <<")";
+  G4String AZ = tmpStream.str();
+  
+  DumpVerboseInformation2(AZ, p, E, T, pinit);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4DPMJET2_5Model::DumpVerboseInformation4 (const G4int i,
+  const G4String particleName, const G4ThreeVector p,
+  const G4double E, const G4double T, const G4ThreeVector pinit) const
+{
+  G4cout <<"----------------------------------------" 
+         <<"----------------------------------------" <<G4endl;
+  G4cout <<"The nuclear fragment #" <<i <<" after" <<G4endl;
+  G4cout <<"----------------------------------------" 
+         <<"----------------------------------------" <<G4endl;
+
+  DumpVerboseInformation2(particleName, p, E, T, pinit);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Initialise
@@ -1288,7 +1381,8 @@ void G4DPMJET2_5Model::Initialise ()
   G4double pt2 = 0.0;
   G4int ipt    = 0;
   G4int nevt   = 0;
-  parpt_ (&i,&pt1,&pt2,&ipt,&nevt);              // CALL PARPT(1,PT1,PT2,IPT,NEVT)
+  parpt_ (&i,&pt1,&pt2,&ipt,&nevt);              
+  // CALL PARPT(1,PT1,PT2,IPT,NEVT)
 //
 //
 // Initialise BAMJET, DECAY and HADRIN.
@@ -1450,11 +1544,14 @@ void G4DPMJET2_5Model::Initialise ()
   popcck_.pdbck  = 0.0;                         // PDBCK  = 0.D0
   popcck_.ijpock = 0;                           // IJPOCK = 0
   casadi_.icasad = 1;                           // ICASAD = 1
-  casadi_.casaxx = 0.05;                        // CASAXX = 0.05D0             ! corrected Nov. 2001
-  popcck_.pdbse  = 0.45;                        // PDBSE  = 0.45D0             ! with baryon stopping
-  popcck_.pdbseu = 0.45;                        // PDBSEU = 0.45D0             ! with baryon stopping
-//                                                C     PDBSE  = 0.D0               ! without baryon stopping
-//                                                C     PDBSEU = 0.D0               ! without baryon stopping
+  casadi_.casaxx = 0.05;                        
+  // CASAXX = 0.05D0             ! corrected Nov. 2001
+  popcck_.pdbse  = 0.45;                        
+  // PDBSE  = 0.45D0             ! with baryon stopping
+  popcck_.pdbseu = 0.45;                        
+  // PDBSEU = 0.45D0             ! with baryon stopping
+  // PDBSE  = 0.D0               ! without baryon stopping
+  // PDBSEU = 0.D0               ! without baryon stopping
   popcck_.irejck = 0;                           // IREJCK = 0
   popcck_.irejse = 0;                           // IREJSE = 0
   popcck_.irejs3 = 0;                           // IREJS3 = 0
@@ -1516,7 +1613,8 @@ void G4DPMJET2_5Model::Initialise ()
 //
   hboo_.ihbook    = 1;                          // IHBOOK = 1
   pomtab_.ipomta  = 1;                          // IPOMTA = 1
-  cmhico_. cmhis  = 0.0;                        // CMHIS = 0.0D+00           !   Lab System
+  cmhico_. cmhis  = 0.0;                        
+  // CMHIS = 0.0D+00           !   Lab System
   zentra_.icentr  = 0;                          // ICENTR = 0
   user2_.istruf   = 222;                        // ISTRUF = 222
   strufu_.istrum  = 0;                          // ISTRUM = 0
@@ -1562,9 +1660,11 @@ void G4DPMJET2_5Model::Initialise ()
   stars_.istar3   = 0;                          // ISTAR3 = 0
   user2_.ptlar    = 2.0;                        // PTLAR  = 2.D0
 
-//  G4int iglaub    = 0;                        // IGLAUB = 0 !! Note that this is just a local variable
+//  G4int iglaub    = 0;                        
+// IGLAUB = 0 !! Note that this is just a local variable
 
-//  infore_.ifrej   = 0;                        // IFREJ  = 0  Note rejection diagnostics not required
+//  infore_.ifrej   = 0;                        
+// IFREJ  = 0  Note rejection diagnostics not required
   gluspl_.nugluu  = 1;                          // NUGLUU = 1
   gluspl_.nsgluu  = 0;                          // NSGLUU = 0
   colle_.nvers    = 1;                          // NVERS  = 1
@@ -1581,12 +1681,12 @@ void G4DPMJET2_5Model::Initialise ()
   if (strufu_.istrut == 1)
   {
     collis_.ptthr = 2.1 + 0.15*std::pow(std::log10(user2_.cmener/50.),3.0);
-                                                // PTTHR  = 2.1D0+0.15D0*(LOG10(CMENER/50.))**3
+    // PTTHR  = 2.1D0+0.15D0*(LOG10(CMENER/50.))**3
   }
   else if (strufu_.istrut == 2)
   {
     collis_.ptthr = 2.5 + 0.12*std::pow(std::log10(user2_.cmener/50.),3.0);
-                                                // PTTHR  = 2.5D0+0.12D0*(LOG10(CMENER/50.))**3
+    // PTTHR  = 2.5D0+0.12D0*(LOG10(CMENER/50.))**3
   }
   collis_.ptthr2  = collis_.ptthr;              // PTTHR2 = PTTHR
   pomtyp_.ipim    = 2;                          // IPIM   = 2
@@ -1647,7 +1747,8 @@ void G4DPMJET2_5Model::Initialise ()
   delete [] ptr1;
   if (opened == LFALSE)
   {
-    G4cout <<"ATTEMPTED TO OPEN fort.6 TO OUTPUT VERBOSE FORTRAN TEXT" <<G4endl;
+    G4cout <<"ATTEMPTED TO OPEN fort.6 TO OUTPUT VERBOSE FORTRAN TEXT" 
+	   <<G4endl;
     G4cout <<"HOWEVER THIS WAS NOT POSSIBLE" <<G4endl;
   }
 
@@ -1722,7 +1823,8 @@ void G4DPMJET2_5Model::Initialise ()
   if (GetVerboseLevel()>0) {
     G4cout <<"AT G4DPMJET2_5Model::Initialise:" <<G4endl;
     G4cout <<"Printout of important Parameters before DPMJET2.5" <<G4endl;
-    G4cout <<"Please note for DPMJET input all numbers are floating point!" <<G4endl;
+    G4cout <<"Please note for DPMJET input all numbers are floating point!" 
+	   <<G4endl;
     G4cout <<"PROJPAR  " <<nucc_.ip       <<" "
                          <<nucc_.ipz      <<G4endl;
     G4cout <<"TARPAR   " <<nucc_.it       <<" "
@@ -1873,7 +1975,8 @@ void G4DPMJET2_5Model::Initialise ()
 //
 //  i = 1;
 //  G4int idummy;
-//  distr_ (&i,&nucc_.ijproj,&ppn,&idummy);        // CALL DISTR( 1,IJPROJ,PPN,IDUMMY )
+//  distr_ (&i,&nucc_.ijproj,&ppn,&idummy);        
+// CALL DISTR( 1,IJPROJ,PPN,IDUMMY )
   if (pomtyp_.ipim == 2) {prblm2_ (&user2_.cmener);}
 //
 //

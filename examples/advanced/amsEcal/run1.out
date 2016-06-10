@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,9 @@
 
 ***** Table : Nb of materials = 4 *****
 
- Material:     Lead    density: 10.976 g/cm3   RadL:   5.803 mm   Nucl.Int.Length:  18.881 cm   Imean: 823.000 eV 
+ Material:     Lead    density: 10.976 g/cm3   RadL:   5.803 mm   Nucl.Int.Length:  18.869 cm 
+                       Imean: 823.000 eV 
+
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.20 g/mole
          --->  Isotope:   204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
          --->  Isotope:   206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
@@ -22,7 +24,9 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Scintillator    density:  1.032 g/cm3   RadL:  42.438 cm   Nucl.Int.Length:  70.748 cm   Imean:  65.944 eV 
+ Material: Scintillator    density:  1.032 g/cm3   RadL:  42.438 cm   Nucl.Int.Length:  70.639 cm 
+                       Imean:  65.944 eV 
+
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
@@ -34,7 +38,9 @@
           ElmMassFraction:   7.76 %  ElmAbundance  50.00 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
+                       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -47,7 +53,9 @@
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.973 pc 
+                       Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -81,7 +89,6 @@ userDetector->Construct() start.
 
 world is registered to the default region.
 physicsList->Construct() start.
-physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -110,21 +117,21 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 mm 
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Scintillator
  Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 mm 
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 keV
@@ -152,13 +159,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
       94.74         30k         1      490        980         0.00    layer
        3.16          1k         1       17         20         0.00    module
        2.10          0k         1       10         18         0.00    calorimeter
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin Of Event: 0
 
@@ -182,7 +189,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=18.31s Real=19.97s Sys=0.29s
+  User=17.86s Real=24.38s Sys=0.83s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -205,43 +212,48 @@ Run Summary
 
              visible Energy          (rms/mean)        total Energy           (rms/mean)
 
-   layer 0: 812.91 keV +- 2.088 MeV  (2.6e+02 %)     9.3025 MeV +- 6.182 MeV  ( 66 %)
-   layer 1:  784.7 keV +- 1.493 MeV  (1.9e+02 %)     8.2351 MeV +- 5.543 MeV  ( 67 %)
-   layer 2: 772.26 keV +- 1.416 MeV  (1.8e+02 %)     8.5294 MeV +- 5.269 MeV  ( 62 %)
-   layer 3: 785.92 keV +-  1.78 MeV  (2.3e+02 %)     8.2092 MeV +- 5.384 MeV  ( 66 %)
-   layer 4: 807.95 keV +- 1.943 MeV  (2.4e+02 %)      8.512 MeV +- 5.384 MeV  ( 63 %)
-   layer 5:  799.2 keV +- 1.932 MeV  (2.4e+02 %)     8.1386 MeV +- 5.136 MeV  ( 63 %)
-   layer 6: 792.36 keV +- 1.598 MeV  (2e+02 %)     8.4777 MeV +- 5.053 MeV  ( 60 %)
-   layer 7: 789.57 keV +- 1.578 MeV  (2e+02 %)     8.1608 MeV +- 5.363 MeV  ( 66 %)
-   layer 8: 773.02 keV +-   1.1 MeV  (1.4e+02 %)     8.5272 MeV +- 5.169 MeV  ( 61 %)
-   layer 9: 779.56 keV +-  1.31 MeV  (1.7e+02 %)     8.0245 MeV +- 4.694 MeV  ( 58 %)
-   layer 10: 813.87 keV +- 2.092 MeV  (2.6e+02 %)     8.4058 MeV +- 4.985 MeV  ( 59 %)
-   layer 11:  768.9 keV +- 952.3 keV  (1.2e+02 %)     8.0339 MeV +- 4.413 MeV  ( 55 %)
-   layer 12: 772.47 keV +- 1.393 MeV  (1.8e+02 %)     8.4505 MeV +- 5.143 MeV  ( 61 %)
-   layer 13: 783.43 keV +- 1.438 MeV  (1.8e+02 %)     8.0515 MeV +- 4.712 MeV  ( 59 %)
-   layer 14: 767.97 keV +- 1.119 MeV  (1.5e+02 %)     7.5708 MeV +- 4.762 MeV  ( 63 %)
-   layer 15: 781.28 keV +- 1.352 MeV  (1.7e+02 %)     8.9746 MeV +- 4.986 MeV  ( 56 %)
-   layer 16: 780.05 keV +- 1.361 MeV  (1.7e+02 %)     8.4043 MeV +- 5.033 MeV  ( 60 %)
-   layer 17:  804.8 keV +- 1.783 MeV  (2.2e+02 %)     7.4745 MeV +- 4.959 MeV  ( 66 %)
+   layer 0: 783.48 keV +- 1.322 MeV  (1.7e+02 %)     9.2206 MeV +- 5.662 MeV  ( 61 %)
+   layer 1: 801.18 keV +- 1.864 MeV  (2.3e+02 %)     8.0402 MeV +- 5.081 MeV  ( 63 %)
+   layer 2: 801.07 keV +- 1.785 MeV  (2.2e+02 %)     8.5758 MeV +- 5.625 MeV  ( 66 %)
+   layer 3: 794.98 keV +- 1.529 MeV  (1.9e+02 %)     8.1256 MeV +- 5.074 MeV  ( 62 %)
+   layer 4: 803.87 keV +- 1.781 MeV  (2.2e+02 %)     8.4371 MeV +- 5.179 MeV  ( 61 %)
+   layer 5: 805.06 keV +- 1.749 MeV  (2.2e+02 %)     8.1453 MeV +- 5.242 MeV  ( 64 %)
+   layer 6: 828.44 keV +- 2.088 MeV  (2.5e+02 %)     8.4874 MeV +-  5.26 MeV  ( 62 %)
+   layer 7: 820.57 keV +-  1.98 MeV  (2.4e+02 %)     8.2498 MeV +- 5.734 MeV  ( 70 %)
+   layer 8: 759.73 keV +- 1.282 MeV  (1.7e+02 %)     8.5035 MeV +-   5.2 MeV  ( 61 %)
+   layer 9: 812.12 keV +- 1.847 MeV  (2.3e+02 %)     8.1698 MeV +- 5.193 MeV  ( 64 %)
+   layer 10: 796.13 keV +- 1.649 MeV  (2.1e+02 %)     8.4663 MeV +- 5.075 MeV  ( 60 %)
+   layer 11: 795.76 keV +-  1.52 MeV  (1.9e+02 %)     8.1156 MeV +-  4.93 MeV  ( 61 %)
+   layer 12: 810.42 keV +- 1.604 MeV  (2e+02 %)     8.4707 MeV +- 5.226 MeV  ( 62 %)
+   layer 13: 788.91 keV +- 1.237 MeV  (1.6e+02 %)     8.1093 MeV +- 4.894 MeV  ( 60 %)
+   layer 14: 780.19 keV +- 1.384 MeV  (1.8e+02 %)     7.5967 MeV +-  4.92 MeV  ( 65 %)
+   layer 15: 766.34 keV +- 1.277 MeV  (1.7e+02 %)     8.9422 MeV +-  5.26 MeV  ( 59 %)
+   layer 16: 783.04 keV +- 1.449 MeV  (1.9e+02 %)     8.3706 MeV +- 4.529 MeV  ( 54 %)
+   layer 17: 779.67 keV +-   1.3 MeV  (1.7e+02 %)      7.414 MeV +- 4.713 MeV  ( 64 %)
 
-   total calor :  14.17 MeV +- 6.653 MeV  ( 47 %)     149.48 MeV +- 21.48 MeV  ( 14 %)
+   total calor : 14.311 MeV +- 6.784 MeV  ( 47 %)     149.44 MeV +- 21.79 MeV  ( 15 %)
 ------------------------------------------------------------
 
-   Leakage : 850.52 MeV +- 21.48 MeV
+   Leakage : 850.56 MeV +- 21.79 MeV
    Eleak/Ebeam =85.1 %  ( forward =85.1 %   backward =   0 %   lateral =   0 %)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1419903579, 1364644369
+ Current couple of seeds = 1127348993, 381838250
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
 EventManager deleted.
-UImanager deleted.
 Units table cleared.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.15 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
-RunManager is deleted.
+RunManagerKernel is deleted. Good bye :)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmProcessOptions.hh 74376 2013-10-04 08:25:47Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -99,7 +99,8 @@ public:
 
   void SetBuildCSDARange(G4bool val);
 
-  void SetVerbose(G4int val, const G4String& name = "all");
+  void SetVerbose(G4int val, const G4String& name = "all", 
+		  G4bool worker = false);
 
   void SetLambdaFactor(G4double val);
 

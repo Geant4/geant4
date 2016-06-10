@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68385 2013-03-23 14:07:15Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,14 +54,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
+ : G4VUserDetectorConstruction(),
+   fAbsorMaterial(0),
+   fMagField(0),
+   fAbsor(0),
+   fDetectorMessenger(0)
 {
   // default parameter values
   fAbsorRadius = 3*cm;
   fNbOfLayers = 1;
-  
-  fAbsorMaterial = 0;
-  fMagField = 0;
-  fAbsor   = 0;
   
   DefineMaterials();
   SetMaterial("G4_WATER");
@@ -88,19 +89,17 @@ void DetectorConstruction::DefineMaterials()
 { 
   G4NistManager* man = G4NistManager::Instance();
   
-  G4bool isotopes = false;
+  man->FindOrBuildMaterial("G4_Al");
+  man->FindOrBuildMaterial("G4_Si");
+  man->FindOrBuildMaterial("G4_Fe");
+  man->FindOrBuildMaterial("G4_Ge");
+  man->FindOrBuildMaterial("G4_W");
+  man->FindOrBuildMaterial("G4_Pb");
   
-  man->FindOrBuildMaterial("G4_Al", isotopes);
-  man->FindOrBuildMaterial("G4_Si", isotopes);
-  man->FindOrBuildMaterial("G4_Fe", isotopes);
-  man->FindOrBuildMaterial("G4_Ge", isotopes);
-  man->FindOrBuildMaterial("G4_W" , isotopes);
-  man->FindOrBuildMaterial("G4_Pb", isotopes);
+  man->FindOrBuildMaterial("G4_AIR");
+  man->FindOrBuildMaterial("G4_WATER");
   
-  man->FindOrBuildMaterial("G4_AIR"  , isotopes);
-  man->FindOrBuildMaterial("G4_WATER", isotopes);
-  
- G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+ ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,7 +170,8 @@ void DetectorConstruction::PrintParameters()
   G4cout << "---> The Absorber is a sphere of " 
          << G4BestUnit(fAbsorRadius,"Length") << " radius of "
          << fAbsorMaterial->GetName() << " divided in " << fNbOfLayers 
-         << " slices of " << G4BestUnit(fLayerThickness,"Length") << G4endl;
+         << " slices of " << G4BestUnit(fLayerThickness,"Length")
+	 << "\n \n" << fAbsorMaterial << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
 }
 

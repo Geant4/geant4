@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4BoldyshevTripletModel.hh 66241 2012-12-13 18:34:42Z gunter $
 // GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 

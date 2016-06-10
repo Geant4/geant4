@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EqMagElectricField.hh 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 // class G4EqMagElectricField
@@ -41,6 +41,7 @@
 #ifndef G4EQMAGELECTRICFIELD_hh
 #define G4EQMAGELECTRICFIELD_hh
 
+#include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
 #include "G4ElectroMagneticField.hh"
 
@@ -53,7 +54,7 @@ class G4EqMagElectricField : public G4EquationOfMotion
 
     ~G4EqMagElectricField() {;} 
 
-    void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
+    void  SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                 G4double MomentumXc,
                                 G4double mass);
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2010-12-10 06:21:34 kmura Exp $
+$Id: History 77801 2013-11-28 13:33:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 13th 2013 K. Murakami
+- new coding guideline
+
+August 27th, 2013 G. Cosmo
+- Added G4Ellipsoid among solids enabled for parameterisation.
 
 November 21th, 2012 K. Murakami
 - changed that AsciiReader uses IO_GenEvent instead of IO_AsciiParticles

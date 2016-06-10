@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4FragmentingString.hh 69569 2013-05-08 13:19:50Z gcosmo $
 //
 
 #ifndef G4FragmentingString_h

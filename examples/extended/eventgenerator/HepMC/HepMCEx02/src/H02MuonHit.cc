@@ -26,56 +26,47 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02MuonHit.cc
 /// \brief Implementation of the H02MuonHit class
 //
-// ====================================================================
+//   $Id: H02MuonHit.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   H02MuonHit.cc
-//   $Id$
-//
-// ====================================================================
-#include "H02MuonHit.hh"
-#include "G4VVisManager.hh"
+#include <iomanip>
 #include "G4Circle.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"
-#include <iomanip>
+#include "G4VisAttributes.hh"
+#include "G4VVisManager.hh"
+#include "H02MuonHit.hh"
 
 G4Allocator<H02MuonHit> H02MuonHitAllocator;
 
-////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02MuonHit::H02MuonHit()
   : moduleID(-1)
-////////////////////////
 {
 }
 
-/////////////////////////////////////////////////////////////
-H02MuonHit::H02MuonHit(G4int imod, G4String aname, 
-                     const G4ThreeVector& pxyz, 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+H02MuonHit::H02MuonHit(G4int imod, G4String aname,
+                     const G4ThreeVector& pxyz,
                      const G4ThreeVector& xyz, G4double atof)
   : moduleID(imod), pname(aname), momentum(pxyz),
     position(xyz), tof(atof)
-/////////////////////////////////////////////////////////////
 {
 }
 
-////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02MuonHit::~H02MuonHit()
-////////////////////////
 {
 }
 
-/////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02MuonHit::H02MuonHit(const H02MuonHit& right)
-/////////////////////////////////////////////
   : G4VHit()
 {
   *this= right;
 }
 
-////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 const H02MuonHit& H02MuonHit::operator=(const H02MuonHit& right)
-////////////////////////////////////////////////////////////////
 {
   moduleID= right.moduleID;
   pname= right.pname;
@@ -86,16 +77,14 @@ const H02MuonHit& H02MuonHit::operator=(const H02MuonHit& right)
   return *this;
 }
 
-/////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int H02MuonHit::operator==(const H02MuonHit& right) const
-/////////////////////////////////////////////////////////
 {
   return (this==&right) ? 1 : 0;
 }
 
-///////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02MuonHit::Draw()
-///////////////////////
 {
   const G4double pt_min=20.*GeV;
 
@@ -115,10 +104,9 @@ void H02MuonHit::Draw()
   }
 }
 
-////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02MuonHit::Print()
-////////////////////////
-{  
+{
   G4int id= moduleID;
   G4String tag="B";
   if(moduleID >=10) {
@@ -127,7 +115,7 @@ void H02MuonHit::Print()
   }
   G4cout << tag << id << " :" << std::setw(12) << pname.c_str()
          << " : pT=" << std::setprecision(3)  << momentum.perp()/GeV
-         << " : TOF=" << std::setprecision(3) << tof/ns 
-         << " : x="  << std::setprecision(3) << position*(1./m) 
+         << " : TOF=" << std::setprecision(3) << tof/ns
+         << " : x="  << std::setprecision(3) << position*(1./m)
          << G4endl;
 }

@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: StepLimiterBuilder.cc 68771 2013-04-05 12:45:26Z gcosmo $
+//
 /// \file medical/GammaTherapy/src/StepLimiterBuilder.cc
 /// \brief Implementation of the StepLimiterBuilder class
 //
-//
-// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -70,9 +70,9 @@ void StepLimiterBuilder::ConstructProcess()
 {
   StepLimiter* stepMax = new StepLimiter();
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {

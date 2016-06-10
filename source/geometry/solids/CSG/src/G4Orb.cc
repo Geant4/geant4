@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Orb.cc 76263 2013-11-08 11:41:52Z gcosmo $
 //
 // class G4Orb
 //
@@ -37,9 +37,9 @@
 //
 //////////////////////////////////////////////////////////////
 
-#include <assert.h>
-
 #include "G4Orb.hh"
+
+#if !defined(G4GEOM_USE_UORB)
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -53,8 +53,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 
 using namespace CLHEP;
 
@@ -723,7 +721,4 @@ G4Polyhedron* G4Orb::CreatePolyhedron () const
   return new G4PolyhedronSphere (0., fRmax, 0., 2*pi, 0., pi);
 }
 
-G4NURBS* G4Orb::CreateNURBS () const
-{
-  return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
-}
+#endif

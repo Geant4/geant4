@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSEventActionMessenger.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSEventActionMessenger.hh
 /// \brief Definition of the WLSEventActionMessenger class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,17 +47,17 @@ class WLSEventActionMessenger: public G4UImessenger
   public:
 
     WLSEventActionMessenger(WLSEventAction*);
-    ~WLSEventActionMessenger();
+    virtual ~WLSEventActionMessenger();
 
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
 
-    WLSEventAction* eventAction;
+    WLSEventAction* fEventAction;
 
-    G4UIcmdWithAnInteger* setVerboseCmd;
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;
+    G4UIcmdWithAnInteger* fSetVerboseCmd;
+    G4UIcmdWithAString*   fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;
 };
 
 #endif

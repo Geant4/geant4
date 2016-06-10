@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ApplicationState.cc,v 1.5 2006-11-20 05:56:46 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4ApplicationState.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4ApplicationState.cc
 //

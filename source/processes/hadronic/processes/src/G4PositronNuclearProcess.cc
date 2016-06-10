@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PositronNuclearProcess.cc 66499 2012-12-19 09:16:35Z gcosmo $
 //
 
 #include "G4PositronNuclearProcess.hh" 

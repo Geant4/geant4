@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4cDetectorConstruction.cc 77601 2013-11-26 17:08:44Z gcosmo $
 // 
 /// \file B4cDetectorConstruction.cc
 /// \brief Implementation of the B4cDetectorConstruction class
@@ -37,49 +37,36 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
 #include "G4SDManager.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4GenericMessenger.hh"
-
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#include <stdio.h>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal 
+G4GlobalMagFieldMessenger* B4cDetectorConstruction::fMagFieldMessenger = 0; 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4cDetectorConstruction::B4cDetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fMessenger(0),
-   fMagField(0),
-   fCheckOverlaps(true)
+   fCheckOverlaps(true),
+   fNofLayers(-1)
 {
-  // Define /B4/det commands using generic messenger class
-  fMessenger 
-    = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
-
-  // Define /B4/det/setMagField command
-  G4GenericMessenger::Command& setMagFieldCmd
-    = fMessenger->DeclareMethod("setMagField", 
-                                &B4cDetectorConstruction::SetMagField, 
-                                "Define magnetic field value (in X direction");
-  setMagFieldCmd.SetUnitCategory("Magnetic flux density");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4cDetectorConstruction::~B4cDetectorConstruction()
 { 
-  delete fMagField;
-  delete fMessenger;
-}
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -90,7 +77,6 @@ G4VPhysicalVolume* B4cDetectorConstruction::Construct()
   
   // Define volumes
   return DefineVolumes();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,8 +85,7 @@ void B4cDetectorConstruction::DefineMaterials()
 { 
   // Lead material defined using NIST Manager
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
-  nistManager->FindOrBuildMaterial("G4_Pb", fromIsotopes);
+  nistManager->FindOrBuildMaterial("G4_Pb");
   
   // Liquid argon material
   G4double a;  // mass of a mole;
@@ -122,13 +107,13 @@ void B4cDetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
 {
   // Geometry parameters
-  G4int nofLayers = 10;
+  fNofLayers = 10;
   G4double absoThickness = 10.*mm;
   G4double gapThickness =  5.*mm;
   G4double calorSizeXY  = 10.*cm;
 
   G4double layerThickness = absoThickness + gapThickness;
-  G4double calorThickness = nofLayers * layerThickness;
+  G4double calorThickness = fNofLayers * layerThickness;
   G4double worldSizeXY = 1.2 * calorSizeXY;
   G4double worldSizeZ  = 1.2 * calorThickness; 
   
@@ -138,9 +123,10 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
   G4Material* gapMaterial = G4Material::GetMaterial("liquidArgon");
   
   if ( ! defaultMaterial || ! absorberMaterial || ! gapMaterial ) {
-    G4cerr << "Cannot retrieve materials already defined. " << G4endl;
-    G4cerr << "Exiting application " << G4endl;
-    exit(1);
+    G4ExceptionDescription msg;
+    msg << "Cannot retrieve materials already defined."; 
+    G4Exception("B4DetectorConstruction::DefineVolumes()",
+      "MyCode0001", FatalException, msg);
   }  
    
   //     
@@ -208,7 +194,7 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
                  layerLV,          // its logical volume
                  calorLV,          // its mother
                  kZAxis,           // axis of replication
-                 nofLayers,        // number of replica
+                 fNofLayers,        // number of replica
                  layerThickness);  // witdth of replica
   
   //                               
@@ -222,7 +208,7 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
     = new G4LogicalVolume(
                  absorberS,        // its solid
                  absorberMaterial, // its material
-                 "Abso");          // its name
+                 "AbsoLV");        // its name
                                    
    new G4PVPlacement(
                  0,                // no rotation
@@ -245,7 +231,7 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
     = new G4LogicalVolume(
                  gapS,             // its solid
                  gapMaterial,      // its material
-                 "Gap");           // its name
+                 "GapLV");         // its name
                                    
   new G4PVPlacement(
                  0,                // no rotation
@@ -261,26 +247,12 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
   // print parameters
   //
   G4cout << "\n------------------------------------------------------------"
-         << "\n---> The calorimeter is " << nofLayers << " layers of: [ "
+         << "\n---> The calorimeter is " << fNofLayers << " layers of: [ "
          << absoThickness/mm << "mm of " << absorberMaterial->GetName() 
          << " + "
          << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " 
          << "\n------------------------------------------------------------\n";
   
-  
-  // 
-  // Sensitive detectors
-  //
-  B4cCalorimeterSD* absoSD 
-    = new B4cCalorimeterSD("AbsorberSD", "AbsorberHitsCollection", nofLayers);
-  G4SDManager::GetSDMpointer()->AddNewDetector(absoSD );
-  absorberLV->SetSensitiveDetector(absoSD);
-
-  B4cCalorimeterSD* gapSD 
-    = new B4cCalorimeterSD("GapSD", "GapHitsCollection", nofLayers);
-  G4SDManager::GetSDMpointer()->AddNewDetector(gapSD );
-  gapLV->SetSensitiveDetector(gapSD);
-
   //                                        
   // Visualization attributes
   //
@@ -298,25 +270,33 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4cDetectorConstruction::SetMagField(G4double fieldValue)
+void B4cDetectorConstruction::ConstructSDandField()
 {
-  // Apply a global uniform magnetic field along X axis
-  G4FieldManager* fieldManager
-    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  // G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
-  // Delete the existing magnetic field
-  if ( fMagField )  delete fMagField; 
+  // 
+  // Sensitive detectors
+  //
+  B4cCalorimeterSD* absoSD 
+    = new B4cCalorimeterSD("AbsorberSD", "AbsorberHitsCollection", fNofLayers);
+  SetSensitiveDetector("AbsoLV",absoSD);
 
-  if ( fieldValue != 0. ) {
-    // create a new one if not null
-    fMagField 
-      = new G4UniformMagField(G4ThreeVector(fieldValue, 0., 0.));
-      
-    fieldManager->SetDetectorField(fMagField);
-    fieldManager->CreateChordFinder(fMagField);
-  } 
-  else {
-    fMagField = 0;
-    fieldManager->SetDetectorField(fMagField);
-  }
+  B4cCalorimeterSD* gapSD 
+    = new B4cCalorimeterSD("GapSD", "GapHitsCollection", fNofLayers);
+  SetSensitiveDetector("GapLV",gapSD);
+
+  // 
+  // Magnetic field
+  //
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
+  
+  // Register the field messenger for deleting
+  G4AutoDelete::Register(fMagFieldMessenger);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

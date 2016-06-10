@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4GDMLParser.cc,v 1.5 2010-12-02 08:24:22 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4GDMLParser.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4GDMLParser.cc
 //

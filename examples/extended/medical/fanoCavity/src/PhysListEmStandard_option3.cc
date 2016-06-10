@@ -26,10 +26,10 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_option3.cc
 /// \brief Implementation of the PhysListEmStandard_option3 class
 //
-// $Id$
+// $Id: PhysListEmStandard_option3.cc 73201 2013-08-22 08:18:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard_option3.hh"
 #include "DetectorConstruction.hh"
@@ -43,7 +43,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel95.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -77,9 +76,9 @@ void PhysListEmStandard_option3::ConstructProcess()
   // Add standard EM Processes
   //
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -87,9 +86,10 @@ void PhysListEmStandard_option3::ConstructProcess()
       // gamma
     
       G4ComptonScattering* compton = new G4ComptonScattering();
-      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
+      MyKleinNishinaCompton* comptonModel = 
+        new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
-      compton->SetModel(comptonModel );
+      compton->SetEmModel(comptonModel );
             
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(compton);
@@ -98,7 +98,6 @@ void PhysListEmStandard_option3::ConstructProcess()
     } else if (particleName == "e-") {
       //electron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
             
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
@@ -110,7 +109,6 @@ void PhysListEmStandard_option3::ConstructProcess()
     } else if (particleName == "e+") {
       //positron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
             
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
@@ -143,7 +141,7 @@ void PhysListEmStandard_option3::ConstructProcess()
       
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  
       
   //energy loss
   //

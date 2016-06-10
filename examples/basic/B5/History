@@ -1,0 +1,293 @@
+$Id: History 78054 2013-12-03 08:26:31Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example B5 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+02 December 2013 Ivana Hrivnacova 
+- Fixed gui.mac:
+  corrected wireframe parameter, removed run2.mac from gui 
+
+28 November 2013 Ivana Hrivnacova (exampleB5-V09-06-11)
+- Added macros for GUI
+- Fixed range for selection rundomnly particle type
+- Improved documentation
+
+26 November 2013 Makoto Asai (exampleB5-V09-06-10)
+- Changed the way G4GenericMessenger declares UI commands that take units.
+
+26 November 2013 Ivana Hrivnacova (exampleB5-V09-06-09)
+- Fixed deleting magnetic field and its manager with use of G4AutoDelete 
+  utility
+
+22 November 2013 Joseph Perl (exampleB5-V09-06-08)
+- Added paragraph about HepRep attributes in README  
+
+22 November 2013 Ivana Hrivnacova 
+- Changed step limit size to 1 m  (more sutable for demonstration 
+  of the smooth trajectory visualization option)
+- Added paragraph about this limit in README  
+
+15 November 2013 Ivana Hrivnacova (exampleB5-V09-06-07)
+- Changed magnetic tube material to G4_Air (was G4_Galactic)
+  Resolves issue of low-energy electrons spinning forever in vacuum.
+  (By John Apostolakis.)
+
+02 November 2013 Ivana Hrivnacova (exampleB5-V09-06-06)
+- New tag for testing, no changes in the example
+
+31 October 2013 Ivana Hrivnacova (exampleB5-V09-06-05)
+- SetDefaultValue arguments passed in generic messenger commands
+  must be of G4Stringg type.
+  (This fixes compilation warnings.)
+
+30 October 2013 Ivana Hrivnacova (exampleB5-V09-06-04)
+- Replaced messenger classes with use of G4GenericMessenger
+- Removed SetNumberOfThreads from main
+- Updated macros and README
+
+10 October 2013 Ivana Hrivnacova (exampleB5-V09-06-03)
+- Fixed compiler warning from B5EventAction
+- Added class descriptions
+- Code clean-up
+
+08 October 2013 Ivana Hrivnacova (exampleB5-V09-06-02)
+- Migration to MT
+- Removed Edep vs Tof histogram (remained empty),
+  adjusted min max in Chamber1[2] XY histograms
+- Less verbose output from exampleB5.in and run2.mac
+- Code clean-up
+
+03 October 2013 Ivana Hrivnacova (exampleB5-V09-06-01)
+- A new tag co-working with a fix in ctest.
+
+03 October 2013 Ivana Hrivnacova (exampleB5-V09-06-00)
+- The first tagged version of the new B5 example created from 
+  extended/analysis/A01.
+
+05 June 2013  Ivana Hrivnacova (exampleA01-V09-06-04)
+- Updated .README for changes in README
+- Applied coding guidelines (data members initialization)
+- Removed unnecessary inline keyword
+- Fixed compilation with G4ANALYSIS_USE
+
+28 May 2013  Joseph Perl (exampleA01-V09-06-03)
+- Update README
+
+28 May 2013  Joseph Perl (exampleA01-V09-06-02)
+- Apply coding guidelines
+
+01 April 2013 Andrea Dotti (exampleA01-V09-06-01)
+- New G4VUserPhysicsList interface 
+
+18 December 2012 Michael Kelsey (exampleA01-V09-06-00)
+- Replace G4AntiProtonAnnihiliationAtRest with G4AntiProtonAbsorptionFritiof.
+
+16 November 2012 Ivana Hrivnacova (exampleA01-V09-05-03)
+- Fixed .README file for artefacts from Markdown support
+
+31 August 2012 Ivana Hrivnacova (exampleA01-V09-05-02)
+- Minor fixes in CMakeList.txt
+
+24 August 2012 Ivana Hrivnacova (exampleA01-V09-05-01)
+- README.JAIDA replaced with more general README.AIDA (revised 
+  by Guy Barrand)
+- Added README.OpenScientist (previously AnaEx03/UseOpenScientist.txt) 
+- Added .README files for Doxygen documentation
+- Added file descriptions for all .hh and .cc
+- Fixed functions names in B5AnalysisManager (to get example 
+  compiling)
+- Adding support for building example with AIDA in CMake build   
+
+19 June 2012  Joseph Perl (exampleA01-V09-05-00)
+- Corrected order of filling x and y for Cloud2D
+
+20 April 2012  Joseph Perl
+- Apply coding guidelines
+
+28 October 2011  Joseph Perl (exampleA01-V09-04-00)
+- Corrected order of filling x and y for Cloud2D
+
+4 June 2010  Joseph Perl (exampleA01-V09-03-00)
+- Updated vis usage.
+
+2 Dec 2009  Joseph Perl (exampleA01-V09-02-02)
+- B5MuonPhysics: change hMultipleScattering to MuMultipleScattering.
+
+20 Mov 2009  Joseph Perl (exampleA01-V09-02-01)
+- B5DetectorConstruction, B5MagneticField: improve handing of field.
+  Resolves bug 1012.
+- B5Trajectory: removed.  Example uses G4Trajectory.
+- Update to new multiple scattering classes.
+- README: General update.
+	  Remove references to obsolete SLAC Geant4 tutorial CD.
+
+14 Mov 2009  John Allison (exampleA01-V09-02-00)
+- exampleA01.cc: Introduced G4UIExecutive.
+
+5 March 2009 Guy Barrand
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file, since
+  it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
+
+17 May 2007 - Mark Donszelmann (exampleA01-V08-03-01)
+- Fixed memory leak for plotter
+
+16 May 2007 - Mark Donszelmann
+- Fixed warning message about JAS-JAIDA window on exit.
+
+13 November 2006 - Joseph Perl (exampleA01-V08-01-02)
+- Remove unused attributes from hit classes.
+
+10 November 2006 - Mark Donszelmann (exampleA01-V08-01-01)
+- Fixed Makefile
+- Fixed limits on histogram
+
+6 November 2006 - John Allison (exampleA01-V08-01-00)
+- Change "Bookkeeping" to "Physics" in G4AttDefs.
+- Removed tracking action.  Use "/vis/scene/add/trajectories rich", etc.
+- Invoke G4UIterminal(new G4UItcsh) if G4UI_USE_TCSH set.
+
+1 June 2006 - Joseph Perl (exampleA01-V08-00-01)
+- Add Time attribute to Hit classes.
+
+2 June 2005 - Joseph Perl (exampleA01-V07-00-05)
+- Add G4Atts to the four hit classes.
+
+1 June 2005 - Mark Donszelmann (exampleA01-V07-00-04)
+- Updated documentation for the use of Binary HepRep.
+
+31st May 2005 -  Mark Donszelmann (exampleA01-V07-00-03)
+- Added setting of initial viewpoint to macro files for heprep and bheprep.
+
+26th May 2005 -  Mark Donszelmann (exampleA01-V07-00-02)
+- Fixed filling of hit histograms.
+
+16th May 2005 -  Mark Donszelmann (exampleA01-V07-00-01)
+- Added bheprep example files.
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+31 March 2005 Mark Donszelmann (exampleA01-V07-00-00)
+- Fixed linking problem with AIDA by replacing LOADLIBS with LDLIBS
+  which is not touched by the replacement strategy in binmake.gmk
+  for WIN32-VC.
+
+13th December 2004 Gabriele Cosmo (exampleA01-V06-02-03)
+- Modified hadlists.gmk to new phys-lists structure.
+
+3rd December 2004 Gabriele Cosmo (exampleA01-V06-02-02)
+- Implemented migration to <cmath>.
+
+23rd November 2004 Mark Donszelmann (exampleA01-V06-02-01)
+- Removed dependency from user hadronics lists
+
+14th July 2004 Gabriele Cosmo (exampleA01-V06-02-00)
+- hadlist.gmk: removed unnecessary kernel libraries list.
+  Fixes problem report #647.
+
+27th May 2004 Mark Donszelmann (exampleA01-V06-01-01)
+- Updated Mac file to write separate geometry.
+
+26th May 2004 Mark Donszelmann (exampleA01-V06-01-00)
+- Updated mac files for HepRep2 driver to set zoom factor and coordinate system.
+
+9th February 2004 Makoto Asai (exampleA01-V06-00-00)
+- Fix EM part of the physics list to use the new 
+  processes introduced at 6.0.
+- Reference output is updated accordingly.
+
+ 1st December 2003 Joseph Perl
+- Removed endOfEventAction.mac since new vis policy provides such a flush
+  automatically.
+- Updated README to include more information about HepRep2 macros.
+
+17th November 2003 Makoto Asai (exampleA01-V05-02-00)
+- Introducing test.in macro for batch mode testing and its reference output.
+
+13th November 2003 John Allison
+- Removed OPACS from Vis Manager.
+
+15th October 2003 Mark Donszelmann
+- Updated README.JAIDA to refer to the proper versions of JAIDA and AIDAJNI.
+  Also changed compilation instructions to use aida-config.
+- Made sure G4HadronPhysics is compiled without optmization on Darwin-g++,
+  Darwin-g++2 and Darwin-g++3 (MacOS X).
+
+14th October 2003 Mark Donszelmann
+- Added clear statement to GNUmakefile that G4HadronPhysics is compiled
+  without optimization.
+- Made sure G4HadronPhysics is compiled without optimization on Linux-g++,
+  Linux-g++2 and Linux-g++3.
+
+14th October 2003 Joseph Perl
+- Remove SetForceWireFrame(false) from three hit classes since these
+  are redundant to the SetForceSolid(true) statements already there.
+
+14th October 2003 Joseph Perl
+- Remove SetForceWireFrame(true) statements from B5DetectorConstruction.cc.
+  The user can instead control this at runtime using /vis/viewer/set/style
+
+13th October 2003 Mark Donszelmann
+- Re-included B5EventActionMessenger in general (non G4ANALYSIS_USE) compilation
+  for use with B5EventACtion, see comment below.
+- Removed all include/AIDA include files and changed the GNUmakefile. 
+  To compile/link with G4ANALYSIS_USE you will need an AIDA 3.0 compliant 
+  implementation, such as AIDAJNI. The makefile will execute aida-config
+  to find the include files and the libraries to link with.
+- setup-analysis.csh/sh/win32 now only sets up G4 specific flags to compile
+  in the AIDA analysis framework.
+  
+13th October 2003 Joseph Perl
+- Minor changes to README's sections on vis and analysis.
+
+12th October 2003 Makoto Asai
+- Move G4ANALYSIS_USE ifdef blocks so that event summary is printed out
+  regardless of this flag. Only the AIDA part in B5EventAction is 
+  blocked.
+
+12th October 2003 Joseph Perl
+- Modify G4TrackingAction to use G4Trajectory rather than B5Trajectory.
+  This allows trajectories to pick up physics attributes.
+  Left B5Trajectory in place as alternative to get color coding by
+  particle type, but no physics attributes.
+  Will later come up with a good scheme to make choice of one or the other
+  or both of these choices at run time.
+- Renamed visualization macro heprep.mac to vis.mac
+
+20th August 2003 Mark Donszelmann
+- Updated code to run with AIDAJNI 3.0.3 release, which adds compilation
+  under g++ 3.2.
+- Added aida.mac example file.
+
+14th August 2003 Mark Donszelmann
+- Code will only compile AIDA parts if G4ANALYSIS_USE is set.
+
+11th July 2003 Mark Donszelmann
+- Fixed all warnings under g++ 2.95.3.
+
+3rd April 2003 Mark Donszelmann (examples-analysis-B5-V05-00-00)
+- Added 2 more histograms to the example
+- Fixed NullPointerException by letting SDManager delete the detectors created in
+  DetectorConstruction.cc
+- Added comment when quitting Geant4 that JAS window still needs closing.
+
+26th November 2002 Mark Donszelmann
+- Fixed DrifChamberHit to have a reasonable screensize (2) rather than 0.1
+- Fixed minimum value for EmCalHit color to be visible (0.4).
+
+14th November 2002 Mark Donszelmann
+- Added B5 example to repository

@@ -1,0 +1,14 @@
+#
+/mydet/RoIangle 10 deg
+/mydet/reqmuon 1
+/mydet/isomuon 1
+#
+/particle/createAllIon
+/control/verbose 2
+/run/verbose 2
+/event/verbose 1
+/tracking/verbose 1
+/run/beamOn 100
+###/run/beamOn 40
+#
+

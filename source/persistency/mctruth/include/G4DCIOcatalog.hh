@@ -89,7 +89,7 @@ class G4DCIOcatalog
 
     private:
       int m_verbose;
-      static G4DCIOcatalog* f_thePointer;
+      static G4ThreadLocal G4DCIOcatalog* f_thePointer;
       DCIOmap theCatalog;
       DCIOstore theStore;
 

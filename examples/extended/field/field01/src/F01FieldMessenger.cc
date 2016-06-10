@@ -27,23 +27,20 @@
 /// \brief Implementation of the F01FieldMessenger class
 //
 //
-// $Id$
+// $Id: F01FieldMessenger.cc 76248 2013-11-08 11:19:52Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F01FieldMessenger.hh"
 
 #include "F01FieldSetup.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
  : G4UImessenger(),
@@ -53,7 +50,7 @@ F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
    fMagFieldCmd(0),
    fMinStepCmd(0),
    fUpdateCmd(0)
-{ 
+{
   fFieldDir = new G4UIdirectory("/field/");
   fFieldDir->SetGuidance("F01 field tracking control.");
 
@@ -63,29 +60,28 @@ F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
   fStepperCmd->SetDefaultValue(4);
   fStepperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
- 
   fUpdateCmd = new G4UIcmdWithoutParameter("/field/update",this);
   fUpdateCmd->SetGuidance("Update calorimeter geometry.");
   fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
   fUpdateCmd->AvailableForStates(G4State_Idle);
-      
-  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
+ 
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);
   fMagFieldCmd->SetGuidance("Define magnetic field.");
   fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   fMagFieldCmd->SetParameterName("Bz",false,false);
   fMagFieldCmd->SetDefaultUnit("tesla");
-  fMagFieldCmd->AvailableForStates(G4State_Idle); 
+  fMagFieldCmd->AvailableForStates(G4State_Idle);
  
-  fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
+  fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCmd->SetGuidance("Define minimal step");
   fMinStepCmd->SetGuidance("Magnetic field will be in Z direction.");
   fMinStepCmd->SetParameterName("min step",false,false);
   fMinStepCmd->SetDefaultUnit("mm");
-  fMinStepCmd->AvailableForStates(G4State_Idle);  
+  fMinStepCmd->AvailableForStates(G4State_Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01FieldMessenger::~F01FieldMessenger()
 {
@@ -96,26 +92,18 @@ F01FieldMessenger::~F01FieldMessenger()
   delete fUpdateCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
-{ 
+{
   if( command == fStepperCmd )
-  { 
     fEMfieldSetup->SetStepperType(fStepperCmd->GetNewIntValue(newValue));
-  }  
   if( command == fUpdateCmd )
-  { 
-    fEMfieldSetup->CreateStepperAndChordFinder(); 
-  }
+    fEMfieldSetup->CreateStepperAndChordFinder();
   if( command == fMagFieldCmd )
-  { 
     fEMfieldSetup->SetFieldValue(fMagFieldCmd->GetNewDoubleValue(newValue));
-  }
   if( command == fMinStepCmd )
-  { 
     fEMfieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));
-  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

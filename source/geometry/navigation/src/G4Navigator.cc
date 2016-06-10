@@ -71,6 +71,8 @@ G4Navigator::G4Navigator()
 
   fStepEndPoint = G4ThreeVector( kInfinity, kInfinity, kInfinity ); 
   fLastStepEndPointLocal = G4ThreeVector( kInfinity, kInfinity, kInfinity ); 
+
+  fpVoxelSafety= new G4VoxelSafety();
 }
 
 // ********************************************************************
@@ -78,7 +80,7 @@ G4Navigator::G4Navigator()
 // ********************************************************************
 //
 G4Navigator::~G4Navigator()
-{;}
+{ delete fpVoxelSafety; }
 
 // ********************************************************************
 // ResetHierarchyAndLocate
@@ -716,7 +718,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fCalculatedExitNormal  = false;
     // Reset for new step
 
-  static G4int sNavCScalls=0;
+  static G4ThreadLocal G4int sNavCScalls=0;
   sNavCScalls++;
 
   fLastTriedStepComputation= true; 
@@ -1589,7 +1591,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 }
 
 // To make the new Voxel Safety the default, uncomment the next line
-// #define  G4NEW_SAFETY  1
+#define  G4NEW_SAFETY  1
 
 // ********************************************************************
 // ComputeSafety
@@ -1663,54 +1665,8 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
           if ( pVoxelHeader )
           {
 #ifdef G4NEW_SAFETY
-            static G4VoxelSafety sfVoxelSafety;
-            G4double safetyTwo = sfVoxelSafety.ComputeSafety(localPoint,
+            G4double safetyTwo = fpVoxelSafety->ComputeSafety(localPoint,
                                            *motherPhysical, pMaxLength);
-#ifdef G4DEBUG_NAVIGATION
-            G4double safetyNormal=
-               fnormalNav.ComputeSafety(localPoint, fHistory, pMaxLength);
-
-            G4double diffSafety= (safetyTwo - safetyNormal);
-            if( std::fabs(diffSafety) > CLHEP::perMillion
-                                      * std::fabs(safetyNormal) )
-            {
-              G4ExceptionDescription exd;
-              exd << " ERROR in G4Navigator::ComputeStep " << G4endl;
-              exd << "  Error>  DIFFERENCE in Safety from G4VoxelSafety "
-                  << " - compared to value from Normal.  Diff = " << diffSafety << G4endl;
-              exd << "  New Voxel Safety= " << safetyTwo
-                  << "  Value from Normal= " << safetyNormal << G4endl;
-              exd << "  Location:  Local coordinates = " << localPoint
-                  << "  mother Volume= " << *motherPhysical->GetName()
-                  << "  Copy# = " << motherPhysical->GetCopyNo() << G4endl;
-              exd << "          : Global coordinates = " << pGlobalpoint
-                  << G4endl;
-              G4Exception("G4Navigator::ComputeSafety()",
-                          "GeomNav0003", JustWarning, exd);
-            }
-            G4double safetyOldVoxel;
-            safetyOldVoxel =
-              fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
-
-            G4double diffBetterToApprox= safetyTwo - safetyOldVoxel;
-            if( diffBetterToApprox < 0.0 )
-            {
-              G4ExceptionDescription exd;
-              exd << "SMALLER Safety from call G4VoxelSafety compared to value "
-                  << " from Normal.  Diff = " << diffSafety << G4endl;
-              exd << " New Voxel Safety= " << safetyTwo
-                  << "  Old value from Normal= " << newSafety << G4endl;
-              exd << "  Location:  Local coordinates = " << localPoint
-                  << "  mother Volume= " << *motherPhysical->GetName()
-                  << "  Copy# = " << motherPhysical->GetCopyNo() << G4endl;
-              exd << "          : Global coordinates = " << pGlobalpoint
-                  << G4endl;
-              G4Exception("G4Navigator::ComputeSafety()",
-                          "GeomNav0003", JustWarning, exd);
-            }
-#endif
-
-            // newSafety= safetyOldVoxel;
             newSafety= safetyTwo;   // Faster and best available
 #else
             G4double safetyOldVoxel;
@@ -1901,7 +1857,7 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
               << fAccuracyForException/mm << " mm.";
 
       suggestion << " ";
-      static G4int warnNow = 0;
+      static G4ThreadLocal G4int warnNow = 0;
       if( ((++warnNow % 100) == 1) )
       {
         message << G4endl

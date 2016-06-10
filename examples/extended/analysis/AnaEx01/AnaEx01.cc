@@ -27,22 +27,23 @@
 /// \brief Main program of the analysis/AnaEx01 example
 //
 //
-// $Id$
+// $Id: AnaEx01.cc 73919 2013-09-17 07:38:47Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
-#include "HistoManager.hh"
+#include "ActionInitialization.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
+
+#include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -58,36 +59,21 @@ int main(int argc,char** argv)
 {     
   // Construct the default run manager
   //
+#ifdef G4MULTITHREADED
+  G4int nThreads = 4;
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(nThreads);
+#else
   G4RunManager * runManager = new G4RunManager;
+#endif
 
   // Set mandatory initialization classes
   //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  //
-  PhysicsList* physics = new PhysicsList;
-  runManager->SetUserInitialization(physics);
- 
-  // set an HistoManager
-  //
-  HistoManager*  histo = new HistoManager();
+  runManager->SetUserInitialization(new PhysicsList);
+  runManager->SetUserInitialization(new ActionInitialization(detector));
       
-  // Set user action classes
-  //
-  PrimaryGeneratorAction* gen_action = 
-                          new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(gen_action);
-  //
-  RunAction* run_action = new RunAction(histo);  
-  runManager->SetUserAction(run_action);
-  //
-  EventAction* event_action = new EventAction(run_action,histo);
-  runManager->SetUserAction(event_action);
-  //
-  SteppingAction* stepping_action =
-                    new SteppingAction(detector, event_action);
-  runManager->SetUserAction(stepping_action);
-  
   // Initialize G4 kernel
   //
   runManager->Initialize();
@@ -124,7 +110,6 @@ int main(int argc,char** argv)
     }
   
   // Job termination
-  delete histo;                
   delete runManager;
 
   return 0;

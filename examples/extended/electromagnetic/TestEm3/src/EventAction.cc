@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id$
+// $Id: EventAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(DetectorConstruction* det, RunAction* run)
-:fDetector(det), fRunAct(run)
+:G4UserEventAction(),fDetector(det), fRunAct(run),
+ fEventMessenger(0)
 {
   fDrawFlag = "none";
   fPrintModulo = 10000;

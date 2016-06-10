@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSTrajectory.cc 72065 2013-07-05 09:54:59Z gcosmo $
+//
 /// \file optical/wls/src/WLSTrajectory.cc
 /// \brief Implementation of the WLSTrajectory class
 //
 //
-//
-
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4AttDefStore.hh"
@@ -52,49 +52,55 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<WLSTrajectory> WLSTrajectoryAllocator;
+G4ThreadLocal G4Allocator<WLSTrajectory>* WLSTrajectoryAllocator=0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSTrajectory::WLSTrajectory()
     : fpPointsContainer(0), fTrackID(0), fParentID(0),
-      PDGCharge(0.0), PDGEncoding(0), ParticleName(""),
-      initialMomentum(G4ThreeVector())
+      fPDGCharge(0.0), fPDGEncoding(0), fParticleName(""),
+      fInitialMomentum(G4ThreeVector())
 {
-    wls         = false;
-    drawit      = false;
-    forceNoDraw = false;
-    forceDraw   = false;
+    fWLS         = false;
+    fDrawIt      = false;
+    fForceNoDraw = false;
+    fForceDraw   = false;
 
-    particleDefinition = NULL;
+    fParticleDefinition = NULL;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSTrajectory::WLSTrajectory(const G4Track* aTrack)
 {
-    particleDefinition = aTrack->GetDefinition();
-    ParticleName = particleDefinition->GetParticleName();
-    PDGCharge = particleDefinition->GetPDGCharge();
-    PDGEncoding = particleDefinition->GetPDGEncoding();
+    fParticleDefinition = aTrack->GetDefinition();
+    fParticleName = fParticleDefinition->GetParticleName();
+    fPDGCharge = fParticleDefinition->GetPDGCharge();
+    fPDGEncoding = fParticleDefinition->GetPDGEncoding();
     fTrackID = aTrack->GetTrackID();
     fParentID = aTrack->GetParentID();
-    initialMomentum = aTrack->GetMomentum();
+    fInitialMomentum = aTrack->GetMomentum();
     fpPointsContainer = new WLSTrajectoryPointContainer();
     // Following is for the first trajectory point
     fpPointsContainer->push_back(new WLSTrajectoryPoint(aTrack));
 
-    wls         = false;
-    drawit      = false;
-    forceNoDraw = false;
-    forceDraw   = false;
+    fWLS         = false;
+    fDrawIt      = false;
+    fForceNoDraw = false;
+    fForceDraw   = false;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSTrajectory::WLSTrajectory(WLSTrajectory & right) : G4VTrajectory()
 {
-    particleDefinition=right.particleDefinition;
-    ParticleName = right.ParticleName;
-    PDGCharge = right.PDGCharge;
-    PDGEncoding = right.PDGEncoding;
+    fParticleDefinition=right.fParticleDefinition;
+    fParticleName = right.fParticleName;
+    fPDGCharge = right.fPDGCharge;
+    fPDGEncoding = right.fPDGEncoding;
     fTrackID = right.fTrackID;
     fParentID = right.fParentID;
-    initialMomentum = right.initialMomentum;
+    fInitialMomentum = right.fInitialMomentum;
     fpPointsContainer = new WLSTrajectoryPointContainer();
 
     for(size_t i=0;i<right.fpPointsContainer->size();++i) {
@@ -103,11 +109,13 @@ WLSTrajectory::WLSTrajectory(WLSTrajectory & right) : G4VTrajectory()
         fpPointsContainer->push_back(new WLSTrajectoryPoint(*rightPoint));
     }
 
-    wls         = right.wls;
-    drawit      = right.drawit;
-    forceNoDraw = right.forceNoDraw;
-    forceDraw   = right.forceDraw;
+    fWLS         = right.fWLS;
+    fDrawIt      = right.fDrawIt;
+    fForceNoDraw = right.fForceNoDraw;
+    fForceDraw   = right.fForceDraw;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSTrajectory::~WLSTrajectory()
 {
@@ -119,6 +127,8 @@ WLSTrajectory::~WLSTrajectory()
     delete fpPointsContainer;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSTrajectory::ShowTrajectory(std::ostream& os) const
 {
     // Invoke the default implementation in G4VTrajectory...
@@ -126,15 +136,15 @@ void WLSTrajectory::ShowTrajectory(std::ostream& os) const
     // ... or override with your own code here.
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSTrajectory::DrawTrajectory() const
 {
-  // Invoke the default implementation in G4VTrajectory...
-  G4VTrajectory::DrawTrajectory();
-  // ... or override with your own code here.
-}
+    // i_mode is no longer available as an argument of G4VTrajectory.
+    // In this exampple it was always called with an argument of 50.
+    const G4int i_mode = 50;
+    // Consider using commands /vis/modeling/trajectories.
 
-void WLSTrajectory::DrawTrajectory(G4int i_mode) const
-{
     // Invoke the default implementation in G4VTrajectory...
     // G4VTrajectory::DrawTrajectory(i_mode);
     // ... or override with your own code here.
@@ -142,7 +152,7 @@ void WLSTrajectory::DrawTrajectory(G4int i_mode) const
     //Taken from G4VTrajectory and modified to select colours based on particle
     //type and to selectively eliminate drawing of certain trajectories.
 
-    if (!forceDraw && (!drawit || forceNoDraw)) return;
+    if (!fForceDraw && (!fDrawIt || fForceNoDraw)) return;
 
     // If i_mode>=0, draws a trajectory as a polyline and, if i_mode!=0,
     // adds markers - yellow circles for step points and magenta squares
@@ -188,8 +198,8 @@ void WLSTrajectory::DrawTrajectory(G4int i_mode) const
     if (lineRequired) {
       G4Colour colour;
 
-      if(particleDefinition==G4OpticalPhoton::OpticalPhotonDefinition()){
-        if(wls) //WLS photons are red
+      if(fParticleDefinition==G4OpticalPhoton::OpticalPhotonDefinition()){
+        if(fWLS) //WLS photons are red
           colour = G4Colour(1.,0.,0.);
         else{ //Scintillation and Cerenkov photons are green
           colour = G4Colour(0.,1.,0.);
@@ -219,15 +229,21 @@ void WLSTrajectory::DrawTrajectory(G4int i_mode) const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSTrajectory::AppendStep(const G4Step* aStep)
 {
     fpPointsContainer->push_back(new WLSTrajectoryPoint(aStep));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4ParticleDefinition* WLSTrajectory::GetParticleDefinition()
 {
-    return (G4ParticleTable::GetParticleTable()->FindParticle(ParticleName));
+    return (G4ParticleTable::GetParticleTable()->FindParticle(fParticleName));
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
@@ -242,6 +258,8 @@ void WLSTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
     delete (*second->fpPointsContainer)[0];
     second->fpPointsContainer->clear();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const std::map<G4String,G4AttDef>* WLSTrajectory::GetAttDefs() const
 {
@@ -283,6 +301,8 @@ const std::map<G4String,G4AttDef>* WLSTrajectory::GetAttDefs() const
     return store;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 std::vector<G4AttValue>* WLSTrajectory::CreateAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
@@ -293,19 +313,19 @@ std::vector<G4AttValue>* WLSTrajectory::CreateAttValues() const
   values->push_back
     (G4AttValue("PID",G4UIcommand::ConvertToString(fParentID),""));
 
-  values->push_back(G4AttValue("PN",ParticleName,""));
+  values->push_back(G4AttValue("PN",fParticleName,""));
 
   values->push_back
-    (G4AttValue("Ch",G4UIcommand::ConvertToString(PDGCharge),""));
+    (G4AttValue("Ch",G4UIcommand::ConvertToString(fPDGCharge),""));
 
   values->push_back
-    (G4AttValue("PDG",G4UIcommand::ConvertToString(PDGEncoding),""));
+    (G4AttValue("PDG",G4UIcommand::ConvertToString(fPDGEncoding),""));
 
   values->push_back
-    (G4AttValue("IMom",G4BestUnit(initialMomentum,"Energy"),""));
+    (G4AttValue("IMom",G4BestUnit(fInitialMomentum,"Energy"),""));
 
   values->push_back
-    (G4AttValue("IMag",G4BestUnit(initialMomentum.mag(),"Energy"),""));
+    (G4AttValue("IMag",G4BestUnit(fInitialMomentum.mag(),"Energy"),""));
 
   values->push_back
     (G4AttValue("NTP",G4UIcommand::ConvertToString(GetPointEntries()),""));

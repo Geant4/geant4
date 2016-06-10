@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VRML2SceneHandlerFunc.icc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 // G4VRML2SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -32,6 +32,8 @@
 //#define DEBUG_SCENE_FUNC
 
 #include "G4VisManager.hh"
+
+#include <sstream>
 
 void G4VRML2SCENEHANDLER::AddSolid(const G4Trd& trd)
 {
@@ -284,19 +286,6 @@ void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 
 } 
 
-
-void G4VRML2SCENEHANDLER::AddPrimitive(const G4NURBS&)
-{
-#if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cout << "***** AddPrimitive nurbs" << "\n" ;
-#endif 
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cout << "G4VRML2File::AddPrimitive(G4NURBS&): not implemented. " << "\n" ;
-
-	VRMLBeginModeling () ;
-}
-
 void G4VRML2SCENEHANDLER::AddPrimitive( const G4Text& ) 
 {
 #if defined DEBUG_SCENE_FUNC
@@ -519,17 +508,19 @@ void G4VRML2SCENEHANDLER::SendMaterialNode( const G4VisAttributes*  pVA )
 
 	//  Wireframe or not
 	const	G4ViewParameters& cur_view_param = fpViewer -> GetViewParameters ();
-	if (pVA->IsForceDrawingStyle() &&
-	   (pVA->GetForcedDrawingStyle() == G4VisAttributes::wireframe)) 
-	{
-		// wireframe style is assigned to this object
-		flagWF = true ;
+        if (pVA) {
+          if (pVA->IsForceDrawingStyle() &&
+              (pVA->GetForcedDrawingStyle() == G4VisAttributes::wireframe))
+          {
+            // wireframe style is assigned to this object
+            flagWF = true ;
 
-	} else if ( cur_view_param.GetDrawingStyle() == G4ViewParameters::wireframe )   
-	{
-		// current viewing style is  wireframe 
-		flagWF = true  ;
-	} 
+          } else if ( cur_view_param.GetDrawingStyle() == G4ViewParameters::wireframe )
+          {
+            // current viewing style is  wireframe 
+            flagWF = true  ;
+          }
+        }
 
 	// VRML codes are generated below
 	if (!pVA) { 
@@ -724,9 +715,11 @@ G4double      G4VRML2SCENEHANDLER::SetPVTransparency ()
 	if( getenv( "G4VRML_TRANSPARENCY" ) != NULL ) {
 
 		// get a value from the env value
-		sscanf( getenv("G4VRML_TRANSPARENCY"), "%lg", &TRANSPARENCY ) ;
+//		sscanf( getenv("G4VRML_TRANSPARENCY"), "%lg", &TRANSPARENCY ) ;
+          std::istringstream iss( getenv("G4VRML_TRANSPARENCY") );
+          iss >> TRANSPARENCY;
 
-		// truncation 
+		// truncation
 		TRANSPARENCY = std::fabs ( TRANSPARENCY ) ; 
 		if ( TRANSPARENCY > 1.0 ) { TRANSPARENCY = 1.0 ; }
 	} 

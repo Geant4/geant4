@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PVPlacement.hh 73250 2013-08-22 13:22:23Z gcosmo $
 //
 // 
 // class G4PVPlacement
@@ -126,12 +126,14 @@ class G4PVPlacement : public G4VPhysicalVolume
     void  SetCopyNo(G4int CopyNo);
       // Gets and sets the copy number of the volume.
 
-    G4bool CheckOverlaps(G4int res=1000, G4double tol=0., G4bool verbose=true);
+    G4bool CheckOverlaps(G4int res=1000, G4double tol=0.,
+                         G4bool verbose=true, G4int maxErr=1);
       // Verifies if the placed volume is overlapping with existing
       // daughters or with the mother volume. Provides default resolution
       // for the number of points to be generated and verified.
       // A tolerance for the precision of the overlap check can be specified,
       // by default it is set to maximum precision.
+      // Reports a maximum of overlaps errors according to parameter in input.
       // Returns true if the volume is overlapping.
 
   public:  // without description

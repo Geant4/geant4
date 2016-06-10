@@ -23,20 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: field02.cc 77484 2013-11-25 10:11:57Z gcosmo $
+//
 /// \file field/field02/field02.cc
 /// \brief Main program of the field/field02 example
 //
+//
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "F02DetectorConstruction.hh"
-#include "F02ElectricFieldSetup.hh"
-#include "F02PhysicsList.hh"
-#include "F02PrimaryGeneratorAction.hh"
-#include "F02RunAction.hh"
-#include "F02EventAction.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "F02SteppingVerbose.hh"
-
 #include "G4RunManager.hh"
+#endif
+
+#include "F02PhysicsList.hh"
+#include "F02DetectorConstruction.hh"
+
+#include "F02ActionInitialization.hh"
+
 #include "G4UImanager.hh"
+
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -47,81 +58,78 @@
 #include "G4UIExecutive.hh"
 #endif
 
-int main(int argc,char** argv) 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+int main(int argc,char** argv)
 {
+  // Choose the Random engine
+  //
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  //choose the Random engine
-
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-
-  G4VSteppingVerbose::SetInstance(new F02SteppingVerbose);
-  
   // Construct the default run manager
+  //
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+#else
+  G4VSteppingVerbose::SetInstance(new F02SteppingVerbose);
+  G4RunManager * runManager = new G4RunManager;
+#endif
 
-  G4RunManager* runManager = new G4RunManager;
-
-  // Construct the helper class to manage the electric field & 
-  // the parameters for the propagation of particles in it.
-
-  F02ElectricFieldSetup* field = new F02ElectricFieldSetup() ;
-    
   // Set mandatory initialization classes
-
-  F02DetectorConstruction* detector = new F02DetectorConstruction;
+  //
+  // Detector construction
+  F02DetectorConstruction* detector = new F02DetectorConstruction();
   runManager->SetUserInitialization(detector);
+  // Physics list
   runManager->SetUserInitialization(new F02PhysicsList(detector));
-  
-  // Set user action classes
+  // User action initialization
+  runManager->SetUserInitialization(new F02ActionInitialization(detector));
 
-  runManager->SetUserAction(new F02PrimaryGeneratorAction(detector));
-
-  F02RunAction* runAction = new F02RunAction;
-  runManager->SetUserAction(runAction);
-
-  runManager->SetUserAction(new F02EventAction(runAction));
-  
-  // Initialize G4 kernel, physics tables ...
-
+  // Initialize G4 kernel
+  //
   runManager->Initialize();
-    
+
 #ifdef G4VIS_USE
-
-  // visualization manager
-
+  // Initialize visualization
+  //
   G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
+#endif
 
-#endif 
- 
-  // get the pointer to the User Interface manager 
+  // Get the pointer to the User Interface manager
+  //
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
- 
   if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);
     }
   else
     {  // interactive mode : define UI session
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+     if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
+     ui->SessionStart();
+     delete ui;
 #endif
     }
-    
-  // job termination
+
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
 
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  delete field;
   delete runManager;
 
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

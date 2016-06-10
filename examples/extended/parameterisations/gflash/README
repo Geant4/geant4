@@ -47,11 +47,11 @@ To use GFLASH the user has to implement the following to use GFLASH:
       	 * Initializing shower modell
        	***********************************************/	
        	cout<<"Shower parameterization"<<endl;
-       	m_theFastShowerModel =  new GFlashShowerModel("fastShowerModel",m_calo_log);
-       	m_theParametrisation = new GFlashHomoShowerParamterisation(matManager->getMaterial(mat));
-       	m_theFastShowerModel->SetParametrisation(*m_theParametrisation);
-       	m_theFastShowerModel->SetParticleBounds(*m_theParticleBounds) ;
-       	m_theFastShowerModel->SetHitMaker(*m_theHMaker);	 
+       	fTheFastShowerModel =  new GFlashShowerModel("fastShowerModel",m_calo_log);
+       	fTheParametrisation = new GFlashHomoShowerParamterisation(matManager->getMaterial(mat));
+       	fTheFastShowerModel->SetParametrisation(*fTheParametrisation);
+       	fTheFastShowerModel->SetParticleBounds(*fTheParticleBounds) ;
+       	fTheFastShowerModel->SetHitMaker(*fTheHMaker);	 
        	cout<<"end shower parameterization"<<endl;
        	/**********************************************/
 

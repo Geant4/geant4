@@ -14,6 +14,86 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 Nov   2013 A. Ribon       (hadr-stopping-V09-06-11)
+--------------------------------------------------------------------
+- Updated GNUmakefile and sources.cmake to reflect removal of HE
+  hadronic models.
+
+03 Oct   2013 K. Genser      (hadr-stopping-V09-06-10)
+--------------------------------------------------------------------
+- G4MuonMinusCapture.cc
+  Replaced native PreCompound model with Bertini
+  (G4MuMinusCapturePrecompound with G4CascadeInterface)
+
+16 July  2013 G. Cosmo       (hadr-stopping-V09-06-09)
+--------------------------------------------------------------------
+- Correction to CMake scripts for granular build.
+
+04 June  2013 A. Ribon       (hadr-stopping-V09-06-08)
+--------------------------------------------------------------------
+- G4MuonMinusCaptureAtRest  
+  fix inside .cc file to access ions via IonTable class and
+  GetIon method
+
+01 May   2013 K. Genser      (hadr-stopping-V09-06-07)
+--------------------------------------------------------------------
+- G4MuonMinusBoundDecay 
+  improved muon capture rate data/lookup and improved 
+  calculation of bound muon decay rate
+
+24 April 2013 K. Genser      (hadr-stopping-V09-06-06)
+--------------------------------------------------------------------
+- G4MuonMinusBoundDecay.hh, G4MuonMinusBoundDecay.cc
+  G4StopElementSelector.cc
+  corrected calculations and lookup of MuonCaptureRate
+
+24 April 2013 V. Ivantchenko (hadr-stopping-V09-06-05)
+--------------------------------------------------------------------
+- G4EmCaptureCascade - fix inside .cc file instead of .hh
+
+24 April 2013 V. Ivantchenko (hadr-stopping-V09-06-04)
+--------------------------------------------------------------------
+- G4EmCaptureCascade - fixed array length (reported by Coverity)
+
+15 March 2013 V. Ivantchenko (hadr-stopping-V09-06-03)
+--------------------------------------------------------------------
+- G4MuMinusCapturePrecompound, G4EmCaptureCascade,
+  G4MuonMinusBoundDecay, G4StopElementSelector - fixed Coverity warnings,
+    removed "static" const, make physics methods public to be used
+    in unit tests
+
+28 January 2013 Julia Yarba (hadr-stopping-V09-06-02)
+---------------------------------------------------------
+- Remove G4ThreadLocal from G4StopElementSelector, G4MuMinusCaptureCascade,
+  G4MuonMinusBoundDecay, and replace with static const as those arrays are 
+  NOT mutable; this is part of adapting for MT processing
+
+13 December 2012 Michael Kelsey (hadr-stopping-V09-06-01)
+---------------------------------------------------------
+- G4AntiNeutronAnnihilationAtRest.hh,cc: Restore this process from the
+  cleanup below.  This class does not have a Fritiof-based counterpart.
+  NOTE:  Restoration was done using |svn copy -r 66187|, so all prior
+  history of the file is also recovered.
+
+- sources.cmake: Restore G4AntiNeutronAnnihilationAtRest.hh,cc.
+
+3 December 2012 Michael Kelsey (hadr-stopping-V09-06-00)
+--------------------------------------------------------
+- sources.cmake: Remove all deprecated classes for start of 10.0 development:
+
+G4AntiNeutronAnnihilationAtRest.hh,cc	G4PiMinusStopLi.hh,cc		 
+G4AntiProtonAnnihilationAtRest.hh,cc	G4PiMinusStopMaterial.hh,cc	 
+G4DistributionGenerator.hh,cc		G4PiMinusStopN.hh,cc		 
+G4KaonMinusAbsorption.hh,cc		G4PiMinusStopO.hh,cc		 
+G4KaonMinusAbsorptionAtRest.hh,cc	G4PiMinusStopPb.hh,cc		 
+G4NeutronCaptureAtRest.hh,cc		G4PiMinusStopTa.hh,cc		 
+G4PiMinusAbsorptionAtRest.hh,cc		G4PionMinusAbsorptionAtRest.hh,cc
+G4PiMinusStopAbsorption.hh,cc		G4StopDeexcitation.hh,cc	 
+G4PiMinusStopAl.hh,cc			G4StopDeexcitationAlgorithm.hh	 
+G4PiMinusStopC.hh,cc			G4StopDummyDeexcitation.hh,cc	 
+G4PiMinusStopCo.hh,cc			G4StopTheoDeexcitation.hh,cc
+G4PiMinusStopCu.hh,cc
+
 14 November 2012 V. Ivantchenko (hadr-stopping-V09-05-31)
 --------------------------------------------------------------------
 - G4MuMinusCapturePrecompound - fixed extra run time memory leak

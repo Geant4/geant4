@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WentzelVIRelXSection.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,7 @@
 #include "G4Positron.hh"
 #include "G4Proton.hh"
 #include "G4LossTableManager.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -213,7 +214,7 @@ G4WentzelVIRelXSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
       if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
       x1= x/(1 + x);
-      xlog = log(1.0 + x);  
+      xlog = G4Log(1.0 + x);  
       y = xlog - x1; 
       if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }
@@ -251,7 +252,7 @@ G4WentzelVIRelXSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
       if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
       x1= x/(1 + x);
-      xlog = log(1.0 + x);  
+      xlog = G4Log(1.0 + x);  
       y = xlog - x1; 
       if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }

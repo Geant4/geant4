@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WatcherGun.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // To include numerous high-Z watchers (e.g., for proton-lead collisions)
 // set the preprocessor flag G4CASCADE_WATCHER_HIGHZ

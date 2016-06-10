@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2009-10-21 15:28:53 allison Exp $
+# $Id: GNUmakefile 66373 2012-12-18 09:41:34Z gcosmo $
 
 name := G4visXXX
 

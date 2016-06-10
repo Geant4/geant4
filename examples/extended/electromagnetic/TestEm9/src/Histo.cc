@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/Histo.cc
 /// \brief Implementation of the Histo class
 //
-// $Id$
+// $Id: Histo.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,8 +49,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Histo::Histo()
+ : fManager(0),
+   fMessenger(0)
 {
-  fManager   = 0;
   fMessenger = new HistoMessenger(this);
  
   fHistName   = "test";

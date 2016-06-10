@@ -26,49 +26,43 @@
 /// \file field/field01/include/F01RunMessenger.hh
 /// \brief Definition of the F01RunMessenger class
 //
-
 //
-// $Id$
+// $Id: F01RunMessenger.hh 76248 2013-11-08 11:19:52Z gcosmo $
 //
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01RunMessenger_h
 #define F01RunMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
-#include "G4ios.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class F01RunAction;
 class G4UIdirectory;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01RunMessenger: public G4UImessenger
 {
   public:
 
    F01RunMessenger(F01RunAction* );
-   ~F01RunMessenger();
+   virtual ~F01RunMessenger();
 
    virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
    F01RunAction*              fRunAction;
-   
+
    G4UIdirectory*             fRndmDir;
-   G4UIcmdWithAnInteger*      fRndmSaveCmd;    
-   G4UIcmdWithAString*        fRndmReadCmd;    
+
+   G4UIcmdWithAnInteger*      fRndmSaveCmd;
+   G4UIcmdWithAString*        fRndmReadCmd;
  
 };
 
 #endif
-

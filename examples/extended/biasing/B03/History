@@ -1,0 +1,41 @@
+$Id: History 75090 2013-10-25 23:25:51Z dwright $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 24th, 2013 A. Howard - B03-V09-06-04
+- Set default number of MT cores back to two
+
+Nov 24th, 2013 A. Howard - B03-V09-06-03
+- Synchronised geometry with B01 and B02
+- Corrected english mistakes in variable names
+
+Nov 23rd, 2013 A. Howard - B03-V09-06-02
+- Prevented case of double biasing process in single threaded mode
+- Removed unsused scoring classes B03ScoringDetectorConstruction,
+  B03PSScoringDetectorConstruction
+
+Nov 22nd, 2013 A. Howard - B03-V09-06-01
+- Fixed typos and removed unused variables
+
+Nov 22nd, 2013 A. Howard - B03-V09-06-00
+- Created new example. This is taken from the previous B02 which was migrated
+  to the new MT compliant interface using modular physicslists.
+- Contains standalone physicslist implementation to demonstrate new MT
+  compliance
+
+

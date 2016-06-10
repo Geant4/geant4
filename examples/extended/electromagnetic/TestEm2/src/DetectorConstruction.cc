@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 // 
-// $Id$
+// $Id: DetectorConstruction.cc 77305 2013-11-22 11:16:19Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,8 +45,7 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
+#include "G4GlobalMagFieldMessenger.hh"
 
 #include "G4NistManager.hh"
 #include "G4RunManager.hh"
@@ -54,14 +53,17 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4AutoDelete.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fNLtot(40),fNRtot(50),fDLradl(0.5),fDRradl(0.1),
+:G4VUserDetectorConstruction(),
+ fNLtot(40),fNRtot(50),fDLradl(0.5),fDRradl(0.1),
  fDLlength(0.),fDRlength(0.),
- fMaterial(0),fMagField(0),
+ fMaterial(0),
  fEcalLength(0.),fEcalRadius(0.),
- fSolidEcal(0),fLogicEcal(0),fPhysiEcal(0)
+ fSolidEcal(0),fLogicEcal(0),fPhysiEcal(0),
+ fDetectorMessenger(0)
 {
   DefineMaterials();
   SetMaterial("G4_PbWO4");
@@ -112,7 +114,7 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole, density= 2.7*g/cm3);
   new G4Material("Iron",        z=26., a= 55.85*g/mole, density= 7.87*g/cm3);  
   new G4Material("Copper",      z=29., a= 63.55*g/mole, density= 8.960*g/cm3); 
-  new G4Material("Tungsten",    z=74., a=183.84*g/mole, density=19.35*g/cm3);    
+  new G4Material("Tungsten",    z=74., a=183.84*g/mole, density=19.35*g/cm3); 
   new G4Material("Lead",        z=82., a=207.19*g/mole, density=11.35*g/cm3);  
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
 
@@ -122,8 +124,6 @@ void DetectorConstruction::DefineMaterials()
   BGO->AddElement(O , natoms=12);
   BGO->AddElement(Ge, natoms= 3);
   BGO->AddElement(Bi, natoms= 4);
-
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -149,10 +149,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   fPhysiEcal = new G4PVPlacement(0,G4ThreeVector(),
                                 fLogicEcal,"Ecal",0,false,0);
 
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+
   G4cout << "Absorber is " << G4BestUnit(fEcalLength,"Length")
          << " of " << fMaterial->GetName() << G4endl;
-  G4cout << fMaterial << G4endl;     
-
   //
   //always return the physical World
   //
@@ -167,9 +167,9 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
   G4Material* pttoMaterial =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  if (pttoMaterial) {
+  if(pttoMaterial &&  fMaterial != pttoMaterial) {
     fMaterial = pttoMaterial;
-    if(fLogicEcal) fLogicEcal->SetMaterial(fMaterial);
+    if(fLogicEcal) { fLogicEcal->SetMaterial(fMaterial); }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
@@ -185,6 +185,7 @@ void DetectorConstruction::SetLBining(G4ThreeVector Value)
     fNLtot = MaxBin;
   }  
   fDLradl = Value(1);
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,33 +199,24 @@ void DetectorConstruction::SetRBining(G4ThreeVector Value)
     fNRtot = MaxBin;
   }    
   fDRradl = Value(1);
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMagField(G4double fieldValue)
+void DetectorConstruction::ConstructSDandField()
 {
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+            new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
 
-  if(fMagField) delete fMagField;                //delete the existing magn field
-
-  if(fieldValue!=0.)                        // create a new one if non nul
-  { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(fMagField);
-    fieldMgr->CreateChordFinder(fMagField);
-  } else {
-    fMagField = 0;
-    fieldMgr->SetDetectorField(fMagField);
-  }
+    }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

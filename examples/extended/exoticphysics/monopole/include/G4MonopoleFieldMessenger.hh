@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleFieldMessenger.hh
 /// \brief Definition of the G4MonopoleFieldMessenger class
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4MonopoleFieldMessenger.hh 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ public:
   G4MonopoleFieldMessenger(G4MonopoleFieldSetup* );
   ~G4MonopoleFieldMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   

@@ -32,7 +32,7 @@
 //    *                                 *
 //    ***********************************
 //
-// $Id$
+// $Id: PurgMagTrackingAction.cc 72967 2013-08-14 14:57:48Z gcosmo $
 //
 
 #include "PurgMagTrackingAction.hh"
@@ -44,8 +44,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagTrackingAction::PurgMagTrackingAction(PurgMagRunAction* run)
-:PurgMagRun(run)
+PurgMagTrackingAction::PurgMagTrackingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

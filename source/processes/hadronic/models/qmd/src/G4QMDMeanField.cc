@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <numeric>
 
+#include <cmath>
 #include <CLHEP/Random/Stat.h>
 
 #include "G4QMDMeanField.hh"
@@ -72,6 +73,7 @@ G4QMDMeanField::G4QMDMeanField()
    csg = - cs / ( 2.0 * wl );
    pag = gamm - 1;
 
+   system = NULL; // will be set through SetSystem method
 }
 
 
@@ -221,14 +223,23 @@ void G4QMDMeanField::Cal2BodyQuantities()
          G4int icharge = system->GetParticipant(i)->GetChargeInUnitOfEplus();
          G4int jcharge = system->GetParticipant(j)->GetChargeInUnitOfEplus();
 
-         G4double erf = 0.0;
+         G4double xerf = 0.0;
          // T. K. add this protection. 5.8 is good enough for double
-         if ( rrs*c0sw < 5.8 )
-            erf = CLHEP::HepStat::erf ( rrs*c0sw );
-         else
-            erf = 1.0;
+         if ( rrs*c0sw < 5.8 ) {
+            //erf = G4RandStat::erf ( rrs*c0sw );
+            //Restore to CLHEP for avoiding compilation error in MT
+            //erf = CLHEP::HepStat::erf ( rrs*c0sw );
+            //Use cmath 
+#if defined WIN32-VC
+            xerf = CLHEP::HepStat::erf ( rrs*c0sw );
+#else
+            xerf = erf ( rrs*c0sw );
+#endif
+         } else {
+            xerf = 1.0;
+         }
 
-         G4double erfij = erf/rrs;
+         G4double erfij = xerf/rrs;
 
 
          rhe[i][j] = icharge*jcharge * erfij;
@@ -344,14 +355,21 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
       G4int icharge = system->GetParticipant(i)->GetChargeInUnitOfEplus();
       G4int jcharge = system->GetParticipant(j)->GetChargeInUnitOfEplus();
 
-      G4double erf = 0.0;
+      G4double xerf = 0.0;
       // T. K. add this protection. 5.8 is good enough for double
-      if ( rrs*c0sw < 5.8 )
-         erf = CLHEP::HepStat::erf ( rrs*c0sw );
-      else
-         erf = 1.0;
+      if ( rrs*c0sw < 5.8 ) {
+         //xerf = G4RandStat::erf ( rrs*c0sw );
+         //Use cmath 
+#if defined WIN32-VC
+         xerf = CLHEP::HepStat::erf ( rrs*c0sw );
+#else
+         xerf = erf ( rrs*c0sw );
+#endif
+      } else {
+         xerf = 1.0;
+      }
 
-      G4double erfij = erf/rrs; 
+      G4double erfij = xerf/rrs; 
       
 
       rhe[i][j] = icharge*jcharge * erfij;
@@ -433,19 +451,19 @@ void G4QMDMeanField::CalGraduate()
          ccpp *= mi_R;
 
 /*
-           std::cout << c0g << " " << c3g << " " << csg << " " << cl << std::endl;
-           std::cout << "ccpp " << i << " " << j << " " << ccpp << std::endl;
-           std::cout << "rha[j][i] " << rha[j][i] << std::endl;
-           std::cout << "rh3d " << rh3d[j] << " " << rh3d[i] << std::endl;
-           std::cout << "rhc[j][i] " << rhc[j][i] << std::endl;
+           G4cout << c0g << " " << c3g << " " << csg << " " << cl << G4endl;
+           G4cout << "ccpp " << i << " " << j << " " << ccpp << G4endl;
+           G4cout << "rha[j][i] " << rha[j][i] << G4endl;
+           G4cout << "rh3d " << rh3d[j] << " " << rh3d[i] << G4endl;
+           G4cout << "rhc[j][i] " << rhc[j][i] << G4endl;
 */
 
          G4double grbb = - rbij[j][i];
          G4double ccrr = grbb * ccpp / eij;
 
 /*
-           std::cout << "ccrr " << ccrr << std::endl;
-           std::cout << "grbb " << grbb << std::endl;
+           G4cout << "ccrr " << ccrr << G4endl;
+           G4cout << "grbb " << grbb << G4endl;
 */
 
 
@@ -562,9 +580,9 @@ G4double G4QMDMeanField::calPauliBlockingFactor( G4int i )
       {
 
 /*
-   std::cout << "Pauli i j " << i << " " << j << std::endl;
-   std::cout << "Pauli icharge " << icharge << std::endl;
-   std::cout << "Pauli jcharge " << jcharge << std::endl;
+   G4cout << "Pauli i j " << i << " " << j << G4endl;
+   G4cout << "Pauli icharge " << icharge << G4endl;
+   G4cout << "Pauli jcharge " << jcharge << G4endl;
 */
          G4double expa = -rr2[i][j]*cpw;   
 
@@ -573,10 +591,10 @@ G4double G4QMDMeanField::calPauliBlockingFactor( G4int i )
          {
             expa = expa - pp2[i][j]*cph;
 /*
-   std::cout << "Pauli cph " << cph << std::endl;
-   std::cout << "Pauli pp2 " << pp2[i][j] << std::endl;
-   std::cout << "Pauli expa " <<  expa  << std::endl;
-   std::cout << "Pauli epsx " <<  epsx  << std::endl;
+   G4cout << "Pauli cph " << cph << G4endl;
+   G4cout << "Pauli pp2 " << pp2[i][j] << G4endl;
+   G4cout << "Pauli expa " <<  expa  << G4endl;
+   G4cout << "Pauli epsx " <<  epsx  << G4endl;
 */
             if ( expa > epsx ) 
             { 
@@ -778,10 +796,10 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
          {
 
 /*
-            std::cout << "G4QMDRESULT "
-                      << i << " " << j << " " << id << " " 
-                      << is_assigned_to [ i ] << " " << is_assigned_to [ j ] 
-                      << std::endl;
+            G4cout << "G4QMDRESULT "
+                   << i << " " << j << " " << id << " " 
+                   << is_assigned_to [ i ] << " " << is_assigned_to [ j ] 
+                   << G4endl;
 */
 
             if ( is_assigned_to [ j ] == -1 )

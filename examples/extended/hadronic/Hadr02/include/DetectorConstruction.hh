@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -46,6 +46,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"
 
 class CheckVolumeSD;
 class TargetSD;
@@ -61,9 +62,7 @@ public:
   DetectorConstruction();
   virtual ~DetectorConstruction();
 
-public:
-
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
   void SetWorldMaterial(const G4String&);
   void SetTargetMaterial(const G4String&);

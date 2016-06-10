@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4aEventAction.hh 75215 2013-10-29 16:07:06Z gcosmo $
 // 
 /// \file B4aEventAction.hh
 /// \brief Definition of the B4aEventAction class
@@ -34,10 +34,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class B4RunAction;
-
-class G4GenericMessenger;
-
 /// Event action class
 ///
 /// It defines data members to hold the energy deposit and track lengths
@@ -45,11 +41,6 @@ class G4GenericMessenger;
 /// - fEnergyAbs, fEnergyGap, fTrackLAbs, fTrackLGap
 /// which are collected step by step via the functions
 /// - AddAbs(), AddGap()
-/// 
-/// The data member fPrintModulo defines the frequency of printing
-/// the accumulated quantities. Its value can be changed via a command
-/// defined using G4GenericMessenger class:
-/// - /B4/event/setPrintModulo value
 
 class B4aEventAction : public G4UserEventAction
 {
@@ -62,19 +53,12 @@ class B4aEventAction : public G4UserEventAction
     
     void AddAbs(G4double de, G4double dl);
     void AddGap(G4double de, G4double dl);
-                     
-    void SetPrintModulo(G4int value);
     
   private:
-    G4GenericMessenger*  fMessenger;
-    B4RunAction*  fRunAction;
-   
     G4double  fEnergyAbs;
     G4double  fEnergyGap;
     G4double  fTrackLAbs; 
     G4double  fTrackLGap;
-                     
-    G4int     fPrintModulo;
 };
 
 // inline functions
@@ -87,10 +71,6 @@ inline void B4aEventAction::AddAbs(G4double de, G4double dl) {
 inline void B4aEventAction::AddGap(G4double de, G4double dl) {
   fEnergyGap += de; 
   fTrackLGap += dl;
-}
-
-inline void B4aEventAction::SetPrintModulo(G4int value) {
-  fPrintModulo = value;
 }
                      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

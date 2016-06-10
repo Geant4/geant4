@@ -42,6 +42,8 @@ class G4VCollision
 public:
 
   G4VCollision();
+  void establish_G4MT_TLS_G4VCollision();
+  G4VCollision(void *s1, void *s2, void *s3, void *s4, void *s5, void *s6, void *s7);
 
   virtual ~G4VCollision();
 

@@ -1,0 +1,400 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4VAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+
+#include "G4HnManager.hh"
+#include "G4VH1Manager.hh"
+#include "G4VH2Manager.hh"
+#include "G4VNtupleManager.hh"
+#include "G4VFileManager.hh"
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
+{
+  return fVH1Manager->FillH1(id, value, weight);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillH2(G4int id, 
+                                     G4double xvalue, G4double yvalue, 
+                                     G4double weight)
+{
+  return fVH2Manager->FillH2(id, xvalue, yvalue, weight);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillNtupleIColumn(G4int columnId, G4int value)
+{
+  return fVNtupleManager->FillNtupleIColumn(columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillNtupleFColumn(G4int columnId, G4float value)
+{
+  return fVNtupleManager->FillNtupleFColumn(columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillNtupleDColumn(G4int columnId, G4double value)
+{
+  return fVNtupleManager->FillNtupleDColumn(columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::AddNtupleRow()
+{ 
+  return fVNtupleManager->AddNtupleRow();
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillNtupleIColumn(G4int ntupleId, G4int columnId, 
+                                               G4int value)
+{
+  return fVNtupleManager->FillNtupleIColumn(ntupleId, columnId, value);
+}                                         
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillNtupleFColumn(G4int ntupleId, G4int columnId, 
+                                               G4float value)
+{
+  return fVNtupleManager->FillNtupleFColumn(ntupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillNtupleDColumn(G4int ntupleId, G4int columnId, 
+                                               G4double value)
+{
+  return fVNtupleManager->FillNtupleDColumn(ntupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::AddNtupleRow(G4int ntupleId)
+{ 
+  return fVNtupleManager->AddNtupleRow(ntupleId);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetActivation() const 
+{
+  return fState.GetIsActivation();
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int G4VAnalysisManager::GetH1Id(const G4String& name, G4bool warn) const
+{
+  return fVH1Manager->GetH1Id(name, warn);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int G4VAnalysisManager::GetH2Id(const G4String& name, G4bool warn) const
+{
+  return fVH2Manager->GetH2Id(name, warn);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int G4VAnalysisManager::GetH1Nbins(G4int id) const
+{
+  return fVH1Manager->GetH1Nbins(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH1Xmin(G4int id) const
+{
+// Returns xmin value with applied unit and histogram function
+
+  return fVH1Manager->GetH1Xmin(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH1Xmax(G4int id) const
+{
+  return fVH1Manager->GetH1Xmax(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH1Width(G4int id) const
+{
+  return fVH1Manager->GetH1Width(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int G4VAnalysisManager::GetH2Nxbins(G4int id) const
+{  
+  return fVH2Manager->GetH2Nxbins(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH2Xmin(G4int id) const
+{
+// Returns xmin value with applied unit and histogram function
+
+  return fVH2Manager->GetH2Xmin(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH2Xmax(G4int id) const
+{
+  return fVH2Manager->GetH2Xmax(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH2XWidth(G4int id) const
+{
+  return fVH2Manager->GetH2XWidth(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int G4VAnalysisManager::GetH2Nybins(G4int id) const
+{
+  return fVH2Manager->GetH2Nybins(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH2Ymin(G4int id) const
+{
+// Returns xmin value with applied unit and histogram function
+
+  return fVH2Manager->GetH2Ymin(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH2Ymax(G4int id) const
+{
+  return fVH2Manager->GetH2Ymax(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH2YWidth(G4int id) const
+{
+  return fVH2Manager->GetH2YWidth(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH1Name(G4int id) const
+{
+  return fH1HnManager->GetName(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH1Unit(G4int id) const
+{
+  return fH1HnManager->GetXUnit(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH1Activation(G4int id) const
+{
+  return fH1HnManager->GetActivation(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH1Ascii(G4int id) const
+{
+  return fH1HnManager->GetAscii(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH2Name(G4int id) const
+{
+  return fH2HnManager->GetName(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH2XUnit(G4int id) const
+{
+  return fH2HnManager->GetXUnit(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4double G4VAnalysisManager::GetH2YUnit(G4int id) const
+{
+  return fH2HnManager->GetYUnit(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH2Activation(G4int id) const
+{
+  return fH2HnManager->GetActivation(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH2Ascii(G4int id) const
+{
+  return fH2HnManager->GetAscii(id);
+}  
+
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH1Title(G4int id, const G4String& title)
+{
+  return fVH1Manager->SetH1Title(id, title);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH1XAxisTitle(G4int id, const G4String& title)
+{
+  return fVH1Manager->SetH1XAxisTitle(id, title);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH1YAxisTitle(G4int id, const G4String& title)
+{
+  return fVH1Manager->SetH1YAxisTitle(id, title);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH2Title(G4int id, const G4String& title)
+{
+  return fVH2Manager->SetH2Title(id, title);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH2XAxisTitle(G4int id, const G4String& title)
+{
+  return fVH2Manager->SetH2XAxisTitle(id, title);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH2YAxisTitle(G4int id, const G4String& title)
+{
+  return fVH2Manager->SetH2YAxisTitle(id, title);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH2ZAxisTitle(G4int id, const G4String& title)
+{
+  return fVH2Manager->SetH2ZAxisTitle(id, title);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH1Title(G4int id) const
+{
+  return fVH1Manager->GetH1Title(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH1XAxisTitle(G4int id) const 
+{
+  return fVH1Manager->GetH1XAxisTitle(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH1YAxisTitle(G4int id) const 
+{
+  return fVH1Manager->GetH1YAxisTitle(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH2Title(G4int id) const
+{
+  return fVH2Manager->GetH2Title(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH2XAxisTitle(G4int id) const 
+{
+  return fVH2Manager->GetH2XAxisTitle(id);
+} 
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH2YAxisTitle(G4int id) const 
+{
+  return fVH2Manager->GetH2YAxisTitle(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4String G4VAnalysisManager::GetH2ZAxisTitle(G4int id) const 
+{
+  return fVH2Manager->GetH2ZAxisTitle(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int G4VAnalysisManager::GetVerboseLevel() const 
+{
+  return fState.GetVerboseLevel();
+}  
+ 
+//_____________________________________________________________________________
+inline
+G4String G4VAnalysisManager::GetType() const 
+{
+  return fState.GetType();
+}                 
+
+//_____________________________________________________________________________
+inline
+G4String G4VAnalysisManager::GetFileType() const 
+{
+  return fVFileManager->GetFileType();
+}                 

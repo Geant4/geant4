@@ -27,7 +27,7 @@
 /// \brief Definition of the G04PrimaryGeneratorAction class
 //
 //
-// $Id$
+// $Id: G04PrimaryGeneratorAction.hh 69988 2013-05-21 12:36:24Z gcosmo $
 //
 //
 
@@ -50,7 +50,7 @@ class G04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G04PrimaryGeneratorAction();
    ~G04PrimaryGeneratorAction();
 
-   void GeneratePrimaries(G4Event* anEvent);
+   virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
 

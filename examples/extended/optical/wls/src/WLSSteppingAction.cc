@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSSteppingAction.cc 75292 2013-10-30 09:25:15Z gcosmo $
+//
 /// \file optical/wls/src/WLSSteppingAction.cc
 /// \brief Implementation of the WLSSteppingAction class
 //
 //
-//
-
 #include "G4Run.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
@@ -62,40 +62,66 @@
 
 static const G4ThreeVector ZHat = G4ThreeVector(0.0,0.0,1.0);
 
-G4int WLSSteppingAction::maxRndmSave = 10000;
+G4int WLSSteppingAction::fMaxRndmSave = 10000;
 
-WLSSteppingAction::WLSSteppingAction(WLSDetectorConstruction* DC)
-  : detector(DC)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+WLSSteppingAction::WLSSteppingAction(WLSDetectorConstruction* detector)
+  : fDetector(detector)
 {
-  steppingMessenger = new WLSSteppingActionMessenger(this);
+  fSteppingMessenger = new WLSSteppingActionMessenger(this);
 
-  counterEnd = 0;
-  counterMid = 0;
-  bounceLimit = 100000;
+  fCounterEnd = 0;
+  fCounterMid = 0;
+  fBounceLimit = 100000;
+
+  fOpProcess = NULL;
  
   ResetCounters();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSSteppingAction::~WLSSteppingAction()
 {
-  delete steppingMessenger;
+  delete fSteppingMessenger;
 }
 
-void  WLSSteppingAction::SetBounceLimit(G4int i)   {bounceLimit = i;}
-G4int WLSSteppingAction::GetNumberOfBounces()      {return counterBounce;}
-G4int WLSSteppingAction::GetNumberOfClad1Bounces() {return counterClad1Bounce;}
-G4int WLSSteppingAction::GetNumberOfClad2Bounces() {return counterClad2Bounce;}
-G4int WLSSteppingAction::GetNumberOfWLSBounces()   {return counterWLSBounce;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void  WLSSteppingAction::SetBounceLimit(G4int i)   {fBounceLimit = i;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int WLSSteppingAction::GetNumberOfBounces()      {return fCounterBounce;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int WLSSteppingAction::GetNumberOfClad1Bounces() {return fCounterClad1Bounce;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int WLSSteppingAction::GetNumberOfClad2Bounces() {return fCounterClad2Bounce;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int WLSSteppingAction::GetNumberOfWLSBounces()   {return fCounterWLSBounce;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int WLSSteppingAction::ResetSuccessCounter()     {
-      G4int temp = counterEnd; counterEnd = 0; return temp;
+      G4int temp = fCounterEnd; fCounterEnd = 0; return temp;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void WLSSteppingAction::saveRandomStatus(G4String subDir) 
 // save the random status into a sub-directory
 // Pre: subDir must be empty or ended with "/"
-inline void WLSSteppingAction::saveRandomStatus(G4String subDir) {
+{
  
     // don't save if the maximum amount has been reached
-    if (WLSSteppingAction::maxRndmSave == 0) return;
+    if (WLSSteppingAction::fMaxRndmSave == 0) return;
 
     G4RunManager* theRunManager = G4RunManager::GetRunManager();
     G4String randomNumberStatusDir = theRunManager->GetRandomNumberStoreDir();
@@ -112,23 +138,17 @@ inline void WLSSteppingAction::saveRandomStatus(G4String subDir) {
     G4String copCmd = "/control/shell cp "+fileIn+" "+fileOut;
     G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
 
-    WLSSteppingAction::maxRndmSave--;
+    WLSSteppingAction::fMaxRndmSave--;
 }
 
-void WLSSteppingAction::UpdateHistogramSuccess(G4StepPoint* ,G4Track* ) {}
-
-void WLSSteppingAction::UpdateHistogramReflect(G4StepPoint* ,G4Track* ) {}
-
-void WLSSteppingAction::UpdateHistogramEscape(G4StepPoint* , G4Track* ) {}
-
-void WLSSteppingAction::UpdateHistogramAbsorb(G4StepPoint* , G4Track* ) {}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 {
   G4Track* theTrack = theStep->GetTrack();
   WLSUserTrackInformation* trackInformation
       = (WLSUserTrackInformation*)theTrack->GetUserInformation();
- 
+
   G4StepPoint* thePrePoint  = theStep->GetPreStepPoint();
   G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
 
@@ -149,10 +169,10 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
      if ( theTrack->GetCurrentStepNumber() == 1 ) {
 //        G4double x  = theTrack->GetVertexPosition().x();
 //        G4double y  = theTrack->GetVertexPosition().y();
-        G4double z  = theTrack->GetVertexPosition().z();
+//        G4double z  = theTrack->GetVertexPosition().z();
 //        G4double pz = theTrack->GetVertexMomentumDirection().z();
-        initTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
-        initZ = z;
+//        G4double fInitTheta = 
+//                         theTrack->GetVertexMomentumDirection().angle(ZHat);
      }
   }
 
@@ -170,13 +190,13 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 
      for ( G4int i=0; i<MAXofPostStepLoops; i++) {
          G4VProcess* fCurrentProcess = (*fPostStepDoItVector)[i];
-         opProcess = dynamic_cast<G4OpBoundaryProcess*>(fCurrentProcess);
-         if (opProcess) { theStatus = opProcess->GetStatus(); break;}
+         fOpProcess = dynamic_cast<G4OpBoundaryProcess*>(fCurrentProcess);
+         if (fOpProcess) { theStatus = fOpProcess->GetStatus(); break;}
      }
   }
 
   // Find the skewness of the ray at first change of boundary
-  if ( initGamma == -1 &&
+  if ( fInitGamma == -1 &&
        (theStatus == TotalInternalReflection
         || theStatus == FresnelReflection
         || theStatus == FresnelRefraction)
@@ -187,13 +207,14 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
         G4double x  = theTrack->GetPosition().x();
         G4double y  = theTrack->GetPosition().y();
 
-        initGamma = x * px + y * py;
+        fInitGamma = x * px + y * py;
 
-        initGamma = initGamma / std::sqrt(px*px + py*py) / std::sqrt(x*x + y*y);
+        fInitGamma = 
+                 fInitGamma / std::sqrt(px*px + py*py) / std::sqrt(x*x + y*y);
 
-        initGamma = std::acos(initGamma*rad);
+        fInitGamma = std::acos(fInitGamma*rad);
 
-        if ( initGamma / deg > 90.0)  { initGamma = 180 * deg - initGamma;}
+        if ( fInitGamma / deg > 90.0)  { fInitGamma = 180 * deg - fInitGamma;}
   }
   // Record Photons that missed the photon detector but escaped from readout
   if ( !thePostPV && trackInformation->isStatus(EscapedFromReadOut) ) {
@@ -225,10 +246,10 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
        } else if (trackInformation->isStatus(InsideOfFiber)) {
 
            // EscapedFromReadOut if the z position is the same as fiber's end
-           if (theTrack->GetPosition().z() == detector->GetWLSFiberEnd())
+           if (theTrack->GetPosition().z() == fDetector->GetWLSFiberEnd())
            {
               trackInformation->AddStatusFlag(EscapedFromReadOut);
-              counterEnd++;
+              fCounterEnd++;
            }
            else // Escaped from side
            {
@@ -237,7 +258,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 
 //              UpdateHistogramEscape(thePostPoint,theTrack);
 
-              counterMid++;
+              fCounterMid++;
               ResetCounters();
            }
 
@@ -252,7 +273,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
      case TotalInternalReflection:
  
        // Kill the track if it's number of bounces exceeded the limit
-       if (bounceLimit > 0 && counterBounce >= bounceLimit)
+       if (fBounceLimit > 0 && fCounterBounce >= fBounceLimit)
        {
           theTrack->SetTrackStatus(fStopAndKill);
           trackInformation->AddStatusFlag(murderee);
@@ -263,23 +284,23 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
  
      case FresnelReflection:
 
-       counterBounce++;
+       fCounterBounce++;
  
-       if ( thePrePVname == "WLSFiber") counterWLSBounce++;
+       if ( thePrePVname == "WLSFiber") fCounterWLSBounce++;
 
-       else if ( thePrePVname == "Clad1") counterClad1Bounce++;
+       else if ( thePrePVname == "Clad1") fCounterClad1Bounce++;
 
-       else if ( thePrePVname == "Clad2") counterClad2Bounce++;
+       else if ( thePrePVname == "Clad2") fCounterClad2Bounce++;
  
        // Determine if the photon has reflected off the read-out end
-       if (theTrack->GetPosition().z() == detector->GetWLSFiberEnd())
+       if (theTrack->GetPosition().z() == fDetector->GetWLSFiberEnd())
        {
           if (!trackInformation->isStatus(ReflectedAtReadOut) &&
               trackInformation->isStatus(InsideOfFiber))
           {
              trackInformation->AddStatusFlag(ReflectedAtReadOut);
 
-             if (detector->IsPerfectFiber() &&
+             if (fDetector->IsPerfectFiber() &&
                  theStatus == TotalInternalReflection)
              {
                 theTrack->SetTrackStatus(fStopAndKill);

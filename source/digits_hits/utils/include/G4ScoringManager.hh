@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ScoringManager.hh 68735 2013-04-05 09:49:13Z gcosmo $
 //
 
 #ifndef G4ScoringManager_h
@@ -82,6 +82,7 @@ class G4ScoringManager
 
   public:
       void Accumulate(G4VHitsCollection* map);
+      void Merge(const G4ScoringManager* scMan);
       G4VScoringMesh* FindMesh(const G4String&);
       void List() const;
       void Dump() const;
@@ -98,8 +99,8 @@ class G4ScoringManager
       void ListScoreColorMaps();
 
   private: 
-      static G4ScoringManager * fSManager;
-      static G4int replicaLevel;
+      static G4ThreadLocal G4ScoringManager * fSManager;
+      static G4ThreadLocal G4int replicaLevel;
       G4int verboseLevel;
       G4ScoringMessenger* fMessenger;
       G4ScoreQuantityMessenger* fQuantityMessenger;

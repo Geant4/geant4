@@ -93,11 +93,7 @@ private:
 
 #include "DMXDetectorMaterial.ihh"  // materials used
 
-  G4double worldRadius;                // sizes
-  G4double worldHeight;
   G4double sourceZ;
-  G4double sourceZ2;
-
 
   G4LogicalVolume*   world_log;        // pointers
   G4VPhysicalVolume* world_phys;  
@@ -151,9 +147,7 @@ private:
   G4LogicalVolume*   liqLag_log; 
   G4VPhysicalVolume* liqLag_phys;  
   G4LogicalVolume*   alpha_log;   
-  G4VPhysicalVolume* alpha_phys; 
-  G4LogicalVolume*   recess_log;   
-  G4VPhysicalVolume* recess_phys; 
+  G4VPhysicalVolume* alpha_phys;
   G4LogicalVolume*   americium_log;   
   G4VPhysicalVolume* americium_phys; 
   G4LogicalVolume*   ring_log;   

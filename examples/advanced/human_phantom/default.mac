@@ -1,2 +1,28 @@
-/control/execute adultMIXFemale.mac
+#/control/execute adultMIXFemale.mac
+# or ...
+#/control/execute adultHead.mac
+# or ...
+/control/execute adultMIRDMale.mac
+# or ...
+#/control/execute adultMIRDFemale.mac
+# or ...
+#/control/execute adultORNLMale.mac
+# or...
+#/control/execute adultORNLFemale.mac
+#
+# Primary radiation field
+/control/execute primary.mac
+#
+#
+# Visualization Config
+#
+# Visualize Phantom with VRML
+#/control/execute vrmlVis.mac
+#
+# Visualize Phantom with OPENGL
+/control/execute openGLVis.mac
+#
+# Visualize Phantom with DAWN
+#/control/execute dawnVis.mac
+#
 

@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01EventAction.hh
 /// \brief Definition of the RE01EventAction class
 //
-// $Id$
+// $Id: RE01EventAction.hh 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #ifndef RE01EventAction_h
@@ -40,7 +40,7 @@ class G4PrimaryParticle;
 class RE01EventAction : public G4UserEventAction
 {
 public:
-  RE01EventAction();
+  RE01EventAction();//G4bool);
   virtual ~RE01EventAction();
 
 public:

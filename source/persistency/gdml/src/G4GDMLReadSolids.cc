@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GDMLReadSolids.cc 77528 2013-11-25 13:06:36Z gcosmo $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -32,7 +32,6 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadSolids.hh"
-
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Ellipsoid.hh"
@@ -44,6 +43,7 @@
 #include "G4Para.hh"
 #include "G4Paraboloid.hh"
 #include "G4Polycone.hh"
+#include "G4GenericPolycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4QuadrangularFacet.hh"
 #include "G4ReflectedSolid.hh"
@@ -535,6 +535,13 @@ void G4GDMLReadSolids::HypeRead(const xercesc::DOMElement* const hypeElement)
    new G4Hype(name,rmin,rmax,inst,outst,z);
 }
 
+void G4GDMLReadSolids::MultiUnionRead(const xercesc::DOMElement* const)
+{
+   G4Exception("G4GDMLReadSolids::MultiUnionRead()",
+               "InvalidSetup", JustWarning,
+               "MultiUnion is not supported yet. Sorry!");
+}
+
 void G4GDMLReadSolids::OrbRead(const xercesc::DOMElement* const orbElement)
 {
    G4String name;
@@ -756,6 +763,82 @@ PolyconeRead(const xercesc::DOMElement* const polyconeElement)
 }
 
 void G4GDMLReadSolids::
+GenericPolyconeRead(const xercesc::DOMElement* const polyconeElement) 
+{
+   G4String name;
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
+   G4double startphi = 0.0;
+   G4double deltaphi = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = polyconeElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::GenericPolyconeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name") { name = GenerateName(attValue); } else
+      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
+      if (attName=="startphi") { startphi = eval.Evaluate(attValue); }else
+      if (attName=="deltaphi") { deltaphi = eval.Evaluate(attValue); }
+   }
+
+   startphi *= aunit;
+   deltaphi *= aunit;
+
+   std::vector<rzPointType> rzPointList;
+
+   for (xercesc::DOMNode* iter = polyconeElement->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::GenericPolyconeRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
+      const G4String tag = Transcode(child->getTagName());
+
+      if (tag=="rzpoint") { rzPointList.push_back(RZPointRead(child)); }
+   }
+
+   G4int numRZPoints = rzPointList.size();
+
+   G4double* r_array = new G4double[numRZPoints];
+   G4double* z_array    = new G4double[numRZPoints];
+
+   for (G4int i=0; i<numRZPoints; i++)
+   { 
+      r_array[i] = rzPointList[i].r*lunit;
+      z_array[i] = rzPointList[i].z*lunit;
+   }
+   new G4GenericPolycone(name,startphi,deltaphi,numRZPoints,
+                         r_array,z_array);
+}
+
+void G4GDMLReadSolids::
 PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
 {
    G4String name;
@@ -834,6 +917,87 @@ PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
 
    new G4Polyhedra(name,startphi,deltaphi,numsides,numZPlanes,
                    z_array,rmin_array,rmax_array);
+
+}
+
+void G4GDMLReadSolids::
+GenericPolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
+{
+   G4String name;
+   G4double lunit = 1.0;
+   G4double aunit = 1.0;
+   G4double startphi = 0.0;
+   G4double deltaphi = 0.0;
+   G4int numsides = 0;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = polyhedraElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::GenericPolyhedraRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name") { name = GenerateName(attValue); } else
+      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
+      if (attName=="startphi") { startphi = eval.Evaluate(attValue); } else
+      if (attName=="deltaphi") { deltaphi = eval.Evaluate(attValue); } else
+      if (attName=="numsides") { numsides = eval.EvaluateInteger(attValue); }
+   }
+
+   startphi *= aunit;
+   deltaphi *= aunit;
+
+   std::vector<rzPointType> rzpointList;
+
+   for (xercesc::DOMNode* iter = polyhedraElement->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::GenericPolyhedraRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
+      const G4String tag = Transcode(child->getTagName());
+
+      if (tag=="rzpoint") { rzpointList.push_back(RZPointRead(child)); }
+   }
+
+   G4int numRZPoints = rzpointList.size();
+
+   G4double* r_array = new G4double[numRZPoints];
+   G4double* z_array = new G4double[numRZPoints];
+  
+
+   for (G4int i=0; i<numRZPoints; i++)
+   { 
+      r_array[i] = rzpointList[i].r*lunit;
+      z_array[i] = rzpointList[i].z*lunit;
+   }
+
+   new G4Polyhedra(name,startphi,deltaphi,numsides,numRZPoints,
+                   r_array,z_array);
 
 }
 
@@ -1858,6 +2022,40 @@ ZplaneRead(const xercesc::DOMElement* const zplaneElement)
 
    return zplane;
 }
+G4GDMLReadSolids::rzPointType G4GDMLReadSolids::
+RZPointRead(const xercesc::DOMElement* const zplaneElement)
+{
+  rzPointType rzpoint = {0.,0.};
+
+  const xercesc::DOMNamedNodeMap* const attributes
+         = zplaneElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* node = attributes->item(attribute_index);
+
+      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::RZPointRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return rzpoint;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="r") { rzpoint.r = eval.Evaluate(attValue); } else
+      if (attName=="z") { rzpoint.z = eval.Evaluate(attValue); }
+   }
+    
+   return rzpoint;
+ 
+}
 
 void G4GDMLReadSolids::
 OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
@@ -2006,11 +2204,14 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="xtru") { XtruRead(child); } else
       if (tag=="hype") { HypeRead(child); } else
       if (tag=="intersection") { BooleanRead(child,INTERSECTION); } else
+      if (tag=="multiunion") { MultiUnionRead(child); } else
       if (tag=="orb") { OrbRead(child); } else
       if (tag=="para") { ParaRead(child); } else
       if (tag=="paraboloid") { ParaboloidRead(child); } else
       if (tag=="polycone") { PolyconeRead(child); } else
+      if (tag=="genericPolycone") { GenericPolyconeRead(child); } else
       if (tag=="polyhedra") { PolyhedraRead(child); } else
+      if (tag=="genericPolyhedra") { GenericPolyhedraRead(child); } else
       if (tag=="reflectedSolid") { ReflectedSolidRead(child); } else
       if (tag=="sphere") { SphereRead(child); } else
       if (tag=="subtraction") { BooleanRead(child,SUBTRACTION); } else

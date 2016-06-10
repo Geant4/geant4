@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4hCoulombScatteringModel.hh 70370 2013-05-29 15:15:40Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;
-class G4ParticleTable;
+class G4IonTable;
 class G4NistManager;
 
 class G4hCoulombScatteringModel : public G4VEmModel
@@ -109,7 +109,7 @@ private:
 
 protected:
  
-  G4ParticleTable*          theParticleTable;
+  G4IonTable*               theIonTable;
   G4ParticleChangeForGamma* fParticleChange;
   G4WentzelVIRelXSection*   wokvi;
   G4NistManager*            fNistManager;

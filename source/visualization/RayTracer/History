@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2011-01-03 14:53:34 lgarnier Exp $
+$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,35 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+15th November 2013  John Allison (raytracer-V09-06-07)
+- Some changes as suggested by PVS.
+- Fixes for Coverity.
+
+20th September 2013 Gabriele Cosmo (raytracer-V09-06-06)
+- Fixed GNUmakefile. Added dependency on "run" category...
+
+19th September 2013 Makoto Asai (raytracer-V09-06-05)
+- Removed unused variable in G4RTPrimaryGeneratorAction.hh.
+
+19th September 2013 Makoto Asai (raytracer-V09-06-04)
+- Both G4TheRayTracer and G4TheMTRayTracer invoke G4VVisManager::IgnoreStateChanges()
+  method to avoid unnecessary state-change handling.
+- Co-working with greps-V09-06-10.
+
+17th September 2013 Makoto Asai (raytracer-V09-06-03)
+- Introducing G4TheMTRayTracer that is multi-threaded. 
+- Co-working with run-V09-06-100 and greps-V09-06-09.
+
+15th September 2013 Makoto Asai (raytracer-V09-06-02)
+- Move data member of G4RTSteppingAction static. Preparation toward
+  making G4TheRayTracer class multi-threaded.
+
+16th June 2013  Makoto Asai (raytracer-V09-06-01)
+- Make G4RayTrajectory and G4RayTrajectoryPoint classes thread safe.
+
+2nd December 2012  John Allison  (raytracer-V09-06-00)
+- Removed NURBS and references to i_mode.
 
 5th July 2012  Gabriele Cosmo  (raytracer-V09-05-05)
 - Explicitly use inclusion of headers for system of units and physical

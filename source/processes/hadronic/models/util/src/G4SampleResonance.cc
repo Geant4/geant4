@@ -41,10 +41,10 @@
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
 
-G4SampleResonance::minMassMapType G4SampleResonance::minMassCache;
+G4ThreadLocal G4SampleResonance::minMassMapType *G4SampleResonance::minMassCache_G4MT_TLS_ = 0;
 
 G4double G4SampleResonance::GetMinimumMass(const G4ParticleDefinition* p) const
-{
+{  ;;;   if (!minMassCache_G4MT_TLS_) minMassCache_G4MT_TLS_ = new G4SampleResonance::minMassMapType  ; G4SampleResonance::minMassMapType &minMassCache = *minMassCache_G4MT_TLS_;  ;;;  
 
 	G4double minResonanceMass = DBL_MAX;
 
@@ -82,7 +82,9 @@ G4double G4SampleResonance::GetMinimumMass(const G4ParticleDefinition* p) const
 			}
 			// replace this as soon as the compiler supports mutable!!
 			G4SampleResonance* self = const_cast<G4SampleResonance*>(this);
-			(self->minMassCache)[p] = minResonanceMass;
+			//Andrea Dotti (13Jan2013): Change needed for G4MT
+			//(self->minMassCache)[p] = minResonanceMass;
+			self->minMassCache_G4MT_TLS_->operator[](p) = minResonanceMass;
 
 		}
 	} 
@@ -100,7 +102,7 @@ G4double G4SampleResonance::GetMinimumMass(const G4ParticleDefinition* p) const
 
 
 G4double G4SampleResonance::SampleMass(const G4ParticleDefinition* p, const G4double maxMass) const
-{
+{ if (!minMassCache_G4MT_TLS_) minMassCache_G4MT_TLS_ = new G4SampleResonance::minMassMapType  ;
 	return SampleMass(p->GetPDGMass(), p->GetPDGWidth(), GetMinimumMass(p), maxMass);
 }
 
@@ -109,7 +111,7 @@ G4double G4SampleResonance::SampleMass(const G4double poleMass,
 		const G4double gamma,
 		const G4double minMass,
 		const G4double maxMass) const
-{
+{ if (!minMassCache_G4MT_TLS_) minMassCache_G4MT_TLS_ = new G4SampleResonance::minMassMapType  ;
 	// Chooses a mass randomly between minMass and maxMass
 	//     according to a Breit-Wigner function with constant
 	//     width gamma and pole poleMass

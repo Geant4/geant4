@@ -42,6 +42,9 @@ add_definitions(-DCLHEP_EXPORT)
 # - Headers
 set(G4clhep_HEADERS
     include/CLHEP/Evaluator/Evaluator.h
+    include/CLHEP/Evaluator/hash_map.icc
+    include/CLHEP/Evaluator/stack.icc
+    include/CLHEP/Evaluator/string.icc
     include/CLHEP/Geometry/BasicVector3D.h
     include/CLHEP/Geometry/Normal3D.h
     include/CLHEP/Geometry/Plane3D.h
@@ -56,22 +59,37 @@ set(G4clhep_HEADERS
     include/CLHEP/Random/MTwistEngine.h
     include/CLHEP/Random/NonRandomEngine.h
     include/CLHEP/Random/RandBinomial.h
+    include/CLHEP/Random/RandBinomial.icc
     include/CLHEP/Random/RandBit.h
     include/CLHEP/Random/RandBreitWigner.h
+    include/CLHEP/Random/RandBreitWigner.icc
     include/CLHEP/Random/RandChiSquare.h
+    include/CLHEP/Random/RandChiSquare.icc
     include/CLHEP/Random/RandExponential.h
+    include/CLHEP/Random/RandExponential.icc
     include/CLHEP/Random/RandFlat.h
+    include/CLHEP/Random/RandFlat.icc
     include/CLHEP/Random/RandGamma.h
+    include/CLHEP/Random/RandGamma.icc
     include/CLHEP/Random/RandGauss.h
+    include/CLHEP/Random/RandGauss.icc
     include/CLHEP/Random/RandGaussQ.h
+    include/CLHEP/Random/RandGaussQ.icc
     include/CLHEP/Random/RandGeneral.h
+    include/CLHEP/Random/RandGeneral.icc
     include/CLHEP/Random/RandLandau.h
-    include/CLHEP/Random/RandomEngine.h
-    include/CLHEP/Random/Random.h
-    include/CLHEP/Random/Randomize.h
+    include/CLHEP/Random/RandLandau.icc
     include/CLHEP/Random/RandPoisson.h
+    include/CLHEP/Random/RandPoisson.icc
     include/CLHEP/Random/RandPoissonQ.h
+    include/CLHEP/Random/RandPoissonQ.icc
     include/CLHEP/Random/RandStudentT.h
+    include/CLHEP/Random/RandStudentT.icc
+    include/CLHEP/Random/Random.h
+    include/CLHEP/Random/Random.icc
+    include/CLHEP/Random/RandomEngine.h
+    include/CLHEP/Random/RandomEngine.icc
+    include/CLHEP/Random/Randomize.h
     include/CLHEP/Random/RanecuEngine.h
     include/CLHEP/Random/Ranlux64Engine.h
     include/CLHEP/Random/RanluxEngine.h
@@ -79,6 +97,9 @@ set(G4clhep_HEADERS
     include/CLHEP/Random/SeedTable.h
     include/CLHEP/Random/Stat.h
     include/CLHEP/Random/StaticRandomStates.h
+    include/CLHEP/Random/gaussQTables.cdat
+    include/CLHEP/Random/gaussTables.cdat
+    include/CLHEP/Random/poissonTables.cdat
     include/CLHEP/Units/PhysicalConstants.h
     include/CLHEP/Units/SystemOfUnits.h
     include/CLHEP/Utility/defs.h
@@ -87,20 +108,35 @@ set(G4clhep_HEADERS
     include/CLHEP/Utility/noncopyable.h
     include/CLHEP/Utility/type_traits.h
     include/CLHEP/Vector/AxisAngle.h
+    include/CLHEP/Vector/AxisAngle.icc
     include/CLHEP/Vector/Boost.h
+    include/CLHEP/Vector/Boost.icc
     include/CLHEP/Vector/BoostX.h
+    include/CLHEP/Vector/BoostX.icc
     include/CLHEP/Vector/BoostY.h
+    include/CLHEP/Vector/BoostY.icc
     include/CLHEP/Vector/BoostZ.h
+    include/CLHEP/Vector/BoostZ.icc
     include/CLHEP/Vector/EulerAngles.h
+    include/CLHEP/Vector/EulerAngles.icc
     include/CLHEP/Vector/LorentzRotation.h
+    include/CLHEP/Vector/LorentzRotation.icc
     include/CLHEP/Vector/LorentzVector.h
+    include/CLHEP/Vector/LorentzVector.icc
     include/CLHEP/Vector/Rotation.h
+    include/CLHEP/Vector/Rotation.icc
     include/CLHEP/Vector/RotationInterfaces.h
+    include/CLHEP/Vector/RotationInterfaces.icc
     include/CLHEP/Vector/RotationX.h
+    include/CLHEP/Vector/RotationX.icc
     include/CLHEP/Vector/RotationY.h
+    include/CLHEP/Vector/RotationY.icc
     include/CLHEP/Vector/RotationZ.h
+    include/CLHEP/Vector/RotationZ.icc
     include/CLHEP/Vector/ThreeVector.h
+    include/CLHEP/Vector/ThreeVector.icc
     include/CLHEP/Vector/TwoVector.h
+    include/CLHEP/Vector/TwoVector.icc
 )
 
 # - Sources

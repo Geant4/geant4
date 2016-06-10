@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.9 2010-01-11 16:20:08 gcosmo Exp $
+# $Id: GNUmakefile 68710 2013-04-05 09:04:21Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,10 +13,6 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-
-ifdef G4ANALYSIS_USE_PLOTTER
-  CPPFLAGS += -DG4ANALYSIS_USE_PLOTTER
-endif
 
 .PHONY: all
 all: lib bin

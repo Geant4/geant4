@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyEMSTDpl.cc,v 1.4 2006-06-29 15:29:49 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyEMSTDpl.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyEMSTDpl.cc
 //
@@ -49,14 +48,14 @@ namespace pyEMSTDpl {
 PhysicsListEMstd* Construct()
 {
   PhysicsListEMstd* pl= new PhysicsListEMstd;
-  
+
   G4RunManager* runMgr= G4RunManager::GetRunManager();
   runMgr-> SetUserInitialization(pl);
 
   return pl;
 }
 
-};
+}
 
 using namespace pyEMSTDpl;
 
@@ -71,7 +70,7 @@ BOOST_PYTHON_MODULE(EMSTDpl) {
     ;
 
   // ---
-  def("Construct", Construct, 
+  def("Construct", Construct,
       return_value_policy<reference_existing_object>());
 
 }

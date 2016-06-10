@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LogLogInterpolation.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         Sebastian Incerti (incerti@cenbg.in2p3.fr)

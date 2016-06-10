@@ -27,7 +27,7 @@
 /// \brief Definition of the Em10StepCut class
 //
 //
-// $Id$
+// $Id: Em10StepCut.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LogicalBorderSurface.hh 73926 2013-09-17 07:59:06Z gcosmo $
 //
 // class G4LogicalBorderSurface
 //
@@ -96,7 +96,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
     G4VPhysicalVolume* Volume1;  // Physical Volume pointer on side 1
     G4VPhysicalVolume* Volume2;  // Physical Volume pointer on side 2
 
-    static G4LogicalBorderSurfaceTable theBorderSurfaceTable;
+    static G4LogicalBorderSurfaceTable *theBorderSurfaceTable;
       // The static Table of BorderSurfaces.
 };
 

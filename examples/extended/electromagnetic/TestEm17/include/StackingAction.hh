@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/include/StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.hh 67268 2013-02-13 11:38:40Z ihrivnac $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ class StackingAction : public G4UserStackingAction
     StackingAction();
    ~StackingAction();
 
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
     
 };
 

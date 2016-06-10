@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ErrorSurfaceTrajState.hh 69014 2013-04-15 09:42:51Z gcosmo $
 //
 //
 // Class description:
@@ -75,13 +75,12 @@ class G4ErrorSurfaceTrajState : public G4ErrorTrajState
     // Constructor by providing G4ErrorFreeTrajState and G4Plane3D surface
 
   G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecV,
-                           const G4Vector3D& vecW );
+                           const G4Vector3D& vecW  , G4ErrorMatrix &transfM);
     // Constructor by providing G4ErrorFreeTrajState and two vectors on surface
 
   ~G4ErrorSurfaceTrajState(){}
-
-  void BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecV,
-                         const G4Vector3D& vecW );
+  G4ErrorMatrix   BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecV,
+				    const G4Vector3D& vecW );
     // Build the error matrix from a free state plus the vectors of the surface
 
   virtual void Dump( std::ostream& out = G4cout ) const;

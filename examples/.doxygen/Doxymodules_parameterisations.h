@@ -1,4 +1,4 @@
-// $Id: Doxymodules_parameterisations.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_parameterisations.h 78005 2013-12-02 08:29:57Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_parameterisations.h
@@ -10,16 +10,36 @@
  *  @{
  */
 
+/** @defgroup extended_parameterisations_Par01 Par01
+ *  parameterisations example Par01
+ *  @{
+ */
+
+class Par01ActionInitialization {};
+class Par01CalorimeterHit {};
+class Par01CalorimeterSD {};
+class Par01DetectorConstruction {};
+class Par01EMShowerModel {};
+class Par01EnergySpot {};
+class Par01ParallelWorldForPion {};
+class Par01PhysicsList {};
+class Par01PiModel {};
+class Par01PionShowerModel {};
+class Par01PrimaryGeneratorAction {};
+
+
+/** @} */
+
 /** @defgroup extended_parameterisations_gflash gflash
  *  parameterisations example gflash
  *  @{
  */
 
+  class ExGflashActionInitialization {};
   class ExGflashDetectorConstruction {};
   class ExGflashEventAction {};
   class ExGflashHit {};
   class ExGflashHitsCollection {};
-  class ExGflashMaterialManager {};
   class ExGflashPhysicsList {};
   class ExGflashPrimaryGeneratorAction {};
   class ExGflashRunAction {};

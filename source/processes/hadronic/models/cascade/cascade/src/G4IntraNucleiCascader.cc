@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4IntraNucleiCascader.cc 67746 2013-03-05 21:11:14Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100307  M. Kelsey -- Bug fix: momentum_out[0] should be momentum_out.e()
@@ -110,6 +110,9 @@
 //		final-state tables instead of particle "isPhoton()"
 // 20120521  A. Ribon -- Specify mass when decay trapped particle.
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+// 20121205  M. Kelsey -- In processSecondary(), set generation to 1, as these
+//		particles are not true projectiles, but already embedded.
+// 20130304  M. Kelsey -- Use new G4CascadeHistory to dump cascade structure
 
 #include <algorithm>
 
@@ -117,6 +120,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCoalescence.hh"
+#include "G4CascadeHistory.hh"
 #include "G4CascadeParameters.hh"
 #include "G4CascadeRecoilMaker.hh"
 #include "G4CascadParticle.hh"
@@ -157,12 +161,15 @@ G4IntraNucleiCascader::G4IntraNucleiCascader()
   : G4CascadeColliderBase("G4IntraNucleiCascader"), model(new G4NucleiModel),
     theElementaryParticleCollider(new G4ElementaryParticleCollider),
     theRecoilMaker(new G4CascadeRecoilMaker), theClusterMaker(0),
-    tnuclei(0), bnuclei(0), bparticle(0),
+    theCascadeHistory(0), tnuclei(0), bnuclei(0), bparticle(0),
     minimum_recoil_A(0.), coulombBarrier(0.),
     nucleusTarget(new G4InuclNuclei),
     protonTarget(new G4InuclElementaryParticle) {
   if (G4CascadeParameters::doCoalescence())
     theClusterMaker = new G4CascadeCoalescence;
+
+  if (G4CascadeParameters::showHistory())
+    theCascadeHistory = new G4CascadeHistory;
 }
 
 G4IntraNucleiCascader::~G4IntraNucleiCascader() {
@@ -170,6 +177,7 @@ G4IntraNucleiCascader::~G4IntraNucleiCascader() {
   delete theElementaryParticleCollider;
   delete theRecoilMaker;
   delete theClusterMaker;
+  delete theCascadeHistory;
   delete nucleusTarget;
   delete protonTarget;
 }
@@ -179,6 +187,10 @@ void G4IntraNucleiCascader::setVerboseLevel(G4int verbose) {
   model->setVerboseLevel(verbose);
   theElementaryParticleCollider->setVerboseLevel(verbose);
   theRecoilMaker->setVerboseLevel(verbose);
+
+  // Optional functionality
+  if (theClusterMaker) theClusterMaker->setVerboseLevel(verbose);
+  if (theCascadeHistory) theCascadeHistory->setVerboseLevel(verbose);
 }
 
 
@@ -196,6 +208,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     setupCascade();
     generateCascade();
   } while (!finishCascade() && itry<itry_max);
+
+  // Report full structure of final cascade if requested
+  if (theCascadeHistory) theCascadeHistory->Print(G4cout);
 
   finalize(itry, bullet, target, globalOutput);
 }
@@ -219,6 +234,9 @@ void G4IntraNucleiCascader::rescatter(G4InuclParticle* bullet,
     preloadCascade(theNucleus, theSecondaries);
     generateCascade();
   } while (!finishCascade() && itry<itry_max);
+
+  // Report full structure of final cascade if requested
+  if (theCascadeHistory) theCascadeHistory->Print(G4cout);
 
   finalize(itry, bullet, target, globalOutput);
 }
@@ -286,8 +304,9 @@ void G4IntraNucleiCascader::newCascade(G4int itry) {
   output.reset();
   new_cascad_particles.clear();
   theExitonConfiguration.clear();
-
   cascad_particles.clear();		// List of initial secondaries
+
+  if (theCascadeHistory) theCascadeHistory->Clear();
 }
 
 
@@ -345,10 +364,23 @@ void G4IntraNucleiCascader::generateCascade() {
 	     << cascad_particles.size() << " last one: \n"
 	     << cascad_particles.back() << G4endl;
     }
-    
+
+    // Record incident particle first, to get history ID
+    if (theCascadeHistory) {
+      theCascadeHistory->AddEntry(cascad_particles.back());
+      if (verboseLevel > 2) {
+	G4cout << " active cparticle got history ID "
+	       << cascad_particles.back().getHistoryId() << G4endl;
+      }
+    }
+
     model->generateParticleFate(cascad_particles.back(),
 				theElementaryParticleCollider,
 				new_cascad_particles);
+
+    // Record interaction for later reporting (if desired)
+    if (theCascadeHistory && new_cascad_particles.size()>1) 
+      theCascadeHistory->AddVertex(cascad_particles.back(), new_cascad_particles);
 
     if (verboseLevel > 2) {
       G4cout << " After generate fate: New particles "
@@ -733,7 +765,7 @@ void G4IntraNucleiCascader::processSecondary(const G4KineticTrack* ktrack) {
 
   // Convert momentum to Bertini internal units
   cpart.getParticle().fill(ktrack->Get4Momentum()/GeV, ktype);
-  cpart.setGeneration(0);
+  cpart.setGeneration(1);
   cpart.setMovingInsideNuclei();
   cpart.initializePath(0);
 
@@ -792,11 +824,13 @@ processTrappedParticle(const G4CascadParticle& trapped) {
   
   if (trappedP.nucleon()) {	// normal exciton (proton or neutron)
     theExitonConfiguration.incrementQP(xtype);
+    if (theCascadeHistory) theCascadeHistory->DropEntry(trapped);
     return;
   }
 
   if (trappedP.hyperon()) {	// Not nucleon, so must be hyperon
     decayTrappedParticle(trapped);
+    if (theCascadeHistory) theCascadeHistory->DropEntry(trapped);
     return;
   }
 

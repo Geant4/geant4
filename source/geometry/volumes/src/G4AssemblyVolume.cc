@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4AssemblyVolume.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -41,7 +41,7 @@
 
 #include <sstream>
 
-unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
+G4ThreadLocal unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 
 // Default constructor
 //

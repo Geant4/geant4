@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02PSPassageCellFlux class
 //
 //
-// $Id$
+// $Id: RE02PSPassageCellFlux.cc 72957 2013-08-14 14:27:23Z gcosmo $
 //
 // RE02PSPassageCellFlux
 #include "RE02PSPassageCellFlux.hh"
@@ -74,6 +74,8 @@ G4int RE02PSPassageCellFlux::GetIndex(G4Step* aStep)
   G4int ix = touchable->GetReplicaNumber(1);
   G4int iy = touchable->GetReplicaNumber(2);
   G4int iz = touchable->GetReplicaNumber(0);
-  
-  return iy*fNx*fNz+ix*fNz+iz;
+ 
+  G4int tmp = fNy;
+  if (tmp) return iy*fNx*fNz+ix*fNz+iz;
+  else return iy*fNx*fNz+ix*fNz+iz; 
 }

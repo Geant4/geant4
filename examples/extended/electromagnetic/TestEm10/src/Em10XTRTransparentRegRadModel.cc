@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Em10XTRTransparentRegRadModel.cc 66587 2012-12-21 11:06:44Z ihrivnac $
+//
 /// \file electromagnetic/TestEm10/src/Em10XTRTransparentRegRadModel.cc
 /// \brief Implementation of the Em10XTRTransparentRegRadModel class
 //

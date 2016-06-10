@@ -24,7 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VHighEnergyGenerator.cc 69717 2013-05-13 09:47:57Z gcosmo $
+//      V. Uzhinsky Nov. 2012
+//          Added method GetProjectileNucleus for simulation of nucleus-nucleus inter.
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"
@@ -62,3 +64,12 @@ G4String G4VHighEnergyGenerator::GetModelName() const
 {
 	return theGeneratorModelName;
 }
+
+G4V3DNucleus * G4VHighEnergyGenerator::GetProjectileNucleus() const   // Uzhi Nov. 2012
+{                                                                     // Uzhi Nov. 2012
+  G4ExceptionDescription ed;
+  ed << "The used HighEnergyGenerator "<<GetModelName()<<" cannot manage with a residual projectile nucleus" << G4endl;
+  G4Exception("G4VHighEnergyGenerator::GetProjectileNucleus ", "G4had_mod_man",
+                FatalException, ed); 
+  return 0;
+}                                                                     // Uzhi Nov. 2012

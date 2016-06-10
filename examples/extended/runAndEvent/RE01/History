@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2010-11-24 22:47:23 asaim Exp $
+$Id: History 75598 2013-11-04 13:00:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 31, 2013 A. Kimura (exampleRE01-V09-06-08)
+- Added newline at end of RE01DetectorConstruction.cc
+
+Oct 29, 2013 A. Kimura (exampleRE01-V09-06-07)
+- Added RE01ActionInitialization.{hh,cc}
+
+Oct 25, 2013 M. Asai (exampleRE01-V09-06-06)
+- MT migration.
+
+Aug 27, 2013 G. Cosmo (exampleRE01-V09-06-05)
+- Added G4Ellipsoid among solids enabled for parameterisation
+
+Apr 01, 2013 A. Dotti (exampleRE01-V09-06-04)
+- New API for physics lists needed for MT
+
+Mar 14, 2013 M. Asai (exampleRE01-V09-06-03)
+- Enforcing the coding guideline.
+
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members initialization)
+
+Feb 1, 2013 V.Ivanchenko (exampleRE01-V09-06-02)
+- Migration to new physics_lists directory structure
+
+Dec 14, 2012 A.Ribon (exampleRE01-V09-06-01)
+- Replaced obsolete class G4QStoppingPhysics with G4StoppingPhysics.
+
+Dec 02, 2012 J.Allison (exampleRE01-V09-06-00)
+  Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o RE01Trajectory.cc: Removed DrawTrajectory(G4int i_mode).
 
 Nov 8, 2012 I.Hrivnacova (exampleRE01-V09-05-02)
 - Added copying pythia_event.data in the build area

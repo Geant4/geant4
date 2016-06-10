@@ -34,5 +34,25 @@ It create parallel world(s) for defining scoring mesh(es).
  This example demonstrates how to define layered mass geometry in
 a parallel world and use it in a simulation.
 
+\link ExampleRE05 RE05 \endlink
+
+Defines a simplified collider detector setup.
+Demonstrates interfacing to the PYTHIA primary generator. Includes
+the definition of a 'readout' geometry. Exercises event filtering using
+the stacking mechanism. Includes visualization. \n
+It was moved in extended examples from novice/N04 with removal of
+novice examples. 
+
+\link ExampleRE06 RE06 \endlink
+
+Implements three simplified sandwitch calorimeters.
+Shows how to modify part of the geometry setup at run-time. Includes
+detector description parameterisation by materials. Demonstrates
+sharing of a sensitive detector definition for different sub-detectors.
+Defines different geometrical regions with different production
+thresholds. Shows customization of the G4Run. \n
+It was moved in extended examples from novice/N07 with removal of
+novice examples. 
+
 */
 

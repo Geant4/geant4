@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UserSpecialCuts.hh 68048 2013-03-13 14:34:07Z gcosmo $
 //
 // class description
 //

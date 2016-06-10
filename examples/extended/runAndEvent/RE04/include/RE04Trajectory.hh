@@ -60,7 +60,7 @@ typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
 /// - void ShowTrajectory(std::ostream& os=G4cout) const
 ///     invokes the default implementation
 ///
-/// - void DrawTrajectory(G4int i_mode = 0) const
+/// - void DrawTrajectory() const
 ///     invokes the default implementation
 ///
 /// - void AppendStep(const G4Step* aStep)
@@ -128,7 +128,7 @@ public:
 // Other member functions
    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
    //virtual void DrawTrajectory() const;
-   virtual void DrawTrajectory(G4int i_mode = 0) const;
+   virtual void DrawTrajectory() const;
    virtual void AppendStep(const G4Step* aStep);
    virtual int GetPointEntries() const { return fPositionRecord->size(); }
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
@@ -155,18 +155,17 @@ public:
 
 };
 
-extern G4Allocator<RE04Trajectory> faTrajAllocator;
+extern G4ThreadLocal G4Allocator<RE04Trajectory> * faTrajAllocator;
 
 inline void* RE04Trajectory::operator new(size_t)
 {
-  void* aTrajectory;
-  aTrajectory = (void*)faTrajAllocator.MallocSingle();
-  return aTrajectory;
+  if(!faTrajAllocator) faTrajAllocator = new G4Allocator<RE04Trajectory>;
+  return (void*)faTrajAllocator->MallocSingle();
 }
 
 inline void RE04Trajectory::operator delete(void* aTrajectory)
 {
-  faTrajAllocator.FreeSingle((RE04Trajectory*)aTrajectory);
+  faTrajAllocator->FreeSingle((RE04Trajectory*)aTrajectory);
 }
 
 #endif

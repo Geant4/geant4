@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the RE01PrimaryGeneratorMessenger class
 //
-// $Id$
+// $Id: RE01PrimaryGeneratorMessenger.cc 68026 2013-03-13 13:45:22Z gcosmo $
 //
 
 #include "RE01PrimaryGeneratorMessenger.hh"
@@ -38,7 +38,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01PrimaryGeneratorMessenger
 ::RE01PrimaryGeneratorMessenger(RE01PrimaryGeneratorAction * mpga)
-  :G4UImessenger(),fMyAction(mpga)
+  :G4UImessenger(),fMyAction(mpga),
+   fMydetDirectory(0),fGenCmd(0)
 {
   fMydetDirectory = new G4UIdirectory("/mydet/");
   fMydetDirectory->SetGuidance("RE01 detector control commands.");

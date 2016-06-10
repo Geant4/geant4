@@ -23,15 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/include/HepMCG4AsciiReaderMessenger.hh
+/// \file eventgenerator/HepMC/HepMCEx01/include/HepMCG4AsciiReaderMessenger.hh
 /// \brief Definition of the HepMCG4AsciiReaderMessenger class
 //
-// ====================================================================
+// $Id: HepMCG4AsciiReaderMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   HepMCG4AsciiReaderMessenger.hh
-//   $Id$
-//
-// ====================================================================
+
 #ifndef HEPMC_G4_ASCII_READER_MESSENGER_H
 #define HEPMC_G4_ASCII_READER_MESSENGER_H
 
@@ -44,6 +41,13 @@ class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
 class HepMCG4AsciiReaderMessenger : public G4UImessenger {
+public:
+  HepMCG4AsciiReaderMessenger(HepMCG4AsciiReader* agen);
+  ~HepMCG4AsciiReaderMessenger();
+
+  void SetNewValue(G4UIcommand* command, G4String newValues);
+  G4String GetCurrentValue(G4UIcommand* command);
+
 private:
   HepMCG4AsciiReader* gen;
 
@@ -51,12 +55,6 @@ private:
   G4UIcmdWithAnInteger* verbose;
   G4UIcmdWithAString* open;
 
-public:
-  HepMCG4AsciiReaderMessenger(HepMCG4AsciiReader* agen);
-  ~HepMCG4AsciiReaderMessenger();
-
-  void SetNewValue(G4UIcommand* command, G4String newValues);
-  G4String GetCurrentValue(G4UIcommand* command);
 };
 
 #endif

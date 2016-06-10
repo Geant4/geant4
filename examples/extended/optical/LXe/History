@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2010-10-25 15:16:41 gunter Exp $
+$Id: History 77882 2013-11-29 08:39:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,66 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 28, 2013 P. Gumplinger (LXe-V09-06-17)
+- add icons.mac run.png
+
+November 27, 2013 P. Gumplinger (LXe-V09-06-15 and 16)
+- Fixed ConstructSDandField():
+  Moved setting the SD and field manager to logical volume outside the tests
+- Put back cleaning volumes and solid stores in Construct()
+- add gui.mac
+
+November 25, 2013 P. Gumplinger (LXe-V09-06-14)
+- Fixed compilation warnings for data not used in LXeWLSFiber.hh and
+  LXeWLSSlab.hh.
+
+November 25, 2013 P. Gumplinger (LXe-V09-06-13)
+- bug fix a divided by zero
+
+November 22, 2013 P. Gumplinger (LXe-V09-06-12)
+- replace Update method and commands with ReinitializeGeometry
+
+October 29, 2013 P. Gumplinger (LXe-V09-06-11)
+- remove all reference to LXeWorkerInitialization and SetNumberOfThreads
+
+October 25, 2013 P. Gumplinger (LXe-V09-06-10)
+- Instantiate SteppingVerbose in a new method in LXeActionInitialization
+  and removed LXeWorkerInitialization (not needed anymore)
+
+September 20, 2013 Ivana Hrivnacova (LXe-V09-06-09)
+- Fixed setting of sensitive detectors to logical volumes
+
+September 13, 2013 Peter Gumplinger (LXe-V09-06-08)
+- apply all of Ivana's modifications to make the code MT ready
+
+July 16, 2013 Ivana Hrivnacova (LXe-V09-06-07)
+- Make LXeTrajectoryAllocator thread local (required for MT)
+
+July 11, 2013 Ivana Hrivnacova (LXe-V09-06-06)
+- Added missing G4ThreadLocal keyword for the *HitAllocator definition
+  in LXePMTHit.cc, LXeScintHit.cc
+
+May 27, 2013 P. Gumplinger (LXe-V09-06-05)
+- coding guideline - line length < 80 for LXeSteppingMessenger
+  and LXeEventMessenger
+
+Apr 05, 2013 P. Gumplinger (LXe-V09-06-04)
+- properly initialize fExpectedNextStatus at the first step
+
+Apr 05, 2013 P. Gumplinger (LXe-V09-06-03)
+- rename to aParticleIterator as per A. Dotti
+
+Apr 05, 2013 P. Gumplinger (LXe-V09-06-02)
+- fix geometry overlap
+
+Apr 01, 2013 A. Dotti (LXe-V09-06-01)
+- Migrate to new G4VUserPhysicsList interface needed for MT
+
+Dec 02, 2012 J.Allison (LXe-V09-06-00)
+  Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o LXeTrajectory.cc: Removed DrawTrajectory(G4int i_mode).
+  o LXeEventAction.cc: Removed argument from DrawTrajectory().
 
 16 November 2012 Gunter Folger    (LXe-V09-05-02)
 - reduce size of LXe.out, and remove tracking/verbose 1, responsible for the 

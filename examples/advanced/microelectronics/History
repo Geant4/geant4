@@ -1,0 +1,27 @@
+-------------------------------------------------------------------
+$Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - Microelectronics example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+03 December 2013 - I. Hrivnacova - microelectronics-V09-06-03
+   Fixed analysis code in RunAction:
+   CreateHistograms must be called for each run, as the analysis manager
+   is deleted at the end of each run
+
+27 November 2013 - G. Folger - microelectronics-V09-06-02
+    remove setting number of threads from macro files
+
+31 October 2013 - L. Pandola - microelectronics-V09-06-01
+	 Edited CMakeLists.txt to make the test work on 
+	 Windows
+
+29 October 2013 - M. Raine - microelectronics-V09-06-00
+	 Package created, based on microdosimetry.
+
+

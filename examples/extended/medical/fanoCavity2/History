@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2011-01-04 19:17:29 vnivanch Exp $
+$Id: History 73202 2013-08-22 08:19:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,32 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-08-13 V.Ivant (fano2-V09-06-08)
+- PhysListEmStandard_option3 - use G4UrbanMscModel instead of 
+    G4UrbanMscModel95
+
+29/31-07-13 P.Gumplinger (fano2-V09-06-06/07)
+- fic MAC/clang32 compilation warnings
+
+11-07-13 I.Hrivnacova (fano2-V09-06-05) 
+- In HistoManager: use new analysis manager method SetH1Activation()   
+
+08-06-13 mma (fano2-V09-06-04)
+- Cosmetic in SteppingAction.
+     
+11-04-13 mma (fano2-V09-06-03)
+- HistoManager functionalities transfered to G4Analysis and its messenger.
+    - userAction classes and all macros affected
+         
+01-04-13 A. Dotti (fano2-V09-06-02)
+- new API for physics list for MT
+     
+26-03-13 mma (fano2-V09-06-01)
+- more on coding conventions
+     
+15-03-13 mma (fano2-V09-06-00)
+- G4 coding conventions
 
 14-11-12 I. Hrivnacova (fano2-V09-05-08)
 - Fixed order of instatiating G4VisExecutive and G4UIExecutive

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4H3O.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4H3O.cc 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -42,7 +42,7 @@
 // ###                         H3O                                    ###
 // ###          oxonium is the usual name for H3O+ (hydronium)        ###
 // ######################################################################
-G4H3O* G4H3O::theInstance = 0;
+/*G4ThreadLocal*/ G4H3O* G4H3O::theInstance = 0;
 
 G4H3O* G4H3O::Definition()
 {

@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04FieldMessenger.hh 76690 2013-11-14 08:45:07Z gcosmo $
+//
 /// \file field/field04/include/F04FieldMessenger.hh
 /// \brief Definition of the F04FieldMessenger class
 //
-//
+
 #ifndef F04FieldMessenger_h
 #define F04FieldMessenger_h 1
 
@@ -40,10 +42,12 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
+class F04DetectorConstruction;
+
 class F04FieldMessenger: public G4UImessenger
 {
   public:
-    F04FieldMessenger(F04GlobalField* );
+    F04FieldMessenger(F04GlobalField*, F04DetectorConstruction* );
     virtual ~F04FieldMessenger();
 
     virtual void SetNewValue(G4UIcommand*, G4String);
@@ -54,6 +58,10 @@ class F04FieldMessenger: public G4UImessenger
  
     G4UIdirectory*             fDetDir;
 
+    G4UIcmdWithADoubleAndUnit* fCaptureB1Cmd;
+    G4UIcmdWithADoubleAndUnit* fCaptureB2Cmd;
+    G4UIcmdWithADoubleAndUnit* fTransferBCmd;
+
     G4UIcmdWithAnInteger*      fStepperCMD;
     G4UIcmdWithADoubleAndUnit* fMinStepCMD;
     G4UIcmdWithADoubleAndUnit* fDeltaChordCMD;
@@ -63,6 +71,7 @@ class F04FieldMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fEpsMaxCMD;
     G4UIcmdWithoutParameter*   fUpdateCMD;
 
+    F04DetectorConstruction*   fDetector;
 };
 
 #endif

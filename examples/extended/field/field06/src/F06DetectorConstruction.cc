@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F06DetectorConstruction.cc 75572 2013-11-04 11:46:08Z gcosmo $
+//
 /// \file field/field06/src/F06DetectorConstruction.cc
 /// \brief Implementation of the F06DetectorConstruction class
 //
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,27 +52,33 @@
 #include "G4UserLimits.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "F06Field.hh"
+#include "G4UniformGravityField.hh"
 
-#include "G4RunManager.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+
+#include "G4RepleteEofM.hh"
+//#include "G4EqGravityField.hh"
+
+#include "G4ClassicalRK4.hh"
+#include "G4MagIntegratorStepper.hh"
+#include "G4ChordFinder.hh"
+#include "G4PropagatorInField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F06DetectorConstruction::F06DetectorConstruction()
- : Vacuum(0), field(0)
+ : fVacuum(0), fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0)
 {
   // materials
   DefineMaterials();
-
-  // ensure the global field is initialized
-  field = new F06Field();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F06DetectorConstruction::~F06DetectorConstruction()
 {
-  delete field;
+  if (fField) delete fField;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +87,7 @@ void F06DetectorConstruction::DefineMaterials()
 {
   G4NistManager* nistMan = G4NistManager::Instance();
 
-  Vacuum = nistMan->FindOrBuildMaterial("G4_Galactic");
+  fVacuum = nistMan->FindOrBuildMaterial("G4_Galactic");
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -91,7 +96,7 @@ void F06DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* F06DetectorConstruction::Construct()
 {
-  //     
+  //
   // World
   //
 
@@ -99,37 +104,88 @@ G4VPhysicalVolume* F06DetectorConstruction::Construct()
   G4double expHall_y = 1.0*m;
   G4double expHall_z = 1.0*m;
 
-  solidWorld = new G4Box("World",                  //its name
+  fSolidWorld = new G4Box("World",                 //its name
                    expHall_x,expHall_y,expHall_z); //its size
-                         
-  logicWorld = new G4LogicalVolume(solidWorld,     //its solid
-                                   Vacuum,         //its material
-                                   "World");       //its name
-                                   
-  physiWorld = new G4PVPlacement(0,                //no rotation
-                                 G4ThreeVector(),  //at (0,0,0)
-                                 logicWorld,       //its logical volume
-                                 "World",          //its name
-                                 0,                //its mother  volume
-                                 false,            //no boolean operation
-                                 0);               //copy number
-  
+
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,   //its solid
+                                    fVacuum,       //its material
+                                    "World");      //its name
+
+  fPhysiWorld = new G4PVPlacement(0,               //no rotation
+                                  G4ThreeVector(), //at (0,0,0)
+                                  fLogicWorld,     //its logical volume
+                                  "World",         //its name
+                                  0,               //its mother  volume
+                                  false,           //no boolean operation
+                                  0);              //copy number
+
   G4double maxStep = 1.0*mm;
   G4double maxTime = 41.*s;
 
   G4UserLimits* stepLimit = new G4UserLimits(maxStep,DBL_MAX,maxTime);
 
-  logicWorld->SetUserLimits(stepLimit);
+  fLogicWorld->SetUserLimits(stepLimit);
  
-  //                                        
+  //
   // Visualization attributes
   //
-  // logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+  // fLogicWorld->SetVisAttributes (G4VisAttributes::Invisible);
 
   //
   //always return the physical World
   //
-  return physiWorld;
+  return fPhysiWorld;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal G4UniformGravityField* F06DetectorConstruction::fField = 0;
+
+void F06DetectorConstruction::ConstructSDandField()
+{
+  if (!fField) {
+
+     fField = new G4UniformGravityField();
+
+     G4RepleteEofM* equation = new G4RepleteEofM(fField);
+//     G4EqGravityField* equation = new G4EqGravityField(fField);
+
+     G4FieldManager* fieldManager
+      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+     fieldManager->SetDetectorField(fField);
+
+//     G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,12);
+     G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,8);
+
+     G4double minStep           = 0.01*mm;
+
+     G4ChordFinder* chordFinder = 
+                   new G4ChordFinder((G4MagneticField*)fField,minStep,stepper);
+
+     // Set accuracy parameters
+     G4double deltaChord        = 3.0*mm;
+     chordFinder->SetDeltaChord( deltaChord );
+
+     G4double deltaOneStep      = 0.01*mm;
+     fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+
+     G4double deltaIntersection = 0.1*mm;
+     fieldManager->SetDeltaIntersection(deltaIntersection);
+
+     G4TransportationManager* transportManager =
+                           G4TransportationManager::GetTransportationManager();
+
+     G4PropagatorInField* fieldPropagator =
+                                      transportManager->GetPropagatorInField();
+
+     G4double epsMin            = 2.5e-7*mm;
+     G4double epsMax            = 0.05*mm;
+
+     fieldPropagator->SetMinimumEpsilonStep(epsMin);
+     fieldPropagator->SetMaximumEpsilonStep(epsMax);
+
+     fieldManager->SetChordFinder(chordFinder);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

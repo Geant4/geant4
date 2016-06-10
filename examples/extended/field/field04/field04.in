@@ -12,12 +12,9 @@
 #
 /field04/SetCaptureR 0.6 m
 /field04/SetCaptureZ 4.0 m
-/field04/SetCaptureB1 2.5 tesla
-/field04/SetCaptureB2 5.0 tesla
 #
 /field04/SetTransferR  0.3 m
 /field04/SetTransferZ 15.0 m
-/field04/SetTransferB 5.0 tesla
 /field04/SetTransferP 0.0 m
 #
 /field04/SetTgtMat G4_W
@@ -31,17 +28,21 @@
 /field04/SetDgrThick 0.1 cm
 #/field04/SetDgrPos -7.4 m
 #
-/exp/phys/gammaCut 1.0 m
-/exp/phys/stepMax 2.0 mm
+#######/exp/phys/gammaCut 1.0 m
+#######/exp/phys/stepMax 2.0 mm
 #
 #/decay/pienu
 #/decay/pimunu
 #
+/run/initialize
+#
+/field/SetCaptureB1 2.5 tesla
+/field/SetCaptureB2 5.0 tesla
+/field/SetTransferB 5.0 tesla
+#
 /field/setStepperType 4
 /field/setMinStep 10 mm
 /field/update
-#
-/run/initialize
 #
 #/process/inactivate msc
 #/process/activate msc

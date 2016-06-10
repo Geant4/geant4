@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.hh 77251 2013-11-22 10:06:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 class DetectorConstruction;
 class G4UIdirectory;
+class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
@@ -63,7 +64,7 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        fMaterCmd;
     G4UIcmdWithADoubleAndUnit* fSizeCmd;
     G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
-    G4UIcmdWithoutParameter*   fUpdateCmd;
+    G4UIcommand*               fIsotopeCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

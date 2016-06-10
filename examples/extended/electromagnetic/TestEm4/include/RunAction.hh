@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm4/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id$
+// $Id: RunAction.hh 74270 2013-10-02 14:46:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,12 +34,10 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
+#include "Analysis.hh"
+
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
-#include "g4root.hh"
-////#include "g4xml.hh"
-////#include "g4hbook.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

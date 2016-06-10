@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:42:29 bmorgan Exp $
+# $Id: sources.cmake 76607 2013-11-13 08:46:40Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/usolids/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -51,6 +52,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4graphics_reps
         G4intercoms
         G4volumes
+        G4GeomUSolids
     GLOBAL_DEPENDENCIES
         G4global
         G4graphics_reps

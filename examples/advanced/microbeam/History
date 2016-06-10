@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
+$Id: History 70524 2013-05-31 16:36:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,32 @@ $Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
 
                        Package History file
                        --------------------
+
+03 Oct 2013 - S. Incerti - tag microbeam-V09-06-07
+- Updated for changes in analysis:
+
+30 Sep 2013 - I. Hrivnacova - tag microbeam-V09-06-06
+- Updated for changes in analysis:
+  (removal of G4AnalysisManager::Create(isMaster))
+
+05 Sep 2013 - S. Incerti - tag microbeam-V09-06-05
+- Updated README
+
+27 Aug 2013 - G. Cosmo - tag microbeam-V09-06-04
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+23 Aug 2013 - S. Incerti - tag microbeam-V09-06-03
+- Migration to MT (cont.)
+
+22 Aug 2013 - S. Incerti - tag microbeam-V09-06-02
+- Migration to MT
+
+30 May 2013 - L. Pandola - tag microbeam-V09-06-01
+- Migrate analysis from AIDA to g4tools (no AIDA 
+  dependency any longer). Minor fix in the CMakeLists.txt
+
+19 April 2013 - S. Incerti - tag microbeam-V09-06-00
+- Removed comparisons of strings in MicrobeamSteppingAction
 
 06 November 2012 - L. Pandola - tag microbeam-V09-05-07
 - Fix syntax in CMakeLists.txt

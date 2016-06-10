@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DipBustGenerator.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,8 @@
 #include "G4DipBustGenerator.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 G4DipBustGenerator::G4DipBustGenerator(const G4String&)
   : G4VEmAngularDistribution("DipBustGen")
@@ -65,7 +67,7 @@ G4ThreeVector&
 G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp,
 				    G4double, G4int, const G4Material*)
 {
-  G4double c, cosTheta, delta, cofA, signc = 1., a, power = 1./3.;
+  G4double a, c, cosTheta, delta, cofA, signc = 1.;
 
   G4double eTkin = dp->GetKineticEnergy();
 
@@ -81,7 +83,7 @@ G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp,
   delta += a;
   delta *= 0.5; 
 
-  cofA = -signc*std::pow(delta, power);
+  cofA = -signc*G4Exp(G4Log(delta)/3.0);
 
   cosTheta = cofA - 1./cofA;
 
@@ -104,7 +106,7 @@ G4double G4DipBustGenerator::PolarAngle(const G4double eTkin,
 				    const G4double, // final_energy
 				    const G4int ) // Z
 {
-  G4double c, cosTheta, delta, cofA, signc = 1., a, power = 1./3.;
+  G4double c, cosTheta, delta, cofA, signc = 1., a;
   G4double gamma, beta, theta;
 
   c = 4. - 8.*G4UniformRand();
@@ -119,7 +121,7 @@ G4double G4DipBustGenerator::PolarAngle(const G4double eTkin,
   delta += a;
   delta *= 0.5; 
 
-  cofA = -signc*std::pow(delta, power);
+  cofA = -signc*G4Exp(G4Log(delta)/3.0);
 
   cosTheta = cofA - 1./cofA;
 

@@ -32,10 +32,9 @@
 //    *                             *
 //    *******************************
 //
-// $Id$
+// $Id: BrachyFactoryI.cc 69765 2013-05-14 10:11:22Z gcosmo $
 //
 #include "BrachyFactoryI.hh"
-#include "BrachyPrimaryGeneratorActionI.hh"
 #include "BrachyDetectorConstructionI.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
@@ -49,17 +48,11 @@
 BrachyFactoryI:: BrachyFactoryI()
 {
   iodiumSource = new BrachyDetectorConstructionI();
-  iodiumPrimaryParticle = new BrachyPrimaryGeneratorActionI();
 }
 
 BrachyFactoryI::~BrachyFactoryI()
 {
   delete iodiumSource;
-}
-
-void  BrachyFactoryI::CreatePrimaryGeneratorAction(G4Event* anEvent)
-{ 
-  iodiumPrimaryParticle -> GeneratePrimaries(anEvent);
 }
 
 void BrachyFactoryI::CreateSource(G4VPhysicalVolume* mother)
@@ -68,4 +61,7 @@ void BrachyFactoryI::CreateSource(G4VPhysicalVolume* mother)
 }
 
 void BrachyFactoryI::CleanSource()
-{;}
+{
+ iodiumSource -> CleanIodium(); 
+ iodiumSource = 0;
+}

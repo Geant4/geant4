@@ -26,42 +26,53 @@
 /// \file electromagnetic/TestEm1/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id$
+// $Id: SteppingAction.cc 76293 2013-11-08 13:11:23Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
+#include "G4RunManager.hh"
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* run, EventAction* event)
-:fRunAction(run), fEventAction(event)
+SteppingAction::SteppingAction(EventAction* event)
+:G4UserSteppingAction(), fEventAction(event)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
    
   G4double EdepStep = aStep->GetTotalEnergyDeposit();
-  if (EdepStep > 0.) {  fRunAction->AddEdep(EdepStep);
+  if (EdepStep > 0.) {         run->AddEdep(EdepStep);
                       fEventAction->AddEdep(EdepStep);
   }
-  const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
-  if (process) fRunAction->CountProcesses(process->GetProcessName());
+ const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
+  if (process) run->CountProcesses(process->GetProcessName());
 
   // step length of primary particle
   G4int ID         = aStep->GetTrack()->GetTrackID();
   G4double steplen = aStep->GetStepLength();
-  if (ID == 1) analysisManager->FillH1(3,steplen);  
+  if (ID == 1) analysisManager->FillH1(3,steplen);
+/*  
+  //mass and charge
+  //
+  G4StepPoint* postPoint = aStep->GetPostStepPoint();
+  G4double charge = postPoint->GetCharge();
+  G4double mass   = postPoint->GetMass();
+  G4cout << "\n   charge= " << charge << "  mass= " << mass << G4endl;
+*/      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

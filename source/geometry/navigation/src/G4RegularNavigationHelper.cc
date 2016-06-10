@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RegularNavigationHelper.cc 68709 2013-04-05 09:03:07Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigationHelper implementation
@@ -35,14 +35,14 @@
 
 #include "G4RegularNavigationHelper.hh"
 
-G4RegularNavigationHelper * G4RegularNavigationHelper::theInstance = 0;
+G4ThreadLocal G4RegularNavigationHelper*
+G4RegularNavigationHelper::theInstance = 0;
 
 G4RegularNavigationHelper* G4RegularNavigationHelper::Instance()
 {
-  if(theInstance == 0)
+  if(!theInstance)
   {
-    static G4RegularNavigationHelper helper;
-    theInstance = &helper;
+    theInstance = new G4RegularNavigationHelper;
   }
   return theInstance;
 }
@@ -57,6 +57,7 @@ G4RegularNavigationHelper::G4RegularNavigationHelper()
 //
 G4RegularNavigationHelper::~G4RegularNavigationHelper()
 {
+  if (theInstance)  { delete theInstance; theInstance=0; }
 }
 
 // --------------------------------------------------------------------

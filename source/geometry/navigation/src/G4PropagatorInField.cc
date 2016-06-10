@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id$
+// $Id: G4PropagatorInField.cc 69711 2013-05-13 09:22:17Z gcosmo $
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
@@ -68,7 +68,6 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fNavigator(theNavigator),
     fCurrentFieldMgr(detectorFieldMgr),
     fSetFieldMgr(false),
-    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
                         G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
     fParticleIsLooping(false),
@@ -168,8 +167,6 @@ G4PropagatorInField::ComputeStep(
   if( !fSetFieldMgr ) fCurrentFieldMgr= FindAndSetFieldManager( pPhysVol ); 
   // For the next call, the field manager must again be set
   fSetFieldMgr= false;
-
-  GetChordFinder()->SetChargeMomentumMass(fCharge,fInitialMomentumModulus,fMass);
 
  // Values for Intersection Locator has to be updated on each call for the
  // case that CurrentFieldManager has changed from the one of previous step
@@ -444,10 +441,7 @@ G4PropagatorInField::ComputeStep(
              << "  Zero progress for "  << fNoZeroStep << " attempted steps." 
              << G4endl
              << "  Proposed Step is " << CurrentProposedStepLength
-             << " but Step Taken is "<< fFull_CurveLen_of_LastAttempt << G4endl
-             << "  For Particle with Charge = " << fCharge
-             << " Momentum = "<< fInitialMomentumModulus
-             << " Mass = " << fMass << G4endl;
+             << " but Step Taken is "<< fFull_CurveLen_of_LastAttempt << G4endl;
      if( pPhysVol )
        message << " in volume " << pPhysVol->GetName() ; 
      else

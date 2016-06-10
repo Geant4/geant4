@@ -1,0 +1,15 @@
+#
+### Radiation field defined
+### by means of GPS 
+/gps/verbose 0
+/gps/particle e-
+/gps/energy 1 MeV
+#
+/gps/pos/type Volume
+#
+/gps/pos/shape Para
+/gps/pos/halfx 20 cm
+/gps/pos/halfy 1 mm
+/gps/pos/halfz 100 cm
+/gps/pos/centre 0. 30. 0. cm
+/gps/direction 0 -1 0 

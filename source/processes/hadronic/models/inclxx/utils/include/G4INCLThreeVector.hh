@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -137,17 +135,16 @@ namespace G4INCL {
       }
 
       template<typename T>
-        inline void operator*= (const T c) {
+        inline void operator*= (const T &c) {
           x *= c;
           y *= c;
           z *= c;
         }
 
       template<typename T>
-        inline void operator/= (const T c) {
-          x /= c;
-          y /= c;
-          z /= c;
+        inline void operator/= (const T &c) {
+          const G4double oneOverC = 1./c;
+          this->operator*=(oneOverC);
         }
 
       inline ThreeVector operator- (const ThreeVector &v) const {
@@ -162,7 +159,8 @@ namespace G4INCL {
        * Divides all components of the vector with a constant number.
        */
       inline ThreeVector operator/ (const G4double C) const {
-        return ThreeVector(x/C, y/C, z/C);
+        const G4double oneOverC = 1./C;
+        return ThreeVector(x*oneOverC, y*oneOverC, z*oneOverC);
       }
 
       inline ThreeVector operator* (const G4double C) const {

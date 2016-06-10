@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NistMessenger.cc 72057 2013-07-04 13:07:29Z gcosmo $
 //
 //
 // File name:     G4NistMessenger
@@ -54,7 +54,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4NistMessenger::G4NistMessenger(G4NistManager* man)
-:manager(man)
+  : manager(man)
 {
   matDir = new G4UIdirectory("/material/");
   matDir->SetGuidance("Commands for materials");
@@ -80,14 +80,14 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
   przElmCmd->SetRange("0<=Z && Z<108");
    
   lisMatCmd = new G4UIcmdWithAString("/material/nist/listMaterials",this);
-  lisMatCmd->SetGuidance("list materials in Geant4 dataBase.");
+  lisMatCmd->SetGuidance("Materials in Geant4 dataBase.");
   lisMatCmd->SetGuidance("simple - simple NIST materials.");
   lisMatCmd->SetGuidance("compound - compound NIST materials.");
   lisMatCmd->SetGuidance("hep - HEP materials.");
-  lisMatCmd->SetGuidance("biomedical - biomedical materials.");
+  lisMatCmd->SetGuidance("bio - biomedical materials.");
   lisMatCmd->SetGuidance("all - list of all Geant4 materials.");
-  lisMatCmd->SetParameterName("list", true);
-  lisMatCmd->SetCandidates("simple compound hep all");
+  lisMatCmd->SetParameterName("matlist", true);
+  // lisMatCmd->SetCandidates("simple compound hep bio all");
   lisMatCmd->SetDefaultValue("all");
   
   g4Dir = new G4UIdirectory("/material/g4/");
@@ -102,13 +102,13 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
   g4MatCmd = new G4UIcmdWithAString("/material/g4/printMaterial",this);
   g4MatCmd->SetGuidance("print Material from G4MaterialTable.");
   g4MatCmd->SetGuidance("all - all materials");
-  g4MatCmd->SetParameterName("mat", true);
+  g4MatCmd->SetParameterName("pmat", true);
   g4MatCmd->SetDefaultValue("all");
 
   g4DensCmd = new G4UIcmdWithAString("/material/g4/printDensityEffParam",this);
   g4DensCmd->SetGuidance("print Material from G4DensityEffectData.");
   g4DensCmd->SetGuidance("all - all materials");
-  g4DensCmd->SetParameterName("mat", true);
+  g4DensCmd->SetParameterName("dmat", true);
   g4DensCmd->SetDefaultValue("all");
 }
 
@@ -133,25 +133,25 @@ G4NistMessenger::~G4NistMessenger()
 
 void G4NistMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
+  //G4cout << "G4NistMessenger::SetNewValue <" << newValue << ">" << G4endl;
   if (command == verCmd) 
    { manager->SetVerbose(verCmd->GetNewIntValue(newValue));}
     
   else if (command == prtElmCmd)
-   { manager->PrintElement(newValue);}
+   { manager->PrintElement(newValue); }
     
   else if (command == przElmCmd) {
     G4int Z = przElmCmd->GetNewIntValue(newValue);
     if(Z >= 0 && Z < 108) { manager->PrintElement(Z); }
-  }
-   
+  }   
   else if (command == lisMatCmd) 
-   { manager->ListMaterials(newValue);}
+   { manager->ListMaterials(newValue); }
 
   else if (command == g4ElmCmd)
-   { manager->PrintG4Element(newValue);}
+   { manager->PrintG4Element(newValue); }
    
   else if (command == g4MatCmd)
-   { manager->PrintG4Material(newValue);}
+   { manager->PrintG4Material(newValue); }
 
   else if (command == g4DensCmd)
     { G4IonisParamMat::GetDensityEffectData()->PrintData(newValue); }

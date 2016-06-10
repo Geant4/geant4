@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbGeometryDumper.cc 77346 2013-11-22 16:01:16Z gcosmo $
 // GEANT4 tag $Name: $
 //
 //
@@ -54,6 +54,7 @@
 #include "G4Torus.hh"
 #include "G4Hype.hh"
 #include "G4Polycone.hh"
+#include "G4GenericPolycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4EllipticalTube.hh"
 #include "G4Ellipsoid.hh"
@@ -77,7 +78,7 @@
 #include <iomanip>
 
 //------------------------------------------------------------------------
-G4tgbGeometryDumper* G4tgbGeometryDumper::theInstance = 0;
+G4ThreadLocal G4tgbGeometryDumper* G4tgbGeometryDumper::theInstance = 0;
 
 //------------------------------------------------------------------------
 G4tgbGeometryDumper::G4tgbGeometryDumper()
@@ -867,6 +868,26 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
       G4int ncor = plc->GetNumRZCorner();
       params.push_back( angphi );
       params.push_back( plc->GetOriginalParameters()->Opening_angle/deg ); 
+      params.push_back( ncor );
+    
+      for( G4int ii = 0; ii < ncor; ii++ )
+      {
+        params.push_back( plc->GetCorner(ii).r ); 
+        params.push_back( plc->GetCorner(ii).z );
+      }
+    }
+  } else if (solidType == "GENERICPOLYCONE") {
+    //--- Dump RZ corners
+    const G4GenericPolycone * plc =
+          dynamic_cast < const G4GenericPolycone * > (so);
+    if (plc) {
+      G4double angphi = plc->GetStartPhi()/deg;
+      if( angphi > 180*deg )  { angphi -= 360*deg; }
+      G4double endphi = plc->GetEndPhi()/deg;
+      if( endphi > 180*deg )  { endphi -= 360*deg; }
+      G4int ncor = plc->GetNumRZCorner();
+      params.push_back( angphi );
+      params.push_back( endphi-angphi ); 
       params.push_back( ncor );
     
       for( G4int ii = 0; ii < ncor; ii++ )

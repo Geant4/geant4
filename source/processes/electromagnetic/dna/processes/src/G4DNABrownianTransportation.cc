@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABrownianTransportation.cc 64374 2012-10-31 16:37:23Z gcosmo $
+// $Id: G4DNABrownianTransportation.cc 74551 2013-10-14 12:59:14Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -134,7 +134,6 @@ void G4DNABrownianTransportation::BuildPhysicsTable(const G4ParticleDefinition& 
                << setw(24) << particle.GetParticleName()
                << "\tSubType= " << GetProcessSubType()   << G4endl;
     }
-
     // Initialize water density pointer
     fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetDensityTableFor(G4Material::GetMaterial("G4_WATER"));
 }
@@ -146,16 +145,17 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
 {
     // G4cout << "G4ITBrownianTransportation::ComputeStep" << G4endl;
 
-    // If this method is called, this step
-    // cannot be geometry limited.
-    // In case the step is limited by the geometry,
-    // this method should not be called.
-    // The fTransportEndPosition calculated in
-    // the method AlongStepIL should be taken
-    // into account.
-    // In order to do so, the flag IsLeadingStep
-    // is on. Meaning : this track has the minimum
-    // interaction length over all others.
+    /* If this method is called, this step
+     * cannot be geometry limited.
+     * In case the step is limited by the geometry,
+     * this method should not be called.
+     * The fTransportEndPosition calculated in
+     * the method AlongStepIL should be taken
+     * into account.
+     * In order to do so, the flag IsLeadingStep
+     * is on. Meaning : this track has the minimum
+     * interaction length over all others.
+     */
     if(GetIT(track)->GetTrackingInfo()->IsLeadingStep())
     {
         const G4VITProcess* ITProc = ((const G4VITProcess*) step.GetPostStepPoint()->GetProcessDefinedStep());

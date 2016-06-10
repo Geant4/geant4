@@ -32,11 +32,10 @@
 //    *                             *
 //    *******************************
 //
-// $Id$
+// $Id: BrachyFactoryIr.cc 69765 2013-05-14 10:11:22Z gcosmo $
 //
 #include "globals.hh"
 #include "BrachyFactoryIr.hh"
-#include "BrachyPrimaryGeneratorActionIr.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
@@ -50,20 +49,13 @@
 BrachyFactoryIr:: BrachyFactoryIr()
 {
   iridiumSource = new  BrachyDetectorConstructionIr(); 
-  iridiumPrimaryParticle = new BrachyPrimaryGeneratorActionIr();
 }
 
 BrachyFactoryIr:: ~BrachyFactoryIr()
 {
   delete iridiumSource;
-  delete iridiumPrimaryParticle;
 }
  
-void BrachyFactoryIr::CreatePrimaryGeneratorAction(G4Event* anEvent)
-{
-  iridiumPrimaryParticle -> GeneratePrimaries(anEvent);
-}
-
 void BrachyFactoryIr::CreateSource(G4VPhysicalVolume* mother)
 {
   iridiumSource -> ConstructIridium(mother);
@@ -72,4 +64,5 @@ void BrachyFactoryIr::CreateSource(G4VPhysicalVolume* mother)
 void BrachyFactoryIr::CleanSource()
 {
   iridiumSource -> CleanIridium();
+  iridiumSource = 0;
 }

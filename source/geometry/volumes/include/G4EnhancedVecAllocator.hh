@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4EnhancedVecAllocator.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // 
 // ------------------------------------------------------------
@@ -71,9 +71,9 @@ class G4AllocStats
 
   public:
 
-    static G4ChunkIndexType * allocStat;
-    static G4int totSpace;
-    static G4int numCat;
+    static G4ThreadLocal G4ChunkIndexType * allocStat;
+    static G4ThreadLocal G4int totSpace;
+    static G4ThreadLocal G4int numCat;
 };
 
 template<typename _Tp>

@@ -88,7 +88,7 @@ public: // With Description
 #ifdef __IBMCPP__
     inline void *operator new(size_t sz, void* p) { return p; }
 #endif
-    inline void operator delete(void *aVUserTrackInformation);
+    inline void operator delete(void*);
 
     G4Molecule(const G4Molecule&);
     G4Molecule & operator=(const G4Molecule &right);
@@ -226,29 +226,26 @@ public:
     G4double GetMass() const;
 ////////////////////////////////////////////////////////////////////////
 
-    inline G4MolecularConfiguration* GetMolecularConfiguration() ;
+    G4MolecularConfiguration* GetMolecularConfiguration() const;
 
-    inline static void SetGlobalTemperature(double);
-    inline static double GetGlobalTemperature();
+    static void SetGlobalTemperature(G4double);
+    static G4double GetGlobalTemperature();
 
 private:
     /** Default molecule builder
      */
     G4Molecule();
 
-    void Init();
-    G4DynamicParticle* fDynamicParticle;
+    G4MolecularConfiguration* fpMolecularConfiguration;
 
-    G4MolecularConfiguration* fMolecularConfiguration;
-
-    static double fgTemperature;
+    static /*G4ThreadLocal*/ double fgTemperature;
 };
 
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4Allocator<G4Molecule> aMoleculeAllocator;
+extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
 #else
-extern G4DLLIMPORT G4Allocator<G4Molecule> aMoleculeAllocator;
+extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
 #endif
 
 
@@ -256,33 +253,15 @@ extern G4DLLIMPORT G4Allocator<G4Molecule> aMoleculeAllocator;
 inline void * G4Molecule::operator new(size_t)
 //////////////////////////
 {
-    void * aMolecule;
-    aMolecule = (void *) aMoleculeAllocator.MallocSingle();
-    return aMolecule;
+    if (!aMoleculeAllocator)  aMoleculeAllocator = new G4Allocator<G4Molecule>;
+    return (void *) aMoleculeAllocator->MallocSingle();
 }
 
 //////////////////////////
 inline void G4Molecule::operator delete(void * aMolecule)
 //////////////////////////
 {
-    // DEBUG
-    // G4cout<<"G4Molecule::operator delete(void * aMolecule) called"<<G4endl;
-    aMoleculeAllocator.FreeSingle((G4Molecule *) aMolecule);
-}
-
-inline G4MolecularConfiguration* G4Molecule::GetMolecularConfiguration()
-{
-    return fMolecularConfiguration ;
-}
-
-inline void G4Molecule::SetGlobalTemperature(double temperature)
-{
-    fgTemperature = temperature;
-}
-
-inline double G4Molecule::GetGlobalTemperature()
-{
-    return fgTemperature;
+    aMoleculeAllocator->FreeSingle((G4Molecule *) aMolecule);
 }
 
 #endif

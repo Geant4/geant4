@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4IsotopeProperty.hh 69557 2013-05-08 12:01:40Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -33,12 +33,14 @@
 // ------------------------------------------------------------
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 //      Add Magnetic Moment                      14 Mar  07 H.Kurashige
+//      Add isomer level              30 Apr. H.Kurashige
+
 
 #ifndef G4IsotopeProperty_h
 #define G4IsotopeProperty_h 1
 
 #include "globals.hh"
-class    G4DecayTable;
+class G4DecayTable;
 class G4IsotopeProperty
 {
  // Class Description
@@ -83,6 +85,10 @@ class G4IsotopeProperty
   G4double      GetEnergy() const;
   void          SetEnergy(G4double  E);
 
+  // Set/Get isomer lervel
+  G4int         GetIsomerLevel() const;
+  void          SetIsomerLevel(G4int  level);
+
   // Set/Get life time
   G4double      GetLifeTime() const;
   void          SetLifeTime(G4double  T);
@@ -102,6 +108,7 @@ class G4IsotopeProperty
   G4double      fLifeTime;         // lifeTime 
   G4DecayTable* fDecayTable;       // decay Table
   G4double      fMagneticMoment;   // magnetic moment 
+  G4int         fIsomerLevel;      // isomer level 
 };
 
 inline 
@@ -162,6 +169,17 @@ inline
  void G4IsotopeProperty::SetEnergy(G4double E)
 {
     fEnergy = E;
+}
+
+inline  
+ G4int  G4IsotopeProperty::GetIsomerLevel() const
+{
+  return fIsomerLevel; 
+}
+inline  
+ void   G4IsotopeProperty::SetIsomerLevel(G4int  level)
+{
+  fIsomerLevel = level;
 }
 
 inline 

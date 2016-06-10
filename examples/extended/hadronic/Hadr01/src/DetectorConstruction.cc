@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.cc 77255 2013-11-22 10:09:14Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -73,22 +73,22 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
+ : G4VUserDetectorConstruction(),
+   fTargetMaterial(0),
+   fWorldMaterial(0),
+   fLogicTarget(0),
+   fLogicCheck(0),
+   fLogicWorld(0),
+   fDetectorMessenger(0)
 {
-  fLogicTarget = 0;
-  fLogicCheck  = 0;
-  fLogicWorld  = 0;
   fDetectorMessenger = new DetectorMessenger(this);
 
   fRadius = 10.*cm;
 
   fTargetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-  fWorldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  fWorldMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 
-  // Prepare sensitive detectors
-  fCheckSD = new CheckVolumeSD("checkSD");
-  (G4SDManager::GetSDMpointer())->AddNewDetector( fCheckSD );
-  fTargetSD = new TargetSD("targetSD");
-  (G4SDManager::GetSDMpointer())->AddNewDetector( fTargetSD );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,23 +128,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Check volume
   //
   G4Tubs* solidC = new G4Tubs("Check",0.,checkR,checkZ,0.,twopi);
-  fLogicCheck = new G4LogicalVolume( solidC,fWorldMaterial,"Check");
-  //  G4VPhysicalVolume* physC = 
-  new G4PVPlacement(0,G4ThreeVector(),fLogicCheck,"Check",fLogicWorld,false,0);
-  fLogicCheck->SetSensitiveDetector(fCheckSD);
+  fLogicCheck = new G4LogicalVolume( solidC,fWorldMaterial,"Check"); 
+  new G4PVPlacement(0,G4ThreeVector(),fLogicCheck,"Check",
+                    fLogicWorld,false,0);
 
   //
   // Target volume
   //
   G4Tubs* solidA = new G4Tubs("Target",0.,fRadius,sliceZ,0.,twopi);
   fLogicTarget = new G4LogicalVolume( solidA,fTargetMaterial,"Target");
-  fLogicTarget->SetSensitiveDetector(fTargetSD);
 
   G4double z = sliceZ - targetZ;
 
   for(G4int i=0; i<nSlices; i++) {
     // physC = 
-    new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),fLogicTarget,"Target",fLogicCheck,false,i);
+    new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),fLogicTarget,"Target",
+                      fLogicCheck,false,i);
     z += 2.0*sliceZ;
   }
   G4cout << "### Target consist of " << nSlices
@@ -169,6 +168,21 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   return world;
 }
 
+void DetectorConstruction::ConstructSDandField()
+{
+    static G4ThreadLocal G4bool initialized = false;
+    if ( ! initialized ) {
+        // Prepare sensitive detectors
+        CheckVolumeSD* fCheckSD = new CheckVolumeSD("checkSD");
+        (G4SDManager::GetSDMpointer())->AddNewDetector( fCheckSD );
+        fLogicCheck->SetSensitiveDetector(fCheckSD);
+
+        TargetSD* fTargetSD = new TargetSD("targetSD");
+        (G4SDManager::GetSDMpointer())->AddNewDetector( fTargetSD );
+        fLogicTarget->SetSensitiveDetector(fTargetSD);
+        initialized=true;
+    }
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetTargetMaterial(const G4String& mat)
@@ -199,19 +213,12 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DetectorConstruction::SetTargetRadius(G4double val)  
 {
   if(val > 0.0) {
     fRadius = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  } 
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

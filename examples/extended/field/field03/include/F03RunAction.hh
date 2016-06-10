@@ -26,42 +26,40 @@
 /// \file field/field03/include/F03RunAction.hh
 /// \brief Definition of the F03RunAction class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F03RunAction.hh 76602 2013-11-13 08:33:35Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F03RunAction_h
 #define F03RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class F03RunMessenger;
 class G4Run;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F03RunAction : public G4UserRunAction
 {
   public:
     F03RunAction();
-    ~F03RunAction();
+    virtual ~F03RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
     void  SetRndmFreq(G4int val) {fSaveRndm = val;}
     G4int GetRndmFreq() const    {return fSaveRndm;}
 
   private:
- 
-    F03RunMessenger* fRunMessenger;
-    G4int fSaveRndm;    
+
+    F03RunMessenger* fMessenger;
+    G4int fSaveRndm;
 };
 
 #endif

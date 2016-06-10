@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LowEIonFragmentation.cc 68717 2013-04-05 09:15:15Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,15 +46,14 @@
 #include "G4Proton.hh"
 #include "G4NucleiProperties.hh"
 
-G4int G4LowEIonFragmentation::hits = 0;
-G4int G4LowEIonFragmentation::totalTries = 0;
-G4double G4LowEIonFragmentation::area = 0;
-
 G4LowEIonFragmentation::G4LowEIonFragmentation(G4ExcitationHandler * const value) 
 {
   theHandler = value;
   theModel = new G4PreCompoundModel(theHandler);
   proton = G4Proton::Proton();
+  hits = 0;
+  totalTries = 1;
+  area = 0.0;
 }
 
 G4LowEIonFragmentation::G4LowEIonFragmentation() 
@@ -62,6 +61,9 @@ G4LowEIonFragmentation::G4LowEIonFragmentation()
   theHandler = new G4ExcitationHandler;
   theModel = new G4PreCompoundModel(theHandler);
   proton = G4Proton::Proton();
+  hits = 0;
+  totalTries = 1;
+  area = 0.0;
 }
 
 G4LowEIonFragmentation::~G4LowEIonFragmentation() 
@@ -72,7 +74,7 @@ G4LowEIonFragmentation::~G4LowEIonFragmentation()
 G4HadFinalState * G4LowEIonFragmentation::
 ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
 {
-  area = 0;
+  area = 0.0;
   // initialize the particle change
   theResult.Clear();
   theResult.SetStatusChange( stopAndKill );

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4MuonMinusCaptureAtRest.hh 66367 2012-12-18 09:18:08Z gcosmo $
 //
 //  G4MuonMinusCaptureAtRest physics process
 //  Larry Felawka (TRIUMF) and Art Olin (TRIUMF) April 1998

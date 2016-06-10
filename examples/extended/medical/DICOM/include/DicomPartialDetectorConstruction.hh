@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomPartialDetectorConstruction.hh 73076 2013-08-16 07:45:30Z gcosmo $
+//
 /// \file medical/DICOM/include/DicomPartialDetectorConstruction.hh
 /// \brief Definition of the DicomPartialDetectorConstruction class
 //
@@ -56,13 +58,13 @@ public:
   DicomPartialDetectorConstruction();
   ~DicomPartialDetectorConstruction();
 
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
 private:
   virtual void ReadPhantomData();
   void ReadPhantomDataFile(const G4String& fname);
   void ConstructPhantomContainer();
-  void ConstructPhantom();
+  virtual void ConstructPhantom();
 
   void ReadVoxelDensitiesPartial( std::ifstream& fin, std::map< G4int, std::map< G4int, G4int > > ifxmin, std::map< G4int, std::map< G4int, G4int > > ifxmax );
 

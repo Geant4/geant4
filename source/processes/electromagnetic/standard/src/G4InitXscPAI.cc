@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InitXscPAI.cc 68797 2013-04-05 13:27:11Z gcosmo $
 //
 // 
 // G4InitXscPAI.cc -- class implementation file
@@ -420,8 +420,8 @@ G4double G4InitXscPAI::DifPAIxSection( G4double omega )
   G4double epsilonRe = RePartDielectricConst(omega);
   G4double epsilonIm = ImPartDielectricConst(i,omega);
   G4double be4 ;
-  G4double betaBohr2 = fine_structure_const*fine_structure_const ;
-  G4double betaBohr4 = betaBohr2*betaBohr2*4.0 ;
+  static const G4double betaBohr2 = fine_structure_const*fine_structure_const ;
+  static const G4double betaBohr4 = betaBohr2*betaBohr2*4.0 ;
   be2 = betaGammaSq/(1 + betaGammaSq) ;
   be4 = be2*be2 ;
  
@@ -492,12 +492,12 @@ G4double G4InitXscPAI::PAIdNdxCherenkov( G4double omega  )
   G4double epsilonIm = ImPartDielectricConst(i,omega);
 
   G4double /*cof,*/ logarithm, x3, x5, argument, modul2, dNdxC ; 
-  G4double be2, be4, betaBohr2,betaBohr4,cofBetaBohr ;
+  G4double be2, be4;
 
   //cof         = 1.0 ;
-   cofBetaBohr = 4.0 ;
-   betaBohr2   = fine_structure_const*fine_structure_const ;
-   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr ;
+  static const G4double cofBetaBohr = 4.0 ;
+  static const G4double betaBohr2   = fine_structure_const*fine_structure_const ;
+  static const G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr ;
 
    be2 = betaGammaSq/(1 + betaGammaSq) ;
    be4 = be2*be2 ;
@@ -557,12 +557,12 @@ G4double G4InitXscPAI::PAIdNdxPlasmon( G4double omega )
   G4double epsilonIm = ImPartDielectricConst(i,omega);
 
    G4double cof, resonance, modul2, dNdxP ;
-   G4double be2, be4, betaBohr2, betaBohr4, cofBetaBohr ;
+   G4double be2, be4;
 
    cof = 1 ;
-   cofBetaBohr = 4.0 ;
-   betaBohr2   = fine_structure_const*fine_structure_const ;
-   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr ;
+   static const G4double cofBetaBohr = 4.0 ;
+   static const G4double betaBohr2   = fine_structure_const*fine_structure_const ;
+   static const G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr ;
 
    be2 = betaGammaSq/(1 + betaGammaSq) ;
    be4 = be2*be2 ;

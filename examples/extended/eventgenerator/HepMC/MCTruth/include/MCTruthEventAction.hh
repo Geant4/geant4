@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthEventAction class
 //
 //
-// $Id$
+// $Id: MCTruthEventAction.hh 73446 2013-08-27 11:32:59Z gcosmo $
 //
 //
 // --------------------------------------------------------------

@@ -1,3 +1,5 @@
+$Id: exception_classification.txt 72312 2013-07-15 16:01:02Z gcosmo $
+
 Analysis_F001: Fatal exception when trying to create a singleton manager twice
 
 Analysis_W001: Cannot create directory for histograms or ntpuple
@@ -28,3 +30,5 @@ Analysis_W013: Cannot apply histogram/ntuple attribute due to its
                wrong definition
 Analysis_W013: Wrong histogram/ntuple attribute value
               
+Analysis_W014: Master manager not instatiated, 
+               histogram data cannot be merged

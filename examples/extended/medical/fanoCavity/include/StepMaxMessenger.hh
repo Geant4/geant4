@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/StepMaxMessenger.hh
 /// \brief Definition of the StepMaxMessenger class
 //
-// $Id$
+// $Id: StepMaxMessenger.hh 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ class StepMaxMessenger: public G4UImessenger
     StepMaxMessenger(StepMax*);
    ~StepMaxMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
     StepMax*                   fStepMax;

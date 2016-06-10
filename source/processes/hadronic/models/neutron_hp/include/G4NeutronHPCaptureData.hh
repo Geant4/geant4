@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 // 080428 Add bool onFlightDB by T. Koi
@@ -80,6 +79,10 @@ class G4NeutronHPCaptureData : public G4VCrossSectionDataSet
 
       void IgnoreOnFlightDopplerBroadening(){ onFlightDB = false; };
       void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
+
+   public:
+      G4int GetVerboseLevel() const;
+      void SetVerboseLevel( G4int );
    
    private:
    

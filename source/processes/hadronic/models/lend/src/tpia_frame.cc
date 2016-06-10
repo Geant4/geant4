@@ -38,14 +38,15 @@
 #include <string.h>
 #include <tpia_target.h>
 #include <tpia_misc.h>
+#include "G4Types.hh"
 
 #if defined __cplusplus
 namespace GIDI {
 using namespace GIDI;
 #endif
 
-static int nlab_Str = 0, nCOM_Str = 0;
-static char lab_Str[] = "lab", COM_Str[] = "centerOfMass";
+static G4ThreadLocal int nlab_Str = 0, nCOM_Str = 0;
+static const char lab_Str[] = "lab", COM_Str[] = "centerOfMass";
 /*
 ************************************************************
 */

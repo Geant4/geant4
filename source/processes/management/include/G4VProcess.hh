@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VProcess.hh 73928 2013-09-17 08:00:50Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -367,7 +367,36 @@ class G4VProcess
  protected:
    G4int verboseLevel;
    // controle flag for output message
+    
+private:
+    G4VProcess* masterProcessShadow;
+    //For multi-threaded: poitner to the instance of this process
+    // for the master thread
+public:
+    virtual void SetMasterProcess( G4VProcess* masterP);
+    // Sets the master thread process instance
+    const G4VProcess* GetMasterProcess() const;
+    // Returns the master thread process instnace
+    // Can be used to initialize worker type processes
+    // instances from master one (e.g. to share a read-only table)
+    // if ( this != GetMasterProcess() ) { /*worker*/ }
+    // else { /* master or sequential */ }
 
+    virtual void BuildWorkerPhysicsTable(const G4ParticleDefinition& part);
+    // Messaged by the Particle definition (via the Process manager)
+    // in worker threads. See BuildWorkerBhyiscsTable method.
+    // Can be used to share among threads physics tables. Use GetMasterProcess
+    // to get pointer of master process from worker thread.
+    // By default this method makes a forward call to
+    // BuildPhysicsTable
+    
+    virtual void PrepareWorkerPhysicsTable(const G4ParticleDefinition&);
+    // Messaged by the Particle definition (via the Process manager)
+    // in worker threads. See PreparephysicsTable
+    // Can be used to share among threads physics tables. Use GetMasterProcess
+    // to get pointer of master process from worker thread
+    // By default this method makes a forward call
+    // to PreparePhysicsTable
 };
 
 // -----------------------------------------
@@ -503,6 +532,40 @@ inline
  G4bool G4VProcess::isPostStepDoItIsEnabled() const
 {
   return enablePostStepDoIt;
+}
+
+inline
+const G4VProcess* G4VProcess::GetMasterProcess() const
+{
+    return masterProcessShadow;
+}
+
+inline
+void G4VProcess::SubtractNumberOfInteractionLengthLeft(
+                                  G4double previousStepSize )
+{
+  if (currentInteractionLength>0.0) {
+    theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
+    if(theNumberOfInteractionLengthLeft<0.) {
+       theNumberOfInteractionLengthLeft=CLHEP::perMillion;
+    }
+
+  } else {
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cerr << "G4VProcess::SubtractNumberOfInteractionLengthLeft()";
+      G4cerr << " [" << theProcessName << "]" <<G4endl;
+      G4cerr << " currentInteractionLength = " << currentInteractionLength << " [mm]";
+      G4cerr << " previousStepSize = " << previousStepSize << " [mm]";
+      G4cerr << G4endl;
+    }
+#endif
+    G4String msg = "Negative currentInteractionLength for ";
+    msg +=      theProcessName;
+    G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
+                "ProcMan201",EventMustBeAborted,
+                msg);
+  }
 }
 
 #endif

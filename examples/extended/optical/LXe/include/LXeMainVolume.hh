@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeMainVolume.hh 77486 2013-11-25 10:14:16Z gcosmo $
+//
 /// \file optical/LXe/include/LXeMainVolume.hh
 /// \brief Definition of the LXeMainVolume class
 //
@@ -50,20 +52,25 @@ class LXeMainVolume : public G4PVPlacement
                  G4int pCopyNo,
                  LXeDetectorConstruction* c);
 
+    G4LogicalVolume* GetLogPhotoCath() {return fPhotocath_log;}
+    G4LogicalVolume* GetLogScint()     {return fScint_log;}
+
+    std::vector<G4ThreeVector> GetPmtPositions() {return fPmtPositions;}
+
   private:
 
     void VisAttributes();
     void SurfaceProperties();
 
     void PlacePMTs(G4LogicalVolume* pmt_Log,
-                   G4RotationMatrix* rot, G4double &a, G4double &b, G4double da,
-                   G4double db, G4double amin, G4double bmin, G4int na, G4int nb,
-                   G4double &x, G4double &y, G4double &z, G4int &k,LXePMTSD* sd);
+                   G4RotationMatrix* rot,
+                   G4double &a, G4double &b, G4double da,
+                   G4double db, G4double amin, G4double bmin,
+                   G4int na, G4int nb,
+                   G4double &x, G4double &y, G4double &z, G4int &k);
 
     void CopyValues();
 
-    G4bool fUpdated;
-  
     LXeDetectorConstruction* fConstructor;
 
     G4double fScint_x;
@@ -88,14 +95,14 @@ class LXeMainVolume : public G4PVPlacement
     // Logical volumes
     //
     G4LogicalVolume* fScint_log;
-    static G4LogicalVolume* fHousing_log;
+    G4LogicalVolume* fHousing_log;
     G4LogicalVolume* fPmt_log;
     G4LogicalVolume* fPhotocath_log;
     G4LogicalVolume* fSphere_log;
 
-    //Sensitive Detectors
-    static LXeScintSD* fScint_SD;
-    static LXePMTSD* fPmt_SD;
+    // Sensitive Detectors positions
+    std::vector<G4ThreeVector> fPmtPositions;
+
 };
 
 #endif

@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: Analysis.hh 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file Analysis.hh
 /// @brief Define histograms
 
@@ -29,6 +32,10 @@
 #define ANALYSIS_MANAGER_H
 
 #include "G4ThreeVector.hh"
+
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
 
 class TH1D;
 class TH2D;
@@ -49,21 +56,22 @@ public:
   void ClearIncidentFlag();
 
 private:
-  static Analysis* myanalysis;
+  Analysis();
+  DISALLOW_COPY_AND_ASSIGN(Analysis);
 
-  TH2D* incident_map;
-  TH1D* incident_x_hist;
+  TH2D* fincident_map;
+  TH1D* fincident_x_hist;
 
-  TH2D* dose_map;
-  TH1D* dose_hist;
+  TH2D* fdose_map;
+  TH1D* fdose_hist;
 
-  Analysis(); // protected
-
-  G4bool incidentFlag;
+  static G4ThreadLocal G4int fincidentFlag;
 };
 
-// ====================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 inline void Analysis::ClearIncidentFlag()
-{ incidentFlag= false; }
+{
+  fincidentFlag = false;
+}
 
 #endif

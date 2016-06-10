@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LevelReader.cc 77025 2013-11-20 16:11:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -132,8 +132,12 @@ G4bool G4LevelReader::Read(std::ifstream& dataFile)
 G4bool 
 G4LevelReader::ReadDataItem(std::istream& dataFile, G4double& x) 
 {
-  G4bool okay = (dataFile >> buffer);		// Get next token
-  if (okay) x = strtod(buffer, NULL);
+  // G4bool okay = (dataFile >> buffer) != 0;		// Get next token
+  // if (okay) x = strtod(buffer, NULL);
+  G4bool okay = true;
+  dataFile >> buffer;
+  if(dataFile.fail()) { okay = false; }
+  else { x = strtod(buffer, NULL); }
 
   return okay;
 }

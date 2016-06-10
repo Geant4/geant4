@@ -70,12 +70,6 @@ class G4QMDGroundStateNucleus : public G4QMDNucleus
 
       G4double dsam, ddif, dsam2, ddif2; 
 
-      G4double c0, c3 , cs , cl , wl;
-
-
-
-      G4double rho0,aaa,bbb;
-
       G4double cdp;
       G4double c0p,clp,c3p,csp;
 

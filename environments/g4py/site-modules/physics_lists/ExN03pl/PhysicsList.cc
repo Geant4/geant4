@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: PhysicsList.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // 
 

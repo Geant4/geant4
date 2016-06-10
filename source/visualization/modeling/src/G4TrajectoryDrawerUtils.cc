@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4TrajectoryDrawerUtils.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -307,68 +307,6 @@ namespace G4TrajectoryDrawerUtils {
 	point.SetVisAttributes(&stepPointsAttribs);
 	pVVisManager->Draw(point);
       }
-    }
-  }
-
-  void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext& context, const G4int& i_mode) 
-  {
-    static G4bool warnedAboutIMode = false;
-    G4ExceptionDescription ed;
-    ed << "WARNING: DEPRECATED use of i_mode (i_mode: " << i_mode
-	<< ").  Feature will be removed at a future major release.";
-    if (!warnedAboutIMode) {
-      G4Exception
-	("G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, context, i_mode)",
-	 "modeling0125", JustWarning, ed);
-      warnedAboutIMode = true;
-    }
-
-    // Extra copy while i_mode is still around
-    G4VisTrajContext myContext(context);
-    
-    if (i_mode != 0) {
-      const G4double markerSize = std::abs(i_mode)/1000;
-      G4bool lineRequired (i_mode >= 0);
-      G4bool markersRequired (markerSize > 0.);        
-      
-      myContext.SetDrawLine(lineRequired);
-      myContext.SetDrawAuxPts(markersRequired);
-      myContext.SetDrawStepPts(markersRequired);
-
-      myContext.SetAuxPtsSize(markerSize);
-      myContext.SetStepPtsSize(markerSize);
-    }
-
-    // Return if don't need to do anything
-    if (!myContext.GetDrawLine() && !myContext.GetDrawAuxPts() && !myContext.GetDrawStepPts()) return;
-    
-    // Get points and times (times are returned only if time-slicing
-    // is requested).
-    G4Polyline trajectoryLine;
-    G4Polymarker stepPoints;
-    G4Polymarker auxiliaryPoints;
-    std::vector<G4double> trajectoryLineTimes;
-    std::vector<G4double> stepPointTimes;
-    std::vector<G4double> auxiliaryPointTimes;
-
-    TimesValidity validity = GetPointsAndTimes
-      (traj, context,
-       trajectoryLine, auxiliaryPoints, stepPoints,
-       trajectoryLineTimes, auxiliaryPointTimes, stepPointTimes);
-    
-    if (validity == ValidTimes) {
-
-      SliceLine(context.GetTimeSliceInterval(),
-                trajectoryLine, trajectoryLineTimes);
-
-      DrawWithTime(context,
-                   trajectoryLine, auxiliaryPoints, stepPoints,
-                   trajectoryLineTimes, auxiliaryPointTimes, stepPointTimes);
-
-    } else {
-
-      DrawWithoutTime(context, trajectoryLine, auxiliaryPoints, stepPoints);
-
     }
   }
 

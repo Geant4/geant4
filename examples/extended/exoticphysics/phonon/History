@@ -1,4 +1,4 @@
-$Id: $
+$Id: History 76938 2013-11-19 09:51:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,89 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 November 2013:  M. Kelsey (phononExample-V09-06-09)
+- XDetectorConstruction.cc:  Remove verbosity settings.
+- XPhysicsList:  Add verbosity ctor argument, use to set process vebosities.
+- run.out:  Updated content to reflect new verbosity controls
+- caustic.out-MT-Darwin, timing.out-MT-Darwin: New reference files from CDash.
+- caustic.out-MT-Linux, timing.out-MT-Linux: New reference files from CDash.
+
+14 November 2013:  M. Kelsey (phononExample-V09-06-08)
+- XDetectorConstruction.cc:  *TEMPORARY* Remove lattice dump, keep LM
+  verbosity, add lattice verbosity.  Requires materials-V09-06-29.
+
+NOTE:  XPhysicsList.cc still has process verbosity.
+
+13 November 2013:  M. Kelsey (phononExample-V09-06-07)
+- XDetectorConstruction.cc:  *TEMPORARY* Turn on LatticeManager verbosity
+  and dump generated lattice to output.  Requires materials-V09-06-28.
+
+12 November 2013:  M. Kelsey (phononExample-V09-06-06)
+- run.in:  Remove temporary tracking verbosity.  Windows jobs crash in the
+  very first track.
+
+- XPhysicsList.cc:  *TEMPORARY*  Set verbosity on phonon processes.
+
+9 November 2013:  M. Kelsey (phononExample-V09-06-05)
+- CTestDefinitions.txt:  Fix variable setting for comparing timing.out on MT
+  jobs (_causticRef was set twice).
+
+- run.in:  *TEMPORARY* Add tracking verbosity to get output useful for
+  diagnosing a runtime problem on win7-vc11.  This will be removed later.
+
+7 November 2013:  M. Kelsey (phononExample-V09-06-04)
+- REMOVED particles, lattice classes, and processes.  Now all in GEANT4
+  toolkit for Release 10.  Eliminated use of G4VUserTrackInfo, creating a
+  singleton (thread-local) map between tracks and wavevectors, for use by
+  the stacking action and by processes (the map is also in the toolkit).
+
+	XLPhonon	-> source/particles/*/G4PhononLong
+	XTPhononFast	-> source/particles/*/G4PhononTransFast
+	XTPhononSlow	-> source/particles/*/G4PhononTransSlow
+
+	XLogicalLattice	-> source/materials/*/G4LatticeLogical
+	XPhysicalLattice-> source/materials/*/G4LatticePhysical
+
+	XLatticeManager3-> source/processes/phonon/*/G4LatticeManager
+	XPhononDownconversionProcess
+			-> source/processes/phonon/*/G4PhononDownconversion
+	XPhononReflectionProcess
+			-> source/processes/phonon/*/G4PhononReflection
+	XPhononScatteringProcess
+			-> source/processes/phonon/*/G4PhononScattering
+
+	XPhononTrackInformation	-> DELETED
+
+- Renaming of classes, objects, and member functions in above code affected
+  several other classes.  Also cleaned up #includes in both .hh and .cc files:
+
+	XDetectorConstruction.hh,.cc
+	XPhysicsList.cc
+	XPhononStackingAction.cc
+	XPrimaryGeneratorAction.cc
+
+- Internal "CRYSTALMAPS" envvar replaced with "G4LATTICEDATA" used in
+  source/processes/phonon/*/G4LatticeReader.
+
+	CrystalMaps/Ge/ subdirectory added with config file for numerical
+	constants.  Lookup tables moved into subdirectory.
+
+- Updated caustic.out, timing.out to reflect minor numerical differences due
+  to use of h_Planck.  Updated run.out to reflect reduced message output.
+
+13 June 2013: A. Dotti (phononExample-V09-06-03)
+- Adding reference files for MT mode, adding CTestDefinitions.txt 
+  file containing new ctest with OS/Mode reference files
+
+6 June 2013: G. Cosmo (phononExample-V09-06-02)
+- Fixed printout in XLogicalLattice.cc.
+
+19 February 2013: I. Hrivnacova (phononExample-V09-06-01)
+- Applied coding guidelines (separators)
+
+13 February 2013: I. Hrivnacova (phononExample-V09-06-00)
+- Applied coding guidelines (data members names, virtual keyword)
 
 28 November 2012: G. Cosmo (phononExample-V09-05-09)
 - Fixed cases of variable shadowing.

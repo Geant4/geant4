@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4cCalorHit.cc 69586 2013-05-08 14:20:11Z gcosmo $
 //
 /// \file B4cCalorHit.cc
 /// \brief Implementation of the B4cCalorHit class
@@ -37,7 +37,7 @@
 
 #include <iomanip>
 
-G4Allocator<B4cCalorHit> B4cCalorHitAllocator;
+G4ThreadLocal G4Allocator<B4cCalorHit>* B4cCalorHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

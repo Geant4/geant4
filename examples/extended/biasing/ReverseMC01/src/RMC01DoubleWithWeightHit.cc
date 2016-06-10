@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01DoubleWithWeightHit.cc
 /// \brief Implementation of the RMC01DoubleWithWeightHit class
 //
-// $Id$
+// $Id: RMC01DoubleWithWeightHit.cc 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01DoubleWithWeightHit
@@ -46,8 +46,8 @@ G4Allocator<RMC01DoubleWithWeightHit> RMC01DoubleWithWeightHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01DoubleWithWeightHit::RMC01DoubleWithWeightHit(G4double aValue,
-                                                                      G4double aWeight)
-: fValue(aValue),fWeight (aWeight)
+                                                   G4double aWeight)
+: G4VHit(), fValue(aValue), fWeight(aWeight)
 {;
 }
 

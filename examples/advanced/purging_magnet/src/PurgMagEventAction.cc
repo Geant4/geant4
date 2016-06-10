@@ -32,7 +32,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id$
+// $Id: PurgMagEventAction.cc 72967 2013-08-14 14:57:48Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,14 +44,12 @@
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 
-#ifdef G4ANALYSIS_USE
 #include"PurgMagAnalysisManager.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagEventAction::PurgMagEventAction(PurgMagRunAction* run)
-  :PurgMagRun(run),drawFlag("all"),printModulo(10000)
+PurgMagEventAction::PurgMagEventAction()
+  :drawFlag("all"),printModulo(10000)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

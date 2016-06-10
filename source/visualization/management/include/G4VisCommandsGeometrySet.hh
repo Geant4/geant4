@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisCommandsGeometrySet.hh 66373 2012-12-18 09:41:34Z gcosmo $
 
 // /vis/geometry commands - John Allison  31st January 2006
 

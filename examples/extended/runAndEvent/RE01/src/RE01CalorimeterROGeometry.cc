@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01CalorimeterROGeometry.cc
 /// \brief Implementation of the RE01CalorimeterROGeometry class
 //
-// $Id$
+// $Id: RE01CalorimeterROGeometry.cc 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #include "RE01CalorimeterROGeometry.hh"
@@ -110,7 +110,7 @@ G4VPhysicalVolume* RE01CalorimeterROGeometry::Build()
   G4LogicalVolume * caloROcellLog
     = new G4LogicalVolume(caloROcellTub, dummyMat, "caloROcellLogical",0,0,0);
 //  G4VPhysicalVolume * caloROcellPhys =
-      new G4PVReplica("caloROcellPhysical", caloROcellLog, caloROphiDivisionPhys,
+  new G4PVReplica("caloROcellPhysical", caloROcellLog, caloROphiDivisionPhys,
                       kZAxis, fSegmentsinZ,2.*fCaloRing_dz);
 
   return ROWorldPhys;

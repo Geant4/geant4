@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.hh 73005 2013-08-15 08:14:21Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,9 +78,12 @@ private:
 
   G4String                 fileName[2];
   G4String                 fileType;
-  G4String                 fileOption;    
+  G4String                 fileOption;
+#ifdef G4ANALYSIS_USE
   AIDA::IAnalysisFactory*  af;    
   AIDA::ITree*             tree;
+  G4bool                   factoryOn;
+#endif
   AIDA::IHistogram1D*      histo[MaxHisto];
   G4bool                   exist[MaxHisto];
   G4String                 Label[MaxHisto];
@@ -90,7 +93,6 @@ private:
   G4double                 Vmax [MaxHisto];
   G4double                 Unit [MaxHisto];
   G4double                 Width[MaxHisto];
-  G4bool                   factoryOn;
   HistoMessenger*          histoMessenger;
 };
 

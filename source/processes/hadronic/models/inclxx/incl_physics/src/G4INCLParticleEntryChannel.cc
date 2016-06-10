@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -66,17 +64,20 @@ namespace G4INCL {
      * the QP excitation energy, as determined by conservation, is what given
      * by our model.
      *
-     * Possible choices for the correction (or, equivalently, for the QP excitation energy):
+     * Possible choices for the correction (or, equivalently, for the QP
+     * excitation energy):
+     *
      * 1. the correction is 0. (same as in particle-nucleus);
      * 2. the correction is the separation energy of the entering nucleon in
      *    the current QP;
      * 3. the QP excitation energy is given by A. Boudard's algorithm, as
      *    implemented in INCL4.2-HI/Geant4.
+     * 4. the QP excitation energy vanishes.
      *
      * Ideally, the QP excitation energy should always be >=0. Algorithms 1.
      * and 2. do not guarantee this, although violations to the rule seem to be
-     * more severe for 1. than for 2.. Algorithm 3., by construction, yields
-     * non-negative QP excitation energies.
+     * more severe for 1. than for 2.. Algorithms 3. and 4., by construction,
+     * yields non-negative QP excitation energies.
      */
     G4double theCorrection;
     if(isNN) {
@@ -113,11 +114,15 @@ namespace G4INCL {
       */
 
       // Fix the correction in such a way that the quasi-projectile excitation
-      // energy is given by A. Boudard's INCL4.2-HI model.
+      // energy is given by A. Boudard's INCL4.2-HI model (model 3. above).
       const G4double theProjectileExcitationEnergy =
-       (projectileRemnant->getA()-theParticle->getA()>1) ?
-       (projectileRemnant->computeExcitationEnergy(theParticle->getID())) :
-       0.;
+        (projectileRemnant->getA()-theParticle->getA()>1) ?
+        (projectileRemnant->computeExcitationEnergyExcept(theParticle->getID())) :
+        0.;
+      // Set the projectile excitation energy to zero (cold quasi-projectile,
+      // model 4. above).
+      // const G4double theProjectileExcitationEnergy = 0.;
+      // The part that follows is common to model 3. and 4.
       const G4double theProjectileEffectiveMass =
         ParticleTable::getTableMass(projectileRemnant->getA() - theParticle->getA(), projectileRemnant->getZ() - theParticle->getZ())
         + theProjectileExcitationEnergy;
@@ -129,6 +134,8 @@ namespace G4INCL {
           theNucleus->getZ() + theParticle->getZ())
         + theParticle->getTableMass() - theParticle->getINCLMass()
         + theProjectileCorrection;
+      // end of part common to model 3. and 4.
+
 
       projectileRemnant->removeParticle(theParticle, theProjectileCorrection);
     } else {
@@ -136,7 +143,7 @@ namespace G4INCL {
       const G4int ZCN = theNucleus->getZ() + theParticle->getZ();
       // Correction to the Q-value of the entering particle
       theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN);
-      DEBUG("The following Particle enters with correction " << theCorrection
+      INCL_DEBUG("The following Particle enters with correction " << theCorrection
           << theParticle->print() << std::endl);
     }
 
@@ -176,15 +183,39 @@ namespace G4INCL {
           theEnergy(theParticle->getEnergy()),
           theMass(theParticle->getMass()),
           theQValueCorrection(correction),
-          theMomentum(theParticle->getMomentum())
-          {}
+          refraction(n->getStore()->getConfig()->getRefraction()),
+          theMomentumDirection(theParticle->getMomentum())
+          {
+            if(refraction) {
+              const ThreeVector &position = theParticle->getPosition();
+              const G4double r2 = position.mag2();
+              if(r2>0.)
+                normal = - position / std::sqrt(r2);
+              G4double cosIncidenceAngle = theParticle->getCosRPAngle();
+              if(cosIncidenceAngle < -1.)
+                sinIncidenceAnglePOut = 0.;
+              else
+                sinIncidenceAnglePOut = theMomentumDirection.mag()*std::sqrt(1.-cosIncidenceAngle*cosIncidenceAngle);
+            } else {
+              sinIncidenceAnglePOut = 0.;
+            }
+          }
         ~IncomingEFunctor() {}
         G4double operator()(const G4double v) const {
           G4double energyInside = std::max(theMass, theEnergy + v - theQValueCorrection);
           theParticle->setEnergy(energyInside);
           theParticle->setPotentialEnergy(v);
+          if(refraction) {
+            // Compute the new direction of the particle momentum
+            const G4double pIn = std::sqrt(energyInside*energyInside-theMass*theMass);
+            const G4double sinRefractionAngle = sinIncidenceAnglePOut/pIn;
+            const G4double cosRefractionAngle = (sinRefractionAngle>1.) ? 0. : std::sqrt(1.-sinRefractionAngle*sinRefractionAngle);
+            const ThreeVector momentumInside = theMomentumDirection - normal * normal.dot(theMomentumDirection) + normal * (pIn * cosRefractionAngle);
+            theParticle->setMomentum(momentumInside);
+          } else {
+            theParticle->setMomentum(theMomentumDirection); // keep the same direction
+          }
           // Scale the particle momentum
-          theParticle->setMomentum(theMomentum); // keep the same direction
           theParticle->adjustMomentumFromEnergy();
           return v - thePotential->computePotentialEnergy(theParticle);
         }
@@ -192,25 +223,27 @@ namespace G4INCL {
       private:
         Particle *theParticle;
         NuclearPotential::INuclearPotential const *thePotential;
-        G4double theEnergy;
-        G4double theMass;
-        G4double theQValueCorrection;
-        ThreeVector theMomentum;
+        const G4double theEnergy;
+        const G4double theMass;
+        const G4double theQValueCorrection;
+        const G4bool refraction;
+        const ThreeVector theMomentumDirection;
+        ThreeVector normal;
+        G4double sinIncidenceAnglePOut;
     } theIncomingEFunctor(theParticle,theNucleus,theQValueCorrection);
 
     G4double v = theNucleus->getPotential()->computePotentialEnergy(theParticle);
     if(theParticle->getKineticEnergy()+v-theQValueCorrection<0.) { // Particle entering below 0. Die gracefully
-      DEBUG("Particle " << theParticle->getID() << " is trying to enter below 0" << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " is trying to enter below 0" << std::endl);
       return false;
     }
-    G4bool success = RootFinder::solve(&theIncomingEFunctor, v);
-    if(success) { // Apply the solution
-      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
-      theIncomingEFunctor(theSolution.first);
+    const RootFinder::Solution theSolution = RootFinder::solve(&theIncomingEFunctor, v);
+    if(theSolution.success) { // Apply the solution
+      theIncomingEFunctor(theSolution.x);
     } else {
-      WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << std::endl);
+      INCL_WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << std::endl);
     }
-    return success;
+    return theSolution.success;
   }
 
 }

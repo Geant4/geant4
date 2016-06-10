@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2010-10-27 07:57:21 gcosmo Exp $
+# $Id: GNUmakefile 77241 2013-11-22 09:55:47Z gcosmo $
 # ----------------------------------------------------------
 # GNUmakefile for tracking library.  Katsuya Amako, 5/9/95.
 # ----------------------------------------------------------
@@ -23,6 +23,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/navigation/include \
+            -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/materials/include \

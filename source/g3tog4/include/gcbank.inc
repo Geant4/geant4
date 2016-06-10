@@ -24,8 +24,7 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: gcbank.inc,v 1.4 2006-06-29 18:12:46 gunter Exp $
-*     GEANT4 tag $Name: not supported by cvs2svn $
+*     $Id: gcbank.inc 67982 2013-03-13 10:36:03Z gcosmo $
 *    
       INTEGER IQ,LQ,NZEBRA,IXSTOR,IXDIV,IXCONS,LMAIN,LR1,JCG
       INTEGER KWBANK,KWWORK,IWS

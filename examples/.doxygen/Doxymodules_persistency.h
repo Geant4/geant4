@@ -1,4 +1,4 @@
-// $Id: Doxymodules_persistency.h 65679 2012-11-26 13:41:53Z gcosmo $
+// $Id: Doxymodules_persistency.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_persistency.h
@@ -116,6 +116,7 @@
  *  @{
  */
 
+  class ExTGActionInitialization {};
   class ExTGDetectorConstruction {};
   class ExTGDetectorConstructionWithCpp {};
   class ExTGDetectorConstructionWithCuts {};

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: QGS_BIC.icc 67969 2013-03-13 09:44:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@
 //AR-31Oct2012 #include "G4NeutronCrossSectionXS.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGS_BIC.hh"
+#include "G4HadronPhysicsQGS_BIC.hh"
 
 #include "G4WarnPLStatus.hh"
 
@@ -93,7 +93,7 @@ template<class T> TQGS_BIC<T>::TQGS_BIC(G4int ver):  T()
   this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsQGS_BIC(ver) );
+  this->RegisterPhysics(  new G4HadronPhysicsQGS_BIC(ver) );
 
   // Stopping Physics
   this->RegisterPhysics( new G4StoppingPhysics(ver) );

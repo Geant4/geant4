@@ -30,7 +30,6 @@
 #include "G4CrossSectionVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ShortLivedConstructor.hh"
-#include "G4ShortLivedTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4PionPlus.hh"
 

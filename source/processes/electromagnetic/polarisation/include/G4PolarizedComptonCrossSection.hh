@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PolarizedComptonCrossSection.hh 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -89,8 +89,7 @@ private:
   void DefineCoefficients(const G4StokesVector & pol0,
 			  const G4StokesVector & pol1);
   // states if an incoming or outgoing particle is polarized
-  G4bool gammaPol0, electronPol1, gammaPol2, electronPol3;
-
+  G4bool gammaPol2, electronPol3;
 
   // these variables store the information necessary to evaluate the  
   // differential cross section for arbitrary final state 
@@ -105,7 +104,7 @@ private:
   G4double polxx, polyy, polzz, polxz, polzx, polyz, polzy, polxy, polyx;
 
   G4double diffXSFactor, totalXSFactor, re2;
-  G4double epsilon, polXS, unpXS;
+  G4double polXS, unpXS;
 };
 
 

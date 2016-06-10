@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -58,11 +56,16 @@ namespace G4INCL {
       currentTime = 0.0;
       firstCollisionTime = 0.0;
       firstCollisionXSec = 0.0;
+      firstCollisionSpectatorPosition = 0.0;
+      firstCollisionSpectatorMomentum = 0.0;
+      firstCollisionIsElastic = false;
       nAvatars[SurfaceAvatarType] = 0;
       nAvatars[CollisionAvatarType] = 0;
       nAvatars[DecayAvatarType] = 0;
       nAvatars[ParticleEntryAvatarType] = 0;
       nCascading = 0;
+      nEmittedClusters = 0;
+      nEnergyViolationInteraction = 0;
     };
 
     void incrementAcceptedCollisions() { nAcceptedCollisions++; };
@@ -72,12 +75,23 @@ namespace G4INCL {
     void incrementAvatars(AvatarType type) { nAvatars[type]++; };
     void incrementCascading() { nCascading++; }
     void decrementCascading() { nCascading--; }
+    void incrementEmittedClusters() { nEmittedClusters++; }
+    void incrementEnergyViolationInteraction() { nEnergyViolationInteraction++; }
 
-    void setFirstCollisionTime(G4double t) { firstCollisionTime = t; };
-    G4double getFirstCollisionTime() { return firstCollisionTime; };
+    void setFirstCollisionTime(const G4double t) { firstCollisionTime = t; };
+    G4double getFirstCollisionTime() const { return firstCollisionTime; };
 
-    void setFirstCollisionXSec(G4double x) { firstCollisionXSec = x; };
-    G4double getFirstCollisionXSec() { return firstCollisionXSec; };
+    void setFirstCollisionXSec(const G4double x) { firstCollisionXSec = x; };
+    G4double getFirstCollisionXSec() const { return firstCollisionXSec; };
+
+    void setFirstCollisionSpectatorPosition(const G4double x) { firstCollisionSpectatorPosition = x; };
+    G4double getFirstCollisionSpectatorPosition() const { return firstCollisionSpectatorPosition; };
+
+    void setFirstCollisionSpectatorMomentum(const G4double x) { firstCollisionSpectatorMomentum = x; };
+    G4double getFirstCollisionSpectatorMomentum() const { return firstCollisionSpectatorMomentum; };
+
+    void setFirstCollisionIsElastic(const G4bool e) { firstCollisionIsElastic = e; };
+    G4bool getFirstCollisionIsElastic() const { return firstCollisionIsElastic; };
 
     void setCurrentTime(G4double t) { currentTime = t; };
     G4double getCurrentTime() { return currentTime; };
@@ -88,6 +102,8 @@ namespace G4INCL {
     G4int getBlockedDecays() const {return nBlockedDecays; };
     G4int getAvatars(AvatarType type) const { return nAvatars.find(type)->second; };
     G4int getCascading() const { return nCascading; };
+    G4int getEmittedClusters() const { return nEmittedClusters; };
+    G4int getEnergyViolationInteraction() const { return nEnergyViolationInteraction; };
 
   private:
     G4int nAcceptedCollisions;
@@ -97,8 +113,13 @@ namespace G4INCL {
     G4double currentTime;
     G4double firstCollisionTime;
     G4double firstCollisionXSec;
+    G4double firstCollisionSpectatorPosition;
+    G4double firstCollisionSpectatorMomentum;
+    G4bool firstCollisionIsElastic;
     std::map<AvatarType,G4int> nAvatars;
     G4int nCascading;
+    G4int nEmittedClusters;
+    G4int nEnergyViolationInteraction;
   };
 }
 

@@ -1,4 +1,4 @@
-# $Id: basic.mac,v 1.4 2009-10-31 18:05:56 maire Exp $
+# $Id: basic.mac 68763 2013-04-05 12:36:20Z gcosmo $
 #
 /control/verbose 2
 /run/verbose 2

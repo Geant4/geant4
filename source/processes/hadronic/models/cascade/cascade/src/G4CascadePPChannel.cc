@@ -588,7 +588,7 @@ namespace {
 
 // Initialize p-p cross-section table
 
-G4CascadePPChannelData::data_t
+const G4CascadePPChannelData::data_t
 G4CascadePPChannelData::data(pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
 			     pp8bfs, pp9bfs, ppCrossSections, ppTotXSec,
 			     pro*pro, "ProtonProton");

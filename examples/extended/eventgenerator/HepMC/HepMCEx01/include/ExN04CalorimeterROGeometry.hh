@@ -26,13 +26,15 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04CalorimeterROGeometry.hh
 /// \brief Definition of the ExN04CalorimeterROGeometry class
 //
+// $Id: ExN04CalorimeterROGeometry.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//
+
 #ifndef ExN04CalorimeterROGeometry_h
 #define ExN04CalorimeterROGeometry_h 1
 
 #include "G4VReadOutGeometry.hh"
 
-class ExN04CalorimeterROGeometry : public G4VReadOutGeometry
-{
+class ExN04CalorimeterROGeometry : public G4VReadOutGeometry {
 public:
   ExN04CalorimeterROGeometry();
   ExN04CalorimeterROGeometry(G4String);

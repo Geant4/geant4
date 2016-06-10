@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLImmediateWt.cc 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // OpenGLImmediateWt graphics system factory.
@@ -41,6 +41,9 @@
 #include "G4OpenGLImmediateSceneHandler.hh"
 #include "G4UIWt.hh"
 #include "G4UImanager.hh"
+
+#include <Wt/WLabel>
+#include <Wt/WContainerWidget>
 
 G4OpenGLImmediateWt::G4OpenGLImmediateWt ():
   G4VGraphicsSystem ("OpenGLImmediateWt",
@@ -62,51 +65,41 @@ G4VViewer* G4OpenGLImmediateWt::CreateViewer
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateWt::CreateViewer \n");
 #endif
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateWt::CreateViewer after Get Pointer\n");
-#endif
-  if (UI == NULL) return NULL;
-
-  if (! static_cast<G4UIWt*> (UI->GetG4UIWindow())) return NULL;
-
-  G4UIWt * uiWt = static_cast<G4UIWt*> (UI->GetG4UIWindow());
+  G4VViewer* pView = 0;
+  // G4VisManager::CreateViewer
+  // -> G4OpenGLImmediateWt::CreateViewer
+  //   -> G4OpenGLImmediateWtViewer
+  // !! ImmediateWtViewer should be the container
   
-  G4VViewer* pView = NULL;
-  if ( uiWt) {
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLImmediateWt::CreateViewer uiWt\n");
-#endif
-    uiWt->AddTabWidget(new Wt::WLabel("Test..."),"my name",50,50);
-    //  uiWt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
-//     pView = new G4OpenGLImmediateWtViewer
-//       ((G4OpenGLImmediateSceneHandler&) scene, uiWt->getLastTabContainerInsert(),name);
-    /* pView =*/ new G4OpenGLImmediateWtViewer
-      (name);
-    //         new Wt::WLabel("Test...",uiWt->getLastTabContainerInsert());
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLImmediateWt::CreateViewer lastInsert :%d\n",uiWt->getLastTabContainerInsert());
-#endif
-    
-    if (pView) {
-      if (pView -> GetViewId () < 0) {
-        G4cerr << "G4OpenGLImmediateWt::CreateViewer: error flagged by negative"
-          " view id in G4OpenGLImmediateWtViewer creation."
-          "\n Destroying view and returning null pointer."
-               << G4endl;
-        delete pView;
-        pView = 0;
-      }
+  // G4VisManager::CreateViewer
+  // G4OpenGLImmediateQtViewer::Initialise()
+  // ->G4OpenGLQtViewer::CreateMainWindow(container, name)
+  //   fUiQt->AddTabWidget  (container fWindow)
+
+  // Create a container for the widget
+  fWGLContainer = new Wt::WContainerWidget();
+  
+  pView = new G4OpenGLImmediateWtViewer
+  ((G4OpenGLImmediateSceneHandler&) scene, fWGLContainer, name);
+  if (pView) {
+    if (pView -> GetViewId () < 0) {
+      G4cerr << "G4OpenGLImmediateWt::CreateViewer: error flagged by negative"
+      " view id in G4OpenGLImmediateWtViewer creation."
+      "\n Destroying view and returning null pointer."
+      << G4endl;
+      delete pView;
+      pView = 0;
     }
-    else {
-      G4cerr << "G4OpenGLImmediateWt::CreateViewer: null pointer on"
-        " new G4OpenGLImmediateWtViewer." << G4endl;
-    }
+  }
+  else {
+    G4cerr << "G4OpenGLImmediateWt::CreateViewer: null pointer on"
+    " new G4OpenGLImmediateWtViewer." << G4endl;
   }
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateWt::CreateViewer END \n");
 #endif
-   return pView;
+  return pView;
 }
+
 
 #endif

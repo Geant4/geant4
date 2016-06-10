@@ -57,7 +57,6 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-#include "G4hZiegler1977Nuclear.hh"
 #include "G4hZiegler1985Nuclear.hh"
 #include "G4hICRU49Nuclear.hh"
 #include "G4DynamicParticle.hh"
@@ -85,13 +84,9 @@ void G4hNuclearStoppingModel::InitializeMe()
 
   // Registration of parametrisation models of nuclear energy losses
   G4String blank  = G4String(" ") ;
-  G4String zi77   = G4String("Ziegler1977") ;
   G4String ir49   = G4String("ICRU_R49") ;
   G4String zi85   = G4String("Ziegler1985") ;
-  if(zi77 == modelName) { 
-      nStopingPowerTable = new G4hZiegler1977Nuclear();
-    
-  } else if(ir49 == modelName || blank == modelName) {
+  if(ir49 == modelName || blank == modelName) {
       nStopingPowerTable = new G4hICRU49Nuclear();
 
   } else if(zi85 == modelName) {
@@ -100,9 +95,9 @@ void G4hNuclearStoppingModel::InitializeMe()
   } else {
     G4cout << 
     "G4hLowEnergyIonisation warning: There is no table with the modelName <" 
- << modelName << ">" 
- << " for nuclear stopping, <ICRU_R49> is applied " 
- << G4endl; 
+	   << modelName << ">" 
+	   << " for nuclear stopping, <ICRU_R49> is applied " 
+	   << G4endl; 
     nStopingPowerTable = new G4hICRU49Nuclear();
   }
 

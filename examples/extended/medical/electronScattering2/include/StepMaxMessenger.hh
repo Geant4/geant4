@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: StepMaxMessenger.hh 70325 2013-05-29 08:06:02Z gcosmo $
+//
 /// \file medical/electronScattering2/include/StepMaxMessenger.hh
 /// \brief Definition of the StepMaxMessenger class
-//
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef StepMaxMessenger_h
 #define StepMaxMessenger_h 1

@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: DetectorConstruction.hh 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file DetectorConstruction.hh
 /// @brief Define geometry
 
@@ -30,12 +33,19 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
+class G4LogicalVolume;
+
 class DetectorConstruction : public G4VUserDetectorConstruction {
 public:
   DetectorConstruction();
-  ~DetectorConstruction(); 
+  ~DetectorConstruction();
 
-  virtual G4VPhysicalVolume* Construct(); 
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
+
+private:
+  G4LogicalVolume* flv_voxel;
+
 };
 
 #endif

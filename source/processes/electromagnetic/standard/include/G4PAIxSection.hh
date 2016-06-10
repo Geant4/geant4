@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PAIxSection.hh 75582 2013-11-04 12:13:01Z gcosmo $
 //
 // 
 // G4PAIxSection.hh -- header file
@@ -69,6 +69,7 @@ class G4PAIxSection
 {
 public:
 	  // Constructors
+  G4PAIxSection();
   G4PAIxSection( G4MaterialCutsCouple* matCC);
 	  
   G4PAIxSection( G4int materialIndex,
@@ -88,6 +89,9 @@ public:
 	  // Destructor
 	  
           ~G4PAIxSection();
+
+  void Initialize(const G4Material* material, 
+  		  G4double maxEnergyTransfer, G4double betaGammaSq, G4SandiaTable*);
 	  
 	  // Operators
           // G4PAIxSection& operator=(const G4PAIxSection& right);
@@ -97,6 +101,9 @@ public:
 	  // Methods
 	  
 	  // General control functions
+
+  void     ComputeLowEnergyCof(const G4Material* material);
+	  void     ComputeLowEnergyCof();
           
 	  void InitPAI();
 
@@ -132,6 +139,7 @@ public:
 
           G4double PAIdNdxResonance( G4int intervalNumber,
 	                           G4double betaGammaSq    );
+
 
 	  void     IntegralPAIxSection();
 	  void     IntegralCerenkov();
@@ -195,6 +203,10 @@ public:
 	  G4double GetMeanResonanceLoss() const {return fIntegralResonance[0]; }
 
 	  G4double GetNormalizationCof() const { return fNormalizationCof; }
+
+	  G4double GetLowEnergyCof() const { return fLowEnergyCof; }
+
+  void SetVerbose(G4int v){fVerbose=v;};
           
 	  inline G4double GetPAItable(G4int i,G4int j) const;
 
@@ -221,7 +233,7 @@ private :
 static const G4double fDelta; // energy shift from interval border = 0.001
 static const G4double fError; // error in lin-log approximation = 0.005
 
-static       G4int fNumberOfGammas;         // = 111;
+static G4int fNumberOfGammas;         // = 111;
 static const G4double fLorentzFactor[112];  //  static gamma array
 
 static 
@@ -235,48 +247,44 @@ G4double fNormalizationCof;   // Normalization cof for PhotoAbsorptionXsection
   G4int fMaterialIndex;  // current material index
   G4double fDensity;            // Current density
   G4double fElectronDensity;    // Current electron (number) density
+  G4double fLowEnergyCof;    // Correction cof for low energy region
   G4int    fSplineNumber;       // Current size of spline
+  G4int    fVerbose;       // verbose flag
 
 // Arrays of Sandia coefficients
 
   G4OrderedTable* fMatSandiaMatrix;
+
   G4SandiaTable*  fSandia;
 
-G4double* fEnergyInterval;
-G4double* fA1; 
-G4double* fA2;
-G4double* fA3; 
-G4double* fA4;
+  G4DataVector fEnergyInterval;
+  G4DataVector fA1; 
+  G4DataVector fA2;
+  G4DataVector fA3; 
+  G4DataVector fA4;
 
 static
 const G4int   fMaxSplineSize ;          // Max size of output splain arrays = 500
 
-/* ******************
-G4double*          fSplineEnergy;   // energy points of splain
-G4double* fRePartDielectricConst;   // Real part of dielectric const
-G4double* fImPartDielectricConst;   // Imaginary part of dielectric const
-G4double*          fIntegralTerm;   // Integral term in PAI cross section
-G4double*        fDifPAIxSection;   // Differential PAI cross section
-G4double*   fIntegralPAIxSection;   // Integral PAI cross section  ?
-*/ ///////////////
+
+  G4DataVector          fSplineEnergy;   // energy points of splain
+  G4DataVector   fRePartDielectricConst;   // Real part of dielectric const
+  G4DataVector   fImPartDielectricConst;   // Imaginary part of dielectric const
+  G4DataVector            fIntegralTerm;   // Integral term in PAI cross section
+  G4DataVector          fDifPAIxSection;   // Differential PAI cross section
+  G4DataVector            fdNdxCerenkov;   // dNdx of Cerenkov collisions
+  G4DataVector            fdNdxPlasmon;    // dNdx of Plasmon collisions
+  G4DataVector            fdNdxMM;    // dNdx of MM-Cerenkov collisions
+  G4DataVector            fdNdxResonance;    // dNdx of Resonance collisions
+
+  G4DataVector     fIntegralPAIxSection;   // Integral PAI cross section  ?
+  G4DataVector     fIntegralPAIdEdx;       // Integral PAI dEdx  ?
+  G4DataVector     fIntegralCerenkov;      // Integral Cerenkov N>omega  ?
+  G4DataVector     fIntegralPlasmon;       // Integral Plasmon N>omega  ?
+  G4DataVector     fIntegralMM;       // Integral MM N>omega  ?
+  G4DataVector     fIntegralResonance;       // Integral resonance N>omega  ?
 
 
-G4double          fSplineEnergy[500];   // energy points of splain
-G4double fRePartDielectricConst[500];   // Real part of dielectric const
-G4double fImPartDielectricConst[500];   // Imaginary part of dielectric const
-G4double          fIntegralTerm[500];   // Integral term in PAI cross section
-G4double        fDifPAIxSection[500];   // Differential PAI cross section
-G4double          fdNdxCerenkov[500];   // dNdx of Cerenkov collisions
-G4double          fdNdxMM[500];   // dNdx of MM-Cerenkov collisions
-G4double          fdNdxPlasmon[500];   // dNdx of Plasmon collisions
-G4double          fdNdxResonance[500];   // dNdx of resonance collisions
-
-G4double   fIntegralPAIxSection[500];   // Integral PAI cross section  ?
-G4double   fIntegralPAIdEdx[500];   // Integral PAI dEdx  ?
-G4double   fIntegralCerenkov[500];   // Integral Cerenkov N>omega  ?
-G4double   fIntegralMM[500];   // Integral MM-Cerenkov N>omega  ?
-G4double   fIntegralPlasmon[500];   // Integral Plasmon N>omega  ?
-G4double   fIntegralResonance[500];   // Integral resonance N>omega  ?
 
 G4double fPAItable[500][112]; // Output array
 

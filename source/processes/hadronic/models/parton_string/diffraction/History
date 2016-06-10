@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2010-11-15 10:10:16 vuzhinsk Exp $
+$Id: History 74627 2013-10-17 07:04:38Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,85 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16-Oct-2013 A. Ribon       (hadr-string-diff-V09-06-18)
+-  Fixed a trivial warning error of the previous tag.
+
+16-Oct-2013 A. Ribon       (hadr-string-diff-V09-06-17)
+-  First, minor improvement of the code: clean-up, indentation,
+   removal of tabs and consistent use of spaces. 
+   Neither changes of the algorithms nor of the physics.
+
+31-Aug-2013 V. Uzhinsky    (hadr-string-diff-V09-06-16)
+-  Division by 0 is erased in FTF model (AdjustNucleons, cases 2 and 3)
+
+07-Aug-2013 A. Ribon       (hadr-string-diff-V09-06-15)
+-  Set Delta-isobar probability to 10%, as a compromise between better
+   agreement with thin-target data and smaller impact on hadronic shower
+   observables with respect to G4 9.6.ref06.
+
+02-Jul-2013 A. Ribon       (hadr-string-diff-V09-06-14)
+-  Replaced CLHEP::RandFlat with G4RandFlat in G4DiffractiveExcitation.cc.
+
+13-June-2012 V. Uzhinsky   (hadr-string-diff-V09-06-13)
+-  New parameterizations of FTF process cross sections are implemented.
+   25 % of Delta-isobar probability was returned.
+   A best description of exp. data on hP, hA interactions is reached.
+   Results of FTF become close to QGSM, especially for heavy targets.
+
+02-May-2013 A. Ribon       (hadr-string-diff-V09-06-12)
+-  For thread safety, replaced CLHEP::RandFlat with G4RandFlat in 
+   G4DiffractiveExcitation.cc and G4FTFAnnihilation.cc.
+
+21-Mar-2013 A. Ribon       (hadr-string-diff-V09-06-11)
+-  Fixed warning message in G4DiffractiveHHScatterer.
+
+14-Feb-2013 V. Uzhinsky    (hadr-string-diff-V09-06-10)
+-  Division by 0 erased in G4FTFAnnihilation for DbarPb
+   if(Prel2 <= 0. ) is inserted.
+
+ 8-Feb-2013 V. Uzhinsky    (hadr-string-diff-V09-06-09)
+-  Division by 0 erased in G4FTFParameters.cc for PbarP
+   X pion diffraction # 0.
+
+ 6-Feb-2013 A. Ribon    (hadr-string-diff-V09-06-08)
+-  Close writing of debugging information in G4FTFParameters.cc
+
+ 5-Feb-2013 V.Uzhinsky  (hadr-string-diff-V09-06-07)
+-  Annihilation at rest is improved.
+
+ 4-Feb-2013 V.Uzhinsky  (hadr-string-diff-V09-06-06)
+-  Warning message of G4FTFmodel (line 155) is erased.
+
+ 1-Feb-2013 V.Uzhinsky  (hadr-string-diff-V09-06-05)
+-  Bug is fixed in double delition of projectile nucleus
+
+30-Jan-2013 V.Uzhinsky  (hadr-string-diff-V09-06-04)
+-  Bug is fixed in reggeon cascading
+
+29-Jan-2013 V.Uzhinsky  (hadr-string-diff-V09-06-03)
+-  New attempt to implement nucl-nucl interaction simulation
+
+12-Jan-2013 V.Uzhinsky  (hadr-string-diff-V09-06-02)
+-  New attempt to implement nucl-nucl interaction simulation
+
+19-Dec-2012 V. Uzhinsky  (hadr-string-diff-V09-06-01)
+-  Unneeded print-out was closed. Stopping of particles in AA-interaction
+   below 2 GeV/N was blocked. Energy-momentum conservation in 
+   AA-interactions was recovered.
+
+18-Dec-2012 V. Uzhinsky  (hadr-string-diff-V09-06-00)
+-  An interface for a manipulation with nucleus-nucleus interactions was
+   improved. A low energy limit of FTF model is lowered. Adjust method was
+   essential extended. It is expected that there will not be problem with 
+   high energy interactions. Problem can be with anti-nuclei.
+
+21-Nov-2012 V. Uzhinsky   (hadr-string-diff-V09-05-19)
+-  Bug fixing.
+
+20-Nov-2012 V. Uzhinsky   (hadr-string-diff-V09-05-18)
+-  An interface for a manipulation with nucleus-nucleus interactions was
+   introduced, especially for treating remnants of projectile nuclei.
 
 27 September 2012, G.Cosmo
 =  Explicitly use inclusion of headers for system of units and physical

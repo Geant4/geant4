@@ -1,4 +1,4 @@
-// $Id$
+// $Id: History 78053 2013-12-03 08:25:13Z gcosmo $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,35 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 02, 2013
+- More fixes in gui.mac:
+  Let execute vis.mac first to make the command in added menus available;
+  corrected wireframe parameter
+
+November 29, 2013 - I. Hrivnacova P.Gumplinger
+- Fixed gui.mac (commented out command specific to B2 example)
+- updated CMakeLists.txt
+
+Nov 18, 2013 Ivana Hrivnacova - fieldex05-V09-06-05
+- Minor fix in .README
+
+Nov 04, 2013 P. Gumplinger - fieldex05-V09-06-04
+- place G4Random::setTheSeed(myseed) so that it is executed for both
+  sequential and MT mode
+
+Nov 01, 2013 P. Gumplinger - fieldex05-V09-06-03
+- Migration to MT
+
+May 06, 2013 P. Gumplinger - fieldex05-V09-06-02
+- Apply all Examples Coding Guidelines
+
+April 1st, 2013 A. Dotti - fieldex05-V09-06-01
+- New API for physics list needed for MT
+
+February 22th, 2013 Peter Gumplinger - fieldex05-V09-06-00
+- changed GetFieldValue signature to Point[4] and added
+  F05SteppingVerbose to print GlobalTime
 
 November 14th, 2012 Ivana Hrivnacova - fieldex05-V09-05-00
 ------------------------------------

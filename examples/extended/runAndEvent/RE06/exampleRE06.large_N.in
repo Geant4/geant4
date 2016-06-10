@@ -1,0 +1,32 @@
+/control/verbose 2
+/run/verbose 1
+/run/initialize
+/run/dumpRegion
+/run/beamOn 1000
+/run/dumpCouples
+##
+##
+##
+/run/setCutForRegion Calor-A 0.2 mm
+/run/setCutForRegion Calor-B 2 mm
+/run/setCutForRegion Calor-C 2 cm
+/run/dumpRegion
+/run/beamOn 1000
+/run/dumpCouples
+##
+##
+##
+/RE06/setAbsMat Aluminium
+/RE06/setGapMat Water
+/run/dumpRegion
+/run/beamOn 1000
+/run/dumpCouples
+##
+##
+##
+/run/setCutForRegion Calor-A 0.01 mm
+/run/setCutForRegion Calor-B 0.1 mm
+/run/setCutForRegion Calor-C 1 mm
+/run/dumpRegion
+/run/beamOn 1000
+/run/dumpCouples

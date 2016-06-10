@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VSceneHandler.cc 73126 2013-08-19 08:01:37Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -50,7 +50,6 @@
 #include "G4Square.hh"
 #include "G4Polymarker.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
 #include "G4Visible.hh"
 #include "G4VisAttributes.hh"
 #include "G4VModel.hh"
@@ -122,6 +121,15 @@ G4VSceneHandler::~G4VSceneHandler () {
     last = fViewerList.back();
     fViewerList.pop_back();
     delete last;
+  }
+}
+
+const G4VisExtent& G4VSceneHandler::GetExtent() const
+{
+  if (fpScene) {
+    return fpScene->GetExtent();
+  } else {
+    return G4VisExtent::NullExtent;
   }
 }
 
@@ -259,15 +267,12 @@ void G4VSceneHandler::AddSolid (const G4VSolid& solid) {
 void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
   G4TrajectoriesModel* trajectoriesModel =
     dynamic_cast<G4TrajectoriesModel*>(fpModel);
-  if (!trajectoriesModel) G4Exception
+  if (trajectoriesModel)
+    traj.DrawTrajectory();
+  else {
+    G4Exception
     ("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
      "visman0105", FatalException, "Not a G4TrajectoriesModel.");
-  else {
-    if (trajectoriesModel->IsDrawingModeSet()) {
-      traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());
-    } else {
-      traj.DrawTrajectory();
-    }
   }
 }
 
@@ -479,57 +484,22 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   BeginPrimitives (fObjectTransformation);
-  G4NURBS* pNURBS = 0;
-  G4Polyhedron* pPolyhedron = 0;
-  switch (fpViewer -> GetViewParameters () . GetRepStyle ()) {
-  case G4ViewParameters::nurbs:
-    pNURBS = solid.CreateNURBS ();
-    if (pNURBS) {
-      static G4bool warned = false;
-      if (!warned) {
-        warned = true;
-        G4cout <<
-  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-  "!!!!! NURBS are deprecated and will be removed in the next major release."
-  "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        << G4endl;
-      }
-      pNURBS -> SetVisAttributes (fpVisAttribs);
-      AddPrimitive (*pNURBS);
-      delete pNURBS;
-      break;
+  G4Polyhedron::SetNumberOfRotationSteps (GetNoOfSides (fpVisAttribs));
+  G4Polyhedron* pPolyhedron = solid.GetPolyhedron ();
+  G4Polyhedron::ResetNumberOfRotationSteps ();
+  if (pPolyhedron) {
+    pPolyhedron -> SetVisAttributes (fpVisAttribs);
+    AddPrimitive (*pPolyhedron);
+  }
+  else {
+    G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+      "ERROR: G4VSceneHandler::RequestPrimitives"
+      "\n  Polyhedron not available for " << solid.GetName () <<
+      ".\n  This means it cannot be visualized on most systems."
+      "\n  Contact the Visualization Coordinator." << G4endl;
     }
-    else {
-      G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
-      if (verbosity >= G4VisManager::errors) {
-	G4cout <<
-	  "ERROR: G4VSceneHandler::RequestPrimitives"
-	  "\n  NURBS not available for "
-	       << solid.GetName () << G4endl;
-	G4cout << "Trying polyhedron." << G4endl;
-      }
-    }
-    // Dropping through to polyhedron...
-  case G4ViewParameters::polyhedron:
-  default:
-    G4Polyhedron::SetNumberOfRotationSteps (GetNoOfSides (fpVisAttribs));
-    pPolyhedron = solid.GetPolyhedron ();
-    G4Polyhedron::ResetNumberOfRotationSteps ();
-    if (pPolyhedron) {
-      pPolyhedron -> SetVisAttributes (fpVisAttribs);
-      AddPrimitive (*pPolyhedron);
-    }
-    else {
-      G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
-      if (verbosity >= G4VisManager::errors) {
-	G4cout <<
-	  "ERROR: G4VSceneHandler::RequestPrimitives"
-	  "\n  Polyhedron not available for " << solid.GetName () <<
-	  ".\n  This means it cannot be visualized on most systems."
-	  "\n  Contact the Visualization Coordinator." << G4endl;
-      }
-    }
-    break;
   }
   EndPrimitives ();
 }

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.hh 77255 2013-11-22 10:09:14Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -61,16 +61,13 @@ public:
   DetectorConstruction();
   virtual ~DetectorConstruction();
 
-public:
-
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
 
   void SetWorldMaterial(const G4String&);
   void SetTargetMaterial(const G4String&);
 
   void SetTargetRadius(G4double val);
-
-  void UpdateGeometry();
 
 private:
 
@@ -81,9 +78,6 @@ private:
 
   G4Material*  fTargetMaterial;
   G4Material*  fWorldMaterial;
-
-  CheckVolumeSD*   fCheckSD;
-  TargetSD*        fTargetSD;
 
   G4LogicalVolume* fLogicTarget;
   G4LogicalVolume* fLogicCheck;

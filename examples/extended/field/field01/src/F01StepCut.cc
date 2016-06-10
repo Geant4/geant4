@@ -27,11 +27,10 @@
 /// \brief Implementation of the F01StepCut class
 //
 //
-// $Id$
+// $Id: F01StepCut.cc 76248 2013-11-08 11:19:52Z gcosmo $
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F01StepCut.hh"
 
@@ -40,7 +39,7 @@
 #include "G4VParticleChange.hh"
 #include "G4EnergyLossTables.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01StepCut::F01StepCut(const G4String& aName)
  : G4VDiscreteProcess(aName),
@@ -51,24 +50,22 @@ F01StepCut::F01StepCut(const G4String& aName)
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01StepCut::~F01StepCut()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01StepCut::F01StepCut(F01StepCut& right)
  : G4VDiscreteProcess(right)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01StepCut::SetMaxStep(G4double step)
 {
-  fMaxChargedStep = step ;
+  fMaxChargedStep = step;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

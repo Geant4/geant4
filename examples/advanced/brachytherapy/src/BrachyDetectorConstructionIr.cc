@@ -37,7 +37,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id$
+// $Id: BrachyDetectorConstructionIr.cc 69765 2013-05-14 10:11:22Z gcosmo $
 //
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
@@ -87,11 +87,11 @@ void BrachyDetectorConstructionIr::ConstructIridium(G4VPhysicalVolume* mother)
   capsuleLog = new G4LogicalVolume(capsule,capsuleMat,"CapsuleLog");
   capsulePhys = new G4PVPlacement(0,
                                  G4ThreeVector(0,0,-1.975*mm),
-                                 "CapsulePhys",
+                                 "IridiumCapsulePhys",
                                  capsuleLog,
                                  mother,
                                  false,
-                                 0);
+                                 0, true);
 
   // Capsule tip
   capsuleTip = new G4Sphere("CapsuleTipIridium",
@@ -111,7 +111,7 @@ void BrachyDetectorConstructionIr::ConstructIridium(G4VPhysicalVolume* mother)
                                      capsuleTipLog,
                                      mother,
                                      false,
-                                     0);
+                                     0, true);
 
   // Iridium core
   iridiumCore = new G4Tubs("IrCore",0,0.30*mm,1.75*mm,0.*deg,360.*deg);
@@ -124,7 +124,7 @@ void BrachyDetectorConstructionIr::ConstructIridium(G4VPhysicalVolume* mother)
                                       iridiumCoreLog,
                                       capsulePhys,
                                       false,
-                                      0);
+                                      0, true);
 
   simpleCapsuleVisAtt = new G4VisAttributes(red);
   simpleCapsuleVisAtt -> SetVisibility(true);  
@@ -179,4 +179,6 @@ void BrachyDetectorConstructionIr::CleanIridium()
   
   delete capsuleLog; 
   capsuleLog = 0;
+
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }

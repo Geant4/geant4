@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: exGPSRunAction.cc 76468 2013-11-11 10:27:19Z gcosmo $
+//
 /// \file eventgenerator/exgps/src/exGPSRunAction.cc
 /// \brief Implementation of the exGPSRunAction class
 //
@@ -33,14 +35,14 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
+#include "exGPSHistoManager.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "exGPSAnalysisManager.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-exGPSRunAction::exGPSRunAction()
+exGPSRunAction::exGPSRunAction(exGPSHistoManager* histoManager)
+ : G4UserRunAction(),
+   fexGPSHistoManager(histoManager)
 {
 }
 
@@ -55,33 +57,15 @@ void exGPSRunAction::BeginOfRunAction(const G4Run* aRun)
 {
  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  fexGPSHistoManager->book();
 
-#ifdef G4VIS_USE
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    } 
-#endif
-#ifdef G4ANALYSIS_USE
-  // If analysis is used reset the histograms
-  exGPSAnalysisManager::GetInstance()->BeginOfRun();
-#endif
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exGPSRunAction::EndOfRunAction(const G4Run* )
-{
-#ifdef G4VIS_USE
-  if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-#endif
-  // If analysis is used
-#ifdef G4ANALYSIS_USE 
-  exGPSAnalysisManager::GetInstance()->EndOfRun();
-#endif
+{fexGPSHistoManager->save();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

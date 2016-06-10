@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04Trajectory.hh 76690 2013-11-14 08:45:07Z gcosmo $
+//
 /// \file field/field04/include/F04Trajectory.hh
 /// \brief Definition of the F04Trajectory class
 //
-//
+
 #ifndef F04Trajectory_h
 #define F04Trajectory_h 1
 
@@ -73,13 +75,12 @@ class F04Trajectory : public G4VTrajectory
      inline G4String GetParticleName() const { return fParticleName; }
      inline G4double GetCharge() const { return fPDGCharge; }
      inline G4int GetPDGEncoding() const { return fPDGEncoding; }
-     inline G4ThreeVector GetInitialMomentum() const { return fInitialMomentum; }
+     inline G4ThreeVector GetInitialMomentum() const {return fInitialMomentum;}
 
 // Other member functions
 
      virtual void ShowTrajectory(std::ostream& os=G4cout) const;
      virtual void DrawTrajectory() const;
-     virtual void DrawTrajectory(G4int i_mode=0) const;
      virtual void AppendStep(const G4Step* aStep);
      virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 
@@ -110,15 +111,16 @@ class F04Trajectory : public G4VTrajectory
 
 };
 
-extern G4Allocator<F04Trajectory> myTrajectoryAllocator;
+extern G4ThreadLocal G4Allocator<F04Trajectory>* F04TrajectoryAllocator;
 
 inline void* F04Trajectory::operator new(size_t) {
-    void* aTrajectory = (void*) myTrajectoryAllocator.MallocSingle();
-    return aTrajectory;
+    if(!F04TrajectoryAllocator)
+      F04TrajectoryAllocator = new G4Allocator<F04Trajectory>;
+    return (void*) F04TrajectoryAllocator->MallocSingle();
 }
 
 inline void F04Trajectory::operator delete(void* aTrajectory) {
-    myTrajectoryAllocator.FreeSingle((F04Trajectory*)aTrajectory);
+    F04TrajectoryAllocator->FreeSingle((F04Trajectory*)aTrajectory);
 }
 
 #endif

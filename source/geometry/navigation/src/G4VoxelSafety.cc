@@ -345,7 +345,8 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
      sampleProxy = targetVoxelHeader->GetSlice(targetNodeNo);
 
 #ifdef G4DEBUG_NAVIGATION
-     if( fVerbose > 2 )
+     assert( sampleProxy != 0);
+     if( fVerbose > 2 ) 
      {
        G4cout << " -Checking node " << targetNodeNo
               << " is proxy with address " << sampleProxy << G4endl;
@@ -429,12 +430,15 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
      //
      if( targetNodeNo >= pointNodeNo )
      {
-       nextUp   = trialUp;
-       distUp = targetHeaderMax-localCrd ;
-       if( distUp < 0.0 )
-       {
-         distUp = DBL_MAX;  // On the wrong side - must not be considered
-       }
+        nextUp   = trialUp;
+        // distUp   = std::max( targetHeaderMax-localCrd,  0.0 );
+        G4double lowerEdgeOfNext = targetHeaderMin
+                                 + nextUp * targetHeaderNodeWidth;
+        distUp = lowerEdgeOfNext-localCrd ;
+        if( distUp < 0.0 )
+        {
+           distUp = DBL_MAX;  // On the wrong side - must not be considered
+        }
 #ifdef G4DEBUG_NAVIGATION
        if( fVerbose > 2 )
        {
@@ -445,12 +449,15 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
      
      if( targetNodeNo <= pointNodeNo ) 
      {
-       nextDown = trialDown;
-       distDown = localCrd-targetHeaderMin;
-       if( distDown < 0.0 )
-       {
-         distDown= DBL_MAX; // On the wrong side - must not be considered 
-       }
+         nextDown = trialDown;
+         // distDown = std::max( localCrd-targetHeaderMin,  0.0);
+         G4double upperEdgeOfNext = targetHeaderMin
+                                  + (nextDown+1) * targetHeaderNodeWidth;
+         distDown = localCrd-upperEdgeOfNext;
+         if( distDown < 0.0 )
+         {
+            distDown= DBL_MAX; // On the wrong side - must not be considered 
+         }
 #ifdef G4DEBUG_NAVIGATION
        if( fVerbose > 2 )
        {
@@ -479,7 +486,8 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
      G4bool UpIsClosest;
      UpIsClosest= distUp < distDown;
      
-     if( UpIsClosest || (nextDown < 0) )
+     if( (nextUp < targetHeaderNoSlices)
+         && (UpIsClosest || (nextDown < 0)) )
      {
        nextNodeNo=nextUp;
        distAxis = distUp;
@@ -516,6 +524,7 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
        targetNodeNo= nextNodeNo;
 
 #ifdef G4DEBUG_NAVIGATION
+       assert( targetVoxelHeader->GetSlice(nextNodeNo) != 0 );
        G4bool bContinue= (distAxis<minSafety);
        if( !bContinue )
        {

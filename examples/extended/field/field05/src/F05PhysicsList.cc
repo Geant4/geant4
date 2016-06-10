@@ -23,13 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F05PhysicsList.cc 75672 2013-11-05 08:47:41Z gcosmo $
+//
 /// \file field/field05/src/F05PhysicsList.cc
 /// \brief Implementation of the F05PhysicsList class
 //
 //
-//
-//
-
 #include "F05PhysicsList.hh"
 
 #include "F05ExtraPhysics.hh"
@@ -48,18 +47,25 @@
 #include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F05PhysicsList::F05PhysicsList() : G4VModularPhysicsList() 
 {
     RegisterPhysics(new G4DecayPhysics());
     RegisterPhysics(new F05ExtraPhysics());
 }
 
-F05PhysicsList::~F05PhysicsList()
-{;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F05PhysicsList::~F05PhysicsList() {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::ConstructParticle()
 {
     G4VModularPhysicsList::ConstructParticle();
+
+    G4GenericIon::GenericIonDefinition();
 
     G4DecayTable* MuonPlusDecayTable = new G4DecayTable();
     MuonPlusDecayTable -> Insert(new
@@ -75,6 +81,8 @@ void F05PhysicsList::ConstructParticle()
                             G4MuonRadiativeDecayChannelWithSpin("mu-",0.014));
     G4MuonMinus::MuonMinusDefinition() -> SetDecayTable(MuonMinusDecayTable);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::ConstructProcess()
 {
@@ -137,6 +145,8 @@ void F05PhysicsList::ConstructProcess()
     }
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::SetCuts()
 {

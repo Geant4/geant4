@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: LXeDetectorMessenger.cc 77486 2013-11-25 10:14:16Z gcosmo $
+//
 /// \file optical/LXe/src/LXeDetectorMessenger.cc
 /// \brief Implementation of the LXeDetectorMessenger class
 //
@@ -57,62 +59,84 @@ LXeDetectorMessenger::LXeDetectorMessenger(LXeDetectorConstruction* detector)
   fDimensionsCmd->SetGuidance("Set the dimensions of the detector volume.");
   fDimensionsCmd->SetParameterName("scint_x","scint_y","scint_z",false);
   fDimensionsCmd->SetDefaultUnit("cm");
+  fDimensionsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fDimensionsCmd->SetToBeBroadcasted(false);
 
   fHousingThicknessCmd = new G4UIcmdWithADoubleAndUnit
     ("/LXe/detector/housingThickness",this);
   fHousingThicknessCmd->SetGuidance("Set the thickness of the housing.");
   fHousingThicknessCmd->SetParameterName("d_mtl",false);
   fHousingThicknessCmd->SetDefaultUnit("cm");
+  fHousingThicknessCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fHousingThicknessCmd->SetToBeBroadcasted(false);
 
   fPmtRadiusCmd = new G4UIcmdWithADoubleAndUnit
     ("/LXe/detector/pmtRadius",this);
   fPmtRadiusCmd->SetGuidance("Set the radius of the PMTs.");
   fPmtRadiusCmd->SetParameterName("radius",false);
   fPmtRadiusCmd->SetDefaultUnit("cm");
+  fPmtRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fPmtRadiusCmd->SetToBeBroadcasted(false);
 
   fNxCmd = new G4UIcmdWithAnInteger("/LXe/detector/nx",this);
   fNxCmd->SetGuidance("Set the number of PMTs along the x-dimension.");
   fNxCmd->SetParameterName("nx",false);
+  fNxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNxCmd->SetToBeBroadcasted(false);
 
   fNyCmd = new G4UIcmdWithAnInteger("/LXe/detector/ny",this);
   fNyCmd->SetGuidance("Set the number of PMTs along the y-dimension.");
   fNyCmd->SetParameterName("ny",false);
+  fNyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNyCmd->SetToBeBroadcasted(false);
 
   fNzCmd = new G4UIcmdWithAnInteger("/LXe/detector/nz",this);
   fNzCmd->SetGuidance("Set the number of PMTs along the z-dimension.");
   fNzCmd->SetParameterName("nz",false);
+  fNzCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNzCmd->SetToBeBroadcasted(false);
 
   fSphereCmd = new G4UIcmdWithABool("/LXe/detector/volumes/sphere",this);
   fSphereCmd->SetGuidance("Enable/Disable the sphere.");
+  fSphereCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSphereCmd->SetToBeBroadcasted(false);
 
   fReflectivityCmd = new G4UIcmdWithADouble("/LXe/detector/reflectivity",this);
   fReflectivityCmd->SetGuidance("Set the reflectivity of the housing.");
+  fReflectivityCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fReflectivityCmd->SetToBeBroadcasted(false);
 
   fWlsCmd = new G4UIcmdWithABool("/LXe/detector/volumes/wls",this);
   fWlsCmd->SetGuidance("Enable/Disable the WLS slab");
+  fWlsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWlsCmd->SetToBeBroadcasted(false);
 
   fLxeCmd = new G4UIcmdWithABool("/LXe/detector/volumes/lxe",this);
   fLxeCmd->SetGuidance("Enable/Disable the main detector volume.");
+  fLxeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fLxeCmd->SetToBeBroadcasted(false);
 
   fNFibersCmd = new G4UIcmdWithAnInteger("/LXe/detector/nfibers",this);
   fNFibersCmd->SetGuidance("Set the number of WLS fibers in the WLS slab.");
-
-  fUpdateCmd = new G4UIcommand("/LXe/detector/update",this);
-  fUpdateCmd->SetGuidance("Update the detector geometry with changed values.");
-  fUpdateCmd->SetGuidance
-    ("Must be run before beamOn if detector has been changed.");
+  fNFibersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNFibersCmd->SetToBeBroadcasted(false);
 
   fDefaultsCmd = new G4UIcommand("/LXe/detector/defaults",this);
   fDefaultsCmd->SetGuidance("Set all detector geometry values to defaults.");
-  fDefaultsCmd->SetGuidance("(Update still required)");
+  fDefaultsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fDefaultsCmd->SetToBeBroadcasted(false);
 
   fMainScintYield=new G4UIcmdWithADouble("/LXe/detector/MainScintYield",this);
   fMainScintYield->SetGuidance("Set scinitillation yield of main volume.");
   fMainScintYield->SetGuidance("Specified in photons/MeV");
+  fMainScintYield->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMainScintYield->SetToBeBroadcasted(false);
 
   fWLSScintYield = new G4UIcmdWithADouble("/LXe/detector/WLSScintYield",this);
   fWLSScintYield->SetGuidance("Set scintillation yield of WLS Slab");
   fWLSScintYield->SetGuidance("Specified in photons/MeV");
+  fWLSScintYield->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWLSScintYield->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,7 +149,6 @@ LXeDetectorMessenger::~LXeDetectorMessenger()
   delete fNxCmd;
   delete fNyCmd;
   delete fNzCmd;
-  delete fUpdateCmd;
   delete fDetectorDir;
   delete fVolumesDir;
   delete fDefaultsCmd;
@@ -160,9 +183,6 @@ void LXeDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
   else if (command == fNzCmd){
     fLXeDetector->SetNZ(fNzCmd->GetNewIntValue(newValue));
-  }
-  else if (command == fUpdateCmd){
-    fLXeDetector->UpdateGeometry();
   }
   else if (command == fDefaultsCmd){
     fLXeDetector->SetDefaults();

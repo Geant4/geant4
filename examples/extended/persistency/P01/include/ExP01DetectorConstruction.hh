@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01DetectorConstruction class
 //
 //
-// $Id$
+// $Id: ExP01DetectorConstruction.hh 71397 2013-06-14 15:05:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,10 +58,10 @@ class ExP01DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
   
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
      
      const 
-     G4VPhysicalVolume* GetTracker() {return physiTracker;};
+     G4VPhysicalVolume* GetTracker() {return fPhysiTracker;};
      G4double GetTrackerFullLength() {return fTrackerLength;};
      G4double GetTargetFullLength()  {return fTargetLength;};
      G4double GetWorldFullLength()   {return fWorldLength;}; 
@@ -72,34 +72,34 @@ class ExP01DetectorConstruction : public G4VUserDetectorConstruction
      
   private:
 
-     G4Box*             solidWorld;    // pointer to the solid envelope 
-     G4LogicalVolume*   logicWorld;    // pointer to the logical envelope
-     G4VPhysicalVolume* physiWorld;    // pointer to the physical envelope
+     G4Box*             fSolidWorld;    // pointer to the solid envelope 
+     G4LogicalVolume*   fLogicWorld;    // pointer to the logical envelope
+     G4VPhysicalVolume* fPhysiWorld;    // pointer to the physical envelope
      
-     G4Box*             solidTarget;   // pointer to the solid Target
-     G4LogicalVolume*   logicTarget;   // pointer to the logical Target
-     G4VPhysicalVolume* physiTarget;   // pointer to the physical Target
+     G4Box*             fSolidTarget;   // pointer to the solid Target
+     G4LogicalVolume*   fLogicTarget;   // pointer to the logical Target
+     G4VPhysicalVolume* fPhysiTarget;   // pointer to the physical Target
                
-     G4Box*             solidTracker;  // pointer to the solid Tracker
-     G4LogicalVolume*   logicTracker;  // pointer to the logical Tracker
-     G4VPhysicalVolume* physiTracker;  // pointer to the physical Tracker
+     G4Box*             fSolidTracker;  // pointer to the solid Tracker
+     G4LogicalVolume*   fLogicTracker;  // pointer to the logical Tracker
+     G4VPhysicalVolume* fPhysiTracker;  // pointer to the physical Tracker
      
-     G4Box*             solidChamber;  // pointer to the solid Chamber
-     G4LogicalVolume*   logicChamber;  // pointer to the logical Chamber
-     G4VPhysicalVolume* physiChamber;  // pointer to the physical Chamber
+     G4Box*             fSolidChamber;  // pointer to the solid Chamber
+     G4LogicalVolume*   fLogicChamber;  // pointer to the logical Chamber
+     G4VPhysicalVolume* fPhysiChamber;  // pointer to the physical Chamber
      
-     G4Material*         TargetMater;  // pointer to the target  material
-     G4Material*         ChamberMater; // pointer to the chamber material     
-     ExP01MagneticField* fpMagField;   // pointer to the magnetic field 
+     G4Material*         fTargetMater;  // pointer to the target  material
+     G4Material*         fChamberMater; // pointer to the chamber material     
+     ExP01MagneticField* fPMagField;   // pointer to the magnetic field 
      
-     ExP01DetectorMessenger* detectorMessenger;  // pointer to the Messenger
+     ExP01DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
        
      G4double fWorldLength;            // Full length of the world volume
      G4double fTargetLength;           // Full length of Target
      G4double fTrackerLength;          // Full length of Tracker
-     G4int    NbOfChambers;            // Nb of chambers in the tracker region
-     G4double ChamberWidth;            // width of the chambers
-     G4double ChamberSpacing;          // distance between chambers
+     G4int    fNbOfChambers;            // Nb of chambers in the tracker region
+     G4double fChamberWidth;            // width of the chambers
+     G4double fChamberSpacing;          // distance between chambers
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

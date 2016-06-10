@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 70759 2013-06-05 12:26:43Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : fDetector(det), fPrimary(prim)
+  : G4UserRunAction(),
+    fDetector(det), fPrimary(prim), fHistoManager(0)
 {
  fHistoManager = new HistoManager(); 
 }
@@ -183,29 +184,59 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << " +- "                   << G4BestUnit( rms,"Length")
          << "\tmassic: "             << G4BestUnit(massicMFP, "Mass/Surface")
          << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
-         << "\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
+         << "\t\tmassic: "           << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
          
+  //cross section per atom (only for single material)
+  //
+  if (material->GetNumberOfElements() == 1) {
+    G4double nbAtoms = material->GetTotNbOfAtomsPerVolume();
+    G4double crossSection = CrossSection/nbAtoms;
+    G4cout << " crossSection per atom:\t"
+           << G4BestUnit(crossSection,"Surface") << G4endl;     
+  }         
   //check cross section from G4HadronicProcessStore
   //
   G4cout << "\n Verification : "
          << "crossSections from G4HadronicProcessStore:";
   
   G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();  
-  G4double sumc = 0.0;  
-  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-    const G4VProcess* process = it->first;
-    G4double xs =
-    store->GetCrossSectionPerVolume(particle,energy,process,material);                   
-    G4double massSigma = xs/density;                                                  
-    sumc += massSigma;
-    G4String procName = process->GetProcessName();    
-    G4cout << "\n    " << procName << "= " 
-           << G4BestUnit(massSigma, "Surface/Mass");
-  }             
-  G4cout << "\n    total = " 
-         << G4BestUnit(sumc, "Surface/Mass") << G4endl;
-         
+  G4double sumc1 = 0.0, sumc2 = 0.0; 
+  if (material->GetNumberOfElements() == 1) {
+    const G4Element* element = material->GetElement(0);
+    for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
+      const G4VProcess* process = it->first;
+      G4double xs1 =
+      store->GetCrossSectionPerVolume(particle,energy,process,material);
+      G4double massSigma = xs1/density;
+      sumc1 += massSigma;      
+      G4double xs2 =
+      store->GetCrossSectionPerAtom(particle,energy,process,element,material);
+      sumc2 += xs2;
+      G4String procName = process->GetProcessName();    
+      G4cout << "\n" << std::setw(20) << procName << "= "
+             << G4BestUnit(massSigma, "Surface/Mass") << "\t"
+             << G4BestUnit(xs2, "Surface");
+      
+    }             
+    G4cout << "\n" << std::setw(20) << "total" << "= "
+           << G4BestUnit(sumc1, "Surface/Mass") << "\t" 
+           << G4BestUnit(sumc2, "Surface") << G4endl;  
+  } else {
+    for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
+      const G4VProcess* process = it->first;
+      G4double xs =
+      store->GetCrossSectionPerVolume(particle,energy,process,material);
+      G4double massSigma = xs/density;
+      sumc1 += massSigma;
+      G4String procName = process->GetProcessName();    
+      G4cout << "\n" << std::setw(20)  << procName << "= " 
+             << G4BestUnit(massSigma, "Surface/Mass");
+    }             
+    G4cout << "\n" << std::setw(20) << "total" << "= " 
+           << G4BestUnit(sumc1, "Surface/Mass") << G4endl;  
+  }
+              
  //nuclear channel count
  //
  G4cout << "\n   List of nuclear reactions: \n" << G4endl;
@@ -227,7 +258,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
    G4cout << "\n" << std::setw(58) << "Number of gamma: N = " 
            << fNbGamma[1] << " --> " << fNbGamma[2] << G4endl;
  }
-       
+
+ G4cout 
+   << "\n   --> NOTE: XXXX because neutronHP is unable to return target nucleus"
+   << G4endl;
+        
  //particles count
  //
  G4cout << "\n   List of generated particles: \n" << G4endl;
@@ -270,7 +305,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   fEmean.clear();  fEmin.clear(); fEmax.clear();  
   
   //save histograms      
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  ////G4double factor = 1./NbOfEvents;
+  ////analysisManager->ScaleH1(3,factor);      
   if ( analysisManager->IsActive() ) {
     analysisManager->Write();
     analysisManager->CloseFile();

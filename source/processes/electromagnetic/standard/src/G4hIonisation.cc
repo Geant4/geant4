@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4hIonisation.cc 71104 2013-06-11 10:21:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -154,11 +154,15 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     G4String pname = part->GetParticleName();
     G4double q = part->GetPDGCharge();
 
+    //G4cout << " G4hIonisation::InitialiseEnergyLossProcess " << pname 
+    //   << "  " << bpart << G4endl;
+
     // standard base particles
     if(part == bpart || pname == "proton" ||
        pname == "anti_proton" || 
        pname == "pi+" || pname == "pi-" || 
-       pname == "kaon+" || pname == "kaon-") 
+       pname == "kaon+" || pname == "kaon-" || pname == "GenericIon"
+       || pname == "He3" || pname == "alpha") 
       { 
 	theBaseParticle = 0;
       }

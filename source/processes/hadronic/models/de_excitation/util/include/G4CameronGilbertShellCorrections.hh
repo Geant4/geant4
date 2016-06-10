@@ -23,88 +23,68 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
+// $Id: G4CameronGilbertShellCorrections.hh 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #ifndef G4CameronGilbertShellCorrections_h
 #define G4CameronGilbertShellCorrections_h 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
 #include "globals.hh"
-
-//#define verbose 1
 
 class G4CameronGilbertShellCorrections
 {
-private:
+public:
 
   G4CameronGilbertShellCorrections();
-  
-  static G4CameronGilbertShellCorrections* theInstance;
-
-
-public:
-  
-  static G4CameronGilbertShellCorrections* GetInstance();
 
   ~G4CameronGilbertShellCorrections();
   
-  G4double GetShellCorrection(const G4int A, const G4int Z) const 
+  inline 
+  G4double GetShellCorrection(G4int A, G4int Z) const 
   {
     return GetShellZ(Z) + GetShellN(A-Z);
   }
 
-  G4double GetShellZ(const G4int Z) const
+  inline 
+  G4double GetShellZ(G4int Z) const
   {
-    if (IsInTableThisZ(Z)) return ShellZTable[Z-ZTableMin]*CLHEP::MeV;
-    else {
-#ifdef verbose
-      G4cerr << "G4CameronGilbertShellCorrections: out of table for Z = " << Z << G4endl;
-#endif
-      return 0.0;
-    }
+    G4double res = 0.0;
+    if (IsInTableThisZ(Z)) { res = ShellZTable[Z-ZTableMin]; }
+    return res;
   }
 
-  G4bool IsInTableThisZ(const G4int Z) const 
+  inline 
+  G4bool IsInTableThisZ(G4int Z) const 
   {
-    if ( Z >= ZTableMin && Z <= ZTableMax ) return true;
-    else return false;
+    return ( Z >= ZTableMin && Z <= ZTableMax );
   }
-
 	
-  G4double GetShellN(const G4int N) const 
+  inline 
+  G4double GetShellN(G4int N) const 
   {
-    if (IsInTableThisN(N)) return ShellNTable[N-NTableMin]*CLHEP::MeV;
-    else {
-#ifdef verbose
-      G4cerr << "G4CameronGilbertShellCorrections: out of table for N = " << N << G4endl;
-#endif
-      return 0.0;
-    }
+    G4double res = 0.0;
+    if (IsInTableThisN(N)) { res = ShellNTable[N-NTableMin]; }
+    return res;
   }
   
-  G4bool IsInTableThisN(const G4int N) const 
+  inline 
+  G4bool IsInTableThisN(G4int N) const 
   {
-    if ( N >= NTableMin && N <= NTableMax ) return true;
-    else return false;
+    return ( N >= NTableMin && N <= NTableMax );
   }
-  
-  
 
   enum  { ZTableSize = 88, NTableSize = 140, ZTableMin = 11, ZTableMax = 98,
 	  NTableMin = 11, NTableMax = 150 };
 
 private:
 
-  
-  
-  static const G4double ShellZTable[ZTableSize];
-  
-  static const G4double ShellNTable[NTableSize];
+  static G4double ShellZTable[ZTableSize];  
+  static G4double ShellNTable[NTableSize];
 	
 };
 #endif

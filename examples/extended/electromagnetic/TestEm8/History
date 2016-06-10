@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2010-11-19 11:42:28 vnivanch Exp $
+$Id: History 77094 2013-11-21 10:51:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-05-13 V.Ivant (testem8-V09-06-03)
+- PhysicsList - substituted obsolete G4PAIPhotonMOdel by G4PAIPhotModel 
+
+08-05-13 V.Ivant (testem8-V09-06-02)
+- PhysicsList - fixed typo in PhysicsList::SetCutForProton
+
+13-02-13 I.Hrivnacova (testem8-V09-06-01)
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+08-02-13 V.Ivant (testem8-V09-06-00)
+- Stacking action and its messenge are added allowing to kill
+   secondary electrons inside GasDetector region and add this
+   energy to total energy deposit; by default this option is off
+- HistoManager - a histogram is added for energy deposition in units
+   of ADC counts and an extra UI command "/testem/setEnergyPerChannel"
 
 12-10-12 V.Ivant (testem8-V09-05-09)
 - Migration to the updated analysis tool

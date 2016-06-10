@@ -49,6 +49,16 @@ G4MuElecElasticModel::G4MuElecElasticModel(const G4ParticleDefinition*,
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
+  
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The name of the class G4MuElecElasticModel is changed to G4MicroElecElasticModel. " << G4endl;
+   G4cout << "   The obsolete class will be REMOVED with the next release of Geant4. " << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
+   
   nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
 
   killBelowEnergy = 16.7 * eV; // Minimum e- energy for energy loss by excitation
@@ -125,7 +135,7 @@ void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
   
   G4double scaleFactor = 1e-18 * cm * cm;
 
-  G4String fileElectron("muelec/sigma_elastic_e_Si");
+  G4String fileElectron("microelec/sigma_elastic_e_Si");
 
   G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
   G4String electron;
@@ -151,11 +161,11 @@ void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
     }
 
     std::ostringstream eFullFileName;
-    eFullFileName << path << "/muelec/sigmadiff_elastic_e_Si.dat";
+    eFullFileName << path << "/microelec/sigmadiff_elastic_e_Si.dat";
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
      
     if (!eDiffCrossSection) 
-	G4Exception("G4MuElecElasticModel::Initialise","em0003",FatalException,"Missing data file: /muelec/sigmadiff_elastic_e_Si.dat");
+	G4Exception("G4MuElecElasticModel::Initialise","em0003",FatalException,"Missing data file: /microelec/sigmadiff_elastic_e_Si.dat");
       
     eTdummyVec.push_back(0.);
 

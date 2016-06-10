@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4SeltzerBergerModel.hh 74458 2013-10-07 15:23:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -70,6 +70,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
@@ -82,9 +84,11 @@ protected:
 
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
+  virtual G4String DirectoryPath() const;
+
 private:
 
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(G4int Z, const char* path = 0);
 
   // hide assignment operator
   G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right);
@@ -94,6 +98,8 @@ private:
   static G4double ylimit[101];
   static G4double expnumlim;
   G4int  nwarn;
+  size_t idx;
+  size_t idy;
   G4bool useBicubicInterpolation;
 };
 

@@ -175,9 +175,7 @@ private:
   G4LogicalVolume*   logicOptic;
   G4VPhysicalVolume* physiOptic;
 
-  G4Sphere*          solidGrain;
   G4LogicalVolume*   logicGrain;
-  G4VPhysicalVolume* physiGrain;
 
   //materials management
   XrayFluoNistMaterials* materials;
@@ -187,7 +185,6 @@ private:
   G4Material*        OhmicNegMaterial; 
   G4Material*           pixelMaterial;
   G4Material*         mercuryMaterial;
-  G4Material*           opticMaterial;
   //  G4Material*        Dia3Material;
   G4Material*         defaultMaterial;
 
@@ -217,8 +214,6 @@ private:
   G4double           sunDia;
 
   G4double           mercurySunDistance;
-
-  G4double           grainDia;
 
   G4double           ThetaHPGe;
   

@@ -27,7 +27,7 @@
 /// \brief Definition of the G03ColorReader class
 //
 //
-// $Id$
+// $Id: G03ColorReader.hh 69987 2013-05-21 12:33:52Z gcosmo $
 //
 //
 // class G03ColorReader
@@ -60,7 +60,7 @@ class G03ColorReader : public G4GDMLReadStructure
 
  protected:
 
-   void VolumeRead(const xercesc::DOMElement* const);
+   virtual void VolumeRead(const xercesc::DOMElement* const);
 
  private:
 

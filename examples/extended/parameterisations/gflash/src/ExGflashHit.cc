@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: ExGflashHit.cc 72372 2013-07-16 14:30:39Z gcosmo $
+//
 /// \file parameterisations/gflash/src/ExGflashHit.cc
 /// \brief Implementation of the ExGflashHit class
 //
@@ -35,13 +37,13 @@
 #include "G4LogicalVolume.hh"
 #include "G4ios.hh"
 
-G4Allocator<ExGflashHit>ExGflashHitAllocator;
+G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator=0;
 
 ExGflashHit::ExGflashHit()
-{pLogV=NULL;}
+{fLogV=NULL;}
 
 ExGflashHit::ExGflashHit(G4LogicalVolume* logVol)
-:pLogV(logVol)
+:fLogV(logVol)
 {;}
 
 ExGflashHit::~ExGflashHit()
@@ -51,30 +53,30 @@ ExGflashHit::ExGflashHit(const ExGflashHit &right)
 :G4VHit()
 //@@@ ExGflashHit:Is it right with the init?
 {
-  edep = right.edep;
-  pos = right.pos; 
-  start =right.start; 
-  rot = right.rot;
-  pLogV = right.pLogV;
-  crystalnumber = right.crystalnumber;
+  fEdep = right.fEdep;
+  fPos = right.fPos; 
+  fStart =right.fStart; 
+  fRot = right.fRot;
+  fLogV = right.fLogV;
+  fCrystalNumber = right.fCrystalNumber;
 }
 
 const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
 {
-  edep = right.edep;
-  start =right.start; 
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
-  crystalnumber = right.crystalnumber;
-  crystalnumber = right.crystalnumber;
+  fEdep = right.fEdep;
+  fStart =right.fStart; 
+  fPos = right.fPos;
+  fRot = right.fRot;
+  fLogV = right.fLogV;
+  fCrystalNumber = right.fCrystalNumber;
+  fCrystalNumber = right.fCrystalNumber;
   return *this;
 }
 
 int ExGflashHit::operator==(const ExGflashHit &right) const
 {
 // @@@@ return 0;
-  if ((pos==right.pos) &&  (edep == right.edep)) return true;
+  if ((fPos==right.fPos) &&  (fEdep == right.fEdep)) return true;
   else return false;
   
 }
@@ -84,15 +86,15 @@ void ExGflashHit::Draw()
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Transform3D trans(rot,pos);
+    G4Transform3D trans(fRot,fPos);
     G4VisAttributes attribs;
-    const G4VisAttributes* pVA = pLogV->GetVisAttributes();
+    const G4VisAttributes* pVA = fLogV->GetVisAttributes();
     if(pVA) attribs = *pVA;
     G4Colour colour(1.,0.,0.);
     attribs.SetColour(colour);
     attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
-    pVVisManager->Draw(*pLogV,attribs,trans);
+    pVVisManager->Draw(*fLogV,attribs,trans);
   }
 }
 

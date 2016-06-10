@@ -26,27 +26,24 @@
 /// \file eventgenerator/HepMC/HepMCEx01/HepMCEx01.cc
 /// \brief Main program of the eventgenerator/HepMC/HepMCEx01 example
 //
+// $Id: HepMCEx01.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
-// $Id$
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 // --------------------------------------------------------------
 //      GEANT 4 - example derived from novice exampleN04
 // --------------------------------------------------------------
 
+#include "FTFP_BERT.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
 #include "ExN04DetectorConstruction.hh"
-#include "FTFP_BERT.hh"
+#include "ExN04EventAction.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "ExN04RunAction.hh"
-#include "ExN04EventAction.hh"
 #include "ExN04StackingAction.hh"
-#include "ExN04TrackingAction.hh"
 #include "ExN04SteppingAction.hh"
 #include "ExN04SteppingVerbose.hh"
+#include "ExN04TrackingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -62,7 +59,7 @@ int main(int argc,char** argv)
   //
   G4VSteppingVerbose* verbosity = new ExN04SteppingVerbose;
   G4VSteppingVerbose::SetInstance(verbosity);
-  
+
   // Run manager
   //
   G4RunManager* runManager = new G4RunManager;
@@ -74,7 +71,7 @@ int main(int argc,char** argv)
   //
   G4VUserPhysicsList* physics = new FTFP_BERT;
   runManager->SetUserInitialization(physics);
-  
+
   runManager->Initialize();
 
   // User Action classes
@@ -83,7 +80,7 @@ int main(int argc,char** argv)
   runManager->SetUserAction(gen_action);
   //
   G4UserRunAction* run_action = new ExN04RunAction;
-  runManager->SetUserAction(run_action);  
+  runManager->SetUserAction(run_action);
   //
   G4UserEventAction* event_action = new ExN04EventAction;
   runManager->SetUserAction(event_action);
@@ -96,15 +93,15 @@ int main(int argc,char** argv)
   //
   G4UserSteppingAction* stepping_action = new ExN04SteppingAction;
   runManager->SetUserAction(stepping_action);
-  
+
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
-  //get the pointer to the User Interface manager   
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (argc!=1)   // batch mode
     {
@@ -113,7 +110,7 @@ int main(int argc,char** argv)
 #endif
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);
     }
   else
     {  // interactive mode : define UI session
@@ -136,4 +133,3 @@ int main(int argc,char** argv)
 
   return 0;
 }
-

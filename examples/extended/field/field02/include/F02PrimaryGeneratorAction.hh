@@ -26,51 +26,53 @@
 /// \file field/field02/include/F02PrimaryGeneratorAction.hh
 /// \brief Definition of the F02PrimaryGeneratorAction class
 //
-// $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: F02PrimaryGeneratorAction.hh 77893 2013-11-29 08:57:22Z gcosmo $
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02PrimaryGeneratorAction_h
 #define F02PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
-class F02DetectorConstruction;
-class F02PrimaryGeneratorMessenger;
 class G4ParticleGun;
 class G4Event;
+class F02DetectorConstruction;
+class F02PrimaryGeneratorMessenger;
+class G4ParticleDefinition;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    F02PrimaryGeneratorAction(F02DetectorConstruction*);    
-    ~F02PrimaryGeneratorAction();
+    F02PrimaryGeneratorAction(F02DetectorConstruction*);
+    virtual ~F02PrimaryGeneratorAction();
 
   public:
     virtual void GeneratePrimaries(G4Event*);
-    void SetRndmFlag(G4String val) { fRndmFlag = val;}
+    void SetRndmFlag(G4String val) { fRndmFlag = val; }
     void SetXVertex(G4double x);
     void SetYVertex(G4double y);
     void SetZVertex(G4double z);
 
-    static G4String GetPrimaryName() ;                
+    static G4String GetPrimaryName();
 
   private:
-    static G4String fgPrimaryParticleName ;
+    G4ParticleGun*                fParticleGun; //pointer a to G4 service class
+    F02DetectorConstruction*      fDetector;    //pointer to the geometry
 
-    G4ParticleGun*                fParticleGun;// pointer a to G4 service class
-    F02DetectorConstruction*      fDetector;   // pointer to the geometry
-    
-    F02PrimaryGeneratorMessenger* fMessenger;  // messenger of this class
-    G4String                      fRndmFlag;   // flag for a random impact point       
+    F02PrimaryGeneratorMessenger* fGunMessenger; //messenger of this class
+    G4String                      fRndmFlag;     //flag for random impact point
 
+    static G4ParticleDefinition* fgPrimaryParticle;
     G4double fXVertex, fYVertex, fZVertex;
-    G4bool fVertexDefined ;
+    G4bool fVertexDefined;
+
 };
 
 #endif

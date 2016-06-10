@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TwistTubsSide.cc 72937 2013-08-14 13:20:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -474,7 +474,7 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
       }
    }
    
-   static const G4double halftol = 0.5 * kCarTolerance; 
+   const G4double halftol = 0.5 * kCarTolerance; 
 
    G4ThreeVector  p       = ComputeLocalPoint(gp);
    G4ThreeVector  xx;
@@ -693,7 +693,7 @@ G4double G4TwistTubsSide::DistanceToPlane(const G4ThreeVector &p,
                                                  G4ThreeVector &xx,
                                                  G4ThreeVector &n)
 {
-   static const G4double halftol = 0.5 * kCarTolerance;
+   const G4double halftol = 0.5 * kCarTolerance;
    
    G4ThreeVector M = 0.5*(A + B);
    G4ThreeVector N = 0.5*(C + D);
@@ -755,7 +755,7 @@ G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector &xx,
    // We must use the function in local coordinate system.
    // See the description of DistanceToSurface(p,v).
    
-   static const G4double ctol = 0.5 * kCarTolerance;
+   const G4double ctol = 0.5 * kCarTolerance;
    G4int areacode = sInside;
    
    if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {

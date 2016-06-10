@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GeometryManager.hh 66872 2013-01-15 01:25:57Z japost $
 //
 // class G4GeometryManager
 //
@@ -89,7 +89,7 @@ class G4GeometryManager
     void DeleteOptimisations(G4VPhysicalVolume* vol);
     static void ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
                                   G4double totalCpuTime );
-    static G4GeometryManager* fgInstance;
+    static G4ThreadLocal G4GeometryManager* fgInstance;
     G4bool fIsClosed;
 };
 

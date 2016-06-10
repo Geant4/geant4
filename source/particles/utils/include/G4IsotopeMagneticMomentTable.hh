@@ -35,7 +35,8 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // HISTORY
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////// IsomerLevel is added                         30 Apr. 2013  H.Kurashige
+
 //
 #include "globals.hh"
 #include "G4IsotopeProperty.hh"
@@ -84,12 +85,16 @@ public:
   // implementation, instead we use the next function.
   //
   virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E);
+  virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl=0);
   //
   //   again it will replace the pure virtual one in the abstract base class.
   //
   //   Z: Atomic Number
   //   A: Atomic Mass
   //   E: Excitaion energy
+  //    or
+  //    G4int  level: isomer level
+  // 
 
 private:
   G4int GetVerboseLevel() const;

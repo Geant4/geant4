@@ -26,6 +26,8 @@
 /// \file persistency/P02/src/ExP02DetectorConstruction.cc
 /// \brief Implementation of the ExP02DetectorConstruction class
 //
+// $Id: ExP02DetectorConstruction.cc 71727 2013-06-21 07:55:45Z gcosmo $
+//
 //
 #include "ExP02DetectorConstruction.hh"
 
@@ -49,7 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP02DetectorConstruction::ExP02DetectorConstruction()
- :  fExperimentalHall_log(0), fTracker_log(0),
+  :  G4VUserDetectorConstruction(),
+    fExperimentalHall_log(0), fTracker_log(0),
     fCalorimeterBlock_log(0), fCalorimeterLayer_log(0),
     fExperimentalHall_phys(0), fCalorimeterLayer_phys(0),
     fCalorimeterBlock_phys(0), fTracker_phys(0)

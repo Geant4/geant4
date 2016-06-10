@@ -27,7 +27,7 @@
 /// \brief Implementation of the B02PVolumeStore class
 //
 //
-// $Id$
+// $Id: B02PVolumeStore.cc 77475 2013-11-25 09:38:51Z gcosmo $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -43,8 +43,15 @@
 
 #include "G4VPhysicalVolume.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B02PVolumeStore::B02PVolumeStore(){}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B02PVolumeStore::~B02PVolumeStore(){}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 void B02PVolumeStore::AddPVolume(const G4GeometryCell &cell){
 
@@ -60,6 +67,8 @@ void B02PVolumeStore::AddPVolume(const G4GeometryCell &cell){
 
     
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4VPhysicalVolume *B02PVolumeStore::
 GetPVolume(const G4String &name) const {
@@ -77,6 +86,8 @@ GetPVolume(const G4String &name) const {
   }
   return pvol;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String B02PVolumeStore::GetPNames() const {
   G4String NameString;
@@ -96,3 +107,10 @@ G4String B02PVolumeStore::GetPNames() const {
   }
   return NameString;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int B02PVolumeStore::Size() {
+  return fSetGeometryCell.size();
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

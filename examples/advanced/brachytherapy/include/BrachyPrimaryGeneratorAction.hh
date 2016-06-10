@@ -24,43 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: BrachyPrimaryGeneratorAction.hh 74021 2013-09-19 13:41:54Z gcosmo $
 //
 //    ********************************************
 //    *                                          *
 //    *      BrachyPrimaryGeneratorAction.hh     *
 //    *                                          *
 //    ********************************************
-
-// This class must be implemented because it is mandatory
+// 
+// code developed by Susanna Guatelli
 
 #ifndef BrachyPrimaryGeneratorAction_h
 #define BrachyPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-class G4ParticleGun;
-class G4Run;
-class G4Event;
+class G4GeneralParticleSource;
 class BrachyAnalysisManager;
-class BrachyFactory;
-class  BrachyPrimaryGeneratorMessenger;
 
 class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:
-   BrachyPrimaryGeneratorAction();
+   BrachyPrimaryGeneratorAction(BrachyAnalysisManager*);
    ~BrachyPrimaryGeneratorAction();
 
  public:
   void GeneratePrimaries(G4Event* anEvent);
-  void SwitchEnergy(G4String);
 
-private:
-  BrachyFactory* factory;
-  BrachyPrimaryGeneratorMessenger* primaryMessenger;
+ private:
+  G4GeneralParticleSource* gun;
+  BrachyAnalysisManager* analysis;
 };
-
 #endif
-
-

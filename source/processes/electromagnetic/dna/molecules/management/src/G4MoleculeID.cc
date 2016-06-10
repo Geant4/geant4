@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeID.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4MoleculeID.cc 71827 2013-06-25 15:58:24Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -36,5 +36,4 @@
 
 #include "G4MoleculeID.hh"
 
-int G4MoleculeID::fLastValue(0);
-G4MoleculeID gStartCounter(G4MoleculeID::Initialize(999666999));
+G4ThreadLocal int G4MoleculeID::fLastValue(999666999);

@@ -39,7 +39,7 @@
 #include "G4VHCIOentry.hh"
 #include "G4VDCIOentry.hh"
 
-G4PersistencyCenter* G4PersistencyCenter::f_thePointer=G4PersistencyCenter::GetPersistencyCenter();
+G4ThreadLocal G4PersistencyCenter* G4PersistencyCenter::f_thePointer = 0 ;
 
 // Implementation of Constructor #1
 G4PersistencyCenter::G4PersistencyCenter()
@@ -176,8 +176,6 @@ void G4PersistencyCenter::SetRetrieveMode(std::string objName, G4bool mode)
 // Implementation of CurrentStoreMode
 StoreMode G4PersistencyCenter::CurrentStoreMode(std::string objName)
 {
-
-
   if ( (*(f_writeFileName.find(objName))).second != "" ) {
     return f_writeFileMode[objName];
   } else {
@@ -422,4 +420,3 @@ std::string G4PersistencyCenter::PadString(std::string name, unsigned int width)
 }
 
 // End of G4PersistencyCenter.cc
-

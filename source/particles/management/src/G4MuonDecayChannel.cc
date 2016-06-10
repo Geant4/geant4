@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4MuonDecayChannel.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -131,23 +131,23 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4MuonDecayChannel::DecayIt ";
 #endif
 
-  if (parent == 0) FillParent();  
-  if (daughters == 0) FillDaughters();
+  if (G4MT_parent == 0) FillParent();  
+  if (G4MT_daughters == 0) FillDaughters();
  
   // parent mass
-  G4double parentmass = parent->GetPDGMass();
+  G4double parentmass = G4MT_parent->GetPDGMass();
 
   //daughters'mass
   G4double daughtermass[3]; 
   G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<3; index++){
-    daughtermass[index] = daughters[index]->GetPDGMass();
+    daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
 
    //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
@@ -196,7 +196,7 @@ do {
 
   direction0 *= rot;
 
-  G4DynamicParticle * daughterparticle = new G4DynamicParticle ( daughters[0],	 direction0 * daughtermomentum[0]);
+  G4DynamicParticle * daughterparticle = new G4DynamicParticle ( G4MT_daughters[0],	 direction0 * daughtermomentum[0]);
 
   products->PushProducts(daughterparticle);
   
@@ -207,7 +207,7 @@ do {
 
   direction1 *= rot;
 
-  G4DynamicParticle * daughterparticle1 = new G4DynamicParticle ( daughters[1],	 direction1 * daughtermomentum[1]);
+  G4DynamicParticle * daughterparticle1 = new G4DynamicParticle ( G4MT_daughters[1],	 direction1 * daughtermomentum[1]);
   products->PushProducts(daughterparticle1);
 
   //muonnic neutrino 2
@@ -217,7 +217,7 @@ do {
 
   direction2 *= rot;
 
-  G4DynamicParticle * daughterparticle2 = new G4DynamicParticle ( daughters[2],
+  G4DynamicParticle * daughterparticle2 = new G4DynamicParticle ( G4MT_daughters[2],
 	 direction2 * daughtermomentum[2]);
   products->PushProducts(daughterparticle2);
 

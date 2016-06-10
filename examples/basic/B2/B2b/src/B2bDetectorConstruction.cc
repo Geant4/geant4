@@ -31,7 +31,6 @@
 #include "B2bDetectorConstruction.hh"
 #include "B2bDetectorMessenger.hh"
 #include "B2bChamberParameterisation.hh"
-#include "B2MagneticField.hh"
 #include "B2TrackerSD.hh"
 
 #include "G4Material.hh"
@@ -42,8 +41,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
-
-#include "G4SDManager.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
 #include "G4GeometryTolerance.hh"
 #include "G4GeometryManager.hh"
@@ -55,28 +54,27 @@
 
 #include "G4SystemOfUnits.hh"
 
-//#include "G4ios.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal 
+G4GlobalMagFieldMessenger* B2bDetectorConstruction::fMagFieldMessenger = 0;
  
 B2bDetectorConstruction::B2bDetectorConstruction()
-: 
+:G4VUserDetectorConstruction(),
  fLogicTarget(NULL), fLogicChamber(NULL), 
  fTargetMaterial(NULL), fChamberMaterial(NULL), 
- fStepLimit(NULL),
+ fStepLimit(NULL), 
  fCheckOverlaps(true)
 {
   fMessenger = new B2bDetectorMessenger(this);
-  fMagField  = new B2MagneticField();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 B2bDetectorConstruction::~B2bDetectorConstruction()
 {
-  delete fMagField;
   delete fStepLimit;
-  delete fMessenger;             
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,16 +96,14 @@ void B2bDetectorConstruction::DefineMaterials()
 
   G4NistManager* nistManager = G4NistManager::Instance();
 
-  G4bool fromIsotopes = false;
-
   // Air defined using NIST Manager
-  nistManager->FindOrBuildMaterial("G4_AIR", fromIsotopes);
+  nistManager->FindOrBuildMaterial("G4_AIR");
   
   // Lead defined using NIST Manager
-  fTargetMaterial  = nistManager->FindOrBuildMaterial("G4_Pb", fromIsotopes);
+  fTargetMaterial  = nistManager->FindOrBuildMaterial("G4_Pb");
 
   // Xenon gas defined using NIST Manager
-  fChamberMaterial = nistManager->FindOrBuildMaterial("G4_Xe", fromIsotopes);
+  fChamberMaterial = nistManager->FindOrBuildMaterial("G4_Xe");
 
   // Print materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -242,14 +238,6 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
          << fChamberMaterial->GetName() << "\nThe distance between chamber is "
          << chamberSpacing/cm << " cm" << G4endl;
 
-  // Sensitive detectors
-
-  G4String trackerChamberSDname = "B2/TrackerChamberSD";
-  B2TrackerSD* aTrackerSD = new B2TrackerSD(trackerChamberSDname,
-                                            "TrackerHitsCollection");
-  G4SDManager::GetSDMpointer()->AddNewDetector( aTrackerSD );
-  fLogicChamber->SetSensitiveDetector( aTrackerSD );
-
   // Visualization attributes
 
   G4VisAttributes* boxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
@@ -286,13 +274,34 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
+void B2bDetectorConstruction::ConstructSDandField()
+{
+  // Sensitive detectors
+
+  G4String trackerChamberSDname = "B2/TrackerChamberSD";
+  B2TrackerSD* aTrackerSD = new B2TrackerSD(trackerChamberSDname,
+                                            "TrackerHitsCollection");
+  SetSensitiveDetector( fLogicChamber,  aTrackerSD );
+
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
+  
+  // Register the field messenger for deleting
+  G4AutoDelete::Register(fMagFieldMessenger);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void B2bDetectorConstruction::SetTargetMaterial(G4String materialName)
 {
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
 
   G4Material* pttoMaterial =
-              nistManager->FindOrBuildMaterial(materialName, fromIsotopes);
+              nistManager->FindOrBuildMaterial(materialName);
 
   if (fTargetMaterial != pttoMaterial) {
      if ( pttoMaterial ) {
@@ -311,10 +320,9 @@ void B2bDetectorConstruction::SetTargetMaterial(G4String materialName)
 void B2bDetectorConstruction::SetChamberMaterial(G4String materialName)
 {
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
 
   G4Material* pttoMaterial =
-              nistManager->FindOrBuildMaterial(materialName, fromIsotopes);
+              nistManager->FindOrBuildMaterial(materialName);
 
   if (fChamberMaterial != pttoMaterial) {
      if ( pttoMaterial ) {
@@ -330,13 +338,6 @@ void B2bDetectorConstruction::SetChamberMaterial(G4String materialName)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void B2bDetectorConstruction::SetMagField(G4double fieldValue)
-{
-  fMagField->SetMagFieldValue(fieldValue);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void B2bDetectorConstruction::SetMaxStep(G4double maxStep)
 {
   if ((fStepLimit)&&(maxStep>0.)) fStepLimit->SetMaxAllowedStep(maxStep);

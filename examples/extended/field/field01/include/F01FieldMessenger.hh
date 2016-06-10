@@ -27,17 +27,15 @@
 /// \brief Definition of the F01FieldMessenger class
 //
 //
-// $Id$
+// $Id: F01FieldMessenger.hh 76248 2013-11-08 11:19:52Z gcosmo $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01FieldMessenger_h
 #define F01FieldMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
 
 class F01FieldSetup;
@@ -46,19 +44,20 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01FieldMessenger: public G4UImessenger
 {
   public:
     F01FieldMessenger(F01FieldSetup* );
-    ~F01FieldMessenger();
-    
+    virtual ~F01FieldMessenger();
+ 
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+ 
   private:
 
     F01FieldSetup*             fEMfieldSetup;
-    
+
     G4UIdirectory*             fFieldDir;
 
     G4UIcmdWithAnInteger*      fStepperCmd;

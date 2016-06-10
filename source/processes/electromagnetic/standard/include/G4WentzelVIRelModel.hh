@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WentzelVIRelModel.hh 66592 2012-12-23 09:34:55Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -86,7 +86,7 @@ public:
 					      G4double cut = DBL_MAX,
 					      G4double emax= DBL_MAX);
 
-  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*, 
+  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
 					  G4double safety);
 
   virtual G4double ComputeTruePathLengthLimit(const G4Track& track,

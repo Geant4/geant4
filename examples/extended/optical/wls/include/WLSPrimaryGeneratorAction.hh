@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSPrimaryGeneratorAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSPrimaryGeneratorAction.hh
 /// \brief Definition of the WLSPrimaryGeneratorAction class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,11 +53,11 @@ class WLSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
 
     WLSPrimaryGeneratorAction(WLSDetectorConstruction*);
-    ~WLSPrimaryGeneratorAction();
+    virtual ~WLSPrimaryGeneratorAction();
 
   public:
 
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
     void BuildEmissionSpectrum();
 
@@ -68,22 +67,20 @@ class WLSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   protected:
 
-    G4PhysicsTable* theIntegralTable;
+    G4PhysicsTable* fIntegralTable;
 
   private:
 
     void SetOptPhotonPolar();
     void SetOptPhotonTime();
  
-    WLSDetectorConstruction*   detector;
-    G4GeneralParticleSource*   particleGun;
-    WLSPrimaryGeneratorMessenger* gunMessenger;
+    WLSDetectorConstruction*   fDetector;
+    G4GeneralParticleSource*   fParticleGun;
+    WLSPrimaryGeneratorMessenger* fGunMessenger;
 
-    static G4bool first;
+    static G4bool fFirst;
 
-    G4AffineTransform global2local;
-
-    G4double timeConstant;
+    G4double fTimeConstant;
 
 };
 

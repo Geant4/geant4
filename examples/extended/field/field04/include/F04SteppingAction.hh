@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04SteppingAction.hh 68021 2013-03-13 13:36:07Z gcosmo $
+//
 /// \file field/field04/include/F04SteppingAction.hh
 /// \brief Definition of the F04SteppingAction class
 //
-//
+
 #ifndef F04SteppingAction_h
 #define F04SteppingAction_h 1
 

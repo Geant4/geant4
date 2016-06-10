@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 //
@@ -76,6 +75,10 @@ class G4NeutronHPFissionData : public G4VCrossSectionDataSet
 
       void DumpPhysicsTable(const G4ParticleDefinition&);
    
+   public:
+      G4int GetVerboseLevel() const;
+      void SetVerboseLevel( G4int );
+
    private:
    
       G4PhysicsTable * theCrossSections;

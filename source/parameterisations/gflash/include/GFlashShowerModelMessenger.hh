@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: GFlashShowerModelMessenger.hh 68057 2013-03-13 14:46:00Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -67,7 +67,6 @@ class GFlashShowerModelMessenger: public G4UImessenger
 
     GFlashShowerModel* myModel;
     G4UIdirectory*   myParaDir;
-    G4UIcmdWithAString*  SwitchCmd;
     G4UIcmdWithAnInteger*  FlagCmd;
     G4UIcmdWithAnInteger*  ContCmd; // Containment Check
     G4UIcmdWithADouble*   StepInX0Cmd;

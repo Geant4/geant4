@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIdirectory.hh 74098 2013-09-22 16:05:49Z gcosmo $
 //
 //
 
@@ -41,8 +41,8 @@
 class G4UIdirectory : public G4UIcommand
 {
   public: // with description
-    G4UIdirectory(char * theCommandPath);
-    G4UIdirectory(const char * theCommandPath);
+    G4UIdirectory(char * theCommandPath,G4bool commandsToBeBroadcasted = true);
+    G4UIdirectory(const char * theCommandPath,G4bool commandsToBeBroadcasted = true);
     // Constructors. The argument is a full path directory which
     // starts and ends with "/".
 };

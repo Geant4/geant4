@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NavigationHistory.hh 75578 2013-11-04 12:03:33Z gcosmo $
 //
 // class G4NavigationHistory
 //
@@ -43,15 +43,17 @@
 #define G4NAVIGATIONHISTORY_HH
 
 #include <assert.h>
-#include "geomdefs.hh"
+#include <vector>
+#include <iostream>
 
+#include "geomdefs.hh"
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4NavigationLevel.hh"
-#include "G4EnhancedVecAllocator.hh"
 
-#include <vector>
-#include <iostream>
+#if (defined(G4MULTITHREADED) || !defined(WIN32))
+  #include "G4EnhancedVecAllocator.hh"
+#endif
 
 class G4NavigationHistory
 {
@@ -140,13 +142,13 @@ class G4NavigationHistory
 
  private:
 
-#ifdef WIN32
+#if defined(WIN32)
   std::vector<G4NavigationLevel> fNavHistory;
 #else
   std::vector<G4NavigationLevel,
               G4EnhancedVecAllocator<G4NavigationLevel> > fNavHistory;
-    // The geometrical tree; uses specialized allocator to optimize
-    // memory handling and reduce possible fragmentation
+    // The geometrical tree; uses specialized allocator to optimize memory
+    // handling, reduce possible fragmentation and use of malloc in MT mode
 #endif
 
   G4int fStackDepth;

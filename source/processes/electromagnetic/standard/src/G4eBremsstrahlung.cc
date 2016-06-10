@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eBremsstrahlung.cc 75582 2013-11-04 12:13:01Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +77,6 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
-#include "G4eBremsstrahlungModel.hh"
 #include "G4SeltzerBergerModel.hh"
 #include "G4eBremsstrahlungRelModel.hh"
 #include "G4UnitsTable.hh"

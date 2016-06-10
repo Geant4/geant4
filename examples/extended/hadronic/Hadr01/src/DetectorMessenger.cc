@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.cc 77255 2013-11-22 10:09:14Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -56,7 +56,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:fDetector(Det)
+: G4UImessenger(), fDetector(Det),
+  fTestDir(0),
+  fMatCmd(0),
+  fMat1Cmd(0),
+  fRCmd(0),
+  fLCmd(0),
+  fEdepCmd(0),
+  fBinCmd(0),
+  fNOfAbsCmd(0),
+  fVerbCmd(0),
+  fBeamCmd(0)
 {
   fTestDir = new G4UIdirectory("/testhadr/");
   fTestDir->SetGuidance(" Hadronic Extended Example.");
@@ -102,12 +112,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fEdepCmd->SetRange("edep>0");
   fEdepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testhadr/Update",this);
-  fUpdateCmd->SetGuidance("Update geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s)");
-  fUpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fBeamCmd = new G4UIcmdWithABool("/testhadr/DefaultBeamPosition",this);
   fBeamCmd->SetGuidance("show inelastic and elastic cross sections");
 
@@ -127,7 +131,6 @@ DetectorMessenger::~DetectorMessenger()
   delete fLCmd;
   delete fBinCmd;
   delete fNOfAbsCmd;
-  delete fUpdateCmd;
   delete fTestDir;
   delete fBeamCmd;
   delete fVerbCmd;
@@ -157,8 +160,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     h->SetDefaultBeamPositionFlag(fBeamCmd->GetNewBoolValue(newValue));
   } else if (command == fEdepCmd) {
     h->SetMaxEnergyDeposit(fEdepCmd->GetNewDoubleValue(newValue));
-  } else if( command == fUpdateCmd ) {
-    fDetector->UpdateGeometry();
   }
 }
 

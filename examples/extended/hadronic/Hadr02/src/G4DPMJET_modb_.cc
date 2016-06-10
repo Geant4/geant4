@@ -36,6 +36,8 @@
 /// \file hadronic/Hadr02/src/G4DPMJET_modb_.cc
 /// \brief Implementation of the G4DPMJET_modb_ class
 //
+// $Id: G4DPMJET_modb_.cc 77519 2013-11-25 10:54:57Z gcosmo $
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET_modb_.cc
@@ -55,6 +57,9 @@
 
 #include "globals.hh"
 #include "G4GlaubAADataSetHandler.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 
 extern "C" void g4dpmjet_modb_ (G4double &v, G4double &b)
 {

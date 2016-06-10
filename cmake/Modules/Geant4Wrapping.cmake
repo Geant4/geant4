@@ -4,13 +4,13 @@
 # This is yet to be implemented although the general structure is in place
 #
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Optional build of Python wrappers (Geant4Py)
 # -> Requires Global/Shared library build of Geant4
 # -> Requires Boost.Python and Python libraries
 #
 #include(CMakeDependentOption)
-#CMAKE_DEPENDENT_OPTION(GEANT4_WRAP_PYTHON "Build Geant4 Python Wrapping Interface" OFF "NOT GEANT4_BUILD_GRANULAR_LIBS;BUILD_SHARED_LIBS" OFF)
+#cmake_dependent_option(GEANT4_WRAP_PYTHON "Build Geant4 Python Wrapping Interface" OFF "NOT GEANT4_BUILD_GRANULAR_LIBS;BUILD_SHARED_LIBS" OFF)
 #if(GEANT4_WRAP_PYTHON)
     # We need Boost.Python and Python
     # NB: Watch for FindPythonLibs picking up the static version...

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DynamicParticle.cc 72152 2013-07-11 12:49:58Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -71,7 +71,7 @@
 #include "G4IonTable.hh"
 #include "G4PrimaryParticle.hh"
 
-G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
+G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator = 0;
 
 static const G4double EnergyMomentumRelationAllowance = keV;
 
@@ -90,7 +90,9 @@ G4DynamicParticle::G4DynamicParticle():
                    thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1),
 		   primaryParticle(0),
-                   thePDGcode(0) {}
+                   thePDGcode(0)
+{
+}
 
 ////////////////////
 // -- constructors ----
@@ -111,7 +113,9 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
                    thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1),
 		   primaryParticle(0),
-                   thePDGcode(0) {}
+                   thePDGcode(0)
+{
+}
 
 ////////////////////
 G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
@@ -130,8 +134,7 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   primaryParticle(0),
                    thePDGcode(0)
 {
-  // 3-dim momentum is given
-  SetMomentum(aParticleMomentum);
+  SetMomentum(aParticleMomentum);  // 3-dim momentum is given
 }
 
 ////////////////////
@@ -151,8 +154,7 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   primaryParticle(0),
                    thePDGcode(0)
 {
-  // 4-momentum vector (Lorentz vecotr) is given
-  Set4Momentum(aParticleMomentum);
+  Set4Momentum(aParticleMomentum);  // 4-momentum vector (Lorentz vector) is given
 }
 
 G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
@@ -217,8 +219,8 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right):
 ////////////////////
 // -- destructor ----
 ////////////////////
-G4DynamicParticle::~G4DynamicParticle() {
-
+G4DynamicParticle::~G4DynamicParticle()
+{
   //  delete thePreAssignedDecayProducts
   if (thePreAssignedDecayProducts != 0) delete thePreAssignedDecayProducts;
   thePreAssignedDecayProducts = 0;
@@ -274,11 +276,11 @@ void G4DynamicParticle::SetDefinition(const G4ParticleDefinition * aParticleDefi
   if (thePreAssignedDecayProducts != 0) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << " G4DynamicParticle::SetDefinition()::"
+      G4cout << " G4DynamicParticle::SetDefinition()::"
              << "!!! Pre-assigned decay products is attached !!!! " << G4endl;
-      G4cerr << "!!! New Definition is " << aParticleDefinition->GetParticleName() 
+      G4cout << "!!! New Definition is " << aParticleDefinition->GetParticleName() 
 	     << " !!! " << G4endl;
-      G4cerr << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
+      G4cout << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
     }
 #endif
     delete thePreAssignedDecayProducts;
@@ -410,7 +412,7 @@ void G4DynamicParticle::DumpInfo(G4int) const
 ////////////////////////
 G4double  G4DynamicParticle::GetElectronMass() const
 {
-  static G4double electronMass = 0.0;
+  static G4ThreadLocal G4double electronMass = 0.0;
 
   // check if electron exits and get the mass
   if (electronMass<=0.0) {

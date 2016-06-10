@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SubtractionSolid.cc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -39,8 +39,6 @@
 //
 // --------------------------------------------------------------------
 
-#include <sstream>
-
 #include "G4SubtractionSolid.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -51,8 +49,8 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "HepPolyhedronProcessor.h"
-#include "G4NURBS.hh"
-// #include "G4NURBSbox.hh"
+
+#include <sstream>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -176,7 +174,7 @@ EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
        ( positionA == kSurface && positionB == kSurface &&
          ( fPtrSolidA->SurfaceNormal(p) - 
            fPtrSolidB->SurfaceNormal(p) ).mag2() > 
-            1000*G4GeometryTolerance::GetInstance()->GetRadialTolerance() ) )
+         1000.0*G4GeometryTolerance::GetInstance()->GetRadialTolerance() ) )
     {
       return kSurface;
     }
@@ -195,28 +193,32 @@ G4ThreeVector
 G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const 
 {
   G4ThreeVector normal;
-  if( Inside(p) == kOutside )
+  EInside insideThis= Inside(p); 
+  if( insideThis == kOutside )
   {
 #ifdef G4BOOLDEBUG
     G4cout << "WARNING - Invalid call [1] in "
            << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
-           << "  Point p is inside !" << G4endl;
+           << "  Point p is outside !" << G4endl;
     G4cout << "          p = " << p << G4endl;
     G4cerr << "WARNING - Invalid call [1] in "
            << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
-           << "  Point p is inside !" << G4endl;
+           << "  Point p is outside !" << G4endl;
     G4cerr << "          p = " << p << G4endl;
 #endif
   }
   else
   { 
-    if( fPtrSolidA->Inside(p) == kSurface && 
-        fPtrSolidB->Inside(p) != kInside      ) 
+    EInside InsideA = fPtrSolidA->Inside(p); 
+    EInside InsideB = fPtrSolidB->Inside(p); 
+
+    if( InsideA == kSurface && 
+        InsideB != kInside      ) 
     {
       normal = fPtrSolidA->SurfaceNormal(p) ;
     }
-    else if( fPtrSolidA->Inside(p) == kInside && 
-             fPtrSolidB->Inside(p) != kOutside    )
+    else if( InsideA == kInside && 
+             InsideB != kOutside    )
     {
       normal = -fPtrSolidB->SurfaceNormal(p) ;
     }
@@ -231,7 +233,7 @@ G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const
         normal = -fPtrSolidB->SurfaceNormal(p) ;
       }
 #ifdef G4BOOLDEBUG
-      if(Inside(p) == kInside)
+      if(insideThis == kInside)
       {
         G4cout << "WARNING - Invalid call [2] in "
              << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
@@ -312,7 +314,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               message << "Looping detected in point " << p+dist*v
                       << ", from original point " << p
                       << " and direction " << v << G4endl
-                      << "Computed candidate distance: " << dist << "*mm.";
+                      << "Computed candidate distance: " << dist << "*mm. ";
               message.precision(6);
               DumpInfo();
               G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
@@ -366,13 +368,13 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               message << "Looping detected in point " << p+dist*v
                       << ", from original point " << p
                       << " and direction " << v << G4endl
-                      << "Computed candidate distance: " << dist << "*mm.";
+                      << "Computed candidate distance: " << dist << "*mm. ";
               message.precision(6);
               DumpInfo();
               G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
-                          "GeomSolids1001", JustWarning, message);
-              return dist;         
-
+                          "GeomSolids1001", JustWarning, message,
+                          "Returning candidate distance.");
+              return dist;
             }
           }
         }
@@ -557,16 +559,4 @@ G4SubtractionSolid::CreatePolyhedron () const
   G4Polyhedron* result = new G4Polyhedron(*top);
   if (processor.execute(*result)) { return result; }
   else { return 0; }
-}
-
-/////////////////////////////////////////////////////////
-//
-//
-
-G4NURBS*      
-G4SubtractionSolid::CreateNURBS () const 
-{
-  // Take into account boolean operation - see CreatePolyhedron.
-  // return new G4NURBSbox (1.0, 1.0, 1.0);
-  return 0;
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InuclEvaporation.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>

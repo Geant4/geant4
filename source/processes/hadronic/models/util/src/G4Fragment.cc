@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Fragment.cc 67984 2013-03-13 10:44:01Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -45,7 +45,7 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-G4int G4Fragment::errCount = 0;
+G4ThreadLocal G4int G4Fragment::errCount = 0;
 
 // Default constructor
 G4Fragment::G4Fragment() :

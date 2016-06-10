@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4InteractionContent.cc 67999 2013-03-13 11:14:32Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -42,6 +42,7 @@ G4InteractionContent::G4InteractionContent(G4VSplitableHadron *aPrimaryParticipa
 {
 	theProjectile=aPrimaryParticipant;
 	theTarget=0;
+	theProjectileNucleon=0; // Uzhi Nov. 2012
 	theTargetNucleon=0;
 }
 
@@ -51,7 +52,9 @@ G4InteractionContent::~G4InteractionContent()
 
 G4bool G4InteractionContent::operator<(const G4InteractionContent &right) const
 {
-        return this->GetInteractionTime() < right.GetInteractionTime();
+G4cout<<this->GetInteractionTime()/fermi<<" "<<right.GetInteractionTime()/fermi<<G4endl;
+      return this->GetInteractionTime() < right.GetInteractionTime();
+//        return right.GetInteractionTime() < this->GetInteractionTime();
 }
 
 void  G4InteractionContent::SetInteractionTime(G4double aValue)

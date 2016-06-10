@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GoudsmitSaundersonMscModel.hh 67990 2013-03-13 10:56:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -87,7 +87,7 @@ public:
 					      G4double AtomicNumber, G4double, 
 					      G4double, G4double);
 
-  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*, 
+  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
 					  G4double safety);
 
   virtual G4double ComputeTruePathLengthLimit(const G4Track& track,

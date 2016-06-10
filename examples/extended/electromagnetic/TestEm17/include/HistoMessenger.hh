@@ -27,7 +27,7 @@
 /// \brief Definition of the HistoMessenger class
 //
 //
-// $Id$
+// $Id: HistoMessenger.hh 67268 2013-02-13 11:38:40Z ihrivnac $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -55,7 +55,7 @@ class HistoMessenger: public G4UImessenger
    HistoMessenger(HistoManager* );
   ~HistoMessenger();
 
-   void SetNewValue(G4UIcommand* ,G4String );
+   virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 

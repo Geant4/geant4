@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Mag_UsualEqRhs.hh 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 // class G4Mag_UsualEqRhs
@@ -44,6 +44,7 @@
 #define G4MAG_USUAL_EQRHS
 
 #include "G4Mag_EqRhs.hh"
+#include "G4ChargeState.hh"
 
 class G4MagneticField;
 
@@ -52,7 +53,7 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
    public:  // with description
 
      G4Mag_UsualEqRhs( G4MagneticField* MagField );
-    ~G4Mag_UsualEqRhs();
+     virtual ~G4Mag_UsualEqRhs();
        // Constructor and destructor. No actions.
 
      void EvaluateRhsGivenB( const G4double y[],
@@ -61,16 +62,9 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
        // Given the value of the magnetic field B, this function 
        // calculates the value of the derivative dydx.
 
-     virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
+     virtual void SetChargeMomentumMass( G4ChargeState particleCharge,
                                          G4double MomentumXc,
                                          G4double mass);
-     
-  private:
-
-    G4double  fInvCurrentMomentumXc;   // OBSOLETE:
-                            // This extra state was meant to save a square root 
-                            // in a critical method.   But its use reduced
-                            // robustness (it was unstable for large steps.)
 };
 
 #endif /* G4MAG_USUAL_EQRHS */

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: plotResults.java 68753 2013-04-05 10:26:04Z gcosmo $
 import hep.aida.*;
 import java.util.Random;
 import java.io.IOException;

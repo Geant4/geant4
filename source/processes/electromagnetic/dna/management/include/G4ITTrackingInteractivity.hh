@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingInteractivity.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITTrackingInteractivity.hh 70171 2013-05-24 13:34:18Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -52,6 +52,8 @@ protected :
 public:
     G4ITTrackingInteractivity(){;}
     virtual ~G4ITTrackingInteractivity(){;}
+
+    virtual void Initialize(){;}
 
     virtual void StartTracking(G4Track*){;}
     virtual void AppendStep(G4Track* /*track*/, G4Step* /*step*/){;}

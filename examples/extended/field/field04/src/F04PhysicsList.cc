@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04PhysicsList.cc 78002 2013-12-02 08:25:49Z gcosmo $
+//
 /// \file field/field04/src/F04PhysicsList.cc
 /// \brief Implementation of the F04PhysicsList class
 //
-//
+
 #include "F04PhysicsList.hh"
 #include "F04PhysicsListMessenger.hh"
 
@@ -39,7 +41,9 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 
-#include "G4PhysListFactory.hh"
+//#include "G4PhysListFactory.hh"
+#include "FTFP_BERT.hh"
+#include "QGSP_BERT_HP.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -73,14 +77,19 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
 
     SetVerboseLevel(1);
 
-    G4PhysListFactory factory;
+//    G4PhysListFactory factory;
     G4VModularPhysicsList* phys = NULL;
+    if (physName == "QGSP_BERT_HP") {
+       phys = new QGSP_BERT_HP;
+    } else {
+       phys = new FTFP_BERT;
+    }
 
-    if (factory.IsReferencePhysList(physName))
-       phys =factory.GetReferencePhysList(physName);
+//    if (factory.IsReferencePhysList(physName))
+//       phys =factory.GetReferencePhysList(physName);
 
     // Physics List is defined via environment variable PHYSLIST
-    if (!phys) phys = factory.ReferencePhysList();
+//    if (!phys) phys = factory.ReferencePhysList();
 
     if (!phys) G4Exception("WLSPhysicsList::WLSPhysicsList","InvalidSetup",
                               FatalException,"PhysicsList does not exist");
@@ -114,6 +123,8 @@ F04PhysicsList::~F04PhysicsList()
 void F04PhysicsList::ConstructParticle()
 {
     G4VModularPhysicsList::ConstructParticle();
+
+    G4GenericIon::GenericIonDefinition();
 
     G4DecayTable* muonPlusDecayTable = new G4DecayTable();
     muonPlusDecayTable -> Insert(new

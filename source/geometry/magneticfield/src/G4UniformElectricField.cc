@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UniformElectricField.cc 68055 2013-03-13 14:43:28Z gcosmo $
 //
 // 
 //
@@ -63,6 +63,11 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    fFieldComponents[3] = vField*std::sin(vTheta)*std::cos(vPhi) ;
    fFieldComponents[4] = vField*std::sin(vTheta)*std::sin(vPhi) ;
    fFieldComponents[5] = vField*std::cos(vTheta) ;
+}
+
+G4UniformElectricField* G4UniformElectricField::Clone() const
+{
+    return new G4UniformElectricField( G4ThreeVector(this->fFieldComponents[3],this->fFieldComponents[4],this->fFieldComponents[5]) );
 }
 
 G4UniformElectricField::~G4UniformElectricField()

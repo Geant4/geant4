@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EquilibriumEvaporator.cc 71954 2013-06-29 04:40:40Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100308  M. Kelsey -- Bug fix for setting masses of evaporating nuclei
@@ -63,6 +63,14 @@
 // 20111007  M. Kelsey -- Add G4InuclParticleNames, replace hardcoded numbers
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 // 20121009  M. Kelsey -- Improve debugging output
+// 20130129  M. Kelsey -- Move QF interpolation to global statics for
+//		multi-threaded shared memory.
+// 20130621  M. Kelsey -- Remove turning off conservation checks after fission
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
+// 20130628  Fissioner produces G4Fragment output directly in G4CollisionOutput
+// 20130808  M. Kelsey -- Use new object-version of paraMaker, for thread safety
+// 20130924  M. Kelsey -- Use G4Log, G4Exp for CPU speedup
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4SystemOfUnits.hh"
@@ -70,44 +78,100 @@
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4Fissioner.hh"
+#include "G4Fragment.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;
 
+namespace {			// Interpolation arrays for QF
+  const G4double QFREP[72] = {  
+    //     TL201 *     *   *    *
+    //      1    2     3   4    5
+    22.5, 22.0, 21.0, 21.0, 20.0,
+    //     BI209 BI207 PO210 AT213 *    TH234
+    //      6     7    8     9     10   11
+    20.6, 20.6, 18.6, 15.8, 13.5, 6.5,
+    //     TH233 TH232 TH231 TH230 TX229 PA233 PA232 PA231 PA230 U240
+    //     12    13    14    15    16    17    18    19    20    21
+    6.65, 6.22, 6.27, 6.5,  6.7,  6.2,  6.25, 5.9,  6.1,  5.75,
+    //     U239 U238 U237  U236 U235 U234 U233 U232 U231
+    //     22   23   24    25   26   27   28   29   30
+    6.46, 5.7, 6.28, 5.8, 6.15, 5.6, 5.8, 5.2, 5.8,
+    //     NP238 NP237 NP236 NP235 PU245 NP234  PU244 NP233
+    //     31    32    33    34    35    36     37    38
+    6.2 , 5.9 , 5.9,  6.0,  5.8,  5.7,   5.4,  5.4,
+    //     PU242 PU241 PU240 PU239 PU238 AM247 PU236 AM245 AM244 AM243
+    //     39    40    41    42    43    44    45    46    47    48
+    5.6,  6.1,  5.57, 6.3,  5.5,  5.8,  4.7,  6.2,  6.4,  6.2,
+    //     AM242 AM241 AM240 CM250 AM239 CM249 CM248 CM247 CM246
+    //     49    50    51    52    53    54    55    56    57
+    6.5,  6.2,  6.5,  5.3,  6.4,  5.7,  5.7,  6.2,  5.7,
+    //     CM245 CM244 CM243 CM242 CM241 BK250 CM240
+    //     58    59    60    61    62    63    64
+    6.3,  5.8,  6.7,  5.8,  6.6,  6.1,  4.3,
+    //     BK249 CF252 CF250 CF248 CF246 ES254 ES253 FM254
+    //     65    66    67    68    69    70    71    72
+    6.2,  3.8,  5.6,  4.0,  4.0,  4.2,  4.2,  3.5 };
+
+  static const G4double XREP[72] = {
+    //      1      2     3      4      5
+    0.6761, 0.677, 0.6788, 0.6803, 0.685,
+    //      6     7     8     9     10     11
+    0.6889, 0.6914, 0.6991, 0.7068, 0.725, 0.7391,
+    //     12  13    14   15   16    17  18    19    20    21
+    0.74, 0.741, 0.742, 0.743, 0.744, 0.7509, 0.752, 0.7531, 0.7543, 0.7548,
+    //     22    23    24
+    0.7557, 0.7566, 0.7576,
+    //      25     26   27    28    29   30   31    32     33    34
+    0.7587, 0.7597, 0.7608, 0.762, 0.7632, 0.7644, 0.7675, 0.7686, 0.7697, 0.7709,
+    //      35    36    37    38    39   40    41
+    0.7714, 0.7721, 0.7723, 0.7733, 0.7743, 0.7753, 0.7764,
+    //      42    43    44    45    46    47    48   49
+    0.7775, 0.7786, 0.7801, 0.781, 0.7821, 0.7831, 0.7842, 0.7852,
+    //     50     51    52    53    54    55    56    57    58
+    0.7864, 0.7875, 0.7880, 0.7887, 0.7889, 0.7899, 0.7909, 0.7919, 0.7930,
+    //      59    60    61    62    63    64
+    0.7941, 0.7953, 0.7965, 0.7977, 0.7987, 0.7989,
+    //      65    66    67    68    69    70    71    72
+    0.7997, 0.8075, 0.8097, 0.8119, 0.8143, 0.8164, 0.8174, 0.8274 };
+}
+
+
+// Constructor and destructor
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
-  : G4CascadeColliderBase("G4EquilibriumEvaporator") {
+  : G4CascadeDeexciteBase("G4EquilibriumEvaporator"),
+    theParaMaker(verboseLevel), QFinterp(XREP) {
   parms.first.resize(6,0.);
   parms.second.resize(6,0.);
 }
 
 G4EquilibriumEvaporator::~G4EquilibriumEvaporator() {}
 
+void G4EquilibriumEvaporator::setVerboseLevel(G4int verbose) {
+  G4CascadeDeexciteBase::setVerboseLevel(verbose);
+  theFissioner.setVerboseLevel(verbose);
+  theBigBanger.setVerboseLevel(verbose);
+}
 
-void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
-				      G4InuclParticle* target,
-				      G4CollisionOutput& output) {
+
+// Main operation
+
+void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
+				       G4CollisionOutput& output) {
   if (verboseLevel) {
-    G4cout << " >>> G4EquilibriumEvaporator::collide" << G4endl;
+    G4cout << " >>> G4EquilibriumEvaporator::deExcite" << G4endl;
   }
 
-  // Sanity check
-  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
-  if (!nuclei_target) {
-    G4cerr << " EquilibriumEvaporator -> target is not nuclei " << G4endl;    
-    return;
-  }
-
-  if (verboseLevel>1) G4cout << " evaporating target: \n" << *target << G4endl;
-
-  theFissioner.setVerboseLevel(verboseLevel);
-  theBigBanger.setVerboseLevel(verboseLevel);
+  if (verboseLevel>1) G4cout << " evaporating target: \n" << target << G4endl;
 
   // simple implementation of the equilibium evaporation a la Dostrowski
   const G4double huge_num = 50.0;
@@ -130,11 +194,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   G4double W[8], u[6], V[6], TM[6];
   G4int A1[6], Z1[6];
 
-  G4int A = nuclei_target->getA();
-  G4int Z = nuclei_target->getZ();
-  G4LorentzVector PEX = nuclei_target->getMomentum();
-  G4double EEXS = nuclei_target->getExitationEnergy();
-  
+  getTargetData(target);
   if (verboseLevel > 3) G4cout << " after noeq: eexs " << EEXS << G4endl;
 
   G4InuclElementaryParticle dummy(small_ekin, proton);
@@ -147,18 +207,18 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   // See if fragment should just be dispersed
   if (explosion(A, Z, EEXS)) {
     if (verboseLevel > 1) G4cout << " big bang in eql start " << G4endl;
-    theBigBanger.collide(0, target, output);
+    theBigBanger.deExcite(target, output);
 
-    validateOutput(0, target, output);		// Check energy conservation
+    validateOutput(target, output);		// Check energy conservation
     return;
   }
 
   // If nucleus is in ground state, no evaporation
   if (EEXS < cut_off_energy) {
     if (verboseLevel > 1) G4cout << " no energy for evaporation" << G4endl;
-    output.addOutgoingNucleus(*nuclei_target);
+    output.addRecoilFragment(target);
 
-    validateOutput(0, target, output);		// Check energy conservation
+    validateOutput(target, output);		// Check energy conservation
     return;
   }
 
@@ -188,10 +248,9 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       if (verboseLevel > 2) 
 	G4cout << " big bang in eql step " << itry_global << G4endl;
 
-      G4InuclNuclei nuclei(PEX, A, Z, EEXS, G4InuclParticle::Equilib);        
-      theBigBanger.collide(0, &nuclei, output);
+      theBigBanger.deExcite(makeFragment(PEX,A,Z,EEXS), output);
 
-      validateOutput(0, target, output);	// Check energy conservation
+      validateOutput(target, output);	// Check energy conservation
       return;	
     } 
 
@@ -209,7 +268,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4double parlev = getPARLEVDEN(A, Z);
     G4double u1 = parlev * A;
 
-    paraMaker(Z, parms);
+    theParaMaker.getParams(Z, parms);
     const std::vector<G4double>& AK = parms.first;
     const std::vector<G4double>& CPA = parms.second;
 
@@ -247,7 +306,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       if (TM1 > huge_num) TM1 = huge_num;
       else if (TM1 < small) TM1 = small;
 
-      W[0] *= std::exp(TM1);
+      W[0] *= G4Exp(TM1);
       prob_sum += W[0];
     }
       
@@ -260,7 +319,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	if (TM1 > huge_num) TM1 = huge_num;
 	else if (TM1 < small) TM1 = small;
 
-	W[i] *= std::exp(TM1);
+	W[i] *= G4Exp(TM1);
 	prob_sum += W[i];
       }
     }
@@ -280,7 +339,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	if (TM1 > huge_num) TM1 = huge_num;
 	else if (TM1 < small) TM1 = small;
 
-	W[6] = BF * std::exp(TM1);
+	W[6] = BF * G4Exp(TM1);
 	if (W[6] > fisssion_cut*W[0]) W[6] = fisssion_cut*W[0]; 	     
 
 	prob_sum += W[6];
@@ -312,7 +371,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	G4double FMAX;
 
 	if (T04 < EEXS) {
-	  FMAX = (T04*T04*T04*T04) * std::exp((EEXS - T04) / T00);
+	  FMAX = (T04*T04*T04*T04) * G4Exp((EEXS - T04) / T00);
 	} else {
 	  FMAX = EEXS*EEXS*EEXS*EEXS;
 	}; 
@@ -324,7 +383,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	while (itry < itry_max) {
 	  itry++;
 	  S = EEXS * inuclRndm();
-	  X1 = (S*S*S*S) * std::exp((EEXS - S) / T00);
+	  X1 = (S*S*S*S) * G4Exp((EEXS - S) / T00);
 
 	  if (X1 > FMAX * inuclRndm()) break;
 	};
@@ -393,7 +452,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	}
 
 	G4double uc = 2.0 * std::sqrt(u[icase] * TM[icase]);
-	G4double ur = (uc > huge_num ? std::exp(huge_num) : std::exp(uc));
+	G4double ur = (uc > huge_num ? G4Exp(huge_num) : G4Exp(uc));
 	G4double d1 = 1.0 / ur;
 	G4double d2 = 1.0 / (ur - 1.0);	    
 	G4int itry1 = 0;
@@ -407,7 +466,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	  while (itry < itry_max && EPR < 0.0) {
 	    itry++;
-	    G4double uu = uc + std::log((1.0 - d1) * inuclRndm() + d2);
+	    G4double uu = uc + G4Log((1.0 - d1) * inuclRndm() + d2);
 	    S = 0.5 * (uc * uc - uu * uu) / u[icase];
 	    EPR = TM[icase] - S * A / (A - 1.0) + V[icase];
 	  }; 
@@ -520,8 +579,6 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	if (itry1 == itry_max || bad) try_again = false;
       } else { 	// if (icase < 6)
-	G4InuclNuclei nuclei(A, Z, EEXS, G4InuclParticle::Equilib);        
-
 	if (verboseLevel > 2) {
 	  G4cout << " fission: A " << A << " Z " << Z << " eexs " << EEXS
 		 << " Wn " << W[0] << " Wf " << W[6] << G4endl;
@@ -529,24 +586,19 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	// Catch fission output separately for verification
 	fission_output.reset();
-	theFissioner.collide(0, &nuclei, fission_output);
+	theFissioner.deExcite(makeFragment(A,Z,EEXS), fission_output);
 
-	std::vector<G4InuclNuclei>& nuclea = fission_output.getOutgoingNuclei();
-	if (nuclea.size() == 2) { 		// fission ok
+	if (fission_output.numberOfFragments() == 2) { 		// fission ok
 	  if (verboseLevel > 2) G4cout << " fission done in eql" << G4endl;
 
 	  // Move fission fragments to lab frame for processing
 	  fission_output.boostToLabFrame(toTheNucleiSystemRestFrame);
 
 	  // Now evaporate the fission fragments individually
-	  G4bool prevDoChecks = doConservationChecks;	// Turn off checking
-	  setConservationChecks(false);
+	  this->deExcite(fission_output.getRecoilFragment(0), output);
+	  this->deExcite(fission_output.getRecoilFragment(1), output);
 
-	  this->collide(0, &nuclea[0], output);
-	  this->collide(0, &nuclea[1], output);
-
-	  setConservationChecks(prevDoChecks);	// Restore previous flag value
-	  validateOutput(0, target, output);	// Check energy conservation
+	  validateOutput(target, output);	// Check energy conservation
 	  return;
 	} else { // fission forbidden now
 	  fission_open = false;
@@ -566,7 +618,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   G4LorentzVector pnuc = pin - ppout;
 
   // NOTE:  In-situ constructor will be optimized away (no copying)
-  output.addOutgoingNucleus(G4InuclNuclei(pnuc, A, Z, EEXS,
+  output.addOutgoingNucleus(G4InuclNuclei(pnuc, A, Z, 0.,
 					  G4InuclParticle::Equilib));
 
   if (verboseLevel > 3) {
@@ -575,7 +627,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   }
 
 
-  validateOutput(0, target, output);		// Check energy conservation
+  validateOutput(target, output);		// Check energy conservation
   return;
 }		     
 
@@ -617,57 +669,6 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
     G4cout << " >>> G4EquilibriumEvaporator::getQF ";
   }
   
-  static const G4double QFREP[72] = {  
-    //     TL201 *     *   *    *
-    //      1    2     3   4    5
-    22.5, 22.0, 21.0, 21.0, 20.0,
-    //     BI209 BI207 PO210 AT213 *    TH234
-    //      6     7    8     9     10   11
-    20.6, 20.6, 18.6, 15.8, 13.5, 6.5,
-    //     TH233 TH232 TH231 TH230 TX229 PA233 PA232 PA231 PA230 U240
-    //     12    13    14    15    16    17    18    19    20    21
-    6.65, 6.22, 6.27, 6.5,  6.7,  6.2,  6.25, 5.9,  6.1,  5.75,
-    //     U239 U238 U237  U236 U235 U234 U233 U232 U231
-    //     22   23   24    25   26   27   28   29   30
-    6.46, 5.7, 6.28, 5.8, 6.15, 5.6, 5.8, 5.2, 5.8,
-    //     NP238 NP237 NP236 NP235 PU245 NP234  PU244 NP233
-    //     31    32    33    34    35    36     37    38
-    6.2 , 5.9 , 5.9,  6.0,  5.8,  5.7,   5.4,  5.4,
-    //     PU242 PU241 PU240 PU239 PU238 AM247 PU236 AM245 AM244 AM243
-    //     39    40    41    42    43    44    45    46    47    48
-    5.6,  6.1,  5.57, 6.3,  5.5,  5.8,  4.7,  6.2,  6.4,  6.2,
-    //     AM242 AM241 AM240 CM250 AM239 CM249 CM248 CM247 CM246
-    //     49    50    51    52    53    54    55    56    57
-    6.5,  6.2,  6.5,  5.3,  6.4,  5.7,  5.7,  6.2,  5.7,
-    //     CM245 CM244 CM243 CM242 CM241 BK250 CM240
-    //     58    59    60    61    62    63    64
-    6.3,  5.8,  6.7,  5.8,  6.6,  6.1,  4.3,
-    //     BK249 CF252 CF250 CF248 CF246 ES254 ES253 FM254
-    //     65    66    67    68    69    70    71    72
-    6.2,  3.8,  5.6,  4.0,  4.0,  4.2,  4.2,  3.5 };
-     
-  static const G4double XREP[72] = {
-    //      1      2     3      4      5
-    0.6761, 0.677, 0.6788, 0.6803, 0.685,
-    //      6     7     8     9     10     11
-    0.6889, 0.6914, 0.6991, 0.7068, 0.725, 0.7391,
-    //     12  13    14   15   16    17  18    19    20    21
-    0.74, 0.741, 0.742, 0.743, 0.744, 0.7509, 0.752, 0.7531, 0.7543, 0.7548,
-    //     22    23    24
-    0.7557, 0.7566, 0.7576,
-    //      25     26   27    28    29   30   31    32     33    34
-    0.7587, 0.7597, 0.7608, 0.762, 0.7632, 0.7644, 0.7675, 0.7686, 0.7697, 0.7709,
-    //      35    36    37    38    39   40    41
-    0.7714, 0.7721, 0.7723, 0.7733, 0.7743, 0.7753, 0.7764,
-    //      42    43    44    45    46    47    48   49
-    0.7775, 0.7786, 0.7801, 0.781, 0.7821, 0.7831, 0.7842, 0.7852,
-    //     50     51    52    53    54    55    56    57    58
-    0.7864, 0.7875, 0.7880, 0.7887, 0.7889, 0.7899, 0.7909, 0.7919, 0.7930,
-    //      59    60    61    62    63    64
-    0.7941, 0.7953, 0.7965, 0.7977, 0.7987, 0.7989,
-    //      65    66    67    68    69    70    71    72
-    0.7997, 0.8075, 0.8097, 0.8119, 0.8143, 0.8164, 0.8174, 0.8274 };
-
   const G4double G0 = 20.4;
   const G4double XMIN = 0.6761;
   const G4double XMAX = 0.8274;
@@ -680,8 +681,7 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
 
     QFF = G0 * FX * G4cbrt(a*a);
   } else {
-    static G4CascadeInterpolator<72> interp(XREP);	// Only need one!
-    QFF = interp.interpolate(x, QFREP);
+    QFF = QFinterp.interpolate(x, QFREP);
   }
 
   if (QFF < 0.0) QFF = 0.0;

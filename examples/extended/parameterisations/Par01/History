@@ -1,0 +1,305 @@
+$Id: History 77940 2013-11-29 15:15:17Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example Par01 History file
+                    ---------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+29-11-2013 M. Verderi (expar01-V09-06-02)
+- fix of src/Par01EMShowerModel.cc of spurious remaing CLHEP:: :
+  bt = CLHEP::RandGamma::shoot(a,1.0); -> bt = G4RandGamma::shoot(a,1.0);
+  which made random crashes in MT mode.
+- thanks to Gabriele, and apologies to Makoto...
+
+26-11-2013 M. Verderi (expar01-V09-06-01)
+- migration to MT.
+- required bug fix in region handling in MT, as fast simulation
+  managers were lost in MT mode.
+- required fix in parallel world instantiation in MT mode
+- remove unecessary run, event and stepping actions
+
+7-06-2013 Marc Verderi (expar01-V09-06-00)
+- Follow coding guidelines.
+- Change tag name exampleN05 -> expar01 due to change of location.
+
+29-11-2011 Ben Morgan (exampleN05-V09-04-03)
+- CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
+  to build directory, plus comments and neatification.
+
+30-09-2011 G.Folger        (exampleN05-V09-04-02)
+- Fix gcc46 compilation warnings in ExN05DetectorConstruction.cc
+
+18th February 2011 G.Folger (exampleN05-V09-04-01)
+- ExN05DetectorConstruction: SetProductionCuts() needs array of 4 values, twice
+
+18th February 2011 G.Folger (exampleN05-V09-04-00)
+- ExN05DetectorConstruction: SetProductionCuts() needs array of 4 values
+
+4th June 2010 Joseph Perl (exampleN05-V09-03-01)
+- Updated vis usage
+
+19th March 2010 Gabriele Cosmo (exampleN05-V09-03-00)
+- Migrated physics lists to use particle-based multiple-scattering processes.
+
+30th October 2009 John Allison (exampleN05-V09-02-00)
+- Introduced G4UIExecutive.
+
+30th November 2007
+- modify ExN05PhysicsList.cc to account for Along method of G4FSMP
+- tag as exampleN05-V09-00-00
+
+18th May M. Verderi (exampleN05-V08-03-00)
+- remove exampleN05.ref
+
+11th May 2007 M. Verderi (HEAD)
+- migrate to parallel geometry scheme
+- add vis.mac
+
+17th November 2006 Makoto Asai (exampleN05-V08-01-01)
+- Fix a bug in ExN05CalorimeterSD.cc which was originated from ExN04CalorimeterSD.cc
+
+14th November 2006 Gabriele Cosmo (exampleN05-V08-01-00)
+- Removed debug printout in ExN05PionShowerModel and ExN05EMShowerModel
+  DoIt() methods.
+
+10th November 2006 Marc Verderi
+- Changed in physics list to use G4FastSimulationManagerProcess81.
+
+3rd November 2006 Marc Verderi
+- Moved to new parallel geometry scheme, with addition of
+  ExN05ParallelWorldForPion and removal of ghosts in the
+  ExN05DetectorConstruction.
+- Clean up of the XXXCuts classes, as they are not of primary need for the
+  example.
+
+28th June 2006 Makoto Asai (exampleN05-V08-00-01)
+- Fix a memory leak in ExN05PionShowerModel.cc
+
+16th June 2006 Gabriele Cosmo (exampleN05-V08-00-00)
+- Use coherent allocation scheme for user-classes and
+  initialisation in main().
+
+6th December 2005  Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+4th December 2005  John Allison (exampleN05-V07-01-03)
+- Quietened vis manager in batch mode.
+
+25th November 2005  Marc Verderi  (exampleN05-V07-01-02)
+- Ghost functionnality made available back
+- requires param-V07-01-03
+
+16th November 2005  Marc Verderi  (exampleN05-V07-01-01)
+- Migration to G4Region.
+- NOTE: *** ghost functionnality is not available for now ***.
+- Implemented migration to <sstream> from deprecated <strstream>.
+
+4th November 2005  Marc Verderi  (exampleN05-V07-01-00)
+- Use RandGamma from CLHEP end removed custom RandomGamma function.
+
+28th June 2005  Gabriele Cosmo  (exampleN05-V07-00-00)
+- Added inclusion of <cmath> to RandomGamma.cc.
+
+3rd May 2005  John Allison
+- Replaced vis manager with G4VisExecutive.
+
+December 9, 2004 Vladimir Ivanchenko (exampleN05-V06-02-02)
+- Fix compilation problem
+
+Nov 26, 2004 Marc Verderi (exampleN05-V06-02-01)
+- Implemented migration to new G4VParticleChange interfaces.
+
+May 09, 2004 Hisaya Kurashige (exampleN05-V06-02-00)
+- Modify method name for ParticleChange in ExN05SpecialCuts.cc
+
+December 09, 2003 Hisaya Kurashige
+- Add protection for negative proposed step in ExN05MinEkineCuts.cc
+
+November 10, 2003 Gabriele Cosmo (exampleN05-V05-02-01)
+- Removed usage of G4ParticleWithCuts in physics-list (H.Kurasige).
+- Removed OPACS driver from vis-manager.
+- Cleared usage of LocateGlobalPointAndUpdateTouchable(). Use
+  LocateGlobalPointAndUpdateTouchableHandle() instead.
+- Cleared compilation warnings.
+
+August 27, 2003 Vladimir Ivanchenko (exampleN05-V05-02-00)
+- Migrade to cut per region
+
+May 28, 2003 Gabriele Cosmo (exampleN05-V05-01-00)
+- Get rid of pedantic warnings ...
+
+Nov 8, 2001 Radovan Chytracek (exampleN05-V03-02-00)
+- RC dev changes propagated to the main trunk HEAD revision
+
+Nov 7, 2001 Marc Verderi (exampleN05-RC-dev)
+- changes to be compatible with RC dev: the branch tag is
+	dev_rc_touchables_branch_start
+
+Oct 19, 2001  Steve O'Neale (examples-V03-02-00)
+- Update reference output
+
+27th April 2001 Gabriele Cosmo (exampleN05-V03-01-00)
+- Migrated to STL vector. Removed RW wrappers.
+
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for min.delta energy cut
+- The changes in deposited energy in HAD cal towers upto 20 per cent
+- The changes in deposited energy in EM cry(s)tals about 1 part in 10**5
+
+August 03, 2000  Gabriele Cosmo (exampleN05-V02-00-01r)
+- Changed RandGauss to G4RandGauss in ExN05PionShowerModel.cc to fix problem
+  of events' reproducibility.
+
+July 28, 2000  Gabriele Cosmo (exampleN05-V02-00-01)
+- Includes also new ExN05VisManager class.
+
+June 26, 2000  John Allison  (exampleN05-V02-00-00)
+- Reduced no. of events per run from 500 to 250 in exampleN05.large_N.in.
+
+June 24, 2000  John Allison  (exampleN05-V01-01-01)
+- Updated exampleN05.out for stand-V01-01-05 and utils-V01-01-03.
+
+June 17, 2000  John Allison  (exampleN05-V01-01-00)
+- Updated exampleN05.out for geant4-01-01-ref-06.
+
+23th April 1999 H.Kurashige
+- Remove ConstructHad and ConstructLeptHad in ExN05PhysicsList
+
+16th April 1999 H.Kurashige
+- modify ExN05RunAction  ExN05SteppingAction ExN05TrackingAction
+- modify ExN05PhysicsList::SetCuts
+
+11 December 1998 M. Verderi
+- fix made in ExN05CalorimeterSD to allow several instanciations of this class.
+  The problem was a static variable (HCID) used in EndOfEventAction which made
+  confusion to get the hits collection. HCID is now put as private (non static!) 
+  member of the class.
+- the example.in/.out are updated accordingly
+
+
+9 December 1998 M. Verderi
+- Added ExN05PionShowerModel: a model producing hits
+  for pi+/pi-
+- Modify ExN05EMShowerModel to produce a "less unrealistic"
+  shower shape: now the longitudinal profile is according to
+  the Gamma distribution. Transverse profile is two cylinder:
+  the 1 moliere radius receive 90% of the energy, the 3.5 one
+  receives the rest.
+- Added RandomGamma: shoot at random according to the Gamma
+  distribution. Adapted from RNGAMA function of KERNLIB.
+  (thanks to D. Bernard who gave me the source).
+- ExN05DetectorConstruction. Many changes:
+	- EM calo size reduced, crytals also;
+	- addition of an hadronic calorimeter
+	- addition of a ghost volume
+  The G4VFastSimulationModel are instanciated(?) here, and
+  no more in exampleN05.cc
+- exampleN05.in modified to shoot pions in order to test
+  the ghost geometry.
+- ExN05PhysicsList modified to add the parameterisation
+  process as a Post&Along process, because of the ghost.
+
+
+
+16th August 1998 H.Kurashige
+- Added ExN05MinRangeCuts, ExN05MinEkineCuts, ExN05MaxTimeCuts
+  and their base class of ExN05SpecialCuts for using UserLimits.
+- Modified ExN05PhysicsList to register above processes.
+- Modified ExN05DetectorConstruction to attach Userlimits to crystal.
+- Added ExN05DetectorMessenger to switch on/off UserLimits.
+- Modified exampleN05.in 
+ 
+
+9th August 1998  John Allison
+- Changed G4UIterminal to G4UIGAG.
+
+16th July 1998  John Allison
+- Changed /vis~/Draw... to /vis~/draw.
+
+June 26th 98 Marc Verderi:
+
+Remove previous files, and add new ones with the
+good (hopefully) naming conventions this time.
+Improvements done in ExN05EMShowerModel by using
+a private navigator, rather than the one for tracking.
+
+   include:
+	ExN05CalorimeterHit.hh
+	ExN05CalorimeterHitsCollection.hh
+	ExN05CalorimeterSD.hh
+	ExN05DetectorConstruction.hh
+	ExN05EMShowerModel.hh
+	ExN05EnergySpot.hh
+	ExN05EventAction.hh
+	ExN05EventActionMessenger.hh
+	ExN05PhysicsList.hh
+	ExN05PiModel.hh
+	ExN05PrimaryGeneratorAction.hh
+	ExN05RunAction.hh
+	ExN05SteppingAction.hh
+	ExN05SteppingActionMessenger.hh
+   src:
+	ExN05CalorimeterHit.cc
+	ExN05CalorimeterHitsCollection.cc
+	ExN05CalorimeterSD.cc
+	ExN05DetectorConstruction.cc
+	ExN05EMShowerModel.cc
+	ExN05EnergySpot.cc
+	ExN05EventAction.cc
+	ExN05EventActionMessenger.cc
+	ExN05PhysicsList.cc
+	ExN05PiModel.cc
+	ExN05PrimaryGeneratorAction.cc
+	ExN05RunAction.cc
+	ExN05SteppingAction.cc
+	ExN05SteppingActionMessenger.cc
+
+May 07, 98 M. Verderi
+
+- First commit (many improvements needed):
+	- main() coded in exampleN05.cc 
+	- include:
+		MyCalorimeterHit.hh
+		MyCalorimeterHitsCollection.hh
+		MyCalorimeterSD.hh
+		MyDetectorBox.hh
+		MyEMCShower.hh
+		MyEnergySpot.hh
+		MyEventAction.hh
+		MyEventActionMessenger.hh 
+		MyPhysicsList.hh
+		MyPiModel.hh
+		MyPrimaryGeneratorAction.hh
+		MyRunAction.hh
+		MySteppingAction.hh
+		MySteppingActionMessenger.hh
+	- src:
+		MyCalorimeterHit.cc
+		MyCalorimeterHitsCollection.cc
+		MyCalorimeterSD.cc
+		MyDetectorBox.cc
+		MyEMCShower.cc
+		MyEnergySpot.cc
+		MyEventAction.cc
+		MyEventActionMessenger.cc
+		MyPhysicsList.cc
+		MyPiModel.cc
+		MyPrimaryGeneratorAction.cc
+		MyRunAction.cc
+		MySteppingAction.cc
+		MySteppingActionMessenger.cc
+
+
+April 09, 98 G. Cosmo
+
+- Created.

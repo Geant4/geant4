@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -45,8 +43,8 @@
 
 namespace G4INCL {
 
-  PionNucleonChannel::PionNucleonChannel(Particle *p1, Particle *p2, Nucleus *nucleus, const G4bool localE)
-    : theNucleus(nucleus), particle1(p1), particle2(p2), locE(localE)
+  PionNucleonChannel::PionNucleonChannel(Particle *p1, Particle *p2, Nucleus *nucleus)
+    : theNucleus(nucleus), particle1(p1), particle2(p2)
   {
 
   }
@@ -82,7 +80,7 @@ namespace G4INCL {
     } else if(ParticleConfig::isPair(particle1, particle2, Neutron, PiMinus)) {
       deltaType = DeltaMinus;
     } else {
-      ERROR("Unknown particle pair in Pi-N collision." << std::endl);
+      INCL_ERROR("Unknown particle pair in Pi-N collision." << std::endl);
     }
 
     G4double deltaEnergy = nucleon->getEnergy() - nucleon->getPotentialEnergy()

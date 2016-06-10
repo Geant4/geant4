@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04PrimaryGeneratorAction.cc 78002 2013-12-02 08:25:49Z gcosmo $
+//
 /// \file field/field04/src/F04PrimaryGeneratorAction.cc
 /// \brief Implementation of the F04PrimaryGeneratorAction class
 //
-//
+
 #include "G4ios.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -44,13 +46,11 @@
 #include "F04DetectorConstruction.hh"
 #include "F04PrimaryGeneratorMessenger.hh"
 
-G4bool F04PrimaryGeneratorAction::fFirst = false;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04PrimaryGeneratorAction::
        F04PrimaryGeneratorAction(F04DetectorConstruction* detectorConstruction)
-  : fDetector(detectorConstruction), fRndmFlag("off"),
+  : fDetector(detectorConstruction), fRndmFlag("off"), fFirst(false),
     fXvertex(0.), fYvertex(0.), fZvertex(0.),
     fVertexdefined(false)
 {
@@ -88,34 +88,30 @@ void F04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if (!fFirst) {
 
      fFirst = true;
+     G4ThreeVector direction(0.0,0.0,1.0);
 
      G4Navigator* theNavigator =
                     G4TransportationManager::GetTransportationManager()->
                                                  GetNavigatorForTracking();
-     G4Navigator* aNavigator = new G4Navigator();
      if ( theNavigator->GetWorldVolume() )
-               aNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
+     {
+       G4Navigator* aNavigator = new G4Navigator();
+       aNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
 
-     G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+       G4ThreeVector center(0.,0.,0.);
+       aNavigator->LocateGlobalPointAndSetup(center,0,false);
 
-     if (!geomManager->IsGeometryClosed()) {
-        geomManager->OpenGeometry();
-        geomManager->CloseGeometry(true);
-     }
-
-     G4ThreeVector center(0.,0.,0.);
-     aNavigator->LocateGlobalPointAndSetup(center,0,false);
-
-     G4TouchableHistoryHandle touchable = aNavigator->
+       G4TouchableHistoryHandle touchable = aNavigator->
                                           CreateTouchableHistoryHandle();
 
-    // set Global2local transform
-    fGlobal2local = touchable->GetHistory()->GetTopTransform();
+       // set Global2local transform
+       fGlobal2local = touchable->GetHistory()->GetTopTransform();
 
-    G4ThreeVector direction(0.0,0.0,1.0);
-    direction = fGlobal2local.Inverse().TransformAxis(direction);
+       direction = fGlobal2local.Inverse().TransformAxis(direction);
+       delete aNavigator;
+     }
 
-    fParticleGun->SetParticleMomentumDirection(direction);
+     fParticleGun->SetParticleMomentumDirection(direction);
   }
 
   G4double x0,y0,z0 ;

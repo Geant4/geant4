@@ -1,0 +1,290 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_key
+#define tools_wroot_key
+
+#include "seek"
+#include "date"
+#include "ifile"
+#include "wbuf"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include <ostream>
+
+namespace tools {
+namespace wroot {
+
+class key {
+  static uint32 class_version() {return 2;}
+  static uint32 START_BIG_FILE() {return 2000000000;}
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::key");
+    return s_v;
+  }
+public:
+  static unsigned int std_string_record_size(const std::string& x) {
+    // Returns size string will occupy on I/O buffer.
+    if (x.size() > 254)
+      return x.size()+sizeof(unsigned char)+sizeof(int);
+    else
+      return x.size()+sizeof(unsigned char);
+  }
+public:
+  key(ifile& a_file,
+      seek a_seek_parent_dir,
+      const std::string& a_object_name,
+      const std::string& a_object_title,
+      const std::string& a_object_class,
+      uint32 a_object_size) //uncompressed data size.
+  :m_file(a_file)
+  ,m_buf_size(0)
+  ,m_buffer(0)
+  // Record :
+  ,m_nbytes(0)
+  ,m_version(class_version())
+  ,m_object_size(a_object_size)
+  ,m_date(0)
+  ,m_key_length(0)
+  ,m_cycle(0)
+  ,m_seek_key(0)
+  ,m_seek_parent_dir(0)
+  ,m_object_class(a_object_class)
+  ,m_object_name(a_object_name)
+  ,m_object_title(a_object_title)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+
+    if(a_object_size) {
+      if(m_file.END()>START_BIG_FILE()) m_version += 1000;
+    }
+    if(m_version>1000) {
+    } else {
+      if(a_seek_parent_dir>START_BIG_FILE()) m_version += 1000;
+    }
+
+    m_key_length = record_size(m_version);
+
+    initialize(a_object_size);
+
+    m_seek_parent_dir = a_seek_parent_dir;
+  }
+  virtual ~key(){
+    delete [] m_buffer;
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  key(const key& a_from):m_file(a_from.m_file){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  key& operator=(const key &){return *this;}
+public:
+  uint16 cycle() const {return m_cycle;}
+  void set_cycle(uint16 a_cycle) {m_cycle = a_cycle;}
+
+  const std::string& object_name() const {return m_object_name;}
+  std::string object_name() {return m_object_name;}
+
+  const std::string& object_class() const {return m_object_class;}
+  std::string object_class() {return m_object_class;}
+
+  bool write_self() {
+    char* buffer = m_buffer;
+    wbuf wb(m_file.out(),m_file.byte_swap(),eob(),buffer);
+    return to_buffer(wb);
+  }
+
+  bool write_file(uint32& a_nbytes){
+    if(!m_file.set_pos(m_seek_key)) {
+      a_nbytes = 0;
+      return false;
+    }
+    if(!m_file.write_buffer(m_buffer,m_nbytes)) {
+      a_nbytes = 0;
+      return false;
+    }
+
+    if(m_file.verbose()) {
+      m_file.out() << "tools::wroot::key::write_file :"
+                   << " writing " << m_nbytes << " bytes"
+                   << " at address " << m_seek_key
+                   << " for ID=" << sout(m_object_name)
+                   << " Title=" << sout(m_object_title) << "."
+                   << std::endl;
+    }
+
+    delete [] m_buffer; //???
+    m_buffer = 0;
+    m_buf_size = 0;
+
+    a_nbytes = m_nbytes;
+    return true;
+  }
+
+  void set_number_of_bytes(uint32 a_n) {m_nbytes = a_n;}
+  uint32 number_of_bytes() const {return m_nbytes;}
+
+  uint32 object_size() const {return m_object_size;}
+
+  seek seek_key() const {return m_seek_key;}
+  short key_length() const {return m_key_length;}
+
+  char* data_buffer() {return m_buffer + m_key_length;}
+  const char* eob() const {return m_buffer + m_buf_size;}
+
+  bool to_buffer(wbuf& a_wb) const {
+    if(!a_wb.write(m_nbytes)) return false;
+    short version = m_version;
+    if(!a_wb.write(version)) return false;
+    if(!a_wb.write(m_object_size)) return false;
+    unsigned int _date = 0; //FIXME
+    if(!a_wb.write(_date)) return false;
+    if(!a_wb.write(m_key_length)) return false;
+    if(!a_wb.write(m_cycle)) return false;
+    if(version>1000) {
+      if(!a_wb.write(m_seek_key)) return false;
+      if(!a_wb.write(m_seek_parent_dir)) return false;
+    } else {
+      if(m_seek_key>START_BIG_FILE()) {
+        m_file.out() << "tools::wroot::key::to_buffer :"
+                     << " attempt to write big seek "
+                     << m_seek_key << " on 32 bits."
+                     << std::endl;
+        return false;
+      }
+      if(!a_wb.write((seek32)m_seek_key)) return false;
+      if(m_seek_parent_dir>START_BIG_FILE()) {
+        m_file.out() << "tools::wroot::key::to_buffer :"
+                     << " (2) attempt to write big seek "
+                     << m_seek_parent_dir << " on 32 bits."
+                     << std::endl;
+        return false;
+      }
+      if(!a_wb.write((seek32)m_seek_parent_dir)) return false;
+    }
+    if(!a_wb.write(m_object_class)) return false;
+    if(!a_wb.write(m_object_name)) return false;
+    if(!a_wb.write(m_object_title)) return false;
+    if(m_file.verbose()) {
+      m_file.out() << "tools::wroot::key::to_buffer :"
+                   << " nbytes : " << m_nbytes
+                   << ", object class : " << sout(m_object_class)
+                   << ", object name : " << sout(m_object_name)
+                   << ", object title : " << sout(m_object_title)
+                   << ", object size : " << m_object_size
+                   << "." 
+                   << std::endl;
+    }
+    return true;
+  }
+
+protected:
+  static std::string sout(const std::string& a_string) {
+    return std::string("\"")+a_string+"\"";
+  }
+protected:
+  uint32 record_size(uint32 a_version) const {
+    // Return the size in bytes of the key header structure.
+    uint32 nbytes = sizeof(m_nbytes);
+    nbytes += sizeof(short);
+    nbytes += sizeof(m_object_size);
+    nbytes += sizeof(date);
+    nbytes += sizeof(m_key_length);
+    nbytes += sizeof(m_cycle);
+    if(a_version>1000) {
+      nbytes += sizeof(seek);
+      nbytes += sizeof(seek);
+    } else {
+      nbytes += sizeof(seek32);
+      nbytes += sizeof(seek32);
+    }
+    nbytes += std_string_record_size(m_object_class);
+    nbytes += std_string_record_size(m_object_name);
+    nbytes += std_string_record_size(m_object_title);
+    return nbytes;
+  }
+
+  bool initialize(uint32 a_nbytes) {
+    uint32 nsize = m_key_length+a_nbytes;
+
+    m_date = get_date();
+
+    if(a_nbytes) {//GB
+      m_seek_key = m_file.END();
+      m_file.set_END(m_seek_key+nsize);
+
+      //NOTE : the free segment logic found in ROOT/TKey
+      //       is not yet needed right now for us, since
+      //       we always write at end of file. The update
+      //       of the eof free_seg is done in set_END.
+    } else { //basket
+      m_seek_key = 0;
+    }
+
+    delete [] m_buffer;
+    m_buffer = new char[nsize];
+    m_buf_size = nsize;
+    m_nbytes = nsize;
+
+    return true;
+  }
+protected:
+  ifile& m_file;
+  uint32 m_buf_size;
+  char* m_buffer;
+  // Record (stored in file) :
+  uint32 m_nbytes;               //Number of bytes for the object on file
+  uint32 m_version;              //Key version identifier
+  uint32 m_object_size;       //Length of uncompressed object in bytes
+  date m_date;                //Date/Time of insertion in file
+  uint16 m_key_length;        //Number of bytes for the key itself
+  uint16 m_cycle;              //Cycle number
+  seek m_seek_key;            //Location of object on file
+  seek m_seek_parent_dir;     //Location of parent directory on file
+  std::string m_object_class; //Object Class name.
+  std::string m_object_name;  //name of the object.
+  std::string m_object_title; //title of the object.
+};
+
+}}
+
+#endif
+
+//doc :
+//////////////////////////////////////////////////////////////////////////
+//                                                                      //
+//  The Key class includes functions to book space on a file,           //
+//   to create I/O buffers, to fill these buffers                       //
+//   to compress/uncompress data buffers.                               //
+//                                                                      //
+//  Before saving (making persistent) an object on a file, a key must   //
+//  be created. The key structure contains all the information to       //
+//  uniquely identify a persistent object on a file.                    //
+//     fNbytes    = number of bytes for the compressed object+key       //
+//     version of the Key class                                         //
+//     fObjlen    = Length of uncompressed object                       //
+//     fDatime    = Date/Time when the object was written               //
+//     fKeylen    = number of bytes for the key structure               //
+//     fCycle     = cycle number of the object                          //
+//     fSeekKey   = Address of the object on file (points to fNbytes)   //
+//                  This is a redundant information used to cross-check //
+//                  the data base integrity.                            //
+//     fSeekPdir  = Pointer to the directory supporting this object     //
+//     fClassName = Object class name                                   //
+//     fName      = name of the object                                  //
+//     fTitle     = title of the object                                 //
+//                                                                      //
+//  The Key class is used by ROOT to:                                   //
+//    - to write an object in the Current Directory                     //
+//    - to write a new ntuple buffer                                    //
+//                                                                      //
+//////////////////////////////////////////////////////////////////////////

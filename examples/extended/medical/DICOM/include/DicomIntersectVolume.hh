@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DicomIntersectVolume.hh 74809 2013-10-22 09:49:26Z gcosmo $
+//
 /// \file medical/DICOM/include/DicomIntersectVolume.hh
 /// \brief Definition of the DicomIntersectVolume class
 //
@@ -51,8 +53,8 @@ public:
   DicomIntersectVolume();
   ~DicomIntersectVolume();
 
-  void SetNewValue(G4UIcommand * command,
-                   G4String newValues);
+  virtual void SetNewValue(G4UIcommand * command,
+                           G4String newValues);
 
 private:
 
@@ -60,8 +62,10 @@ private:
   void BuildG4Solid( std::vector<G4String> params );
   G4PhantomParameterisation* GetPhantomParam(G4bool bMustExist);
   G4bool IsPhantomVolume( G4VPhysicalVolume* pv );
-  std::vector<G4VPhysicalVolume*> GetPhysicalVolumes( const G4String& name, bool exists, G4int nVols );
-  std::vector<G4LogicalVolume*> GetLogicalVolumes( const G4String& name, bool exists, G4int nVols );
+  std::vector<G4VPhysicalVolume*> GetPhysicalVolumes( const G4String& name, 
+                              bool exists, G4int nVols );
+  std::vector<G4LogicalVolume*> GetLogicalVolumes( const G4String& name, 
+                           bool exists, G4int nVols );
   std::vector<G4String> GetWordsInString( const G4String& stemp);
 
 private:
@@ -70,11 +74,7 @@ private:
 
   G4VSolid* fSolid;
 
-  G4VPhysicalVolume* fPhantomVolume;
-
   std::ofstream fout;
-
-  G4PhantomParameterisation* fRegularParam;
 
   G4ThreeVector fPhantomMinusCorner;
 

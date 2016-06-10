@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VPreCompoundTransitions.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // J. M. Quesada (May 08). New virtual classes have been added Prob1,2,3 
 // JMQ (06 September 2008) Also external choices have been added for:

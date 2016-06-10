@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ChargeExchange.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model

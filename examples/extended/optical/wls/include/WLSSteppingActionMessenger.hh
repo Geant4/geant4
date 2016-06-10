@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: WLSSteppingActionMessenger.hh 69561 2013-05-08 12:25:56Z gcosmo $
+//
 /// \file optical/wls/include/WLSSteppingActionMessenger.hh
 /// \brief Definition of the WLSSteppingActionMessenger class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,17 +47,17 @@ class WLSSteppingActionMessenger : public G4UImessenger
   public:
 
     WLSSteppingActionMessenger(WLSSteppingAction* );
-    ~WLSSteppingActionMessenger();
+    virtual ~WLSSteppingActionMessenger();
 
-    void SetNewValue(G4UIcommand* ,G4String );
+    virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-    WLSSteppingAction* steppingAction;
+    WLSSteppingAction* fSteppingAction;
 
-    G4UIdirectory*     steppingDir;
+    G4UIdirectory*     fSteppingDir;
  
-    G4UIcmdWithAnInteger* SetBounceLimitCmd;
+    G4UIcmdWithAnInteger* fSetBounceLimitCmd;
 
 };
 

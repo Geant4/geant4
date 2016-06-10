@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPFieldPoint_h
 #define G4NeutronHPFieldPoint_h 1

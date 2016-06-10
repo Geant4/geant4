@@ -92,7 +92,7 @@ PreInit or Idle > /control/execute vis.mac
  HistoManager class and its Messenger. The histos can be individually activated
  with the command :
 \verbatim
-/testem/histo/setHisto id nbBins  valMin valMax unit 
+/analysis/h1/set id nbBins  valMin valMax unit 
 \endverbatim
  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
  (see the macros xxxx.mac).
@@ -101,18 +101,22 @@ PreInit or Idle > /control/execute vis.mac
  - 2     "(charged particles): dN/dS at Scoring plane"
  - 3     "(charged particles): d(N/cost)/dS at Scoring plane"
  - 4     "(charged particles): normalized d(N/cost)/dS at Scoring plane"
+ - 5     "(charged particles); scattering angle theta"
+ - 6     "(charged particles); measured scattering angle theta" 
 
  The histograms can be viewed using ROOT or PAW.
  
  One can control the name and format of the histograms file with the command:
 \verbatim
-/testem/histo/setFileName  name  (default nrccBenchmark)
-/testem/histo/setFileType  type  (choice: hbook, root(default), xml)  
+/analysis/setFileName  name  (default nrccBenchmark)
 \endverbatim
+
+ It is possible to choose the format of the histogram file : root (default),
+ xml, csv, by using namespace in HistoManager.hh   
    
  It is also possible to print selected histograms on an ascii file:
 \verbatim
-/testem/histo/printHisto id
+/analysis/h1/setAscii id
 \endverbatim
  All selected histos will be written on a file name.ascii (default nrccBenchmark)
 

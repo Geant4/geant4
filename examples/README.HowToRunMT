@@ -1,0 +1,79 @@
+$Id: README,v 1.16 2010-11-29 10:34:36 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+        Tips how to run an example in multi-threading mode
+        --------------------------------------------------
+
+ 1) RUN EXAMPLE IN MULTI-THREADING MODE
+
+ No special steps are needed to build an example in multi-threading (MT) mode.
+ The examples which has been migrated to multi-threading will automatically 
+ run in MT when they are built against the Geant4 libraries built with MT mode
+ activated, otherwise they will run in sequential mode.
+ Not migrated examples will run in sequential mode even when built against
+ Geant4 libraries built with MT mode activated.
+
+ The examples which support MT can be easily recognized by the following lines
+ of code in main ():
+
+ #ifdef G4MULTITHREADED
+   G4MTRunManager* runManager = new G4MTRunManager;
+ #else
+   G4RunManager* runManager = new G4RunManager;
+ #endif
+
+ The compiler flag -DG4MULTITHREADED is automatically set when building applications
+ using Geant4's CMake (via GEANT4_USE_FILE) and GNUmake systems, and is listed in 
+ the flags reported by the --cflags option of the geant4-config program.
+
+ 2) SET NUMBER OF THREADS
+
+ When the number of threads is not selected in the application, the default number
+ (which is actually 2) will be used. Another number of threads can be set in several
+ ways:
+
+ - in the code
+
+   #ifdef G4MULTITHREADED
+     G4MTRunManager* runManager = new G4MTRunManager;
+     runManager->SetNumberOfThreads(4);
+   #else
+     ...
+
+ - in a macro file via UI command added just before /run/initialize
+
+   /run/numberOfThreads 4
+
+ - by setting the environment variable 
+  
+   export G4FORCENUMBEROFTHREADS = 4  
+   or
+   setenv G4FORCENUMBEROFTHREADS 4
+
+ The environment variable value is forced and it cannot be changed from a code 
+ call or a macro. A warning is issued in such situation.
+
+ 3) OUTPUT FROM THREADS
+
+ In MT processing each worker produces its output and these messages are interlayed
+ on the screen. The messeges from threads are preceded with a predefined string 
+ G4WTi> where i is the thread number.  Users can change this default behaviour 
+ and choose
+
+ - to buffer the output from each thread at a time, so that the output of each 
+   thread is grouped and printed at the end of the job
+
+   /control/cout/useBuffer true|false
+
+ - to limit the output from threads to one selected thread only: 
+
+  /control/cout/ignoreThreadsExcept 0
+
+ - to redirect the output from threads in a file:
+
+   /control/cout/setCoutFile coutFileName
+   /control/cout/setCerrFile cerrFileName

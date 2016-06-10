@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04MuonHit.hh
 /// \brief Definition of the ExN04MuonHit class
 //
+// $Id: ExN04MuonHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #ifndef ExN04MuonHit_h
 #define ExN04MuonHit_h 1
@@ -35,48 +37,39 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
-class ExN04MuonHit : public G4VHit
-{
-  public:
+class ExN04MuonHit : public G4VHit {
+public:
+  ExN04MuonHit();
+  ~ExN04MuonHit();
+  ExN04MuonHit(const ExN04MuonHit& right);
+  const ExN04MuonHit& operator=(const ExN04MuonHit &right);
+  G4int operator==(const ExN04MuonHit &right) const;
 
-      ExN04MuonHit();
-      ~ExN04MuonHit();
-      ExN04MuonHit(const ExN04MuonHit &right);
-      const ExN04MuonHit& operator=(const ExN04MuonHit &right);
-      G4int operator==(const ExN04MuonHit &right) const;
+  inline void *operator new(size_t);
+  inline void operator delete(void *aHit);
 
+  virtual void Draw();
+  virtual void Print();
 
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
+  inline void SetEdep(G4double de) { fedep = de; }
+  inline void AddEdep(G4double de) { fedep += de; }
+  inline G4double GetEdep() { return fedep; }
+  inline void SetPos(G4ThreeVector xyz) { fpos = xyz; }
+  inline G4ThreeVector GetPos() { return fpos; }
 
-      void Draw();
-      void Print();
-
-  private:
-      G4double edep;
-      G4ThreeVector pos;
-
-  public:
-      inline void SetEdep(G4double de)
-      { edep = de; }
-      inline void AddEdep(G4double de)
-      { edep += de; }
-      inline G4double GetEdep()
-      { return edep; }
-      inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; }
-      inline G4ThreeVector GetPos()
-      { return pos; }
-
+private:
+  G4double fedep;
+  G4ThreeVector fpos;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 typedef G4THitsCollection<ExN04MuonHit> ExN04MuonHitsCollection;
 
 extern G4Allocator<ExN04MuonHit> ExN04MuonHitAllocator;
 
 inline void* ExN04MuonHit::operator new(size_t)
 {
-  void *aHit;
+  void* aHit;
   aHit = (void *) ExN04MuonHitAllocator.MallocSingle();
   return aHit;
 }
@@ -87,5 +80,3 @@ inline void ExN04MuonHit::operator delete(void *aHit)
 }
 
 #endif
-
-

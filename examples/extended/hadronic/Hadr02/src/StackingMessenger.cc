@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/StackingMessenger.cc
 /// \brief Implementation of the StackingMessenger class
 //
-// $Id$
+// $Id: StackingMessenger.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -41,6 +41,8 @@
 //
 
 #include "StackingMessenger.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "StackingAction.hh"
 #include "G4UIcmdWithABool.hh"

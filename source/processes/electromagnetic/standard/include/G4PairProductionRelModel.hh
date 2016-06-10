@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PairProductionRelModel.hh 73607 2013-09-02 10:04:03Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -70,6 +70,9 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel);
+
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
@@ -98,17 +101,17 @@ public:
   inline G4bool LPMflag() const;
 
 protected:
+
   // screening functions
   inline G4double Phi1(G4double delta) const;
   inline G4double Phi2(G4double delta) const;
+  inline G4double ScreenFunction1(G4double ScreenVariable);
+  inline G4double ScreenFunction2(G4double ScreenVariable);
   inline G4double DeltaMax() const;
   inline G4double DeltaMin(G4double) const;
+
   // lpm functions
   void  CalcLPMFunctions(G4double k, G4double eplus);
-
-  // obsolete
-  G4double ScreenFunction1(G4double ScreenVariable);
-  G4double ScreenFunction2(G4double ScreenVariable);
 
   G4double ComputeXSectionPerAtom(G4double totalEnergy, G4double Z);
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HepRepFileSceneHandler.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //
 // Joseph Perl  27th January 2002
@@ -50,7 +50,6 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
 #include "G4VTrajectory.hh"
 #include "G4VTrajectoryPoint.hh"
 #include "G4TrajectoriesModel.hh"
@@ -83,6 +82,11 @@ G4VSceneHandler(system, fSceneIdCount++, name)
 	doneInitTraj = false;
 	drawingHit = false;
 	doneInitHit = false;
+        trajContext = 0;
+        trajAttValues = 0;
+        trajAttDefs = 0;
+        hitAttValues = 0;
+        hitAttDefs = 0;
 }
 
 
@@ -631,7 +635,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	// instead need to do point drawing from here (in order to obtain the points attributes,
 	// not available from AddPrimitive(...point).  Instead, such a call will just serve to set the
 	// flag that tells us that point drawing was requested for this trajectory (depends on several
-	// factors including i_mode, trajContext and filtering).
+	// factors including trajContext and filtering).
 	drawingTraj = true;
 	doneInitTraj = false;
 	G4VSceneHandler::AddCompound(traj);
@@ -720,15 +724,14 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 							strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
 							strcmp(iAttVal->GetName(),"Pos-Z")!=0)
 							hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-					delete pointAttValues;
 				}
-				delete rawPointAttValues;
 			}
 			
 			// Clean up point attributes.
-			if (pointAttDefs)
-				delete pointAttDefs;
-			
+                        delete pointAttDefs;
+                        delete pointAttValues;
+                        delete rawPointAttValues;
+
 			// Each trajectory point is made of a single primitive, a point.
 			hepRepXMLWriter->addPrimitive();
 			G4Point3D vertex = aTrajectoryPoint->GetPosition();
@@ -819,15 +822,14 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 							strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
 							strcmp(iAttVal->GetName(),"Pos-Z")!=0)
 							hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-					delete pointAttValues;
 				}
-				delete rawPointAttValues;
 			}
 			
 			// Clean up point attributes.
-			if (pointAttDefs)
-				delete pointAttDefs;
-			
+			delete pointAttDefs;
+                        delete pointAttValues;
+                        delete rawPointAttValues;
+
 			// Each trajectory point is made of a single primitive, a point.
 			G4Point3D vertex = aTrajectoryPoint->GetPosition();
 			
@@ -1265,17 +1267,6 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 			hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
 		} while (notLastEdge);
 	} while (notLastFace);
-}
-
-
-void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS&) {
-#ifdef G4HEPREPFILEDEBUG
-	G4cout <<
-    "G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
-	<< G4endl;
-	PrintThings();
-#endif
-    G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4NURBS : not implemented. " << G4endl;
 }
 
 

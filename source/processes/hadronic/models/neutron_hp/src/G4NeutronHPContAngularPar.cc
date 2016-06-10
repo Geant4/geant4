@@ -53,9 +53,9 @@
 #include "G4NeutronHPVector.hh"
 #include "G4NucleiProperties.hh"
 #include "G4NeutronHPKallbachMannSyst.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
  
-  void G4NeutronHPContAngularPar::Init(std::ifstream & aDataFile)
+  void G4NeutronHPContAngularPar::Init(std::istream & aDataFile)
   {
     aDataFile >> theEnergy >> nEnergies >> nDiscreteEnergies >> nAngularParameters;
     theEnergy *= eV;
@@ -107,7 +107,8 @@
     }
     else
     {
-      result->SetDefinition(G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z));
+      //result->SetDefinition(G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z));
+      result->SetDefinition(G4IonTable::GetIonTable()->GetIon(Z,A,0));
     }
     G4int i(0);
     G4int it(0);

@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02RunAction class
 //
 //
-// $Id$
+// $Id: RE02RunAction.cc 75682 2013-11-05 09:11:19Z gcosmo $
 // 
 #include "RE02RunAction.hh"
 #include "RE02Run.hh"
@@ -51,7 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // Constructor
 RE02RunAction::RE02RunAction()
-  : fNx(0), fNy(0), fNz(0)
+  : G4UserRunAction(),
+    fNx(0), fNy(0), fNz(0)
 {
   // - Prepare data member for RE02Run.
   //   vector represents a list of MultiFunctionalDetector names.
@@ -86,6 +87,8 @@ void RE02RunAction::BeginOfRunAction(const G4Run* aRun)
 //== 
 void RE02RunAction::EndOfRunAction(const G4Run* aRun)
 {
+  if(!IsMaster()) return;
+
   //- RE02Run object.
   RE02Run* re02Run = (RE02Run*)aRun;
   //--- Dump all socred quantities involved in RE02Run.

@@ -35,16 +35,17 @@
 */
 #include <string.h>
 #include <tpia_target.h>
+#include "G4Types.hh"
 
 #if defined __cplusplus
 namespace GIDI {
 using namespace GIDI;
 #endif
 
-static int initialSizeOfList = 100, incrementalSizeOfList = 100;
-static int numberOfParticles = 0, sizeOfParticleSortedList = 0;
-static tpia_particle **particleSortedList = NULL;
-static tpia_particle *particleList = NULL, *particleListEnd = NULL;
+static G4ThreadLocal int initialSizeOfList = 100, incrementalSizeOfList = 100;
+static G4ThreadLocal int numberOfParticles = 0, sizeOfParticleSortedList = 0;
+static G4ThreadLocal tpia_particle **particleSortedList = NULL;
+static G4ThreadLocal tpia_particle *particleList = NULL, *particleListEnd = NULL;
 /*
 ************************************************************
 */

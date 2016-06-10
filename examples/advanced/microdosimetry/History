@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
+$Id: History 73136 2013-08-19 14:28:09Z sincerti $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,37 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
 
                        Package History file
                        --------------------
+
+3 Oct 2013 - S. Incerti - microdosimetry-V09-06-09
+- Updated CMakeLists.txt
+
+30 Sep 2013 - I. Hrivnacova - microdosimetry-V09-06-08
+- Updated for changes in analysis:
+  (removal of G4AnalysisManager::Create(isMaster))
+
+22 Aug 2013 - S. Incerti - microdosimetry-V09-06-07
+- Updated README
+
+19 Aug 2013 - S. Incerti - microdosimetry-V09-06-06
+- Updated README
+
+30 July 2013 - A.Dotti - microdosimetry-V09-06-05
+- Fix compilation warnings from clang32
+
+7 June 2013 - M. Karamitros - microdosimetry-V09-06-04
+- Remove unnecessary output
+
+7 June 2013 - M. Karamitros - microdosimetry-V09-06-03
+- Code clean up and comments added for beta release
+
+3 June 2013 - M. Karamitros - microdosimetry-V09-06-02
+- Fix initialization of sequential run
+
+10 Apr 2013 - M. Karamitros - microdosimetry-V09-06-01
+- Migration to MT
+
+10 Apr 2013 - S. Incerti - microdosimetry-V09-06-00
+- Updated msc model
 
 3 Nov 2012 - S.Incerti - microdosimetry-V09-05-06
 - Removed shadowing in SteppingAction

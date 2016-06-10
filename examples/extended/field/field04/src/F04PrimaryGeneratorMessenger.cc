@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: F04PrimaryGeneratorMessenger.cc 77884 2013-11-29 08:41:11Z gcosmo $
+//
 /// \file field/field04/src/F04PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the F04PrimaryGeneratorMessenger class
 //
-//
+
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4SystemOfUnits.hh"
@@ -52,16 +54,19 @@ F04PrimaryGeneratorMessenger::
   fSetXvertexCmd->SetGuidance(" Set x coord. of the primary vertex.");
   fSetXvertexCmd->SetParameterName("xv",true);
   fSetXvertexCmd->SetDefaultValue(0.0*mm);
+  fSetXvertexCmd->SetDefaultUnit("mm");
  
   fSetYvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/yvertex",this);
   fSetYvertexCmd->SetGuidance(" Set y coord. of the primary vertex.");
   fSetYvertexCmd->SetParameterName("yv",true);
   fSetYvertexCmd->SetDefaultValue(0.0*mm);
+  fSetYvertexCmd->SetDefaultUnit("mm");
  
   fSetZvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/zvertex",this);
   fSetZvertexCmd->SetGuidance(" Set z coord. of the primary vertex.");
   fSetZvertexCmd->SetParameterName("zv",true);
   fSetZvertexCmd->SetDefaultValue(0.0*mm);
+  fSetZvertexCmd->SetDefaultUnit("mm");
 
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsOrderedFreeVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Implementation
@@ -41,8 +41,9 @@
 //                derived class constructors
 //              2000-11-11 by H.Kurashige
 //              > use STL vector for dataVector and binVector
-//              19 Jun. 2009-06-19 by V.Ivanchenko 
+//              2009-06-19 by V.Ivanchenko 
 //              > removed hidden bin 
+//              2013-10-02 by V.Ivanchenko removed FindBinLocation   
 //
 // mail:        gum@triumf.ca
 //
@@ -104,11 +105,6 @@ void G4PhysicsOrderedFreeVector::InsertValues(G4double energy, G4double value)
         edgeMax = binVector.back();
 }
 
-G4double  G4PhysicsOrderedFreeVector::GetLowEdgeEnergy(size_t binNumber) const
-{
-        return binVector[binNumber];
-} 
-
 G4double  G4PhysicsOrderedFreeVector::GetEnergy(G4double aValue)
 {
 
@@ -149,19 +145,3 @@ G4double G4PhysicsOrderedFreeVector::LinearInterpolationOfEnergy(G4double aValue
          ( binVector[theLocBin+1]-binVector[theLocBin] ) * intplFactor;
 }
 
-
-size_t G4PhysicsOrderedFreeVector::FindBinLocation(G4double theEnergy) const
-{
-   G4int n1 = 0;
-   G4int n2 = numberOfNodes/2;
-   G4int n3 = numberOfNodes - 1;
-   while (n1 != n3 - 1)
-   {
-      if (theEnergy > binVector[n2])
-         { n1 = n2; }
-      else
-         { n3 = n2; }
-      n2 = n1 + (n3 - n1 + 1)/2;
-   }
-   return (size_t)n1;
-}

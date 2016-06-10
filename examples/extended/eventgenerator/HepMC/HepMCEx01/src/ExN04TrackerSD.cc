@@ -26,33 +26,38 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackerSD.cc
 /// \brief Implementation of the ExN04TrackerSD class
 //
+// $Id: ExN04TrackerSD.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//
 
 #include "ExN04TrackerSD.hh"
 #include "ExN04TrackerHit.hh"
 #include "G4Step.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
-#include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04TrackerSD::ExN04TrackerSD(G4String name)
-:G4VSensitiveDetector(name)
+  : G4VSensitiveDetector(name)
 {
   G4String HCname;
   collectionName.insert(HCname="trackerCollection");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04TrackerSD::~ExN04TrackerSD(){;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
   trackerCollection = new ExN04TrackerHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
+                      (SensitiveDetectorName,collectionName[0]);
   if(HCID<0)
   { HCID = GetCollectionID(0); }
   HCE->AddHitsCollection(HCID,trackerCollection);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool ExN04TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -66,18 +71,22 @@ G4bool ExN04TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerSD::clear()
 {
-} 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerSD::DrawAll()
 {
-} 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04TrackerSD::PrintAll()
 {
-} 
+}

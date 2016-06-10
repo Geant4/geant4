@@ -27,7 +27,7 @@
 /// \brief Definition of the G02DetectorConstruction class
 //
 //
-// $Id$
+// $Id: G02DetectorConstruction.hh 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02DetectorConstruction
 //
@@ -63,7 +63,7 @@ class G02DetectorConstruction : public G4VUserDetectorConstruction
 
     // Construction of SubDetectors
     //
-    G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
     G4LogicalVolume* ConstructSubDetector1();
     G4LogicalVolume* ConstructSubDetector2();
     G4VPhysicalVolume* ConstructDetector();

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 25-08-06 New Final State type (refFlag==3 , Legendre (Low Energy) + Probability (High Energy) )
 //          is added by T. KOI

@@ -1,0 +1,56 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_pointer
+#define tools_pointer
+
+//WARNING : touchy
+
+//NOTE : on 32 or 64 bits machine, a pointer matches an unsigned long.
+
+#include "typedefs"
+#include "snpf"
+
+#include <string>
+
+namespace tools {
+
+inline bool to_pointer(const std::string& a_string,void*& a_value){
+  unsigned long v = 0L;
+  if(::sscanf(a_string.c_str(),"0x%lx",&v)!=1) {
+    if(::sscanf(a_string.c_str(),"%lu",&v)!=1) {
+      a_value = 0;
+      return false;
+    }
+  }
+  a_value = (void*)v;
+  return true;
+}
+
+inline std::string p2s(const void* a_value){
+  char s[512];
+  snpf(s,sizeof(s),"%lu",(unsigned long)a_value);
+  return s;
+}
+
+inline std::string p2sx(const void* a_value){
+  char s[512];
+  snpf(s,sizeof(s),"0x%lx",(unsigned long)a_value);
+  return s;
+}
+
+inline std::string char_p2s(const char* a_value) {
+  char s[512];
+  snpf(s,sizeof(s),"%lu",(unsigned long)a_value);
+  return std::string(s);
+}
+
+inline std::string long2s(const long a_value) {
+  char s[512];
+  snpf(s,sizeof(s),"%ld",a_value);
+  return std::string(s);
+}
+
+}
+
+#endif

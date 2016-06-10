@@ -1,4 +1,4 @@
-# $Id: stepfunction.mac,v 1.2 2009-10-31 18:05:56 maire Exp $
+# $Id: stepfunction.mac 68999 2013-04-15 09:23:17Z gcosmo $
 #
 /control/verbose 2
 /run/verbose 2
@@ -12,8 +12,8 @@
 #
 /process/eLoss/StepFunction 1 10 um
 #
-/testem/histo/setFileName nothing.dr100
-/testem/histo/setHisto 9 100  0  5 mm	#step size in wall
+/analysis/setFileName nothing_dr100
+/analysis/h1/set 9 100  0  5 mm	#step size in wall
 #
 /testem/event/printModulo 200000
 #

@@ -134,6 +134,12 @@ G4V3DNucleus* G4QGSModel<ParticipantType>::GetWoundedNucleus() const
   return theParticipants.GetWoundedNucleus();
 }
 
+template<class ParticipantType>                      // Uzhi Nov. 2012
+G4V3DNucleus* G4QGSModel<ParticipantType>::GetProjectileNucleus() const
+{
+  return 0;
+}
+
 template<class ParticipantType>
 void G4QGSModel<ParticipantType>::ModelDescription(std::ostream& outFile) const
 {

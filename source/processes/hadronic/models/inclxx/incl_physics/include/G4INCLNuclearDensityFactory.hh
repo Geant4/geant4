@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -46,48 +44,23 @@
 
 namespace G4INCL {
 
-  class NuclearDensityFactory {
-  public:
-    static NuclearDensity *createDensity(const G4int A, const G4int Z);
+  namespace NuclearDensityFactory {
 
-    static InverseInterpolationTable *createRPCorrelationTable(const G4int A, const G4int Z);
+    InverseInterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z);
 
-    static InverseInterpolationTable *createRCDFTable(const G4int A, const G4int Z);
+    InverseInterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z);
 
-    static InverseInterpolationTable *createPCDFTable(const G4int A, const G4int Z);
+    InverseInterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z);
 
-    static ParticleSampler *createParticleSampler(const G4int A, const G4int Z);
+    NuclearDensity const *createDensity(const G4int A, const G4int Z);
 
-    static void clearCache() {
-      for(std::map<G4int,NuclearDensity*>::const_iterator i = nuclearDensityCache.begin(); i!=nuclearDensityCache.end(); ++i)
-        delete i->second;
-      nuclearDensityCache.clear();
+    void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InverseInterpolationTable * const table);
 
-      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rpCorrelationTableCache.begin(); i!=rpCorrelationTableCache.end(); ++i)
-        delete i->second;
-      rpCorrelationTableCache.clear();
+    void addDensityToCache(const G4int A, const G4int Z, NuclearDensity * const density);
 
-      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rCDFTableCache.begin(); i!=rCDFTableCache.end(); ++i)
-        delete i->second;
-      rCDFTableCache.clear();
+    void clearCache();
 
-      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = pCDFTableCache.begin(); i!=pCDFTableCache.end(); ++i)
-        delete i->second;
-      pCDFTableCache.clear();
-    }
-
-  protected:
-    // We will not construct any instances of this class
-    NuclearDensityFactory() {}
-    ~NuclearDensityFactory() {}
-
-    static std::map<G4int,NuclearDensity*> nuclearDensityCache;
-
-    static std::map<G4int,InverseInterpolationTable*> rpCorrelationTableCache;
-    static std::map<G4int,InverseInterpolationTable*> rCDFTableCache;
-    static std::map<G4int,InverseInterpolationTable*> pCDFTableCache;
-
-  };
+  }
 }
 
 #endif

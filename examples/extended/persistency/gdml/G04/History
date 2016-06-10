@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2010-11-09 10:34:35 allison Exp $
+$Id: History 69988 2013-05-21 12:36:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 17st, 2013 W. Pokorski  (G04-V09-06-00)
+- changes for Coding Rule 2.1
 
 July 31st, 2012 W. Pokorski  (G04-V09-05-00)
 - adding CMake file + cosmetic changes

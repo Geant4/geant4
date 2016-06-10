@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NucleiPropertiesTheoreticalTable.hh 72955 2013-08-14 14:23:14Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -91,18 +91,18 @@ private:
  
 
   // Mass Excess
-  static G4double AtomicMassExcess[nEntries];
+  static const G4double AtomicMassExcess[nEntries];
   
   // Table of Z (number of protons) and A (number of nucleons)
   //        indexArray[0][ ] --> Z
   //        indexArray[1][ ] --> A
-  static G4int indexArray[2][nEntries];
+  static const G4int indexArray[2][nEntries];
   
   // Reduced Table of Z for shorter index search.
   //         The index in this table coincide with Z-1
   //         For each Z value shortTable[Z-1] has the index of
   // the 1st occurrence in the indexArray[][]
-  static G4int shortTable[shortTableSize];
+  static const G4int shortTable[shortTableSize];
 
 };
   

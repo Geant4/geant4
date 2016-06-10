@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChemistryManager.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4DNAChemistryManager.hh 75583 2013-11-04 12:16:46Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -59,7 +59,7 @@ enum ElectronicModification
 /**
   * G4DNAChemistryManager is called from the physics models.
   * It creates the water molecules and the solvated electrons and
-  * and send them to G4ITStepManager to be treated in the chemistry stage.
+  * and send them to synchronous step manager to be treated in the chemistry stage.
   * For this, the fActiveChemistry flag needs to be on.
   * It is also possible to give already molecule's pointers already built.
   * G4DNAChemistryManager will then be in charge of creating the track and loading
@@ -80,6 +80,7 @@ public:
       * You should rather use DeleteInstance than the destructor of this class
       */
     static void DeleteInstance();
+
 
     /**
       * Tells the chemMan to write into a file
@@ -135,17 +136,21 @@ public:
       */
     void PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecule,
                                           const G4Track* /*theIncomingTrack*/);
+
+
+    void AddEmptyLineInOuputFile();
+
 protected :
     G4DNAWaterExcitationStructure* GetExcitationLevel();
     G4DNAWaterIonisationStructure* GetIonisationLevel();
+    void InitializeFile();
+    G4DNAChemistryManager();
 
 private:
-    G4DNAChemistryManager();
     static std::auto_ptr<G4DNAChemistryManager> fInstance;
     bool fActiveChemistry;
-
-    std::ofstream  fOutput;
     G4bool fWriteFile;
+    static G4ThreadLocal std::ofstream*  fOutput;
 
     G4DNAWaterExcitationStructure* fExcitationLevel;
     G4DNAWaterIonisationStructure* fIonisationLevel;

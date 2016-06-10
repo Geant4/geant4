@@ -144,3 +144,12 @@ void G4NeutronHPElastic::addChannelForNewElement()
    delete theFS;
    numEle = (G4int)G4Element::GetNumberOfElements();
 }
+
+G4int G4NeutronHPElastic::GetVerboseLevel() const 
+{
+   return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+}
+void G4NeutronHPElastic::SetVerboseLevel( G4int newValue ) 
+{
+   G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
+}

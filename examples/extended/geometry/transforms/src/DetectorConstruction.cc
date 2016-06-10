@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: DetectorConstruction.cc 68726 2013-04-05 09:35:20Z gcosmo $
 //
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
@@ -53,7 +53,10 @@
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
    fMessenger(0),
-   fMethod(kWithDirectMatrix)
+   fMethod(kWithDirectMatrix),
+   fWorldVolume(0),
+   fTrdVolume(0)
+   
 {
   fMessenger = new DetectorMessenger(this);
 }
@@ -71,8 +74,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Materials
   G4NistManager* nist = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
-  G4Material* material = nist->FindOrBuildMaterial("G4_AIR", fromIsotopes);
+  G4Material* material = nist->FindOrBuildMaterial("G4_AIR");
   
   // Clean old geometry, if any
   //
@@ -225,7 +227,7 @@ void DetectorConstruction::PlaceWithInverseMatrix()
                     "Trd",              //name
                     fWorldVolume,       //mother volume
                     false,              //no boolean operation
-                    2);                 //copy number                                                                                     
+                    2);                 //copy number
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -292,7 +294,7 @@ void DetectorConstruction::PlaceWithEulerAngles()
   G4double theta_euler =  90*deg;
   G4double psi_euler   = -90*deg;
   //attention : clhep Euler constructor build inverse matrix !
-  G4RotationMatrix rotm1Inv  = G4RotationMatrix(phi_euler,theta_euler,psi_euler);
+  G4RotationMatrix rotm1Inv = G4RotationMatrix(phi_euler,theta_euler,psi_euler);
   G4RotationMatrix rotm1 = rotm1Inv.inverse();
   //remark : could be built as rotm1 = G4RotationMatrix(-psi, -theta, -phi)
   G4cout << "\n --> phi = " << phi/deg << " deg;  direct rotation matrix : ";
@@ -387,7 +389,7 @@ void DetectorConstruction::PlaceWithReflections()
             fTrdVolume,                          //logical volume
             fWorldVolume,                        //mother volume
             false,                               //no boolean operation
-            3);                                  //copy number                       
+            3);                                  //copy number
 
   // 4rd position
   G4ReflectionFactory::Instance()
@@ -396,7 +398,7 @@ void DetectorConstruction::PlaceWithReflections()
             fTrdVolume,                          //logical volume
             fWorldVolume,                        //mother volume
             false,                               //no boolean operation
-            4);                                  //copy number                       
+            4);                                  //copy number
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

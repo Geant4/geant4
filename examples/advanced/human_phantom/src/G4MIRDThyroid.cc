@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -46,6 +46,7 @@
 #include "G4Box.hh"
 #include "G4VSolid.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDThyroid::G4MIRDThyroid()
 {
@@ -55,18 +56,24 @@ G4MIRDThyroid::~G4MIRDThyroid()
 {
 }
 
-G4VPhysicalVolume* G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
-{
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
 
- G4double z= 4.20*cm; //c thickness = c,  
- G4double rmin= 0. * cm;
- G4double rmax= 1.85 *cm; //Rmax
+G4VPhysicalVolume* G4MIRDThyroid::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
+					    const G4String& colourName, G4bool wireFrame, G4bool)
+{
+ 
+  
+  G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
+  
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
+  
+  G4double z= 4.20*cm; //c thickness = c,  
+  G4double rmin= 0. * cm;
+  G4double rmax= 1.85 *cm; //Rmax
   G4double startphi = 0. * degree;
   G4double deltaphi= 180. * degree; // y< y0
-
+  
   G4Tubs* LobOfThyroidOut = new G4Tubs("LobOfThyroidOut",
 				       rmin, rmax,z/2., 
 				       startphi, deltaphi);
@@ -75,7 +82,7 @@ G4VPhysicalVolume* G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4
   rmax= 0.83 * cm; //r
   deltaphi= 360. * degree; 
   G4Tubs* LobOfThyroidIn = new G4Tubs("LobOfThyroidIn",
-				       rmin, rmax,z/2., 
+				      rmin, rmax,z/2., 
 				      startphi, deltaphi);
 
   G4double xx = 3.72*cm;
@@ -93,51 +100,46 @@ G4VPhysicalVolume* G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4
   relative_matrix -> rotateX(-50.* degree);
 
   G4SubtractionSolid* SecondThyroid = new G4SubtractionSolid("SecondThyroid",
-							    FirstThyroid,
-							    SubtrThyroid,
-							    relative_matrix,
-							    G4ThreeVector(0.0 *cm,0.0 *cm, 4.20*cm));
+							     FirstThyroid,
+							     SubtrThyroid,
+							     relative_matrix,
+							     G4ThreeVector(0.0 *cm,0.0 *cm, 4.20*cm));
 
- G4RotationMatrix* relative_matrix_2 = new G4RotationMatrix();
+  G4RotationMatrix* relative_matrix_2 = new G4RotationMatrix();
   relative_matrix_2 -> rotateX(50.* degree);
  
-G4SubtractionSolid* thyroid = new G4SubtractionSolid("SecondThyroid",
-						      SecondThyroid,
-						      SubtrThyroid,
-						      relative_matrix_2,
-						      G4ThreeVector(0.0 *cm,0.0 *cm, -5.40*cm));
+  G4SubtractionSolid* thyroid = new G4SubtractionSolid("SecondThyroid",
+						       SecondThyroid,
+						       SubtrThyroid,
+						       relative_matrix_2,
+						       G4ThreeVector(0.0 *cm,0.0 *cm, -5.40*cm));
 
 
 
- G4LogicalVolume* logicThyroid = new G4LogicalVolume(thyroid, soft,
-						     "ThyroidVolume",
-						     0, 0, 0);
+  G4LogicalVolume* logicThyroid = new G4LogicalVolume(thyroid, soft,
+						      "ThyroidVolume",
+						      0, 0, 0);
 
- G4RotationMatrix* rm = new G4RotationMatrix();
-  
- rm -> rotateZ(180.*degree);
- 
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm->rotateZ(180.*degree);
   G4VPhysicalVolume* physThyroid = new G4PVPlacement(rm,
-						     G4ThreeVector(0.0*cm,-3.91*cm, -5.925*cm),//y0
-      			       "physicalThyroid",
-  			       logicThyroid,
-			       mother,
-			       false,
-			       0);
-
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicThyroid->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
-
+						     //						     G4ThreeVector(0.0*cm,-3.91*cm, -5.925*cm),//y0
+						     G4ThreeVector(0.0*cm,-3.91*cm, -5.65*cm),//y0
+						     "physicalThyroid",
+						     logicThyroid,
+						     mother,
+						     false,
+						     0,true);
+ 
+ 
   // Visualization Attributes
-  G4VisAttributes* ThyroidVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
-  ThyroidVisAtt->SetForceSolid(true);
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* ThyroidVisAtt = new G4VisAttributes(colour);
+  ThyroidVisAtt->SetForceSolid(wireFrame);
   logicThyroid->SetVisAttributes(ThyroidVisAtt);
 
-  G4cout << "Thyroid created for "<<sex << " !!!!!!" << G4endl;
+  G4cout << "Thyroid created !!!!!!" << G4endl;
 
   // Testing Thyroid Volume
   G4double ThyroidVol = logicThyroid->GetSolid()->GetCubicVolume();

@@ -22,25 +22,28 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: VoxelParam.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file VoxelParam.cc
 /// @brief Define voxel parameterization
 
-#include "VoxelParam.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4Box.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4VPhysicalVolume.hh"
+#include "VoxelParam.hh"
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 VoxelParam::VoxelParam()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 VoxelParam::~VoxelParam()
 {
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void VoxelParam::ComputeTransformation(const G4int id,
                                        G4VPhysicalVolume* vol) const
 {
@@ -59,7 +62,7 @@ void VoxelParam::ComputeTransformation(const G4int id,
   vol-> SetRotation(0);
 }
 
-// --------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void VoxelParam::ComputeDimensions(G4Box& box, const G4int,
                                    const G4VPhysicalVolume*) const
 {

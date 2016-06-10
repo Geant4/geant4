@@ -11,8 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-11-29 17:35:45 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id: sources.cmake 75582 2013-11-04 12:13:01Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -56,7 +55,10 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4BraggModel.hh
         G4ComptonScattering.hh
         G4CoulombScattering.hh
+        G4DeltaAngle.hh
+        G4DeltaAngleFreeScat.hh
         G4DipBustGenerator.hh
+        G4ESTARStopping.hh
         G4GammaConversion.hh
         G4GoudsmitSaundersonMscModel.hh
         G4GoudsmitSaundersonTable.hh
@@ -74,11 +76,13 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4MottCoefficients.hh
         G4NuclearStopping.hh
         G4PAIModel.hh
+        G4PAIModelData.hh
+        G4PAIPhotData.hh
+        G4PAIPhotModel.hh
         G4PAIPhotonModel.hh
         G4PAIxSection.hh
         G4PAIySection.hh
         G4PEEffectFluoModel.hh
-        G4PEEffectModel.hh
         G4PSTARStopping.hh
         G4PairProductionRelModel.hh
         G4PhotoElectricEffect.hh
@@ -86,11 +90,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ScreeningMottCrossSection.hh
         G4SeltzerBergerModel.hh
         G4UniversalFluctuation.hh
-        G4UrbanMscModel90.hh
-        G4UrbanMscModel92.hh
-        G4UrbanMscModel93.hh
-        G4UrbanMscModel95.hh
-        G4UrbanMscModel96.hh
+        G4UrbanMscModel.hh
         G4WaterStopping.hh
         G4WentzelOKandVIxSection.hh
         G4WentzelVIModel.hh
@@ -100,7 +100,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4alphaIonisation.hh
         G4eBremsstrahlung.hh
 	G4eBremParametrizedModel.hh
-        G4eBremsstrahlungModel.hh
         G4eBremsstrahlungRelModel.hh
         G4eCoulombScatteringModel.hh
         G4eIonisation.hh
@@ -124,7 +123,10 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ComptonScattering.cc
         G4CoulombScattering.cc
         G4GammaConversion.cc
+        G4DeltaAngle.cc
+        G4DeltaAngleFreeScat.cc
         G4DipBustGenerator.cc
+        G4ESTARStopping.cc
         G4GoudsmitSaundersonMscModel.cc
         G4GoudsmitSaundersonTable.cc
         G4HeatedKleinNishinaCompton.cc
@@ -141,11 +143,13 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4MottCoefficients.cc
         G4NuclearStopping.cc
         G4PAIModel.cc
+        G4PAIModelData.cc
+        G4PAIPhotData.cc
+        G4PAIPhotModel.cc
         G4PAIPhotonModel.cc
         G4PAIxSection.cc
         G4PAIySection.cc
         G4PEEffectFluoModel.cc
-        G4PEEffectModel.cc
         G4PSTARStopping.cc
         G4PairProductionRelModel.cc
         G4PhotoElectricEffect.cc
@@ -153,11 +157,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ScreeningMottCrossSection.cc
         G4SeltzerBergerModel.cc
         G4UniversalFluctuation.cc
-        G4UrbanMscModel90.cc
-        G4UrbanMscModel92.cc
-        G4UrbanMscModel93.cc
-        G4UrbanMscModel95.cc
-        G4UrbanMscModel96.cc
+        G4UrbanMscModel.cc
         G4WaterStopping.cc
         G4WentzelOKandVIxSection.cc
         G4WentzelVIModel.cc
@@ -167,7 +167,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4alphaIonisation.cc
         G4eBremsstrahlung.cc
 	G4eBremParametrizedModel.cc
-        G4eBremsstrahlungModel.cc
         G4eBremsstrahlungRelModel.cc
         G4eCoulombScatteringModel.cc
         G4eIonisation.cc

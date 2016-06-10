@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -38,7 +38,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
-#include "G4HumanPhantomMaterial.hh"
 #include "G4EllipticalTube.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
@@ -47,6 +46,7 @@
 #include "G4UnionSolid.hh"
 #include "G4EllipticalCone.hh"
 #include "G4HumanPhantomColour.hh"
+#include "G4HumanPhantomMaterial.hh"
 
 G4MIRDRightArmBone::G4MIRDRightArmBone()
 {
@@ -57,14 +57,14 @@ G4MIRDRightArmBone::~G4MIRDRightArmBone()
 }
 
 G4VPhysicalVolume* G4MIRDRightArmBone::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
-						     const G4String& colourName,G4bool wireFrame, G4bool sensitivity)
+						 const G4String& colourName,G4bool wireFrame, G4bool)
 {
   // Remind! the elliptical cone gives problems! Intersections of volumes, 
   // wrong calculation of the volume!
    
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "Construct " << volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
   
@@ -78,33 +78,25 @@ G4VPhysicalVolume* G4MIRDRightArmBone::Construct(const G4String& volumeName,G4VP
   G4EllipticalTube* rightArm = new G4EllipticalTube("OneRightArmBone",dx,dy,34.5 *cm);
  
   G4LogicalVolume* logicRightArmBone = new G4LogicalVolume(rightArm,
-						      skeleton,
-						      "logical" + volumeName,
-						      0, 0,0);
+							   skeleton,
+							   "logical" + volumeName,
+							   0, 0,0);
 
-  G4RotationMatrix* matrix = new G4RotationMatrix();
-  matrix -> rotateX(180. * degree);
-
-  G4VPhysicalVolume* physRightArmBone = new G4PVPlacement(matrix,
-			       G4ThreeVector(-18.4 * cm, 0.0, -0.5*cm),
-						     //-x0
-      			       "physicalRightArmBone",
-  			       logicRightArmBone,
-			       mother,
-			       false,0,true);
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm->rotateX(180.*degree);
+  G4VPhysicalVolume* physRightArmBone = new G4PVPlacement(rm,
+							  G4ThreeVector(-18.4 * cm, 0.0, -0.5*cm),
+							  //-x0
+							  "physicalRightArmBone",
+							  logicRightArmBone,
+							  mother,
+							  false,0,true);
 			      
-
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicRightArmBone->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
 
 
   // Visualization Attributes
   //G4VisAttributes* RightArmBoneVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
- G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   G4VisAttributes* RightArmBoneVisAtt = new G4VisAttributes(colour);
 

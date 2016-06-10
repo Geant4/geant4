@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4bRunData.cc 69223 2013-04-23 12:36:10Z gcosmo $
 //
 /// \file B4bRunData.cc
 /// \brief Implementation of the B4bRunData class
@@ -31,25 +31,13 @@
 #include "B4bRunData.hh"
 #include "B4Analysis.hh"
 
-#include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B4bRunData* B4bRunData::fgInstance = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B4bRunData::B4bRunData()
+B4bRunData::B4bRunData() : G4Run()
 {
-  if ( fgInstance ) {
-    G4cerr << "Cannot create the run data object twice" << G4endl;
-    exit(1);
-  }
-  
-  fgInstance = this;  
-  
   fVolumeNames[0] = "Absorber";
   fVolumeNames[1] = "Gap";
  
@@ -62,9 +50,7 @@ B4bRunData::B4bRunData()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4bRunData::~B4bRunData()
-{
-  fgInstance = 0;
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

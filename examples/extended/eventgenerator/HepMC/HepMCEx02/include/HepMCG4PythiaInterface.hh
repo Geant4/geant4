@@ -23,17 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/include/HepMCG4PythiaInterface.hh
+/// \file eventgenerator/HepMC/HepMCEx01/include/HepMCG4PythiaInterface.hh
 /// \brief Definition of the HepMCG4PythiaInterface class
 //
-// ====================================================================
+// $Id: HepMCG4PythiaInterface.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
-//   HepMCG4PythiaInterface.hh
-//   $Id$
-//
-//   A generic interface class with Pythia event generator via HepMC.
-//
-// ====================================================================
+
 #ifndef HEPMC_G4_PYTHIA_INTERFACE_H
 #define HEPMC_G4_PYTHIA_INTERFACE_H
 
@@ -41,6 +36,8 @@
 #include "HepMC/IO_HEPEVT.h"
 
 class HepMCG4PythiaMessenger;
+
+/// A generic interface class with Pythia event generator via HepMC.
 
 class HepMCG4PythiaInterface : public HepMCG4Interface {
 protected:
@@ -50,7 +47,7 @@ protected:
 
   HepMCG4PythiaMessenger* messenger;
 
-  // In default, this is automatic conversion, Pythia->HEPEVT->HepMC, 
+  // In default, this is automatic conversion, Pythia->HEPEVT->HepMC,
   // by HepMC utilities.
   virtual HepMC::GenEvent* GenerateHepMCEvent();
 
@@ -60,13 +57,13 @@ public:
 
   // set/get methods
   void SetVerboseLevel(G4int i);
-  G4int GetVerboseLevel() const; 
+  G4int GetVerboseLevel() const;
 
   void SetPylist(G4int i);
-  G4int GetPylist() const; 
+  G4int GetPylist() const;
 
   // call pyxxx
-  void CallPyinit(G4String frame, G4String beam, G4String target, 
+  void CallPyinit(G4String frame, G4String beam, G4String target,
                   G4double win);
   void CallPystat(G4int istat);
 
@@ -84,10 +81,7 @@ public:
   virtual void Print() const;
 };
 
-// ====================================================================
-// inline functions
-// ====================================================================
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 inline void HepMCG4PythiaInterface::SetVerboseLevel(G4int i)
 {
   verbose= i;

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPEnergyDistribution_h
 #define G4NeutronHPEnergyDistribution_h 1
@@ -65,7 +64,7 @@ class G4NeutronHPEnergyDistribution
     }
   }
   
-  inline void Init(std::ifstream & theData)
+  inline void Init(std::istream & theData)
   {
     G4double dummy;
     theData >> dummy >> theNumberOfPartials;

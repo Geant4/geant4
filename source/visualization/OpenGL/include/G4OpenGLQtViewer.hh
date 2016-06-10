@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLQtViewer.hh 77479 2013-11-25 10:01:22Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -144,6 +144,12 @@ protected:
   void updateKeyModifierState(const Qt::KeyboardModifiers&);
   void displaySceneTreeComponent();
   G4Colour getColorForPoIndex(int poIndex);
+  
+  // So that privately accumulated vis attributes modifiers may be
+  // concatenated with the standard vis attributes modifiers for commands
+  // such as /vis/viewer/set/all and /vis/viewer/save...
+  const std::vector<G4ModelingParameters::VisAttributesModifier>*
+  GetPrivateVisAttributesModifiers() const;
 
 protected:
   QGLWidget* fWindow;
@@ -207,6 +213,10 @@ private:
   // Get the old tree wigdet item for POindex if exists
   QTreeWidgetItem* getOldTreeWidgetItem(int POindex);
 
+// parse the scene tree and return a string of status that can be saved
+  std::string parseSceneTreeAndSaveState();
+
+  std::string parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level);
 
   QMenu *fContextMenu;
   QPoint fLastPos1;
@@ -263,8 +273,9 @@ private:
   QWidget* fSceneTreeWidget;
   bool fPVRootNodeCreate;
   QLineEdit* fHelpLine;
-
-
+  QString fFileSavePath;
+  QString fDefaultSaveFileFormat;
+  
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;
@@ -293,10 +304,12 @@ private:
   QSignalMapper *signalMapperSurface;
 
   // quick map index to find next item
-  std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskFor;
+  std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIterator;
+  std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIteratorEnd;
 
   // quick map index to find next item
-  std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskFor;
+  std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIterator;
+  std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIteratorEnd;
 
 
 public Q_SLOTS :
@@ -315,7 +328,6 @@ private Q_SLOTS :
   void showShortcuts();
   void toggleMouseAction(int);
   void toggleSurfaceAction(int);
-  void toggleRepresentation(bool);
   void toggleProjection(bool);
   void toggleTransparency(bool);
   void toggleAntialiasing(bool);

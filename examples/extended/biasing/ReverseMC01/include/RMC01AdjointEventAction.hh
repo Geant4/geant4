@@ -26,14 +26,14 @@
 /// \file biasing/ReverseMC01/include/RMC01AdjointEventAction.hh
 /// \brief Definition of the RMC01AdjointEventAction class
 //
-// $Id$
+// $Id: RMC01AdjointEventAction.hh 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01AdjointEventAction
+//  Class Name:            RMC01AdjointEventAction
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -61,10 +61,8 @@ class RMC01AdjointEventAction : public G4UserEventAction
    RMC01AdjointEventAction();
    virtual ~RMC01AdjointEventAction();
   
- public:
    virtual void  BeginOfEventAction(const G4Event*);
    virtual void  EndOfEventAction(const G4Event*);
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

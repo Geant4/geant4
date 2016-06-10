@@ -24,21 +24,30 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TrajectoryContainer.cc 69010 2013-04-15 09:34:16Z gcosmo $
 //
 
 #include "G4TrajectoryContainer.hh"
-G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;
+
+G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator = 0;
 
 G4TrajectoryContainer::G4TrajectoryContainer()
-{ vect = new TrajectoryVector; }
+{
+  vect = new TrajectoryVector;
+}
 
 G4TrajectoryContainer::~G4TrajectoryContainer()
-{ clearAndDestroy();
-  delete vect; }
+{
+  clearAndDestroy();
+  delete vect;
+}
 
 G4int G4TrajectoryContainer::operator==(const G4TrajectoryContainer& right) const
-{ return (this==&right); }
-G4int G4TrajectoryContainer::operator!=(const G4TrajectoryContainer& right) const
-{ return (this!=&right); }
+{ 
+  return (this==&right);
+}
 
+G4int G4TrajectoryContainer::operator!=(const G4TrajectoryContainer& right) const
+{
+  return (this!=&right);
+}

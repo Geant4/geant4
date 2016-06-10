@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4TypeKeyT.hh 69802 2013-05-15 14:52:57Z gcosmo $
 //
 // Type key class
 //
@@ -40,7 +40,9 @@ class G4TypeKeyT : public G4TypeKey {
 public:
   
   G4TypeKeyT() {
-    static Key key = NextKey();
+    static G4ThreadLocal Key *pkey = 0 ;
+    if (!pkey) { pkey = new Key; *pkey = NextKey(); }
+    Key &key = *pkey;
     fMyKey = key;
   }
 

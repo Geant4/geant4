@@ -34,16 +34,17 @@
 #include "G4Qt.hh"
 #endif
 
+#if defined(G4UI_BUILD_WT_SESSION)
+#include "G4UIWt.hh"
+#include "G4Wt.hh"
+#endif
+
 #if defined(G4UI_BUILD_XM_SESSION)
 #include "G4UIXm.hh"
 #endif
 
 #if defined(G4UI_BUILD_WIN32_SESSION)
 #include "G4UIWin32.hh"
-#endif
-
-#if defined(G4UI_BUILD_WT_SESSION)
-//#include "G4UIWt.hh"
 #endif
 
 #include "G4UIGAG.hh"
@@ -147,8 +148,8 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     break;
   case kWt:
 #if defined(G4UI_BUILD_WT_SESSION)
-    //session = new G4UIWt(argc, argv);
-    //isGUI = true;
+    session = new G4UIWt(argc, argv);
+    isGUI = true;
 #endif
     break;
   case kGag:
@@ -203,7 +204,7 @@ void G4UIExecutive::SelectSessionByArg(const G4String& stype)
   if ( qt_build && stype == "qt" ) selected = kQt;
   else if ( xm_build && stype == "xm" ) selected = kXm;
   else if ( win32_build && stype == "win32" ) selected = kWin32;
-  //else if ( wt_build && stype == "wt" ) selected = kWt;
+  else if ( wt_build && stype == "wt" ) selected = kWt;
   else if ( stype == "gag" ) selected = kGag;
   else if ( tcsh_build && stype == "tcsh" ) selected = kTcsh;
   else if ( stype == "csh" ) selected = kCsh;
@@ -215,7 +216,7 @@ void G4UIExecutive::SelectSessionByEnv()
   if ( qt_build && getenv("G4UI_USE_QT") ) selected = kQt;
   else if ( xm_build && getenv("G4UI_USE_XM") ) selected = kXm;
   else if ( win32_build && getenv("G4UI_USE_WIN32") ) selected = kWin32;
-  //else if ( wt_build && getenv("G4UI_USE_WT") ) selected = kWt;
+  else if ( wt_build && getenv("G4UI_USE_WT") ) selected = kWt;
   else if ( getenv("G4UI_USE_GAG") ) selected = kGag;
   else if ( tcsh_build && getenv("G4UI_USE_TCSH") ) selected = kTcsh;
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4E1SingleProbability1.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 //  Class G4E1SingleProbability1.cc
 //
@@ -87,7 +87,7 @@ G4double G4E1SingleProbability1::EmissionProbDensity(const G4Fragment& frag,
   G4double Egdp = (40.3 / G4Pow::GetInstance()->powZ(Afrag,0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
-  const G4double normC = 1.0 / ((pi * hbarc)*(pi * hbarc));
+  static const G4double normC = 1.0 / ((pi * hbarc)*(pi * hbarc));
 
   // CD
   //cout<<"  PROB TESTS "<<G4endl;
@@ -131,14 +131,14 @@ G4double G4E1SingleProbability1::EmissionProbability(const G4Fragment& frag,
 
   G4double ScaleFactor = 1.0;     // playing with scale factors
 
-  const G4double Uexcite = frag.GetExcitationEnergy();
+  G4double Uexcite = frag.GetExcitationEnergy();
   G4double Uafter = Uexcite - exciteE;
 
-  G4double normC = 3.0;
+  static const G4double normC = 3.0;
 
-  const G4double upperLim = Uexcite;
-  const G4double lowerLim = Uafter;
-  const G4int numIters = 25;
+  G4double upperLim = Uexcite;
+  G4double lowerLim = Uafter;
+  static const G4int numIters = 25;
 
   // Need to integrate EmissionProbDensity from lowerLim to upperLim 
   // and multiply by normC
@@ -162,7 +162,7 @@ G4double G4E1SingleProbability1::EmissionIntegration(const G4Fragment& frag,
   // Simple Gaussian quadrature integration
 
   G4double x;
-  const G4double root3 = 1.0/std::sqrt(3.0);
+  static const G4double root3 = 1.0/std::sqrt(3.0);
 
   G4double Step = (upLim-lowLim)/(2.0*numIters);
   G4double Delta = Step*root3;

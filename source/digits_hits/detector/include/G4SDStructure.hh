@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SDStructure.hh 74048 2013-09-20 09:34:57Z gcosmo $
 //
 
 #ifndef G4SDStructure_h
@@ -63,6 +63,7 @@ class G4SDStructure
   private:
       G4SDStructure* FindSubDirectory(G4String subD);
       G4String ExtractDirName(G4String aPath);
+      void RemoveSD(G4VSensitiveDetector*);
 
   private:
       std::vector<G4SDStructure*> structure;

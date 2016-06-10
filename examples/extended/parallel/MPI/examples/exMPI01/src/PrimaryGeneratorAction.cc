@@ -22,37 +22,40 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id: PrimaryGeneratorAction.cc 78126 2013-12-03 17:43:56Z gcosmo $
+//
 /// @file PrimaryGeneratrorAction.cc
 /// @brief Define primary generator action
 
-#include "PrimaryGeneratorAction.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
+#include "PrimaryGeneratorAction.hh"
 
-// -------------------------------------------------------------------------- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
-  particleGun = new G4ParticleGun;
+  fparticleGun = new G4ParticleGun;
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable-> FindParticle("e-");
 
-  particleGun-> SetParticleDefinition(particle);
-  particleGun-> SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-14.9*cm));
-  particleGun-> SetParticleEnergy(200.*MeV);
+  fparticleGun-> SetParticleDefinition(particle);
+  fparticleGun-> SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fparticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-14.9*cm));
+  fparticleGun-> SetParticleEnergy(200.*MeV);
 }
 
-// -------------------------------------------------------------------------- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fparticleGun;
 }
 
-// -------------------------------------------------------------------------- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun-> GeneratePrimaryVertex(anEvent);
+  fparticleGun-> GeneratePrimaryVertex(anEvent);
 }

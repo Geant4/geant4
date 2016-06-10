@@ -28,7 +28,6 @@
 //
 //
 // $Id: PrimaryGeneratorAction.hh,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
@@ -51,7 +50,7 @@ class G01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G01PrimaryGeneratorAction();
    ~G01PrimaryGeneratorAction();
 
-   void GeneratePrimaries(G4Event* anEvent);
+   virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
 

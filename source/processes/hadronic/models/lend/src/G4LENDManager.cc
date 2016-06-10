@@ -42,7 +42,7 @@
 
 #include "G4Neutron.hh"
 
-G4LENDManager* G4LENDManager::lend_manager = NULL;
+G4ThreadLocal G4LENDManager* G4LENDManager::lend_manager = NULL;
 
 G4LENDManager::G4LENDManager()
 :verboseLevel( 0 )
@@ -50,21 +50,25 @@ G4LENDManager::G4LENDManager()
 
    printBanner();
 
-   if(!getenv("G4LENDDATA")) 
+   G4String xmcf;
+   if( getenv("G4LENDDATA") == NULL ) {
       throw G4HadronicException(__FILE__, __LINE__, " Please setenv G4LENDDATA to point to the LEND files." );
-
-   G4String xmcf = getenv("G4LENDDATA");
-   xmcf = xmcf+"/xmcf.n_1.map";
-
-// for neutron
-
-   G4GIDI* axLEND = new G4GIDI( 1 , xmcf );
-
-   if ( proj_lend_map.find ( G4Neutron::Neutron() ) == proj_lend_map.end() )
-   {
-      proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4Neutron::Neutron() , axLEND ) ); 
+   } else {
+      xmcf = getenv("G4LENDDATA");
+      xmcf += "/xmcf.n_1.map";
    }
-      
+
+//Example of xmcf.n_1.map
+//<map>
+//<target schema="MonteCarlo" evaluation="ENDF.B-VII.0" projectile="n_1" target="H_1" path="000_n_1/xMC.000_n_1.001_H_1/xMC.000_n_1.001_H_1.xml"/>
+//</map>
+//
+// for neutron
+   proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4Neutron::Neutron() , new G4GIDI( 1 , xmcf ) ) );
+//
+// for other particle 
+// proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( xxx , new G4GIDI( xxx , xmcf ) ) );
+
    v_lend_target.clear();
 
    ionTable = new G4IonTable();
@@ -103,22 +107,26 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
 
    G4GIDI_target* anLENDTarget = NULL;
 
-   G4int iTarg = ionTable->GetNucleusEncoding( iZ , iA );
-                                                     // G4double E=0.0, G4int J=0);
+   if ( iM > 9 ) { 
+      throw G4HadronicException(__FILE__, __LINE__, "Requested isomer level of target is too high." ); 
+   }
 
+   G4int iTarg = GetNucleusEncoding( iZ , iA , iM );
+
+   // Searching in current map
    for ( std::vector < lend_target >::iterator 
          it = v_lend_target.begin() ; it != v_lend_target.end() ; it++ )
    {
-//    find the target
       if ( it->proj == proj && it->target_code == iTarg && it->evaluation == evaluation ) 
       {
+         //find! 
          return it->target;
       }
    }
 
-   if ( proj_lend_map.find ( proj ) == proj_lend_map.end() ) 
-   {
-      G4cout << proj->GetParticleName() << " is not supported by this LEND." << G4endl;
+
+   if ( proj_lend_map.find ( proj ) == proj_lend_map.end() ) {
+      G4cout << proj->GetParticleName() << " is not supported by this LEND library." << G4endl;
       return anLENDTarget; // return NULL 
    }
 
@@ -127,8 +135,10 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
    if ( xlend->isThisDataAvailable( evaluation, iZ, iA , iM ) )
    {
 
-      if ( verboseLevel > 1 ) 
-         G4cout << evaluation << " for " << ionTable->GetIonName( iZ , iA , 0 ) << " is exist in this LEND." << G4endl;
+      if ( verboseLevel > 1 ) {
+         G4cout << evaluation << " for " << ionTable->GetIonName( iZ , iA , 0 ) 
+                 << " with Isomer level of " << iM  << " is exist in this LEND." << G4endl;
+      }
 
       anLENDTarget = xlend->readTarget( evaluation , iZ , iA , iM );
 
@@ -148,13 +158,15 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
    else 
    {
 //    NO EXACT DATA (Evaluatino & Z,A,M)
-                                                                        // This is for ground state
+                                                                        
+      //Searching available evaluation and natural abundance data and give suggestions.  
+      //
       if ( verboseLevel > 1 ) 
-         G4cout << evaluation << " for " << ionTable->GetIonName( iZ , iA , 0 ) << " is not exist in this LEND." << G4endl;
+         G4cout << evaluation << " for " << ionTable->GetIonName( iZ , iA , 0 ) 
+                << " with Isomer level of " << iM << " is not exist in this LEND." << G4endl;
 
       std::vector< std::string >* available =  xlend->getNamesOfAvailableLibraries( iZ, iA , iM );
-      if ( available->size() > 0 )
-      {
+      if ( available->size() > 0 ) {
 //       EXACT Z,A,M but Evaluation is different 
          if ( verboseLevel > 1 ) 
          {
@@ -166,12 +178,10 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
 
             G4cout << G4endl;
          }
-      }
+      } else if ( xlend->isThisDataAvailable( evaluation, iZ, 0 , iM ) ) {
 //      
 //    checking natural abundance data for Z
 //
-      else if ( xlend->isThisDataAvailable( evaluation, iZ, 0 , iM ) )
-      {
 //       EXACT natural abundance data for the evaluation 
          if ( verboseLevel > 1 ) 
             G4cout << " However you can use natural abundance data for the target. " << G4endl;
@@ -180,11 +190,9 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
       {
          std::vector< std::string >* available_nat =  xlend->getNamesOfAvailableLibraries( iZ, 0 , iM );
 //
-         if ( available_nat->size() > 0 )
-         {
+         if ( available_nat->size() > 0 ) {
 //          EXACT natural abundance data for Z but differnet evaluation
-            if ( verboseLevel > 1 ) 
-            {
+            if ( verboseLevel > 1 ) {
                G4cout << " However you can use following evaluation(s) for natural abundace of the target. " << G4endl;
 
                std::vector< std::string >::iterator its;
@@ -193,8 +201,9 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
                G4cout << G4endl;
             }
          }
+         delete available_nat;
       }
-
+      delete available;
 //    return NULL if exact data is not available               
       return anLENDTarget; // return NULL   
    }
@@ -203,28 +212,37 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
 }
 
 
-
 std::vector< G4String > G4LENDManager::IsLENDTargetAvailable ( G4ParticleDefinition* proj , G4int iZ , G4int iA , G4int iM )
 {
 
-   std::vector< G4String > answer;
+   std::vector< G4String > vEvaluation; 
    if ( proj_lend_map.find ( proj ) == proj_lend_map.end() ) 
    {
       G4cout << proj->GetParticleName() << " is not supported by this LEND." << G4endl;
-      return answer; // return NULL 
+      return vEvaluation; // return empty 
    }
 
    G4GIDI* xlend = proj_lend_map.find ( proj ) -> second; 
    std::vector< std::string >* available =  xlend->getNamesOfAvailableLibraries( iZ, iA , iM );
 
-   if ( available->size() > 0 )
-   {
+   if ( available->size() > 0 ) {
       std::vector< std::string >::iterator its;
       for ( its = available->begin() ; its != available->end() ; its++ ) 
-         answer.push_back ( *its );
+         vEvaluation.push_back ( *its );
    }
+   delete available;
 
-   return answer;
+   return vEvaluation;
+}
+
+
+
+G4int G4LENDManager::GetNucleusEncoding ( G4int iZ , G4int iA , G4int iM ) 
+{   
+   G4int value = ionTable->GetNucleusEncoding( iZ , iA ); // Ground State
+                                                     // G4double E=0.0, G4int J=0);
+   value += iM;
+   return value;
 }
 
 

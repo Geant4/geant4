@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4OpenGLWtViewer.cc 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // G4OpenGLWtViewer : Class to provide Wt specific
@@ -53,24 +53,9 @@
 #include "G4UIWt.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommandTree.hh"
-
 #include <WT/WHBoxLayout>
 #include <WT/WApplication>
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-/**
-   Implementation of virtual method of G4VViewer
-*/
-void G4OpenGLWtViewer::SetView (
-) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  G4OpenGLViewer::SetView ();
-}
+#include <Wt/WTime>
 
 
 
@@ -92,30 +77,96 @@ void G4OpenGLWtViewer::CreateMainWindow (
   fWindow = glWidget ;
   //  fWindow->makeCurrent();
 
-  //G4Wt* interactorManager = G4Wt::getInstance ();
-
-  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
-    
-  // FIXME L.Garnier 9/11/09 Has to be check !!! 
-  // Wt UI with Wt Vis
-  // Wt UI with X Vis
-  // X UI with Wt Vis
-  // X UI with X Vis
-  // Ne marche pas avec un UIBatch !! (ecran blanc)
-
+//  G4Wt* interactorManager = G4Wt::getInstance ();
   // return false if G4UIWt was not launch
   
-  fGLWindow = fWindow;
-    // FIXME::   fGLWindow->resize(getWinWidth(), getWinHeight());
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if (UI == NULL) return;
+  
+  if (! static_cast<G4UIWt*> (UI->GetG4UIWindow())) {
+    // NO UI, should be batch mode
+    fBatchMode = true;
+    return;
+  }
+  fUiWt = static_cast<G4UIWt*> (UI->GetG4UIWindow());
+  
+  bool isTabbedView = false;
+  if ( fUiWt) {
+    if (!fBatchMode) {
+//      if (!interactorManager->IsExternalApp()) {
 
+      // resize window to get the good size at the beginning
+      ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+      
+      isTabbedView = fUiWt->AddTabWidget(fWindow->parent(),name,getWinWidth(),getWinHeight());
+      // change color
+      fWindow->parent()->decorationStyle().setBackgroundColor (Wt::WColor("blue"));
+
+      // Have to resize !
+#ifdef G4DEBUG_VIS_OGL
+      printf("G4OpenGLWtViewer::CreateMainWindow :: resize :%d %d\n",getWinWidth(),getWinHeight());
+#endif
+      fWindow->resize(getWinWidth(),getWinHeight());
+
+      fUISceneTreeComponentsTBWidget = fUiWt->GetSceneTreeComponentsTBWidget();
+      fWindow->resize(fWindow->parent()->width(),fWindow->parent()->height());
+      isTabbedView = true;
+      //      }
+    }
+  }
+#ifdef G4DEBUG_VIS_OGL
+  else {
+    printf("G4OpenGLWtViewer::CreateMainWindow :: UIWt NOt found \n");
+  }
+#endif
+  
+
+/* if (!isTabbedView) { // we have to do a dialog
+    
+    Wt::WWidget *myParent = getParentWidget();
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLWtViewer::CreateMainWindow :: getParent OK \n");
+#endif
+    if (myParent != NULL) {
+      glWidget->setParent(myParent);
+    }
+    Wt::WHBoxLayout *mainLayout = new Wt::WHBoxLayout(fGLWindow);
+    
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);
+    mainLayout->addWidget(fWindow);
+    if (fGLWindow->inherits("Wt::WContainerWidget")) {
+      fGLWindow->setWindowTitle( name);
+    }
+    fGLWindow->setLayout(mainLayout);
+    
+ */   
+/*
+ //useful for MACOSX, we have to compt the menuBar height
+    int offset = QApplication::desktop()->height()
+    - QApplication::desktop()->availableGeometry().height();
+    
+    G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
+    if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
+      YPos = offset;
+    }
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::CreateMainWindow :: resizing to %d %d \n",getWinWidth(), getWinHeight());
+#endif
+    fGLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
+*/
+//    fGLWindow->show();
+//  } else {
+
+    fGLWindow = fWindow;
+//  }
+  
   if(!fWindow) return;
   
 #ifdef _A_FINIR_FIXME
-  if (!fContextMenu) 
+  if (!fContextMenu)
     createPopupMenu();
 #endif
-
-  // FIXME::  updateWWidget();
 
 }
 
@@ -161,10 +212,15 @@ G4OpenGLWtViewer::G4OpenGLWtViewer (
   ,fAltKeyPress(false)
   ,fControlKeyPress(false)
   ,fShiftKeyPress(false)
+  ,fBatchMode(false)
+  ,fUiWt(NULL)
 {
 
   // launch Wt if not
   G4Wt::getInstance ();
+
+// FIXME : all stuff with G4VIS_BUILD_OPENGL_ES_DRIVER
+    //  G4OpenGLViewer::SetView(this);
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLWtViewer::Create \n");
@@ -173,6 +229,8 @@ G4OpenGLWtViewer::G4OpenGLWtViewer (
   fLastPos2 = Wt::WPoint(-1,-1);    
   fLastPos1 = Wt::WPoint(-1,-1);    
   
+  mMatrix.setToIdentity();
+
 #ifdef _A_FINIR_FIXME
   initMovieParameters();
 #endif
@@ -182,7 +240,23 @@ G4OpenGLWtViewer::G4OpenGLWtViewer (
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLWtViewer::G4OpenGLWtViewer END\n");
 #endif
+
 }
+
+
+
+
+
+void G4OpenGLWtViewer::resizeGL(int width, int height)
+  {
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLWtViewer resizeGL %d %d\n",width,height);
+#endif
+
+  }
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 G4OpenGLWtViewer::~G4OpenGLWtViewer (
@@ -194,6 +268,9 @@ G4OpenGLWtViewer::~G4OpenGLWtViewer (
   G4cout <<removeTempFolder().toUTF8().c_str() <<G4endl;
 #endif
 }
+
+
+
 
 
 #ifdef _A_FINIR_FIXME
@@ -976,14 +1053,6 @@ void Graph::exportToSVG(const Wt::WString& fname)
 
 
 
-void G4OpenGLWtViewer::FinishView()
-{
-  glFlush ();
-
-  // L. Garnier 10/2009 : Not necessary and cause problems on mac OS X 10.6
-  //  fWindow->swapBuffers ();
-}
-
 /**
    Save the current mouse press point
    @param p mouse click point
@@ -998,7 +1067,7 @@ void G4OpenGLWtViewer::G4MousePressEvent(Wt::WMouseEvent *event)
     fLastPos1 = Wt::WPoint(event->widget().x,event->widget().y);
     fLastPos2 = fLastPos1;
     fLastPos3 = fLastPos2;
-    fLastEventTime->start();
+//    fLastEventTime->start();
     if (fMouseAction == STYLE3){  // pick
       Pick(event->widget().x,event->widget().y);
     }
@@ -1009,7 +1078,7 @@ void G4OpenGLWtViewer::G4MousePressEvent(Wt::WMouseEvent *event)
 */
 void G4OpenGLWtViewer::G4MouseReleaseEvent()
 {
-  fSpinningDelay = fLastEventTime->elapsed();
+    fSpinningDelay = 1;//fLastEventTime->elapsed();
   Wt::WPoint delta = Wt::WPoint(fLastPos3.x()-fLastPos1.x(),fLastPos3.y()-fLastPos1.y());
   if ((delta.x() == 0) && (delta.y() == 0)) {
     return;
@@ -1017,12 +1086,13 @@ void G4OpenGLWtViewer::G4MouseReleaseEvent()
   if (fSpinningDelay < fLaunchSpinDelay ) {
     fAutoMove = true;
     Wt::WTime lastMoveTime;
-    lastMoveTime.start();
+//    lastMoveTime.start();
     // try to addapt speed move/rotate looking to drawing speed
     float correctionFactor = 5;
     while (fAutoMove) {
-      if ( lastMoveTime.elapsed () >= (int)(1000/fNbMaxFramesPerSec)) {
-        float lTime = 1000/((float)lastMoveTime.elapsed ());
+//      if ( lastMoveTime.elapsed () >= (int)(1000/fNbMaxFramesPerSec)) {
+        if ( 1 >= (int)(1000/fNbMaxFramesPerSec)) {
+        float lTime = 1000/((float)1);
         if (((((float)delta.x())/correctionFactor)*lTime > fNbMaxAnglePerSec) ||
             ((((float)delta.x())/correctionFactor)*lTime < -fNbMaxAnglePerSec) ) {
           correctionFactor = (float)delta.x()*(lTime/fNbMaxAnglePerSec);
@@ -1049,13 +1119,13 @@ void G4OpenGLWtViewer::G4MouseReleaseEvent()
           if (fNoKeyPress) {
             rotateWtScene(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
           } else if (fAltKeyPress) {
-            rotateWtSceneInViewDirection(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
+            rotateWtSceneToggle(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
           }
           
         } else if (fMouseAction == STYLE2) {  // move
           moveScene(-((float)delta.x())/correctionFactor,-((float)delta.y())/correctionFactor,0,true);
         }
-        lastMoveTime.start();
+//        lastMoveTime.start();
       }
 #ifdef _A_FINIR_FIXME
       ((Wt::WApplication*)G4Wt::getInstance ())->processEvents();
@@ -1108,7 +1178,7 @@ void G4OpenGLWtViewer::G4MouseDoubleClickEvent()
       if (fNoKeyPress) {
         rotateWtScene(((float)deltaX),((float)deltaY));
       } else if (fAltKeyPress) {
-        rotateWtSceneInViewDirection(((float)deltaX),((float)deltaY));
+        rotateWtSceneToggle(((float)deltaX),((float)deltaY));
       } else if (fShiftKeyPress) {
         unsigned int sizeWin;
         sizeWin = getWinWidth();
@@ -1129,7 +1199,7 @@ void G4OpenGLWtViewer::G4MouseDoubleClickEvent()
     }
   }
 
-  fLastEventTime->start();
+//  fLastEventTime->start();
 }
 
 
@@ -1195,16 +1265,13 @@ void G4OpenGLWtViewer::rotateWtScene(float dx, float dy)
    @param dy delta mouse y position
 */
 
-void G4OpenGLWtViewer::rotateWtSceneInViewDirection(float dx, float dy)
+void G4OpenGLWtViewer::rotateWtSceneToggle(float dx, float dy)
 {
   if (fHoldRotateEvent)
     return;
   fHoldRotateEvent = true;
   
-  fXRot +=dx;
-  fYRot +=dy;
-  
-  rotateSceneInViewDirection(dx/100,dy/100);
+  rotateSceneToggle(dx,dy);
   
   updateWWidget();
   
@@ -1215,44 +1282,6 @@ void G4OpenGLWtViewer::rotateWtSceneInViewDirection(float dx, float dy)
    @param dx delta mouse x position
    @param dy delta mouse y position
 */
-
-void G4OpenGLWtViewer::rotateWtCamera(float dx, float dy)
-{
-  if (fHoldRotateEvent)
-    return;
-  fHoldRotateEvent = true;
-
-  rotateScene(dx,dy);
-  updateWWidget();
-  
-  fHoldRotateEvent = false;
-}
-
-/**
-   @param dx delta mouse x position
-   @param dy delta mouse y position
-*/
-
-void G4OpenGLWtViewer::rotateWtCameraInViewDirection(float dx, float dy)
-{
-  if (fHoldRotateEvent)
-    return;
-  fHoldRotateEvent = true;
-
-  fVP.SetUpVector(G4Vector3D(0.0, 1.0, 0.0));
-  fVP.SetViewAndLights (G4Vector3D(0.0, 0.0, 1.0));
-
-
-  fXRot +=dx;
-  fYRot +=dy;
-
-  rotateSceneInViewDirection(fXRot/100,fYRot/100);
-
-  updateWWidget();
-  
-  fHoldRotateEvent = false;
-}
-
 
 
 
@@ -1326,7 +1355,7 @@ bool G4OpenGLWtViewer::printPDF (
 
 
 
-void G4OpenGLWtViewer::G4wheelEvent (Wt::WWheelEvent * event) 
+void G4OpenGLWtViewer::G4wheelEvent (Wt::WWheelEvent * event)
 {
   fVP.SetZoomFactor(fVP.GetZoomFactor()+(fVP.GetZoomFactor()*(event->delta())/1200)); 
   updateWWidget();
@@ -1421,16 +1450,16 @@ void G4OpenGLWtViewer::G4wheelEvent (Wt::WWheelEvent * event)
   }
   if ((fAltKeyPress)) {
     if (event->key() == Wt::Key_Down) { // rotate phi
-      rotateWtSceneInViewDirection(0,-fDeltaRotation);
+      rotateWtSceneToggle(0,-fDeltaRotation);
     }
     else if (event->key() == Wt::Key_Up) { // rotate phi
-      rotateWtSceneInViewDirection(0,fDeltaRotation);
+      rotateWtSceneToggle(0,fDeltaRotation);
     }
     if (event->key() == Wt::Key_Left) { // rotate theta
-      rotateWtSceneInViewDirection(fDeltaRotation,0);
+      rotateWtSceneToggle(fDeltaRotation,0);
     }
     else if (event->key() == Wt::Key_Right) { // rotate theta
-      rotateWtSceneInViewDirection(-fDeltaRotation,0);
+      rotateWtSceneToggle(-fDeltaRotation,0);
     }
 
     // Rotatio +/-
@@ -2183,6 +2212,45 @@ Wt::WString G4OpenGLWtViewer::getProcessErrorMsg()
 #endif
 
 
+//
+// Matrix utility functions
+//
+
+/*
+function mvTranslate(v) {
+  multMatrix(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
+}
+
+
+var mvMatrixStack = [];
+
+function mvPushMatrix(m) {
+  if (m) {
+    mvMatrixStack.push(m.dup());
+    mvMatrix = m.dup();
+  } else {
+    mvMatrixStack.push(mvMatrix.dup());
+  }
+}
+
+function mvPopMatrix() {
+  if (!mvMatrixStack.length) {
+    throw("Can't pop from an empty matrix stack.");
+  }
+  
+  mvMatrix = mvMatrixStack.pop();
+  return mvMatrix;
+}
+
+function mvRotate(angle, v) {
+  var inRadians = angle * Math.PI / 180.0;
+  
+  var m = Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
+  multMatrix(m);
+}
+*/
+
+
 
 /*
   
@@ -2208,3 +2276,208 @@ void MultiLayer::exportToSVG(const Wt::WString& fname)
 }
 */
 #endif
+
+
+
+
+ /*
+G4UIWt::CommandEnteredCallback
+G4UIWt::CommandEnteredCallback 1
+G4UIWt::CommandEnteredCallback 2
+G4UIWt::CommandEnteredCallback 3
+G4UIWt::CommandEnteredCallback 4
+G4VisCommandViewerCreate::SetNewValue Before CreateViewer
+G4VisManager::CreateViewer Before CreateViewer
+G4OpenGLImmediateWt::CreateViewer 
+G4OpenGLImmediateWt::CreateViewer after Get Pointer
+G4OpenGLImmediateWt::CreateViewer uiWt
+G4UIWt::AddTabWidget 50 50
+G4UIWt::AddTabWidget 4
+G4UIWt::AddTabWidget 5
+G4UIWt::AddTabWidget 5a
+G4UIWt::AddTabWidget 5a2 69882928 69985360
+G4UIWt::AddTabWidget 5b
+G4UIWt::AddTabWidget 5c
+G4UIWt::AddTabWidget 6
+G4UIWt::AddTabWidget ADD 50 50 + 23 1880279432---------------------------------------------------
+G4UIWt::AddTabWidget 7
+G4UIWt::AddTabWidget 8
+G4UIWt::AddTabWidget 9
+G4UIWt::AddTabWidget END
+G4OpenGLViewer:: Creation
+G4OpenGLWtViewer::Create 
+G4OpenGLWtViewer::G4OpenGLWtViewer END
+G4OpenGLImmediateWtViewer INIT
+G4OpenGLImmediateWt::CreateViewer lastInsert :68536784
+G4OpenGLImmediateWt::CreateViewer END 
+G4VisManager::CreateViewer After 1 CreateViewer
+G4VisManager::CreateViewer After 1 CreateViewer
+G4VisManager::CreateViewer After 2 CreateViewer
+G4VisManager::CreateViewer After 3 CreateViewer
+G4VisManager::CreateViewer After 4 CreateViewer
+G4OpenGLImmediateWtViewer::Initialise 
+G4OpenGLWtViewer::CreateMainWindow 
+G4OpenGLViewer::ResizeWindow 600 600
+G4OpenGLViewer::SetWinSize 600 600
+G4VisManager::CreateViewer After 5 CreateViewer
+G4VisManager::CreateViewer After 5 CreateViewer
+G4VisManager::CreateViewer After 6 CreateViewer
+G4VisManager::CreateViewer After 7 CreateViewer
+G4VisManager::CreateViewer After 8 CreateViewer
+G4VisManager::CreateViewer After 9 CreateViewer
+G4VisManager::CreateViewer After END CreateViewer
+G4VisCommandViewerCreate::SetNewValue After CreateViewer 1
+G4VisCommandViewerCreate::SetNewValue After CreateViewer 2
+G4VisCommandViewerCreate::SetNewValue After CreateViewer 3
+G4OpenGLViewer::SetView
+G4OpenGLViewer::ResizeGLView 600 600 0x104857b40
+G4OpenGLViewer::ClearView
+G4OpenGLViewer::ClearView set Background :0.040000 .4 .9: 1.000000
+G4OpenGLViewer::ClearView flush
+G4OpenGLImmediateWtViewer DrawView
+G4OpenGLImmediateWtViewer updateWWidget
+G4OpenGLImmediateWtViewer paintGL vvvvvvvvvvvvvvvvvvvv
+  G4OpenGLWtViewer paintGL   VVVVVVVVVVVVVVVVVVVVVVVVVV
+    G4OpenGLViewer::SetView
+    G4OpenGLViewer::ResizeGLView 600 600 0x104857b40
+    G4OpenGLViewer::ClearView
+    G4OpenGLViewer::ClearView set Background :0.080000 .4 .9: 0.000000
+    G4OpenGLViewer::ClearView flush
+#0  G4OpenGLViewer::ClearView (this=0x1049f1540) at src/G4OpenGLViewer.cc:195
+#1  0x0000000100353e1d in G4OpenGLWtViewer::paintGL (this=0x1049f0e00) at src/G4OpenGLWtViewer.cc:508
+#2  0x000000010030e2bd in G4OpenGLImmediateWtViewer::paintGL (this=0x1049f0e00) at src/G4OpenGLImmediateWtViewer.cc:117
+#3  0x000000010030e1b9 in G4OpenGLImmediateWtViewer::updateWWidget (this=0x1049f0e00) at src/G4OpenGLImmediateWtViewer.cc:314
+#4  0x000000010030e28e in G4OpenGLImmediateWtViewer::DrawView (this=0x1049f0e00) at src/G4OpenGLImmediateWtViewer.cc:206
+#5  0x00000001005fed54 in G4VisCommandViewerRefresh::SetNewValue (this=0x104240e30, newValue=@0x1045436f0) at src/G4VisCommandsViewer.cc:1189
+#6  0x0000000101612e04 in ~G4String [inlined] () at src/G4UIcommand.cc:211
+#7  0x0000000101612e04 in ~G4String [inlined] () at /Users/garnier/Work/geant4/source/global/management/include/G4String.hh:122
+#8  0x0000000101612e04 in G4UIcommand::DoIt (this=<value temporarily unavailable, due to optimizations>, parameterList=<value temporarily unavailable, due to optimizations>) at src/G4UIcommand.cc:211
+
+    G4OpenGLWtViewer drawScene   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawScene Call ComputeView
+      G4OpenGLWtViewer::ComputeView 600 600   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+        G4OpenGLWtViewer drawArrays
+        G4OpenGLWtViewer::ComputeView NeedKernelVisit
+        G4OpenGLWtViewer::ComputeView ProcessView
+        G4VViewer::ProcessView  need ? 1
+        G4VSceneHandler::ProcessScene 
+        G4OpenGLWtViewer::FinishView() 
+        G4VSceneHandler::ProcessScene END
+        G4VViewer::ProcessView END
+        G4OpenGLWtViewer::FinishView() 
+      G4OpenGLWtViewer::ComputeView 600 600 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+      G4OpenGLWtViewer drawScene END Call ComputeView
+    G4OpenGLWtViewer drawScene END   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    G4OpenGLImmediateWtViewer resizeGL
+    G4OpenGLWtViewer resizeGL 600 600
+  G4OpenGLWtViewer paintGL   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G4OpenGLImmediateWtViewer paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G4OpenGLImmediateWtViewer updateWWidget END
+G4OpenGLImmediateWtViewer DrawView END
+G4VisCommandViewerCreate::SetNewValue After CreateViewer 4
+G4UIWt::CommandEnteredCallback 5
+G4UIWt::CommandEnteredCallback 6
+G4UIWt::CommandEnteredCallback END
+G4UIWt::CommandLineSlot
+G4OpenGLWtViewer initializeGL
+G4OpenGLWtViewer centerpoint END
+G4OpenGLWtViewer initializeGL END
+G4OpenGLImmediateWtViewer updateWWidget
+G4OpenGLImmediateWtViewer paintGL vvvvvvvvvvvvvvvvvvvv
+  G4OpenGLWtViewer paintGL   VVVVVVVVVVVVVVVVVVVVVVVVVV
+    G4OpenGLViewer::SetView
+    G4OpenGLViewer::ResizeGLView 600 600 0x104857b40
+    G4OpenGLViewer::ClearView
+    G4OpenGLViewer::ClearView set Background :0.120000 .4 .9: 0.000000
+    G4OpenGLViewer::ClearView flush
+#0  G4OpenGLViewer::ClearView (this=0x1049f1540) at src/G4OpenGLViewer.cc:195
+#1  0x0000000100353e1d in G4OpenGLWtViewer::paintGL (this=0x1049f0e00) at src/G4OpenGLWtViewer.cc:508
+#2  0x000000010030e2bd in G4OpenGLImmediateWtViewer::paintGL (this=0x1049f0e00) at src/G4OpenGLImmediateWtViewer.cc:117
+#3  0x000000010030e1b9 in G4OpenGLImmediateWtViewer::updateWWidget (this=0x1049f0e00) at src/G4OpenGLImmediateWtViewer.cc:314
+#4  0x0000000100354e82 in G4OpenGLWtViewer::initializeGL (this=0x1049f0e00) at src/G4OpenGLWtViewer.cc:446
+#5  0x000000010283b785 in basic_string [inlined] () at /usr/include/c++/4.2.1/bits/basic_string.h:451
+#6  0x000000010283b785 in _Alloc_hider [inlined] () at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WGLWidget.C:2067
+#7  0x000000010283b785 in basic_string [inlined] () at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WGLWidget.C:262
+#8  0x000000010283b785 in std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::str () at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WGLWidget.C:130
+#9  std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::str () at /usr/include/c++/4.2.1/sstream:572
+
+
+    G4OpenGLWtViewer drawScene   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawScene Call ComputeView
+      G4OpenGLWtViewer::ComputeView 600 600   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+        G4OpenGLWtViewer drawArrays
+        G4OpenGLWtViewer::ComputeView NeedKernelVisit
+        G4OpenGLWtViewer::ComputeView ProcessView
+        G4VViewer::ProcessView  need ? 1
+        G4VSceneHandler::ProcessScene 
+        G4OpenGLWtViewer::FinishView() 
+        G4VSceneHandler::ProcessScene END
+        G4VViewer::ProcessView END
+        G4OpenGLWtViewer::FinishView() 
+      G4OpenGLWtViewer::ComputeView 600 600 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+      G4OpenGLWtViewer drawScene END Call ComputeView
+    G4OpenGLWtViewer drawScene END   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    G4OpenGLImmediateWtViewer resizeGL
+    G4OpenGLWtViewer resizeGL 600 600
+  G4OpenGLWtViewer paintGL   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G4OpenGLImmediateWtViewer paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G4OpenGLImmediateWtViewer updateWWidget END
+G4OpenGLImmediateWtViewer resizeGL
+G4OpenGLWtViewer resizeGL 600 600
+G4OpenGLImmediateWtViewer paintGL vvvvvvvvvvvvvvvvvvvv
+  G4OpenGLWtViewer paintGL   VVVVVVVVVVVVVVVVVVVVVVVVVV
+    G4OpenGLViewer::SetView
+    G4OpenGLViewer::ResizeGLView 600 600 0x104857b40
+    G4OpenGLViewer::ClearView
+    G4OpenGLViewer::ClearView set Background :0.160000 .4 .9: 0.000000
+    G4OpenGLViewer::ClearView flush
+#0  G4OpenGLViewer::ClearView (this=0x1049f1540) at src/G4OpenGLViewer.cc:195
+#1  0x0000000100353e1d in G4OpenGLWtViewer::paintGL (this=0x1049f0e00) at src/G4OpenGLWtViewer.cc:508
+#2  0x000000010030e2bd in G4OpenGLImmediateWtViewer::paintGL (this=0x1049f0e00) at src/G4OpenGLImmediateWtViewer.cc:117
+#3  0x000000010283955b in std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::str () at /usr/include/c++/4.2.1/sstream:527
+#4  0x000000010283955b in Wt::WGLWidget::updateDom (this=<value temporarily unavailable, due to optimizations>, element=@0x1049e1800, all=true) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WGLWidget.C:531
+#5  0x000000010283ba3c in Wt::WGLWidget::createDomElement (this=0x1049f0e00, app=<value temporarily unavailable, due to optimizations>) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WGLWidget.C:473
+#6  0x0000000102993cfa in Wt::WWidget::createSDomElement (this=0x1049f0e00, app=0x105021e00) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WWidget.C:326
+#7  0x00000001027ebf16 in Wt::WContainerWidget::createDomChildren (this=0x1041c1b50, parent=@0x1049e0c00, app=0x105021e00) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WContainerWidget.C:720
+#8  0x00000001027ec5a6 in Wt::WContainerWidget::createDomElement (this=0x1041c1b50, app=0x105021e00, addChildren=true) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WContainerWidget.C:653
+#9  0x0000000102993cfa in Wt::WWidget::createSDomElement (this=0x1041c1b50, app=0x105021e00) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WWidget.C:326
+#10 0x00000001027ebf16 in Wt::WContainerWidget::createDomChildren (this=0x1041c1cf0, parent=@0x1049f5200, app=0x105021e00) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WContainerWidget.C:720
+#11 0x00000001027ec5a6 in Wt::WContainerWidget::createDomElement (this=0x1041c1cf0, app=0x105021e00, addChildren=true) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WContainerWidget.C:653
+#12 0x0000000102993cfa in Wt::WWidget::createSDomElement (this=0x1041c1cf0, app=0x105021e00) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WWidget.C:326
+#13 0x00000001027eb5a2 in Wt::WContainerWidget::updateDomChildren (this=0x104278560, parent=@0x1049f4600, app=0x105021e00) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WContainerWidget.C:748
+#14 0x00000001027ec62d in Wt::WContainerWidget::getDomChanges (this=0x104278560, result=@0x1045449b0, app=0x105021e00) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WContainerWidget.C:632
+#15 0x0000000102976c93 in Wt::WWebWidget::getSDomChanges (this=0x104278560, result=@0x1045449b0, app=0x105021e00) at /Users/garnier/Work/Devel/wt-3.2.0/src/Wt/WWebWidget.C:1788
+
+
+    G4OpenGLWtViewer drawScene   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawArrays
+      G4OpenGLWtViewer drawScene Call ComputeView
+      G4OpenGLWtViewer::ComputeView 600 600   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+        G4OpenGLWtViewer drawArrays
+        G4OpenGLWtViewer::ComputeView NeedKernelVisit
+        G4OpenGLWtViewer::ComputeView ProcessView
+        G4VViewer::ProcessView  need ? 1
+        G4VSceneHandler::ProcessScene 
+        G4OpenGLWtViewer::FinishView() 
+        G4VSceneHandler::ProcessScene END
+        G4VViewer::ProcessView END
+        G4OpenGLWtViewer::FinishView()  
+      G4OpenGLWtViewer::ComputeView 600 600 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+      G4OpenGLWtViewer drawScene END Call ComputeView
+    G4OpenGLWtViewer drawScene END   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    G4OpenGLImmediateWtViewer resizeGL
+    G4OpenGLWtViewer resizeGL 600 600
+  G4OpenGLWtViewer paintGL   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+G4OpenGLImmediateWtViewer paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ */

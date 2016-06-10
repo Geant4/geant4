@@ -74,7 +74,16 @@ virtual
 					   G4int Z, G4int A);
 
 virtual
+  G4double GetProductionIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+					   G4double kinEnergy, 
+					   G4int Z, G4int A);
+
+virtual
   G4double GetInelasticElementCrossSection(const G4ParticleDefinition* aParticle,
+					   G4double kinEnergy, 
+					   G4int Z, G4double A);
+virtual
+  G4double GetProductionElementCrossSection(const G4ParticleDefinition* aParticle,
 					   G4double kinEnergy, 
 					   G4int Z, G4double A);
 
@@ -148,7 +157,7 @@ virtual
 
 private:
 
-  const G4double fUpperLimit;
+//  const G4double fUpperLimit;
   G4double fLowerLimit; 
   const G4double fRadiusConst;
 
@@ -165,7 +174,7 @@ private:
   static const G4double fPionMinusBarCorrectionIn[93];
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
-  G4double fHadronNucleonXsc;
+//  G4double fHadronNucleonXsc;
  
   G4ParticleDefinition* theGamma;
   G4ParticleDefinition* theProton;

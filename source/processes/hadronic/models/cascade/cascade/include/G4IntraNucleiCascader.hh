@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4IntraNucleiCascader.hh 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -61,6 +61,8 @@
 // 20110801  M. Kelsey -- Add local target buffers for rescattering, to avoid
 //		memory leak.
 // 20110919  M. Kelsey -- Add optional final-state clustering
+// 20130304  M. Kelsey -- Add new G4CascadeHistory for cacasde structure reporting
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -72,6 +74,7 @@
 
 class G4CascadParticle;
 class G4CascadeCoalescence;
+class G4CascadeHistory;
 class G4CascadeRecoilMaker;
 class G4ElementaryParticleCollider;
 class G4InuclElementaryParticle;
@@ -133,6 +136,7 @@ private:
   G4ElementaryParticleCollider* theElementaryParticleCollider;
   G4CascadeRecoilMaker* theRecoilMaker;
   G4CascadeCoalescence* theClusterMaker;
+  G4CascadeHistory* theCascadeHistory;
 
   // Buffers and parameters for cascade attempts
   G4InuclNuclei* tnuclei;		// Target nucleus (must be non-zero)
@@ -153,6 +157,11 @@ private:
   G4ExitonConfiguration theExitonConfiguration;
 
   std::vector<G4ThreeVector> hitNucleons;	// Nucleons hit before rescatter
+
+private:
+  // Copying of modules is forbidden
+  G4IntraNucleiCascader(const G4IntraNucleiCascader&);
+  G4IntraNucleiCascader& operator=(const G4IntraNucleiCascader&);
 };        
 
 #endif /* G4INTRA_NUCLEI_CASCADER_HH */

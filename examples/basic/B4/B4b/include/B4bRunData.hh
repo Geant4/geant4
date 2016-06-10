@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4bRunData.hh 69223 2013-04-23 12:36:10Z gcosmo $
 // 
 /// \file B4bRunData.hh
 /// \brief Definition of the B4bRunData class
@@ -31,6 +31,7 @@
 #ifndef B4bRunData_h
 #define B4bRunData_h 1
 
+#include "G4Run.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,8 +41,6 @@ enum {
   kGap = 1,
   kDim = 2
 };  
-
-class B4bRunData;
 
 ///  Run data class
 ///
@@ -56,13 +55,11 @@ class B4bRunData;
 /// the accumulated values are filled in histograms and entuple
 /// event by event in B4EventAction.
 
-class B4bRunData
+class B4bRunData : public G4Run
 {
 public:
   B4bRunData();
   virtual ~B4bRunData();
-
-  static B4bRunData* GetInstance() { return fgInstance; }
 
   void Add(G4int id, G4double de, G4double dl);
   void FillPerEvent();
@@ -75,8 +72,6 @@ public:
   G4double  GetTrackLength(G4int id) const; 
 
 private:
-  static B4bRunData* fgInstance;
-
   G4String  fVolumeNames[kDim];
   G4double  fEdep[kDim];
   G4double  fTrackLength[kDim]; 

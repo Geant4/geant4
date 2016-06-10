@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2008-06-11 17:17:54 schaelic Exp $
+# $Id: GNUmakefile 75669 2013-11-05 08:38:52Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,12 +14,7 @@ endif
 .PHONY: all
 all: lib bin
 
+include $(G4INSTALL)/config/architecture.gmk
+
 include $(G4INSTALL)/config/binmake.gmk
 
-plots:	plotResults.class
-	@echo calling JAIDA ...
-	java -cp .:$(CLASSPATH) plotResults Pol01.aida
-
-plotResults.class: plotResults.java
-	@echo compiling $<
-	javac $<

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4FTFBinaryProtonBuilder.hh 68750 2013-04-05 10:19:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -67,6 +67,7 @@ class G4FTFBinaryProtonBuilder : public G4VProtonBuilder
     virtual void Build(G4ProtonInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
@@ -77,7 +78,7 @@ class G4FTFBinaryProtonBuilder : public G4VProtonBuilder
     G4QuasiElasticChannel * theQuasiElastic;
 
     G4double theMin;
-
+    G4double theMax;
 };
 
 #endif

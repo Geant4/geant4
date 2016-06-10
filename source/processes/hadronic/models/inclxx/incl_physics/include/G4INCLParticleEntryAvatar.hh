@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -48,7 +46,7 @@ namespace G4INCL {
   public:
     ParticleEntryAvatar(G4double, G4INCL::Nucleus*, G4INCL::Particle*);
     virtual ~ParticleEntryAvatar();
-    virtual G4INCL::IChannel* getChannel() const;
+    virtual G4INCL::IChannel* getChannel();
     ParticleList getParticles() const {
       ParticleList theParticleList;
       theParticleList.push_back(theParticle);
@@ -59,9 +57,6 @@ namespace G4INCL {
     virtual FinalState *postInteraction(FinalState *);
 
     std::string dump() const;
-
-    static const G4double cutNN;
-    static const G4double cutNNSquared;
   private:
     Nucleus *theNucleus;
     Particle *theParticle;

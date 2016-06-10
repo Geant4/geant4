@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VTouchable.cc,v 1.4 2006-06-29 15:32:57 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id: pyG4VTouchable.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VTouchable.cc
 //
@@ -43,20 +42,20 @@ using namespace boost::python;
 namespace pyG4VTouchable {
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetTranslation,
-				       GetTranslation, 0, 1);
+				       GetTranslation, 0, 1)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetRotation,
-				       GetRotation, 0, 1);
+				       GetRotation, 0, 1)
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetVolume, GetVolume, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetVolume, GetVolume, 0, 1)
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetSolid, GetSolid, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetSolid, GetSolid, 0, 1)
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetReplicaNumber, 
-				       GetReplicaNumber, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetReplicaNumber,
+				       GetReplicaNumber, 0, 1)
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_MoveUpHistory, MoveUpHistory, 0, 1);
-  
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_MoveUpHistory, MoveUpHistory, 0, 1)
+
 }
 
 using namespace pyG4VTouchable;
@@ -80,10 +79,10 @@ void export_G4VTouchable()
     .def("GetSolid", &G4VTouchable::GetSolid,
 	 f_GetSolid()
 	 [return_value_policy<reference_existing_object>()])
-    .def("GetReplicaNumber", &G4VTouchable::GetReplicaNumber, 
+    .def("GetReplicaNumber", &G4VTouchable::GetReplicaNumber,
 	 f_GetReplicaNumber())
     .def("GetHistoryDepth",  &G4VTouchable::GetHistoryDepth)
-    .def("MoveUpHistory", &G4VTouchable::MoveUpHistory, 
+    .def("MoveUpHistory", &G4VTouchable::MoveUpHistory,
 	 f_MoveUpHistory())
     ;
 }

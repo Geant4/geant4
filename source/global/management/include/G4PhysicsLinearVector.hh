@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsLinearVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -47,6 +47,7 @@
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //    16 Aug. 2011  H.Kurashige : Move dBin, baseBin to the base class
+//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method
 //
 //--------------------------------------------------------------------
 
@@ -72,16 +73,11 @@ class G4PhysicsLinearVector : public G4PhysicsVector
     virtual ~G4PhysicsLinearVector();
       // Destructor
 
-    G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
+    virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
 
     virtual void ScaleVector(G4double factorE, G4double factorV);
       // Scale all values of the vector and second derivatives
       // by factorV, energies by vectorE. 
-
-  protected:
-
-    virtual size_t FindBinLocation(G4double theEnergy) const;
-      // Find bin# in which theEnergy belongs - pure virtual function
 
 };
 

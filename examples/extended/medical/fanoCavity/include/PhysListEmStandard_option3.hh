@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/PhysListEmStandard_option3.hh
 /// \brief Definition of the PhysListEmStandard_option3 class
 //
-// $Id$
+// $Id: PhysListEmStandard_option3.hh 68459 2013-03-27 18:45:08Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,16 +46,16 @@ class PhysListEmStandard_option3 : public G4VPhysicsConstructor
 public: 
   PhysListEmStandard_option3(const G4String& name, 
                              DetectorConstruction* det);
-  virtual ~PhysListEmStandard_option3();
+ ~PhysListEmStandard_option3();
 
 public: 
   // This method is dummy for physics
-  void ConstructParticle() {};
+  virtual void ConstructParticle() {};
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  void ConstructProcess();
+  virtual void ConstructProcess();
   
 private:
   DetectorConstruction* fDetector;  
@@ -64,11 +64,3 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
-

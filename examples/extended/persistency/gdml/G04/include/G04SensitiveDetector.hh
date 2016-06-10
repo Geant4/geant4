@@ -27,7 +27,7 @@
 /// \brief Definition of the G04SensitiveDetector class
 //
 //
-// $Id$
+// $Id: G04SensitiveDetector.hh 69988 2013-05-21 12:36:24Z gcosmo $
 //
 
 #ifndef G04SensitiveDetector_h
@@ -45,9 +45,9 @@ class G04SensitiveDetector : public G4VSensitiveDetector
       G04SensitiveDetector(const G4String&);
      ~G04SensitiveDetector();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
+      virtual void Initialize(G4HCofThisEvent*);
+      virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+      virtual void EndOfEvent(G4HCofThisEvent*);
 
   private:
 

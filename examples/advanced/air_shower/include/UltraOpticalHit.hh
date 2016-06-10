@@ -83,22 +83,22 @@ public:
 
 typedef G4THitsCollection<UltraOpticalHit> UltraOpticalHitsCollection;
 
-extern G4Allocator<UltraOpticalHit> UltraOpticalHitAllocator;
+extern G4ThreadLocal G4Allocator<UltraOpticalHit> *UltraOpticalHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* UltraOpticalHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) UltraOpticalHitAllocator.MallocSingle();
-  return aHit;
+  if (!UltraOpticalHitAllocator)
+    UltraOpticalHitAllocator = new G4Allocator<UltraOpticalHit>;
+  return (void*) UltraOpticalHitAllocator->MallocSingle();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void UltraOpticalHit::operator delete(void* aHit)
 {
-  UltraOpticalHitAllocator.FreeSingle((UltraOpticalHit*) aHit);
+  UltraOpticalHitAllocator->FreeSingle((UltraOpticalHit*) aHit);
 }
 
 #endif

@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -44,8 +42,8 @@
 
 namespace G4INCL {
 
-  DeltaDecayChannel::DeltaDecayChannel(Nucleus *n, Particle *p, ThreeVector const dir)
-    :theParticle(p), theNucleus(n), incidentDirection(dir)
+  DeltaDecayChannel::DeltaDecayChannel(Particle *p, ThreeVector const dir)
+    :theParticle(p), incidentDirection(dir)
   { }
 
   DeltaDecayChannel::~DeltaDecayChannel() {}
@@ -90,15 +88,15 @@ namespace G4INCL {
     //   common/hazard/ial,IY1,IY2,IY3,IY4,IY5,IY6,IY7,IY8,IY9,IY10,
     // s               IY11,IY12,IY13,IY14,IY15,IY16,IY17,IY18,IY19
 
-    // DATA IY8,IY9,IY10/82345,92345,45681/                           
+    // DATA IY8,IY9,IY10/82345,92345,45681/
     // PCM(E,A,C)=0.5*SQRT((E**2-(A+C)**2)*(E**2-(A-C)**2))/E            P-N20800
     // XI=YM(ij)
 
     // XE=WP                                                             P-N20810
     // B1=P1/XE                                                          P-N20820
     // B2=P2/XE                                                          P-N20830
-    // B3=P3/XE                                                          
-    // XQ=PCM(XI,X1,X2)                                                  
+    // B3=P3/XE
+    // XQ=PCM(XI,X1,X2)
 
     const G4double deltaMass = theParticle->getMass();
 
@@ -159,8 +157,8 @@ namespace G4INCL {
         pionType = PiMinus;
         break;
       default:
-        FATAL("Unrecognized delta type; type=" << theParticle->getType() << std::endl);
-        abort();
+        INCL_FATAL("Unrecognized delta type; type=" << theParticle->getType() << std::endl);
+        pionType = UnknownParticle;
         break;
     }
 

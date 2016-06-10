@@ -7,7 +7,7 @@
   <position name="BreastUnionRelativePos" unit="cm" x="17.26" y="0" z="0" />
   <position name="BreastRelativePos" unit="cm" x="8.63" y="0.0" z="-8.4854" />
   <rotation name="BreastRotation" unit="degree" x="90" y="0" z="0" />
-  <position name="OrganPos" unit="cm" x="8.63" y="46.87" z="8.4854" />
+  <position name="OrganPos" unit="cm" x="8.63" y="8.4854" z="46.87" />
   <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
   <position name="TrunkPos" unit="cm" x="0" y="31.55" z="0" />
   <rotation name="TrunkRot" unit="degree" x="90" y="0" z="0" />

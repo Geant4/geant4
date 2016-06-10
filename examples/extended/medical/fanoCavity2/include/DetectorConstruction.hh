@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.hh 68763 2013-04-05 12:36:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
       
      void SetWorldRadius     (G4double);
                  
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
      void               UpdateGeometry();
      
   public:
