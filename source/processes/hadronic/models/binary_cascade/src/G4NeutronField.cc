@@ -81,7 +81,7 @@ G4double G4NeutronField::GetField(const G4ThreeVector & aPosition)
 {
   G4double x = aPosition.mag();
   G4int index = static_cast<G4int>(x/(0.3*fermi) );
-  if(index+2> static_cast<G4int>(theFermiMomBuffer.size())) return theFermiMomBuffer.back();
+  if(index+2> static_cast<G4int>(theFermiMomBuffer.size()) || index<0) return theFermiMomBuffer.back();
   G4double y1 = theFermiMomBuffer[index];
   G4double y2 = theFermiMomBuffer[index+1];
   G4double x1 = (0.3*fermi)*index;

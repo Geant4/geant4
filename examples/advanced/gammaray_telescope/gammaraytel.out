@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-patch-03    (14-March-2014)
+ Geant4 version Name: geant4-09-06-patch-04    (30-January-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2073,7 +2073,7 @@ Number of digits in this event =  5
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.47s Real=0.8s Sys=0s
+  User=0.47s Real=1.03s Sys=0.02s
 End of Run 
 File Tracks_0.dat
 /gun/particle gamma
@@ -3274,7 +3274,7 @@ Number of digits in this event =  1
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.78s Real=5.4s Sys=0.01s
+  User=2.78s Real=8.12s Sys=0s
 End of Run 
 File Tracks_1.dat
 /gun/particle e-
@@ -5709,7 +5709,7 @@ Number of digits in this event =  12
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.92s Real=6.83s Sys=0s
+  User=2.9s Real=8.42s Sys=0s
 End of Run 
 File Tracks_2.dat
 Graphics systems deleted.

@@ -186,6 +186,7 @@ G4VParticleChange* G4AntiProtonAnnihilationAtRest::AtRestDoIt(
     {
       targetCharge = G4double((*theElementVector)[i2]->GetZ());
       targetAtomicMass = (*theElementVector)[i2]->GetN();
+      break;
     }
   }
   if (random>runningSum)

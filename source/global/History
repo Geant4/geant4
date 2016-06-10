@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 30, 2015 G.Cosmo (global-V09-05-19)
+- Updated date for release 9.6.p04.
+
+March 13, 2014 G.Cosmo
+- Fix in G4SimplexDownhill header to proper define header guard.
+
 March 10, 2014 G.Cosmo (global-V09-05-18)
 - Updated date for release 9.6.p03.
 

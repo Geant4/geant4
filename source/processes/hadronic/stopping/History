@@ -14,6 +14,34 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 January 2015 V. Ivantchenko (hadr-stopping-V09-05-38)
+--------------------------------------------------------------------
+- G4HadronStoppingProcess, G4MuMinusCapturePrecompound,  
+  G4MuonMinusBoundDecay - cleanup comments
+
+08 December 2014 V. Ivantchenko
+--------------------------------------------------------------------
+- G4HadronStoppingProcess, G4MuonMinusBoundDecay: fixed time of muon 
+    nuclear capture secondaries (fix #1695).
+
+27 May 2014 V. Ivantchenko     (hadr-stopping-V09-05-36)
+--------------------------------------------------------------------
+- G4MuonMinusCaptureAtRest - fixed trivial Coverity defect
+
+14 May 2014 V. Ivantchenko
+--------------------------------------------------------------------
+- G4MuMinusCapturePrecompound - added simplified model for capture
+    in deuterium and in He4; reduced number of trials to find neutrino
+    4-momentum from 1000 to 100; added protection 1 keV for negative
+    excitation energy, substitute FatalException by JustWarning.
+    All this addressing the recent ATLAS report
+
+24 April 2014 A. Ribon         (hadr-stopping-V09-05-35)
+--------------------------------------------------------------------
+- G4AntiProtonAnnihilationAtRest.cc : fixed bug found by Mihaly Novak
+  related to a wrong target sampling (always the last element of the
+  element vector was sampled as target).
+
 31 January 2014 V. Ivantchenko (hadr-stopping-V09-05-34)
 --------------------------------------------------------------------
 - G4MuMinusCapturePrecompound - fix infinite loop (bug #1536) by 

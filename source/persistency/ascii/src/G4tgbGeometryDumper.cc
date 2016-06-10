@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbGeometryDumper.cc 87947 2015-01-22 10:10:59Z gcosmo $
 // GEANT4 tag $Name: $
 //
 //
@@ -786,11 +786,9 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     const G4Trap * trp = dynamic_cast < const G4Trap * > (so);
     if (trp) {
       G4ThreeVector symAxis(trp->GetSymAxis());
-      G4double theta = symAxis.theta()/deg;
-      G4double phi = symAxis.phi()/deg;
       params.push_back( trp->GetZHalfLength() );
-      params.push_back( theta ); 
-      params.push_back( phi);
+      params.push_back( symAxis.theta()/deg);
+      params.push_back( symAxis.phi()/deg);
       params.push_back( trp->GetYHalfLength1() );
       params.push_back( trp->GetXHalfLength1() );
       params.push_back( trp->GetXHalfLength2() );    
@@ -812,15 +810,13 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
   } else if (solidType == "PARA") {
     const G4Para * para = dynamic_cast < const G4Para * > (so);
     if (para) {
-      G4double phi = 0.;
-      if(para->GetSymAxis().z()!=1.0)
-        { phi = std::atan(para->GetSymAxis().y()/para->GetSymAxis().x()); }
+      G4ThreeVector symAxis(para->GetSymAxis());
       params.push_back( para->GetXHalfLength());
       params.push_back(  para->GetYHalfLength());
       params.push_back( para->GetZHalfLength());
       params.push_back( std::atan(para->GetTanAlpha())/deg);
-      params.push_back( std::acos(para->GetSymAxis().z())/deg);
-      params.push_back( phi/deg);
+      params.push_back( symAxis.theta()/deg);
+      params.push_back( symAxis.phi()/deg);
     }
   } else if (solidType == "CONS") {
     const G4Cons * cn = dynamic_cast < const G4Cons * > (so);

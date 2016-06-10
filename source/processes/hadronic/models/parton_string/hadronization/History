@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24-Apr-2014, A.Ribon       (had-hadronization-V09-05-09)
+- Applied Novak's bug fix in G4LundStringFragmentation.cc : replacing
+  ">=" with ">" in three if statements, which caused crashes in the
+  case of anti_sigma+ capture at rest on hydrogen.
+
 14-Nov-2013, A.Ribon       (had-hadronization-V09-05-08)
 - Fixed two mistakes in the index manipulation of the BaryonWeight
   4-dimensional vector in G4LundStringFragmentation.cc .

@@ -4,7 +4,6 @@
 # 21st September 2010 Ben Morgan
 #
 # $Id: CMakeLists.txt,v 1.6 2010-12-08 16:36:34 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
 #------------------------------------------------------------------------------
@@ -24,6 +23,30 @@ endif()
 # - Define CMake requirements and override make rules as needed
 #
 cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
+
+# If Policy CMP0022 exists, use OLD because Geant4 still needs
+# to support versions < 2.8.12.
+# This relates to LINK_INTERFACE_LIBRARIES and can be removed once
+# minimum required CMake version reaches 2.8.12
+if(POLICY CMP0022)
+  cmake_policy(SET CMP0022 OLD)
+endif()
+
+# If Policy CMP0042 exists, use OLD to prefer the use of install names
+# instead of the new @rpath default. This is temporary to suppress warnings
+# on newer CMake versions.
+if(POLICY CMP0042)
+  cmake_policy(SET CMP0042 OLD)
+endif()
+
+# If Policy CMP0043 exists, use OLD because Geant4 still needs
+# to support Geant4 =< 2.8.12.
+# This relates to the use of generator expressions to set COMPILE_DEFINITIONS
+# and can be removed once the minimum required CMake version reaches 2.8.10.
+if(POLICY CMP0043)
+  cmake_policy(SET CMP0043 OLD)
+endif()
+
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
    ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_cxx.cmake)
 
@@ -52,10 +75,10 @@ set(CMAKE_MODULE_PATH
 # See the documentation in each of these modules for further details.
 #
 # - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "9.6.3")
+set(${PROJECT_NAME}_VERSION "9.6.4")
 set(${PROJECT_NAME}_VERSION_MAJOR "9")
 set(${PROJECT_NAME}_VERSION_MINOR "6")
-set(${PROJECT_NAME}_VERSION_PATCH "3")
+set(${PROJECT_NAME}_VERSION_PATCH "4")
 
 # - Provide dependent options as these are needed for some Geant4 features
 include(CMakeDependentOption)

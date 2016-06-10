@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-patch-03    (14-March-2014)
+ Geant4 version Name: geant4-09-06-patch-04    (30-January-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13994,7 +13994,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 * G4Track Information:   Particle = e-,   Track ID = 1098,   Parent ID = 1095
 *********************************************************************************************************
 
-Step#   
+Step# 
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================

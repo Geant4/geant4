@@ -70,8 +70,9 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   theN       = new G4Fancy3DNucleus();
   theHandler = new G4ExcitationHandler();
   G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
+  targetMass = 0.0;
 }
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuonMinusCaptureAtRest::~G4MuonMinusCaptureAtRest()

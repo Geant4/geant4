@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June  24, 2014 - G.Folger  (geomnav-V09-05-49)
+-------------------------
+- G4MultiNavigator: set 'fIdNavLimiting' index to navigator limiting the step,
+  if only one navigator limited the step. Fixes crash in RE05 on Windows.
+
+May   27, 2014 - J.Apostolakis  (geomnav-V09-05-48)
+------------------------------
+- G4Navigator: Corrected saving/restoring of 'navigator state':
+  * Added bool sWasLimitedByGeometry to G4SaveNavigatorState struct
+  * Corrected RestoreState() to reset the Safety Origin and Value.
+
+March 14, 2014 - J.Apostolakis
+------------------------------
+- G4PathFinder: Added EndTrack() method, to reset internal state
+    and inform G4TransportationManager to use 'ordinary' Navigator
+    ( Must be called by G4CoupledTransportation to be of any use. )
+
 June 4th, 2013 - J.Apostolakis  (geomnav-V09-05-47)
 ------------------------------
 - G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().  

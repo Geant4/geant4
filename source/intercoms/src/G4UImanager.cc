@@ -293,7 +293,20 @@ void G4UImanager::ForeachS(const char* valueList)
     c1 += " ";
     c1 += ca;
   }
-  Foreach(mf,vn,c1);
+
+  G4String aliasValue = c1;
+  if(aliasValue(0)=='"')
+  {
+    G4String strippedValue;
+    if(aliasValue(aliasValue.length()-1)=='"')
+    { strippedValue = aliasValue(1,aliasValue.length()-2); }
+    else
+    { strippedValue = aliasValue(1,aliasValue.length()-1); }
+    aliasValue = strippedValue;
+  }
+
+//  Foreach(mf,vn,c1);
+  Foreach(mf,vn,aliasValue);
 }
 
 void G4UImanager::Foreach(const char * macroFile,const char * variableName,

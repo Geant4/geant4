@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 11th, 2014 G.Cosmo - geomvol-V09-05-03
+- Avoid post-increment in G4NavigationLevelRep::AddAReference().
+
 November 6th, 2012 G.Cosmo - geomvol-V09-05-02
 - Fix in G4EnhancedVecAllocator for porting on AIX.
 

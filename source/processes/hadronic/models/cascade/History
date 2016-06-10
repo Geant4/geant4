@@ -15,6 +15,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 November 2014  M. Kelsey (hadr-casc-V09-05-33)
+-------------------------------------------------
+- G4CascadeInterface.cc:  Fix possible infinite-loop condition where (nTries
+  >= maxTries) and momentum balance fails, by regrouping conditions in
+  retryInelasticNucleus().
+
+23 May 2014  M. Kelsey (hadr-casc-V09-05-32)
+--------------------------------------------
+- G4InuclNuclei.cc:  Avoid FPE in setExcitationEnergy() for zero Ekin.
+
+11 March 2014  M.Kelsey (hadr-casc-V09-05-31)
+---------------------------------------------
+- G4IntraNucleiCascader.cc:  Address bug #1584, fixing memory leak by
+  deleting list of decay products in decayTrappedParticle().
+
 11 March 2014  G.Cosmo (hadr-casc-V09-05-30)
 --------------------------------------------
 - G4CascadeParameters: have canonical singleton implementation.
@@ -32,13 +47,6 @@ code and to keep track of all tags.
   method generateParticleFate. The members current_nucl1 and
   current_nucl2 were not properly initialized in the case that
   the interaction-partners list has one single element.
-
-22 May 2013  Michael Kelsey
----------------------------
-- G4ParticleLargerEkin.hh, G4ParticleLargerBeta.hh:  Change ">=" to ">" in
-  both cases, to avoid error in (extremely rare) case that both inputs are
-  identical.  With floats, this is a ~2^-64 probability, but a Windows test
-  job managed to catch it.
 
 20 October 2012  Michael Kelsey (hadr-casc-V09-05-26)
 -----------------------------------------------------

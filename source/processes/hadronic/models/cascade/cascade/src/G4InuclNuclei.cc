@@ -49,6 +49,7 @@
 // 20110919  M. Kelsey -- Special case:  Allow fill(A=0,Z=0) to make dummy
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 // 20121009  M. Kelsey -- Add report of excitons if non-empty
+// 20140523  M. Kelsey -- Avoid FPE in setExcitationEnergy() for zero Ekin
 
 #include <assert.h>
 #include <sstream>
@@ -179,8 +180,9 @@ void G4InuclNuclei::setExitationEnergy(G4double e) {
 
   G4double emass = getNucleiMass() + e*MeV/GeV;	// From Bertini to G4 units
 
-  // Directly compute new kinetic energy from old
-  G4double ekin_new = std::sqrt(emass*emass + ekin*(2.*getMass()+ekin)) - emass;
+  // Safety check -- if zero energy, don't do computation
+  G4double ekin_new = (ekin == 0.) ? 0.
+    : std::sqrt(emass*emass + ekin*(2.*getMass()+ekin)) - emass;
 
   setMass(emass);	       // Momentum is computed from mass and Ekin
   setKineticEnergy(ekin_new);

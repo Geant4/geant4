@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 69790 2013-05-15 12:39:10Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 87943 2015-01-22 09:16:36Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -558,7 +558,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     //G4cout << "angle " << angle  << G4endl;
 
     G4int counter = 0;
-    while ( angle > pi )
+    while ( angle >= pi )
     {
       // G4cout << "Skipping concave vertex " << c2->second << G4endl;
 

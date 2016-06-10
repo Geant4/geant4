@@ -75,6 +75,25 @@ class G4OpticalSurface;
 
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials
 {
+  class G4ThreeVectorCompare
+  {
+    public:
+
+    G4bool operator()(const G4ThreeVector& t1, const G4ThreeVector& t2 ) const
+    {
+      if(t1.x() < t2.x())
+        return true;
+
+      if(t1.y() < t2.y())
+        return true;
+
+      if(t1.z() < t2.z())
+        return true;
+
+      return false;
+    }
+  };
+
   public:
 
    virtual void AddSolid(const G4VSolid* const);

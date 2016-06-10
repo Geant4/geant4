@@ -75,7 +75,7 @@ G4int G4NavigationLevelRep::GetReplicaNo() const
 inline
 void G4NavigationLevelRep::AddAReference() 
 {
-  fCountRef++; 
+  ++fCountRef; 
 }
 
 inline

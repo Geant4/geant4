@@ -159,7 +159,7 @@ G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const DElement)
 G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const PElement)
 {
    G4double value = STP_Pressure;
-   G4double unit = pascal;
+   G4double unit = hep_pascal;
 
    const xercesc::DOMNamedNodeMap* const attributes = PElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
@@ -581,8 +581,8 @@ MixtureRead(const xercesc::DOMElement *const mixtureElement,
          G4Material *materialPtr = GetMaterial(GenerateName(ref,true), false);
          G4Element *elementPtr = GetElement(GenerateName(ref,true), false);
 
-         if (materialPtr != 0) { material->AddMaterial(materialPtr,n); } else
-         if (elementPtr != 0)  { material->AddElement(elementPtr,n); }
+         if (elementPtr != 0)  { material->AddElement(elementPtr,n); } else
+         if (materialPtr != 0) { material->AddMaterial(materialPtr,n); }
 
          if ((materialPtr == 0) && (elementPtr == 0))
          {

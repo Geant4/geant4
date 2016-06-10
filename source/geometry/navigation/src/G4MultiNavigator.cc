@@ -529,6 +529,7 @@ void G4MultiNavigator::WhichLimited()
   if( (last > -1) && (noLimited == 1 ) )
   {
     fLimitedStep[ last ] = kUnique; 
+    fIdNavLimiting = last;
   }
 
   fNoLimitingStep= noLimited;  

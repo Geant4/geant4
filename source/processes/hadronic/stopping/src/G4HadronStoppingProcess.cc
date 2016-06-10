@@ -134,6 +134,7 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
 
   G4HadFinalState* result = 0;
   thePro.Initialise(track);
+  thePro.SetGlobalTime(0.0);
   G4double time0 = track.GetGlobalTime();
   G4bool nuclearCapture = true;
 
@@ -167,6 +168,10 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
   }
 
   if(nuclearCapture) {
+
+    // delay of capture
+    G4double capTime = thePro.GetGlobalTime();
+    thePro.SetGlobalTime(0.0);
 
     // select model
     G4HadronicInteraction* model = 0;
@@ -224,7 +229,15 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
     while(!resultNuc);
 
     edep = resultNuc->GetLocalEnergyDeposit();
-    nSecondaries += resultNuc->GetNumberOfSecondaries();
+    size_t nnuc = resultNuc->GetNumberOfSecondaries();
+
+    // add delay time of capture
+    for(size_t i=0; i<nnuc; ++i) { 
+      G4HadSecondary* sec = resultNuc->GetSecondary(i);
+      sec->SetTime(capTime + sec->GetTime());
+    }
+
+    nSecondaries += nnuc;
     result->AddSecondaries(resultNuc); 
     resultNuc->Clear();
   }

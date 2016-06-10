@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 May, 2014 M. Asai (intercoms-V09-05-09)
+ - G4GenericMessenger.cc : Fix core dump when GetCurrentValue()
+  method is invoked for a command defined by DeclareMethod().
+
+3 May, 2014 M. Asai
+- Fix the treatment of double-quotes in G4UImanager::ForeachS().
+  Addressing bug report #1614.
+
+16 April, 2014 G. Cosmo
+- Corrected inclusion protection flag in G4GenericMessenger.hh.
+  Addressing old problem report #1527.
+
 26 October, 2012 P. Mato (intercoms-V09-05-07)
  - G4AnyMethod.hh avoided compilation warning.
 

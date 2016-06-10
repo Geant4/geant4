@@ -1,4 +1,4 @@
-$Id: History 79613 2014-03-10 10:27:56Z gcosmo $
+$Id: History 87947 2015-01-22 10:10:59Z gcosmo $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 April 2014 - P.Arce (ascii-V09-05-07)
+- G4tgbGeometryDumper: G4Para use G4ThreeVector methods for SymAxis
 
 14 November 2013 - G.Cosmo (ascii-V09-05-06)
 - Corrected typo in G4tgrUtils::WordIsUnit().

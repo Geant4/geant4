@@ -753,6 +753,10 @@ PolyconeRead(const xercesc::DOMElement* const polyconeElement)
 
    new G4Polycone(name,startphi,deltaphi,numZPlanes,
                   z_array,rmin_array,rmax_array);
+
+   delete [] rmin_array;
+   delete [] rmax_array;
+   delete [] z_array;
 }
 
 void G4GDMLReadSolids::
@@ -835,6 +839,9 @@ PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
    new G4Polyhedra(name,startphi,deltaphi,numsides,numZPlanes,
                    z_array,rmin_array,rmax_array);
 
+   delete [] rmin_array;
+   delete [] rmax_array;
+   delete [] z_array;
 }
 
 G4QuadrangularFacet* G4GDMLReadSolids::

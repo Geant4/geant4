@@ -4,7 +4,7 @@
 
                                                               14 March 2014
 
-List of fixes included in this public patch since the public release 9.6.p01:
+List of fixes included in this public patch since the public release 9.6.p02:
 
   o Configuration:
     -------------
@@ -35,7 +35,7 @@ List of fixes included in this public patch since the public release 9.6.p01:
       o Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified
         accuracy. Addressing problem report #1493.
     + navigation:
-      o G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().  (+)
+      o G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().
     + solids/CSG:
       o Corrected sanity check for wrong/small dimensions in G4Box constructor.
       o Correctly initialise fSPhi to zero in G4Sphere constructor.
@@ -78,7 +78,7 @@ List of fixes included in this public patch since the public release 9.6.p01:
   o Generic Processes:
     -----------------
     + Decay:
-      o Fixed problem of wrong global time for secondaries in case that the        (+)
+      o Fixed problem of wrong global time for secondaries in case that the
         primary track stops during along step. Addressing problem report #1555.
 
   o Hadronic Processes:

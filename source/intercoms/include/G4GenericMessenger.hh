@@ -28,7 +28,7 @@
 //
 
 #ifndef G4GenericMessenger_h
-#define G4GenericMmessenger_h 1
+#define G4GenericMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "G4UIcommand.hh"

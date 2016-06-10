@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
+22th January 2014  Laurent Garnier (interfaces-V09-05-37)
+- G4Qt : BUGFIX : bugzilla 1487 : Explicitly set the LC_NUMERIC locale to "C"
+
 15th November 2012 Laurent Garnier (interfaces-V09-05-36)
 - G4UIQt:
  o Fix bug #1391 : Menus were append before the "File" menu

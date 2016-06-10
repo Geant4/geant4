@@ -100,6 +100,11 @@ G4String G4GenericMessenger::GetCurrentValue(G4UIcommand* command) {
     Property& p = properties[command->GetCommandName()];
     return p.variable.ToString();
   }
+  else if ( methods.find(command->GetCommandName()) != methods.end()) {
+    G4cout<<" GetCurrentValue() is not available for a command defined by"
+          <<" G4GenericMessenger::DeclareMethod()."<<G4endl;
+    return G4String();
+  }
   else {
     throw G4InvalidUICommand();
   }

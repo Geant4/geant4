@@ -452,6 +452,7 @@ class G4Navigator
      G4VPhysicalVolume* spBlockedPhysicalVolume;
      G4int sBlockedReplicaNo;  
      G4int sLastStepWasZero; 
+     G4bool sWasLimitedByGeometry;
 
      //  Potentially relevant
      //

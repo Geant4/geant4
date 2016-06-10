@@ -99,6 +99,7 @@ G4Transportation::G4Transportation( G4int verbosity )
 {
   // set Process Sub Type
   SetProcessSubType(static_cast<G4int>(TRANSPORTATION));
+  pParticleChange= &fParticleChange;   // Required to conform to G4VProcess 
 
   G4TransportationManager* transportMgr ; 
 

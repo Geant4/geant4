@@ -114,7 +114,7 @@ BooleanWrite(xercesc::DOMElement* solElement,
       if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(firstPtr))
       {
          firstpos += disp->GetObjectTranslation();
-         firstrot += firstrot + GetAngles(disp->GetObjectRotation());
+         firstrot += GetAngles(disp->GetObjectRotation());
          firstPtr = disp->GetConstituentMovedSolid();
          displaced++;
          continue;
@@ -372,9 +372,8 @@ ParaWrite(xercesc::DOMElement* solElement, const G4Para* const para)
 
    const G4ThreeVector simaxis = para->GetSymAxis();
    const G4double alpha = std::atan(para->GetTanAlpha());
-   const G4double theta = std::acos(simaxis.z());
-   const G4double phi = (simaxis.z() != 1.0)
-                      ? (std::atan(simaxis.y()/simaxis.x())) : (0.0);
+   const G4double phi = simaxis.phi();
+   const G4double theta = simaxis.theta();
 
    xercesc::DOMElement* paraElement = NewElement("para");
    paraElement->setAttributeNode(NewAttribute("name",name));
@@ -508,7 +507,7 @@ TessellatedWrite(xercesc::DOMElement* solElement,
    tessellatedElement->setAttributeNode(NewAttribute("lunit","mm"));
    solElement->appendChild(tessellatedElement);
 
-   std::map<G4ThreeVector, G4String> vertexMap;
+   std::map<G4ThreeVector, G4String, G4ThreeVectorCompare> vertexMap;
 
    const size_t NumFacets = tessellated->GetNumberOfFacets();
    size_t NumVertex = 0;
@@ -648,9 +647,8 @@ TrapWrite(xercesc::DOMElement* solElement, const G4Trap* const trap)
    const G4String& name = GenerateName(trap->GetName(),trap);
 
    const G4ThreeVector& simaxis = trap->GetSymAxis();
-   const G4double phi = (simaxis.z() != 1.0)
-                      ? (std::atan(simaxis.y()/simaxis.x())) : (0.0);
-   const G4double theta = std::acos(simaxis.z());
+   const G4double phi = simaxis.phi();
+   const G4double theta = simaxis.theta();
    const G4double alpha1 = std::atan(trap->GetTanAlpha1());
    const G4double alpha2 = std::atan(trap->GetTanAlpha2());
 

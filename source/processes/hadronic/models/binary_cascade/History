@@ -13,6 +13,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28 May 2014 Gunter Folger        had-binary-V09-05-17
+- G4BinaryCasacde: Improve calculation of mass, and of correction for outgoing 
+   particles by always using GetIon() method. IN GetIonMass() return 0 when A==0
+        (Addresses crash for p+d seen in d+H in BLIC)
+
+23 May 2014 Gunter Folger
+- G4NeutronField, G4ProtonField: add protection for position far outside
+   nucleus, resulting in negative index.
+
+15 Nov 2012 Gunter Folger        had-binary-V09-05-14
+- fix coverity warnings
+
 26 Oct 2012 Gunter Folger        had-binary-V09-05-13
 - send a warning message to G4cout, not G4cerr.
 

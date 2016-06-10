@@ -95,6 +95,7 @@
 // 20120525  M. Kelsey -- In NoInteraction, check for Ekin<0., set to zero;
 //		use SetEnergyChange(0.) explicitly for good final states.
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+// 20141118  M. Kelsey -- Fix possible infinite-loop in retryInelasticNucleus
 
 #include <cmath>
 #include <iostream>
@@ -712,16 +713,15 @@ G4bool G4CascadeInterface::retryInelasticNucleus() const {
 	 << G4endl;
 #endif
 
-  return ( ((numberOfTries < maximumTries) &&
-	    (npart != 0) &&
+  return ( (numberOfTries < maximumTries) &&
+	   ( ((npart != 0) &&
 #ifdef G4CASCADE_COULOMB_DEV
-	    (coulombBarrierViolation() && npart+nfrag > 2)
+	      (coulombBarrierViolation() && npart+nfrag > 2)
 #else
-	    (npart+nfrag < 3 && firstOut == bullet->getDefinition())
+	      (npart+nfrag < 3 && firstOut == bullet->getDefinition())
 #endif
-	    )
 #ifndef G4CASCADE_SKIP_ECONS
-	   || (!balance->okay())
+	      ) || (!balance->okay()))
 #endif
 	   );
 }

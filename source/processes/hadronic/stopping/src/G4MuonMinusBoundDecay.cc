@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusBoundDecay.cc 79599 2014-03-07 17:15:40Z gcosmo $
+// $Id: G4MuonMinusBoundDecay.cc 88066 2015-01-27 10:41:12Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -86,9 +86,11 @@ G4MuonMinusBoundDecay::ApplyYourself(const G4HadProjectile& projectile,
   G4double lambda   = lambdac + lambdad;
 
   // ===  sample capture  time and change time of projectile
+  // ===  this is needed for the case when bound decay is not happen
+  // ===  but muon is capruted by the nucleus with some delay
 
-  G4double time = -std::log(G4UniformRand()) / lambda;
   G4HadProjectile* p = const_cast<G4HadProjectile*>(&projectile);
+  G4double time = p->GetGlobalTime() - std::log(G4UniformRand())/lambda;
   p->SetGlobalTime(time);
     
   //G4cout << "lambda= " << lambda << " lambdac= " << lambdac 

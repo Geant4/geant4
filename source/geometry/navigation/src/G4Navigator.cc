@@ -546,7 +546,13 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 //
 void
 G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
-{  
+{
+#ifdef G4DEBUG_NAVIGATION
+   // Check: Either step was not limited by a boundary
+   //         or else the full step is no longer being taken
+   assert( !fWasLimitedByGeometry );
+#endif
+  
    fLastLocatedPointLocal = ComputeLocalPoint(pGlobalpoint);
    fLastTriedStepComputation= false;
    fChangedGrandMotherRefFrame= false;  //  Frame for Exit Normal
@@ -618,6 +624,10 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 //
 void G4Navigator::SetSavedState()
 {
+  // Note: the state of dependent objects is not currently saved.
+  //   ( This means that the full state is changed by calls between
+  //     SetSavedState() and RestoreSavedState(); 
+  
   fSaveState.sExitNormal = fExitNormal;
   fSaveState.sValidExitNormal = fValidExitNormal;
   fSaveState.sExiting = fExiting;
@@ -632,6 +642,7 @@ void G4Navigator::SetSavedState()
   fSaveState.sLastLocatedPointLocal= fLastLocatedPointLocal;
   fSaveState.sEnteredDaughter= fEnteredDaughter;
   fSaveState.sExitedMother= fExitedMother;
+  fSaveState.sWasLimitedByGeometry= fWasLimitedByGeometry;
 
   // Even the safety sphere - if you want to change it do it explicitly!
   //
@@ -661,8 +672,11 @@ void G4Navigator::RestoreSavedState()
   fLastLocatedPointLocal= fSaveState.sLastLocatedPointLocal;
   fEnteredDaughter= fSaveState.sEnteredDaughter;
   fExitedMother= fSaveState.sExitedMother;
-  fSaveState.sPreviousSftOrigin= fPreviousSftOrigin;
-  fSaveState.sPreviousSafety= fPreviousSafety;
+  fWasLimitedByGeometry= fSaveState.sWasLimitedByGeometry;
+  
+  // The 'expected' behaviour is to restore these too (fix 2014.05.26)
+  fPreviousSftOrigin=   fSaveState.sPreviousSftOrigin;
+  fPreviousSafety= fSaveState.sPreviousSafety;
 }
 
 // ********************************************************************
@@ -1100,7 +1114,6 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       fExitNormalGlobalFrame= G4ThreeVector( 0., 0., 0.);
     }
   }
-  fStepEndPoint= pGlobalpoint+Step*pDirection; 
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
   {
@@ -1154,10 +1167,14 @@ G4double G4Navigator::CheckNextStep( const G4ThreeVector& pGlobalpoint,
                        pCurrentProposedStepLength, 
                        pNewSafety ); 
 
-  // If a parasitic call, then attempt to restore the key parts of the state
+  // It is a parasitic call, so attempt to restore the key parts of the state
   //
   RestoreSavedState(); 
-
+  // NOTE: the state of the current subnavigator is NOT restored.
+  // ***> TODO: restore subnavigator state
+  //            if( last_located)       Need Position of last location
+  //            if( last_computed step) Need Endposition of last step
+  
   return step; 
 }
 
@@ -1762,13 +1779,17 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
     newSafety = 0.0; 
   }
 
+  if (keepState)  {
+     RestoreSavedState();
+     // This now overwrites the values of the Safety 'sphere' (correction)
+  }
+
   // Remember last safety origin & value
   //
+  // We overwrite the Safety 'sphere' - keeping old behaviour
   fPreviousSftOrigin = pGlobalpoint;
-  fPreviousSafety = newSafety; 
-
-  if (keepState)  { RestoreSavedState(); }
-
+  fPreviousSafety = newSafety;
+  
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 1 )
   {

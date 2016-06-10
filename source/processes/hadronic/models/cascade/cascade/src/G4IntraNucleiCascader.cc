@@ -110,6 +110,7 @@
 //		final-state tables instead of particle "isPhoton()"
 // 20120521  A. Ribon -- Specify mass when decay trapped particle.
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+// 20140311  M. Kelsey -- Address bug #1584, deleting daughters in decay
 
 #include <algorithm>
 
@@ -866,4 +867,6 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
       output.addOutgoingParticle(idaugEP);
     }
   }
+
+  delete daughters;		// Clean up memory created by DecayIt()
 }

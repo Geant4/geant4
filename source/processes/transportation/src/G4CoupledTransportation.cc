@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc 69887 2013-05-17 08:17:02Z gcosmo $
+// $Id: G4CoupledTransportation.cc 81801 2014-06-05 12:33:15Z japost $
 //
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -900,6 +900,7 @@ void
 G4CoupledTransportation::EndTracking()
 {
   G4TransportationManager::GetTransportationManager()->InactivateAll();
+  fPathFinder->EndTrack();   //  Resets TransportationManager to use ordinary Navigator
 }
 
 void

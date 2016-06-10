@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TwistTrapAlphaSide.cc 87943 2015-01-22 09:16:36Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -217,7 +217,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
   if (fCurStatWithV.IsDone())
   {
-    for (register int i=0; i<fCurStatWithV.GetNXX(); i++)
+    for (G4int i=0; i<fCurStatWithV.GetNXX(); i++)
     {
       gxx[i] = fCurStatWithV.GetXX(i);
       distance[i] = fCurStatWithV.GetDistance(i);
@@ -228,7 +228,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
   }
   else  // initialise
   {
-    for (register int j=0; j<G4VSURFACENXX ; j++)
+    for (G4int j=0; j<G4VSURFACENXX ; j++)
     {
       distance[j] = kInfinity;
       areacode[j] = sOutside;
@@ -356,7 +356,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
     G4JTPolynomialSolver trapEq ;
     G4int num = trapEq.FindRoots(c,7,srd,si);
 
-    for (register int i = 0 ; i<num ; i++ )   // loop over all math solutions
+    for (G4int i = 0 ; i<num ; i++ )   // loop over all math solutions
     {  
       if ( si[i]==0.0 )  // only real solutions
       { 
@@ -393,7 +393,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
   G4double factor;  // a scaling factor
   G4int maxint=30;  // number of iterations
 
-  for ( register size_t k = 0 ; k<xbuf.size() ; k++ )
+  for ( size_t k = 0 ; k<xbuf.size() ; k++ )
   {
 #ifdef G4TWISTDEBUG
     G4cout << "Solution " << k << " : " 
@@ -406,7 +406,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
     IsConverged = false ;   // no convergence at the beginning
     
-    for ( register int i = 1 ; i<maxint ; i++ )
+    for ( G4int i = 1 ; i<maxint ; i++ )
     {
       xxonsurface = SurfacePoint(phi,u) ;
       surfacenormal = NormAng(phi,u) ;
@@ -541,7 +541,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
     
     xbuf.push_back(xbuftmp) ;  // store it to xbuf
 
-    for ( register size_t k = nxxtmp ; k<xbuf.size() ; k++ )
+    for ( size_t k = nxxtmp ; k<xbuf.size() ; k++ )
     {
 
 #ifdef G4TWISTDEBUG
@@ -555,7 +555,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
       IsConverged = false ;   // no convergence at the beginning
       
-      for ( register int i = 1 ; i<maxint ; i++ )
+      for ( G4int i = 1 ; i<maxint ; i++ )
       {
         xxonsurface = SurfacePoint(phi,u) ;
         surfacenormal = NormAng(phi,u) ;
@@ -653,7 +653,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
   nxx = xbuf.size() ;   // determine number of solutions again.
 
-  for ( register size_t i = 0 ; i<xbuf.size() ; i++ )
+  for ( size_t i = 0 ; i<xbuf.size() ; i++ )
   {
     distance[i] = xbuf[i].distance;
     gxx[i]      = ComputeGlobalPoint(xbuf[i].xx);
@@ -704,7 +704,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
    if (fCurStat.IsDone())
    {
-      for (register int i=0; i<fCurStat.GetNXX(); i++)
+      for (G4int i=0; i<fCurStat.GetNXX(); i++)
       {
          gxx[i] = fCurStat.GetXX(i);
          distance[i] = fCurStat.GetDistance(i);
@@ -714,7 +714,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
    }
    else  // initialize
    {
-      for (register int i=0; i<G4VSURFACENXX; i++)
+      for (G4int i=0; i<G4VSURFACENXX; i++)
       {
          distance[i] = kInfinity;
          areacode[i] = sOutside;
@@ -735,7 +735,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
    G4double deltaX, uMax ;
    G4double halfphi = 0.5*fPhiTwist ;
    
-   for ( register int i = 1 ; i<20 ; i++ )
+   for ( G4int i = 1 ; i<20 ; i++ )
    {
      xxonsurface = SurfacePoint(phiR,uR) ;
      surfacenormal = NormAng(phiR,uR) ;
@@ -1127,13 +1127,13 @@ G4TwistTrapAlphaSide::GetFacets( G4int k, G4int n, G4double xyz[][3],
 
   // calculate the (n-1)*(k-1) vertices
 
-  for ( register int i = 0 ; i<n ; i++ )
+  for ( G4int i = 0 ; i<n ; i++ )
   {
     z = -fDz+i*(2.*fDz)/(n-1) ;
     phi = z*fPhiTwist/(2*fDz) ;
     b = GetValueB(phi) ;
 
-    for ( register int j = 0 ; j<k ; j++ )
+    for ( G4int j = 0 ; j<k ; j++ )
     {
       nnode = GetNode(i,j,k,n,iside) ;
       u = -b/2 +j*b/(k-1) ;
