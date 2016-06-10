@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4WentzelVIModel.cc 66596 2012-12-23 14:57:45Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -395,7 +395,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreeVector& 
-G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
+G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 				   G4double safety)
 {
   fDisplacement.set(0.0,0.0,0.0);
@@ -403,8 +403,7 @@ G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   //	 << particle->GetParticleName() << G4endl;
 
   // ignore scattering for zero step length and energy below the limit
-  G4double tkin = dynParticle->GetKineticEnergy();
-  if(tkin < lowEnergyLimit || tPathLength <= 0.0) 
+  if(preKinEnergy < lowEnergyLimit || tPathLength <= 0.0) 
     { return fDisplacement; }
   
   G4double invlambda = 0.0;
@@ -445,7 +444,6 @@ G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // geometry
   G4double sint, cost, phi;
-  G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector temp(0.0,0.0,1.0);
 
   // current position and direction relative to the end point

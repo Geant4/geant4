@@ -557,7 +557,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 	if( endEnergy > fMaxEnergyKilled) { fMaxEnergyKilled= endEnergy; }
 
 #ifdef G4VERBOSE
-	if( (fVerboseLevel > 1) || 
+	if( (fVerboseLevel > 1) && 
 	    ( endEnergy > fThreshold_Warning_Energy )  ) { 
 	  G4cout << " G4Transportation is killing track that is looping or stuck "
 		 << G4endl

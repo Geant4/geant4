@@ -1,4 +1,4 @@
-$Id: History,v 1.191 2010-12-23 16:12:55 vnivanch Exp $
+$Id: History 67044 2013-01-30 08:50:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-01-13 V.Ivanchenko (materials-V09-05-34)
+- G4NistMaterialBuilder fixed: stainless steel parameters from
+  http://www.azom.com/article.aspx?ArticleID=965
 
 14-11-12 P. Mato (materials-V09-05-33)
 - Added include G4SystemOfUnits.hh in unit tests 

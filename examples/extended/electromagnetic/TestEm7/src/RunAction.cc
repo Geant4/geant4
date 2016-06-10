@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc 66995 2013-01-29 14:46:45Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,9 +69,9 @@ RunAction::~RunAction()
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+
+  if(!fAnalysisManager) { BookHisto(); }
   
-  // save Rndm status
-  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
      
   //initialize projected range, tallies, Ebeam, and book histograms
@@ -164,19 +164,21 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << G4endl; 
   }
 
-  // normalize histograms
-  //
-  for (G4int j=1; j<3; j++) {  
-    G4double binWidth = fAnalysisManager->GetH1Width(j);
-    G4double fac = (mm/MeV)/(nbofEvents * binWidth);
-    fAnalysisManager->ScaleH1(j, fac);
-  }
-  fAnalysisManager->ScaleH1(3, 1./nbofEvents);
- 
-  // save histograms
   if (fAnalysisManager->IsActive() ) {        
+    // normalize histograms
+    //
+    for (G4int j=1; j<3; j++) {  
+      G4double binWidth = fAnalysisManager->GetH1Width(j);
+      G4double fac = (mm/MeV)/(nbofEvents * binWidth);
+      fAnalysisManager->ScaleH1(j, fac);
+    }
+    fAnalysisManager->ScaleH1(3, 1./nbofEvents);
+ 
+    // save histograms
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
+    delete fAnalysisManager;
+    fAnalysisManager = 0;
   }
    
   // show Rndm status

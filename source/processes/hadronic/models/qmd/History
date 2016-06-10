@@ -13,6 +13,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11-January-2013  Gabriele Cosmo (hadr-qmd-V09-05-04)
+- Fix for logic error in G4QMDGroundStateNucleus::packNucleons().
+  Addressing problem report #1418.
+
 27-September-2012  Gabriele Cosmo (hadr-qmd-V09-05-03)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NistMaterialBuilder.cc 67044 2013-01-30 08:50:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -1828,10 +1828,12 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
   AddElementByAtomCount("Zn",  9);
   AddElementByAtomCount("Pb" , 2);
 
+  // parameters are taken from
+  //  http://www.azom.com/article.aspx?ArticleID=965
   AddMaterial("G4_STAINLESS-STEEL", 8.00, 0, 0.0, 3);
   AddElementByAtomCount("Fe", 74);
-  AddElementByAtomCount("Cr",  8);
-  AddElementByAtomCount("Ni" ,18);
+  AddElementByAtomCount("Cr", 18);
+  AddElementByAtomCount("Ni" , 8);
 
   AddMaterial("G4_CR39", 1.32, 0, 0.0, 3);
   AddElementByAtomCount("H", 18);

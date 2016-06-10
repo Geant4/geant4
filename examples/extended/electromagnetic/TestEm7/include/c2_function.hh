@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/include/c2_function.hh
-/// \brief Definition of the c2_function class
-//
-//
 /**
- *  \file 
+ *  \file electromagnetic/TestEm7/include/c2_function.hh
  *  \brief Provides the headers for the general c2_function algebra which supports 
  *  fast, flexible operations on piecewise-twice-differentiable functions
  *
@@ -38,6 +34,9 @@
  *         \version c2_function.hh 490 2012-04-10 19:05:40Z marcus 
  *  \see \ref c2_factory "Factory Functions" for information on constructing things in here  
  */
+
+//
+// $Id: c2_function.hh 66995 2013-01-29 14:46:45Z gcosmo $
 
 #ifndef __has_c2_function_hh
 #define __has_c2_function_hh 1
@@ -1701,8 +1700,8 @@ public:
         
         virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception)
         {
-                float_type c=std::cos(x), s=std::sin(x);
-                float_type t=s/c;
+                float_type c=std::cos(x), ss=std::sin(x);
+                float_type t=ss/c;
                 float_type yp=1/(c*c);
                 if(yprime) *yprime=yp; if(yprime2) *yprime2=2*t*yp; 
                 return t; 

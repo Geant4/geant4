@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UAtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -241,12 +240,12 @@ void G4UAtomicDeexcitation::GenerateParticles(
 
   // Defined initial conditions
   G4int givenShellId = atomicShell->ShellId();
-  //  G4cout << "generating particles for vacancy in shellId: " << givenShellId << G4endl;
+  //G4cout << "generating particles for vacancy in shellId: " << givenShellId << G4endl; // debug
   minGammaEnergy = gammaCut;
   minElectronEnergy = eCut;
 
   // V.I. short-cut
-  if(!IsAugerActive()) {  minElectronEnergy = DBL_MAX; }
+  //  if(!IsAugerActive()) {  minElectronEnergy = DBL_MAX; }
 
   // generation secondaries
   G4DynamicParticle* aParticle=0;
@@ -274,8 +273,9 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	      }
 	    else if ( provShellId == -1)
 	      {
+		//		G4cout << "Try to generate Auger 1" << G4endl; //debug
 		aParticle = GenerateAuger(Z, givenShellId);
-		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+		//		if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
 	      }
 	    else
 	      {
@@ -294,8 +294,9 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	      }
 	    else if ( provShellId == -1)
 	      {
+		//		G4cout << "Try to generate Auger 2" << G4endl; //debug
 		aParticle = GenerateAuger(Z, newShellId);
-		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+		//		if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
 	      }
 	    else
 	      {
@@ -317,7 +318,7 @@ void G4UAtomicDeexcitation::GenerateParticles(
       G4Exception("G4UAtomicDeexcitation::GenerateParticles()","de0001",JustWarning, "Energy deposited locally");
     }
   
-  //  G4cout << "---------FATTO!---------" << G4endl; //debug 
+  //G4cout << "---------FATTO!---------" << G4endl; //debug 
 
 }
 
@@ -540,16 +541,20 @@ G4UAtomicDeexcitation::GenerateFluorescence(G4int Z, G4int shellId,
 
 G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 {
-  if(!IsAugerActive()) { return 0; }
-
+  if(!IsAugerActive()) { 
+    //    G4cout << "auger inactive!" << G4endl; //debug
+    return 0; 
+  }
+  
   if (shellId <=0 ) {
-    {
+    
 
       G4Exception("G4UAtomicDeexcitation::GenerateAuger()","de0002",JustWarning, "Energy deposited locally");
 
       return 0;
-    }
+    
   }
+
   // G4int provShellId = -1;
   G4int maxNumOfShells = transitionManager->NumberOfReachableAugerShells(Z);  
   
@@ -572,7 +577,7 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 	  shellNum++;
  	  if(shellNum == maxNumOfShells)
  	    {
- 	      //G4Exception("G4UAtomicDeexcitation: No Auger transition found");
+	      // 	      G4cout << "No Auger transition found" << G4endl; //debug
 	      return 0;
  	    }
 	}
@@ -694,7 +699,11 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       // and the id of the shell, from which the transition e- come (transitionRandomShellid)
       // If no Transition has been found, 0 is returned.  
 
-      if (!foundFlag) {return 0;} 
+      if (!foundFlag) {
+	//	G4cout << "Auger not found (foundflag = false) " << G4endl; //debug
+	return 0;
+
+} 
       
       // Isotropic angular distribution for the outcoming e-
       G4double newcosTh = 1.-2.*G4UniformRand();
@@ -718,7 +727,9 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       */
       
       if (transitionEnergy < minElectronEnergy) {
-	//G4cout << "Problem!" << G4endl; // debug
+	// G4cout << "Problem!  (transitionEnergy < minElectronEnergy)" << G4endl; // debug
+	// G4cout << "minElectronEnergy(KeV): " << minElectronEnergy/keV << G4endl; // debug
+	// G4cout << "transitionEnergy(KeV): " << transitionEnergy/keV << G4endl; // debug
 	return 0;
       }
 
@@ -732,7 +743,8 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
     }
   else 
     {
-      //G4Exception("G4UAtomicDeexcitation: no auger transition found");
+      //      G4cout << "G4UAtomicDeexcitation: no auger transition found" << G4endl ;
+      //      G4cout << "( shellId <= refAugerTransition->FinalShellId() )" << G4endl;
       return 0;
     }
 }

@@ -14,6 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+1 January 2013  Laurent Desorgher  radioactive_decay-V09-05-13
+--------------------------------------------------------------
+- G4RadioactiveDecay: fix partly bug 1359
+  - Force the boost of the decay products in line 1598
+  - The parent energy considered in the boost is the total energy of the fully stripped parent ion  rather than 
+    the total energy of dynamic ion where the energy of shell electrons is taken into account
+  - Some difference in momentum and energy balance is still observed but much less than before.
+
 13 November 2012  Dennis Wright  radioactive_decay-V09-05-12
 ------------------------------------------------------------
 - G4NuclearDecayChannel: fix Coverity bugs 15098, 15099, 37711 uninitialized

@@ -17,24 +17,34 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.12.2012  L. Pandola, tag emlowen-V09-05-49
+	    Slightly change the fix on G4LivermorePhotoElectricModel 
+  	    introduced in the previous tag
+
+04.12.2012  A. Mantero
+            G4LivermorePhotoElectricModel: fixed a bug in line 310
+            G4UAtomDeexcitation: Added some debug options
+
 12.11.2012  V.Ivanchenko, tag emlowen-V09-05-48
-- G4MuElecInelasticModel Gunter Folger fixed usage of iterators at 
-    boundary of vectors
+            G4MuElecInelasticModel Gunter Folger fixed usage of iterators at 
+            boundary of vectors
 
 06.11.2012  G.Cosmo, tag emlowen-V09-05-47
-- Minor fixes for porting on AIX; mainly on use of const signature for
-  objects in maps...
+            Minor fixes for porting on AIX; mainly on use of const signature
+            for objects in maps...
 
 02.11.2012  V.Ivanchenko, tag emlowen-V09-05-46
-- G4LivermorePhotoElectricModel - fixed non-initialised variable in prvious tag
+            G4LivermorePhotoElectricModel - fixed non-initialised variable
+            in prvious tag
 
 02.11.2012  V.Ivanchenko, tag emlowen-V09-05-45
-- G4LivermorePhotoElectricModel - migration to G4PhysicsVector data structure
+            G4LivermorePhotoElectricModel - migration to G4PhysicsVector
+            data structure
 
 20.10.2012  V.Ivanchenko, tag emlowen-V09-05-44
-- G4RayleighScattering - substitute methods Model(), SetModel()
-    by EmModel(), SetEmModel()
-- G4LivermoreGammaConversionModel - removed variable shadowing
+            G4RayleighScattering - substitute methods Model(), SetModel()
+            by EmModel(), SetEmModel()
+            G4LivermoreGammaConversionModel - removed variable shadowing
 
 17.10.2012  M. Raine, tag emlowen-V09-05-43
 	    Update of MuElec classes to widen the energy range of application.

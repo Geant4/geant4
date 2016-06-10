@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4SteppingManager2.cc 67009 2013-01-29 16:00:21Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -317,10 +317,8 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 // at least one process is necessary to destroy the particle  
 // exit with warning 
    if(NofInactiveProc==MAXofAtRestLoops){ 
-     G4cerr << "ERROR - G4SteppingManager::InvokeAtRestDoItProcs()" << G4endl
-            << "        No AtRestDoIt process is active!" << G4endl;
-     // G4Exception("G4SteppingManager::InvokeAtRestDoItProcs", "Tracking0013",
-     //             FatalException, "No AtRestDoIt process is active." );
+     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs()", "Tracking0013",
+                 JustWarning, "No AtRestDoIt process is active!" );
    }
 
    fStep->SetStepLength( 0. );  //the particle has stopped

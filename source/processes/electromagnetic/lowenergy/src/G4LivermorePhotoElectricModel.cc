@@ -307,7 +307,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   const G4AtomicShell* shell = 0;
 
   // no de-excitation from the last shell
-  if(fDeexcitationActive && shellIdx + 1 == nn) {
+  if(fDeexcitationActive && shellIdx + 1 < nn) {
     G4AtomicShellEnumerator as = G4AtomicShellEnumerator(shellIdx);
     shell = fAtomDeexcitation->GetAtomicShell(Z, as);
   }

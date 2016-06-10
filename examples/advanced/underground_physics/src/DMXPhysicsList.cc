@@ -416,6 +416,11 @@ void DMXPhysicsList::ConstructEM() {
   // turn off msc step-limitation - especially as electron cut 1nm
   opt.SetMscStepLimitation(fMinimal);
 
+  // switch on fluorescence, PIXE and Auger:
+  opt.SetFluo(true);
+  opt.SetPIXE(true);
+  opt.SetAuger(true);
+
 }
 
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // $Id: $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Description: enum codes for beta decay types
 //  Author:      Dennis Wright (SLAC)

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc 66995 2013-01-29 14:46:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,9 +50,8 @@
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
-#include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
-#include "G4IonBinaryCascadePhysics.hh"
+#include "G4IonPhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4EmConfigurator.hh"
@@ -230,16 +229,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fHadronPhys.push_back( new G4HadronHElasticPhysics());
     fHelIsRegisted = true;
 
-  } else if (name == "QElastic" && !fHelIsRegisted) {
-    fHadronPhys.push_back( new G4HadronQElasticPhysics());
-    fHelIsRegisted = true;
-
   } else if (name == "binary" && !fBicIsRegisted) {
     fHadronPhys.push_back(new G4HadronInelasticQBBC());
     fBicIsRegisted = true;
 
   } else if (name == "binary_ion" && !fBiciIsRegisted) {
-    fHadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    fHadronPhys.push_back(new G4IonPhysics());
     fBiciIsRegisted = true;
 
   } else {

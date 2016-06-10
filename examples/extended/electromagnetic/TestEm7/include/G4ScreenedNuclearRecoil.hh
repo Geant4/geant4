@@ -26,6 +26,8 @@
 /// \file electromagnetic/TestEm7/include/G4ScreenedNuclearRecoil.hh
 /// \brief Definition of the G4ScreenedNuclearRecoil class
 //
+// $Id: G4ScreenedNuclearRecoil.hh 66995 2013-01-29 14:46:45Z gcosmo $
+//
 //
 // G4ScreenedNuclearRecoil.hh,v 1.24 2008/05/01 19:58:59 marcus Exp
 // GEANT4 tag 
@@ -221,7 +223,7 @@ public:
         virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         /// \brief Build physics tables in advance.  Not Implemented.
         /// \param aParticleType the type of particle to build tables for 
-        virtual void BuildPhysicsTable(const G4ParticleDefinition&) { }
+        virtual void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
         /// \brief Export physics tables for persistency.  Not Implemented.
         /// \param aParticleType the type of particle to build tables for 
         virtual void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);

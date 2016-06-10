@@ -30,11 +30,9 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-#define G4INCL_VERSION_ID "v5.1.8-clean"
-#define G4INCL_GIT_HASH "8dac6ca5f84f0395784f96c3f614b8d369a7202b"
+#define G4INCL_VERSION_ID "v5.1.9-clean"
+#define G4INCL_GIT_HASH "d3bf191331cfd06b5a12db4f9c2b2a7ac7f2b72f"

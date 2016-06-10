@@ -1,4 +1,4 @@
-# $Id: snr.mac,v 1.4 2009-11-21 22:02:51 maire Exp $
+# $Id: snr.mac 66995 2013-01-29 14:46:45Z gcosmo $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -21,21 +21,27 @@
 /testem/det/tallyPosition 3  0.  0. 0. cm
 /testem/det/tallyPosition 4  5.  0. 0. cm
 #
+#/testem/phys/addPhysics  empenelope	  
 /testem/phys/addPhysics  standardNR	  
+#/testem/phys/addPhysics  standardSS
+/testem/phys/addPhysics  elastic  
+/testem/phys/addPhysics  binary
+/testem/phys/addPhysics  binary_ion
 #
 /run/initialize
 #
 /gun/particle proton
 /gun/energy 160 MeV
 # beam size
-/testem/gun/rndm 3 mm
+#/testem/gun/rndm 3 mm
 #
-/testem/event/printModulo 1000
-/testem/stepMax 1 mm
+/testem/event/printModulo 100
+#/testem/stepMax 1 mm
+#/tracking/verbose 1
 #
 /run/beamOn 10000
 #
-/testem/stepMax 100 mm
+#/testem/stepMax 100 mm
 /gun/particle ion
 /gun/ion 6 12 6
 /gun/energy 3.5 GeV

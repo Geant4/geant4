@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VTwistSurface.cc 67011 2013-01-29 16:17:41Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -796,7 +796,7 @@ void G4VTwistSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 void G4VTwistSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 {
    if (areacode & sCorner) {
-      if (areacode & sC0Min1Max) {
+      if (areacode & sC0Min1Min) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMin[1];
       } else if (areacode & sC0Max1Min) {

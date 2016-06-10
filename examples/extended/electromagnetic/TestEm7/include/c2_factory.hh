@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/include/c2_factory.hh
-/// \brief Definition of the c2_factory class
-//
-//
 /**
- *  \file 
+ *  \file electromagnetic/TestEm7/include/c2_factory.hh
  *  \brief Provides a factory class to avoid an infinite number of template declarations.
  *
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
@@ -36,6 +32,8 @@
  *
  *         \version c2_factory.hh,v 1.13 2008/05/22 12:45:19 marcus Exp
  */
+//
+// $Id: c2_factory.hh 66995 2013-01-29 14:46:45Z gcosmo $
 
 #ifndef __has_c2_factory_hh
 #define __has_c2_factory_hh 1

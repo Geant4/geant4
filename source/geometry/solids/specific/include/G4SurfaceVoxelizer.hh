@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4SurfaceVoxelizer.hh 67011 2013-01-29 16:17:41Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

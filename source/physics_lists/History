@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-01-2013, V.Ivanchenko		(phys-lists-V09-05-82)
+- G4EmStandardPhysics_option4 - substituted new low-energy Compton
+    model by old LivermoreCompton model to avoid numerical problems 
+    in hish statistic runs
+
 23-11-2012, A.Ribon                     (phys-lists-V09-05-81)
 - Included FTFP_BERT_HP in G4PhysListFactory
 

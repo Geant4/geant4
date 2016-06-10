@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 10th, 2012 - G.Cosmo  (geomnav-V09-05-46)
+------------------------
+- Cleared left-over debug check in G4VoxelNavigation.
+
 Nov 20th, 2012 - G.Cosmo  (geomnav-V09-05-45)
 ------------------------
 - Corrected G4Exceptions tags and text.

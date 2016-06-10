@@ -26,8 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopolePhysicsMessenger.hh
 /// \brief Definition of the G4MonopolePhysicsMessenger class
 //
-// $Id$
-//
+// $Id: G4MonopolePhysicsMessenger.hh 66994 2013-01-29 14:34:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

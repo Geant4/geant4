@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UrbanMscModel93.hh 66602 2012-12-29 15:54:43Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -88,7 +88,7 @@ public:
 				      G4double cut =0.,
 				      G4double emax=DBL_MAX);
 
-  G4ThreeVector& SampleScattering(const G4DynamicParticle*, G4double safety);
+  G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double safety);
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
 				      G4double& currentMinimalStep);
@@ -157,6 +157,8 @@ private:
   G4double currentRange; 
   G4double rangeinit;
   G4double currentRadLength;
+
+  G4double numlim, xsi, ea, eaa;
 
   G4double theta0max,rellossmax;
   G4double third;

@@ -69,6 +69,7 @@ G4StackingMessenger::~G4StackingMessenger()
 {
   delete statusCmd;
   delete clearCmd;
+  delete verboseCmd;
   delete stackDir;
 }
 

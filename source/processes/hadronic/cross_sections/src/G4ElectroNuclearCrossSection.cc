@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.33 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
@@ -2407,8 +2408,8 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in Energy
   static const G4double mel=0.5109989;       // Mass of electron in MeV
   static const G4double lmel=std::log(mel);  // Log of electron mass
-  G4double phLE=0.;                   // Prototype of the std::log(nu=E_gamma)
-  G4double Y[nE];                     // Prepare the array for randomization
+  G4double phLE = 0.;                        // Prototype of the std::log(nu=E_gamma)
+  G4double Y[nE] = {0.0};                    // Prepare the array for randomization
 
 #ifdef debug
   G4cout << "G4ElectroNuclearCrossSection::GetEguPhotE:B="
@@ -2431,52 +2432,52 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
     G4cerr << "*HP*G4ElNucCS::GetEqPhotE:S=" << lastSig <<">" << Y[lastL]
            << ",l=" << lastL << ">" << mL << G4endl;
     if(lastSig <= 0.0) { return 0.0; }  // VI
-
-    //return 3.0*MeV; // quick and dirty workaround @@@ HP.
-                    // (now can be not necessary M.K.)
   }
-  G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it
-                                        // is in the funct. region
+  G4double ris = lastSig*G4UniformRand(); // Sig can be > Y[lastL = mL], then it
+                                          // is in the funct. region
 #ifdef debug
-  G4cout<<"G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy: "<<ris<<",Y="<<Y[lastL]<<G4endl;
+  G4cout << "G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy: " << ris
+         << ",Y=" << Y[lastL] << G4endl;
 #endif
-  if(ris<Y[lastL])                      // Search in the table
-  {
-	G4int j=lastF;
-    G4double Yj=Y[j];                   // It mast be 0 (some times just very small)
-    while (ris>Yj && j<lastL)           // Associative search
-	{
+  if (ris < Y[lastL]) {               // Search the table
+    G4int j = lastF;
+    G4double Yj = Y[j];               // It must be 0 (sometimes just very small)
+    while (ris > Yj && j < lastL) {   // Associative search
       j++;
-      Yj=Y[j];                          // High value
-	}
-    G4int j1=j-1;
-    G4double Yi=Y[j1];                  // Low value
-    phLE=lEMi+(j1+(ris-Yi)/(Yj-Yi))*dlnE;
+      Yj = Y[j];                      // Yj is first value above ris
+    }
+    G4int j1 = j-1;
+    G4double Yi = Y[j1];              // Previous value is below ris
+    phLE = lEMi + (j1 + (ris-Yi)/(Yj-Yi) )*dlnE;
 #ifdef debug
-	G4cout<<"G4EleNucCS::E="<<phLE<<",l="<<lEMi<<",j="<<j<<",ris="<<ris<<",Yi="<<Yi<<",Y="<<Yj<<G4endl;
+    G4cout << "G4EleNucCS::E=" << phLE << ",l=" << lEMi << ",j=" << j << ",ris="
+           << ris << ",Yi=" << Yi << ",Y=" << Yj << G4endl;
 #endif
-  }
-  else                                  // Search with the function
-  {
-    if(lastL<mL)G4cerr<<"**G4EleNucCS::GetEfPhE:L="<<lastL<<",S="<<lastSig<<",Y="<<Y[lastL]<<G4endl;
-    G4double f=(ris-Y[lastL])/lastH;    // The scaled residual value of the cross-section integral
+  } else {                            // Search with the function
+    if (lastL < mL) G4cerr << "**G4EleNucCS::GetEfPhE:L=" << lastL << ",S="
+                           << lastSig << ",Y=" << Y[lastL] << G4endl;
+    G4double f = (ris-Y[lastL])/lastH;    // The scaled residual value of the cross-section integral
 #ifdef pdebug
-	G4cout<<"G4EleNucCS::GetEfPhE:HighEnergy f="<<f<<",ris="<<ris<<",lastH="<<lastH<<G4endl;
+    G4cout << "G4EleNucCS::GetEfPhE:HighEnergy f=" << f << ",ris=" << ris
+           << ",lastH=" << lastH << G4endl;
 #endif
     phLE=SolveTheEquation(f);           // Solve the equation to find theLog(phE) (compare with lastLE)
 #ifdef pdebug
-	G4cout<<"G4EleNucCS::GetEfPhE:HighEnergy lphE="<<phLE<<G4endl;
+    G4cout << "G4EleNucCS::GetEfPhE:HighEnergy lphE=" << phLE << G4endl;
 #endif
   }
-  if(phLE>lastLE)
-  {
-    G4cerr<<"***G4ElectroNuclearCS::GetEquPhotE:N="<<lastN<<",Z="<<lastZ<<", lpE"<<phLE<<">leE"<<lastLE
-          <<",Sig="<<lastSig<<",rndSig="<<ris<<",Beg="<<lastF<<",End="<<lastL<<",Y="<<Y[lastL]<<G4endl;
+
+  if (phLE>lastLE) {
+    G4cerr << "***G4ElectroNuclearCS::GetEquPhotE:N=" << lastN << ",Z="
+           << lastZ << ", lpE" << phLE << ">leE" << lastLE << ",Sig="
+           << lastSig << ",rndSig=" << ris << ",Beg=" << lastF << ",End="
+           << lastL << ",Y=" << Y[lastL] << G4endl;
     if(lastLE<7.2) phLE=std::log(std::exp(lastLE)-.511);
     else phLE=7.;
   }
   return std::exp(phLE);
 }
+
 
 G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
 {

@@ -18,6 +18,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
+Feb. 6th, 2013, G.Cosmo transport-V09-05-03
+-----------------------
+- G4Transportation.cc: 
+    Corrected condition for warning message in AlongStepDoIt().
+
 Jul. 12th, 2011, J.Apostolakis transport-V09-05-02
 ------------------------------
 - G4Transportation.cc: 

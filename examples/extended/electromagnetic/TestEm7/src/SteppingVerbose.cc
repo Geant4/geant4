@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm7/src/SteppingVerbose.cc
 /// \brief Implementation of the SteppingVerbose class
 //
-//
-// $Id$
+// $Id: SteppingVerbose.cc 66995 2013-01-29 14:46:45Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

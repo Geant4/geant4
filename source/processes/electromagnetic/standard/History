@@ -17,6 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 January 13: V.Ivanchenko (emstand-V09-05-67)
+- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96: added limit
+  c>1.9 for the main parameter responsible for sampling of scattering
+  tail (fix for ATLAS large scattering angle problem).
+  Extended initialisation at StartTracking() method: class members
+  'tlimitmin' and 'stepmin' are reset to default values to avoid rare
+  cases of non-reproducibility (L.Urban).
+
+9 January 13: V.Ivanchenko (emstand-V09-05-66)
+- G4UrbanMscModel96: new tuning of Urban model.
+
+29 December 12: V.Ivanchenko
+- G4UrbanMscModel93, G4UrbanMscModel95: use more safe expressions in
+  SampleCosineTheta() to avoid numerical problems.
+
+23 December 12: V.Ivanchenko
+- Changed signature of SampleScattering() method of all multiple
+  scattering model classes - instead of G4DynamicParticle, 
+  G4ThreeVector is used; this is direction at PostStepPoint before 
+  angular deflection is applied. Addressing problem report #1403.
+
 12 November 12: V.Ivanchenko (emstand-V09-05-65)
 - G4WentzelOKandVIxSection - make special case for Hydrogen
 

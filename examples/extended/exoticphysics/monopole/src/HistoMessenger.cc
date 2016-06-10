@@ -26,8 +26,7 @@
 /// \file exoticphysics/monopole/src/HistoMessenger.cc
 /// \brief Implementation of the HistoMessenger class
 //
-//
-// $Id$
+// $Id: HistoMessenger.cc 66994 2013-01-29 14:34:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

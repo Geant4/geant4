@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2010-10-26 15:40:03 vnivanch Exp $
+$Id: History 66996 2013-01-29 14:50:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 January 2013: V.Ivant (emhighenergy-V09-05-04)
+- G4mplIonisationWithDeltaModel - fixed min and max energy
+    of delta-electron production
+- G4eeTo3PiModel - removed printout from destructor (fixed bug #1404)
 
 21 July 2012: V.Ivant (emhighenergy-V09-05-03)
 - G4hBremsstrahlung, G4mplIonisation,  G4hPairProduction -

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id:   $
+// GEANT4 tag $Name:  $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +39,9 @@
 // Creation date: 26.09.2012
 //
 // Created from G4UrbanMscModel95
+//
+// New parametrization for theta0
+// Correction for very small step length
 //
 // Class Description:
 //
@@ -82,7 +87,7 @@ public:
 				      G4double cut =0.,
 				      G4double emax=DBL_MAX);
 
-  G4ThreeVector& SampleScattering(const G4DynamicParticle*, G4double safety);
+  G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double safety);
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
 				      G4double& currentMinimalStep);
@@ -157,16 +162,15 @@ private:
 
   G4int    currentMaterialIndex;
 
-  G4double y,z;
+  G4double y;
   G4double Zold;
   G4double Zeff,Z2,Z23,lnZ;
+  G4double coeffth1,coeffth2;
   G4double coeffc1,coeffc2,coeffc3,coeffc4;
-  G4double scr1ini,scr2ini,scr1,scr2;
 
   G4bool   firstStep;
   G4bool   inside;
   G4bool   insideskin;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,6 +193,10 @@ inline
 void G4UrbanMscModel96::UpdateCache()                                   
 {
     lnZ = std::log(Zeff);
+    // correction in theta0 formula
+    G4double facz = 0.74845+0.13354*exp(log(Zeff)/6.);
+    coeffth1 = facz*(1. - 8.7780e-2/Zeff);
+    coeffth2 = facz*(4.0780e-2 + 1.7315e-4*Zeff);
 
     // tail parameters
     G4double Z13 = std::exp(lnZ/3.);
@@ -197,11 +205,8 @@ void G4UrbanMscModel96::UpdateCache()
     coeffc3  = 2.3683e-1 - Z13*(1.8111    - Z13*3.2774e-1);
     coeffc4  = 1.7888e-2 + Z13*(1.9659e-2 - Z13*2.6664e-3);
 
-    // for single scattering
     Z2   = Zeff*Zeff;
     Z23  = Z13*Z13;               
-    scr1 = scr1ini*Z23;
-    scr2 = scr2ini*Z2*ChargeSquare;
                                               
     Zold = Zeff;
 }

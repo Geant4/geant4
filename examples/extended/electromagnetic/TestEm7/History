@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2011-01-05 19:08:45 vnivanch Exp $
+$Id: History 66995 2013-01-29 14:46:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-01-13 V.Ivant (testem7-V09-05-12)
+- G4ScreenedNuclearRecoil - defined type and sub-type of the process;
+                            removed unused obsolete header
+- PhysListEmStandardNR - use standard electron ionisation instead 
+    of Penelope, use multiple scatteing for ions above 100 MeV/u
+- RunAction - delete analysys manager and all histograms the end 
+    of a run
+- c2_function - fixed variable shadowing
+- Removed use of obsolete class G4HadronQElasticPhysics.
+- PhysListEmStandard: use SetEmModel method
+          
 20-11-12 I.Hrivnacova (testem7-V09-05-11)
 - Fixed typo in .README
 

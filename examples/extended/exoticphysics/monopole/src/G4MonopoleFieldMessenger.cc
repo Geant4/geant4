@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4MonopoleFieldMessenger.cc 66994 2013-01-29 14:34:08Z gcosmo $
+//
 /// \file exoticphysics/monopole/src/G4MonopoleFieldMessenger.cc
 /// \brief Implementation of the G4MonopoleFieldMessenger class
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

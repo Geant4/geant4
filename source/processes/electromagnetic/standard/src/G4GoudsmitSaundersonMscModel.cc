@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4GoudsmitSaundersonMscModel.cc 66592 2012-12-23 09:34:55Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -151,10 +151,11 @@ G4GoudsmitSaundersonMscModel::ComputeCrossSectionPerAtom(const G4ParticleDefinit
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreeVector& 
-G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParticle, G4double)
+G4GoudsmitSaundersonMscModel::SampleScattering(const G4ThreeVector& oldDirection, G4double)
 {
   fDisplacement.set(0.0,0.0,0.0);
-  G4double kineticEnergy = dynParticle->GetKineticEnergy();
+  G4double kineticEnergy = currentKinEnergy;
+  //dynParticle->GetKineticEnergy();
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix)||
      (tPathLength/tausmall < lambda1)) { return fDisplacement; }
 
@@ -279,7 +280,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       }
     }
     
-  G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
+  //G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(us,vs,ws);
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);

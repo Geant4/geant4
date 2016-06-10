@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.23 2010-11-18 17:43:36 allison Exp $
+$Id: History 67055 2013-01-30 09:39:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.23 2010-11-18 17:43:36 allison Exp $
 
                       Category History file
                       ---------------------
+
+
+31.10.2012 - A.Howard (DMX-V09-05-04)
+	   - Fixed missing G4SystemOfUnits.hh header
+	   - Fixed Bug 1386 so that auger, fluorescence and PIXE are now
+	     switched on by default
 
 31.10.2012 - L.Pandola (DMX-V09-05-03)
 	   - Fix the CMakeLists.txt file (AIDA optional dependency)

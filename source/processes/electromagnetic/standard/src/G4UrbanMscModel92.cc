@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UrbanMscModel92.cc 66592 2012-12-23 09:34:55Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -792,7 +792,7 @@ G4double G4UrbanMscModel92::ComputeTheta0(G4double trueStepLength,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreeVector& 
-G4UrbanMscModel92::SampleScattering(const G4DynamicParticle* dynParticle,
+G4UrbanMscModel92::SampleScattering(const G4ThreeVector& oldDirection,
 				    G4double safety)
 {
   fDisplacement.set(0.0,0.0,0.0);
@@ -818,7 +818,7 @@ G4UrbanMscModel92::SampleScattering(const G4DynamicParticle* dynParticle,
     // do Gaussian central scattering
     if(kineticEnergy > GeV && cth < 0.0) {
       G4ExceptionDescription ed;
-      ed << dynParticle->GetDefinition()->GetParticleName()
+      ed << particle->GetParticleName()
 	 << " E(MeV)= " << kineticEnergy/MeV
 	 << " Step(mm)= " << tPathLength/mm
 	 << " in " << CurrentCouple()->GetMaterial()->GetName()
@@ -837,7 +837,7 @@ G4UrbanMscModel92::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double dirx = sth*cos(phi);
   G4double diry = sth*sin(phi);
 
-  G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
+  // G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(dirx,diry,cth);
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);

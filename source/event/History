@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2010-12-15 22:15:07 asaim Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 4th, 2012, M.Asai (event-V09-05-18)
+- Delete undeleted UI command in the destructor of G4StackMessenger.
+  Addressing to bug report #1380.
 
 November 27th, 2012, Hisaya Kurashige (event-V09-05-17)
 - Add clearAndDestory() method to G4TrackStack and G4SmartTrackStack 

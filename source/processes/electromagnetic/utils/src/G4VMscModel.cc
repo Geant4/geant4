@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VMscModel.cc 66590 2012-12-23 09:31:50Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -128,7 +128,7 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreeVector& 
-G4VMscModel::SampleScattering(const G4DynamicParticle*, G4double)
+G4VMscModel::SampleScattering(const G4ThreeVector&, G4double)
 {
   return fDisplacement;
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VMscModel.hh 66590 2012-12-23 09:31:50Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -81,7 +81,7 @@ public:
 
   virtual G4double ComputeTrueStepLength(G4double geomPathLength);
 
-  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*,
+  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&,
 					  G4double safety);
 
   // empty method

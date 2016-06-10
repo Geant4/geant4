@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ExcitationHandler.cc 66934 2013-01-21 13:18:35Z vnivanch $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -234,6 +234,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	{
 	  theTempResult = theFermiModel->BreakItUp(*(*iList));
 	  wasFBU = true; 
+	  // if initial fragment returned unchanged try to evaporate it
+          if(1 == theTempResult->size()) {
+            delete theTempResult;
+	    theTempResult = theEvaporation->BreakItUp(*(*iList)); 
+	  }
 	}
       else // apply Evaporation in another case
 	{
@@ -443,9 +448,3 @@ void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
 {
   minEForMultiFrag = anE;
 }
-
-
-
-
-
-

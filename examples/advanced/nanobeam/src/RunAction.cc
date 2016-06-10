@@ -27,30 +27,26 @@
 // $Id$
 // -------------------------------------------------------------------
 
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <fstream>
+#include <vector>
+#include <cmath>
+
+// #define MATRIX_BOUND_CHECK
+
+#include "RunAction.hh"
+
+#include "G4ios.hh"
+#include "Randomize.hh"
+
 #include "G4SteppingManager.hh"
 #include "G4Run.hh"
 #include "G4Material.hh"
 #include "G4UImanager.hh"
-#include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
-#include "Randomize.hh"
-#include <iomanip>
-#include <assert.h>
-
-#include "RunAction.hh"
-
-// MATRIX
-#define MATRIX_BOUND_CHECK
-#include "globals.hh"
-#include <iostream>
-#include "CLHEP/Matrix/Matrix.h"
-#include "CLHEP/Matrix/Vector.h"
-#include <fstream>
-#include "G4ios.hh"
-#include <fstream>
-#include <vector>
-#include <cmath>
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

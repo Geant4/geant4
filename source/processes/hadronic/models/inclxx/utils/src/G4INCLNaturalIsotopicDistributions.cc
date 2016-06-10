@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -48,12 +46,6 @@
 // #include <cassert>
 #include <utility>
 #include <iostream>
-
-#ifdef INCL_ROOT_USE
-#include "TSystem.h"
-#else
-#include <cstdlib>
-#endif
 
 namespace G4INCL {
 
@@ -96,11 +88,6 @@ namespace G4INCL {
       return i->second;
     else {
       FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << std::endl);
-#ifdef INCL_ROOT_USE
-      gSystem->Exit(EXIT_FAILURE);
-#else
-      std::exit(EXIT_FAILURE);
-#endif
       return theDistributions.begin()->second;
     }
   }

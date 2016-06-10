@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VMultipleScattering.cc 66594 2012-12-23 10:17:42Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -450,7 +450,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	postSafety = currentModel->ComputeSafety(fNewPosition,0.0); 
       } 
       G4ThreeVector displacement = 
-	currentModel->SampleScattering(track.GetDynamicParticle(),postSafety);
+	currentModel->SampleScattering(step.GetPostStepPoint()->GetMomentumDirection(),postSafety);
 
       G4double r2 = displacement.mag2();
 
@@ -487,10 +487,12 @@ G4VParticleChange*
 G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step&)
 {
   fParticleChange.Initialize(track);  
+  
   if(fPositionChanged) { 
     safetyHelper->ReLocateWithinVolume(fNewPosition);
     fParticleChange.ProposePosition(fNewPosition); 
   }
+  
   return &fParticleChange;
 }
 

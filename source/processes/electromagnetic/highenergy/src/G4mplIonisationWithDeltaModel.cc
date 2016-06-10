@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4mplIonisationWithDeltaModel.cc 66996 2013-01-29 14:50:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -76,7 +76,7 @@ G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge,
   beta2lim(betalim*betalim),
   bg2lim(beta2lim*(1.0 + beta2lim))
 {
-  nmpl = G4int(abs(magCharge) * 2 * fine_structure_const + 0.5);
+  nmpl = G4lrint(std::fabs(magCharge) * 2 * fine_structure_const);
   if(nmpl > 6)      { nmpl = 6; }
   else if(nmpl < 1) { nmpl = 1; }
   pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
@@ -130,6 +130,7 @@ G4mplIonisationWithDeltaModel::ComputeDEDXPerVolume(const G4Material* material,
   if(!monopole) { SetParticle(p); }
   G4double tmax = MaxSecondaryEnergy(p,kineticEnergy);
   G4double cutEnergy = std::min(tmax, maxEnergy);
+  cutEnergy = std::max(LowEnergyLimit(), cutEnergy);
   G4double tau   = kineticEnergy / mass;
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau + 2.0);
@@ -200,15 +201,16 @@ G4double
 G4mplIonisationWithDeltaModel::ComputeCrossSectionPerElectron(
                                            const G4ParticleDefinition* p,
 					   G4double kineticEnergy,
-					   G4double cutEnergy,
+					   G4double cut,
 					   G4double maxKinEnergy)
 {
   if(!monopole) { SetParticle(p); }
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = min(tmax,maxKinEnergy);
+  G4double maxEnergy = std::min(tmax,maxKinEnergy);
+  G4double cutEnergy = std::max(LowEnergyLimit(), cut);
   if(cutEnergy < maxEnergy) {
-    cross = (1.0/cutEnergy - 1.0/maxEnergy)*twopi_mc2_rcl2*chargeSquare;
+    cross = (0.5/cutEnergy - 0.5/maxEnergy)*pi_hbarc2_over_mc2 * nmpl * nmpl;
   }
   return cross;
 }

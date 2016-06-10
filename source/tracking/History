@@ -1,5 +1,4 @@
-$Id: History,v 1.147 2010-11-18 17:24:22 allison Exp $
-$Name: not supported by cvs2svn $ 
+$Id: History 67009 2013-01-29 16:00:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11th January 2013  Gabriele Cosmo (tracking-V09-05-05)
+- Replace plain printout to cerr with G4Exception warning in
+  G4SteppingManager::InvokeAtRestDoItProcs().
+  Addressing problem report #1421.
 
 26 October 2012 Laurent Desorgher (tracking-V09-05-04)
 - G4AdointSteppingAction.cc. Add test for adjoint particle reaching "out_of_the_world".

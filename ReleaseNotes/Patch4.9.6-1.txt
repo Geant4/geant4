@@ -1,0 +1,163 @@
+
+                 Geant4 9.6 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                              1 February 2013
+
+List of fixes included in this public patch since the public release 9.6:
+
+  o Event:
+    -----
+    + Fixed missing deletion of UI command in destructor of G4StackMessenger.
+      Addressing problem report #1380.
+
+  o Geometry:
+    --------
+    + navigation:
+      o Cleared left-over debug check in G4VoxelNavigation.
+        Addressing problem report #1406.
+    + solids/specific:
+      o Fixed cases of hang-ups in G4ExtrudedSolid on 32-bits platforms, due to
+        G4TessellatedSolid and G4SurfVoxelizer, caused by accessing bitmask
+        arrays with negative indexes. The problem was related to floating-point
+        rounding, which can be different even on same platform with
+        debug/release version.
+        Assuring same number of computed voxels on 32-bit/64-bit platforms.
+        Fixed error in SetVertexIndex() method, which might cause problems on
+        certain configurations. Fixed minor memory leaks.
+        Code cleanup for use of G4endl and tabs...
+      o Fixed condition in G4VTwistSurface::GetBoundaryLimit() for logical
+        error. Addressing problem report #1420.
+
+  o Global:
+    ------
+    + Updated date and version for 9.6.p01.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + High Energy:
+      o G4eeTo3PiModel: removed printout from destructor.
+        Addressing problem report #1404.
+      o G4mplIonisationWithDeltaModel: fixed min and max energy
+        of delta-electron production.
+    + Low Energy:
+      o G4LivermorePhotoElectricModel: fix addressing problem report #1402.
+      o G4UAtomDeexcitation: removed shortcut when Auger is activated.
+    + Standard:
+      o Fixed signature of SampleScattering() for all multiple-scattering
+        models. Addressing problem report #1403.
+      o G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96: added limit
+        for the main parameter responsible for sampling of scattering tail (fix
+        for ATLAS large scattering angle problem).
+        Use safer expression in SampleCosineTheta() to avoid numerical problems.
+        Extended initialisation at StartTracking() method: class members are
+        reset to default values to avoid rare cases of non-reproducibility.
+      o G4UrbanMscModel96: optimised tuning of Urban model.       
+    + Utils:
+      o G4VMultipleScattering, G4VMscModel: fixed signature of method
+        SampleScattering(). Use momentum direction from PostStepPoint instead
+        of G4DynamicParticle.
+        Fixing major bug of migration of multiple-scattering sampling from
+        PostStepDoIt() to AlongStepDoIt(), responsible for observed
+        mis-behavior in presence of magnetic-field.
+        Addressing problem report #1403.
+
+  o Generic Processes:
+    -----------------
+    + Transportation:
+      o Corrected condition for warning message in method AlongStepDoIt()
+        of G4Transportation.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o Fixed memory leak in cross-sections for GetZandACrossSection().
+        Addressing problem report #1424.
+      o Fixed bug to G4ComponentAntiNuclNuclearXS and added class description.
+        Fixed case of non-reproducibility observed with QBBC physics-list:
+        consider anti-protons and anti-neutrons as default particles, so that
+        they can be used also for anti-hyperons.
+      o Fixed several Coverity defects for initialisation of class members.
+    + models/coherent_elastic:
+      o Fixed conditional statement depending on uninitialised variable.
+    + models/de_excitation:
+      o Fix in G4ExcitationHandler: if FermiBreakUp returns unchanged 
+        fragment then the fragment is decayed by Evaporation instead of
+        PhotonEvaporation to avoid production of non-physical isotopes
+        like 4H.
+    + models/im_r_matrix:
+      o Fix in G4Scatterer::GetTimeToInteraction(); one shortcut in the
+        calculation of time was missed, as only one of the two particles was
+        checked. Physics unchanged, but small performance gain of few percent.
+        Addressing problem report #1334.
+    + models/inclxx:
+      o Updated to INCL++ v5.1.9: removed calls to abort() and exit().
+        Addressing problem report #1421.
+    + models/neutron_hp:
+      o Fixed improper use of abort() in G4NeutronHPThermalScattering.
+        Addressing problem report #1421.
+    + models/qmd:
+      o Fix for logic error in G4QMDGroundStateNucleus::packNucleons().
+        Addressing problem report #1418.
+    + models/radioactive_decay:
+      o G4RadioactiveDecay: force boost of the decay products. The parent
+        energy considered in the boost is the total energy of the fully
+        stripped parent ion rather than the total energy of dynamic ion
+        where the energy of shell electrons is taken into account.
+        Some difference in momentum and energy balance is still observed
+        but much less than before. Addressing problem report #1359.
+
+  o Materials:
+    ---------
+    + G4NistMaterialBuilder: fixed stainless steel parameters, taken from
+      http://www.azom.com/article.aspx?ArticleID=965.
+
+  o Physics Lists:
+    -------------
+    + G4EmStandardPhysics_option4: substituted new low-energy Compton
+      model by old LivermoreCompton model to avoid numerical problems 
+      in high statistic runs.
+
+  o Tracking:
+    --------
+    + Replaced plain printout to cerr with G4Exception warning in
+      G4SteppingManager::InvokeAtRestDoItProcs().
+      Addressing problem report #1421.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/nanobeam:
+      o Corrected order and format of inclusion of CLHEP headers.
+    + advanced/underground_physics:
+      o Fixed case of missing inclusion of units header when analysis activated.
+      o Make Auger, fluorescence and PIXE on by default.
+        Addressing problem report #1386.
+    + extended/electromagnetic/TestEm7:
+      o G4ScreenedNuclearRecoil: define type and sub-type of process;
+        removed inlusion of obsolete header
+      o PhysListEmStandardNR: use standard electron ionisation instead 
+        of Penelope, use multiple scattering for ions above 100 MeV/u.
+      o PhysListEmStandard: use SetEmModel() method.
+      o RunAction: delete analysis manager and all histograms at the end of run.
+      o c2_function: fixes for variable shadowing.
+      o Removed use of obsolete class G4HadronQElasticPhysics.
+    + extended/exoticphysics/monopole:
+      o Fixed computation of monopole range.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.6.
+  o  Technical notes distributed for release 9.6 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.6.p01 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

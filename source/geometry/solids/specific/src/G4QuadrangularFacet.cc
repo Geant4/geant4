@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4QuadrangularFacet.cc 67011 2013-01-29 16:17:41Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -121,16 +121,16 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector &vt0,
     G4Exception("G4QuadrangularFacet::G4QuadrangularFacet()",
                 "GeomSolids0002", JustWarning,
                 "Length of sides of facet are too small or sides not planar.");
-    G4cerr << endl;
-    G4cerr << "P0 = " << GetVertex(0) << endl;
-    G4cerr << "P1 = " << GetVertex(1) << endl;
-    G4cerr << "P2 = " << GetVertex(2) << endl;
-    G4cerr << "P3 = " << GetVertex(3) << endl;
-    G4cerr << "Side lengths = P0->P1" << length1 << endl;    
-    G4cerr << "Side lengths = P1->P2" << length2 << endl;    
-    G4cerr << "Side lengths = P2->P3" << length3 << endl;    
-    G4cerr << "Side lengths = P3->P0" << length4 << endl;    
-    G4cerr << endl;
+    G4cout << G4endl;
+    G4cout << "P0 = " << GetVertex(0) << G4endl;
+    G4cout << "P1 = " << GetVertex(1) << G4endl;
+    G4cout << "P2 = " << GetVertex(2) << G4endl;
+    G4cout << "P3 = " << GetVertex(3) << G4endl;
+    G4cout << "Side lengths = P0->P1" << length1 << G4endl;    
+    G4cout << "Side lengths = P1->P2" << length2 << G4endl;    
+    G4cout << "Side lengths = P2->P3" << length3 << G4endl;    
+    G4cout << "Side lengths = P3->P0" << length4 << G4endl;    
+    G4cout << G4endl;
     fRadius = 0.0;
   }
 }

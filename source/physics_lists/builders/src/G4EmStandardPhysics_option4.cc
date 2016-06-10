@@ -52,6 +52,7 @@
 #include "G4LowEPComptonModel.hh"
 #include "G4PenelopeGammaConversionModel.hh"
 #include "G4LivermorePhotoElectricModel.hh"
+#include "G4LivermoreComptonModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
@@ -219,8 +220,9 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       // Compton scattering
       G4ComptonScattering* cs = new G4ComptonScattering;
       cs->SetEmModel(new G4KleinNishinaModel(),1);
-      G4VEmModel* theLowEPComptonModel = new G4LowEPComptonModel();
-      theLowEPComptonModel->SetHighEnergyLimit(20*MeV);
+      G4VEmModel* theLowEPComptonModel = new G4LivermoreComptonModel();
+      //G4VEmModel* theLowEPComptonModel = new G4LowEPComptonModel();
+      theLowEPComptonModel->SetHighEnergyLimit(2*MeV);
       cs->AddEmModel(0, theLowEPComptonModel);
       ph->RegisterProcess(cs, particle);
 

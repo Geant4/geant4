@@ -30,11 +30,11 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "G4UserRunAction.hh"
+#include <CLHEP/Matrix/Vector.h>
+#include <CLHEP/Matrix/Matrix.h>
+
 #include "globals.hh"
-#include <iostream>
-#include "CLHEP/Matrix/Matrix.h"
-#include "CLHEP/Matrix/Vector.h"
+#include "G4UserRunAction.hh"
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -80,16 +80,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

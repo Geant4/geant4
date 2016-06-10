@@ -575,10 +575,10 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 
   if( motherSafety == 0.0 )
   {
+#ifdef G4DEBUG_NAVIGATION
     // Check that point is inside mother volume
     EInside  insideMother= motherSolid->Inside(localPoint);
 
-#if 1 // def G4DEBUG_NAVIGATION
     if( insideMother == kOutside )
     {
       G4ExceptionDescription message;
@@ -597,10 +597,10 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
                   JustWarning,  // FatalException,
                   message);
     }
-#endif
-#if 1 // def G4DEBUG_NAVIGATION
+
     // Following check is NOT for an issue - it is only for information
     //  It is allowed that a solid gives approximate safety - even zero.
+    //
     if( insideMother == kInside ) // && fVerbose )
     {
       G4ExceptionDescription messageIn;

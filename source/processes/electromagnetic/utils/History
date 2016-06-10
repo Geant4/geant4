@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 January 13: V.Ivanchenko (emutils-V09-05-57)
+- Changed signature of SampleScattering() method of all multiple
+  scattering model classes - instead of G4DynamicParticle, 
+  G4ThreeVector is used; this is a direction at PostStepPoint before 
+  angular deflection is applied
+
 09 November 12: V.Ivant (emutils-V09-05-56)
 08 November 12: V.Ivant (emutils-V09-05-55)
 - G4VEnergyLossProcess - fixed non-reproducibility for ions

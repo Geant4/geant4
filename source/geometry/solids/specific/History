@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2010-11-26 13:36:35 gcosmo Exp $
+$Id: History 67011 2013-01-29 16:17:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-Jan-2013  G.Cosmo (geom-specific-V09-05-25)
+- Fixed condition in G4VTwistSurface::GetBoundaryLimit() for logical error.
+  Addressing problem report #1420.
+
+20-Dec-2012  M.Gayer
+- Fixed cases of hang-ups in G4ExtrudedSolid on 32-bits platforms, due to
+  G4TessellatedSolid and G4SurfVoxelizer, caused by accessing bitmask arrays
+  with negative indexes. The problem was related to floating-point rounding,
+  which can be different even on same platform with debug/release version.
+  Assure same number of computed voxels on 32-bit/64-bit platforms.
+  Fixed error in SetVertexIndex() method, which might cause problems on
+  certain configurations even for 64-bit systems. Fixed minor memory leaks.
+- Code cleanup for use of G4endl and tabs...
+
+14-Dec-2012  G.Cosmo
+- Restored SVN id headers.
 
 29-Nov-2012  G.Cosmo (geom-specific-V09-05-24)
 - Remove inclusion of G4PhysicalConstants.hh from G4SurfaceVoxelizer.hh.

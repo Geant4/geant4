@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.cc 66994 2013-01-29 14:34:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   // extract Projected Range of primary particle
   if (aTrack->GetTrackID() == 1) {
-    G4double x = aTrack->GetPosition().x() + fRunAction->GetOffsetX();
+    G4double x = aTrack->GetPosition().x() - fRunAction->GetOffsetX();
     fRunAction->AddProjRange(x);
   }  
 }
