@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 29, 2013 T.Nikitina                   geommng-V09-05-05
+- Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified
+  accuracy. Addressing problem report #1493.
+
 November 28, 2012  G.Cosmo                 geommng-V09-05-04
 - Get rid of explicit inclusion of costants header from meshdefs.hh.
 

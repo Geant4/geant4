@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusBoundDecay.hh 69960 2013-05-21 09:26:16Z gcosmo $
+// $Id: G4MuonMinusBoundDecay.hh 79599 2014-03-07 17:15:40Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //

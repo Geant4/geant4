@@ -716,7 +716,7 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
       for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
       {
         G4ThreeVector oneNormal;
-        if( fLimitedStep[ num ] ) 
+        if( fLimitTruth[ num ] )  // Did this geometry limit the step ?
         { 
           G4ThreeVector newNormal= (*pNavIter)-> GetGlobalExitNormal( argPoint, &oneObtained );
           if( oneObtained )

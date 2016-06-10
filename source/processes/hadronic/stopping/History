@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 January 2014 V. Ivantchenko (hadr-stopping-V09-05-34)
+--------------------------------------------------------------------
+- G4MuMinusCapturePrecompound - fix infinite loop (bug #1536) by 
+    reimplementing old algorithm of mu- capture which not include
+    direct muon reaction but only considering deexcitation of
+    residual fragment
+
 01 May   2013 K. Genser      (hadr-stopping-V09-05-33)
 --------------------------------------------------------------------
 - G4MuonMinusBoundDecay 

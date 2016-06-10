@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
+ Geant4 version Name: geant4-09-06-patch-03    (14-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -176,8 +176,6 @@ userDetector->Construct() start.
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
-!!!=== G4UrbanMscModel96 WARNING This class will be removed in the next reference tag, please, use G4UrbanMscModel===!!!
-!!!=== G4UrbanMscModel96 WARNING This class will be removed in the next reference tag, please, use G4UrbanMscModel===!!!
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
@@ -459,7 +457,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.11s Real=0.21s Sys=0s
+  User=0.11s Real=0.17s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -532,7 +530,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.16s Real=0.26s Sys=0s
+  User=0.16s Real=0.37s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 

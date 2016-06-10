@@ -956,12 +956,15 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   preStepScaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(preStepScaledEnergy);
 
-  if(!currentModel->IsActive(preStepScaledEnergy)) { return x; }
+  if(!currentModel->IsActive(preStepScaledEnergy)) { 
+    currentInteractionLength = DBL_MAX;
+    return x; 
+  }
 
   // change effective charge of an ion on fly
   if(isIon) {
     G4double q2 = currentModel->ChargeSquareRatio(track);
-    if(q2 != chargeSqRatio) {
+    if(q2 != chargeSqRatio && q2 > 0.0) {
       chargeSqRatio = q2;
       fFactor = q2*biasFactor*(*theDensityFactor)[currentCoupleIndex];
       reduceFactor = 1.0/(fFactor*massRatio);
@@ -1734,14 +1737,15 @@ G4double G4VEnergyLossProcess::CrossSectionPerVolume(
   // Cross section per volume is calculated
   DefineMaterial(couple);
   G4double cross = 0.0;
-  if(theLambdaTable) {
-    cross = (*theDensityFactor)[currentCoupleIndex]*
-      ((*theLambdaTable)[basedCoupleIndex])->Value(kineticEnergy);
+  if(theLambdaTable) { 
+    cross = GetLambdaForScaledEnergy(kineticEnergy*massRatio);
+
   } else {
-    SelectModel(kineticEnergy);
-    cross = currentModel->CrossSectionPerVolume(currentMaterial,
-						particle, kineticEnergy,
-						(*theCuts)[currentCoupleIndex]);
+    SelectModel(kineticEnergy*massRatio);
+    cross = biasFactor*(*theDensityFactor)[currentCoupleIndex]
+      *(currentModel->CrossSectionPerVolume(currentMaterial,
+					    particle, kineticEnergy,
+					    (*theCuts)[currentCoupleIndex]));
   }
   if(cross < 0.0) { cross = 0.0; }
   return cross;

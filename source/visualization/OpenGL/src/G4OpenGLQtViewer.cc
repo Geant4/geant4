@@ -1361,7 +1361,13 @@ bool G4OpenGLQtViewer::printPDF (
 
   if (aFilename.substr(aFilename.size()-3) == ".ps") {
 #if QT_VERSION > 0x040200
+  #if QT_VERSION < 0x050000
     printer.setOutputFormat(QPrinter::PostScriptFormat);
+  #else
+    G4cout << "Output in postscript not implemented in this Qt version" << G4endl;
+  #endif
+#else
+    G4cout << "Output in postscript not implemented in this Qt version" << G4endl;
 #endif
   } else {
 #if QT_VERSION > 0x040100
@@ -2970,7 +2976,9 @@ bool G4OpenGLQtViewer::isTouchableVisible(int POindex){
   }
   
   // should be the next one
-  fLastSceneTreeWidgetAskFor++;
+  if (fLastSceneTreeWidgetAskFor != fPositivePoIndexSceneTreeWidgetQuickMap.end()) {
+    fLastSceneTreeWidgetAskFor++;
+  }
 
   QTreeWidgetItem* item = getTreeWidgetItem(POindex);
   

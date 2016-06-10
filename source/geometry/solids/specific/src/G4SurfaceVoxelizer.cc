@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SurfaceVoxelizer.cc 67011 2013-01-29 16:17:41Z gcosmo $
+// $Id: G4SurfaceVoxelizer.cc 79537 2014-03-06 13:54:53Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -371,7 +371,7 @@ void G4SurfaceVoxelizer::BuildBitmasks(std::vector<G4double> boundaries[],
 }
 
 //______________________________________________________________________________
-G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits)
+G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits) const
 {
   // Decodes the candidates in mask as G4String.
 
@@ -386,7 +386,7 @@ G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits)
 }
 
 //______________________________________________________________________________
-void G4SurfaceVoxelizer::DisplayListNodes()
+void G4SurfaceVoxelizer::DisplayListNodes() const
 {
   // Prints which solids are present in the slices previously elaborated.
 
@@ -994,7 +994,7 @@ G4SurfaceVoxelizer::DistanceToNext(const G4ThreeVector &point,
     G4int cur = curVoxel[i];
     if(direction[i] >= 1e-10)
     {
-        if (boundary[cur] - point[i] < fTolerance) // make sure shift would
+        if (boundary[++cur] - point[i] < fTolerance) // make sure shift would
         if (++cur >= (G4int) boundary.size())      // be non-zero
           continue;
     }

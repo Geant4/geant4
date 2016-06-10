@@ -1,4 +1,4 @@
-$Id: History 69803 2013-05-15 15:24:50Z gcosmo $
+$Id: History 79613 2014-03-10 10:27:56Z gcosmo $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -15,6 +15,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 November 2013 - G.Cosmo (ascii-V09-05-06)
+- Corrected typo in G4tgrUtils::WordIsUnit().
+
+7 November 2013 - G.Cosmo
+- Replaced deprecated calls to solids accessor methods.
+
+27 July 2013 - P.Arce
+- Corrected typo in G4tgrPlaceParameterisation::operator<<().
+  Addressing problem report #1504.
 
 23 April 2013 - G.Cosmo (ascii-V09-05-05)
 - Corrected History file, for loss of description of tags 06-00 and 06-01...

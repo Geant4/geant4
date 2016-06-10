@@ -254,6 +254,7 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
   G4double bbb = log(tmax);
   G4int kkk = (G4int)((bbb-aaa)/ak1 + ak2);
   if(kkk > 8) { kkk = 8; }
+  else if(kkk < 1) { kkk = 1; }
   G4double hhh = (bbb-aaa)/G4double(kkk);
   G4double x = aaa;
 

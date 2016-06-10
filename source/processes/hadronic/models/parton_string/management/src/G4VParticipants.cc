@@ -52,7 +52,7 @@ G4VParticipants::~G4VParticipants()
 }
 
 
-inline void G4VParticipants::Init(G4int theA, G4int theZ)
+void G4VParticipants::Init(G4int theA, G4int theZ)
 {
   if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
   theNucleus->Init(theA, theZ);
@@ -60,8 +60,14 @@ inline void G4VParticipants::Init(G4int theA, G4int theZ)
 }
 
 
-inline void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
+void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
 {
   if (theNucleus != NULL) delete theNucleus;
   theNucleus = aNucleus;
+}
+
+
+G4V3DNucleus * G4VParticipants::GetWoundedNucleus() const
+{
+  return theNucleus;
 }

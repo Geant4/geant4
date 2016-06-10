@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16.10.2013, L.Pandola, tag emlowen-V09-05-50
+	    Fix Exception on G4PenelopeOscillatorManager 
+            reported by Krzysztof Genser for specific materials
+
 05.12.2012  L. Pandola, tag emlowen-V09-05-49
 	    Slightly change the fix on G4LivermorePhotoElectricModel 
   	    introduced in the previous tag

@@ -591,10 +591,10 @@ ParametersRead(const xercesc::DOMElement* const element) {
       if (tag=="trap_dimensions") { Trap_dimensionsRead(child,parameter); } else
       if (tag=="tube_dimensions") { Tube_dimensionsRead(child,parameter); } else
       if (tag=="cone_dimensions") { Cone_dimensionsRead(child,parameter); } else
-      if (tag=="sphere_dimensions") { Cone_dimensionsRead(child,parameter); } else
-      if (tag=="orb_dimensions") { Cone_dimensionsRead(child,parameter); } else
-      if (tag=="torus_dimensions") { Cone_dimensionsRead(child,parameter); } else
-      if (tag=="para_dimensions") { Cone_dimensionsRead(child,parameter); } else
+      if (tag=="sphere_dimensions") { Sphere_dimensionsRead(child,parameter); } else
+      if (tag=="orb_dimensions") { Orb_dimensionsRead(child,parameter); } else
+      if (tag=="torus_dimensions") { Torus_dimensionsRead(child,parameter); } else
+      if (tag=="para_dimensions") { Para_dimensionsRead(child,parameter); } else
       if (tag=="hype_dimensions") { Hype_dimensionsRead(child,parameter); }
       else
       {

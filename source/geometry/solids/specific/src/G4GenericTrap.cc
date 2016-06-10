@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GenericTrap.cc 79565 2014-03-07 09:21:17Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -253,14 +253,47 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
       if(cross*cross<=len2*halfCarTolerance*halfCarTolerance)  // Surface check
       {
         G4double test;
-        G4int k,l;
-        if ( poly[i].y() > poly[j].y() )  { k=i; l=j; }
-        else                              { k=j; l=i; }
 
-        if ( poly[k].x() != poly[l].x() )
+        // Check if p lies between the two extremes of the segment
+        //
+        G4int iMax;
+        G4int iMin;
+
+        if (poly[j].x() > poly[i].x())
         {
-          test = (p.x()-poly[l].x())/(poly[k].x()-poly[l].x())
-               * (poly[k].y()-poly[l].y())+poly[l].y();
+          iMax = j;
+          iMin = i;
+        }
+        else {
+          iMax = i;
+          iMin = j;
+        }
+        if ( p.x() > poly[iMax].x()+halfCarTolerance
+          || p.x() < poly[iMin].x()-halfCarTolerance )
+        {
+          return kOutside;
+        }
+
+        if (poly[j].y() > poly[i].y())
+        {
+          iMax = j;
+          iMin = i;
+        }
+        else
+        {
+          iMax = i;
+          iMin = j;
+        }
+        if ( p.y() > poly[iMax].y()+halfCarTolerance
+          || p.y() < poly[iMin].y()-halfCarTolerance )
+        {
+          return kOutside;
+        }
+
+        if ( poly[iMax].x() != poly[iMin].x() )
+        {
+          test = (p.x()-poly[iMin].x())/(poly[iMax].x()-poly[iMin].x())
+               * (poly[iMax].y()-poly[iMin].y())+poly[iMin].y();
         }
         else
         {
@@ -269,8 +302,8 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
 
         // Check if point is Inside Segment
         // 
-        if( (test>=(poly[l].y()-halfCarTolerance))
-         && (test<=(poly[k].y()+halfCarTolerance)) )
+        if( (test>=(poly[iMin].y()-halfCarTolerance))
+         && (test<=(poly[iMax].y()+halfCarTolerance)) )
         { 
           return kSurface;
         }

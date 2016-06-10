@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 4th, 2013 - J.Apostolakis  (geomnav-V09-05-47)
+------------------------------
+- G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().  
+  Issue identified by Coverity. 
+
 Dec 10th, 2012 - G.Cosmo  (geomnav-V09-05-46)
 ------------------------
 - Cleared left-over debug check in G4VoxelNavigation.

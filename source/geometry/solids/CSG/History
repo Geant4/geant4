@@ -1,4 +1,4 @@
-$Id: History 69788 2013-05-15 12:06:57Z gcosmo $
+$Id: History 79541 2014-03-06 14:19:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 2, 2013  G.Cosmo                 geom-csg-V09-05-11
+- Correctly initialise fSPhi to zero in G4Sphere constructor.
+
+August 14, 2013  G.Cosmo
+- Corrected sanity check for wrong/small dimensions in G4Box constructor.
 
 April 16, 2013  T.Nikitina               geom-csg-V09-05-10
 - Fix in G4Cons::DistanceToIn(p,v) for initialisation of dRmax for the

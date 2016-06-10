@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NeutronRadCapture.cc 76888 2013-11-18 13:00:28Z gcosmo $
 //
 //
 // Physics model class G4NeutronRadCapture 
@@ -57,7 +57,6 @@ G4NeutronRadCapture::G4NeutronRadCapture()
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
   photonEvaporation = new G4PhotonEvaporation();
-  //photonEvaporation = 0;
 }
 
 G4NeutronRadCapture::~G4NeutronRadCapture()
@@ -73,6 +72,8 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
 
   G4int A = theNucleus.GetA_asInt();
   G4int Z = theNucleus.GetZ_asInt();
+
+  G4double time = aTrack.GetGlobalTime();
 
   // Create initial state
   G4double m1 = G4NucleiProperties::GetNuclearMass(A, Z);
@@ -105,7 +106,12 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     G4double phi  = G4UniformRand()*CLHEP::twopi;
     G4LorentzVector lv2(e1*sint*std::cos(phi),e1*sint*std::sin(phi),e1*cost,e1);
     lv2.boost(bst);
-    theParticleChange.AddSecondary(new G4DynamicParticle(G4Gamma::Gamma(), lv2));
+    G4HadSecondary* news = 
+      new G4HadSecondary(new G4DynamicParticle(G4Gamma::Gamma(), lv2));
+    news->SetTime(time);
+    theParticleChange.AddSecondary(*news);
+    delete news;
+
     G4ParticleDefinition* theDef = 0;
 
     lv1 -= lv2; 
@@ -113,18 +119,17 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     else if (Z == 1 && A == 3) {theDef = G4Triton::Triton();}
     else if (Z == 2 && A == 3) {theDef = G4He3::He3();}
     else if (Z == 2 && A == 4) {theDef = G4Alpha::Alpha();}
-    else  
-      {
-	theDef = 
-	  G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
-      }
+    else { theDef = G4ParticleTable::GetParticleTable()->GetIon(Z,A,0.0); }
 
     if (verboseLevel > 1) {
       G4cout << "Gamma 4-mom: " << lv2 << "   " 
 	     << theDef->GetParticleName() << "   " << lv1 << G4endl;
     }
     if(theDef) {
-      theParticleChange.AddSecondary(new G4DynamicParticle(theDef, lv1));
+      news = new G4HadSecondary(new G4DynamicParticle(theDef, lv1));
+      news->SetTime(time);
+      theParticleChange.AddSecondary(*news);
+      delete news;
     }
  
   // Use photon evaporation  
@@ -149,24 +154,35 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       G4cout << "G4NeutronRadCapture: " << n << " final particle" << G4endl;
     }
     for(size_t i=0; i<n; ++i) {
+
       G4Fragment* f = (*fv)[i];    
       G4LorentzVector lvres = f->GetMomentum();   
+
       Z = f->GetZ_asInt();
       A = f->GetA_asInt();
 
       G4ParticleDefinition* theDef = 0;
       if(0 == Z && 0 == A) {theDef =  f->GetParticleDefinition();}
-      else
-	{
-	  theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
-	}
-
+      else if (Z == 1 && A == 2) {theDef = G4Deuteron::Deuteron();}
+      else if (Z == 1 && A == 3) {theDef = G4Triton::Triton();}
+      else if (Z == 2 && A == 3) {theDef = G4He3::He3();}
+      else if (Z == 2 && A == 4) {theDef = G4Alpha::Alpha();}
+      else {
+	theDef = G4ParticleTable::GetParticleTable()->GetIon(Z, A, 0.0);
+      }
       if (verboseLevel > 1) {
 	G4cout << i << ". " << theDef->GetParticleName()
 	       << "   " << lvres << G4endl;
       }
       if(theDef) {
-	theParticleChange.AddSecondary(new G4DynamicParticle(theDef, lvres));
+	G4HadSecondary* news = 
+	  new G4HadSecondary(new G4DynamicParticle(theDef, lvres));
+	news->SetTime(time);
+        G4double timeF = f->GetCreationTime();
+        if(timeF < 0.0) { timeF = 0.0; }
+	news->SetTime(time + timeF);
+	theParticleChange.AddSecondary(*news);
+	delete news;
       }
       delete f;
     }

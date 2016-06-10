@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc 69803 2013-05-15 15:24:50Z gcosmo $
+// $Id: G4tgbVolume.cc 79613 2014-03-10 10:27:56Z gcosmo $
 //
 //
 // class G4tgbVolume
@@ -1324,7 +1324,8 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
     solid = new G4Tubs( GetName(), psolid->GetInnerRadius()*redf,
                                    psolid->GetOuterRadius()*redf,
                                    psolid->GetZHalfLength()*redf,
-                                   psolid->GetSPhi(), psolid->GetDPhi());
+                                   psolid->GetStartPhiAngle(),
+                                   psolid->GetDeltaPhiAngle());
   } 
   else if ( parentSolid->GetEntityType() == "G4Cons" )
   {
@@ -1334,7 +1335,8 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
                                    psolid->GetInnerRadiusPlusZ()*redf,
                                    psolid->GetOuterRadiusPlusZ()*redf,
                                    psolid->GetZHalfLength()*redf,
-                                   psolid->GetSPhi(), psolid->GetDPhi());
+                                   psolid->GetStartPhiAngle(),
+                                   psolid->GetDeltaPhiAngle());
   } 
   else if ( parentSolid->GetEntityType() == "G4Trd" )
   {

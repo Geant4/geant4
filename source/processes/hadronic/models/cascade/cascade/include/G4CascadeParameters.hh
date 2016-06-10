@@ -39,7 +39,7 @@ class G4CascadeParamMessenger;
 
 class G4CascadeParameters {
 public:
-  static const G4CascadeParameters* Instance();		// Singleton
+  static G4CascadeParameters* Instance();		// Singleton
   ~G4CascadeParameters();
 
   // Top-level configuration flags
@@ -110,6 +110,8 @@ private:	// Singleton -- no public constructor
 
   G4CascadeParamMessenger* messenger;		// For access via UI commands
   friend class G4CascadeParamMessenger;
+
+  static G4CascadeParameters* fpInstance;
 };
 
 #endif	/* G4CascadeParameters_hh */

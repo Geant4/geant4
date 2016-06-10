@@ -16,6 +16,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th January 2014   Gabriele Cosmo (config-V09-05-15)
+- Fixed setting of -fPIC for Darwin targets.
+
+19th November 2013   Gabriele Cosmo
+- Minor correction to Darwin scripts for Qt setup.
+
+11th November 2013   Gabriele Cosmo
+- Updated Darwin-g++ and Darwin-clang configurations for Qt to allow for
+  correct detection of Qt5 directory structure.
+  Removed '-ansi -pedantic' compilation options, now obsolete.
+  Corrected include paths for X11FLAGS, to resolve compilation errors on
+  MacOSX 10.9 Mavericks.
+
+8th November 2013   Gabriele Cosmo
+- Removed not necessary LD flag in Darwin configurations.
+
+27th November 2012 Gabriele Cosmo (config-V09-05-14)
+- Added -Wno-variadic-macros compilation option to
+  Darwin-g++.gmk and Darwin-clang.gmk.
+
 4th October 2012 Gabriele Cosmo (config-V09-05-12, config-V09-05-11)
 - binmake.gmk: replaced "photolepton_hadron" module with "lepto_nuclear".
 - Cowork with tag "hadr-V09-05-00".

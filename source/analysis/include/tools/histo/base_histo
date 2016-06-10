@@ -388,7 +388,7 @@ public:
       aIs[iaxis] = offset/m_axes[iaxis].m_offset;
       offset -= aIs[iaxis] * m_axes[iaxis].m_offset;
     }}
-    for(unsigned iaxis=0;iaxis<m_dimension;iaxis++) {
+    for(unsigned int iaxis=0;iaxis<m_dimension;iaxis++) {
       if(aIs[iaxis]==0) {
         aIs[iaxis] = axis<TC>::UNDERFLOW_BIN;
       } else if(aIs[iaxis]==int(m_axes[iaxis].m_number_of_bins+1)) {

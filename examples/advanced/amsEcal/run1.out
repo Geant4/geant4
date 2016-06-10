@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
+ Geant4 version Name: geant4-09-06-patch-03    (14-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -182,7 +182,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=18.37s Real=29.67s Sys=0.27s
+  User=18.03s Real=59.52s Sys=0.27s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules

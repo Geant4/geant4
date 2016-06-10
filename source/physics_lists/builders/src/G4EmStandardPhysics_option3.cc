@@ -219,6 +219,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       //msc->AddEmModel(0, new G4UrbanMscModel95());
+      msc->SetRangeFactor(0.01);
       msc->SetStepLimitType(fUseDistanceToBoundary);
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
@@ -233,6 +234,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       //msc->AddEmModel(0, new G4UrbanMscModel95());
       msc->SetStepLimitType(fUseDistanceToBoundary);
+      msc->SetRangeFactor(0.01);
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
 

@@ -14,6 +14,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 March 2014 A.Dotti        (hadr-cross-V09-05-47)
+-----------------------------------------------------
+- Back-porting speed-up changes in G4Electro- and G4PhotoNuclear
+  cross-sections. These are based on hadr-cross-V09-06-28, -26, -21, -18
+  for G4ElectroNuclear. Adding a single "break" statement in 
+  G4PhotoNuclear. Expect between 30% and 50% relative speedup for 
+  calculations of these cross-sections.
+
+22 August 2013 W.Pokorski
+-------------------------
+- improvements and cleanup in G4ElectroNuclearCrossSection
+
+02 May 2013 A. Dotti
+--------------------
+- Clean up ElectroNuclear cross-section and optimize code.
+  Code is now 40% faster in simple setups.
+
 20 March 2013 V.Ivanchenko   (hadr-cross-V09-05-46)
 -----------------------------------------------------
 - G4HadronFissionDataSet - always return zero (only HP may simulate 

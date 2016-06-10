@@ -34,12 +34,16 @@
 #include <iostream>
 using std::endl;
 
+G4CascadeParameters* G4CascadeParameters::fpInstance = 0;
 
 // Singleton accessor
 
-const G4CascadeParameters* G4CascadeParameters::Instance() {
-  static const G4CascadeParameters theInstance;
-  return &theInstance;
+G4CascadeParameters* G4CascadeParameters::Instance() {
+  if (!fpInstance)
+  {
+    fpInstance = new G4CascadeParameters;
+  }
+  return fpInstance;
 }
 
 

@@ -29,10 +29,39 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21st January 2014 - Jonathan Madsen (cmake-V09-05-80)
+- Updated Modules/Geant4InterfaceOptions.cmake to include /opt/X11
+   paths that are now the standard places for X11 and OpenGL on Mac OSX
+   as of Mavericks (OS X 10.9). Without these paths configuring CMake with 
+   GEANT4_USE_OPENGL_X11=ON fails
+
+27th November 2012 -  Gabriele Cosmo
+- Added "-Wno-variadic-macros" compilation option g++ and clang.
+
+21st November 2013 - Ben Morgan
+- Modules/Geant4InterfaceOptions.cmake : Fix bug in checking of status
+  of Xmu include path and library variables that resulted in no error
+  being emitted if these were not found.
+
+19th November 2013 - Ben Morgan
+- Modules/Geant4ConfigureConfigScript.cmake : Fix bug in list manipulation
+  of non-existant list backported in by accident by previous tag. This
+  caused an error report when using Qt5.
+
+25th October 2013 - Ben Morgan
+- Templates/Geant4Config.cmake.in : Re-find Qt5 when Geant4 uses it to ensure
+  imported targets are recreated
+- Templates/geant4make-skeleton.in : Support export of QT4/5 variables to
+  Geant4Make
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Support export of
+  QT4/5 variables to Geant4Make
+- Modules/Geant4InterfaceOptions.cmake : Support export of QT4/5 variables
+  to Geant4Make
+
 27th November 2012 -  Ben Morgan       (cmake-V09-05-79)
 - Templates/geant4-config.in : Correct listing of G3toG4 library,
   replacing "-lG3ToG4" with "-lG3toG4"
-
 
 27th November 2012 -  Gabriele Cosmo   (cmake-V09-05-78)
 - Added "-Wno-variadic-macros -Wshadow" compilation options g++ and clang.

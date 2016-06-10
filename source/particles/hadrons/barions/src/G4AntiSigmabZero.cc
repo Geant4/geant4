@@ -75,7 +75,7 @@ G4AntiSigmabZero* G4AntiSigmabZero::Definition()
                     2,               0,             0,
              "baryon",               0,            -1,       -5212,
                 false,          0.0*ns,          NULL,
-                false,       "sigma_b");
+                false,       "anti_sigma_b");
 
  //create Decay Table
   G4DecayTable* table = new G4DecayTable();
@@ -83,7 +83,7 @@ G4AntiSigmabZero* G4AntiSigmabZero::Definition()
   // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[1];
   // anti_sigma_b0 -> lambda_b + pi0
-  mode[0] = new G4PhaseSpaceDecayChannel("anti_sigma_b0",1.000,2,"lambda_b","pi0");
+  mode[0] = new G4PhaseSpaceDecayChannel("anti_sigma_b0",1.000,2,"anti_lambda_b","pi0");
 
   for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
   delete [] mode;

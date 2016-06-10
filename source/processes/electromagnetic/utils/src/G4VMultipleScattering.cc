@@ -100,7 +100,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
   geomMin = 1.e-6*CLHEP::mm;
-  lowestKinEnergy = 1*eV;
+  lowestKinEnergy = 10*eV;
 
   // default limit on polar angle
   polarAngleLimit = 0.0;
@@ -464,11 +464,13 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 
 	// displaced point is definitely within the volume
 	if(r2 > postSafety*postSafety) {
-          if(!safetyRecomputed) {
-	    postSafety = currentModel->ComputeSafety(fNewPosition, 0.0);
+
+          G4double dispR = std::sqrt(r2);
+	  if(!safetyRecomputed) {
+	    postSafety = currentModel->ComputeSafety(fNewPosition, dispR);
 	  } 
 	  // add a factor which ensure numerical stability
-	  if(r2 > postSafety*postSafety) { fac = 0.99*postSafety/std::sqrt(r2); }
+	  if(dispR > postSafety) { fac = 0.99*postSafety/dispR; }
 	}
 	// compute new endpoint of the Step
 	fNewPosition += fac*displacement;

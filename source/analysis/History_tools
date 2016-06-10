@@ -1,3 +1,10 @@
+ 1.4.4 :
+ - test/cpp/list_free_segs.C : to list free segments in a out.root file.
+ - wroot/file : set_END() : update first back free segment m_first field
+   when writing something. This permits to have good free segs infos in file.
+ - wroot/file/make_free_seg : use free_seg/add_free() function.
+ - wroot/free_seg : add_free function.
+
  1.4.3 :
  - histo/b3,h3d : have a print() method. (Few things in it for the moment...)
  - histo/sliced : for h3 : projection_[xy,yz,xz] methods.

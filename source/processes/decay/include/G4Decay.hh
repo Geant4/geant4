@@ -196,14 +196,6 @@ inline
   return DecayIt(aTrack, aStep);
 }
 
-inline  
-  G4VParticleChange* G4Decay::PostStepDoIt(
-			     const G4Track& aTrack,
-			     const G4Step&  aStep
-			    )
-{
-  return DecayIt(aTrack, aStep);
-}
 
 inline
  const G4VExtDecayer* G4Decay::GetExtDecayer() const

@@ -15,6 +15,31 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 March 2014  G.Cosmo (hadr-casc-V09-05-30)
+--------------------------------------------
+- G4CascadeParameters: have canonical singleton implementation.
+  Addressing problem report #1557.
+
+6 January 2014  M.Kelsey (hadr-casc-V09-05-28)
+----------------------------------------------
+- G4CascadeParameters.cc: Improve singleton initialization by moving static
+  instance to pointer in file scope (anon namespace), check for null pointer
+  in Instance() call.
+
+19 June 2013  Alberto Ribon     (hadr-casc-V09-05-27)
+-----------------------------------------------------
+- G4NucleiModel.cc: fixed rare cases of non-reproducibility in the
+  method generateParticleFate. The members current_nucl1 and
+  current_nucl2 were not properly initialized in the case that
+  the interaction-partners list has one single element.
+
+22 May 2013  Michael Kelsey
+---------------------------
+- G4ParticleLargerEkin.hh, G4ParticleLargerBeta.hh:  Change ">=" to ">" in
+  both cases, to avoid error in (extremely rare) case that both inputs are
+  identical.  With floats, this is a ~2^-64 probability, but a Windows test
+  job managed to catch it.
+
 20 October 2012  Michael Kelsey (hadr-casc-V09-05-26)
 -----------------------------------------------------
 - G4CascadePPChannel.cc, G4CascadeNNChannel.cc, G4CascadeNPChannel.cc:  For

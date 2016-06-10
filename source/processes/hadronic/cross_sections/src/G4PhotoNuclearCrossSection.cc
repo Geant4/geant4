@@ -167,6 +167,7 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
             lastHEN=HEN[i];   // Pointer to prepared High Energy cross sections
             lastTH =eTH[i];   // Energy Threshold
             lastSP =spA[i];   // Shadowing coefficient for UHE
+              break;
           }
 	}
       }

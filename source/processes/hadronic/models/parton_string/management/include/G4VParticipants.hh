@@ -68,13 +68,6 @@ class G4VParticipants
   
 };
 
-// Class G4VParticipants 
-
-inline G4V3DNucleus * G4VParticipants::GetWoundedNucleus() const
-{
-  return theNucleus;
-}
-
 #endif
 
 

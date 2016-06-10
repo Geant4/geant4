@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7 November 2013 Gabriele Cosmo (gdml-V09-05-07)
+- Replaced deprecated calls to G4Sphere accessor methods.
+
+29 October 2013 Tatiana Nikitina
+- Fix in G4GDMLReadParamvol::ParametersRead() for reading parameterised
+  Sphere, Orb, Torus and Para.
+
 26 February 2013 Gabriele Cosmo (gdml-V09-05-06)
 - Removed unused data member in G4STRead.
 

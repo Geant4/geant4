@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
+ Geant4 version Name: geant4-09-06-patch-03    (14-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -146,7 +146,7 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -169,7 +169,7 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -497,21 +497,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=12.23s Real=17.59s Sys=0.05s
+  User=12.33s Real=29.86s Sys=0.01s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.7435 cm    rms= 2.33796 mm 
- Mean number of primary steps = 188.349
- Total energy deposit= 159.994 MeV
- niel energy deposit = 125.855 eV 
+ Projected Range= 17.7427 cm    rms= 2.45014 mm 
+ Mean number of primary steps = 188.374
+ Total energy deposit= 159.996 MeV
+ niel energy deposit = 128.333 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 1: 	 	4.55567 GeV	0.284729 % 	9.12373e-05 Gy
- tally 2: 	 	4.90965 GeV	0.306853 % 	9.83266e-05 Gy
- tally 3: 	 	3.32541 GeV	0.207838 % 	6.65986e-05 Gy
- tally 4: 	 	1.92674 GeV	0.120421 % 	3.85873e-05 Gy
+ tally 1: 	 	4.61514 GeV	0.288446 % 	9.24284e-05 Gy
+ tally 2: 	 	5.00998 GeV	0.313124 % 	0.000100336 Gy
+ tally 3: 	 	3.28225 GeV	0.205141 % 	6.57344e-05 Gy
+ tally 4: 	 	1.97434 GeV	0.123396 % 	3.95405e-05 Gy
 
 ---------------------------------------------------------
 
@@ -520,7 +520,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 224297409, 1575969397
+ Current couple of seeds = 525588401, 318827670
 ----------------------------------------
 /gun/particle ion
 /gun/ion 6 12 6
@@ -550,7 +550,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 224297409, 1575969397
+ Current couple of seeds = 525588401, 318827670
 ----------------------------------------
 ... open Root analysis file : testem7.root - done
 Start Run processing.
@@ -559,21 +559,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.16s Real=7.25s Sys=0.01s
+  User=8.66s Real=23.75s Sys=0.01s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.4931 cm    rms= 448.388 um 
- Mean number of primary steps = 151.8
+ Projected Range= 16.4906 cm    rms= 466.762 um 
+ Mean number of primary steps = 152.025
  Total energy deposit= 3.49998 GeV
- niel energy deposit = 256.164 keV
+ niel energy deposit = 256.115 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 1: 	 	11.0987 GeV	0.317106 % 	0.000222276 Gy
- tally 2: 	 	13.1504 GeV	0.375726 % 	0.000263366 Gy
- tally 3: 	 	15.9661 GeV	0.456173 % 	0.000319756 Gy
- tally 4: 	 	22.9828 GeV	0.65665 % 	0.000460281 Gy
+ tally 1: 	 	10.9638 GeV	0.313251 % 	0.000219574 Gy
+ tally 2: 	 	12.2638 GeV	0.350394 % 	0.000245609 Gy
+ tally 3: 	 	14.6814 GeV	0.419467 % 	0.000294027 Gy
+ tally 4: 	 	23.3446 GeV	0.666987 % 	0.000467526 Gy
 
 ---------------------------------------------------------
 
@@ -582,7 +582,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 255044324, 1437336143
+ Current couple of seeds = 1772862520, 1459561726
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/tallyNumber 0
@@ -703,7 +703,7 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -726,7 +726,7 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -1032,7 +1032,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 255044324, 1437336143
+ Current couple of seeds = 1772862520, 1459561726
 ----------------------------------------
 ... open Root analysis file : testem7.root - done
 Start Run processing.
@@ -1041,20 +1041,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.12s Real=3.2s Sys=0.01s
+  User=2.4s Real=5.14s Sys=0s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.07297 cm    rms= 1.34708 mm 
- Mean number of primary steps = 19.74
- Total energy deposit= 285.576 MeV
- niel energy deposit = 1.63905 keV
+ Projected Range= 2.07314 cm    rms= 1.2097 mm 
+ Mean number of primary steps = 19.666
+ Total energy deposit= 286.068 MeV
+ niel energy deposit = 1.94884 keV
 ... write Root file : testem7.root - done
 ... close Root file : testem7.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1069348103, 1618590189
+ Current couple of seeds = 1679889128, 644621231
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/update
@@ -1174,7 +1174,7 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -1197,7 +1197,7 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -1508,7 +1508,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1069348103, 1618590189
+ Current couple of seeds = 1679889128, 644621231
 ----------------------------------------
 ... open Root analysis file : testem7.root - done
 Start Run processing.
@@ -1521,16 +1521,16 @@ Run Summary
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 309.653 um    rms= 136.991 um 
- Mean number of primary steps = 5.94
- Total energy deposit= 265 eV 
- niel energy deposit = 211.595 eV 
+ Projected Range= 470.125 um    rms= 293.922 um 
+ Mean number of primary steps = 5.97
+ Total energy deposit= 263.562 eV 
+ niel energy deposit = 209.539 eV 
 ... write Root file : testem7.root - done
 ... close Root file : testem7.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1453178607, 966929057
+ Current couple of seeds = 1998622123, 582000377
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/update
@@ -1650,7 +1650,7 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -1673,7 +1673,7 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -1984,7 +1984,7 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1453178607, 966929057
+ Current couple of seeds = 1998622123, 582000377
 ----------------------------------------
 ... open Root analysis file : testem7.root - done
 Start Run processing.
@@ -1993,20 +1993,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.13s Sys=0s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.4281 mm    rms= 48.7144 um 
- Mean number of primary steps = 36.49
+ Projected Range= 6.41972 mm    rms= 47.0689 um 
+ Mean number of primary steps = 36.46
  Total energy deposit= 100 MeV
- niel energy deposit = 10.9058 keV
+ niel energy deposit = 10.8878 keV
 ... write Root file : testem7.root - done
 ... close Root file : testem7.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1353543049, 1589601346
+ Current couple of seeds = 133943299, 986292057
 ----------------------------------------
 /testem/det/setMat G4_Si
 /gun/particle ion
@@ -2039,7 +2039,7 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -2062,7 +2062,7 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -2378,7 +2378,7 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1353543049, 1589601346
+ Current couple of seeds = 133943299, 986292057
 ----------------------------------------
 ... open Root analysis file : testem7.root - done
 Start Run processing.
@@ -2387,20 +2387,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=4.53s Real=7.35s Sys=0.04s
+  User=4.86s Real=14.08s Sys=0s
 
  The run consists of 10 Xe131[0.0] of 1.217 GeV through 20 cm  of G4_Si (density: 2.33 g/cm3 )
 
- Projected Range= 96.9337 um    rms= 273.379 nm 
- Mean number of primary steps = 34284.1
- Total energy deposit= 1.21692 GeV
- niel energy deposit = 4.13668 MeV
+ Projected Range= 96.902 um    rms= 624.973 nm 
+ Mean number of primary steps = 34250.7
+ Total energy deposit= 1.21693 GeV
+ niel energy deposit = 4.14922 MeV
 ... write Root file : testem7.root - done
 ... close Root file : testem7.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1305255161, 1684475077
+ Current couple of seeds = 2068178424, 1622855447
 ----------------------------------------
 /testem/det/setMat Water_1.05
 /gun/particle proton
@@ -2434,7 +2434,7 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -2457,7 +2457,7 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -2780,7 +2780,7 @@ Index : 5     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1305255161, 1684475077
+ Current couple of seeds = 2068178424, 1622855447
 ----------------------------------------
 ... open Root analysis file : testem7.root - done
 Start Run processing.
@@ -2789,19 +2789,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.08s Real=1.6s Sys=0s
+  User=1.1s Real=3.31s Sys=0s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 
- Projected Range= 16.8969 cm    rms= 1.82354 mm 
- Mean number of primary steps = 178.031
+ Projected Range= 16.8966 cm    rms= 1.97921 mm 
+ Mean number of primary steps = 178.063
  Total energy deposit= 160 MeV
- niel energy deposit = 96.6721 eV 
+ niel energy deposit = 94.4963 eV 
 ... write Root file : testem7.root - done
 ... close Root file : testem7.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1507977567, 909554115
+ Current couple of seeds = 132994036, 895587753
 ----------------------------------------
 G4 kernel has come to Quit state.

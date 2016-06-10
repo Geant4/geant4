@@ -28,6 +28,7 @@
 // 20100112  M. Kelsey -- Add additional operator() which uses pointers,
 //		also fix bug which returns wrong result
 // 20110415  M. Kelsey -- Add additional operator() for G4CascadParticle
+// 20140311  M. Kelsey -- Implement strict weak ordering (change ">=" to ">")
 
 #ifndef G4ParticleLargerBeta_h
 #define G4ParticleLargerBeta_h
@@ -39,7 +40,7 @@ class G4ParticleLargerBeta {
 public:
   G4bool operator() (const G4InuclElementaryParticle& part1,
 		     const G4InuclElementaryParticle& part2) {
-    return (part1.getMomModule()/part1.getEnergy() >=
+    return (part1.getMomModule()/part1.getEnergy() >
 	    part2.getMomModule()/part2.getEnergy()
 	    );
   }

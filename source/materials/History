@@ -1,4 +1,4 @@
-$Id: History 67044 2013-01-30 08:50:06Z gcosmo $
+$Id: History 79603 2014-03-07 17:27:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-11-13 V.Ivanchenko (materials-V09-05-36)
+- G4IonisParamMat - fixed density effect parameterisation using
+    static analysis reported by Andrey Karpov (<karpov@viva64.com>)
 
 09-01-13 V.Ivanchenko (materials-V09-05-34)
 - G4NistMaterialBuilder fixed: stainless steel parameters from

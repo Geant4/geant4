@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Sphere.cc 79541 2014-03-06 14:19:53Z gcosmo $
 //
 // class G4Sphere
 //
@@ -91,7 +91,7 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4CSGSolid(pName), fEpsilon(2.e-11),
+  : G4CSGSolid(pName), fEpsilon(2.e-11), fSPhi(0.0),
     fFullPhiSphere(true), fFullThetaSphere(true)
 {
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();

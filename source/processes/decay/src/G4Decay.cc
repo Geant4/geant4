@@ -295,7 +295,6 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     // PostStep case
     if (!isExtDecayer) products->Boost( ParentEnergy, ParentDirection);
   }
-
    // set polarization for daughter particles
    DaughterPolarization(aTrack, products);
 
@@ -374,7 +373,6 @@ G4double G4Decay::PostStepGetPhysicalInteractionLength(
                              G4ForceCondition* condition
                             )
 {
- 
    // condition is set to "Not Forced"
   *condition = NotForced;
 
@@ -407,6 +405,7 @@ G4double G4Decay::PostStepGetPhysicalInteractionLength(
     G4double value;
     if (currentInteractionLength <DBL_MAX) {
       value = theNumberOfInteractionLengthLeft * currentInteractionLength;
+      //fRemainderLifeTime = theNumberOfInteractionLengthLeft*aLife;
     } else {
       value = DBL_MAX;
     }
@@ -464,3 +463,18 @@ void G4Decay::SetExtDecayer(G4VExtDecayer* val)
     SetProcessSubType(static_cast<int>(DECAY_External));
   }
 }
+
+G4VParticleChange* G4Decay::PostStepDoIt(
+			     const G4Track& aTrack,
+			     const G4Step&  aStep
+			    )
+{
+  if ( (aTrack.GetTrackStatus() == fStopButAlive ) ||
+       (aTrack.GetTrackStatus() == fStopAndKill )   ){
+    fParticleChangeForDecay.Initialize(aTrack);
+    return &fParticleChangeForDecay;
+  } else {
+    return DecayIt(aTrack, aStep);
+  }
+}
+

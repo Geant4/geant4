@@ -192,11 +192,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* pimsc = new G4hMultipleScattering();
-  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  //pimsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* kmsc = new G4hMultipleScattering();
-  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  //kmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* pmsc = new G4hMultipleScattering();
-  pmsc->AddEmModel(0, new G4WentzelVIModel());
+  //pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models
@@ -248,10 +248,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
-      G4UrbanMscModel95* msc1 = new G4UrbanMscModel95();
+      G4UrbanMscModel96* msc1 = new G4UrbanMscModel96();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 
@@ -282,10 +283,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
-      G4UrbanMscModel95* msc1 = new G4UrbanMscModel95();
+      G4UrbanMscModel96* msc1 = new G4UrbanMscModel96();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
+ Geant4 version Name: geant4-09-06-patch-03    (14-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -72,7 +72,7 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -96,7 +96,7 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.01, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -421,17 +421,17 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            0k G4_Si
+       0.00         0.00         0.00            0k G4_Si
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00          0k         1        1          1         0.01    G4_Si
+     100.00          0k         1        1          1         0.00    G4_Si
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -446,7 +446,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=3.28s Real=5.22s Sys=0.09s
+  User=11.2s Real=30.6s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -455,20 +455,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 453.437 keV +- 100.099 keV
+ Total Energy deposited        = 448.512 keV +- 103.707 keV
 
- Track length of primary track = 887.803 um  +- 186.438 um 
+ Track length of primary track = 881.591 um  +- 190.229 um 
  Range from EmCalculator = 942.765 um  (from full dE/dx)
 
- Projected range               = 317.874 um  +- 203.163 um 
+ Projected range               = 326.122 um  +- 208.498 um 
 
- Nb of steps of primary track  = 21.37 +- 4.72	 Step size= 42.064 um  +- 7.244 um 
+ Nb of steps of primary track  = 77.76 +- 19.76	 Step size= 11.615 um  +- 2.281 um 
 
- absorbed = 80.12 %   transmit = 4.04 %   reflected = 15.85 %
+ absorbed = 77.73 %   transmit = 5.54 %   reflected = 16.73 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1798501481, 1870460303
+ Current couple of seeds = 5453438, 651300641
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

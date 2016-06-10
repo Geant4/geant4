@@ -11,38 +11,41 @@ namespace tools {
 
 enum what { leading, trailing, both };
 
-inline void strip(std::string& a_string,what a_type = both,char a_char = ' '){
+inline bool strip(std::string& a_string,what a_type = both,char a_char = ' '){
+  //return true = some stripping had been done.
+
   std::string::size_type l = a_string.length();
-  if(l==0) return;
+  if(l==0) return false;
 
   switch ( a_type ) {
   case leading:{
-    std::string::size_type i;
     char* pos = (char*)a_string.c_str();
-    for(i=0;i<l;i++,pos++) {
+    for(std::string::size_type i=0;i<l;i++,pos++) {
       if(*pos!=a_char) {
         a_string = a_string.substr(i,l-i);
-        return;
+        return (i?true:false); //i=0 : same string.
       }
     }
     }break;
   case trailing:{
-    std::string::size_type i;
     char* pos = (char*)a_string.c_str();
     pos += (l-1);
-    for(i=l-1;;i--,pos--) {
+    for(std::string::size_type i=l-1;;i--,pos--) {
       if(*pos!=a_char) {
         a_string = a_string.substr(0,i+1);
-        return;
+        return (i==(l-1)?false:true); //i==l-1 : same string.
       }
     }
     }break;
-  case both:
-    strip(a_string,leading,a_char);
-    strip(a_string,trailing,a_char);
-    break;
+  case both:{
+    bool stat_lead = strip(a_string,leading,a_char);
+    bool stat_trail = strip(a_string,trailing,a_char);
+    if(stat_lead) return true;
+    if(stat_trail) return true;
+    }break;
   //default:break;
   }
+  return false; //nothing done.
 }
 
 inline std::string strp(const std::string& a_string,what a_type = both,char a_char = ' '){
@@ -51,11 +54,13 @@ inline std::string strp(const std::string& a_string,what a_type = both,char a_ch
   return s;
 }
 
-inline void strip(std::vector<std::string>& a_strings,what a_type = both,char a_char = ' ') {
+inline bool strip(std::vector<std::string>& a_strings,what a_type = both,char a_char = ' ') {
+  bool some_done = false;
   std::vector<std::string>::iterator it;
   for(it=a_strings.begin();it!=a_strings.end();++it) {
-    strip(*it,a_type,a_char);
+    if(strip(*it,a_type,a_char)) some_done = true;
   }
+  return some_done;
 }
 
 }

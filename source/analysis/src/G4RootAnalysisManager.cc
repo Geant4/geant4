@@ -322,7 +322,7 @@ G4bool G4RootAnalysisManager::WriteOnAscii(std::ofstream& output)
     for (G4int j=0; j< G4int(h1->axis().bins()); ++j) {
        output << "  " << j << "\t" 
               << h1->axis().bin_center(j) << "\t"
-              << h1->bin_height(i) << G4endl;
+              << h1->bin_height(j) << G4endl;
     } 
   }
   

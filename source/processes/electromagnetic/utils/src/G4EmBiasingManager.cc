@@ -344,7 +344,7 @@ G4EmBiasingManager::ApplySecondaryBiasing(
 	if(safety > fSafetyMin) { ApplyRangeCut(vd, track, eloss, safety); }
 
 	// Russian Roulette
-      } if(1 == nsplit) { 
+      } else if(1 == nsplit) { 
 	weight = ApplyRussianRoulette(vd, index);
 
 	// Splitting

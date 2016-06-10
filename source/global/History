@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 10, 2014 G.Cosmo (global-V09-05-18)
+- Updated date for release 9.6.p03.
+
 April 30, 2013 V.Ivanchenko (global-V09-05-17)
 - G4Pow: fixed bug in interpolation inside logA() and A13() methods,
   now interpolation is accurate at better than per mille level; in worse

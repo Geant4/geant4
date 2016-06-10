@@ -193,7 +193,7 @@ Sphere_dimensionsWrite(xercesc::DOMElement* parametersElement,
    xercesc::DOMElement* sphere_dimensionsElement =
                         NewElement("sphere_dimensions");
    sphere_dimensionsElement->setAttributeNode(NewAttribute("rmin",
-                             sphere->GetInsideRadius()/mm));
+                             sphere->GetInnerRadius()/mm));
    sphere_dimensionsElement->setAttributeNode(NewAttribute("rmax",
                              sphere->GetOuterRadius()/mm));
    sphere_dimensionsElement->setAttributeNode(NewAttribute("startphi",

@@ -112,6 +112,8 @@
 // 20120321  M. Kelsey -- Add check in isProjectile() for single-zone case.
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+// 20130619  A. Ribon -- Fixed reproducibility problem in the method
+//              generateParticleFate
 
 #include <numeric>
 
@@ -820,6 +822,11 @@ generateParticleFate(G4CascadParticle& cparticle,
     outgoing_cparticles.push_back(cparticle);
     
     if (verboseLevel > 2) G4cout << " next zone \n" << cparticle << G4endl;
+
+    //A.R. 19-Jun-2013: Fixed rare cases of non-reproducibility.
+    current_nucl1 = 0;
+    current_nucl2 = 0;
+
   } else {			// there are possible interactions
     if (verboseLevel > 1)
       G4cout << " processing " << npart-1 << " possible interactions" << G4endl;

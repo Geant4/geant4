@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-Mar-2014, V.Ivanchenko               (phys-lists-V09-05-85)
+-  G4EmStandardPhysics_option3, G4EmStandardPhysics_option4,
+   G4EmLivermorePhysics, G4EmPenelopePhysics - use RangeFactor=0.01,
+     use G4UrbanMscModel96 
+
 19-Feb-2013, V.Ivanchenko               (phys-lists-V09-05-84)
 -  G4EmStandardPhysics_option4 - low limit increased from 10 eV to 100 eV
 

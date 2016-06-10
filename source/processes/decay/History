@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Jan. 04, 14 H.Kurashige (decay-V09-05-01)
+- Fix the bug of wrong global time for secondaries 
+  in case that the primary track stops during along step
+  (Bug #1551)
+
 - Jul. 5, 12 G.Cosmo (decay-V09-05-00)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

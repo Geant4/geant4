@@ -271,6 +271,7 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
   G4double aaa = log(vcut);
   G4double bbb = log(vmax);
   G4int    kkk = (G4int)((bbb-aaa)/ak1)+k2 ;
+  if(kkk < 1) { kkk = 1; }
   G4double hhh = (bbb-aaa)/G4double(kkk);
 
   G4double aa = aaa;

@@ -14,6 +14,36 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 January 2014 Vladimir Ivanchenko (hadr-deex-V09-05-15)
+----------------------------------------------------------
+- G4ExcitationHandler - fixed minor memory leak in the case when 
+    FermiBreakUp has no final states available (hadronprocess 
+    HyperNews post #1371 by Andreas Mueller)
+
+15 November 2013 Vladimir Ivanchenko
+----------------------------------------------------------
+- G4NeutronRadCapture - fixed run time memory leak, fixed time of 
+   reaction products
+
+21 October 2013 Gunter Folger
+----------------------------------------------------------
+-  fix trivial compilation issues detected on Visual C++ 18 
+    from Visual studio 12:
+	- fermi_breakup/src/G4FermiFragmentsPool.cc use G4endl to 
+	   end line
+	- photon_evaporation/src/{G4NuclearLevelManager,G4LevelReader}.cc
+	   check pointer !=0, and don't try to convert basic_istream to bool.
+		    
+22 April 2013 Vladimir Ivanchenko
+----------------------------------------------------------
+- G4ExcitationHandler - (J.M.Quesada) fixed typo in the 
+    SetMaxAForFermiBreakUp method
+
+12 February 2013 Vladimir Ivanchenko
+----------------------------------------------------------
+- G4ExcitationHandler - fixed typo in access method name: 
+    GetPhotonEvaporation instead of wrong SetPhotonEvaporation
+
 24 January 2013 Vladimir Ivanchenko (hadr-deex-V09-05-12)
 ----------------------------------------------------------
 - G4ExcitationHandler - if FermiBreakUp returns unchanged 

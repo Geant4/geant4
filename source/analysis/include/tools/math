@@ -22,7 +22,7 @@ inline double deg2rad() {return pi()/180.0;}
 
 template <class T>
 inline T power(const T& a_A,unsigned int a_B){
-  T v = 1;
+  T v = T(1);
   for(unsigned int i=0;i<a_B;i++) v *= a_A; 
   return v;
 }

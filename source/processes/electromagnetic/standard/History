@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 January 14: V.Ivanchenko (emstand-V09-05-70)
+- G4NuclearStopping - do not reset dynamic charge of an ion, because
+    G4ionIonisation process is responsible for that (fix for partially
+    charged ion beam)
+
+08 January 14: V.Ivanchenko
+- G4UrbanMscModel95, G4UrbanMscModel96 - (L.Urban) fixed bug in 
+  randomisation of 1st step in a volume (useDistanceToBoundary option)
+
 17 May 13: V.Ivanchenko (emstand-V09-05-69)
 - Removed wrong printout in G4UrbanMscModel96 constructor.
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4IonisParamMat.cc 79603 2014-03-07 17:27:49Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -253,15 +253,25 @@ void G4IonisParamMat::ComputeDensityEffect()
     //
     if (State == kStateGas) { 
 
-      const G4double ClimiG[] = { 10. , 10.5 , 11. , 11.5 , 12.25 , 13.804};
-      const G4double X0valG[] = { 1.6 , 1.7 ,  1.8 ,  1.9 , 2.0   ,  2.0 };
-      const G4double X1valG[] = { 4.0 , 4.0 ,  4.0 ,  4.0 , 4.0   ,  5.0 };
+      fMdensity = 3.;
+      fX1density = 4.0;
+      //static const G4double ClimiG[] = { 10. , 10.5 , 11. , 11.5 , 12.25, 13.804};
+      //static const G4double X0valG[] = { 1.6 , 1.7 ,  1.8 ,  1.9 , 2.0,  2.0 };
+      //static const G4double X1valG[] = { 4.0 , 4.0 ,  4.0 ,  4.0 , 4.0,  5.0 };
 
-      icase = 5;
-      fX0density = 0.326*fCdensity-2.5 ; fX1density = 5.0 ; fMdensity = 3. ; 
-      while((icase > 0)&&(fCdensity < ClimiG[icase])) { icase-- ; }
-      fX0density = X0valG[icase]; fX1density = X1valG[icase];
-      
+      if(fCdensity < 10.) {
+	fX0density = 1.6; 
+      } else if(fCdensity < 11.5) { 
+	fX0density = 1.6 + 0.2*(fCdensity - 10.); 
+      } else if(fCdensity < 12.25) { 
+	fX0density = 1.9 + (fCdensity - 11.5)/7.5; 
+      } else if(fCdensity < 13.804) { 
+	fX0density = 2.0; 
+	fX1density = 4.0 + (fCdensity - 12.25)/1.554;
+      } else {
+	fX0density = 0.326*fCdensity-2.5; fX1density = 5.0; 
+      }
+
       //special: Hydrogen
       if (1 == nelm && 1 == Z0) {
          fX0density = 1.837; fX1density = 3.0; fMdensity = 4.754;

@@ -112,11 +112,11 @@ class G4PomeronCrossSection
         void InitForGamma();
 	
 	G4double Expand(G4double z);
-	inline G4double Z(const G4double Scms);
-	inline G4double SigP(const G4double Scms);
-	inline G4double Power(const G4double Scms);
-        inline G4double Lambda(const G4double s);
-        inline G4double Eikonal(const G4double s,const G4double impactsquare);
+	G4double Z(const G4double Scms);
+	G4double SigP(const G4double Scms);
+	G4double Power(const G4double Scms);
+        G4double Lambda(const G4double s);
+        G4double Eikonal(const G4double s,const G4double impactsquare);
         
 	G4double pomeron_Alpha;
         G4double pomeron_Alpha_Hard;

@@ -80,7 +80,26 @@ public: //ifile
   }
 
   virtual seek END() const {return m_END;}
-  virtual void set_END(seek a_end){m_END = a_end;}
+
+  virtual void set_END(seek a_end){
+    m_END = a_end;
+
+    if(m_free_segs.empty()) {
+      m_out << "inlib::wroot::file::set_END :"
+            << " free_seg list should not be empty here."
+            << std::endl;
+    } else {
+      free_seg* end_seg = m_free_segs.back();
+      if(end_seg->last()!=START_BIG_FILE()) {
+        m_out << "inlib::wroot::file::set_END :"
+              << " last free_seg is not the ending of file one."
+              << " free_seg list looks corrupted."
+              << std::endl;
+      } else {
+        m_free_segs.back()->set_first(m_END);
+      }
+    }
+  }
 
   virtual bool write_buffer(const char* a_buffer,uint32 a_length) {
     // Write a buffer to the file. This is the basic low level write operation.
@@ -578,10 +597,21 @@ protected:
     //  are overwritten by GAPSIZE where
     //    GAPSIZE = -(Number of bytes occupied by the record).
 
-    if(m_free_segs.empty()) return false; //FIXME : is the return value ok ?
-    free_seg* newfree = new free_seg(m_out,a_first,a_last);
-    if(!newfree) return false;
-    m_free_segs.insert(m_free_segs.begin(),newfree);
+    if(m_free_segs.empty()) {
+      m_out << "inlib::wroot::file::make_free_seg :" 
+            << " free_seg list should not be empty here."
+            << std::endl;
+      return false;
+    }
+
+    free_seg* newfree = add_free(m_free_segs,a_first,a_last);
+    if(!newfree) {
+      m_out << "inlib::wroot::file::make_free_seg :" 
+            << " add_free failed."
+            << std::endl;
+      return false;
+    }
+
     seek nfirst = newfree->first();
     seek nlast = newfree->last();
 

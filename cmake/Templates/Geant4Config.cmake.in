@@ -262,11 +262,23 @@ endif()
 
 # - Qt (UI and Vis!)
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
+set(Geant4_USES_QT5 @Qt5Core_FOUND@)
 if(Geant4_qt_FOUND)
   if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR
       Geant4_FIND_REQUIRED_vis_all)
-    list(APPEND 
-      Geant4_DEFINITIONS 
+    # If we have Qt5, we need to refind the components because they use
+    # imported targets, so linking will not work unless we recreate
+    # them
+    if(Geant4_USES_QT5)
+      find_package(Qt5Core REQUIRED PATHS "@Qt5Core_DIR@")
+      find_package(Qt5Gui REQUIRED PATHS "@Qt5Gui_DIR@")
+      find_package(Qt5Widgets REQUIRED PATHS "@Qt5Widgets_DIR@")
+      find_package(Qt5OpenGL REQUIRED PATHS "@Qt5OpenGL_DIR@")
+      find_package(Qt5PrintSupport REQUIRED PATHS "@Qt5PrintSupport_DIR@")
+    endif()
+
+    list(APPEND
+      Geant4_DEFINITIONS
       -DG4INTY_USE_QT
       -DG4UI_USE_QT
       -DG4VIS_USE_OPENGLQT

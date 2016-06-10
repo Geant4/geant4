@@ -236,12 +236,12 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   QHBoxLayout *buttonBoxLayout = new QHBoxLayout(buttonBox);
 
   buttonOk = new QPushButton( tr( "&OK" ),buttonBox );
-  buttonOk->setAutoDefault( TRUE );
-  buttonOk->setDefault( TRUE );
+  buttonOk->setAutoDefault( true );
+  buttonOk->setDefault( true );
   buttonBoxLayout->addWidget(buttonOk);
 
   buttonCancel = new QPushButton( tr( "&Cancel" ),buttonBox );
-  buttonCancel->setAutoDefault( TRUE );
+  buttonCancel->setAutoDefault( true );
   buttonBoxLayout->addWidget(buttonCancel);
 
   buttonBox->setLayout(buttonBoxLayout);

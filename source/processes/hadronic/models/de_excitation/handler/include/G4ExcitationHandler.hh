@@ -95,7 +95,7 @@ public:
   inline G4VEvaporation* GetEvaporation();
   inline G4VMultiFragmentation* GetMultiFragmentation();
   inline G4VFermiBreakUp* GetFermiModel();
-  inline G4VEvaporationChannel* SetPhotonEvaporation();
+  inline G4VEvaporationChannel* GetPhotonEvaporation();
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt);
@@ -144,7 +144,7 @@ inline G4VFermiBreakUp* G4ExcitationHandler::GetFermiModel()
   return theFermiModel;
 }
 
-inline G4VEvaporationChannel* G4ExcitationHandler::SetPhotonEvaporation()
+inline G4VEvaporationChannel* G4ExcitationHandler::GetPhotonEvaporation()
 {
   return thePhotonEvaporation;
 }

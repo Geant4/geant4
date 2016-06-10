@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 22 Feb. 2014 H.Kurashige (particles-V09-05-09)
+- Fixed wrong properties for heavy anti-baryons 
+  (G4AntiLambdacPlus, G4AntiLambdab, G4AntiSigmabZero).
+  Addressing problem report #1571.
+
 - 24 Feb. 2013 H.Kurashige (particles-V09-05-08)
 - Remove unused variable of thePDGiSpin from G4PDGCodeChecker
 

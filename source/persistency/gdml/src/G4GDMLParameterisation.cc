@@ -109,7 +109,7 @@ ComputeDimensions(G4Cons& cons,const G4int index,const G4VPhysicalVolume*) const
 void G4GDMLParameterisation::
 ComputeDimensions(G4Sphere& sphere,const G4int index,const G4VPhysicalVolume*) const
 {
-   sphere.SetInsideRadius(parameterList[index].dimension[0]);
+   sphere.SetInnerRadius(parameterList[index].dimension[0]);
    sphere.SetOuterRadius(parameterList[index].dimension[1]);
    sphere.SetStartPhiAngle(parameterList[index].dimension[2]);
    sphere.SetDeltaPhiAngle(parameterList[index].dimension[3]);

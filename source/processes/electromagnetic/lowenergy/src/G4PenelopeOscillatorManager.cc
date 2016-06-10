@@ -701,7 +701,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   if (helper->size() > 1)
     {
       G4double TST = totalZ*std::log(meanExcitationEnergy/eV);
-      G4double AALow = 0.5;
+      G4double AALow = 0.1;
       G4double AAHigh = 10.;
       do
 	{

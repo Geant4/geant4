@@ -83,8 +83,41 @@ if(GEANT4_USE_QT)
     set(QT_USE_IMPORTED_TARGETS ON)
   endif()
 
-  find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  find_package(Qt5Core QUIET)
+  find_package(Qt5Gui QUIET)
+  find_package(Qt5Widgets QUIET)
+  find_package(Qt5OpenGL QUIET)
+  find_package(Qt5PrintSupport QUIET)
+
+  if(Qt5Core_FOUND
+      AND Qt5Gui_FOUND
+      AND Qt5Widgets_FOUND
+      AND Qt5OpenGL_FOUND
+      AND Qt5PrintSupport_FOUND)
+    # Compatibility
+    macro(qt4_wrap_cpp)
+      qt5_wrap_cpp(${ARGN})
+    endmacro()
+    set(Qt5_USE_FILE_IN "${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4UseQt5.cmake.in")
+    set(QT_USE_FILE "${PROJECT_BINARY_DIR}/Geant4UseQt5.cmake")
+    configure_file("${Qt5_USE_FILE_IN}" "${QT_USE_FILE}" @ONLY)
+    get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
+    set(G4QTLIBLIST "-lQt5PrintSupport -lQt5Widgets -lQt5Gui -lQt5Core")
+    set(G4GLQTLIBLIST "-lQt5OpenGL ${G4QTLIBLIST}")
+  else()
+    unset(Qt5Core_DIR CACHE)
+    unset(Qt5Gui_DIR CACHE)
+    unset(Qt5Widgets_DIR CACHE)
+    unset(Qt5OpenGL_DIR CACHE)
+    unset(Qt5PrintSupport_DIR CACHE)
+    find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  endif()
+
   find_package(OpenGL REQUIRED)
+
+  # Variables for export
+  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PREFIX OUTPUT_VARIABLE G4QTHOME OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_LIBS OUTPUT_VARIABLE G4QTLIBPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   # OpenGL part of Qt is in OpenGL component so mark the need to
   # add OpenGL.
@@ -148,6 +181,7 @@ if(UNIX)
         /usr/openwin/include 
         /usr/openwin/share/include 
         /opt/graphics/OpenGL/include
+        /opt/X11/include
         )
 
     set(X11_LIB_SEARCH_PATH
@@ -155,11 +189,12 @@ if(UNIX)
         /usr/X11R6/lib
         /usr/X11R7/lib
         /usr/openwin/lib 
+        /opt/X11/lib
         )
 
     find_path(X11_Xmu_INCLUDE_PATH X11/Xmu/Xmu.h ${X11_INC_SEARCH_PATH})
     find_library(X11_Xmu_LIBRARY Xmu ${X11_SEARCH_PATH})
-    if(X11_Xmu_LIBRARY-NOTFOUND OR X11_Xmu_INCLUDE_PATH-NOTFOUND)
+    if(NOT X11_Xmu_LIBRARY OR NOT X11_Xmu_INCLUDE_PATH)
       message(FATAL_ERROR "could not find X11 Xmu library and/or headers")
     endif()
 
@@ -197,17 +232,17 @@ if(UNIX)
       set(CMAKE_FIND_FRAMEWORK NEVER)
 
       find_path(OPENGL_X11_INCLUDE_DIR GL/gl.h
-        PATHS /usr/X11R6/include
+        PATHS /usr/X11R6/include /opt/X11/include
         NO_DEFAULT_PATH
         )
 
       find_library(OPENGL_X11_gl_LIBRARY GL
-        PATHS /usr/X11R6/lib
+        PATHS /usr/X11R6/lib /opt/X11/lib
         NO_DEFAULT_PATH
         )
 
       find_library(OPENGL_X11_glu_LIBRARY GLU
-        PATHS /usr/X11R6/lib
+        PATHS /usr/X11R6/lib /opt/X11/lib
         NO_DEFAULT_PATH
         )
 

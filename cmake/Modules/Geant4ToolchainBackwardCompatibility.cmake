@@ -362,6 +362,16 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
 
   # - Qt UI AND VIS
   if(GEANT4_USE_QT)
+    _g4tc_setenv_command(GEANT4_TC_QTHOME ${SHELL_FAMILY} QTHOME ${G4QTHOME})
+    _g4tc_setenv_command(GEANT4_TC_QTLIBPATH ${SHELL_FAMILY} QTLIBPATH ${G4QTLIBPATH})
+    if(QT4_FOUND)
+      set(GEANT4_TC_QTLIBS "#Geant4Make automatically handles QTLIBS for Qt4")
+      set(GEANT4_TC_GLQTLIBS "#Geant4Make automatically handles GLQTLIBS for Qt4")
+    else()
+      _g4tc_setenv_command(GEANT4_TC_QTLIBS ${SHELL_FAMILY} QTLIBS "\"-L${G4QTLIBPATH} ${G4QTLIBLIST}\"")
+      _g4tc_setenv_command(GEANT4_TC_GLQTLIBS ${SHELL_FAMILY} GLQTLIBS "\"-L${G4QTLIBPATH} ${G4GLQTLIBLIST}\"")
+    endif()
+
     _g4tc_setenv_command(GEANT4_TC_G4UI_USE_QT ${SHELL_FAMILY} G4UI_USE_QT 1)
     _g4tc_setenv_command(GEANT4_TC_G4VIS_USE_OPENGLQT ${SHELL_FAMILY} G4VIS_USE_OPENGLQT 1)
 

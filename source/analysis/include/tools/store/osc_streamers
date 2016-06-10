@@ -1,0 +1,881 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_store_osc_streamers
+#define tools_store_osc_streamers
+
+#include "iobj_const_visitor"
+#include "iobj_visitor"
+
+#include "../histo/h1d"
+#include "../histo/h2d"
+#include "../histo/h3d"
+#include "../histo/p1d"
+#include "../histo/p2d"
+#include "../vmanip"
+#include "../sto"
+#include "../S_STRING"
+#include "../scast"
+
+namespace tools {
+namespace osc {
+
+inline const std::string& s_axis() {
+  static const std::string s_v("BatchLab::Axis");
+  return s_v;
+}
+inline const std::string& s_annotation() {
+  static const std::string s_v("BatchLab::Annotation");
+  return s_v;
+}
+inline const std::string& s_base_histogram() {
+  static const std::string s_v("BatchLab::BaseHistogram");
+  return s_v;
+}
+inline const std::string& s_item() {
+  static const std::string s_v("BatchLab::Item");
+  return s_v;
+}
+
+inline const std::string& s_h1d() {
+  static const std::string s_v("BatchLab::Histogram1D");
+  return s_v;
+}
+
+inline const std::string& s_h2d() {
+  static const std::string s_v("BatchLab::Histogram2D");
+  return s_v;
+}
+
+inline const std::string& s_h3d() {
+  static const std::string s_v("BatchLab::Histogram3D");
+  return s_v;
+}
+
+inline const std::string& s_p1d() {
+  static const std::string s_v("BatchLab::Profile1D");
+  return s_v;
+}
+
+inline const std::string& s_p2d() {
+  static const std::string s_v("BatchLab::Profile2D");
+  return s_v;
+}
+
+class Axis : public virtual istorable {
+public:
+  TOOLS_SCLASS(tools::osc::Axis)
+protected:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = tools::cmp_cast<Axis>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& store_cls() const {return s_axis();}
+  virtual bool visit(iobj_const_visitor& a_v) const {
+    if(!a_v.begin(*this,s_axis(),Axis::s_visit)) return false;
+
+    int version = 1;
+    if(!a_v.visit("fVersion",version)) return false;
+
+    if(!a_v.visit("fOffset",m_axis.m_offset)) return false;
+    if(!a_v.visit("fNumberOfBins",(int)m_axis.m_number_of_bins)) return false;
+    if(!a_v.visit("fMinimumValue",m_axis.m_minimum_value)) return false;
+    if(!a_v.visit("fMaximumValue",m_axis.m_maximum_value)) return false;
+    if(!a_v.visit("fFixed",m_axis.m_fixed)) return false;
+    if(!a_v.visit("fBinWidth",m_axis.m_bin_width)) return false;
+    if(!a_v.visit("fEdges",m_axis.m_edges)) return false;
+
+    if(!a_v.end(*this)) return false;
+    return true;
+  }
+  static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
+    const Axis* local = tools::safe_cast<istorable,Axis>(a_o);
+    if(!local) return false;
+    return local->Axis::visit(a_v); //IMPORTANT : have Axis::
+  }
+public:
+  Axis(const histo::axis<double>& a_axis):m_axis(a_axis){}
+  virtual ~Axis(){}
+private:
+  Axis(const Axis& a_from):istorable(a_from),m_axis(a_from.m_axis){}
+  Axis& operator=(const Axis&){return *this;}
+protected:
+  const histo::axis<double>& m_axis;
+};
+
+
+inline bool Axis_read(iobj_visitor& a_visitor,
+                      histo::axis<double>& a_axis){
+  //if(!a_visitor.begin(*this)) return false;
+
+  int version;
+  if(!a_visitor.visit(version)) return false;
+
+  if(!a_visitor.visit(a_axis.m_offset)) return false;
+
+ {int nbin;
+  if(!a_visitor.visit(nbin)) return false;
+  a_axis.m_number_of_bins = nbin;}
+
+  if(!a_visitor.visit(a_axis.m_minimum_value)) return false;
+  if(!a_visitor.visit(a_axis.m_maximum_value)) return false;
+  if(!a_visitor.visit(a_axis.m_fixed)) return false;
+  if(!a_visitor.visit(a_axis.m_bin_width)) return false;
+  if(!a_visitor.visit(a_axis.m_edges)) return false;
+
+  //if(!a_visitor.end(*this)) return false;
+  return true;
+}
+
+class Item : public virtual istorable {
+public:
+  TOOLS_SCLASS(tools::osc::Item)
+protected:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = tools::cmp_cast<Item>(this,a_class)) return p;
+    return 0;
+  }
+public:
+  virtual const std::string& store_cls() const {return s_item();}
+  virtual bool visit(iobj_const_visitor& a_visitor) const {
+    if(!a_visitor.begin(*this,s_item(),Item::s_visit)) return false;
+  
+    int version = 1;
+    if(!a_visitor.visit("fVersion",version)) return false;
+  
+    if(!a_visitor.visit("fKey",fKey)) return false;
+    if(!a_visitor.visit("fValue",fValue)) return false;
+    if(!a_visitor.visit("fSticky",fSticky)) return false;
+  
+    if(!a_visitor.end(*this)) return false;
+    return true;
+  }
+  static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
+    const Item* local = tools::safe_cast<istorable,Item>(a_o);
+    if(!local) return false;
+    return local->Item::visit(a_v); //IMPORTANT : have Item::
+  }
+public:
+  virtual bool read(iobj_visitor& a_visitor) {
+    //if(!a_visitor.begin(*this)) return false;
+  
+    int version;
+    if(!a_visitor.visit(version)) return false;
+  
+    if(!a_visitor.visit(fKey)) return false;
+    if(!a_visitor.visit(fValue)) return false;
+    if(!a_visitor.visit(fSticky)) return false;
+  
+    //if(!a_visitor.end(*this)) return false;
+    return true;
+  }
+public:
+  Item(){}
+  Item(const std::string& aKey,const std::string& aValue,bool aSticky)
+  :fKey(aKey),fValue(aValue),fSticky(aSticky){}
+  virtual ~Item(){}
+public:
+  Item(const Item& aFrom)
+  :istorable(aFrom)
+  ,fKey(aFrom.fKey)
+  ,fValue(aFrom.fValue)
+  ,fSticky(aFrom.fSticky)
+  {}
+  Item& operator=(const Item& aFrom) {
+    fKey = aFrom.fKey;
+    fValue = aFrom.fValue;
+    fSticky = aFrom.fSticky;
+    return *this;
+  }
+public:
+  std::string fKey;
+  std::string fValue;
+  bool fSticky;
+};
+
+
+template <class T>
+class Vector : public virtual istorable {
+public:
+  TOOLS_T_SCLASS(T,tools::osc::Vector)
+protected:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = tools::cmp_cast<Vector>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("BatchLab::Vector<"+m_T+">");
+    return s_v;
+  }
+  virtual bool visit(iobj_const_visitor& a_v) const {
+    if(!a_v.begin
+           (*this,Vector<T>::store_cls(),Vector<T>::s_visit)) return false;
+
+    int version = 1;
+    if(!a_v.visit("fVersion",version)) return false;
+
+    unsigned int number = m_vec.size();
+    if(!a_v.visit("fSize",number)) return false;
+
+    for(unsigned int index=0;index<number;index++) {
+      const T& elem = m_vec[index];
+      if(!a_v.visit(to<int>(index),elem)) return false;
+    }
+
+    if(!a_v.end(*this)) return false;
+    return true;
+  }
+  static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
+    const Vector* local = tools::safe_cast<istorable,Vector>(a_o);
+    if(!local) return false;
+    return local->Vector<T>::visit(a_v); //IMPORTANT : have Vector::
+  }
+public:
+  Vector(const std::vector<T>& a_vec,const std::string& a_T)
+  :m_vec(a_vec),m_T(a_T){}
+  virtual ~Vector(){}
+private:
+  Vector(const Vector& a_from)
+  :istorable(a_from),m_vec(a_from.m_vec),m_T(a_from.m_T){}
+  Vector& operator=(const Vector&){return *this;}
+protected:
+  const std::vector<T>& m_vec;
+  std::string m_T;
+};
+
+
+template <class T>
+inline bool std_vector_read(iobj_visitor& a_visitor,
+                            std::vector<T>& a_vec) {
+  a_vec.clear();
+    
+  //if(!a_visitor.begin(*this)) return false;
+
+  int version;
+  if(!a_visitor.visit(version)) return false;
+
+  unsigned int number;
+  if(!a_visitor.visit(number)) return false;
+
+  a_vec.resize(number);
+  for(unsigned int index=0;index<number;index++) {
+    T& elem = a_vec[index];
+    if(!elem.read(a_visitor)) return false;
+  }
+
+  //if(!a_visitor.end(*this)) return false;
+  return true;
+}
+
+class Annotation : public virtual istorable {
+public:
+  TOOLS_SCLASS(tools::osc::Annotation)
+protected:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = tools::cmp_cast<Annotation>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& store_cls() const {return s_annotation();}
+  virtual bool visit(iobj_const_visitor& a_v) const {
+    if(!a_v.begin(*this,s_annotation(),Annotation::s_visit)) return false;
+
+    int version = 1;
+    if(!a_v.visit("fVersion",version)) return false;  
+
+    Vector<Item> v(m_items,s_item());
+    if(!a_v.visit("fItems",v)) return false;  
+
+    if(!a_v.end(*this)) return false;
+    return true;
+  }
+  static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
+    const Annotation* local = tools::safe_cast<istorable,Annotation>(a_o);
+    if(!local) return false;
+    return local->Annotation::visit(a_v); //IMPORTANT : have Annotation::
+  }
+public:
+  Annotation(){}
+  virtual ~Annotation(){}
+private:
+  Annotation(const Annotation& a_from):istorable(a_from){}
+  Annotation& operator=(const Annotation&){return *this;}
+public:
+  std::vector<Item> m_items;
+};
+
+inline bool Annotation_read(iobj_visitor& a_visitor) {
+  //if(!a_visitor.begin(*this)) return false;
+  int version;
+  if(!a_visitor.visit(version)) return false;  
+  std::vector<Item> fItems;
+  if(!std_vector_read<Item>(a_visitor,fItems)) return false;  
+  //if(!a_visitor.end(*this)) return false;
+  return true;
+}
+
+inline void map2vec(const std::map<std::string,std::string>& a_in,
+                    std::vector<Item>& a_out) {
+  a_out.clear();
+  std::map<std::string,std::string>::const_iterator it;
+  for(it=a_in.begin();it!=a_in.end();++it) {
+    a_out.push_back(Item((*it).first,(*it).second,false));
+  }
+}
+
+typedef histo::histo_data<double,unsigned int,double> hd_data;
+
+class BaseHistogram : public virtual istorable {
+public:
+  TOOLS_SCLASS(tools::osc::BaseHistogram)
+protected:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = tools::cmp_cast<BaseHistogram>(this,a_class)) return p;
+    return 0;
+  }
+public:
+  virtual const std::string& store_cls() const {return s_base_histogram();}
+  virtual bool visit(iobj_const_visitor& a_v) const {
+    if(!a_v.begin
+      (*this,s_base_histogram(),BaseHistogram::s_visit)) return false;
+
+    int version = 1;
+    if(!a_v.visit("fVersion",version)) return false;
+
+    Annotation ano;
+    map2vec(m_data.m_annotations,ano.m_items);
+    if(!a_v.visit("fAnnotation",ano)) return false;
+
+    if(!a_v.end(*this)) return false;
+    return true;
+  }
+protected:
+  static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
+    const BaseHistogram* local =
+      tools::safe_cast<istorable,BaseHistogram>(a_o);
+    if(!local) return false;
+    return local->BaseHistogram::visit(a_v); //IMPORTANT : have BaseHistogram::
+  }
+public:
+  BaseHistogram(const hd_data& a_data):m_data(a_data){}
+  virtual ~BaseHistogram(){}
+private:
+  BaseHistogram(const BaseHistogram& a_from)
+  :istorable(a_from),m_data(a_from.m_data)
+  {}
+  BaseHistogram& operator=(const BaseHistogram&){return *this;}
+protected:
+  const hd_data& m_data;
+};
+
+inline bool BaseHistogram_read(iobj_visitor& a_visitor){
+  //if(!a_visitor.begin(*this)) return false;
+
+  int version;
+  if(!a_visitor.visit(version)) return false;
+
+  if(!Annotation_read(a_visitor)) return false;
+
+  //if(!a_visitor.end(*this)) return false;
+  return true;
+}
+
+inline bool visitHistogram(const hd_data& aData,
+                           iobj_const_visitor& a_visitor){
+  if(!a_visitor.visit("fTitle",aData.m_title)) return false;
+  if(!a_visitor.visit("fDimension",(int)aData.m_dimension)) return false;
+  if(!a_visitor.visit("fBinNumber",(int)aData.m_bin_number)) return false;
+
+  if(!a_visitor.visit("fBinEntries",
+    convert<unsigned int,int>(aData.m_bin_entries))) return false;
+
+  if(!a_visitor.visit("fBinSw",aData.m_bin_Sw)) return false;
+  if(!a_visitor.visit("fBinSw2",aData.m_bin_Sw2)) return false;
+  if(!a_visitor.visit("fBinSxw",aData.m_bin_Sxw)) return false;
+  if(!a_visitor.visit("fBinSx2w",aData.m_bin_Sx2w)) return false;
+ {for(unsigned int iaxis=0;iaxis<aData.m_dimension;iaxis++) {
+    std::string name = "fAxes_" + to<int>(iaxis);   
+    Axis axis(aData.m_axes[iaxis]);
+    if(!a_visitor.visit(name,axis)) return false;
+  }}
+ {int dummy = 0;
+  if(!a_visitor.visit("fMode",dummy)) return false;} //m_mode
+  if(!a_visitor.visit("fProfile",false)) return false;
+ {std::vector<double> dummy;
+  if(!a_visitor.visit("fBinSvw",dummy)) return false;
+  if(!a_visitor.visit("fBinSv2w",dummy)) return false;}
+  if(!a_visitor.visit("fCutV",false)) return false;
+ {double dummy = 0;
+  if(!a_visitor.visit("fMinV",dummy)) return false;
+  if(!a_visitor.visit("fMaxV",dummy)) return false;}
+  // Not written :
+  //aData.fDoubles
+  //aData.fInts
+  return true;
+}
+
+inline bool readHistogram(hd_data& aData,iobj_visitor& a_visitor){
+  if(!a_visitor.visit(aData.m_title)) return false;
+ {int dim;
+  if(!a_visitor.visit(dim)) return false;
+  aData.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_visitor.visit(nbin)) return false;
+  aData.m_bin_number = nbin;}
+
+ {std::vector<int> vec;
+  if(!a_visitor.visit(vec)) return false;
+  aData.m_bin_entries = convert<int,unsigned int>(vec);}
+
+  if(!a_visitor.visit(aData.m_bin_Sw)) return false;
+  if(!a_visitor.visit(aData.m_bin_Sw2)) return false;
+  if(!a_visitor.visit(aData.m_bin_Sxw)) return false;
+  if(!a_visitor.visit(aData.m_bin_Sx2w)) return false;
+  aData.m_axes.clear();
+  for(unsigned int iaxis=0;iaxis<aData.m_dimension;iaxis++) {
+    histo::axis<double> baxis;
+    if(!Axis_read(a_visitor,baxis)) return false;
+    aData.m_axes.push_back(baxis);
+  }
+ {int dummy;
+  if(!a_visitor.visit(dummy)) return false;} //m_mode
+
+ {bool dummy;
+  if(!a_visitor.visit(dummy)) return false;} //m_is_profile
+
+ {std::vector<double> dummy;
+  if(!a_visitor.visit(dummy)) return false;} //m_bin_Svw
+
+ {std::vector<double> dummy;
+  if(!a_visitor.visit(dummy)) return false;} //m_bin_Sv2w
+
+ {bool dummy;
+  if(!a_visitor.visit(dummy)) return false;} //m_cut_v
+
+ {double dummy;
+  if(!a_visitor.visit(dummy)) return false;} //aData.m_min_v
+
+ {double dummy;
+  if(!a_visitor.visit(dummy)) return false;} //aData.m_max_v
+
+  //aData.fDoubles
+  //aData.fInts
+  //aData.m_coords.resize(aData.m_dimension,0);
+  //aData.m_ints.resize(aData.m_dimension,0);
+
+  return true;
+}
+
+
+class Histogram : public virtual istorable {
+public:
+  TOOLS_SCLASS(tools::osc::Histogram)
+protected:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = tools::cmp_cast<Histogram>(this,a_class)) return p;
+    return 0;
+  }
+public:
+  virtual const std::string& store_cls() const {return m_cls;}
+  virtual bool visit(iobj_const_visitor& a_v) const {
+    if(!a_v.begin(*this,m_cls,Histogram::s_visit)) return false;
+
+    int version = 1;
+    if(!a_v.visit("fVersion",version)) return false;
+
+    BaseHistogram bh(m_data);
+    if(!bh.visit(a_v)) return false;
+
+    if(!visitHistogram(m_data,a_v)) return false;
+
+    if(!a_v.end(*this)) return false;
+    return true;
+  }
+protected:
+  static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
+    const Histogram* local = tools::safe_cast<istorable,Histogram>(a_o);
+    if(!local) return false;
+    return local->Histogram::visit(a_v); //IMPORTANT : have Histogram::
+  }
+public:
+  Histogram(const hd_data& a_data,const std::string& a_cls)
+  :m_data(a_data),m_cls(a_cls){}
+  virtual ~Histogram(){}
+public:
+  Histogram(const Histogram& a_from)
+  :istorable(a_from)
+  ,m_data(a_from.m_data)
+  ,m_cls(a_from.m_cls)
+  {}
+  Histogram& operator=(const Histogram& a_from){
+    m_cls = a_from.m_cls;
+    return *this;
+  }
+protected:
+  const hd_data& m_data;
+  std::string m_cls;
+};
+
+inline bool visit(iobj_const_visitor& a_v,const histo::h1d& a_histo) {
+  hd_data d = a_histo.get_histo_data();
+  Histogram h(d,s_h1d());
+  return h.visit(a_v);
+}
+
+inline bool read(iobj_visitor& a_visitor,histo::h1d& a_histo){
+  //if(!a_visitor.begin(*this)) return false;
+
+  int version;
+  if(!a_visitor.visit(version)) return false;
+
+  if(version!=1) {
+    //this may come from an unexpected byteswap.
+    a_visitor.out() << "tools::osc::read :"
+                    << " unexpected version " << version
+                    << std::endl;
+    return false;
+  }
+
+  if(!BaseHistogram_read(a_visitor)) return false;
+
+  hd_data hdata;
+  if(!readHistogram(hdata,a_visitor)) return false;
+
+  a_histo.copy_from_data(hdata);
+
+  //fAxis.copy(fHistogram.get_axis(0));
+
+  //if(!a_visitor.end(*this)) return false;
+
+  a_histo.update_fast_getters();
+
+  return true;
+}
+
+inline bool visit(iobj_const_visitor& a_v,const histo::h2d& a_histo) {
+  hd_data d = a_histo.get_histo_data();
+  Histogram h(d,s_h2d());
+  return h.visit(a_v);
+}
+
+inline bool read(iobj_visitor& a_visitor,histo::h2d& a_histo){
+  //if(!a_visitor.begin(*this)) return false;
+
+  int version;
+  if(!a_visitor.visit(version)) return false;
+
+  if(version!=1) {
+    //this may come from an unexpected byteswap.
+    a_visitor.out() << "tools::osc::read :"
+                    << " unexpected version " << version
+                    << std::endl;
+    return false;
+  }
+
+  if(!BaseHistogram_read(a_visitor)) return false;
+
+  hd_data hdata;
+  if(!readHistogram(hdata,a_visitor)) return false;
+  a_histo.copy_from_data(hdata);
+
+  //fAxisX.copy(fHistogram.get_axis(0));
+  //fAxisY.copy(fHistogram.get_axis(1));
+
+  //if(!a_visitor.end(*this)) return false;
+
+  a_histo.update_fast_getters();
+
+  return true;
+}
+
+inline bool visit(iobj_const_visitor& a_v,const histo::h3d& a_histo) {
+  hd_data d = a_histo.get_histo_data();
+  Histogram h(d,s_h3d());
+  return h.visit(a_v);
+}
+
+inline bool read(iobj_visitor& a_visitor,histo::h3d& a_histo){
+  //if(!a_visitor.begin(*this)) return false;
+
+  int version;
+  if(!a_visitor.visit(version)) return false;
+
+  if(version!=1) {
+    //this may come from an unexpected byteswap.
+    a_visitor.out() << "tools::osc::read :"
+                    << " unexpected version " << version
+                    << std::endl;
+    return false;
+  }
+
+  if(!BaseHistogram_read(a_visitor)) return false;
+
+  hd_data hdata;
+  if(!readHistogram(hdata,a_visitor)) return false;
+  a_histo.copy_from_data(hdata);
+
+  //fAxisX.copy(fHistogram.get_axis(0));
+  //fAxisY.copy(fHistogram.get_axis(1));
+  //fAxisZ.copy(fHistogram.get_axis(2));
+
+  //if(!a_visitor.end(*this)) return false;
+
+  a_histo.update_fast_getters();
+
+  return true;
+}
+
+typedef histo::profile_data<double,unsigned int,double,double> pd_data;
+
+inline bool visitProfile(const pd_data& aData,
+                         iobj_const_visitor& a_visitor){
+  if(!a_visitor.visit("fTitle",aData.m_title)) return false;
+  if(!a_visitor.visit("fDimension",(int)aData.m_dimension)) return false;
+  if(!a_visitor.visit("fBinNumber",(int)aData.m_bin_number)) return false;
+
+  if(!a_visitor.visit("fBinEntries",
+    convert<unsigned int,int>(aData.m_bin_entries))) return false;
+
+  if(!a_visitor.visit("fBinSw",aData.m_bin_Sw)) return false;
+  if(!a_visitor.visit("fBinSw2",aData.m_bin_Sw2)) return false;
+  if(!a_visitor.visit("fBinSxw",aData.m_bin_Sxw)) return false;
+  if(!a_visitor.visit("fBinSx2w",aData.m_bin_Sx2w)) return false;
+  for(unsigned int iaxis=0;iaxis<aData.m_dimension;iaxis++) {
+    std::string name = "fAxes_" + to<int>(iaxis);   
+    Axis axis(aData.m_axes[iaxis]);
+    if(!a_visitor.visit(name,axis)) return false;
+  }
+ {int dummy = 0;
+  if(!a_visitor.visit("fMode",dummy)) return false;} //m_mode
+  if(!a_visitor.visit("fProfile",true)) return false;
+  if(!a_visitor.visit("fBinSvw",aData.m_bin_Svw)) return false;
+  if(!a_visitor.visit("fBinSv2w",aData.m_bin_Sv2w)) return false;
+  if(!a_visitor.visit("fCutV",aData.m_cut_v)) return false;
+  if(!a_visitor.visit("fMinV",aData.m_min_v)) return false;
+  if(!a_visitor.visit("fMaxV",aData.m_max_v)) return false;
+  // Not written :
+  //aData.fDoubles
+  //aData.fInts
+  return true;
+}
+
+class Profile : public virtual istorable {
+public:
+  TOOLS_SCLASS(tools::osc::Profile)
+protected:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = tools::cmp_cast<Profile>(this,a_class)) return p;
+    return 0;
+  }
+public:
+  virtual const std::string& store_cls() const {return m_cls;}
+  virtual bool visit(iobj_const_visitor& a_v) const {
+    if(!a_v.begin(*this,m_cls,Profile::s_visit)) return false;
+
+    int version = 1;
+    if(!a_v.visit("fVersion",version)) return false;
+
+    BaseHistogram bh(m_data);
+    if(!bh.visit(a_v)) return false;
+
+    if(!visitProfile(m_data,a_v)) return false;
+
+    if(!a_v.end(*this)) return false;
+    return true;
+  }
+protected:
+  static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
+    const Profile* local = tools::safe_cast<istorable,Profile>(a_o);
+    if(!local) return false;
+    return local->Profile::visit(a_v); //IMPORTANT : have Profile::
+  }
+public:
+  Profile(const pd_data& a_data,const std::string& a_cls)
+  :m_data(a_data),m_cls(a_cls){}
+  virtual ~Profile(){}
+public:
+  Profile(const Profile& a_from)
+  :istorable(a_from)
+  ,m_data(a_from.m_data)
+  ,m_cls(a_from.m_cls)
+  {}
+  Profile& operator=(const Profile& a_from){
+    m_cls = a_from.m_cls;
+    return *this;
+  }
+protected:
+  const pd_data& m_data;
+  std::string m_cls;
+};
+
+inline bool readProfile(pd_data& aData,iobj_visitor& a_visitor){
+  if(!a_visitor.visit(aData.m_title)) return false;
+
+ {int dim;
+  if(!a_visitor.visit(dim)) return false;
+  aData.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_visitor.visit(nbin)) return false;
+  aData.m_bin_number = nbin;}
+
+ {std::vector<int> vec;
+  if(!a_visitor.visit(vec)) return false;
+  aData.m_bin_entries = convert<int,unsigned int>(vec);}
+
+  if(!a_visitor.visit(aData.m_bin_Sw)) return false;
+  if(!a_visitor.visit(aData.m_bin_Sw2)) return false;
+  if(!a_visitor.visit(aData.m_bin_Sxw)) return false;
+  if(!a_visitor.visit(aData.m_bin_Sx2w)) return false;
+  aData.m_axes.clear();
+  for(unsigned int iaxis=0;iaxis<aData.m_dimension;iaxis++) {
+    histo::axis<double> baxis;
+    if(!Axis_read(a_visitor,baxis)) return false;
+    aData.m_axes.push_back(baxis);
+  }
+ {int dummy;
+  if(!a_visitor.visit(dummy)) return false;} //m_mode
+  if(!a_visitor.visit(aData.m_is_profile)) return false;
+  if(!a_visitor.visit(aData.m_bin_Svw)) return false;
+  if(!a_visitor.visit(aData.m_bin_Sv2w)) return false;
+  if(!a_visitor.visit(aData.m_cut_v)) return false;
+  if(!a_visitor.visit(aData.m_min_v)) return false;
+  if(!a_visitor.visit(aData.m_max_v)) return false;
+
+  // Not written :
+  //aData.fDoubles
+  //aData.fInts
+  //aData.m_coords.resize(aData.m_dimension,0);
+  //aData.m_ints.resize(aData.m_dimension,0);
+
+  return true;
+}
+
+inline bool visit(iobj_const_visitor& a_v,const histo::p1d& a_histo) {
+  pd_data d = a_histo.get_histo_data();
+  Profile h(d,s_p1d());
+  return h.visit(a_v);
+}
+
+inline bool read(iobj_visitor& a_visitor,histo::p1d& a_histo){
+  //if(!a_visitor.begin(*this)) return false;
+
+  int version;
+  if(!a_visitor.visit(version)) return false;
+
+  if(version!=1) {
+    //this may come from an unexpected byteswap.
+    a_visitor.out() << "tools::osc::read :"
+                    << " unexpected version " << version
+                    << std::endl;
+    return false;
+  }
+
+
+  if(!BaseHistogram_read(a_visitor)) return false;
+
+  pd_data hdata;
+  if(!readProfile(hdata,a_visitor)) return false;
+  a_histo.copy_from_data(hdata);
+
+  //fAxis.copy(fHistogram.get_axis(0));
+
+  //if(!a_visitor.end(*this)) return false;
+
+  a_histo.update_fast_getters();
+
+  return true;
+}
+
+inline bool visit(iobj_const_visitor& a_v,const histo::p2d& a_histo) {
+  pd_data d = a_histo.get_histo_data();
+  Profile h(d,s_p2d());
+  return h.visit(a_v);
+}
+
+inline bool read(iobj_visitor& a_visitor,histo::p2d& a_histo){
+  //if(!a_visitor.begin(*this)) return false;
+
+  int version;
+  if(!a_visitor.visit(version)) return false;
+
+  if(version!=1) {
+    //this may come from an unexpected byteswap.
+    a_visitor.out() << "tools::osc::read :"
+                    << " unexpected version " << version
+                    << std::endl;
+    return false;
+  }
+
+
+  if(!BaseHistogram_read(a_visitor)) return false;
+
+  pd_data hdata;
+  if(!readProfile(hdata,a_visitor)) return false;
+  a_histo.copy_from_data(hdata);
+
+  //fAxisX.copy(a_histo.get_axis(0));
+  //fAxisY.copy(a_histo.get_axis(1));
+
+  //if(!a_visitor.end(*this)) return false;
+
+  a_histo.update_fast_getters();
+
+  return true;
+}
+
+class Histogram_cp : public Histogram {
+public:
+  Histogram_cp(const hd_data& a_data,const std::string& a_cls)
+  :Histogram(m_cp,a_cls) //give ref of m_cp to Histogram.
+  ,m_cp(a_data)   //do a local copy.
+  //WARNING : the upper is ok as long as Histogram constructor does nothing
+  //          else than keeping the ref to m_cp. Else it would do
+  //          something on an empty histo (and not on a copy of the
+  //          passed a_data).
+  {}
+  virtual ~Histogram_cp(){}
+public:
+  Histogram_cp(const Histogram_cp& a_from)
+  :istorable(a_from)
+  ,Histogram(m_cp,a_from.m_cls)
+  ,m_cp(a_from.m_cp)
+  {}  
+  Histogram_cp& operator=(const Histogram_cp& a_from){
+    Histogram::operator=(a_from);    
+    m_cp = a_from.m_cp;
+    return *this;
+  }
+protected:
+  hd_data m_cp;
+};
+
+class Profile_cp : public Profile {
+public:
+  Profile_cp(const pd_data& a_data,const std::string& a_cls)
+  :Profile(m_cp,a_cls) //give ref of m_cp to Profile.
+  ,m_cp(a_data)   //do a local copy.
+  //WARNING : the upper is ok as long as Profile constructor does nothing
+  //          else than keeping the ref to m_cp. Else it would do
+  //          something on an empty histo (and not on a copy of the
+  //          passed a_data).
+  {}
+  virtual ~Profile_cp(){}
+public:
+  Profile_cp(const Profile_cp& a_from)
+  :istorable(a_from)
+  ,Profile(m_cp,a_from.m_cls)
+  ,m_cp(a_from.m_cp)
+  {}  
+  Profile_cp& operator=(const Profile_cp& a_from){
+    Profile::operator=(a_from);    
+    m_cp = a_from.m_cp;
+    return *this;
+  }
+protected:
+  pd_data m_cp;
+};
+
+}}
+
+#endif

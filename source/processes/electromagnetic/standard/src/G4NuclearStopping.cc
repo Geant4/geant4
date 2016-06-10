@@ -106,6 +106,11 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
 						    const G4Step&  step)
 {
   nParticleChange.InitializeForAlongStep(track);
+
+  // this line only valid if nuclear stopping 
+  // is computed after G4ionIonisation process 
+  nParticleChange.SetProposedCharge(step.GetPostStepPoint()->GetCharge());
+
   G4double T2 = step.GetPostStepPoint()->GetKineticEnergy();
 
   const G4ParticleDefinition* part = track.GetParticleDefinition();

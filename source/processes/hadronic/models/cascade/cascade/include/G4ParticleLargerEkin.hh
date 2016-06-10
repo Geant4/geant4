@@ -30,6 +30,7 @@
 //
 // 20091125  M. Kelsey -- Add additional operator() which uses pointers
 // 20110415  M. Kelsey -- Add additional operator() for G4CascadParticle
+// 20140311  M. Kelsey -- Implement strict weak ordering (change ">=" to ">")
 
 #ifndef G4PARTICLE_LARGER_EKIN_HH
 #define G4PARTICLE_LARGER_EKIN_HH
@@ -52,7 +53,7 @@ public:
     part2.printParticle();
     G4cout << G4endl;
 #endif
-    return (part1.getKineticEnergy() >= part2.getKineticEnergy());
+    return (part1.getKineticEnergy() > part2.getKineticEnergy());
   }
  
   G4bool operator() (const G4InuclElementaryParticle* part1,

@@ -17,6 +17,15 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 02, 2013 I.Hrivnacova (analysis-V09-05-17)
+- Updated to g4tools 1.4.4 (by G. Barrand) - see History_tools;
+  that includes fix for problem #1523
+
+May 31, 2013 I.Hrivnacova (analysis-V09-05-16)
+- Fixed G4RootAnalysisManager::WriteOnAscii() - bug report #1473
+- Fix in tools (see History_tools for more details):
+  Fixed failure in writing empty ntuples (in tools/wroot/basket)
+
 October 26, 2012 I.Hrivnacova (analysis-V09-05-15)
 - Updated to g4tools 1.4.3 (by G. Barrand) - see History_tools;
   includes bug correction for histo/h3::fill

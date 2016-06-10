@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th November 2013 Laurent Garnier (opengl-V09-05-54)
+- G4OpenGLQtViewer : 
+  o Fix a bug in the sceneTree viewer (probably JIRA DEV-62). A std::map iterator
+    was incremented without checking if it going outside the std::map or not.
+
+25th April 2013  Laurent Garnier
+- G4OpenGLQtViewer.cc : Add Qt5 support
+
+20th March 2013  Laurent Garnier
+- G4OpenGLQtExportDialog : change "TRUE" by "true"
+
 13th November 2012  Laurent Garnier (opengl-V09-05-53)
 - G4OpenGLQtViewer
   o Fix bug #1385 on Linux at launch. Mouse context try to change before it is initialize.

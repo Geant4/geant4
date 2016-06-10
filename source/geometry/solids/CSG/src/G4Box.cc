@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Box.cc 79541 2014-03-06 14:19:53Z gcosmo $
 //
 // 
 //
@@ -65,8 +65,8 @@ G4Box::G4Box(const G4String& pName,
   : G4CSGSolid(pName), fDx(pX), fDy(pY), fDz(pZ)
 {
   if ( (pX < 2*kCarTolerance)
-    && (pY < 2*kCarTolerance)
-    && (pZ < 2*kCarTolerance) )  // limit to thickness of surfaces
+    || (pY < 2*kCarTolerance)
+    || (pZ < 2*kCarTolerance) )  // limit to thickness of surfaces
   {
     std::ostringstream message;
     message << "Dimensions too small for Solid: " << GetName() << "!" << G4endl

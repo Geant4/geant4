@@ -577,7 +577,7 @@ G4bool G4tgrUtils::WordIsUnit( const G4String& word )
       || word == "mrad"
       || word == "deg"
       || word == "ns"
-      || word == "curie"
+      || word == "becquerel"
       || word == "curie"   )
   { 
     return true;

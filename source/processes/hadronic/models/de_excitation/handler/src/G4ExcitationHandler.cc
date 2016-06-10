@@ -236,6 +236,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  wasFBU = true; 
 	  // if initial fragment returned unchanged try to evaporate it
           if(1 == theTempResult->size()) {
+            delete *(theTempResult->begin());
             delete theTempResult;
 	    theTempResult = theEvaporation->BreakItUp(*(*iList)); 
 	  }
@@ -435,7 +436,7 @@ void G4ExcitationHandler::SetMaxZForFermiBreakUp(G4int aZ)
 
 void G4ExcitationHandler::SetMaxAForFermiBreakUp(G4int anA)
 {
-  maxAForFermiBreakUp = std::min(5,anA);
+  maxAForFermiBreakUp = anA;
 }
 
 void G4ExcitationHandler::SetMaxAandZForFermiBreakUp(G4int anA, G4int aZ)

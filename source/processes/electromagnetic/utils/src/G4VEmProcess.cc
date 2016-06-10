@@ -566,7 +566,10 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   DefineMaterial(track.GetMaterialCutsCouple());
   SelectModel(preStepKinEnergy, currentCoupleIndex);
 
-  if(!currentModel->IsActive(preStepKinEnergy)) { return x; }
+  if(!currentModel->IsActive(preStepKinEnergy)) { 
+    currentInteractionLength = DBL_MAX;
+    return x; 
+  }
  
   // forced biasing only for primary particles
   if(biasManager) {
@@ -902,15 +905,15 @@ G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
   // Cross section per atom is calculated
   DefineMaterial(couple);
   G4double cross = 0.0;
-  if(theLambdaTable) {
-    cross = (*theDensityFactor)[currentCoupleIndex]*
-      (((*theLambdaTable)[basedCoupleIndex])->Value(kineticEnergy));
+  if(buildLambdaTable && theLambdaTable) {
+    cross = GetCurrentLambda(kineticEnergy);
+
   } else {
     SelectModel(kineticEnergy, currentCoupleIndex);
-    cross = currentModel->CrossSectionPerVolume(currentMaterial,
-						currentParticle,kineticEnergy);
+    cross = fFactor*currentModel->CrossSectionPerVolume(currentMaterial,
+							currentParticle,
+							kineticEnergy);
   }
-
   if(cross < 0.0) { cross = 0.0; }
   return cross;
 }

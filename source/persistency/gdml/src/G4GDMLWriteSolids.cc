@@ -479,7 +479,7 @@ SphereWrite(xercesc::DOMElement* solElement, const G4Sphere* const sphere)
    xercesc::DOMElement* sphereElement = NewElement("sphere");
    sphereElement->setAttributeNode(NewAttribute("name",name));
    sphereElement->setAttributeNode(NewAttribute("rmin",
-                  sphere->GetInsideRadius()/mm));
+                  sphere->GetInnerRadius()/mm));
    sphereElement->setAttributeNode(NewAttribute("rmax",
                   sphere->GetOuterRadius()/mm));
    sphereElement->setAttributeNode(NewAttribute("startphi",

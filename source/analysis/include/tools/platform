@@ -30,6 +30,7 @@ inline bool is_little_endian() {
 
 namespace tools {
 namespace device {
+
 #if TARGET_OS_IPHONE
 inline bool is_iOS() {return true;}
 #else
@@ -57,6 +58,30 @@ inline bool slow_cpu()         {return true;}
 #else
 inline bool slow_cpu()         {return false;}
 #endif
+
+inline unsigned int tex_mem_limit() {
+  // glGet(GL_MAX_TEXTURE_SIZE) :
+  //   MacBookPro : it returns 8192.
+  //   Android : it returns 2048.
+  //   iPad1 : it returns 2048.
+  //   iPod : it returns ?
+
+  // 1024*1024  //*3 =   3 145 728
+  // 2048*2048  //*3 =  12 582 912
+  // 4096*4096  //*3 =  50 331 648
+  // 8192*8192  //*3 = 201 326 592
+  // 8192*4096  //*3 = 100 663 296
+  if(small_screen()) {
+    //iOS : Apple says that max 2D tex size is 1024*1024 with two units
+    //      texture available. From doc on PowerVR MBX.
+    return 2048*2048*3;
+  } else {
+    //limit = 4096*4096*3; //=8192*2048 //permit to pass ATLAS big image.
+    //permit to pass fete_science_2010/power2/image_0.jpg
+    return 8192*4096*3;
+  }
+}
+
 }}
 
 #endif

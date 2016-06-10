@@ -88,7 +88,7 @@
 #include "G4NuclearStopping.hh"
 
 // msc models
-#include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel96.hh"
 #include "G4UrbanMscModel95.hh"
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4WentzelVIModel.hh"
@@ -203,11 +203,11 @@ void G4EmPenelopePhysics::ConstructProcess()
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
   G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
-  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  //pimsc->AddEmModel(0, new G4WentzelVIModel());
   G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
-  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  //kmsc->AddEmModel(0, new G4WentzelVIModel());
   G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
-  pmsc->AddEmModel(0, new G4WentzelVIModel());
+  //pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models
@@ -271,10 +271,11 @@ void G4EmPenelopePhysics::ConstructProcess()
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
-      G4UrbanMscModel95* msc1 = new G4UrbanMscModel95();
+      G4UrbanMscModel96* msc1 = new G4UrbanMscModel96();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 
@@ -309,10 +310,11 @@ void G4EmPenelopePhysics::ConstructProcess()
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
-      G4UrbanMscModel95* msc1 = new G4UrbanMscModel95();
+      G4UrbanMscModel96* msc1 = new G4UrbanMscModel96();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 

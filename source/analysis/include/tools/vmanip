@@ -54,6 +54,17 @@ inline void append(std::vector<T>& a_vec,const std::vector<T>& a_from) {
 }
 
 template <class T>
+inline void append(std::vector<T>& a_vec,unsigned int a_num,const T* a_from) {
+  typedef typename std::vector<T>::size_type sz_t;
+  sz_t vsize = a_vec.size();
+  a_vec.resize(vsize+a_num);
+  sz_t offset = vsize; 
+  for(sz_t index=0;index<a_num;index++,offset++) {
+    a_vec[offset] = a_from[index];
+  }
+}
+
+template <class T>
 inline void removep(std::vector<T*>& a_vec,T* a_elem) {
   typedef typename std::vector<T*>::iterator it_t;
   it_t it;
@@ -124,6 +135,16 @@ inline bool item_index(const std::vector<T>& a_vec,const T& a_item,unsigned int&
     if(*it==a_item) return true;
   }
   a_index = 0;
+  return false;
+}
+
+template <class T>
+inline bool belong(const std::vector<T>& a_vec,const T& a_item){
+  typedef typename std::vector<T>::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if(*it==a_item) return true;
+  }
   return false;
 }
 

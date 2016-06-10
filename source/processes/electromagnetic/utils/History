@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 November 13: V.Ivant (emutils-V09-05-59)
+- G4EmBiasingManager - fixed typo reported by static analysis of
+    Andrey Karpov
+
+17 October 13: V.Ivant
+- G4VMultipleScattering - increased lowest limit from 1 eV to 10 eV to
+    avoid semi-infinite loop for low-energy particle tracking;
+    fixed re-computation of post-step safety in AlongStepDoIt method
+
+14 June 13: V.Ivant (emutils-V09-05-58)
+- G4VEnergyLossProcess, G4VEmProcess - set interaction length to 
+    DBL_MAX if process is de-activated (fixed problem of DNA simulation); 
+    fixed CrossSectionPerVolume access method
+
 18 January 13: V.Ivanchenko (emutils-V09-05-57)
 - Changed signature of SampleScattering() method of all multiple
   scattering model classes - instead of G4DynamicParticle, 
