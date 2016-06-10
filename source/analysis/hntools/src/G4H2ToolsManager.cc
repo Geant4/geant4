@@ -106,11 +106,15 @@ tools::histo::h2d* CreateToolsH2(
                          const G4String& title,
                          G4int nxbins, G4double xmin, G4double xmax,
                          G4int nybins, G4double ymin, G4double ymax,
+                         const G4String& xunitName,
+                         const G4String& yunitName,
                          const G4String& xfcnName, 
                          const G4String& yfcnName,
                          const G4String& xbinSchemeName,
                          const G4String& ybinSchemeName)
 {
+  G4double xunit = GetUnitValue(xunitName);
+  G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
   G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
@@ -128,17 +132,17 @@ tools::histo::h2d* CreateToolsH2(
                 "Analysis_W013", JustWarning, description);
     }              
     return new tools::histo::h2d(title, 
-                                 nxbins, xfcn(xmin), xfcn(xmax), 
-                                 nybins, yfcn(ymin), yfcn(ymax));
+                                 nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                                 nybins, yfcn(ymin/yunit), yfcn(ymax/yunit));
                // h2 objects are deleted in destructor and reset when 
                // closing a file.
   }
   else {
     // Compute edges
     std::vector<G4double> xedges;
-    ComputeEdges(nxbins, xmin, xmax, xfcn, xbinScheme, xedges);
+    ComputeEdges(nxbins, xmin, xmax, xunit, xfcn, xbinScheme, xedges);
     std::vector<G4double> yedges;
-    ComputeEdges(nybins, ymin, ymax, yfcn, ybinScheme, yedges);
+    ComputeEdges(nybins, ymin, ymax, yunit, yfcn, ybinScheme, yedges);
     return new tools::histo::h2d(title, xedges, yedges); 
   }
 }     
@@ -148,17 +152,21 @@ tools::histo::h2d* CreateToolsH2(
                          const G4String& title,
                          const std::vector<G4double>& xedges,
                          const std::vector<G4double>& yedges,
+                         const G4String& xunitName,
+                         const G4String& yunitName,
                          const G4String& xfcnName,
                          const G4String& yfcnName)
 {                          
+  G4double xunit = GetUnitValue(xunitName);
+  G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
 
   // Apply function 
   std::vector<G4double> xnewEdges;
-  ComputeEdges(xedges, xfcn, xnewEdges);
+  ComputeEdges(xedges, xunit, xfcn, xnewEdges);
   std::vector<G4double> ynewEdges;
-  ComputeEdges(yedges, yfcn, ynewEdges);
+  ComputeEdges(yedges, yunit, yfcn, ynewEdges);
   
   return new tools::histo::h2d(title, xnewEdges, ynewEdges); 
              // h2 objects are deleted in destructor and reset when 
@@ -169,11 +177,15 @@ tools::histo::h2d* CreateToolsH2(
 void  ConfigureToolsH2(tools::histo::h2d* h2d,
                        G4int nxbins, G4double xmin, G4double xmax,
                        G4int nybins, G4double ymin, G4double ymax,
+                       const G4String& xunitName,
+                       const G4String& yunitName,
                        const G4String& xfcnName, 
                        const G4String& yfcnName,
                        const G4String& xbinSchemeName,
                        const G4String& ybinSchemeName)
 {
+  G4double xunit = GetUnitValue(xunitName);
+  G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
   G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
@@ -190,15 +202,15 @@ void  ConfigureToolsH2(tools::histo::h2d* h2d,
       G4Exception("G4H2ToolsManager::CreateH2",
                 "Analysis_W013", JustWarning, description);
     }              
-    h2d->configure(nxbins, xfcn(xmin), xfcn(xmax), 
-                   nybins, yfcn(ymin), yfcn(ymax));
+    h2d->configure(nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                   nybins, yfcn(ymin/yunit), yfcn(ymax/yunit));
   }
   else {
     // Compute bins
     std::vector<G4double> xedges;
-    ComputeEdges(nxbins, xmin, xmax, xfcn, xbinScheme, xedges);
+    ComputeEdges(nxbins, xmin, xmax, xunit, xfcn, xbinScheme, xedges);
     std::vector<G4double> yedges;
-    ComputeEdges(nybins, ymin, ymax, yfcn, ybinScheme, yedges);
+    ComputeEdges(nybins, ymin, ymax, yunit, yfcn, ybinScheme, yedges);
     h2d->configure(xedges, yedges);
   }
 }     
@@ -207,16 +219,20 @@ void  ConfigureToolsH2(tools::histo::h2d* h2d,
 void  ConfigureToolsH2(tools::histo::h2d* h2d,
                        const std::vector<G4double>& xedges,
                        const std::vector<G4double>& yedges,
+                       const G4String& xunitName,
+                       const G4String& yunitName,
                        const G4String& xfcnName,
                        const G4String& yfcnName)
 {
+  G4double xunit = GetUnitValue(xunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   std::vector<G4double> xnewEdges;
-  ComputeEdges(xedges, xfcn, xnewEdges);
+  ComputeEdges(xedges, xunit, xfcn, xnewEdges);
 
+  G4double yunit = GetUnitValue(yunitName);
   G4Fcn yfcn = GetFunction(yfcnName);
   std::vector<G4double> ynewEdges;
-  ComputeEdges(yedges, yfcn, ynewEdges);
+  ComputeEdges(yedges, yunit, yfcn, ynewEdges);
 
   h2d->configure(xnewEdges, ynewEdges);
 }
@@ -306,7 +322,8 @@ G4int G4H2ToolsManager::CreateH2(const G4String& name,  const G4String& title,
 #endif
   tools::histo::h2d* h2d
     = CreateToolsH2(title, nxbins, xmin, xmax, nybins, ymin, ymax, 
-                    xfcnName, yfcnName, xbinSchemeName, ybinSchemeName);
+                    xunitName, yunitName, xfcnName, yfcnName, 
+                    xbinSchemeName, ybinSchemeName);
     
   // Add annotation
   AddH2Annotation(h2d, xunitName, yunitName, xfcnName, yfcnName);        
@@ -341,7 +358,8 @@ G4int G4H2ToolsManager::CreateH2(const G4String& name,  const G4String& title,
     fState.GetVerboseL4()->Message("create", "H2", name);
 #endif
   tools::histo::h2d* h2d
-    = CreateToolsH2(title, xedges, yedges, xfcnName, yfcnName); 
+    = CreateToolsH2(title, xedges, yedges, 
+                    xunitName, yunitName, xfcnName, yfcnName); 
     
   // Add annotation
   AddH2Annotation(h2d, xunitName, yunitName, xfcnName, yfcnName);        
@@ -381,8 +399,8 @@ G4bool G4H2ToolsManager::SetH2(G4int id,
 
   // Configure tools h2
   ConfigureToolsH2(
-    h2d, nxbins, xmin, xmax, nybins, ymin, ymax, xfcnName, yfcnName, 
-    xbinSchemeName, xbinSchemeName);
+    h2d, nxbins, xmin, xmax, nybins, ymin, ymax, 
+    xunitName, yunitName, xfcnName, yfcnName, xbinSchemeName, ybinSchemeName);
 
   // Add annotation
   AddH2Annotation(h2d, xunitName, yunitName, xfcnName, yfcnName);        
@@ -416,7 +434,7 @@ G4bool G4H2ToolsManager::SetH2(G4int id,
 #endif
 
   // Configure tools h2
-  ConfigureToolsH2(h2d, xedges, yedges, xfcnName, yfcnName);
+  ConfigureToolsH2(h2d, xedges, yedges, xunitName, yunitName, xfcnName, yfcnName);
 
   // Add annotation
   AddH2Annotation(h2d, xunitName, yunitName, xfcnName, yfcnName);        

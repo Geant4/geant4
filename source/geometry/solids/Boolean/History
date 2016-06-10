@@ -1,5 +1,5 @@
 
-$Id: History 76607 2013-11-13 08:46:40Z gcosmo $
+$Id: History 84620 2014-10-17 09:30:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ October 3, 2014  G.Cosmo                geom-bool-V09-06-06
+ - Avoid polyhedron deletion (and therefore mutexing) in CreatePolyhedron
+   for G4DisplacedSolid, as not necessary.
+
+ September 1, 2014  G.Cosmo
+ - Fixed use of polyhedron pointer, to avoid race condition in MT
+   when parameterised volumes are visualised.
 
  November 13, 2013  G.Cosmo              geom-bool-V09-06-05, 04
  - Removed G4MultiUnion and related wrapper, as not yet ready for release.

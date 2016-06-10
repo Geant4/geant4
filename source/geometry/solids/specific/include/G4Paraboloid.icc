@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.icc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4Paraboloid.icc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -72,7 +72,7 @@ void G4Paraboloid::SetZHalfLength(G4double pDz)
     //
     fSurfaceArea = 0.; 
     fCubicVolume = 0.;
-    delete fpPolyhedron; fpPolyhedron = 0;
+    fRebuildPolyhedron = true;
   }
 }
 
@@ -95,7 +95,7 @@ void G4Paraboloid::SetRadiusPlusZ(G4double pR2)
     //
     fSurfaceArea = 0.; 
     fCubicVolume = 0.;
-    delete fpPolyhedron; fpPolyhedron = 0;
+    fRebuildPolyhedron = true;
   }
 }
 
@@ -118,7 +118,7 @@ void G4Paraboloid::SetRadiusMinusZ(G4double pR1)
     //
     fSurfaceArea = 0.; 
     fCubicVolume = 0.;
-    delete fpPolyhedron; fpPolyhedron = 0;
+    fRebuildPolyhedron = true;
   }
 }
 

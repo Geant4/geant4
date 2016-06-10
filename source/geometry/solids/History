@@ -1,4 +1,4 @@
-$Id: History 75578 2013-11-04 12:03:33Z gcosmo $
+$Id: History 84628 2014-10-17 10:12:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September, 17th, 2014,  G.Cosmo         -  geomsolids-V09-06-02
+- Updated unit tests for compilation errors and warnings...
+
+September, 1st, 2014,  G.Cosmo
+- Fixed use of polyhedron pointer, to avoid race condition in MT
+  when parameterised volumes are visualised.
 
 October, 29th, 2013,  G.Cosmo           -  geomsolids-V09-06-01
 - Include tags on top of geant4-09-06-ref-10: geom-specific-V09-06-22.

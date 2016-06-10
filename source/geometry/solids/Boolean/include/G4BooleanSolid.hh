@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4BooleanSolid.hh 84620 2014-10-17 09:30:48Z gcosmo $
 //
 //
 // class G4BooleanSolid
@@ -132,6 +132,7 @@ class G4BooleanSolid : public G4VSolid
     G4double fCubicVolume;
     G4double fSurfaceArea;
 
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
     G4bool  createdDisplacedSolid;

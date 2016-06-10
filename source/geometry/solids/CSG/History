@@ -1,4 +1,4 @@
-$Id: History 81636 2014-06-04 09:06:08Z gcosmo $
+$Id: History 84622 2014-10-17 09:43:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 4, 2014  T.Nikitina            geom-csg-V09-06-12
+- G4Cons: fixed typo error in GetPointOnSurface() in the call
+  to GetRadiusInRing(). Responsible for occasionally wrong reports
+  when checking for overlaps.
+- G4Cons: fix in DistanceToIn(p,v) for points on the Surface, to resolve
+  error reported in unit testing by the OpticalEscape test.
+
+September 1, 2014  G.Cosmo
+- Fixed use of polyhedron pointer, to avoid race condition in MT
+  when parameterised volumes are visualised.
 
 March 5, 2014  G.Cosmo                   geom-csg-V09-06-11
 - Fixed proper handling of polyhedron pointer in solids, to avoid memory

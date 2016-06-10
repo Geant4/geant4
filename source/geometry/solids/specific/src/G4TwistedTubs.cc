@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4TwistedTubs.cc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -59,6 +59,13 @@
 
 #include "Randomize.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 //=====================================================================
 //* constructors ------------------------------------------------------
 
@@ -71,7 +78,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    : G4VSolid(pname), fDPhi(dphi), 
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
      fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+     fCubicVolume(0.), fSurfaceArea(0.),
+     fRebuildPolyhedron(false), fpPolyhedron(0)
 {
    if (endinnerrad < DBL_MIN)
    {
@@ -104,7 +112,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    : G4VSolid(pname),
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
      fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+     fCubicVolume(0.), fSurfaceArea(0.),
+     fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 
    if (!nseg)
@@ -147,7 +156,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    : G4VSolid(pname), fDPhi(dphi),
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
      fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+     fCubicVolume(0.), fSurfaceArea(0.),
+     fRebuildPolyhedron(false), fpPolyhedron(0)
 {
    if (innerrad < DBL_MIN)
    {
@@ -170,7 +180,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    : G4VSolid(pname),
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
      fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+     fCubicVolume(0.), fSurfaceArea(0.),
+     fRebuildPolyhedron(false), fpPolyhedron(0)
 {
    if (!nseg)
    {
@@ -200,13 +211,9 @@ G4TwistedTubs::G4TwistedTubs( __void__& a )
     fTanOuterStereo(0.), fKappa(0.), fInnerRadius2(0.), fOuterRadius2(0.),
     fTanInnerStereo2(0.), fTanOuterStereo2(0.), fLowerEndcap(0), fUpperEndcap(0),
     fLatterTwisted(0), fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+    fCubicVolume(0.), fSurfaceArea(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0)
 {
-  fEndZ[0] = 0.; fEndZ[1] = 0.;
-  fEndInnerRadius[0] = 0.; fEndInnerRadius[1] = 0.;
-  fEndOuterRadius[0] = 0.; fEndOuterRadius[1] = 0.;
-  fEndPhi[0] = 0.; fEndPhi[1] = 0.;
-  fEndZ2[0] = 0.; fEndZ2[1] = 0.;
 }
 
 //=====================================================================
@@ -220,7 +227,7 @@ G4TwistedTubs::~G4TwistedTubs()
    if (fFormerTwisted) { delete fFormerTwisted; }
    if (fInnerHype)     { delete fInnerHype;     }
    if (fOuterHype)     { delete fOuterHype;     }
-   if (fpPolyhedron)   { delete fpPolyhedron;   }
+   if (fpPolyhedron)   { delete fpPolyhedron; fpPolyhedron = 0; }
 }
 
 //=====================================================================
@@ -238,7 +245,8 @@ G4TwistedTubs::G4TwistedTubs(const G4TwistedTubs& rhs)
     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0), fFormerTwisted(0),
     fInnerHype(0), fOuterHype(0),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fpPolyhedron(0), fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
+    fRebuildPolyhedron(false), fpPolyhedron(0),
+    fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
     fLastDistanceToIn(rhs.fLastDistanceToIn),
     fLastDistanceToOut(rhs.fLastDistanceToOut),
     fLastDistanceToInWithV(rhs.fLastDistanceToInWithV),
@@ -253,7 +261,6 @@ G4TwistedTubs::G4TwistedTubs(const G4TwistedTubs& rhs)
     fEndZ2[i] = rhs.fEndZ2[i];
   }
   CreateSurfaces();
-  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -299,7 +306,8 @@ G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs)
    }
  
    CreateSurfaces();
-   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
+   fRebuildPolyhedron = false;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }
@@ -1125,12 +1133,16 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
 
 G4Polyhedron* G4TwistedTubs::GetPolyhedron () const
 {
-  if ((!fpPolyhedron) ||
-      (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
-       fpPolyhedron->GetNumberOfRotationSteps()))
+  if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
   {
+    G4AutoLock l(&polyhedronMutex);
     delete fpPolyhedron;
     fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
   }
   return fpPolyhedron;
 }

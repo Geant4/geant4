@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -210,7 +210,7 @@ G4ASCIITreeSceneHandler::EndModeling
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 WARNING: 10 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them.
 G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)

@@ -1,4 +1,4 @@
-$Id: History 79223 2014-02-20 15:01:29Z gcosmo $
+$Id: History 84741 2014-10-20 10:22:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,40 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 17th, 2014 A.Dotti (run-V09-06-146)
+- Addressing CMS report for possible data-race
+  in G4RunManagerKernel::SetupPhysics when calling
+  G4ParticleTable::Setreadiness. Backporting from trunk
+  (output at initialization is also reduced)
+
+October 14th, 2014 M.Asai (run-V09-06-145)
+- G4MTRunManager : Make sure G4RunManager::TerminateEventLoop() is
+  invoked at the end of run.
+
+August 21st, 2014 M.Asai (run-V09-06-144)
+- Clean up previous tag. Addressing to bug report #1665.
+
+August 21st, 2014 M.Asai (run-V09-06-143)
+- Clear root logical volume pointers in G4Region when geometry is
+  rebuilt from scratch.
+
+July 17th, 2014 A.Dotti
+- Bug fix for bug #1657: /random/setSeeds not working
+
+July 11th, 2014 A.Dotti
+- Fixing race condition in G4VUPLSplitter class
+
+July 5th, 2014 A. Dotti
+- Fixing data-race condition when creating RNG for workers in MT:
+  G4UserWorkerThreadInitialization::SetupRNGEngine
+  (Lock moved beginning of function before default engine is created)
+
+July 1th, 2014, V. Ivanchenko
+- G4PhysicsListHelper - minor fix in the default list of processeses:
+    positron annihilation in muons and hadrons cannot be AtRest -
+    these are rare high energy discrete processes. Equivalent fix was 
+    for OrderingParameterTable (problem report #1598)
 
 Jan 21st, 2014, M. Asai (run-V09-06-142)
 - Making sure worker threads re-build physics tables as well when the

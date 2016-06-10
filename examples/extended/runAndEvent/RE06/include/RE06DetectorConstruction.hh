@@ -26,7 +26,7 @@
 /// \file RE06/include/RE06DetectorConstruction.hh
 /// \brief Definition of the RE06DetectorConstruction class
 //
-// $Id: RE06DetectorConstruction.hh 75123 2013-10-28 09:53:28Z gcosmo $
+// $Id: RE06DetectorConstruction.hh 84613 2014-10-17 08:34:52Z gcosmo $
 // 
 
 #ifndef RE06DetectorConstruction_h
@@ -79,7 +79,7 @@ class RE06DetectorConstruction : public G4VUserDetectorConstruction
     G4double           fLayerThickness; ///< = fTotalThickness / fNumberOfLayers
 
     G4bool             fConstructed;
-    G4bool             fConstructedSDandField;
+    static G4ThreadLocal G4bool fConstructedSDandField;
   
     G4String           fCalName[3];
 

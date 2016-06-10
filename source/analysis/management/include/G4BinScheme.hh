@@ -49,10 +49,11 @@ namespace G4Analysis {
 G4BinScheme GetBinScheme(const G4String& binSchemeName);
 
 void ComputeEdges(G4int nbins, G4double xmin, G4double xmax, 
-                  G4Fcn fcn, G4BinScheme,
+                  G4double unit, G4Fcn fcn, G4BinScheme,
                   std::vector<G4double>& edges);
 
-void ComputeEdges(const std::vector<G4double>& edges, G4Fcn fcn, 
+void ComputeEdges(const std::vector<G4double>& edges, 
+                  G4double unit, G4Fcn fcn, 
                   std::vector<G4double>& newEdges);
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.icc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4Hype.icc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -72,7 +72,7 @@ void G4Hype::SetInnerRadius (G4double newIRad)
     endInnerRadius2=HypeInnerRadius2(halfLenZ);
     endInnerRadius=std::sqrt(endInnerRadius2);
     fCubicVolume = 0.;
-    delete fpPolyhedron; fpPolyhedron = 0;
+    fRebuildPolyhedron = true;
   }
 
 inline
@@ -83,7 +83,7 @@ void G4Hype::SetOuterRadius (G4double newORad)
     endOuterRadius2=HypeOuterRadius2(halfLenZ);
     endOuterRadius=std::sqrt(endOuterRadius2);
     fCubicVolume = 0.;
-    delete fpPolyhedron; fpPolyhedron = 0;
+    fRebuildPolyhedron = true;
   } 
 
 inline
@@ -91,7 +91,7 @@ void G4Hype::SetZHalfLength (G4double newHLZ)
   {
     halfLenZ   = newHLZ ;
     fCubicVolume = 0.;
-    delete fpPolyhedron; fpPolyhedron = 0;
+    fRebuildPolyhedron = true;
   }
 
 inline
@@ -103,7 +103,7 @@ void G4Hype::SetInnerStereo (G4double newISte)
     endInnerRadius2=HypeInnerRadius2(halfLenZ);
     endInnerRadius=std::sqrt(endInnerRadius2);
     fCubicVolume = 0.;
-    delete fpPolyhedron; fpPolyhedron = 0;
+    fRebuildPolyhedron = true;
   }
 
 inline
@@ -115,7 +115,7 @@ void G4Hype::SetOuterStereo (G4double newOSte)
     endOuterRadius2=HypeOuterRadius2(halfLenZ);
     endOuterRadius=std::sqrt(endOuterRadius2);
     fCubicVolume = 0.;
-    delete fpPolyhedron; fpPolyhedron = 0;
+    fRebuildPolyhedron = true;
   }
 
 inline

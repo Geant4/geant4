@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4Paraboloid.cc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // class G4Paraboloid
 //
@@ -47,6 +47,13 @@
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 using namespace CLHEP;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,7 +64,8 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
                                  G4double pDz,
                                  G4double pR1,
                                  G4double pR2)
- : G4VSolid(pName), fpPolyhedron(0), fSurfaceArea(0.), fCubicVolume(0.) 
+ : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0),
+   fSurfaceArea(0.), fCubicVolume(0.) 
 
 {
   if( (pDz <= 0.) || (pR2 <= pR1) || (pR1 < 0.) )
@@ -89,7 +97,8 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Paraboloid::G4Paraboloid( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), fSurfaceArea(0.), fCubicVolume(0.),
+  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0),
+    fSurfaceArea(0.), fCubicVolume(0.),
     dz(0.), r1(0.), r2(0.), k1(0.), k2(0.)
 {
 }
@@ -100,6 +109,7 @@ G4Paraboloid::G4Paraboloid( __void__& a )
 
 G4Paraboloid::~G4Paraboloid()
 {
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,11 +117,10 @@ G4Paraboloid::~G4Paraboloid()
 // Copy constructor
 
 G4Paraboloid::G4Paraboloid(const G4Paraboloid& rhs)
-  : G4VSolid(rhs), fpPolyhedron(0),
+  : G4VSolid(rhs), fRebuildPolyhedron(false), fpPolyhedron(0),
     fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume),
     dz(rhs.dz), r1(rhs.r1), r2(rhs.r2), k1(rhs.k1), k2(rhs.k2)
 {
-  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -133,7 +142,8 @@ G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs)
    //
    fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
    dz = rhs.dz; r1 = rhs.r1; r2 = rhs.r2; k1 = rhs.k1; k2 = rhs.k2;
-   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
+   fRebuildPolyhedron = false;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }
@@ -1153,11 +1163,15 @@ G4Polyhedron* G4Paraboloid::CreatePolyhedron () const
 G4Polyhedron* G4Paraboloid::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
   {
+    G4AutoLock l(&polyhedronMutex);
     delete fpPolyhedron;
     fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
   }
   return fpPolyhedron;
 }

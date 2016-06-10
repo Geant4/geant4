@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc 81636 2014-06-04 09:06:08Z gcosmo $
+// $Id: G4CSGSolid.cc 84622 2014-10-17 09:43:17Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -34,13 +34,21 @@
 #include "Randomize.hh"
 #include "G4Polyhedron.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 //////////////////////////////////////////////////////////////////////////
 //
 // Constructor
 //  - Base class constructor 
 
 G4CSGSolid::G4CSGSolid(const G4String& name) :
-  G4VSolid(name), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  G4VSolid(name), fCubicVolume(0.), fSurfaceArea(0.),
+  fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 }
 
@@ -50,7 +58,8 @@ G4CSGSolid::G4CSGSolid(const G4String& name) :
 //                            for usage restricted to object persistency.
 
 G4CSGSolid::G4CSGSolid( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 }
 
@@ -61,7 +70,7 @@ G4CSGSolid::G4CSGSolid( __void__& a )
 
 G4CSGSolid::~G4CSGSolid() 
 {
-  delete fpPolyhedron;
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -71,7 +80,7 @@ G4CSGSolid::~G4CSGSolid()
 
 G4CSGSolid::G4CSGSolid(const G4CSGSolid& rhs)
   : G4VSolid(rhs), fCubicVolume(rhs.fCubicVolume),
-    fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(0)
+    fSurfaceArea(rhs.fSurfaceArea), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 }
 
@@ -93,6 +102,7 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
    //
    fCubicVolume = rhs.fCubicVolume;
    fSurfaceArea = rhs.fSurfaceArea;
+   fRebuildPolyhedron = false;
    delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
@@ -124,11 +134,15 @@ std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
 G4Polyhedron* G4CSGSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
+      G4AutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
+      l.unlock();
     }
   return fpPolyhedron;
 }

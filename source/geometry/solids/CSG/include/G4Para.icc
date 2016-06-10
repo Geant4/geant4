@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.icc 81636 2014-06-04 09:06:08Z gcosmo $
+// $Id: G4Para.icc 84622 2014-10-17 09:43:17Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -75,7 +75,7 @@ void G4Para::SetXHalfLength(G4double val)
   fDx= val;
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -84,7 +84,7 @@ void G4Para::SetYHalfLength(G4double val)
   fDy= val;
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -93,7 +93,7 @@ void G4Para::SetZHalfLength(G4double val)
   fDz= val;
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -102,7 +102,7 @@ void G4Para::SetAlpha(G4double alpha)
   fTalpha= std::tan(alpha);
   fSurfaceArea= 0.;
   fCubicVolume= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -111,7 +111,7 @@ void G4Para::SetTanAlpha(G4double val)
   fTalpha= val;
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -121,7 +121,7 @@ void G4Para::SetThetaAndPhi(double pTheta, double pPhi)
   fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.icc 81636 2014-06-04 09:06:08Z gcosmo $
+// $Id: G4Cons.icc 84622 2014-10-17 09:43:17Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -81,7 +81,7 @@ void G4Cons::Initialize()
 {
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline 

@@ -1,0 +1,174 @@
+
+                 Geant4 10.0 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                           31 October 2014
+
+List of fixes included in this public patch since the public release 10.0.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Append existing CMake CXX/EXE_LINKER flags to Geant4 flags when
+        setting overall CMake flags. This allows users to override the base
+        set if needed, at their own risk.
+        Addressing problem report #1663.
+
+  o Analysis:
+    --------
+    + Fixed applying unit to min, max values in H1, H2 managers.
+    + Fixed createH2/setH2 commands implementation.
+
+  o Geometry:
+    --------
+    + management:
+      o Fixed possible data-race condition among threads in G4GeomSplitter.
+    + navigation:
+      o Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to
+        navigator limiting the step, if only one navigator limits the step.
+      o Removed unnecessary thread_local data specifications in
+        G4ReplicaNavigation.
+    + solids/Boolean:
+      o Fixed use of polyhedron pointer, to avoid race condition in MT
+        when parameterised volumes are visualised.
+    + solids/CSG:
+      o G4Cons: fixed typo error in GetPointOnSurface() in the call
+        to GetRadiusInRing(). Responsible for occasionally wrong reports
+        when checking for overlaps.
+      o G4Cons: fix in DistanceToIn(p,v) for points on the Surface, to resolve
+        error reported in unit testing by the OpticalEscape test.
+      o Fixed use of polyhedron pointer, to avoid race condition in MT
+        when parameterised volumes are visualised.
+    + solids/specific:
+      o Fixed use of polyhedron pointer, to avoid race condition in MT
+        when parameterised volumes are visualised.
+    + solids/usolids:
+      o UCons: fixed typo error in GetPointOnSurface() in the call
+        to GetRadiusInRing(). Responsible for occasionally wrong reports
+        when checking for overlaps.
+        Fix in DistanceToIn(p,v) for points on the Surface, to resolve
+        error reported in unit testing by the OpticalEscape test.
+      o USphere: fixed typo in SafetyFromInside().
+      o Minor fix in UVector2 for variable shadowing.
+    + volumes:
+      o Corrected possible MT data race in G4PVReplica::InitialiseWorker().
+
+  o Global:
+    ------
+    + Added symbol to exclusion list in windefs.h.
+    + Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.
+    + Updated date and version for 10.0.p03.
+
+  o Graphics Representations:
+    ------------------------
+    + HepPolyhedron::SetReferences(): added protection against a null pointer.
+    + BooleanProcessor::execute(): corrected spelling mistake in message.
+
+  o Particles:
+    ---------
+    + G4ElectronOccupancy: added G4Exception to protect against unphysical
+      orbits.
+    + G4NuclideTable : Fix missing Cl35 ground state in NuclideTable2 and
+      missing "*std::log(2.0)" in some comparison of threshold time.
+    + G4IonTable: fill decay channels when an ion is created on the fly to
+      avoid race condition issue in multi-threaded mode.
+      Addressing problem report #1651.
+    + Fix for possible race condition among threads in G4PDefSplitter.
+
+  o Physics Lists:
+    -------------
+    + constructors/limiters:
+      o Fixed possible data-race condition among threads in
+        G4NeutronTrackingCut when calling G4MTcout (defect spotted with DRD).
+      o G4NeutronTrackingCut: register G4NeutronKiller in
+        G4HadronicProcessStore; improved log and process deleted at exit.
+      o G4StepLimiterPhysics: fixed minor memory leak reported by Coverity.
+
+  o Processes - Electromagnetic :
+    ---------------------------
+    + High Energy:
+      o Verified and updated positron annihilation models (G4Vee2hadrons,
+        G4ee2KChargedModel, G4ee2KNeutralModel, G4eeTo3PiModel,
+        G4eeToHadronsMultiModel, G4eeToPGammaModel, G4eeToTwoPiModel,
+        G4eeToHadronsModel) and process G4eeToHadrons.
+        This includes addition of extra inline methods to convert from Lab
+        to CM, to initialise models with more correct thresholds.
+      o G4eeTo3PiModel: fixed sampling algorithm.
+    + Low Energy:
+      o Fixed cases of energy violation in G4LivermoreComptonModel and
+        atomic de-excitation. Addressing problem report #1612.
+    + Standard:
+      o G4PAIxSection: added protection to avoid division by zero.
+        Addressing problem report #1677.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/de_excitation:
+     o Converted G4FermiFragmentsPool to be a G4ThreadLocalSingleton, to fix
+       cases of data race due to lazy initialisation. Effects: sligthly
+       increase of memory per thread; no effects in physics.
+    + models/im_r_matrix:
+      o Fixed out of bound error in G4DetailedBalancePhaseSpaceIntegral,
+        reported by Coverity.
+    + models/inclxx:
+      o Fix a bug in Coulomb deflection for negative incident particles.
+      o Fix: avoid negative Fermi energies for delta resonances.
+    + models/pre_equilibrium:
+      o G4PreCompoundAlpha: fixed integer overflow.
+        Addressing problem report #1646.
+    + models/quasi_elastic:
+      o Removed potential data-race condition among threads.
+        Addressing problem report #1652.
+    + models/radioactive_decay:
+      o Fixed memory leak in destructor of G4RIsotopeTable.
+        Addressing problem report #1617.
+
+  o Run:
+    -------
+    + Fixed data-race condition among threads when creating RNG for workers.
+    + Fixed '/random/setSeeds' command not working properly.
+      Addressing problem report #1657.
+    + Fixed potential race condition among threads in G4VUPLSplitter class.
+    + G4PhysicsListHelper: minor fix in the default list of processes:
+      positron annihilation in muons and hadrons cannot be AtRest; these are
+      rare high energy discrete processes. Equivalent fix done for
+      OrderingParameterTable().
+      Addressiong problem report #1598.
+    + Clear root logical volume pointers in G4Region when geometry is
+      rebuilt from scratch. Addressing problem report #1665.
+    + G4MTRunManager: make sure G4RunManager::TerminateEventLoop() is
+      invoked at the end of run.
+    + Addressing possible data-race in G4RunManagerKernel::SetupPhysics()
+      when calling G4ParticleTable::SetReadiness().
+
+  o Visualization:
+    -------------
+    + gMocren:
+      o Fixed memory leak in G4GMocrenFile. Addressing problem report #1585.
+
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + extended/runAndEvent/RE05:
+      o Reduced amount of print-out.
+    + extended/runAndEvent/RE06:
+      o Added Boolean protection in ConstructSD methods for MT.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.0, 10.0.p01 or 10.0.p02.
+  o  Technical notes distributed for release 10.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.0.p03 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

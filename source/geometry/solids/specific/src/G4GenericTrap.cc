@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4GenericTrap.cc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -58,6 +58,13 @@
 #include "G4PolyhedronArbitrary.hh"
 #include "G4VisExtent.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 const G4int    G4GenericTrap::fgkNofVertices = 8;
 const G4double G4GenericTrap::fgkTolerance = 1E-3;
 
@@ -66,6 +73,7 @@ const G4double G4GenericTrap::fgkTolerance = 1E-3;
 G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
                               const std::vector<G4TwoVector>&  vertices )
   : G4VSolid(name),
+    fRebuildPolyhedron(false),
     fpPolyhedron(0),
     fDz(halfZ),
     fVertices(),
@@ -158,6 +166,7 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
 
 G4GenericTrap::G4GenericTrap( __void__& a )
   : G4VSolid(a),
+    fRebuildPolyhedron(false),
     fpPolyhedron(0),
     halfCarTolerance(0.),
     fDz(0.),
@@ -172,8 +181,6 @@ G4GenericTrap::G4GenericTrap( __void__& a )
 {
   // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.
-
-  for (size_t i=0; i<4; ++i)  { fTwist[i]=0.; }
 }
 
 // --------------------------------------------------------------------
@@ -188,7 +195,8 @@ G4GenericTrap::~G4GenericTrap()
 
 G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
   : G4VSolid(rhs),
-    fpPolyhedron(0), halfCarTolerance(rhs.halfCarTolerance),
+    fRebuildPolyhedron(false), fpPolyhedron(0),
+    halfCarTolerance(rhs.halfCarTolerance),
     fDz(rhs.fDz), fVertices(rhs.fVertices),
     fIsTwisted(rhs.fIsTwisted), fTessellatedSolid(0),
     fMinBBoxVector(rhs.fMinBBoxVector), fMaxBBoxVector(rhs.fMaxBBoxVector),
@@ -200,7 +208,6 @@ G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
    if (rhs.fTessellatedSolid && !fIsTwisted )
    { fTessellatedSolid = CreateTessellatedSolid(); } 
 #endif
-   fpPolyhedron = GetPolyhedron();
 }
 
 // --------------------------------------------------------------------
@@ -229,7 +236,8 @@ G4GenericTrap& G4GenericTrap::operator = (const G4GenericTrap& rhs)
    if (rhs.fTessellatedSolid && !fIsTwisted )
    { delete fTessellatedSolid; fTessellatedSolid = CreateTessellatedSolid(); } 
 #endif
-   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron(); 
+   fRebuildPolyhedron = false;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }
@@ -2098,11 +2106,15 @@ G4Polyhedron* G4GenericTrap::GetPolyhedron () const
 #endif  
   
   if ( (!fpPolyhedron)
+    || fRebuildPolyhedron
     || (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
         fpPolyhedron->GetNumberOfRotationSteps()) )
   {
+    G4AutoLock l(&polyhedronMutex);
     delete fpPolyhedron;
     fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
   }
   return fpPolyhedron;
 }    

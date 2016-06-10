@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4Tet.cc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // class G4Tet
 //
@@ -58,7 +58,7 @@
 
 #if !defined(G4GEOM_USE_UTET)
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc 81641 2014-06-04 09:11:38Z gcosmo $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc 84624 2014-10-17 09:56:00Z gcosmo $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -74,6 +74,13 @@ const char G4Tet::CVSVers[]="$Id: G4Tet.cc 81641 2014-06-04 09:11:38Z gcosmo $";
 #include "G4ThreeVector.hh"
 
 #include <cmath>
+
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace CLHEP;
 
@@ -91,7 +98,7 @@ G4Tet::G4Tet(const G4String& pName,
                    G4ThreeVector p2,
                    G4ThreeVector p3,
                    G4ThreeVector p4, G4bool *degeneracyFlag)
-  : G4VSolid(pName), fpPolyhedron(0), warningFlag(0)
+  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0), warningFlag(0)
 {
   // fV<x><y> is vector from vertex <y> to vertex <x>
   //
@@ -187,7 +194,8 @@ G4Tet::G4Tet(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Tet::G4Tet( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0),
+  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0),
     fAnchor(0,0,0), fP2(0,0,0), fP3(0,0,0), fP4(0,0,0), fMiddle(0,0,0),
     fNormal123(0,0,0), fNormal142(0,0,0), fNormal134(0,0,0),
     fNormal234(0,0,0), warningFlag(0),
@@ -203,7 +211,7 @@ G4Tet::G4Tet( __void__& a )
 
 G4Tet::~G4Tet()
 {
-  delete fpPolyhedron;
+  delete fpPolyhedron;  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,7 +221,7 @@ G4Tet::~G4Tet()
 G4Tet::G4Tet(const G4Tet& rhs)
   : G4VSolid(rhs),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fpPolyhedron(0), fAnchor(rhs.fAnchor),
+    fRebuildPolyhedron(false), fpPolyhedron(0), fAnchor(rhs.fAnchor),
     fP2(rhs.fP2), fP3(rhs.fP3), fP4(rhs.fP4), fMiddle(rhs.fMiddle),
     fNormal123(rhs.fNormal123), fNormal142(rhs.fNormal142),
     fNormal134(rhs.fNormal134), fNormal234(rhs.fNormal234),
@@ -224,7 +232,6 @@ G4Tet::G4Tet(const G4Tet& rhs)
     fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), fTol(rhs.fTol),
     fMaxSize(rhs.fMaxSize)
 {
-  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -255,7 +262,8 @@ G4Tet& G4Tet::operator = (const G4Tet& rhs)
    fYMin = rhs.fYMin; fYMax = rhs.fYMax; fZMin = rhs.fZMin; fZMax = rhs.fZMax;
    fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz; fTol = rhs.fTol;
    fMaxSize = rhs.fMaxSize;
-   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
+   fRebuildPolyhedron = false;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }
@@ -854,11 +862,15 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
 G4Polyhedron* G4Tet::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
+      G4AutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
+      l.unlock();
     }
   return fpPolyhedron;
 }

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -841,7 +841,7 @@ HistoManager: Histograms are booked and run has been started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.27s Real=0.53s Sys=0s
+  User=0.28s Real=0.28s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000

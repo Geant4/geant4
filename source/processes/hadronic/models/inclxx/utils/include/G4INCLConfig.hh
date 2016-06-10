@@ -254,6 +254,12 @@ namespace G4INCL {
     /// \brief Set the Fermi-momentum type
     void setFermiMomentumType(FermiMomentumType const f) { fermiMomentumType=f; }
 
+    /// \brief Get the Fermi momentum
+    G4double getFermiMomentum() const { return fermiMomentum; }
+
+    /// \brief Set the Fermi momentum
+    void setFermiMomentum(const G4double p) { fermiMomentum = p; }
+
     G4double getCutNN() const { return cutNN; }
 
 #ifdef INCL_ROOT_USE
@@ -394,6 +400,8 @@ namespace G4INCL {
 
     std::string fermiMomentumString;
     FermiMomentumType fermiMomentumType;
+
+    G4double fermiMomentum;
 
     G4double cutNN;
 

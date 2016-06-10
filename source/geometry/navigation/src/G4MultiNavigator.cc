@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc 81596 2014-06-03 14:08:49Z gcosmo $
+// $Id: G4MultiNavigator.cc 84511 2014-10-16 14:26:54Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -528,7 +528,8 @@ void G4MultiNavigator::WhichLimited()
   }
   if( (last > -1) && (noLimited == 1 ) )
   {
-    fLimitedStep[ last ] = kUnique; 
+    fLimitedStep[ last ] = kUnique;
+    fIdNavLimiting = last;
   }
 
   fNoLimitingStep= noLimited;  

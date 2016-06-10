@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4VCSGfaceted.hh 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -120,6 +120,7 @@ class G4VCSGfaceted : public G4VSolid
     G4VCSGface **faces;
     G4double fCubicVolume;
     G4double fSurfaceArea;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
     virtual G4double DistanceTo( const G4ThreeVector &p,

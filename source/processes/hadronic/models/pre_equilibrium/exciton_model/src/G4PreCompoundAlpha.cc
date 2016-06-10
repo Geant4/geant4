@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundAlpha.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundAlpha.cc 84486 2014-10-16 09:21:20Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@ G4PreCompoundAlpha::~G4PreCompoundAlpha()
 
 G4double G4PreCompoundAlpha::FactorialFactor(G4int N, G4int P)
 {
-  return G4double((N-4)*(P-3)*(N-3)*(P-2)*(N-2)*(P-1)*(N-1)*P)/12.0;
+  return G4double((N-4)*(P-3)*(N-3)*(P-2))*G4double((N-2)*(P-1)*(N-1)*P)/12.0;
 }
   
 G4double G4PreCompoundAlpha::CoalescenceFactor(G4int A)

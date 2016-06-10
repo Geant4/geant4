@@ -211,10 +211,10 @@ void G4MTRunManager::Initialize()
     ///G4UImanager::GetUIpointer()->SetIgnoreCmdNotFound(true);
 }
 
-void G4MTRunManager::TerminateEventLoop()
-{
-    //Nothing to do
-}
+////void G4MTRunManager::TerminateEventLoop()
+////{
+////    //Nothing to do
+////}
 void G4MTRunManager::ProcessOneEvent(G4int)
 {
     //Nothing to do
@@ -358,7 +358,8 @@ void G4MTRunManager::RunTermination()
 
   // Wait now for all threads to finish event-loop
   WaitForEndEventLoopWorkers();
-  //Now call base-class methof
+  //Now call base-class method
+  G4RunManager::TerminateEventLoop();
   G4RunManager::RunTermination();
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.cc 71040 2013-06-10 09:25:30Z gcosmo $
+// $Id: G4NeutronTrackingCut.cc 84518 2014-10-16 15:24:33Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,13 +43,13 @@
 
 #include "G4Neutron.hh"
 #include "G4NeutronKiller.hh"
+#include "G4HadronicProcessStore.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
 //
-G4ThreadLocal G4bool   G4NeutronTrackingCut::wasActivated = false;
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
   :  G4VPhysicsConstructor("neutronTrackingCut")
@@ -57,7 +57,6 @@ G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
-  //pNeutronKiller     = 0;
 }
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
@@ -65,13 +64,10 @@ G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
-  //pNeutronKiller     = 0;
 }
 
 G4NeutronTrackingCut::~G4NeutronTrackingCut()
-{
-  //delete pNeutronKiller;
-}
+{}
 
 void G4NeutronTrackingCut::ConstructParticle()
 {
@@ -80,17 +76,14 @@ void G4NeutronTrackingCut::ConstructParticle()
 
 void G4NeutronTrackingCut::ConstructProcess()
 {
-  if(wasActivated) return;
-  wasActivated = true;
-
-  // Add Process
-
   G4NeutronKiller* pNeutronKiller = new G4NeutronKiller();
   G4ParticleDefinition * particle = G4Neutron::Neutron();
   G4ProcessManager * pmanager = particle->GetProcessManager();
 
   if(verbose > 0) {
-    G4cout << "### Adding tracking cuts for " << particle->GetParticleName() 
+    G4String pn = particle->GetParticleName();//Avoid data-race when passing
+                                              //this string to G4MTcout
+    G4cout << "### Adding tracking cuts for " << pn 
 	   << "  TimeCut(ns)= " << timeLimit/ns 
 	   << "  KinEnergyCut(MeV)= " <<  kineticEnergyLimit/MeV
 	   <<  G4endl;
@@ -98,6 +91,9 @@ void G4NeutronTrackingCut::ConstructProcess()
   pmanager -> AddDiscreteProcess(pNeutronKiller);
   pNeutronKiller->SetKinEnergyLimit(kineticEnergyLimit);
   pNeutronKiller->SetTimeLimit(timeLimit);
+
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(pNeutronKiller);
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(pNeutronKiller, particle);
 }
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4EllipticalTube.cc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -51,6 +51,13 @@
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 using namespace CLHEP;
 
 //
@@ -60,7 +67,8 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
                                           G4double theDx,
                                           G4double theDy,
                                           G4double theDz )
-  : G4VSolid( name ), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid( name ), fCubicVolume(0.), fSurfaceArea(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0)
 {
   halfTol = 0.5*kCarTolerance;
 
@@ -76,7 +84,8 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
 //
 G4EllipticalTube::G4EllipticalTube( __void__& a )
   : G4VSolid(a), dx(0.), dy(0.), dz(0.), halfTol(0.),
-    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+    fCubicVolume(0.), fSurfaceArea(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 }
 
@@ -86,7 +95,7 @@ G4EllipticalTube::G4EllipticalTube( __void__& a )
 //
 G4EllipticalTube::~G4EllipticalTube()
 {
-  delete fpPolyhedron;
+  delete fpPolyhedron;  fpPolyhedron = 0;
 }
 
 
@@ -96,9 +105,8 @@ G4EllipticalTube::~G4EllipticalTube()
 G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
   : G4VSolid(rhs), dx(rhs.dx), dy(rhs.dy), dz(rhs.dz), halfTol(rhs.halfTol),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fpPolyhedron(0)
+    fRebuildPolyhedron(false), fpPolyhedron(0)
 {
-  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -120,7 +128,8 @@ G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
    dx = rhs.dx; dy = rhs.dy; dz = rhs.dz;
    halfTol = rhs.halfTol;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
+   fRebuildPolyhedron = false;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }
@@ -969,11 +978,15 @@ G4Polyhedron* G4EllipticalTube::CreatePolyhedron() const
 G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
+      G4AutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
+      l.unlock();
     }
   return fpPolyhedron;
 }

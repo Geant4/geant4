@@ -51,8 +51,8 @@ void RE05ActionInitialization::Build() const
   G4UserRunAction* run_action = new RE05RunAction;
   SetUserAction(run_action);
   //
-////  G4UserEventAction* event_action = new RE05EventAction;
-////  SetUserAction(event_action);
+  G4UserEventAction* event_action = new RE05EventAction;
+  SetUserAction(event_action);
   //
   G4UserStackingAction* stacking_action = new RE05StackingAction;
   SetUserAction(stacking_action);

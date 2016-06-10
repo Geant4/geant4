@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc 73250 2013-08-22 13:22:23Z gcosmo $
+// $Id: G4PVReplica.cc 84724 2014-10-20 08:26:15Z gcosmo $
 //
 // 
 // class G4PVReplica Implementation
@@ -290,7 +290,39 @@ void G4PVReplica::InitialiseWorker(G4PVReplica *pMasterObject)
   G4VPhysicalVolume::InitialiseWorker( pMasterObject, 0, G4ThreeVector());
   subInstanceManager.SlaveCopySubInstanceArray();
   G4MT_copyNo = -1;
-  CheckAndSetParameters (faxis, fnReplicas, fwidth, foffset);
+
+  //This call causes "self-assignment" of the input paramters
+  //Issue reported by DRD since TerminateWorker below can be called
+  //at the same time by another thread
+  //What we need here is the splic-class component of this funciton
+  //that is copied here
+  //CheckAndSetParameters (faxis, fnReplicas, fwidth, foffset);
+
+  // Create rotation matrix for phi axis case & check axis is valid
+  //
+  G4RotationMatrix* pRMat=0;
+  switch (faxis)
+  {
+    case kPhi:
+      pRMat=new G4RotationMatrix();
+      if (!pRMat)
+      {
+        G4Exception("G4PVReplica::InitialiseWorker(...)", "GeomVol0003",
+                    FatalException, "Rotation matrix allocation failed.");
+      }
+      SetRotation(pRMat);
+      break;
+    case kRho:
+    case kXAxis:
+    case kYAxis:
+    case kZAxis:
+    case kUndefined:
+      break;
+    default:
+      G4Exception("G4PVReplica::InitialiseWorker(...)", "GeomVol0002",
+                  FatalException, "Unknown axis of replication.");
+      break;
+  }
 }
 
 // This method is similar to the destructor. It is used by each worker

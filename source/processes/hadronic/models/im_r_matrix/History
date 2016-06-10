@@ -13,7 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-29-Jul-2013 Hisaya Kurashige            had-im_r-V09-06-05
+
+10-June-2014 Gunter Folger              hadr-im_r-V09-06-07
+- Fix out of bound error in G4DetailedBalancePhaseSpaceIntegral, reported by
+  coverity.
+
+29-Jul-2013 Hisaya Kurashige            hadr-im_r-V09-06-05
 - remove inclusion of G4ShortLivedTable.hh in G4ResonaceNames.cc
 
 12-Jul-2013 Gunter Folger               hadr-im_r-V09-06-04

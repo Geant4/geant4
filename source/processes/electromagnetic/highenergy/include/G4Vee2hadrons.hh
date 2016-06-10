@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Vee2hadrons.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4Vee2hadrons.hh 84488 2014-10-16 09:28:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,12 +36,13 @@
 //
 // Creation date: 12.08.2004
 //
-// Modifications:
+// Modifications: 14 July 2014 N. Chikuma revised interfaces  
 //
 
 //
-// Class Description:
-//
+// Class Description: base class to compute partial cross sections
+//                    of e+e- annihilation into hadrons and 
+//                    sample of final state in the centre mass frame
 
 // -------------------------------------------------------------------
 //
@@ -53,6 +54,8 @@
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "G4eeCrossSections.hh"
+#include "G4PhysicsLinearVector.hh"
 
 class G4DynamicParticle;
 class G4PhysicsVector;
@@ -62,37 +65,50 @@ class G4Vee2hadrons
 
 public:
 
-  G4Vee2hadrons() : lowEnergy(0.0), highEnergy(1.1*CLHEP::GeV) {};
+  G4Vee2hadrons(G4eeCrossSections* cr,
+		G4double vlowEnergy,
+		G4double vhighEnergy,
+		G4double vdelta) : cross(cr)
+  {
+	lowEnergy  = vlowEnergy;
+	highEnergy = vhighEnergy;
+	delta      = vdelta;
+  };
 
   virtual ~G4Vee2hadrons() {};
-
-  virtual G4double ThresholdEnergy() const = 0;
 
   virtual G4double PeakEnergy() const = 0;
 
   virtual G4double ComputeCrossSection(G4double) const = 0;
 
-  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const = 0;
+  G4PhysicsVector* PhysicsVector() const
+  {
+    G4int nbins = std::max(3, G4int((highEnergy - lowEnergy)/delta) );
+    G4PhysicsVector* pp = new G4PhysicsLinearVector(lowEnergy,highEnergy,nbins);
+    return pp;
+  };
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 G4double, const G4ThreeVector&) = 0;
 
-  void SetLowEnergy(G4double val) {lowEnergy = val;};
-
   G4double LowEnergy() const {return lowEnergy;};
 
-  void SetHighEnergy(G4double val) {highEnergy = val;};
-
   G4double HighEnergy() const {return highEnergy;};
-
+  
 private:
 
   // hide assignment operator
   G4Vee2hadrons & operator=(const  G4Vee2hadrons &right);
   G4Vee2hadrons(const  G4Vee2hadrons&);
 
+  // parameters of the table
   G4double lowEnergy;
   G4double highEnergy;
+  G4double delta;       
+
+protected:
+
+   G4eeCrossSections* cross;  // class to compute cross section
 
 };
 

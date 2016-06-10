@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc 81636 2014-06-04 09:06:08Z gcosmo $
+// $Id: G4Orb.cc 84622 2014-10-17 09:43:17Z gcosmo $
 //
 // class G4Orb
 //
@@ -114,7 +114,6 @@ G4Orb::~G4Orb()
 G4Orb::G4Orb(const G4Orb& rhs)
   : G4CSGSolid(rhs), fRmax(rhs.fRmax), fRmaxTolerance(rhs.fRmaxTolerance)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -135,7 +134,6 @@ G4Orb& G4Orb::operator = (const G4Orb& rhs)
    //
    fRmax = rhs.fRmax;
    fRmaxTolerance = rhs.fRmaxTolerance;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

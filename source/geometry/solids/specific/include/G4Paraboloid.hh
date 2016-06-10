@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.hh 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4Paraboloid.hh 84624 2014-10-17 09:56:00Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -137,6 +137,7 @@ class G4Paraboloid : public G4VSolid
 
   protected:  // without description
  
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
   private:

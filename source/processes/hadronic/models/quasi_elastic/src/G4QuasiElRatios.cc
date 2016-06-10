@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElRatios.cc 68711 2013-04-05 09:05:42Z gcosmo $
+// $Id: G4QuasiElRatios.cc 84610 2014-10-17 08:17:08Z gcosmo $
 //
 //
 // G4 Physics class: G4QuasiElRatios for N+A elastic cross sections
@@ -599,7 +599,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
     static G4ThreadLocal G4double lastP=0.;              // The last momentum for which XS was calculated
     static G4ThreadLocal G4int    lastH=0;               // The last projPDG for which XS was calculated
     static G4ThreadLocal G4bool   lastF=true;            // The last nucleon for which XS was calculated
-    static std::pair<G4double,G4double> lastR(0.,0.); // The last result
+    static G4ThreadLocal std::pair<G4double,G4double>* G4MT_lastR=0; if (!G4MT_lastR) G4MT_lastR = new std::pair<G4double,G4double>(0.,0.); std::pair<G4double,G4double> &lastR=*G4MT_lastR; // The last result
     // Local Associative Data Base:
     static G4ThreadLocal std::vector<G4int>     *vI_G4MT_TLS_ = 0 ; if (!vI_G4MT_TLS_) vI_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vI = *vI_G4MT_TLS_;      // Vector of index for which XS was calculated
     static G4ThreadLocal std::vector<G4double>  *vM_G4MT_TLS_ = 0 ; if (!vM_G4MT_TLS_) vM_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vM = *vM_G4MT_TLS_;      // Vector of rel max ln(p) initialized in LogTable

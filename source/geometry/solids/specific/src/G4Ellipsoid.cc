@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4Ellipsoid.cc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // class G4Ellipsoid
 //
@@ -52,6 +52,13 @@
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 using namespace CLHEP;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,8 +72,8 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
                                G4double pzSemiAxis,
                                G4double pzBottomCut,
                                G4double pzTopCut)
-  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.),
-    zBottomCut(0.), zTopCut(0.)
+  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0),
+    fCubicVolume(0.), fSurfaceArea(0.), zBottomCut(0.), zTopCut(0.)
 {
   // note: for users that want to use the full ellipsoid it is useful
   // to include a default for the cuts 
@@ -110,7 +117,7 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Ellipsoid::G4Ellipsoid( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), kRadTolerance(0.),
+  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0), kRadTolerance(0.),
     halfCarTolerance(0.), halfRadTolerance(0.), fCubicVolume(0.),
     fSurfaceArea(0.), xSemiAxis(0.), ySemiAxis(0.), zSemiAxis(0.),
     semiAxisMax(0.), zBottomCut(0.), zTopCut(0.)
@@ -123,6 +130,7 @@ G4Ellipsoid::G4Ellipsoid( __void__& a )
 
 G4Ellipsoid::~G4Ellipsoid()
 {
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -131,7 +139,8 @@ G4Ellipsoid::~G4Ellipsoid()
 
 G4Ellipsoid::G4Ellipsoid(const G4Ellipsoid& rhs)
   : G4VSolid(rhs),
-    fpPolyhedron(0), kRadTolerance(rhs.kRadTolerance),
+    fRebuildPolyhedron(false), fpPolyhedron(0),
+    kRadTolerance(rhs.kRadTolerance),
     halfCarTolerance(rhs.halfCarTolerance),
     halfRadTolerance(rhs.halfRadTolerance),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
@@ -139,7 +148,6 @@ G4Ellipsoid::G4Ellipsoid(const G4Ellipsoid& rhs)
     zSemiAxis(rhs.zSemiAxis), semiAxisMax(rhs.semiAxisMax),
     zBottomCut(rhs.zBottomCut), zTopCut(rhs.zTopCut)
 {
-  fpPolyhedron = GetPolyhedron();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,7 +173,8 @@ G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs)
    xSemiAxis = rhs.xSemiAxis; ySemiAxis = rhs.ySemiAxis;
    zSemiAxis = rhs.zSemiAxis; semiAxisMax = rhs.semiAxisMax;
    zBottomCut = rhs.zBottomCut; zTopCut = rhs.zTopCut;
-   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
+   fRebuildPolyhedron = false;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }
@@ -1084,11 +1093,15 @@ G4Polyhedron* G4Ellipsoid::CreatePolyhedron () const
 G4Polyhedron* G4Ellipsoid::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
+      G4AutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
+      l.unlock();
     }
   return fpPolyhedron;
 }

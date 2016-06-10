@@ -250,6 +250,9 @@ namespace G4INCL {
       G4ThreadLocal G4IonTable *theG4IonTable;
 #endif
 
+      /// \brief Default value for constant Fermi momentum
+      G4ThreadLocal G4double constantFermiMomentum = PhysicalConstants::Pf;
+
       /// \brief Transform a IUPAC char to an char representing an integer digit
       char iupacToInt(char c) {
         return (char)(((G4int)'0')+elementIUPACDigits.find(c));
@@ -314,9 +317,18 @@ namespace G4INCL {
       }
 
       // Initialise the Fermi-momentum function
-      if(!theConfig || theConfig->getFermiMomentumType()==ConstantFermiMomentum)
+      if(!theConfig || theConfig->getFermiMomentumType()==ConstantFermiMomentum) {
         getFermiMomentum = ParticleTable::getFermiMomentumConstant;
-      else if(theConfig->getFermiMomentumType()==ConstantLightFermiMomentum)
+        if(theConfig) {
+          const G4double aFermiMomentum = theConfig->getFermiMomentum();
+          if(aFermiMomentum>0.)
+            constantFermiMomentum = aFermiMomentum;
+          else
+            constantFermiMomentum = PhysicalConstants::Pf;
+        } else {
+          constantFermiMomentum = PhysicalConstants::Pf;
+        }
+      } else if(theConfig->getFermiMomentumType()==ConstantLightFermiMomentum)
         getFermiMomentum = ParticleTable::getFermiMomentumConstantLight;
       else if(theConfig->getFermiMomentumType()==MassDependentFermiMomentum)
         getFermiMomentum = ParticleTable::getFermiMomentumMassDependent;
@@ -778,7 +790,7 @@ namespace G4INCL {
     }
 
     G4double getFermiMomentumConstant(const G4int /*A*/, const G4int /*Z*/) {
-      return PhysicalConstants::Pf;
+      return constantFermiMomentum;
     }
 
     G4double getFermiMomentumConstantLight(const G4int A, const G4int Z) {

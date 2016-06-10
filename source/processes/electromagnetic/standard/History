@@ -1,4 +1,4 @@
-$Id: History 82133 2014-06-11 10:37:00Z gcosmo $
+$Id: History 84489 2014-10-16 09:51:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+08 August 14: V.Ivanchenko (emstand-V09-06-83)
+- G4PAIxSection - added protection to avoid division by zero; bug #1677
 
 27 May 14: V.Ivanchenko (emstand-V09-06-82)
 - G4IonCoulombCrossSection - tunned computation of the screen 

@@ -135,7 +135,7 @@ private:
   std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > > map_full_list;
 
   //enum {nEntries=3075,MaxA=260, MinZ=2, MaxZ=100};
-  enum {nEntries_ground_state=2909};
+  enum {nEntries_ground_state=2910};
   enum {nEntries_excite_state=3898};
   //static const G4double isomerTable[nEntries][5];
   static const G4double groundStateTable[nEntries_ground_state][6];

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.icc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4Polyhedra.icc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -92,5 +92,5 @@ void G4Polyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
   }
   *original_parameters = *pars;
   fCubicVolume = 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }

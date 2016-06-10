@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -55,6 +55,11 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
+--------------------------------------------------------
+ Calorimeters are placed in parallel.
+ Absorber is made of Lead
+ Gap is made of liquidArgon
+--------------------------------------------------------
 G4SDManager::AddNewCollection : the collection <Calor-A_abs/eDep> is registered at 1
 G4SDManager::AddNewCollection : the collection <Calor-A_abs/nGamma> is registered at 2
 G4SDManager::AddNewCollection : the collection <Calor-A_abs/nElectron> is registered at 3
@@ -114,71 +119,6 @@ G4SDManager::AddNewCollection : the collection <Calor-C_gap/minEkinElectron> is 
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/minEkinPositron> is registered at 52
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/trackLength> is registered at 53
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/nStep> is registered at 54
-New sensitive detector <Calor-C_gap> is registored at /
---------------------------------------------------------
- Calorimeters are placed in parallel.
- Absorber is made of Lead
- Gap is made of liquidArgon
---------------------------------------------------------
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : DET1010
-      issued by : G4SDStructure::AddNewDetector()
-Calor-A_abs had already been stored in /. Object pointer is overwitten.
-It's users' responsibility to delete the old sensitive detector object.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-New sensitive detector <Calor-A_abs> is registored at /
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : DET1010
-      issued by : G4SDStructure::AddNewDetector()
-Calor-A_gap had already been stored in /. Object pointer is overwitten.
-It's users' responsibility to delete the old sensitive detector object.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-New sensitive detector <Calor-A_gap> is registored at /
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : DET1010
-      issued by : G4SDStructure::AddNewDetector()
-Calor-B_abs had already been stored in /. Object pointer is overwitten.
-It's users' responsibility to delete the old sensitive detector object.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-New sensitive detector <Calor-B_abs> is registored at /
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : DET1010
-      issued by : G4SDStructure::AddNewDetector()
-Calor-B_gap had already been stored in /. Object pointer is overwitten.
-It's users' responsibility to delete the old sensitive detector object.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-New sensitive detector <Calor-B_gap> is registored at /
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : DET1010
-      issued by : G4SDStructure::AddNewDetector()
-Calor-C_abs had already been stored in /. Object pointer is overwitten.
-It's users' responsibility to delete the old sensitive detector object.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-New sensitive detector <Calor-C_abs> is registored at /
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : DET1010
-      issued by : G4SDStructure::AddNewDetector()
-Calor-C_gap had already been stored in /. Object pointer is overwitten.
-It's users' responsibility to delete the old sensitive detector object.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 New sensitive detector <Calor-C_gap> is registored at /
 G4SDManager::AddNewCollection : the collection <Calor-AP_para/eDep> is registered at 55
 G4SDManager::AddNewCollection : the collection <Calor-AP_para/nGamma> is registered at 56
@@ -499,7 +439,7 @@ Index : 6     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=3.54s Real=10.06s Sys=0.31s
+  User=3.57s Real=3.88s Sys=0.26s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -975,7 +915,7 @@ Index : 6     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=5.07s Real=14.48s Sys=0.42s
+  User=4.16s Real=4.56s Sys=0.36s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1482,7 +1422,7 @@ Index : 12     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.27s Real=5.09s Sys=0.18s
+  User=2.02s Real=2.39s Sys=0.2s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2018,7 +1958,7 @@ Index : 12     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.48s Real=3.65s Sys=0.15s
+  User=1.14s Real=1.29s Sys=0.11s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

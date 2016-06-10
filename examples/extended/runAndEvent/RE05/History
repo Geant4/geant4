@@ -1,4 +1,4 @@
-$Id: History 77724 2013-11-27 17:11:16Z gcosmo $
+$Id: History 84630 2014-10-17 10:31:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-08-14 M.Asai (exampleRE05-V09-06-10)
+- Reduce the amount of print-out.
 
 27-11-13 G.Folger (exampleRE05-V09-06-09)
 - remove setting number of threads from macro file

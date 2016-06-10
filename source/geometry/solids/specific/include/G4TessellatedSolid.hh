@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4TessellatedSolid.hh 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -266,6 +266,7 @@ class G4TessellatedSolid : public G4VSolid
 
   private:
 
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
     std::vector<G4VFacet *>  fFacets;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc 81636 2014-06-04 09:06:08Z gcosmo $
+// $Id: G4Sphere.cc 84622 2014-10-17 09:43:17Z gcosmo $
 //
 // class G4Sphere
 //
@@ -169,7 +169,6 @@ G4Sphere::G4Sphere(const G4Sphere& rhs)
     halfCarTolerance(rhs.halfCarTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -205,7 +204,6 @@ G4Sphere& G4Sphere::operator = (const G4Sphere& rhs)
    fFullThetaSphere = rhs.fFullThetaSphere; fFullSphere = rhs.fFullSphere;
    halfCarTolerance = rhs.halfCarTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

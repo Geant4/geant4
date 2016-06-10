@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFile.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4GMocrenFile.cc 84618 2014-10-17 08:58:14Z gcosmo $
 //
 //
 // GMocrenFile factory.
@@ -53,7 +53,7 @@ G4GMocrenFile::G4GMocrenFile ()
 
 	//----- G4GMocrenFile, destructor
 G4GMocrenFile::~G4GMocrenFile () {
-  ;
+  delete kMessenger;
 }
 
 

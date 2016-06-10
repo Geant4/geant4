@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.hh 71040 2013-06-10 09:25:30Z gcosmo $
+// $Id: G4NeutronTrackingCut.hh 84518 2014-10-16 15:24:33Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,10 +45,10 @@ class G4NeutronKiller;
 
 class G4NeutronTrackingCut : public G4VPhysicsConstructor
 {
-  public: 
-    G4NeutronTrackingCut(G4int ver=0);
-    G4NeutronTrackingCut(const G4String& name,G4int ver=0);
-    virtual ~G4NeutronTrackingCut();
+public: 
+  G4NeutronTrackingCut(G4int ver=0);
+  G4NeutronTrackingCut(const G4String& name,G4int ver=0);
+  virtual ~G4NeutronTrackingCut();
 
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
@@ -70,7 +70,6 @@ private:
   G4double kineticEnergyLimit;
   
   G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
 };
 
 inline void G4NeutronTrackingCut::SetTimeLimit(G4double val)

@@ -14,22 +14,22 @@
 //
 //   Class implementing a CSG-like type "PCON".
 //
-//   UPolycone( const G4String& name, 
-//              G4double phiStart,     // initial phi starting angle
-//              G4double phiTotal,     // total phi angle
-//              G4int numZPlanes,      // number of z planes
-//              const G4double zPlane[],  // position of z planes
-//              const G4double rInner[],  // tangent distance to inner surface
-//              const G4double rOuter[])  // tangent distance to outer surface
+//   UPolycone( const std::string& name, 
+//              double phiStart,     // initial phi starting angle
+//              double phiTotal,     // total phi angle
+//              int numZPlanes,      // number of z planes
+//              const double zPlane[],  // position of z planes
+//              const double rInner[],  // tangent distance to inner surface
+//              const double rOuter[])  // tangent distance to outer surface
 //
 //   Alternative constructor, but limited to increasing-only Z sections:
 //
-//   UPolycone( const G4String& name, 
-//              G4double phiStart,   // initial phi starting angle
-//              G4double phiTotal,   // total phi angle
-//              G4int    numRZ,      // number corners in r,z space
-//              const G4double r[],  // r coordinate of these corners
-//              const G4double z[])  // z coordinate of these corners
+//   UPolycone( const std::string& name, 
+//              double phiStart,   // initial phi starting angle
+//              double phiTotal,   // total phi angle
+//              int    numRZ,      // number corners in r,z space
+//              const double r[],  // r coordinate of these corners
+//              const double z[])  // z coordinate of these corners
 //
 // 19.04.13 Marek Gayer
 //          Created from original implementation in Geant4
@@ -134,7 +134,7 @@ class UPolycone : public VUSolid
 
     void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
-    //G4Visualisation
+    // Visualisation
     void GetParametersList(int /*aNumber*/, double* /*aArray*/) const {}
     VUSolid* Clone() const;
 

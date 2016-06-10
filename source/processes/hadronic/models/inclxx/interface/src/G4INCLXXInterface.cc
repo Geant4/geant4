@@ -440,7 +440,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
       for(G4ReactionProductVector::iterator fragment = deExcitationResult->begin();
 	  fragment != deExcitationResult->end(); ++fragment) {
-	G4ParticleDefinition *def = (*fragment)->GetDefinition();
+	const G4ParticleDefinition *def = (*fragment)->GetDefinition();
 	if(def != 0) {
 	  G4DynamicParticle *theFragment = new G4DynamicParticle(def, (*fragment)->GetMomentum());
 	  theResult.AddSecondary(theFragment);

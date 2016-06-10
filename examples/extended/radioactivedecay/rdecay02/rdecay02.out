@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -112,6 +112,42 @@ NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 19.5 MeV ---> 100 TeV
+        Model:          NeutronHPElastic: 0 eV  ---> 20 MeV
+     Cr_sctns:        NeutronHPElasticXS: 0 eV  ---> 20 MeV
+     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            Binary Cascade: 19.9 MeV ---> 9.9 GeV
+        Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
+     Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
+        Model:               nRadCapture: 19.9 MeV ---> 100 TeV
+     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nFission
+        Model:          NeutronHPFission: 0 eV  ---> 20 MeV
+        Model:                G4LFission: 19.9 MeV ---> 2.88022e+295 J  
+     Cr_sctns:        NeutronHPFissionXS: 0 eV  ---> 20 MeV
+     Cr_sctns:          GheishaFissionXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
 
 ---------------------------------------------------
                            Hadronic Processes for GenericIon
@@ -224,40 +260,6 @@ NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use
   Process: muMinusCaptureAtRest
 
 ---------------------------------------------------
-                           Hadronic Processes for neutron
-
-  Process: hadElastic
-        Model:             hElasticCHIPS: 19.5 MeV ---> 100 TeV
-        Model:          NeutronHPElastic: 0 eV  ---> 20 MeV
-     Cr_sctns:        NeutronHPElasticXS: 0 eV  ---> 20 MeV
-     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
-
-  Process: neutronInelastic
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            Binary Cascade: 19.9 MeV ---> 9.9 GeV
-        Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
-     Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
-
-  Process: nCapture
-        Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
-        Model:               nRadCapture: 19.9 MeV ---> 100 TeV
-     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
-     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
-
-  Process: nFission
-        Model:          NeutronHPFission: 0 eV  ---> 20 MeV
-        Model:                G4LFission: 19.9 MeV ---> 2.88022e+295 J  
-     Cr_sctns:        NeutronHPFissionXS: 0 eV  ---> 20 MeV
-     Cr_sctns:          GheishaFissionXS: 0 eV  ---> 100 TeV
-
----------------------------------------------------
                            Hadronic Processes for pi+
 
   Process: hadElastic
@@ -362,105 +364,6 @@ Creating Ntuple RDecayProducts in ROOT file: All Products of RDecay
 ROOT Ntuple tRDecayProducts All Products of RDecay PID:Z:A:Energy:Time:Weight booked 
 exrdmAnalysisManager: Histograms are booked and the run has been started
 ### Run : 0
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : HAD_RDM_011

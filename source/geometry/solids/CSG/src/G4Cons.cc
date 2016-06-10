@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc 81636 2014-06-04 09:06:08Z gcosmo $
+// $Id: G4Cons.cc 84622 2014-10-17 09:43:17Z gcosmo $
 // GEANT4 tag $Name: $
 //
 //
@@ -34,6 +34,10 @@
 //
 // History:
 //
+// 04.09.14 T.Nikitina: Fix typo error in GetPointOnSurface() when 
+//                      GetRadiusInRing() was introduced
+//                      Fix DistanceToIn(p,v) for points on the Surface,
+//                      error was reported by OpticalEscape test
 // 05.04.12 M.Kelsey:   GetPointOnSurface() throw flat in sqrt(r)
 // 12.10.09 T.Nikitina: Added to DistanceToIn(p,v) check on the direction in
 //                      case of point on surface
@@ -132,7 +136,6 @@ G4Cons::G4Cons( __void__& a )
     cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
     fPhiFullCone(false), halfCarTolerance(0.), halfRadTolerance(0.),
     halfAngTolerance(0.)
-
 {
 }
 
@@ -160,7 +163,6 @@ G4Cons::G4Cons(const G4Cons& rhs)
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -192,7 +194,6 @@ G4Cons& G4Cons::operator = (const G4Cons& rhs)
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }
@@ -901,7 +902,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
-        if ( sd > 0 )  // If 'forwards'. Check z intersection
+        if ( sd >= 0 )  // If 'forwards'. Check z intersection
         {
           if ( sd>dRmax ) // Avoid rounding errors due to precision issues on
           {               // 64 bits systems. Split long distances and recompute
@@ -2309,8 +2310,8 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
   
   phi    = RandFlat::shoot(fSPhi,fSPhi+fDPhi);
   cosu   = std::cos(phi);  sinu = std::sin(phi);
-  rRand1 = GetRadiusInRing(fRmin1, fRmin2);
-  rRand2 = GetRadiusInRing(fRmax1, fRmax2);
+  rRand1 = GetRadiusInRing(fRmin1, fRmax1);
+  rRand2 = GetRadiusInRing(fRmin2, fRmax2);
   
   if ( (fSPhi == 0.) && fPhiFullCone )  { Afive = 0.; }
   chose  = RandFlat::shoot(0.,Aone+Atwo+Athree+Afour+2.*Afive);

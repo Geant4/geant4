@@ -69,7 +69,7 @@ void G4OTubs::Initialize()
 {
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline 

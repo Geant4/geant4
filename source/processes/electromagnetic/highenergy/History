@@ -1,4 +1,4 @@
-$Id: History 76600 2013-11-13 08:30:02Z gcosmo $
+$Id: History 84488 2014-10-16 09:28:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 July 2014: V.Ivant (emhighenergy-V09-06-10)
+- G4Vee2hadrons - fixed build for gcc 4.1
+
+18 July 2014: V.Ivant
+- G4eeTo3PiModel - fixed sampling algorithm 
+
+18 July 2014: V.Ivant
+- Naruhiro Chikuma verified and updated positron annihilation
+    models: G4Vee2hadrons, G4ee2KChargedModel, G4ee2KNeutralModel,
+    G4eeTo3PiModel, G4eeToHadronsMultiModel, G4eeToPGammaModel,
+    G4eeToTwoPiModel, G4eeToHadronsModel; and process G4eeToHadrons
+    This includes adition on extra inline methods to convert from Lab 
+    to CM, to initilise models, more correct thresholds,
+    migration to updated PhysicsVector interfaces
 
 13 November 2013: V.Ivant (emhighenergy-V09-06-09)
 - G4mplIonisationModel - fixed compillation problem of the previous tag

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4VTwistedFaceted.cc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -56,6 +56,13 @@
 
 #include "Randomize.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 //=====================================================================
 //* constructors ------------------------------------------------------
 
@@ -73,7 +80,7 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
                          G4double  pDx4,   // half x length at +pDz,+pDy
                          G4double  pAlph   // tilt angle 
                  )
-  : G4VSolid(pname), fpPolyhedron(0),
+  : G4VSolid(pname), fRebuildPolyhedron(false), fpPolyhedron(0),
     fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
     fSide90(0), fSide180(0), fSide270(0),
     fSurfaceArea(0.)
@@ -193,7 +200,8 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
 //* Fake default constructor ------------------------------------------
 
 G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), fTheta(0.), fPhi(0.), fDy1(0.),
+  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0),
+    fTheta(0.), fPhi(0.), fDy1(0.),
     fDx1(0.), fDx2(0.), fDy2(0.), fDx3(0.), fDx4(0.),
     fDz(0.), fDx(0.), fDy(0.), fAlph(0.),
     fTAlph(0.), fdeltaX(0.), fdeltaY(0.), fPhiTwist(0.),
@@ -207,21 +215,22 @@ G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
 
 G4VTwistedFaceted::~G4VTwistedFaceted()
 {
-  if (fLowerEndcap) delete fLowerEndcap ;
-  if (fUpperEndcap) delete fUpperEndcap ;
+  if (fLowerEndcap) { delete fLowerEndcap ; }
+  if (fUpperEndcap) { delete fUpperEndcap ; }
 
-  if (fSide0)       delete fSide0 ;
-  if (fSide90)      delete fSide90 ;
-  if (fSide180)     delete fSide180 ;
-  if (fSide270)     delete fSide270 ;
-  if (fpPolyhedron) delete fpPolyhedron;
+  if (fSide0)       { delete fSide0   ; }
+  if (fSide90)      { delete fSide90  ; }
+  if (fSide180)     { delete fSide180 ; }
+  if (fSide270)     { delete fSide270 ; }
+  if (fpPolyhedron) { delete fpPolyhedron; fpPolyhedron = 0; }
 }
 
 //=====================================================================
 //* Copy constructor --------------------------------------------------
 
 G4VTwistedFaceted::G4VTwistedFaceted(const G4VTwistedFaceted& rhs)
-  : G4VSolid(rhs), fpPolyhedron(0), fTheta(rhs.fTheta), fPhi(rhs.fPhi),
+  : G4VSolid(rhs), fRebuildPolyhedron(false), fpPolyhedron(0),
+    fTheta(rhs.fTheta), fPhi(rhs.fPhi),
     fDy1(rhs.fDy1), fDx1(rhs.fDx1), fDx2(rhs.fDx2), fDy2(rhs.fDy2),
     fDx3(rhs.fDx3), fDx4(rhs.fDx4), fDz(rhs.fDz), fDx(rhs.fDx), fDy(rhs.fDy),
     fAlph(rhs.fAlph), fTAlph(rhs.fTAlph), fdeltaX(rhs.fdeltaX),
@@ -260,6 +269,7 @@ G4VTwistedFaceted& G4VTwistedFaceted::operator = (const G4VTwistedFaceted& rhs)
    fdeltaY= rhs.fdeltaY; fPhiTwist= rhs.fPhiTwist; fLowerEndcap= 0;
    fUpperEndcap= 0; fSide0= 0; fSide90= 0; fSide180= 0; fSide270= 0;
    fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
+   fRebuildPolyhedron = false;
    delete fpPolyhedron; fpPolyhedron= 0;
    fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
    fLastDistanceToIn= rhs.fLastDistanceToIn;
@@ -1188,11 +1198,15 @@ G4GeometryType G4VTwistedFaceted::GetEntityType() const
 G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
+      G4AutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
+      l.unlock();
     }
 
   return fpPolyhedron;

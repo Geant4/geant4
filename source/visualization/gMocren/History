@@ -1,4 +1,4 @@
-$Id: History 75179 2013-10-29 10:09:31Z gcosmo $
+$Id: History 84618 2014-10-17 08:58:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+5th June 2014  Laurent Garnier (gMocren-V09-06-09)
+- G4GMocrenFile.cc: FIX Problem 1585 - Memory leak in G4GMocrenFile.cc
 
 29th June 2013  Gabriele Cosmo (gMocren-V09-06-07)
 - Commmented out private declaration of G4GMocrenFileSceneHandler::operator=()

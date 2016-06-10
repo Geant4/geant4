@@ -127,34 +127,34 @@ inline G4double G4UTrd::GetZHalfLength()  const
 inline void G4UTrd::SetXHalfLength1(G4double val)
 {
   GetShape()->SetXHalfLength1(val);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetXHalfLength2(G4double val)
 {
   GetShape()->SetXHalfLength2(val);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetYHalfLength1(G4double val)
 {
   GetShape()->SetYHalfLength1(val);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetYHalfLength2(G4double val)
 {
   GetShape()->SetYHalfLength2(val);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetZHalfLength(G4double val)
 {
   GetShape()->SetZHalfLength(val);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetAllParameters(G4double pdx1, G4double pdx2,
                                      G4double pdy1, G4double pdy2,
                                      G4double pdz)
 {
   GetShape()->SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 #endif

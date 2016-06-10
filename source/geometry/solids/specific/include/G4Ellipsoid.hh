@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4Ellipsoid.hh 84624 2014-10-17 09:56:00Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -133,6 +133,7 @@ class G4Ellipsoid : public G4VSolid
     G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,
                                                    G4int& noPV) const;
 
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
   private:

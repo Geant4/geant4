@@ -26,7 +26,7 @@
 /// \file RE06/include/RE06ParallelWorld.hh
 /// \brief Definition of the RE06ParallelWorld class
 //
-// $Id: RE06ParallelWorld.hh 75123 2013-10-28 09:53:28Z gcosmo $
+// $Id: RE06ParallelWorld.hh 84613 2014-10-17 08:34:52Z gcosmo $
 // 
 
 #ifndef RE06ParallelWorld_h
@@ -60,6 +60,7 @@ class RE06ParallelWorld : public G4VUserParallelWorld
     G4VPhysicalVolume* fLayerPhysical[3];
     G4String           fCalName[3];
     G4bool             fConstructed;
+    static G4ThreadLocal G4bool fSDConstructed;
     G4bool             fSerial;
     G4double           fTotalThickness;
     G4int              fNumberOfLayers;

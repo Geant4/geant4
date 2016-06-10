@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc 81689 2014-06-04 15:09:00Z gcosmo $
+// $Id: G4Polyhedra.cc 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -464,7 +464,8 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
 
-  fpPolyhedron = GetPolyhedron();
+  fRebuildPolyhedron = false;
+  fpPolyhedron = 0;
 }
 
 

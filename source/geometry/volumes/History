@@ -1,4 +1,4 @@
-$Id: History 81646 2014-06-04 09:28:37Z gcosmo $
+$Id: History 84724 2014-10-20 08:26:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 18th, 2014 A.Dotti                - geomvol-V09-06-22
+- Corrected possible data race (reported by DRD) in 
+  G4PVReplica::InitialiseWorker().
 
 April 10th, 2014 G.Cosmo                  - geomvol-V09-06-21
 - Get rid of deprecated 'register' storage class specifier in source files

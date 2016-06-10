@@ -35,10 +35,6 @@ UVoxelizer::UVoxelizer() : fBoundingBox("TessBBox", 1, 1, 1)
   fTolerance = VUSolid::Tolerance();
 
   SetMaxVoxels(fDefaultVoxelsCount);
-
-#ifndef USOLIDSONLY
-  G4SolidStore::GetInstance()->DeRegister(&fBoundingBox);
-#endif // USOLIDSONLY
 }
 
 //______________________________________________________________________________
@@ -89,7 +85,8 @@ void UVoxelizer::BuildEmpty()
 
 #ifdef USOLIDSONLY
 //______________________________________________________________________________
-void UVoxelizer::BuildVoxelLimits(vector<VUSolid*>& solids, vector<UTransform3D*>& transforms)
+//void UVoxelizer::BuildVoxelLimits(vector<VUSolid*>& solids, vector<UTransform3D*>& transforms)
+void UVoxelizer::BuildVoxelLimits(vector<VUSolid*>& solids, vector<UTransform3D>& transforms)
 {
   // "BuildVoxelLimits"'s aim is to store the coordinates of the origin as well as
   // the half lengths related to the bounding box of each node.
@@ -109,8 +106,10 @@ void UVoxelizer::BuildVoxelLimits(vector<VUSolid*>& solids, vector<UTransform3D*
     for (int i = 0; i < numNodes; ++i)
     {
       VUSolid& solid = *solids[i];
-      UTransform3D& transform = *transforms[i];
+      //UTransform3D& transform = *transforms[i];
+      UTransform3D transform = transforms[i];
       UVector3 min, max;
+
       solid.Extent(min, max);
       if (solid.GetEntityType() == "Orb")
       {
@@ -127,12 +126,13 @@ void UVoxelizer::BuildVoxelLimits(vector<VUSolid*>& solids, vector<UTransform3D*
         max += toleranceVector;
       }
       UUtils::TransformLimits(min, max, transform);
-
       fBoxes[i].hlen = (max - min) / 2;
       fBoxes[i].pos = transform.fTr;
     }
     fTotalCandidates = fBoxes.size();
   }
+
+  
 }
 #endif // USOLIDSONLY
 
@@ -625,8 +625,9 @@ void UVoxelizer::BuildReduceVoxels2(vector<double> boundaries[], UVector3 reduct
 
 #ifdef USOLIDSONLY
 //______________________________________________________________________________
-void UVoxelizer::Voxelize(vector<VUSolid*>& solids, vector<UTransform3D*>& transforms)
+void UVoxelizer::Voxelize(vector<VUSolid*>& solids, vector<UTransform3D>& transforms)
 {
+  
   BuildVoxelLimits(solids, transforms);
 
   BuildBoundaries();

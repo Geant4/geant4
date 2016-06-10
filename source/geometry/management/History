@@ -1,4 +1,4 @@
-$Id: History 81594 2014-06-03 14:05:18Z gcosmo $
+$Id: History 84507 2014-10-16 14:03:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 11, 2014 A.Dotti			   geommng-V09-06-19
+- Solves possible data-race condition in G4GeomSplitter.
 
 April 10, 2014 G.Cosmo                     geommng-V09-06-18
 - Get rid of deprecated 'register' storage class specifier in source files.

@@ -1,4 +1,4 @@
-$Id: History 81862 2014-06-06 10:19:30Z gcosmo $
+$Id: History 84806 2014-10-21 09:16:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01.10.2014  L. Pandola et al, tag emlowen-V09-06-52
+	    Fix of bugzilla 1612
 
 19.05.2014  V. Ivanchenko/L. Pandola, tag emlowen-V09-06-51
 	    Bug fix in G4PenelopePhotoElectric effect (no fluorescence in 

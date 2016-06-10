@@ -50,14 +50,16 @@
 #include "G4Be8FermiFragment.hh"
 #include "G4He5FermiFragment.hh"
 #include "G4Li5FermiFragment.hh"
+#include "G4Threading.hh"
 
-G4FermiFragmentsPool* G4FermiFragmentsPool::theInstance = 0;
+G4ThreadLocal G4FermiFragmentsPool* G4FermiFragmentsPool::theInstance = 0;
  
 G4FermiFragmentsPool* G4FermiFragmentsPool::Instance()
 {
   if(0 == theInstance) {
-    static G4FermiFragmentsPool pool;
-    theInstance = &pool;
+    static G4ThreadLocalSingleton<G4FermiFragmentsPool> pool;
+    theInstance = pool.Instance();
+    //theInstance = &pool;
   }
   return theInstance;
 }
@@ -86,6 +88,26 @@ G4FermiFragmentsPool::~G4FermiFragmentsPool()
   if(0 < nn) { for(size_t j=0; j<nn; ++j) { delete listextra[j]; }}
   nn = fragment_pool.size();
   if(0 < nn) { for(size_t j=0; j<nn; ++j) { delete fragment_pool[j]; }}
+}
+
+G4bool G4FermiFragmentsPool::IsAvailable(G4int Z, G4int A) const
+{
+  G4bool res = true;
+  if     (2 == Z && 5 == A) { res = false; }
+  else if(3 == Z && 5 == A) { res = false; }
+  else if(4 == Z && 8 == A) { res = false; }
+  else if(5 == Z && 9 == A) { res = false; }
+  return res;
+}
+
+G4int G4FermiFragmentsPool::GetMaxZ() const
+{
+  return maxZ;
+}
+
+G4int G4FermiFragmentsPool::GetMaxA() const
+{
+  return maxA;
 }
 
 void G4FermiFragmentsPool::Initialise()
@@ -275,7 +297,7 @@ void G4FermiFragmentsPool::Initialise()
  	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<") % "; 
       }
       G4cout<<G4endl;
-      G4cout<<"---------------------------------------------------------------------------------"
+      G4cout<<"-------------------------------------------------------------------------"
 	    << G4endl;
     }
   }
@@ -331,7 +353,7 @@ void G4FermiFragmentsPool::Initialise()
  	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<")("<<a3<<","<<z3<<") % "; 
       }
       G4cout<<G4endl;
-      G4cout<<"---------------------------------------------------------------------------------"
+      G4cout<<"-------------------------------------------------------------------------"
 	    << G4endl;
     }
   }
@@ -435,10 +457,11 @@ void G4FermiFragmentsPool::Initialise()
 	G4int a4=vector[3]->GetA();
 	G4int z4=vector[3]->GetZ();
 
- 	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<")("<<a3<<","<<z3<<")("<<a4<<","<<z4<<") % "; 
+ 	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<")("<<a3<<","<<z3<<")("
+	       <<a4<<","<<z4<<") % "; 
       }
       G4cout<<G4endl;
-      G4cout<<"---------------------------------------------------------------------------------"
+      G4cout<<"-------------------------------------------------------------------------"
 	    << G4endl;
     }
     G4cout << "Total number: " << tot << G4endl;
@@ -630,7 +653,7 @@ G4FermiFragmentsPool::GetConfigurationList(G4int Z, G4int A, G4double mass)
     }
     return v;
   }
-
+  
   // only photon evaporation is possible
   if(conf1) {
     v->push_back(conf1); 
@@ -667,9 +690,8 @@ G4FermiFragmentsPool::GetConfigurationList(G4int Z, G4int A, G4double mass)
   return v;
 }
 
-G4bool 
-G4FermiFragmentsPool::IsExist(G4int Z, G4int A, 
-			      std::vector<const G4VFermiFragment*>& newconf)
+G4bool G4FermiFragmentsPool::IsExist(G4int Z, G4int A, 
+	      std::vector<const G4VFermiFragment*>& newconf) const
 {
   size_t nn = newconf.size();
   G4double mass = 0.0;
@@ -714,7 +736,7 @@ G4FermiFragmentsPool::IsExist(G4int Z, G4int A,
 }
 
 const G4VFermiFragment* 
-G4FermiFragmentsPool::GetFragment(G4int Z, G4int A)
+G4FermiFragmentsPool::GetFragment(G4int Z, G4int A) const
 {
   const G4VFermiFragment* f = 0;
   if(Z >= maxZ || A >= maxA) { return f; }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh 81641 2014-06-04 09:11:38Z gcosmo $
+// $Id: G4VTwistedFaceted.hh 84624 2014-10-17 09:56:00Z gcosmo $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -157,6 +157,7 @@ class G4VTwistedFaceted: public G4VSolid
       // Create the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
+  mutable G4bool fRebuildPolyhedron;
   mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
 
  private:

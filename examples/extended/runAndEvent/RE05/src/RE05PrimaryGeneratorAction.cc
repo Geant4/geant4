@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05PrimaryGeneratorAction.cc 70214 2013-05-27 07:21:19Z gcosmo $
+// $Id: RE05PrimaryGeneratorAction.cc 84630 2014-10-17 10:31:29Z gcosmo $
 //
 /// \file RE05/src/RE05PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE05PrimaryGeneratorAction class
@@ -48,7 +48,7 @@ RE05PrimaryGeneratorAction::RE05PrimaryGeneratorAction()
   if(!HEPEvt)
   {
     const char* filename = "pythia_event.data";
-    HEPEvt = new G4HEPEvtInterface(filename,2);
+    HEPEvt = new G4HEPEvtInterface(filename,1);
   }
 
   G4int n_particle = 1;

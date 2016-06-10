@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc 79188 2014-02-20 09:22:48Z gcosmo $
+// $Id: G4PAIxSection.cc 84489 2014-10-16 09:51:31Z gcosmo $
 // GEANT4 tag $Name: geant4-09-03-ref-06 $
 //
 // 
@@ -592,7 +592,6 @@ G4PAIxSection::~G4PAIxSection()
    delete[] fDifPAIxSection       ;   
    delete[] fIntegralPAIxSection  ;
    */ ////////////////////////
-  delete fSandia;
   delete fMatSandiaMatrix;
 }
 
@@ -1640,8 +1639,9 @@ G4double G4PAIxSection::SumOverInterval( G4int i )
 
    x0 = fSplineEnergy[i];
    x1 = fSplineEnergy[i+1];
+   if(fVerbose>0) G4cout<<"SumOverInterval i= " << i << " x0 = "<<x0<<"; x1 = "<<x1<<G4endl;
 
-   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+   if( x1+x0 <= 0.0 || std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
 
    y0 = fDifPAIxSection[i];
    yy1 = fDifPAIxSection[i+1];
@@ -1673,6 +1673,7 @@ G4double G4PAIxSection::SumOverInterval( G4int i )
    {
       fIntegralPAIxSection[0] += y0*(x1*x1*pow(c,a-2) - x0*x0)/a;
    }
+   if(fVerbose>0) G4cout<<"SumOverInterval, result = "<<result<<G4endl;
    return result;
 
 } //  end of SumOverInterval
@@ -1686,7 +1687,7 @@ G4double G4PAIxSection::SumOverIntervaldEdx( G4int i )
    x0 = fSplineEnergy[i];
    x1 = fSplineEnergy[i+1];
 
-   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+   if(x1+x0 <= 0.0 || std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
 
    y0 = fDifPAIxSection[i];
    yy1 = fDifPAIxSection[i+1];
@@ -1720,7 +1721,7 @@ G4double G4PAIxSection::SumOverInterCerenkov( G4int i )
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
 
-   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+   if(x1+x0 <= 0.0 || std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
 
    y0  = fdNdxCerenkov[i];
    yy1 = fdNdxCerenkov[i+1];
@@ -1756,15 +1757,17 @@ G4double G4PAIxSection::SumOverInterMM( G4int i )
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
 
-   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+   if(x1+x0 <= 0.0 || std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
 
    y0  = fdNdxMM[i];
    yy1 = fdNdxMM[i+1];
-   // G4cout<<"SumC, i = "<<i<<"; x0 ="<<x0<<"; x1 = "<<x1
+   //G4cout<<"SumC, i = "<<i<<"; x0 ="<<x0<<"; x1 = "<<x1
    //   <<"; y0 = "<<y0<<"; yy1 = "<<yy1<<G4endl;
 
    c = x1/x0;
+   //G4cout<<" c = "<<c<< " yy1/y0= " << yy1/y0 <<G4endl;   
    a = log10(yy1/y0)/log10(c);
+   if(a > 10.0) return 0.;  
    b = y0/pow(x0,a);
 
    a += 1.0;
@@ -1772,9 +1775,9 @@ G4double G4PAIxSection::SumOverInterMM( G4int i )
    else       result = y0*(x1*pow(c,a-1) - x0)/a;   
    a += 1.0;
 
-   if( a == 0 ) fIntegralMM[0] += b*log(x1/x0);
+   if( a == 0 ) fIntegralMM[0] += b*log(c);
    else         fIntegralMM[0] += y0*(x1*x1*pow(c,a-2) - x0*x0)/a;
-   //  G4cout<<"a = "<<a<<"; b = "<<b<<"; result = "<<result<<G4endl;   
+   //G4cout<<"a = "<<a<<"; b = "<<b<<"; result = "<<result<<G4endl;   
    return result;
 
 } //  end of SumOverInterMM
@@ -1792,12 +1795,13 @@ G4double G4PAIxSection::SumOverInterPlasmon( G4int i )
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
 
-   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+   if(x1+x0 <= 0.0 || std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
 
    y0  = fdNdxPlasmon[i];
    yy1 = fdNdxPlasmon[i+1];
    c =x1/x0;
    a = log10(yy1/y0)/log10(c);
+   if(a > 10.0) return 0.;  
    // b = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a);
 
@@ -1826,12 +1830,13 @@ G4double G4PAIxSection::SumOverInterResonance( G4int i )
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
 
-   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+   if(x1+x0 <= 0.0 || std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
 
    y0  = fdNdxResonance[i];
    yy1 = fdNdxResonance[i+1];
    c =x1/x0;
    a = log10(yy1/y0)/log10(c);
+   if(a > 10.0) return 0.;  
    // b = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a);
 
@@ -1866,6 +1871,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
+   if(a > 10.0) return 0.;  
 
    if(fVerbose>0) G4cout<<"SumOverBorder, a = "<<a<<G4endl;
 
@@ -1938,6 +1944,7 @@ G4double G4PAIxSection::SumOverBorderdEdx( G4int      i ,
    //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
+   if(a > 10.0) return 0.;  
    // b0 = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a);  // pow(10.,b);
    
@@ -1995,6 +2002,7 @@ G4double G4PAIxSection::SumOverBordCerenkov( G4int      i ,
    c = x1/x0;
    d = e0/x0;
    a = log10(yy1/y0)/log10(c);
+   if(a > 10.0) return 0.;  
    // b0 = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a); // pow(10.,b0);   
    
@@ -2059,6 +2067,7 @@ G4double G4PAIxSection::SumOverBordMM( G4int      i ,
    c = x1/x0;
    d = e0/x0;
    a = log10(yy1/y0)/log10(c);
+   if(a > 10.0) return 0.;  
    // b0 = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a); // pow(10.,b0);   
    
@@ -2120,6 +2129,7 @@ G4double G4PAIxSection::SumOverBordPlasmon( G4int      i ,
    c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(c);
+   if(a > 10.0) return 0.;  
    //  b0 = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a); //pow(10.,b);
    
@@ -2173,6 +2183,7 @@ G4double G4PAIxSection::SumOverBordResonance( G4int      i ,
    c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(c);
+   if(a > 10.0) return 0.;  
    //  b0 = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a); //pow(10.,b);
    

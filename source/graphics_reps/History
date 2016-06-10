@@ -1,4 +1,4 @@
-$Id: History 79153 2014-02-19 15:23:04Z gcosmo $
+$Id: History 84514 2014-10-16 14:44:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th August 2014  John Allison  (greps-V09-06-14)
+- HepPolyhedron::SetReferences: Protected against a null pointer.
+- BooleanProcessor::execute: Corrected spelling mistake in message.
 
 9th December 2013  John Allison  (greps-V09-06-13)
 - Another change suggested by PVS.

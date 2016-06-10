@@ -1,4 +1,4 @@
-$Id: History 77498 2013-11-25 10:26:36Z gcosmo $
+$Id: History 84613 2014-10-17 08:34:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 20, 2014 M.Asai (exampleRE06-V09-06-02)
+- fix boolean protection in ConstructSD methods for MT.
 
 Nov 22, 2013 G.Folger (exampleRE06-V09-06-01)
 - fix typo in RE06RunAction.cc, use G4endl to end output line.

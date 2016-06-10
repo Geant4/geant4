@@ -388,7 +388,7 @@ namespace G4INCL {
     };
 
     // Cool hack to get the size of an array in C++
-    template<typename T, ::std::size_t N> inline ::std::size_t sizeOfArray(const T(&)[ N ] ) {
+    template<typename T, ::std::size_t N> ::std::size_t sizeOfArray(const T(&)[ N ] ) {
       return N;
     }
   }

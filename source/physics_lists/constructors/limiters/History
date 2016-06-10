@@ -1,4 +1,4 @@
-$Id: History 79169 2014-02-19 16:00:48Z gcosmo $
+$Id: History 84518 2014-10-16 15:24:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,17 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-Aug-2014, Vladimir Ivanchenko        (phys-ctor-limiters-V09-06-16)
+- G4NeutronTrackingCut - register G4NeutronKiller in 
+    G4HadronicProcessStore - improved log and process deleted at exit
+
+05-Jul-2014, Andrea Dotti
+- Fix (possible) data-race condition in G4NeutronTrackingCut in 
+  calling G4MTcout (defect seen from DRD)
+  
+27-May-2014, Vladimir Ivanchenko
+- G4StepLimiterPhysics - fixed minor memory leak reported by Coverity
 
 29-Jan-2014, Gunter Folger              (phys-ctor-limiters-V09-06-15)
 - Removed from photolepton_hadron/muon_nuclear from sources.cmake

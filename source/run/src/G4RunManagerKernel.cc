@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 79223 2014-02-20 15:01:29Z gcosmo $
+// $Id: G4RunManagerKernel.cc 84741 2014-10-20 10:22:35Z gcosmo $
 //
 //
 
@@ -436,6 +436,8 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
 
+  if(runManagerKernelType==workerRMK) return;
+
   SetupPhysics();
   if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
   if(verboseLevel>1)
@@ -460,7 +462,6 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 void G4RunManagerKernel::SetupPhysics()
 {
     G4ParticleTable::GetParticleTable()->SetReadiness();
-    if(runManagerKernelType==workerRMK) return;
 
     physicsList->ConstructParticle();
 

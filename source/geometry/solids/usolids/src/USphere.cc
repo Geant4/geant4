@@ -2701,7 +2701,7 @@ double USphere::SafetyFromInside(const UVector3& p, bool /*aAccurate*/) const
   //
   // Distance to Theta extent
   //
-  if (rds)
+  if ((rds)&&(!fFullThetaSphere))
   {
     pTheta = std::acos(p.z / rds);
     if (pTheta < 0)

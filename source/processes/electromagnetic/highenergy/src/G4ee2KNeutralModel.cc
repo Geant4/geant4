@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ee2KNeutralModel.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ee2KNeutralModel.cc 84488 2014-10-16 09:28:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,9 +61,16 @@
 
 using namespace std;
 
-G4ee2KNeutralModel::G4ee2KNeutralModel(G4eeCrossSections* cr):
-  cross(cr)
+G4ee2KNeutralModel::G4ee2KNeutralModel(G4eeCrossSections* cr,
+				       G4double maxkinEnergy,
+				       G4double binWidth)
+:  G4Vee2hadrons(cr,
+		 2.0*G4KaonZeroLong::KaonZeroLong()->GetPDGMass(),
+		 maxkinEnergy,
+		 binWidth)
 {
+  G4cout << "####G4ee2KNeutralModel####" <<G4endl;
+
   massK = G4KaonZeroLong::KaonZeroLong()->GetPDGMass();
   massPhi = 1019.46*MeV;
 }
@@ -72,13 +79,6 @@ G4ee2KNeutralModel::G4ee2KNeutralModel(G4eeCrossSections* cr):
 
 G4ee2KNeutralModel::~G4ee2KNeutralModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4ee2KNeutralModel::ThresholdEnergy() const
-{
-  return 2.0*massK;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,21 +91,7 @@ G4double G4ee2KNeutralModel::PeakEnergy() const
 
 G4double G4ee2KNeutralModel::ComputeCrossSection(G4double e) const
 {
-  G4double ee = std::min(HighEnergy(),e);
-  return cross->CrossSection2Kneutral(ee);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhysicsVector* G4ee2KNeutralModel::PhysicsVector(G4double emin, 
-						   G4double emax) const
-{
-  G4double tmin = std::max(emin, 2.0*massK);
-  G4double tmax = std::max(tmin, emax);
-  G4int nbins = (G4int)((tmax - tmin)/(1.0*MeV));
-  G4PhysicsVector* v = new G4PhysicsLinearVector(emin,emax,nbins);
-  v->SetSpline(true);
-  return v;
+  return cross->CrossSection2Kneutral(e); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

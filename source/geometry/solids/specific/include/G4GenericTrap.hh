@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4GenericTrap.hh 84624 2014-10-17 09:56:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -188,6 +188,7 @@ class G4GenericTrap : public G4VSolid
                                 const G4ThreeVector& p3) const;
   protected:
 
+     mutable G4bool fRebuildPolyhedron;
      mutable G4Polyhedron*   fpPolyhedron;
 
   private:

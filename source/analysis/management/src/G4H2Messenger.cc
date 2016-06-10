@@ -122,12 +122,16 @@ void G4H2Messenger::CreateH2Cmd()
   h2xValUnit0->SetDefaultValue("none");
   
   G4UIparameter* h2xValFcn0 = new G4UIparameter("xvalFcn0", 's', true);
-  G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).\n";
-  fcnxGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnxGuidance += "but none value should be used insted.";
+  G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).";
   h2xValFcn0->SetGuidance(fcnxGuidance);
   h2xValFcn0->SetParameterCandidates("log log10 exp none");
   h2xValFcn0->SetDefaultValue("none");
+  
+  G4UIparameter* h2xValBinScheme0 = new G4UIparameter("xvalBinScheme0", 's', true);
+  G4String xbinSchemeGuidance = "The binning scheme (linear, log).";
+  h2xValBinScheme0->SetParameterCandidates("linear log");
+  h2xValBinScheme0->SetGuidance(xbinSchemeGuidance);
+  h2xValBinScheme0->SetDefaultValue("linear");
   
   G4UIparameter* h2yNbins0 = new G4UIparameter("ynbins0", 'i', true);
   h2yNbins0->SetGuidance("Number of y-bins (default = 100)");
@@ -145,16 +149,20 @@ void G4H2Messenger::CreateH2Cmd()
   h2yValMax0->SetDefaultValue(1.);
 
   G4UIparameter* h2yValUnit0 = new G4UIparameter("yvalUnit0", 's', true);
-  h2yValUnit0->SetGuidance("The unit of xvalMin0 and yvalMax0");
+  h2yValUnit0->SetGuidance("The unit of yvalMin0 and yvalMax0");
   h2yValUnit0->SetDefaultValue("none");
   
   G4UIparameter* h2yValFcn0 = new G4UIparameter("yvalFcn0", 's', true);
-  G4String fcnyGuidance = "The function applied to filled x-values (log, log10, exp, none).\n";
-  fcnyGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnyGuidance += "but none value should be used insted.";
+  G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).";
   h2yValFcn0->SetGuidance(fcnyGuidance);
   h2yValFcn0->SetParameterCandidates("log log10 exp none");
   h2yValFcn0->SetDefaultValue("none");
+
+  G4UIparameter* h2yValBinScheme0 = new G4UIparameter("yvalBinScheme0", 's', true);
+  G4String ybinSchemeGuidance = "The binning scheme (linear, log).";
+  h2yValBinScheme0->SetParameterCandidates("linear log");
+  h2yValBinScheme0->SetGuidance(ybinSchemeGuidance);
+  h2yValBinScheme0->SetDefaultValue("linear");
   
   fCreateH2Cmd = new G4UIcommand("/analysis/h2/create", this);
   fCreateH2Cmd->SetGuidance("Create 2D histogram");
@@ -165,11 +173,13 @@ void G4H2Messenger::CreateH2Cmd()
   fCreateH2Cmd->SetParameter(h2xValMax0);
   fCreateH2Cmd->SetParameter(h2xValUnit0);
   fCreateH2Cmd->SetParameter(h2xValFcn0);
+  fCreateH2Cmd->SetParameter(h2xValBinScheme0);
   fCreateH2Cmd->SetParameter(h2yNbins0);
   fCreateH2Cmd->SetParameter(h2yValMin0);
   fCreateH2Cmd->SetParameter(h2yValMax0);
   fCreateH2Cmd->SetParameter(h2yValUnit0);
   fCreateH2Cmd->SetParameter(h2yValFcn0);
+  fCreateH2Cmd->SetParameter(h2yValBinScheme0);
   fCreateH2Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }  
 
@@ -190,18 +200,22 @@ void G4H2Messenger::SetH2Cmd()
   G4UIparameter* h2xValMax = new G4UIparameter("xvalMax", 'd', false);
   h2xValMax->SetGuidance("Maximum x-value, expressed in unit");
   
+  G4UIparameter* h2xValUnit = new G4UIparameter("xvalUnit", 's', false);
+  h2xValUnit->SetGuidance("The unit of xvalMin and xvalMax");
+  h2xValUnit->SetDefaultValue("none");
+ 
   G4UIparameter* h2xValFcn = new G4UIparameter("xvalFcn", 's', false);
   h2xValFcn->SetParameterCandidates("log log10 exp none");
-  G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).\n";
-  fcnxGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnxGuidance += "but none value should be used insted.";
+  G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).";
   h2xValFcn->SetGuidance(fcnxGuidance);
   h2xValFcn->SetDefaultValue("none");
  
-  G4UIparameter* h2yValUnit = new G4UIparameter("yvalUnit", 's', false);
-  h2yValUnit->SetGuidance("The unit of yvalMin and yvalMax");
-  h2yValUnit->SetDefaultValue("none");
- 
+  G4UIparameter* h2xValBinScheme = new G4UIparameter("xvalBinScheme", 's', true);
+  G4String xbinSchemeGuidance = "The binning scheme (linear, log).";
+  h2xValBinScheme->SetParameterCandidates("linear log");
+  h2xValBinScheme->SetGuidance(xbinSchemeGuidance);
+  h2xValBinScheme->SetDefaultValue("linear");
+  
   G4UIparameter* h2yNbins = new G4UIparameter("nybins", 'i', false);
   h2yNbins->SetGuidance("Number of y-bins");
   
@@ -211,32 +225,39 @@ void G4H2Messenger::SetH2Cmd()
   G4UIparameter* h2yValMax = new G4UIparameter("yvalMax", 'd', false);
   h2yValMax->SetGuidance("Maximum y-value, expressed in unit");
   
-  G4UIparameter* h2xValUnit = new G4UIparameter("xvalUnit", 's', true);
-  h2xValUnit->SetGuidance("The unit of xvalMin and xvalMax");
-  h2xValUnit->SetDefaultValue("none");
+  G4UIparameter* h2yValUnit = new G4UIparameter("yvalUnit", 's', true);
+  h2yValUnit->SetGuidance("The unit of yvalMin and yvalMax");
+  h2yValUnit->SetDefaultValue("none");
  
   G4UIparameter* h2yValFcn = new G4UIparameter("yvalFcn", 's', false);
   h2yValFcn->SetParameterCandidates("log log10 exp none");
-  G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).\n";
-  fcnyGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnyGuidance += "but none value should be used insted.";
+  G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).";
   h2yValFcn->SetGuidance(fcnyGuidance);
   h2yValFcn->SetDefaultValue("none");
  
+  G4UIparameter* h2yValBinScheme = new G4UIparameter("yvalBinScheme", 's', true);
+  G4String ybinSchemeGuidance = "The binning scheme (linear, log).";
+  h2yValBinScheme->SetParameterCandidates("linear log");
+  h2yValBinScheme->SetGuidance(ybinSchemeGuidance);
+  h2yValBinScheme->SetDefaultValue("linear");
+
   fSetH2Cmd = new G4UIcommand("/analysis/h2/set", this);
   fSetH2Cmd->SetGuidance("Set parameters for the 2D histogram of #Id :");
-  fSetH2Cmd->SetGuidance("  nbins; valMin; valMax; unit (of vmin and vmax)");
+  fSetH2Cmd->SetGuidance("  nxbins; xvalMin; xvalMax; xunit; xfunction; xbinScheme");
+  fSetH2Cmd->SetGuidance("  nybins; yvalMin; yvalMax; yunit; yfunction; ybinScheme");
   fSetH2Cmd->SetParameter(h2Id);
   fSetH2Cmd->SetParameter(h2xNbins);
   fSetH2Cmd->SetParameter(h2xValMin);
   fSetH2Cmd->SetParameter(h2xValMax);
   fSetH2Cmd->SetParameter(h2xValUnit);
   fSetH2Cmd->SetParameter(h2xValFcn);
+  fSetH2Cmd->SetParameter(h2xValBinScheme);
   fSetH2Cmd->SetParameter(h2yNbins);
   fSetH2Cmd->SetParameter(h2yValMin);
   fSetH2Cmd->SetParameter(h2yValMax);
   fSetH2Cmd->SetParameter(h2yValUnit);
   fSetH2Cmd->SetParameter(h2yValFcn);
+  fSetH2Cmd->SetParameter(h2yValBinScheme);
   fSetH2Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }  
 
@@ -334,37 +355,39 @@ void G4H2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String name = parameters[counter++];
     G4String title = parameters[counter++];
     G4int xnbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double xvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double xvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
+    G4String xsunit = parameters[counter++];
+    G4String xsfcn = parameters[counter++];
+    G4String xsbinScheme = parameters[counter++];
+    G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
-    G4String xsunit = parameters[counter++];
     G4String ysunit = parameters[counter++];
-    G4String xsfcn = parameters[counter++];
     G4String ysfcn = parameters[counter++];
-    G4String xsbinScheme = parameters[counter++];
     G4String ysbinScheme = parameters[counter++];
     fManager->CreateH2(name, title, 
                        xnbins, xvmin, xvmax, ynbins, yvmin, yvmax, 
-                       ysunit, ysfcn, ysunit, ysfcn);     
+                       xsunit, ysunit, xsfcn, ysfcn, xsbinScheme, ysbinScheme);     
   }
   else if ( command == fSetH2Cmd ) {
     G4int counter = 0;
     G4int id = G4UIcommand::ConvertToInt(parameters[counter++]);
     G4int xnbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double xvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double xvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
+    G4String xsunit = parameters[counter++];
+    G4String xsfcn = parameters[counter++];
+    G4String xsbinScheme = parameters[counter++];
+    G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
-    G4String xsunit = parameters[counter++];
     G4String ysunit = parameters[counter++];
-    G4String xsfcn = parameters[counter++];
     G4String ysfcn = parameters[counter++];
+    G4String ysbinScheme = parameters[counter++];
     fManager->SetH2(id, 
                     xnbins, xvmin, xvmax, ynbins, yvmin, yvmax, 
-                    ysunit, ysfcn, ysunit, ysfcn);     
+                    xsunit, ysunit, xsfcn, ysfcn, xsbinScheme, ysbinScheme);     
   }
   else if ( command == fSetH2TitleCmd ) {
     G4int counter = 0;

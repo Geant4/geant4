@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History 81876 2014-06-06 12:12:46Z gcosmo $
+$Id: History 84491 2014-10-16 10:01:38Z gcosmo $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -16,10 +16,19 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+11 July 2014 - Davide Mancusi (hadr-inclxx-V09-06-51)
+---------------------------------------------------------------
+- INCL++ v5.1.14.9
+  o Fix a bug in Coulomb deflection for negative incident particles.
+
 13 March 2014 - Gabriele Cosmo (hadr-inclxx-V09-06-50)
 ---------------------------------------------------------------
 - Fixed use of inline keyword for method getPhaseSpace() defined in
   ClusteringModelIntercomparison.cc.
+
+5 March 2014 - Davide Mancusi
+---------------------------------------------------------------
+- Fix: avoid negative Fermi energies for delta resonances
 
 9 January 2014 - Davide Mancusi (hadr-inclxx-V09-06-49)
 ---------------------------------------------------------------

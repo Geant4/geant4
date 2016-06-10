@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4ReplicaNavigation.cc 84727 2014-10-20 08:30:47Z gcosmo $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -40,6 +40,16 @@
 #include "G4SmartVoxelNode.hh"
 #include "G4VSolid.hh"
 #include "G4GeometryTolerance.hh"
+
+namespace
+{
+  const G4ThreeVector VecCartAxes[3]=
+  { G4ThreeVector(1.,0.,0.), G4ThreeVector(0.,1.,0.), G4ThreeVector(0.,0.,1.) };
+  const G4ExitNormal::ESide SideCartAxesPlus[3]=
+  { G4ExitNormal::kPX, G4ExitNormal::kPY, G4ExitNormal::kPZ };
+  const G4ExitNormal::ESide SideCartAxesMinus[3]=
+  { G4ExitNormal::kMX, G4ExitNormal::kMX, G4ExitNormal::kMX };
+}
 
 // ********************************************************************
 // Constructor
@@ -256,13 +266,6 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
   G4double signC = 0.0;
   G4ExitNormal candidateNormal; 
    
-  static const G4ThreeVector VecCartAxes[3]=
-   { G4ThreeVector(1.,0.,0.),G4ThreeVector(0.,1.,0.),G4ThreeVector(0.,0.,1.) };
-  static G4ThreadLocal G4ExitNormal::ESide *SideCartAxesPlus = 0 ; if (!SideCartAxesPlus) {SideCartAxesPlus = new  G4ExitNormal::ESide [3] ;
-   SideCartAxesPlus[0]= G4ExitNormal::kPX;SideCartAxesPlus[1]= G4ExitNormal::kPY;SideCartAxesPlus[2]= G4ExitNormal::kPZ ;};
-  static G4ThreadLocal G4ExitNormal::ESide *SideCartAxesMinus = 0 ; if (!SideCartAxesMinus) {SideCartAxesMinus = new  G4ExitNormal::ESide [3] ;
-   SideCartAxesMinus[0]= G4ExitNormal::kMX;SideCartAxesMinus[1]= G4ExitNormal::kMY;SideCartAxesMinus[2]= G4ExitNormal::kMZ ;};
-
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);
   switch(axis)
   {

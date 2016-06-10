@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc 81636 2014-06-04 09:06:08Z gcosmo $
+// $Id: G4Para.cc 84622 2014-10-17 09:43:17Z gcosmo $
 //
 // class G4Para
 //
@@ -90,7 +90,6 @@ void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz,
   }
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -145,7 +144,6 @@ G4Para::G4Para( const G4String& pName,
   fTthetaSphi = ((pt[4]).y()+fDy)/fDz ;
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -175,7 +173,6 @@ G4Para::G4Para(const G4Para& rhs)
     fTalpha(rhs.fTalpha), fTthetaCphi(rhs.fTthetaCphi),
     fTthetaSphi(rhs.fTthetaSphi)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -197,7 +194,6 @@ G4Para& G4Para::operator = (const G4Para& rhs)
    fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz;
    fTalpha = rhs.fTalpha; fTthetaCphi = rhs.fTthetaCphi;
    fTthetaSphi = rhs.fTthetaSphi;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

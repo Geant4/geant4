@@ -142,7 +142,9 @@ namespace G4INCL {
     // Some useful variables
     const G4double theMinimumDistance = minimumDistance(p, n);
     // deltaTheta2 = (pi - Rutherford scattering angle)/2
-    const G4double deltaTheta2 = std::atan(2.*impactParameter/theMinimumDistance);
+    G4double deltaTheta2 = std::atan(2.*impactParameter/theMinimumDistance);
+    if(deltaTheta2<0.)
+      deltaTheta2 += Math::pi;
     const G4double eccentricity = 1./std::cos(deltaTheta2);
 
     G4double newImpactParameter, alpha; // Parameters that must be determined by the deviation
@@ -167,7 +169,8 @@ namespace G4INCL {
 
       // Velocity angle at the entrance point
       alpha = std::atan((1+std::cos(thetaIn))
-        / (std::sqrt(eccentricity*eccentricity-1.) - std::sin(thetaIn)));
+        / (std::sqrt(eccentricity*eccentricity-1.) - std::sin(thetaIn)))
+        * Math::sign(theMinimumDistance);
       // New impact parameter
       newImpactParameter = radius * std::sin(thetaIn - alpha);
     }

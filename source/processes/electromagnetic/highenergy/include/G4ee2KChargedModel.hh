@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ee2KChargedModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ee2KChargedModel.hh 84488 2014-10-16 09:28:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,17 +61,13 @@ class G4ee2KChargedModel : public G4Vee2hadrons
 
 public:
 
-  G4ee2KChargedModel(G4eeCrossSections*);
+  G4ee2KChargedModel(G4eeCrossSections*,G4double,G4double);
 
   virtual ~G4ee2KChargedModel();
-
-  virtual G4double ThresholdEnergy() const;
 
   virtual G4double PeakEnergy() const;
 
   virtual G4double ComputeCrossSection(G4double) const;
-
-  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&);
@@ -81,8 +77,6 @@ private:
   // hide assignment operator
   G4ee2KChargedModel & operator=(const  G4ee2KChargedModel &right);
   G4ee2KChargedModel(const  G4ee2KChargedModel&);
-
-  G4eeCrossSections* cross;
 
   G4double massK;
   G4double massPhi;

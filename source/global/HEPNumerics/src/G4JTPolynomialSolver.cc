@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4JTPolynomialSolver.cc 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4JTPolynomialSolver.cc 84516 2014-10-16 15:04:13Z gcosmo $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,6 +35,7 @@
 
 #include "G4JTPolynomialSolver.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Pow.hh"
 
 const G4double G4JTPolynomialSolver::base   = 2;
 const G4double G4JTPolynomialSolver::eta    = DBL_EPSILON;
@@ -65,14 +66,15 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degr,
   G4double max=0.0, min=infin, xxx=0.0, x=0.0, sc=0.0, bnd=0.0;
   G4double xm=0.0, ff=0.0, df=0.0, dx=0.0;
   G4int cnt=0, nz=0, i=0, j=0, jj=0, l=0, nm1=0, zerok=0;
+  G4Pow* power = G4Pow::GetInstance();
 
   // Initialization of constants for shift rotation.
   //        
-  G4double xx = std::sqrt(0.5);
-  G4double yy = -xx,
-           rot = 94.0*deg;
-  G4double cosr = std::cos(rot),
-           sinr = std::sin(rot);
+  static const G4double xx = std::sqrt(0.5);
+  static const G4double rot = 94.0*deg;
+  static const G4double cosr = std::cos(rot),
+                        sinr = std::sin(rot);
+  G4double xo = xx, yo = -xx;
   n = degr;
 
   //  Algorithm fails if the leading coefficient is zero.
@@ -148,8 +150,8 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degr,
     {
       if (!( sc != 0.0 ))
         { sc = smalno ; }
-      l = (G4int)(std::log(sc)/std::log(base) + 0.5);
-      factor = std::pow(base*1.0,l);
+      l = (G4int)(G4Log(sc)/G4Log(base) + 0.5);
+      factor = power->powN(base,l);
       if (factor != 1.0)
       {
         for (i=0;i<=n;i++) 
@@ -167,7 +169,7 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degr,
 
     // Compute upper estimate of bound.
     //
-    x = std::exp((std::log(-pt[n])-std::log(pt[0])) / (G4double)n);
+    x = G4Exp((G4Log(-pt[n])-G4Log(pt[0])) / (G4double)n);
 
     // If Newton step at the origin is better, use it.
     //
@@ -259,11 +261,11 @@ G4int G4JTPolynomialSolver::FindRoots(G4double *op, G4int degr,
       // has modulus bnd and amplitude rotated by 94 degrees
       // from the previous shift.
       //
-      xxx = cosr*xx - sinr*yy;
-      yy = sinr*xx + cosr*yy;
-      xx = xxx;
-      sr = bnd*xx;
-      si = bnd*yy;
+      xxx = cosr*xo - sinr*yo;
+      yo = sinr*xo + cosr*yo;
+      xo = xxx;
+      sr = bnd*xo;
+      si = bnd*yo;
       u = -2.0 * sr;
       v = bnd;
       ComputeFixedShiftPolynomial(20*(cnt+1),&nz);

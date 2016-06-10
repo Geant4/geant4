@@ -86,15 +86,18 @@ namespace G4INCL {
       separationEnergy[Neutron] = theNeutronSeparationEnergy;
       vNeutron = theNeutronFermiEnergy + theNeutronSeparationEnergy;
 
-      vDeltaPlus = vProton;
-      vDeltaZero = vNeutron;
-      vDeltaPlusPlus = 2.*vDeltaPlus - vDeltaZero;
-      vDeltaMinus = 2.*vDeltaZero - vDeltaPlus;
-
-      separationEnergy[DeltaPlusPlus] = 2.*theProtonSeparationEnergy - theNeutronSeparationEnergy;
+      const G4double separationEnergyDeltaPlusPlus = 2.*theProtonSeparationEnergy - theNeutronSeparationEnergy;
+      separationEnergy[DeltaPlusPlus] = separationEnergyDeltaPlusPlus;
       separationEnergy[DeltaPlus] = theProtonSeparationEnergy;
       separationEnergy[DeltaZero] = theNeutronSeparationEnergy;
-      separationEnergy[DeltaMinus] = 2.*theNeutronSeparationEnergy - theProtonSeparationEnergy;
+      const G4double separationEnergyDeltaMinus = 2.*theNeutronSeparationEnergy - theProtonSeparationEnergy;
+      separationEnergy[DeltaMinus] = separationEnergyDeltaMinus;
+
+      const G4double tinyMargin = 1E-7;
+      vDeltaPlus = vProton;
+      vDeltaZero = vNeutron;
+      vDeltaPlusPlus = std::max(separationEnergyDeltaPlusPlus + tinyMargin, 2.*vDeltaPlus - vDeltaZero);
+      vDeltaMinus = std::max(separationEnergyDeltaMinus + tinyMargin, 2.*vDeltaZero - vDeltaPlus);
 
       separationEnergy[PiPlus] = theProtonSeparationEnergy - theNeutronSeparationEnergy;
       separationEnergy[PiZero] = 0.;
