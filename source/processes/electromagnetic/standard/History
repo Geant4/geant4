@@ -1,4 +1,4 @@
-$Id: History 76879 2013-11-18 12:44:54Z gcosmo $
+$Id: History 79188 2014-02-20 09:22:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,58 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+10 February 14: V.Ivanchenko (emstand-V09-06-80)
+- G4UrbanMscModel - (L.Urban) methods ComputeTheta0,SimpleScattering,
+  SampleDisplacement,LatCorrelation have been inlined in order
+  to improve timing (K. Genser suggesting) in these methods use 
+  class member "third" to reduce number of divisions
+- G4PAIxSection - trivial fix of Coverity report
+
+03 February 14: V.Ivanchenko
+- G4SauterGavrilaAngularDistribution - use Penelope 2008 sampling
+    algorithm, because it is more effective, distribution itself
+    is unchanged
+
+26 January 14: V.Ivanchenko
+- G4ionIonisation - improved printout at initialisation
+
+25 January 14: V.Ivanchenko
+- G4NuclearStopping - do not change ion charge (fixed problem reported
+    by Michel Maire)
+- G4ionIonisation - do not instantiate extra model at high enegry
+    if G4IonParameterisedModel is used 
+
+24 January 14: V.Ivanchenko
+- G4PAIxSection - trivial fix of Coverity report
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - fixed
+    Coverity reports: substitute reading of external file from fopen
+    to ifstream; use G4Log, G4Exp
+
+18 January 14: L.Urban
+- G4UniversalFluctuation - bugfix in "ionization" computing -
+   effect of the bug was small
+
+17 January 14: V.Ivanchenko for J.Apostolakis (emstand-V10-00-03)
+- G4UniversalFluctuation - reduced number of divisions by addition
+    extra class members
+
+11 January 14: V.Ivanchenko for L.Urban
+- G4UniversalFluctuation - G4Pow::expA() is substituted by G4Exp() 
+
+08 January 14: V.Ivanchenko for L.Urban
+- G4UrbanMscModel - bug fix (1st normal step in StepLimitType 2 mode   
+                    was not randomized)  
+- G4UniversalFluctuation - energy loss for extreme small cuts was too small,
+                           it is fixed now        
+
+18 December 13: V.Ivanchenko
+- G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel - get pointer
+    to the vector of cuts from parameter of Initialise(..) method and 
+    not from G4ProductionCutsTable - this is more convinient for
+    unit tests, results unchanged
+
 18 November 13: V.Ivanchenko (emstand-V09-06-79)
-- G4PAIPhotonModel, G4PAIxSection - fixed Coverity reports
+- G4PAIPhotonModel, G4PAIxSection - fixed Coverity reports (V.Grichine)
 
 12 November 13: V.Ivanchenko (emstand-V09-06-78)
 - G4IonCoulombScatteringModel, G4eCoulombScatteringModel,

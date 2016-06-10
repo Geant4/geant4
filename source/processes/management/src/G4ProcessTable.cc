@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc 71231 2013-06-12 13:06:28Z gcosmo $
+// $Id: G4ProcessTable.cc 79219 2014-02-20 14:56:17Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -364,12 +364,12 @@ G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find(
     }
   }
 
-#ifdef G4VERBOSE
   if (!isFound && verboseLevel>0){
+#ifdef G4VERBOSE
     G4cout << " G4ProcessTable::Find :" ;
     G4cout << " The Process[" << processName << "] is not found  " << G4endl;
-  }
 #endif
+  }
   
   return tmpTblVector;
 
@@ -393,12 +393,12 @@ G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find(
     }
   }
 
-#ifdef G4VERBOSE
   if (!isFound && verboseLevel>0){
+#ifdef G4VERBOSE
     G4cout << " G4ProcessTable::Find :" ;
     G4cout << " The ProcessType[" << processType << "] is not found  " << G4endl;
-  }
 #endif
+  }
   
   return tmpTblVector;
 

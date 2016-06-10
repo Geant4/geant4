@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc 68795 2013-04-05 13:24:46Z gcosmo $
+// $Id: G4VParticleChange.cc 79225 2014-02-20 15:03:24Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -494,6 +494,12 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
   if (!itsOKforEnergy) {
     aTrack.SetKineticEnergy(0.0);
   }
+ 
+  if (!itsOK) {
+    this->DumpInfo();
+    
+  }
+
 
   return itsOK;
 }

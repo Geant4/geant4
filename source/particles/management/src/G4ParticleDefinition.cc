@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc 73598 2013-09-02 09:18:28Z gcosmo $
+// $Id: G4ParticleDefinition.cc 79333 2014-02-24 10:36:17Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -59,6 +59,7 @@
 #include "G4DecayTable.hh"
 #include "G4PDGCodeChecker.hh"
 #include "G4StateManager.hh"
+#include "G4UnitsTable.hh"
 
 // This static member is thread local. For each thread, it holds the array
 // size of G4PDefData instances.
@@ -308,6 +309,14 @@ G4int G4ParticleDefinition::FillQuarkContents()
   return temp;
 }
 
+G4double G4ParticleDefinition::GetIonLifeTime() const
+{
+  if(!isGeneralIon) return thePDGLifeTime;
+
+  G4IonTable* ionTable =  G4IonTable::GetIonTable();
+  return ionTable->GetLifeTime(this);
+}
+
 void G4ParticleDefinition::DumpTable() const
 {
   G4cout << G4endl;
@@ -354,16 +363,31 @@ void G4ParticleDefinition::DumpTable() const
     G4cout << " ShortLived : ON" << G4endl;
   }
 
-  if ( thePDGStable ){
-    G4cout << " Stable : stable" << G4endl;
-  } else {
-    if( theDecayTable != 0 ){
-      theDecayTable->DumpInfo();
-    } else {
-      G4cout << "Decay Table is not defined !!" <<G4endl;
+  if ( IsGeneralIon() ) {
+    G4double lftm = GetIonLifeTime();
+    if(lftm<-1000.)
+    { G4cout << " Stable : No data found -- unknown" << G4endl; }
+    else if(lftm<0.)
+    { G4cout << " Stable : stable" << G4endl; }
+    else
+    {
+      G4cout << " Stable : unstable -- lifetime = " << G4BestUnit(lftm,"Time") 
+             << "\n  Decay table should be consulted to G4RadioactiveDecayProcess."
+             << G4endl;
     }
   }
-
+  else
+  {
+    if ( thePDGStable ){
+      G4cout << " Stable : stable" << G4endl;
+    } else {
+      if( theDecayTable != 0 ){
+        theDecayTable->DumpInfo();
+      } else {
+        G4cout << "Decay Table is not defined !!" <<G4endl;
+      }
+    }
+  }
 }
 
 void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)

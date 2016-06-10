@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh 75166 2013-10-29 09:06:54Z gcosmo $
+// $Id: G4IonTable.hh 79333 2014-02-24 10:36:17Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -209,6 +209,9 @@ class G4IonTable
    //  L is number of lambda (A= nn + np + nlambda)
    //  lvl is isomer level
  
+   G4double   GetLifeTime(const G4ParticleDefinition*) const;
+   // Returns a life time of an ion. -1 for stable ion, and -1001 for ion
+   // that is not listed in G4NuclideTable.
    
    G4int                 Entries() const;
    // Return number of ions in the table
@@ -229,7 +232,7 @@ class G4IonTable
    G4int                 size() const;
    //  Return number of ions in the table
 
-    void DumpTable(const G4String &particle_name = "ALL") const;
+   void DumpTable(const G4String &particle_name = "ALL") const;
    // dump information of particles specified by name 
 
 

@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 January 2014  Gabriele Cosmo  (hadr-util-V09-06-01)
+------------------------------------------------------
+- Cleanup of automatic TLS data conversion in G4ReactionProduct,
+  G4HadSignalHandler and G4HadronicWhiteBoard.
+
 02 May 2013  Alberto Ribon  (hadr-util-V09-06-00)
 -------------------------------------------------
 - For thread safety, replaced CLHEP::RandFlat with G4RandFlat in

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh 71045 2013-06-10 09:34:33Z gcosmo $
+// $Id: G4Decay.hh 79179 2014-02-19 16:16:51Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -196,14 +196,6 @@ inline
   return DecayIt(aTrack, aStep);
 }
 
-inline  
-  G4VParticleChange* G4Decay::PostStepDoIt(
-			     const G4Track& aTrack,
-			     const G4Step&  aStep
-			    )
-{
-  return DecayIt(aTrack, aStep);
-}
 
 inline
  const G4VExtDecayer* G4Decay::GetExtDecayer() const

@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History 78007 2013-12-02 08:32:53Z gcosmo $
+$Id: History 79202 2014-02-20 11:25:02Z gcosmo $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,11 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+9 January 2014 - Davide Mancusi (hadr-inclxx-V09-06-49)
+---------------------------------------------------------------
+- Fix: occasionally produced an excited nucleon as a pre-fragment.
+- Getter for INCL Config object in the G4INCLInterfaceStore.
 
 29 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-47, -48)
 ---------------------------------------------------------------

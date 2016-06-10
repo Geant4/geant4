@@ -17,6 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 7, 2014 V.Ivantchenko (global-V09-06-83)
+- G4Physics2DVector::Retrieve(): fixed Coverity report for "taited scalar".
+- Updated date and tag-ID for geant4-10-00-patch-01.
+
+February 5, 2014 T.Koi
+- Added protections to avoid core dumps caused by division by zero 
+  and other minor updates in G4ConvergenceTester.
+
+January 23, 2014 G.Cosmo
+- Protected __attribute__ calls in G4ios.cc from use in WIN32.
+
+January 13, 2014 A. Dotti
+- Call G4iosInitialization/G4iosFinalization with functions marked
+  __attribute__((destructor)) and __attribute__((destructor)) to 
+  guarantee G4cout/G4cerr are initialized correctly before main
+  function
+
+January 14, 2014 V.Ivantchenko
+- G4PhysicsVector: small performance optimisation; division by 6 substituted
+  by multiplication of 1/6 constant.
+
+December 17, 2013 G.Cosmo
+- Explicitly check the upper bound of 'numberOfYNodes' in
+  G4Physics2DVector::Retrieve() (read from file), to fix defect
+  reported by Coverity (L.Pandola).
+- Updated date and tag-ID for geant4-10-00-ref-01.
+
 November 20, 2013 A.Dotti      (global-V09-06-82)
 - Patched G4HepRandom to create default engine if G4Random::setTheSeed
   is called at beginning of job (allowed in SEQ).

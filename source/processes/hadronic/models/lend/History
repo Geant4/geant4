@@ -1,4 +1,4 @@
-# $Id: History 69564 2013-05-08 12:33:30Z gcosmo $
+# $Id: History 79204 2014-02-20 11:31:10Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -14,6 +14,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+29 Jan 2014 Gunter Folger (hadr-lend-V09-06-02)
+- Removed low_energy from sources.cmake
 
 6 May 2013 Tatsumi Koi (hadr-lend-V09-06-01)
 Fix for "warning: conversion specifies type 'int' but the argument has type 'size_t'" 

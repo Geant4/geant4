@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc 71487 2013-06-17 08:19:40Z gcosmo $
+// $Id: G4OpWLS.cc 79221 2014-02-20 14:58:02Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -57,6 +57,12 @@
 // Class Implementation
 /////////////////////////
 
+        //////////////////////
+        // static data members
+        //////////////////////
+
+G4VWLSTimeGeneratorProfile* G4OpWLS::WLSTimeGeneratorProfile = 0;
+
 /////////////////
 // Constructors
 /////////////////
@@ -67,14 +73,12 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   SetProcessSubType(fOpWLS);
 
   theIntegralTable = NULL;
+  if(!WLSTimeGeneratorProfile)
+  { WLSTimeGeneratorProfile = new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta"); }
  
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created " << G4endl;
   }
-
-  WLSTimeGeneratorProfile = 
-       new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
-
 }
 
 ////////////////
@@ -87,7 +91,6 @@ G4OpWLS::~G4OpWLS()
     theIntegralTable->clearAndDestroy();
     delete theIntegralTable;
   }
-  delete WLSTimeGeneratorProfile;
 }
 
 ////////////
@@ -415,8 +418,14 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
   return AttenuationLength;
 }
 
+#include "G4AutoLock.hh"
+namespace {
+ G4Mutex wlsCmdHandlingMutex = G4MUTEX_INITIALIZER;
+}
+
 void G4OpWLS::UseTimeProfile(const G4String name)
 {
+  G4AutoLock l(&wlsCmdHandlingMutex);
   if (name == "delta")
     {
       delete WLSTimeGeneratorProfile;

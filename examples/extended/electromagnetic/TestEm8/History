@@ -1,4 +1,4 @@
-$Id: History 77094 2013-11-21 10:51:54Z gcosmo $
+$Id: History 79241 2014-02-20 16:03:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-01-14 V.Ivant (testem8-V09-06-04)
+- HistoManager - fixed output of rms of mean energy
+
+01-01-14 V.Ivant
+- HistoManager - more accurate computation of mean energy deposition
 
 21-05-13 V.Ivant (testem8-V09-06-03)
 - PhysicsList - substituted obsolete G4PAIPhotonMOdel by G4PAIPhotModel 

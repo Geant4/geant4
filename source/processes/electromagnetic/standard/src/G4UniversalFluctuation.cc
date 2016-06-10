@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4UniversalFluctuation.cc 79188 2014-02-20 09:22:48Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -76,8 +76,8 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Pow.hh"
 #include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,8 +98,7 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
   particleMass = chargeSquare = ipotFluct = electronDensity = f1Fluct = f2Fluct 
     = e1Fluct = e2Fluct = e1LogFluct = e2LogFluct = ipotLogFluct = e0 = esmall 
     = e1 = e2 = 0;
-
-  g4pow = G4Pow::GetInstance();
+  m_Inv_particleMass = m_massrate = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,6 +113,10 @@ void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
   particle       = part;
   particleMass   = part->GetPDGMass();
   G4double q     = part->GetPDGCharge()/eplus;
+
+  // Derived quantities
+  m_Inv_particleMass = 1.0 / particleMass;
+  m_massrate = electron_mass_c2 * m_Inv_particleMass ;
   chargeSquare   = q*q;
 }
 
@@ -139,9 +142,9 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   //G4cout<< "Emean= "<< meanLoss<< " tmax= "<< tmax<< " L= "<<length<<G4endl;
   if (meanLoss < minLoss) { return meanLoss; }
 
-  if(!particle) { InitialiseMe(dp->GetDefinition()); }
+  if(dp->GetDefinition() != particle) { InitialiseMe(dp->GetDefinition()); }
   
-  G4double tau   = tkin/particleMass;
+  G4double tau   = tkin * m_Inv_particleMass;            
   G4double gam   = tau + 1.0;
   G4double gam2  = gam*gam;
   G4double beta2 = tau*(tau + 2.0)/gam2;
@@ -157,25 +160,23 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   if ((particleMass > electron_mass_c2) &&
       (meanLoss >= minNumberInteractionsBohr*tmax))
   {
-    G4double massrate = electron_mass_c2/particleMass ;
     G4double tmaxkine = 2.*electron_mass_c2*beta2*gam2/
-                        (1.+massrate*(2.*gam+massrate)) ;
+                        (1.+m_massrate*(2.*gam+m_massrate)) ;
     if (tmaxkine <= 2.*tmax)   
     {
       electronDensity = material->GetElectronDensity();
       siga = sqrt((1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
 		  * electronDensity * chargeSquare);
 
-     
       G4double sn = meanLoss/siga;
   
       // thick target case 
       if (sn >= 2.0) {
 
 	G4double twomeanLoss = meanLoss + meanLoss;
-	do {
+    	do {
 	  loss = G4RandGauss::shoot(meanLoss,siga);
-	} while (0.0 > loss || twomeanLoss < loss);
+    	} while  (0.0 > loss || twomeanLoss < loss);
 
 	// Gamma distribution
       } else {
@@ -211,7 +212,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   G4int    nstep = 1;
   if(meanLoss < 25.*ipotFluct)
     {
-      if(G4UniformRand() < 0.04*meanLoss/ipotFluct)
+      if(G4UniformRand()*ipotFluct< 0.04*meanLoss)          
 	{ nstep = 1; }
       else
 	{ 
@@ -238,7 +239,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	if(a1 < nmaxCont) { 
 	  //small energy loss
 	  G4double sa1 = sqrt(a1);
-	  if(G4UniformRand() < g4pow->expA(-sa1))
+	  if(G4UniformRand() < G4Exp(-sa1))
 	    {
 	      e1 = esmall;
 	      a1 = meanLoss*(1.-rate)/e1;
@@ -253,11 +254,11 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	    }
 
 	} else {
-	    //not small energy loss
-	    //correction to get better fwhm value
-	    a1 /= fw;
-	    e1 = fw*e1Fluct;
-	    e2 = e2Fluct;
+	  //not small energy loss
+	  //correction to get better fwhm value
+	  a1 /= fw;
+	  e1 = fw*e1Fluct;
+	  e2 = e2Fluct;
 	}
       }   
     }
@@ -265,6 +266,9 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     G4double w1 = tmax/e0;
     if(tmax > e0) {
       a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*G4Log(w1));
+      if(a1+a2 <= 0.) { 
+	a3 /= rate; 
+      }
     }
     //'nearly' Gaussian fluctuation if a1>nmaxCont&&a2>nmaxCont&&a3>nmaxCont  
     G4double emean = 0.;
@@ -286,7 +290,6 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	}
       }
 
-
     // excitation of type 2
     if(a2 > nmaxCont)
       {
@@ -300,7 +303,6 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	if(p2 > 0.) 
 	  loss += (1.-2.*G4UniformRand())*e2;
       }
-
     if(emean > 0.)
       {
 	sige   = sqrt(sig2e);
@@ -331,20 +333,20 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
       if(nb > 0) {
 	for (G4int k=0; k<nb; k++) { lossc += w2/(1.-w*G4UniformRand()); }
       }
-    }
 
     if(emean > 0.)
       {
 	sige   = sqrt(sig2e);
 	lossc += max(0.,G4RandGauss::shoot(emean,sige));
       }
+    }
 
     loss += lossc;
 
     losstot += loss;
   }
   //G4cout << "Vavilov: " << losstot << "  Nstep= " << nstep << G4endl;
-              
+
   return losstot;
 
 }
@@ -358,11 +360,11 @@ G4double G4UniversalFluctuation::Dispersion(
  				G4double tmax,
 			        G4double length)
 {
-  if(!particle) { InitialiseMe(dp->GetDefinition()); }
+  if(dp->GetDefinition() != particle) { InitialiseMe(dp->GetDefinition()); }
 
   electronDensity = material->GetElectronDensity();
 
-  G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0;
+  G4double gam   = (dp->GetKineticEnergy())*m_Inv_particleMass + 1.0;
   G4double beta2 = 1.0 - 1.0/(gam*gam);
 
   G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
@@ -380,6 +382,15 @@ G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
   if(part != particle) {
     particle       = part;
     particleMass   = part->GetPDGMass();
+
+    // Derived quantities
+    if( particleMass != 0.0 ){
+      m_Inv_particleMass = 1.0 / particleMass;
+      m_massrate = electron_mass_c2 * m_Inv_particleMass ;
+    }else{
+      m_Inv_particleMass = DBL_MAX;
+      m_massrate = DBL_MAX;
+    }
   }
   chargeSquare = q2;
 }

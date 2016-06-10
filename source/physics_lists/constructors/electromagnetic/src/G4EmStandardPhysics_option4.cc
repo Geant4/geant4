@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option4.cc 73153 2013-08-20 07:17:42Z gcosmo $
+// $Id: G4EmStandardPhysics_option4.cc 79157 2014-02-19 15:35:01Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -192,11 +192,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* pimsc = new G4hMultipleScattering();
-  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  //pimsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* kmsc = new G4hMultipleScattering();
-  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  //kmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* pmsc = new G4hMultipleScattering();
-  pmsc->AddEmModel(0, new G4WentzelVIModel());
+  //pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models
@@ -248,6 +248,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 
@@ -268,6 +269,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
 
+      // register processes
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
@@ -282,6 +284,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 
@@ -302,13 +305,12 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
 
+      // register processes
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
-      ph->RegisterProcess(ss, particle);
-
-      // annihilation at rest and in flight
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {

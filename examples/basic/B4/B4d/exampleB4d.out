@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -208,6 +208,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -286,6 +292,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 42 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -404,6 +416,12 @@ hPairProd:   for  pi+    SubType= 4
       Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 39 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -617,19 +635,19 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 283.263 MeV       total track length:  19.743 cm 
-        Gap: total energy: 10.6009 MeV       total track length: 5.29096 cm 
+   Absorber: total energy: 266.089 MeV       total track length:  18.963 cm 
+        Gap: total energy: 28.2698 MeV       total track length: 14.5167 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 283.263 MeV rms = 0 eV 
- EGap : mean = 10.6009 MeV rms = 0 eV 
- LAbs : mean = 19.743 cm  rms = 0 fm 
- LGap : mean = 5.29096 cm  rms = 0 fm 
+ EAbs : mean = 266.089 MeV rms = 0 eV 
+ EGap : mean = 28.2698 MeV rms = 0 eV 
+ LAbs : mean = 18.963 cm  rms = 0 fm 
+ LGap : mean = 14.5167 cm  rms = 0 fm 
 ... write Root file : B4.root - done
      Transportation,                msc,              hIoni,            ionIoni
-             hBrems,          hPairProd,              eIoni,              eBrem
-            annihil,        CoulombScat,               phot,              compt
+             hBrems,          hPairProd,        CoulombScat,              eIoni
+              eBrem,            annihil,               phot,              compt
                conv,             muIoni,            muBrems,         muPairProd
       photonNuclear,    electronNuclear,    positronNuclear,              Decay
          hadElastic,   neutronInelastic,           nCapture,    protonInelastic
@@ -744,6 +762,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -822,6 +846,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 42 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -941,6 +971,12 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  pi+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 39 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -970,15 +1006,15 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 282.146 MeV       total track length: 20.3465 cm 
-        Gap: total energy: 18.8759 MeV       total track length: 9.43449 cm 
+   Absorber: total energy: 252.567 MeV       total track length: 18.1356 cm 
+        Gap: total energy:  16.676 MeV       total track length:  7.9709 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 282.146 MeV rms = 0 eV 
- EGap : mean = 18.8759 MeV rms = 0 eV 
- LAbs : mean = 20.3465 cm  rms = 0 fm 
- LGap : mean = 9.43449 cm  rms = 0 fm 
+ EAbs : mean = 252.567 MeV rms = 0 eV 
+ EGap : mean = 16.676 MeV rms = 0 eV 
+ LAbs : mean = 18.1356 cm  rms = 0 fm 
+ LGap : mean = 7.9709 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 
 phot:   for  gamma    SubType= 12
@@ -1082,6 +1118,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1160,6 +1202,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 42 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -1279,6 +1327,12 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  pi+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 39 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1308,15 +1362,15 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 468.273 MeV       total track length: 33.5299 cm 
-        Gap: total energy: 16.8004 MeV       total track length: 8.15542 cm 
+   Absorber: total energy: 459.395 MeV       total track length: 32.3332 cm 
+        Gap: total energy: 23.3245 MeV       total track length: 12.2949 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 468.273 MeV rms = 0 eV 
- EGap : mean = 16.8004 MeV rms = 0 eV 
- LAbs : mean = 33.5299 cm  rms = 0 fm 
- LGap : mean = 8.15542 cm  rms = 0 fm 
+ EAbs : mean = 459.395 MeV rms = 0 eV 
+ EGap : mean = 23.3245 MeV rms = 0 eV 
+ LAbs : mean = 32.3332 cm  rms = 0 fm 
+ LGap : mean = 12.2949 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.cc 77025 2013-11-20 16:11:51Z gcosmo $
+// $Id: G4NuclearLevelManager.cc 79200 2014-02-20 11:22:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -362,43 +362,44 @@ void G4NuclearLevelManager::PrintAll()
 
 G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 {
-    _levelEnergy = right._levelEnergy;
-    _gammaEnergy = right._gammaEnergy;
-    _probability = right._probability;
-    _polarity = right._polarity;
-    _halfLife = right._halfLife;
-    _angularMomentum = right._angularMomentum;
-    _kCC = right._kCC;
-    _l1CC = right._l1CC;
-    _l2CC = right._l2CC;
-    _l3CC = right._l3CC;
-    _m1CC = right._m1CC;
-    _m2CC = right._m2CC;
-    _m3CC = right._m3CC;
-    _m4CC = right._m4CC;
-    _m5CC = right._m5CC;
-    _nPlusCC = right._nPlusCC;
-    _totalCC = right._totalCC;
-    _nucleusA = right._nucleusA;
-    _nucleusZ = right._nucleusZ;
-    _fileName = right._fileName;
-    _validity = right._validity;
+  _levelEnergy = right._levelEnergy;
+  _gammaEnergy = right._gammaEnergy;
+  _probability = right._probability;
+  _polarity = right._polarity;
+  _halfLife = right._halfLife;
+  _angularMomentum = right._angularMomentum;
+  _kCC = right._kCC;
+  _l1CC = right._l1CC;
+  _l2CC = right._l2CC;
+  _l3CC = right._l3CC;
+  _m1CC = right._m1CC;
+  _m2CC = right._m2CC;
+  _m3CC = right._m3CC;
+  _m4CC = right._m4CC;
+  _m5CC = right._m5CC;
+  _nPlusCC = right._nPlusCC;
+  _totalCC = right._totalCC;
+  _nucleusA = right._nucleusA;
+  _nucleusZ = right._nucleusZ;
+  _fileName = right._fileName;
+  _validity = right._validity;
 
-    if (right._levels != 0)   
-      {
-	_levels = new G4PtrLevelVector;
-	G4int n = right._levels->size();
-	G4int i;
-	for (i=0; i<n; ++i)
-	  {
-	    _levels->push_back(new G4NuclearLevel(*(right.GetLevel(i))));
-	  }
-	
-	G4PtrSort<G4NuclearLevel>(_levels);
-      }
-    else 
-      {
-	_levels = 0;
-      }
+  for(G4int i=0; i<30; ++i) { buffer[i] = 0; }
+
+  if (right._levels != 0)   
+    {
+      _levels = new G4PtrLevelVector;
+      G4int n = right._levels->size();
+      G4int i;
+      for (i=0; i<n; ++i)
+	{
+	  _levels->push_back(new G4NuclearLevel(*(right.GetLevel(i))));
+	}
+      G4PtrSort<G4NuclearLevel>(_levels);
+    }
+  else 
+    {
+      _levels = 0;
+    }
 }
 

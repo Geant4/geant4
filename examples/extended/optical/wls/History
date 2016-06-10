@@ -1,4 +1,4 @@
-$Id: History 78066 2013-12-03 11:08:36Z gcosmo $
+$Id: History 79264 2014-02-20 16:38:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,15 @@ track of all tags.
  
      ----------------------------------------------------------
 
+December 04, 2013 P. Gumplinger (WLS-V09-06-17)
+- Fixes in gui.mac:
+  Commented out command specific to B2 example
+  Let execute vis.mac first to make the command in added menus available;
+  Corrected wireframe parameter
+
 December 02, 2013 G. Folger     (WLS-V09-06-15)
-- corrected avoiding re-use of pointer into temporary in WLSDetectorConstruction.cc
+- corrected avoiding re-use of pointer into temporary in
+  WLSDetectorConstruction.cc
 
 December 02, 2013 G. Folger     (WLS-V09-06-14)
 - avoid re-use of pointer into temporary in WLSDetectorConstruction.cc

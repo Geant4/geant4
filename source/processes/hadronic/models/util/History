@@ -1,4 +1,4 @@
-$Id: History 69574 2013-05-08 13:40:26Z gcosmo $
+$Id: History 79213 2014-02-20 14:43:12Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,23 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+29-Jan-2014 Vladimir Ivanchenko		   hadr-mod-util-V09-06-06
+- G4Fragment - warning is printed out only if G4VERBOSE is set 
+
+28-Jan-2014 Vladimir Ivanchenko
+- G4Fragment - removed counter of warnings, 
+  added G4Exception with "ifdef debug_G4Fragment"
+
+22-Jan-2014 Gabriele Cosmo
+- Corrected use of DLL export flag for G4Fragment.
+
+21-Jan-2014 Vladimir Ivanchenko
+- G4Fragment - fixed DLL name
+
+20-Jan-2014 Vladimir Ivanchenko
+- G4Fragment - used G4Allocator to reduce memory churn
+
 01-May-2013 Andrea Dotti		   hadr-mod-util-V09-06-05
 - Replace use of CLHEP::HepRandom with MT safe equivalent G4Random
 

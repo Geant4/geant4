@@ -1,4 +1,4 @@
-$Id: History 76249 2013-11-08 11:21:29Z gcosmo $
+$Id: History 79173 2014-02-19 16:05:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,14 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-Feb-2014, Luciano Pandola            (phys-lists-V09-06-21)
+- Registered model in LBE.icc to handle neutron capture above 20 MeV 
+ (Bug Report 1562) 
+
+29-Jan-2014, Gunter Folger
+- Removed electromagnetic/dna, cascade/{evaporation,utils}, and 
+   isotope_productionfrom sources.cmake
 
 07-Nov-2013, Tatsumi Koi                (phys-lists-V09-06-20)
 -Activate production of fission fragments in Shielding PhysicsList

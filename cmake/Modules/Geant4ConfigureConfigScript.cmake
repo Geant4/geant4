@@ -98,6 +98,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_EXPAT "yes")
   endif()
 
+  # - ZLIB
+  if(GEANT4_USE_SYSTEM_ZLIB)
+    set(G4_BUILTWITH_ZLIB "no")
+  else()
+    set(G4_BUILTWITH_ZLIB "yes")
+  endif()
+
   # - GDML
   if(GEANT4_USE_GDML)
     set(G4_BUILTWITH_GDML "yes")

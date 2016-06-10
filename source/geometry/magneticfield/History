@@ -1,4 +1,4 @@
-$Id: History 76946 2013-11-19 11:33:13Z gcosmo $
+$Id: History 79128 2014-02-18 15:44:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 17, 2014 P.Gumplinger                 - field-V09-06-14
+-------------------------
+- add G4Mag_EqRhs::SetChargeMomentumMass( particleCharge, MomentumXc, mass)
+  to G4Mag_SpinEqRhs::SetChargeMomentumMass, see bug reported at:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/210.html
 
                                             field-V09-06-13 - same as
 Nov 18, 2013 P.Gumplinger                 - field-V09-06-12

@@ -1,4 +1,4 @@
-$Id: History 78188 2013-12-04 16:32:00Z gcosmo $
+$Id: History 79142 2014-02-19 13:35:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-Feb-2014  G.Cosmo               (geom-specific-V09-06-37)
+- Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+  in parameterisation. Resolves crash in MT visualization when using USolids. 
+
+12-Feb-2014  G.Cosmo
+- Added correct cloning mechanism in G4U* wrappers.
+  Addressing problem report #1553.
+
+18-Dec-2013  T.Nikitina
+- Fix in G4GenericTrap::InsidePolygone() to check if p lies between the two
+  extremes of the segment. Addressing problem report #1541.
+
+17-Dec-2013  G.Cosmo
+- Corrected left-over debug printout in G4Polycone::SetOriginalParameters().
 
 04-Dec-2013  G.Cosmo               (geom-specific-V09-06-36)
 - Corrected left-over debug printout in G4Polyhedra::SetOriginalParameters().

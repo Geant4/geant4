@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -125,7 +125,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.78s Real=2.78s Sys=0s
+  User=4.3s Real=7.4s Sys=0s
 
  ======================== run summary ======================
 
@@ -133,18 +133,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.948 MeV +- 204.198 keV
+ Total Energy deposited        = 3.945 MeV +- 209.511 keV
 
- Track length of primary track = 2.042 cm  +- 2.752 mm 
+ Track length of primary track = 2.038 cm  +- 2.772 mm 
  Range from EmCalculator       = 2.037 cm  (from full dE/dx)
 
- Projected range               = 1.324 cm  +- 3.840 mm 
+ Projected range               = 1.319 cm  +- 3.868 mm 
 
- Nb of steps of primary track  = 16.29 +- 3.00	 Step size= 1.291 mm  +- 274.711 um 
+ Nb of steps of primary track  = 16.27 +- 3.02	 Step size= 1.290 mm  +- 279.621 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 906551290, 1054794534
+ Current couple of seeds = 1279428639, 303986140
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -156,7 +156,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.14 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.15 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

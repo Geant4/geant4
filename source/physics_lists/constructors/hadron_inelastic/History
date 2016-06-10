@@ -1,4 +1,4 @@
-$Id: History 76703 2013-11-14 10:29:11Z gcosmo $
+$Id: History 79165 2014-02-19 15:54:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-Jan-2014, Gunter Folger              (phys-ctor-hinelastic-V09-06-21)
+- Removed from photolepton_hadron/muon_nuclear from sources.cmake
 
 14-Nov-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-20)
 - Use G4NeutronInelasticXS for neutrons in the following physics lists

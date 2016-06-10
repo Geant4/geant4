@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SauterGavrilaAngularDistribution.cc 68797 2013-04-05 13:27:11Z gcosmo $
+// $Id: G4SauterGavrilaAngularDistribution.cc 79188 2014-02-20 09:22:48Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,36 +57,35 @@ G4SauterGavrilaAngularDistribution::SampleDirection(
        const G4DynamicParticle* dp, G4double, G4int, const G4Material*)
 {
   G4double tau = dp->GetKineticEnergy()/electron_mass_c2;
-  static const G4double taulimit = 30.0;
+  static const G4double taulimit = 50.0;
 
   if (tau > taulimit) {
     fLocalDirection = dp->GetMomentumDirection(); 
     // Bugzilla 1120
     // SI on 05/09/2010 as suggested by JG 04/09/10 
   } else {
- 
-    G4double invgamma  = 1.0/(tau + 1.0);
-    G4double beta      = std::sqrt(tau*(tau + 2.0))*invgamma;
-    G4double b         = 0.5*tau*(tau*tau - 1.0);
-    G4double invgamma2 = invgamma*invgamma;
-   
-    G4double rndm,term,greject,grejsup,costeta,sint2;
-    if (tau < 1.) { grejsup = (1.+b-beta*b)/invgamma2; }
-    else          { grejsup = (1.+b+beta*b)/invgamma2; }
+    // algorithm according Penelope 2008 manual and 
+    // F.Sauter Ann. Physik 9, 217(1931); 11, 454(1931). 
 
+    G4double gamma = tau + 1;
+    G4double beta  = std::sqrt(tau*(tau + 2))/gamma;
+    G4double A     = (1 - beta)/beta;
+    G4double Ap2   = A + 2;
+    G4double B     = 0.5*beta*gamma*(gamma - 1)*(gamma - 2);
+    G4double grej  = 2*(1 + A*B)/A;
+    G4double z, g;
     do { 
-      rndm    = 1 - 2*G4UniformRand();
-      costeta = (rndm + beta)/(rndm*beta + 1);
-      term    = invgamma2/(1 + beta*rndm);
-      sint2   = (1 - costeta)*(1 + costeta);
-      greject = sint2*(1 + b*term)/(term*term);
+      G4double q = G4UniformRand();
+      z = 2*A*(2*q + Ap2*std::sqrt(q))/(Ap2*Ap2 - 4*q); 
+      g = (2 - z)*(1.0/(A + z) + B);
 
-    } while(greject < G4UniformRand()*grejsup);
-       
-    G4double sinteta = std::sqrt(sint2);
+    } while(g < G4UniformRand()*grej);
+ 
+    G4double cost = 1 - z;
+    G4double sint = std::sqrt(z*(2 - z));
     G4double phi  = CLHEP::twopi*G4UniformRand(); 
 
-    fLocalDirection.set(sinteta*std::cos(phi), sinteta*std::sin(phi), costeta);
+    fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi), cost);
     fLocalDirection.rotateUz(dp->GetMomentumDirection());
   }
   return fLocalDirection;

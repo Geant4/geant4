@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.cc 68720 2013-04-05 09:18:58Z gcosmo $
+// $Id: G4CrossSectionDataStore.cc 79192 2014-02-20 10:07:18Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -240,9 +240,6 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
   G4Element* anElement = (*theElementVector)[0];
 
   G4double cross = GetCrossSection(part, mat);
-
-  // zero cross section case
-  if(0.0 >= cross) { return anElement; }
 
   // select element from a compound 
   if(1 < nElements) {

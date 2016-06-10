@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc 75582 2013-11-04 12:13:01Z gcosmo $
+// $Id: G4GoudsmitSaundersonTable.cc 79188 2014-02-20 09:22:48Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -49,7 +49,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 #include "G4GoudsmitSaundersonTable.hh"
+#include "G4Log.hh"
 #include "G4ios.hh"
+#include <fstream>
 
 using namespace std;
 
@@ -216,11 +218,11 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
 
   ///////////////////////////////////////////////////////////////////////////
   // Calculate some necessary coefficients for PDF and CPDF interpolation 
-  coeff=(std::log(LAMBDAN[KIndex+1]/LAMBDAN[KIndex]))*(std::log(A[JIndex+1]/A[JIndex]));
-  Ckj=(std::log(LAMBDAN[KIndex+1]/lambda))*(std::log(A[JIndex+1]/Chia2))/coeff;
-  CkjPlus1=(std::log(LAMBDAN[KIndex+1]/lambda))*(std::log(Chia2/A[JIndex]))/coeff;
-  CkPlus1j=(std::log(lambda/LAMBDAN[KIndex]))*(std::log(A[JIndex+1]/Chia2))/coeff;
-  CkPlus1jPlus1=(std::log(lambda/LAMBDAN[KIndex]))*(std::log(Chia2/A[JIndex]))/coeff;
+  coeff=(G4Log(LAMBDAN[KIndex+1]/LAMBDAN[KIndex]))*(G4Log(A[JIndex+1]/A[JIndex]));
+  Ckj=(G4Log(LAMBDAN[KIndex+1]/lambda))*(G4Log(A[JIndex+1]/Chia2))/coeff;
+  CkjPlus1=(G4Log(LAMBDAN[KIndex+1]/lambda))*(G4Log(Chia2/A[JIndex]))/coeff;
+  CkPlus1j=(G4Log(lambda/LAMBDAN[KIndex]))*(G4Log(A[JIndex+1]/Chia2))/coeff;
+  CkPlus1jPlus1=(G4Log(lambda/LAMBDAN[KIndex]))*(G4Log(Chia2/A[JIndex]))/coeff;
   ///////////////////////////////////////////////////////////////////////////
   // Calculate Interpolated PDF and CPDF arrays
   Ind0=320*(11*KIndex+JIndex);
@@ -258,13 +260,12 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
   G4String filename;
 
   char* path = getenv("G4LEDATA");
-  if (!path)
-    {
-      G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()","em0006",
-		  FatalException,
-		  "Environment variable G4LEDATA not defined");
-      return;
-    }
+  if (!path) {
+    G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()","em0006",
+		FatalException,
+		"Environment variable G4LEDATA not defined");
+    return;
+  }
 
   G4String pathString(path);
 
@@ -274,38 +275,38 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
  
     G4String dirFile = pathString + "/msc_GS/" + filename;
     
-    FILE *infile = fopen(dirFile,"r"); 
-    if (infile == 0)
-      {
-	G4ExceptionDescription ed;
-	ed << "Data file <" + dirFile + "> is not opened!";
-	G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()",
-		    "em0003",FatalException,ed);
-        return;
-      }
+    std::ifstream infile(dirFile, std::ios::in);
+    if( !infile.is_open()) {
+      G4ExceptionDescription ed;
+      ed << "Data file <" + dirFile + "> is not opened!";
+      G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()",
+		  "em0003",FatalException,ed);
+      return;
+    }
 
     // Read parameters into tables. 
-    G4float aRead;
+    G4double aRead;
     for(G4int k=0 ; k<76 ;k++){
       for(G4int j=0 ; j<11 ;j++){
         for(G4int i=0 ; i<320 ;i++) {
-	  if(1 == fscanf(infile,"%f\t",&aRead)) {
-	    G4int idx = 320*(11*k+j)+i;
-	    if(level == 0)       { PDF[idx]  = aRead; }
-	    else if (level == 1) { CPDF[idx] = aRead; }
-	  } else {
+          infile >> aRead;
+	  if(infile.fail()) {
 	    G4ExceptionDescription ed;
 	    ed << "Error reading <" + dirFile + "> k= " << k 
 	       << "; j= " << j << "; i= " << i;
 	    G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()",
 			"em0003",FatalException,ed);
 	    return;
+	  } else {
+	    G4int idx = 320*(11*k+j)+i;
+	    if(level == 0)       { PDF[idx]  = aRead; }
+	    else if (level == 1) { CPDF[idx] = aRead; }
 	  }
         }
       }
     }
     
-    fclose(infile);
+    infile.close();
   } //End loading PDF and CPDF parameters
 }
 

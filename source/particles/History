@@ -1,4 +1,4 @@
-$Id: History 77701 2013-11-27 16:39:30Z gcosmo $
+$Id: History 79334 2014-02-24 10:53:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 22. Feb. 2014  Makoto Asai (particles-V09-06-66)
+- Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero
+  and G4AntiLambdacPlus. Addressing problem report #1571.
+
+- 21. Feb. 2014  Makoto Asai
+- G4ParticleDefinition::DumpTable() displays correct stability
+  information for a general ion as long as it is known to
+  G4NuclideTable. Addressing to bug report #1560.
+
+- 28. Jan. 2014  Makoto Asai (particles-V09-06-65)
+- Fix G4ParticleTable::GetParticle(G4int) method.
 
 - 27. Nov. 2013  Gabriele Cosmo (particles-V09-06-64)
 - Correction in G4PDefSplitter::FreeSlave() to use free() instead of

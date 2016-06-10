@@ -23,19 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04ElementField.cc 77884 2013-11-29 08:41:11Z gcosmo $
+// $Id: F04ElementField.cc 79251 2014-02-20 16:16:23Z gcosmo $
 //
 /// \file field/field04/src/F04ElementField.cc
 /// \brief Implementation of the F04ElementField class
 //
-
-#include "G4GeometryManager.hh"
 
 #include "F04ElementField.hh"
 
 #include "F04GlobalField.hh"
 
 #include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreadLocal G4Navigator* F04ElementField::fNavigator = 0;
 
@@ -71,17 +71,17 @@ F04ElementField::F04ElementField(G4ThreeVector c, G4LogicalVolume* lv)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04ElementField::Construct(G4VPhysicalVolume* currentWorld)
+void F04ElementField::Construct()
 {
-  if (!fNavigator) { fNavigator = new G4Navigator(); }
-  UpdateWorld(currentWorld);
-}
+  G4Navigator* theNavigator =
+                    G4TransportationManager::GetTransportationManager()->
+                                                 GetNavigatorForTracking();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04ElementField::UpdateWorld(G4VPhysicalVolume* currentWorld)
-{
-  fNavigator->SetWorldVolume(currentWorld);
+  if (!fNavigator) {
+     fNavigator = new G4Navigator();
+     if ( theNavigator->GetWorldVolume() )
+               fNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
+   }
 
   fNavigator->LocateGlobalPointAndSetup(fCenter,0,false);
 

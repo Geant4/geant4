@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.hh 71487 2013-06-17 08:19:40Z gcosmo $
+// $Id: G4OpWLS.hh 79221 2014-02-20 14:58:02Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Definition
@@ -129,7 +129,7 @@ public:
         void DumpPhysicsTable() const;
         // Prints the WLS integral table.
 
-        void UseTimeProfile(const G4String name);
+        static void UseTimeProfile(const G4String name);
         // Selects the time profile generator
 
 private:
@@ -139,7 +139,7 @@ private:
 
 protected:
 
-        G4VWLSTimeGeneratorProfile* WLSTimeGeneratorProfile;
+        static G4VWLSTimeGeneratorProfile* WLSTimeGeneratorProfile;
         G4PhysicsTable* theIntegralTable;
 
 };

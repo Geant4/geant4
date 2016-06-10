@@ -72,13 +72,7 @@ class UTet : public VUSolid
     //G4Visualisation
     void GetParametersList(int aNumber, double* aArray) const;
 
-    VUSolid* Clone() const
-    {
-      std::vector<UVector3> v = GetVertices();
-      return new UTet(GetName(), v[0], v[1], v[2], v[3]);
-    }
-
-
+    VUSolid* Clone() const;
 
     UVector3 GetPointOnSurface() const;
     std::ostream& StreamInfo(std::ostream& os) const;

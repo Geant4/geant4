@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc 76957 2013-11-19 15:07:20Z gcosmo $
+// $Id: G4VEmProcess.cc 79268 2014-02-20 16:46:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -493,6 +493,7 @@ void G4VEmProcess::BuildLambdaTable()
 void G4VEmProcess::PrintInfoProcess(const G4ParticleDefinition& part)
 {
   if(verboseLevel > 0) {
+    G4cout << std::setprecision(6);
     G4cout << G4endl << GetProcessName() << ":   for  "
            << part.GetParticleName();
     if(integral)  { G4cout << ", integral: 1 "; }

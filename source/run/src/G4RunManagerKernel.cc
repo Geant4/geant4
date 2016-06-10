@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 77649 2013-11-27 08:39:54Z gcosmo $
+// $Id: G4RunManagerKernel.cc 79223 2014-02-20 15:01:29Z gcosmo $
 //
 //
 
@@ -664,6 +664,14 @@ void G4RunManagerKernel::BuildPhysicsTables(G4bool fakeRun)
   if( G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
   || physicsNeedsToBeReBuilt)
   {
+#ifdef G4MULTITHREADED
+    if(runManagerKernelType==masterRMK)
+    {
+      // make sure workers also rebuild physics tables
+      G4UImanager* pUImanager = G4UImanager::GetUIpointer();
+      pUImanager->ApplyCommand("/run/physicsModified");
+    }
+#endif
     physicsList->BuildPhysicsTable();
     ////G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
     physicsNeedsToBeReBuilt = false;

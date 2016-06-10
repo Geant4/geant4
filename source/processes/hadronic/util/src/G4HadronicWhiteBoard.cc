@@ -25,6 +25,7 @@
 
 #include "G4HadronicWhiteBoard.hh"
 
+G4ThreadLocal G4HadronicWhiteBoard * G4HadronicWhiteBoard::theInstance = 0;
 
 G4HadronicWhiteBoard::G4HadronicWhiteBoard()
  : theProjectile(0), theDef(0), theName(0), theE(0.0), thePx(0.0),
@@ -34,8 +35,8 @@ G4HadronicWhiteBoard::G4HadronicWhiteBoard()
 
 G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
 {
-  static G4ThreadLocal G4HadronicWhiteBoard *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4HadronicWhiteBoard  ;  G4HadronicWhiteBoard &theInstance = *theInstance_G4MT_TLS_;
-  return theInstance;
+  if (!theInstance) theInstance = new G4HadronicWhiteBoard;
+  return *theInstance;
 }
 
 const G4HadProjectile * G4HadronicWhiteBoard::GetProjectile() 

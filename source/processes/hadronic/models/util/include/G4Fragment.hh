@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 67984 2013-03-13 10:44:01Z gcosmo $
+// $Id: G4Fragment.hh 79213 2014-02-20 14:43:12Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 #include <vector>
 
 #include "globals.hh"
+#include "G4Allocator.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "G4NucleiProperties.hh"
@@ -94,6 +95,10 @@ public:
 
   friend std::ostream& operator<<(std::ostream&, const G4Fragment*);
   friend std::ostream& operator<<(std::ostream&, const G4Fragment&);
+
+  //  new/delete operators are overloded to use G4Allocator
+  inline void *operator new(size_t);
+  inline void operator delete(void *aFragment);
 
   // ============= GENERAL METHODS ==================
 
@@ -166,8 +171,6 @@ private:
 
   // ============= DATA MEMBERS ==================
 
-  static G4ThreadLocal G4int errCount;
-
   G4int theA;
   
   G4int theZ;
@@ -203,6 +206,23 @@ private:
 };
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
+
+#if defined G4HADRONIC_ALLOC_EXPORT
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+#else
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+#endif
+
+inline void * G4Fragment::operator new(size_t)
+{
+  if (!pFragmentAllocator) { pFragmentAllocator = new G4Allocator<G4Fragment>; }
+  return (void*) pFragmentAllocator->MallocSingle();
+}
+
+inline void G4Fragment::operator delete(void * aFragment)
+{
+  pFragmentAllocator->FreeSingle((G4Fragment *) aFragment);
+}
 
 inline void G4Fragment::CalculateExcitationEnergy()
 {

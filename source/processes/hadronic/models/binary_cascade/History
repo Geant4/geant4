@@ -13,9 +13,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 Jan 2014 Gunter Folger      had-binary-V09-06-09
+- G4BinaryLightIoncascade::FuseNucleiAndPrompound():
+  protect at low energy: available energy is not sufficient to create a 
+  fragment.
+
+16 Jan 2014 Gunter Folger
+- bring back corrected change for coverity, rejected previously in 
+  tag had-binary-V09-06-07.
+  Add printout of particle name in check for valid type of projectile 
+  in G4BinaryCasacde::ApplyYourself() 
+
 20 Sep 2013 Gunter Folger      had-binary-V09-06-08
 - revert change introduced for coverity fix, rev 72276, in tag 
-  had-binary-V09-06-07. The tag was rejected, and in teh ways for
+  had-binary-V09-06-07. The tag was rejected, and in the way for
   unrelated fixes.
   Remove commented lines for G4Fragment.SetParticleDefinition()
   
@@ -27,7 +38,7 @@ code and to keep track of all tags.
 10 Sep 2013 Gunter Folger
 - G4BinaryCascade.cc: fix typo, bug report 1511.
 
-12 Jul 2013 Gunter Folger      had-binary-V09-06-07
+12 Jul 2013 Gunter Folger      had-binary-V09-06-07  (tag rejected)
 - G4BinaryLightIonReaction: fix for coverity report on small leak 
 
  9 May 2013 John Apostolakis	 had-binary-V09-06-06  Retag

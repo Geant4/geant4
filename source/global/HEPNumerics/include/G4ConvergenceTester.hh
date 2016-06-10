@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvergenceTester.hh 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4ConvergenceTester.hh 79149 2014-02-19 15:08:06Z gcosmo $
 //
 // Class description:
 //
@@ -167,6 +167,9 @@ class G4ConvergenceTester
       G4int noTotal; // Total number of tests
 
       G4bool statsAreUpdated;
+
+      G4bool showHistory;
+      G4bool calcSLOPE;
 };
 #endif
 

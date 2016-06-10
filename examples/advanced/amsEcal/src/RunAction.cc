@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc 68740 2013-04-05 09:56:39Z gcosmo $
+// $Id: RunAction.cc 79227 2014-02-20 15:32:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,7 +228,7 @@ void RunAction::EndOfRunAction(const G4Run*)
     varianceEvis = meanEvis2 - meanEvis*meanEvis;
     rmsEvis = 0.;
     if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
-    resEvis = 100*rmsEvis/meanEvis;
+    resEvis = meanEvis ? 100*rmsEvis/meanEvis : 0.;
     histoManager->FillHisto(3, i1+0.5, meanEvis);
          
     //total energy

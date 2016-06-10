@@ -1,4 +1,4 @@
-$Id: History 74257 2013-10-02 14:24:55Z gcosmo $
+$Id: History 79122 2014-02-18 14:54:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 21, 2014 I. Hrivnacova (analysis-V09-06-26)
+- Updated to g4tools 1.7.1 (by G. Barrand):
+  Fixed performance observed for an ntuple with large numbers of columns
+  reported in item #455 in Geant4 hypernews, Analysis category.
+  See History_tools for complete list of modifications.
 
 October 02, 2013 I. Hrivnacova (analysis-V09-06-25)
 - Do not call WriteH1[2]() when no histograms are defined.

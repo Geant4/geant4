@@ -43,6 +43,8 @@
 #include <algorithm>
 
 #include "G4NeutronHPThermalScatteringData.hh"
+#include "G4NeutronHPManager.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
@@ -343,7 +345,9 @@ std::map< G4double , G4NeutronHPVector* >* G4NeutronHPThermalScatteringData::rea
 
    std::map< G4double , G4NeutronHPVector* >*  aData = new std::map< G4double , G4NeutronHPVector* >; 
    
-   std::ifstream theChannel( full_name.c_str() );
+   //std::ifstream theChannel( full_name.c_str() );
+   std::istringstream theChannel;
+   G4NeutronHPManager::GetInstance()->GetDataStream(full_name,theChannel);
 
    //G4cout << "G4NeutronHPThermalScatteringData " << name << G4endl;
 
@@ -359,7 +363,7 @@ std::map< G4double , G4NeutronHPVector* >* G4NeutronHPThermalScatteringData::rea
       anEnergyCross->Init ( theChannel , nData , eV , barn );
       aData->insert ( std::pair < G4double , G4NeutronHPVector* > ( temp , anEnergyCross ) );
    }
-   theChannel.close();
+   //theChannel.close();
 
    return aData;
 

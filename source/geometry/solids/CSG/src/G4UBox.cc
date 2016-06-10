@@ -103,3 +103,11 @@ void G4UBox::ComputeDimensions(G4VPVParameterisation* p,
   p->ComputeDimensions(*(G4Box*)this,n,pRep);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UBox::Clone() const
+{
+  return new G4UBox(*this);
+}

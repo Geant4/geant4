@@ -1,4 +1,4 @@
-$Id: History 76340 2013-11-08 15:21:09Z gcosmo $
+$Id: History 79239 2014-02-20 16:00:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+15-12-13 mma (testem4-V09-06-12)     
+- update vis.mac
      
 08-11-13 mma (testem4-V09-06-11)     
 - Setting SteppingVerbose in main only in sequential mode.

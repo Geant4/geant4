@@ -1,4 +1,4 @@
-$Id: History 76940 2013-11-19 09:54:12Z gcosmo $
+$Id: History 79266 2014-02-20 16:41:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+18/02/2014 mma (rdecay02-V09-06-07)
+- exrdmAnalysisManager::EndOfEvent(), 217 : do not force 'second' 
+     
+07/01/2014 Gunter Folger
+- Fix problem identified in boudary chack mode. In exrdmHisto.cc::AddRow(), 
+   using root, float ar[4] was used to take 6 elements. 
+	Fix is to new ar with proper size.
+	
 18/11/2013  Ivana Hrivnacova (rdecay02-V09-06-06)
 - Fixed .README
 

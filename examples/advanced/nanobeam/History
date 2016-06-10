@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 77894 2013-11-29 08:58:25Z gcosmo $
+$Id: History 79233 2014-02-20 15:45:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History 77894 2013-11-29 08:58:25Z gcosmo $
 
                        Package History file
                        --------------------
+
+17 Dec 2013 - tag nanobeam-V09-06-14  - A. Dotti, S. Incerti
+- Made the code thread safe because of unsafe CLHEP matrix inversion
+(in RunAction.cc)
 
 28 Nov 2013 - tag nanobeam-V09-06-13  - S. Incerti
 - Changed selection of volumes in SteppingAction using names

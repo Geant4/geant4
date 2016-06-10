@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc 74790 2013-10-22 07:31:37Z gcosmo $
+// $Id: G4BraggIonModel.cc 79188 2014-02-20 09:22:48Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -160,7 +160,8 @@ G4double G4BraggIonModel::GetParticleCharge(const G4ParticleDefinition* p,
 					    const G4Material* mat,
 					    G4double kineticEnergy)
 {
-  //G4cout<<"G4BraggIonModel::GetParticleCharge e= "<<kineticEnergy<<G4endl;
+  //G4cout<<"G4BraggIonModel::GetParticleCharge e= "<<kineticEnergy <<
+  //  " q= " <<  corr->GetParticleCharge(p,mat,kineticEnergy) <<G4endl;
   // this method is called only for ions
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }

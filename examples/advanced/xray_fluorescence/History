@@ -1,4 +1,4 @@
-# $Id: History 77520 2013-11-25 12:09:36Z gcosmo $
+# $Id: History 79235 2014-02-20 15:47:12Z gcosmo $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: geant4-09-04-ref-00 $
 # -------------------------------------------------------------------
@@ -18,6 +18,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-12-2013 L.Pandola Tag: XrayFluo-V09-06-03
+- Fix shadowed variables and compilation errors due to the #include of 
+  G4SystemOfUnits. Do not show up in system testing, but only when AIDA 
+  is available.
 
 25-11-2013 G.Folger Tag: XrayFluo-V09-06-02
 - Fix  one more typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl; 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh 68709 2013-04-05 09:03:07Z gcosmo $
+// $Id: G4TransportationManager.hh 79140 2014-02-19 13:29:40Z gcosmo $
 //
 // class G4TransportationManager
 //
@@ -68,7 +68,7 @@ class G4TransportationManager
        // Accessors for field handling
 
      inline G4Navigator* GetNavigatorForTracking() const;
-     inline void SetNavigatorForTracking( G4Navigator* newNavigator );
+     void SetNavigatorForTracking( G4Navigator* newNavigator );
        // Accessors for the navigator for tracking
 
      inline void SetWorldForTracking(G4VPhysicalVolume* theWorld);

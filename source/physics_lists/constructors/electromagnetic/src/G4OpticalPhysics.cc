@@ -38,10 +38,19 @@
 
 #include "G4OpticalPhysics.hh"
 
+#include "G4OpAbsorption.hh"
+#include "G4OpRayleigh.hh"
+#include "G4OpMieHG.hh"
+
+#include "G4OpBoundaryProcess.hh"
+
+#include "G4OpWLS.hh"
+#include "G4Scintillation.hh"
+#include "G4Cerenkov.hh"
+
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
 
-G4ThreadLocal G4bool G4OpticalPhysics::wasActivated = false;
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -53,13 +62,6 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4OpticalPhysics);
 G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
   : G4VPhysicsConstructor(name),
 
-    fScintillationProcess(NULL),
-    fCerenkovProcess(NULL),
-    fOpWLSProcess(NULL),
-    fOpAbsorptionProcess(NULL),
-    fOpRayleighScatteringProcess(NULL),
-    fOpMieHGScatteringProcess(NULL),
-    fOpBoundaryProcess(NULL),
     fMaxNumPhotons(100),
     fMaxBetaChange(10.0),
     fYieldFactor(1.),
@@ -72,7 +74,6 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
   fMessenger = new G4OpticalPhysicsMessenger(this);
 
   for ( G4int i=0; i<kNoProcess; i++ ) {
-    fProcesses.push_back(NULL);
     fProcessUse.push_back(true);
     fProcessVerbose.push_back(verbose);
     fProcessTrackSecondariesFirst.push_back(true);
@@ -84,21 +85,6 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
 G4OpticalPhysics::~G4OpticalPhysics()
 {
   delete fMessenger;
-
-// Process objects are deleted elsewhere.
-/*************  if (wasActivated) {
-
-     if (fScintillationProcess) delete fScintillationProcess;
-     if (fCerenkovProcess) delete fCerenkovProcess;
-     if (fOpWLSProcess) delete fOpWLSProcess;
-
-     if (fOpAbsorptionProcess) delete fOpAbsorptionProcess;
-     if (fOpRayleighScatteringProcess) delete fOpRayleighScatteringProcess;
-     if (fOpMieHGScatteringProcess) delete fOpMieHGScatteringProcess;
-     if (fOpBoundaryProcess) delete fOpBoundaryProcess;
-
-     wasActivated = false;
-  } ************************/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,6 +133,7 @@ void G4OpticalPhysics::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Threading.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -154,21 +141,31 @@ void G4OpticalPhysics::ConstructProcess()
 {
 // Construct optical processes.
 
-  if (wasActivated) return;
-
   if(verboseLevel>0)
          G4cout <<"G4OpticalPhysics:: Add Optical Physics Processes"<< G4endl;
 
+  // A vector of optical processes
+  std::vector<G4VProcess*> OpProcesses;
+
+  for ( G4int i=0; i<kNoProcess; i++ ) OpProcesses.push_back(NULL);
+
   // Add Optical Processes
 
-  fProcesses[kAbsorption] = fOpAbsorptionProcess  = new G4OpAbsorption();
-  fProcesses[kRayleigh] = fOpRayleighScatteringProcess = new G4OpRayleigh();
-  fProcesses[kMieHG] = fOpMieHGScatteringProcess = new G4OpMieHG();
+  G4OpAbsorption* OpAbsorptionProcess  = new G4OpAbsorption();
+  G4OpRayleigh* OpRayleighScatteringProcess = new G4OpRayleigh();
+  G4OpMieHG* OpMieHGScatteringProcess = new G4OpMieHG();
 
-  fProcesses[kBoundary] = fOpBoundaryProcess = new G4OpBoundaryProcess();
+  OpProcesses[kAbsorption] = OpAbsorptionProcess;
+  OpProcesses[kRayleigh] = OpRayleighScatteringProcess;
+  OpProcesses[kMieHG] = OpMieHGScatteringProcess;
 
-  fProcesses[kWLS] = fOpWLSProcess = new G4OpWLS();
-  fOpWLSProcess->UseTimeProfile(fProfile);
+  G4OpBoundaryProcess* OpBoundaryProcess = new G4OpBoundaryProcess();
+
+  OpProcesses[kBoundary] = OpBoundaryProcess;
+
+  G4OpWLS* OpWLSProcess = new G4OpWLS();
+
+  OpProcesses[kWLS] = OpWLSProcess;
 
   G4ProcessManager * pManager = 0;
   pManager = G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
@@ -183,28 +180,36 @@ void G4OpticalPhysics::ConstructProcess()
 
   for ( G4int i=kAbsorption; i<=kWLS; i++ ) {
       if ( fProcessUse[i] ) {
-         pManager->AddDiscreteProcess(fProcesses[i]);
+         pManager->AddDiscreteProcess(OpProcesses[i]);
       }
   }
 
-  fProcesses[kScintillation] = fScintillationProcess = new G4Scintillation();
-  fScintillationProcess->SetScintillationYieldFactor(fYieldFactor);
-  fScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
-  fScintillationProcess->SetFiniteRiseTime(fFiniteRiseTime);
-  fScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
-  fScintillationProcess->
-       SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
+  G4Scintillation* ScintillationProcess = new G4Scintillation();
 
-  // Use Birks Correction in the Scintillation process
+  OpProcesses[kScintillation] = ScintillationProcess;
 
-  G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
-  fScintillationProcess->AddSaturation(emSaturation);
+  G4Cerenkov* CerenkovProcess = new G4Cerenkov();
+  OpProcesses[kCerenkov] = CerenkovProcess;
 
-  fProcesses[kCerenkov] = fCerenkovProcess = new G4Cerenkov();
-  fCerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotons);
-  fCerenkovProcess->SetMaxBetaChangePerStep(fMaxBetaChange);
-  fCerenkovProcess->
-       SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
+  // static parameters - set only for masther thread
+  if(!G4Threading::IsWorkerThread())
+  {
+    G4OpWLS::UseTimeProfile(fProfile);
+
+    G4Scintillation::SetScintillationYieldFactor(fYieldFactor);
+    G4Scintillation::SetScintillationExcitationRatio(fExcitationRatio);
+    G4Scintillation::SetFiniteRiseTime(fFiniteRiseTime);
+    G4Scintillation::SetScintillationByParticleType(fScintillationByParticleType);
+    G4Scintillation::SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
+
+    // Use Birks Correction in the Scintillation process
+    G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
+    G4Scintillation::AddSaturation(emSaturation);
+
+    G4Cerenkov::SetMaxNumPhotonsPerStep(fMaxNumPhotons);
+    G4Cerenkov::SetMaxBetaChangePerStep(fMaxBetaChange);
+    G4Cerenkov::SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
+  }
 
   aParticleIterator->reset();
 
@@ -222,31 +227,28 @@ void G4OpticalPhysics::ConstructProcess()
        return;                 // else coverity complains for pManager use below	    
     }
 
-    if( fCerenkovProcess->IsApplicable(*particle) &&
+    if( CerenkovProcess->IsApplicable(*particle) &&
         fProcessUse[kCerenkov] ) {
-          pManager->AddProcess(fCerenkovProcess);
-          pManager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
+          pManager->AddProcess(CerenkovProcess);
+          pManager->SetProcessOrdering(CerenkovProcess,idxPostStep);
     }
-    if( fScintillationProcess->IsApplicable(*particle) &&
+    if( ScintillationProcess->IsApplicable(*particle) &&
         fProcessUse[kScintillation] ){
-          pManager->AddProcess(fScintillationProcess);
-          pManager->SetProcessOrderingToLast(fScintillationProcess,idxAtRest);
-          pManager->SetProcessOrderingToLast(fScintillationProcess,idxPostStep);
+          pManager->AddProcess(ScintillationProcess);
+          pManager->SetProcessOrderingToLast(ScintillationProcess,idxAtRest);
+          pManager->SetProcessOrderingToLast(ScintillationProcess,idxPostStep);
     }
 
   }
 
   // Add verbose
   for ( G4int i=0; i<kNoProcess; i++ ) {
-    fProcesses[i]->SetVerboseLevel(fProcessVerbose[i]);
+    if ( fProcessUse[i] ) OpProcesses[i]->SetVerboseLevel(fProcessVerbose[i]);
   }
 
   if (verboseLevel > 1) PrintStatistics();
   if (verboseLevel > 0)
     G4cout << "### " << namePhysics << " physics constructed." << G4endl;
-
-  wasActivated = true;
-
 }
 
 void G4OpticalPhysics::SetScintillationYieldFactor(G4double yieldFactor)
@@ -254,9 +256,7 @@ void G4OpticalPhysics::SetScintillationYieldFactor(G4double yieldFactor)
 /// Set the scintillation yield factor
 
   fYieldFactor = yieldFactor;
-
-  if(fScintillationProcess)
-    fScintillationProcess->SetScintillationYieldFactor(yieldFactor);
+  G4Scintillation::SetScintillationYieldFactor(yieldFactor);
 }
 
 void G4OpticalPhysics::SetScintillationExcitationRatio(G4double excitationRatio)
@@ -264,9 +264,7 @@ void G4OpticalPhysics::SetScintillationExcitationRatio(G4double excitationRatio)
 /// Set the scintillation excitation ratio
 
   fExcitationRatio = excitationRatio;
-
-  if(fScintillationProcess)
-    fScintillationProcess->SetScintillationExcitationRatio(excitationRatio);
+  G4Scintillation::SetScintillationExcitationRatio(excitationRatio);
 }
 
 void G4OpticalPhysics::SetMaxNumPhotonsPerStep(G4int maxNumPhotons)
@@ -274,9 +272,7 @@ void G4OpticalPhysics::SetMaxNumPhotonsPerStep(G4int maxNumPhotons)
 /// Limit step to the specified maximum number of Cherenkov photons
 
   fMaxNumPhotons = maxNumPhotons;
-
-  if(fCerenkovProcess)
-    fCerenkovProcess->SetMaxNumPhotonsPerStep(maxNumPhotons);
+  G4Cerenkov::SetMaxNumPhotonsPerStep(maxNumPhotons);
 }
 
 void G4OpticalPhysics::SetMaxBetaChangePerStep(G4double maxBetaChange)
@@ -284,9 +280,7 @@ void G4OpticalPhysics::SetMaxBetaChangePerStep(G4double maxBetaChange)
 /// Limit step to the specified maximum change of beta of the parent particle
 
   fMaxBetaChange = maxBetaChange;
-
-  if(fCerenkovProcess)
-    fCerenkovProcess->SetMaxBetaChangePerStep(maxBetaChange);
+  G4Cerenkov::SetMaxBetaChangePerStep(maxBetaChange);
 }
 
 void G4OpticalPhysics::SetWLSTimeProfile(G4String profile)
@@ -294,25 +288,20 @@ void G4OpticalPhysics::SetWLSTimeProfile(G4String profile)
 /// Set the WLS time profile (delta or exponential)
 
   fProfile = profile;
-
-  if(fOpWLSProcess)
-    fOpWLSProcess->UseTimeProfile(fProfile);
+  G4OpWLS::UseTimeProfile(profile);
 }
 
 void G4OpticalPhysics::AddScintillationSaturation(G4EmSaturation* saturation)
 {
 /// Adds Birks Saturation to the G4Scintillation Process
-
-  if(fScintillationProcess)
-    fScintillationProcess->AddSaturation(saturation);
+  G4Scintillation::AddSaturation(saturation);
 }
 
-void G4OpticalPhysics::SetScintillationByParticleType(G4bool scintillationByParticleType)
+void G4OpticalPhysics::
+             SetScintillationByParticleType(G4bool scintillationByParticleType)
 {
   fScintillationByParticleType = scintillationByParticleType;
-
-  if (fScintillationProcess)
-     fScintillationProcess->SetScintillationByParticleType(scintillationByParticleType);
+  G4Scintillation::SetScintillationByParticleType(scintillationByParticleType);
 }
 
 void G4OpticalPhysics::SetTrackSecondariesFirst(G4OpticalProcessIndex index,
@@ -322,18 +311,16 @@ void G4OpticalPhysics::SetTrackSecondariesFirst(G4OpticalProcessIndex index,
   if ( fProcessTrackSecondariesFirst[index] == trackSecondariesFirst ) return;
   fProcessTrackSecondariesFirst[index] = trackSecondariesFirst;
 
-  if(fCerenkovProcess && index == kCerenkov )
-    fCerenkovProcess->SetTrackSecondariesFirst(trackSecondariesFirst);
-
-  if(fScintillationProcess && index == kScintillation)
-    fScintillationProcess->SetTrackSecondariesFirst(trackSecondariesFirst);
+  if ( index == kCerenkov )
+     G4Cerenkov::SetTrackSecondariesFirst(trackSecondariesFirst);
+  if ( index == kScintillation)
+     G4Scintillation::SetTrackSecondariesFirst(trackSecondariesFirst);
 }
 
 void G4OpticalPhysics::SetFiniteRiseTime(G4bool finiteRiseTime)
 {
   fFiniteRiseTime = finiteRiseTime;
-  if(fScintillationProcess)
-    fScintillationProcess->SetFiniteRiseTime(finiteRiseTime);
+  G4Scintillation::SetFiniteRiseTime(finiteRiseTime);
 } 
 
 void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
@@ -350,16 +337,13 @@ void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
 }
 
 void G4OpticalPhysics::SetProcessVerbose(G4int index,
-                                         G4int inputVerboseLevel)
+                                         G4int verbose)
 {
   // Set new verbose level to a selected process
 
   if ( index >= kNoProcess ) return;
-  if ( fProcessVerbose[index] == inputVerboseLevel ) return;
-
-  fProcessVerbose[index] = inputVerboseLevel;
-
-  if ( fProcesses[index] ) fProcesses[index]->SetVerboseLevel(inputVerboseLevel);
+  if ( fProcessVerbose[index] == verbose ) return;
+  fProcessVerbose[index] = verbose;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

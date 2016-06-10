@@ -1,4 +1,4 @@
-$Id: History 77239 2013-11-22 09:52:40Z gcosmo $
+$Id: History 79144 2014-02-19 13:39:28Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 12, 2014  G.Cosmo               geom-csg-V09-06-10
+- Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+  in parameterisation. Resolves crash in MT visualization when using USolids. 
+
+February 12, 2014  G.Cosmo
+- Added correct cloning mechanism in G4U* wrappers.
+  Addressing problem report #1553.
 
 November 22, 2013  G.Cosmo               geom-csg-V09-06-09
 - Correction to USolids wrappers for proper setting of name to base class.

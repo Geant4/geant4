@@ -48,10 +48,7 @@ public:
     a_out << "StreamerInfo for class :" 
           << " " << fName << ", version=" << fStreamedClassVersion
           << std::endl;
-    std::vector<streamer_element*>::const_iterator it;
-    for(it=fElements.begin();it!=fElements.end();++it) { 
-      (*it)->out(a_out);
-    }
+    tools_vforcit(streamer_element*,fElements,it) (*it)->out(a_out);
   }
 public:
   StreamerInfo(const std::string& a_cls_store_name,

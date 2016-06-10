@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc 77079 2013-11-21 10:32:34Z gcosmo $
+// $Id: G4VRangeToEnergyConverter.cc 79177 2014-02-19 16:10:41Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -119,7 +119,19 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
 
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 { 
-//  Reset(); 
+  // Reset();
+  // Comment out Reset() for MT application  
+
+  // delete loss table without deleteing vectors  
+  if (theLossTable) {  
+    delete theLossTable;
+  }
+  theLossTable=0;
+  NumberOfElements=0;
+  
+  //clear RangeVectorStore without deleteing vectors
+  fRangeVectorStore.clear();
+
 }
 
 G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const

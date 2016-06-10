@@ -48,6 +48,7 @@
 #include "G4Step.hh"
 #include "XrayFluoDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4SystemOfUnits.hh"
 
 XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 
@@ -116,7 +117,7 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::getInstance()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoAnalysisManager::CreatePersistency(G4String fileName,G4String persistencyType,
+void XrayFluoAnalysisManager::CreatePersistency(G4String fileName,G4String thePersistencyType,
 						G4bool readOnly, G4bool createNew)
 {
 
@@ -145,19 +146,19 @@ void XrayFluoAnalysisManager::CreatePersistency(G4String fileName,G4String persi
   
   AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
   if(treeFactory) {
-    if (persistencyType == "hbook") {
+    if (thePersistencyType == "hbook") {
       fileName = fileName + ".hbk";
       fileNameDet = fileNameDet + ".hbk";
     }
-    else if (persistencyType == "xml"){
+    else if (thePersistencyType == "xml"){
       fileName = fileName + ".xml";
       fileNameDet = fileNameDet + ".xml";
     }
     
     if (phaseSpaceFlag) {
       
-      tree = treeFactory->create(fileName,persistencyType,readOnly,createNew); // output file
-      treeDet = treeFactory->create(fileNameDet,persistencyType,readOnly,createNew); // output file
+      tree = treeFactory->create(fileName,thePersistencyType,readOnly,createNew); // output file
+      treeDet = treeFactory->create(fileNameDet,thePersistencyType,readOnly,createNew); // output file
       if(analysisFactory) {
        	
 	tupleDetFactory = analysisFactory->createTupleFactory(*treeDet);  
@@ -169,7 +170,7 @@ void XrayFluoAnalysisManager::CreatePersistency(G4String fileName,G4String persi
     // trees to be stored in case of phase-space production
     else {
       
-      tree = treeFactory->create(fileName,persistencyType,readOnly,createNew); // output file
+      tree = treeFactory->create(fileName,thePersistencyType,readOnly,createNew); // output file
       
       if(analysisFactory) {
        	
@@ -255,15 +256,15 @@ void XrayFluoAnalysisManager::LoadGunData(G4String fileName, G4bool raileighFlag
   //  gunParticleTypes = new std::vector<G4String>;
 
   G4String ext = fileName.substr(fileName.size()-3,fileName.size()-1);
-  G4String persistencyType;
+  G4String thePersistencyType;
   
   if (ext == "xml") {
     
-    persistencyType = "xml";
+    thePersistencyType = "xml";
   }
   else if (ext == "hbk") {
     
-    persistencyType = "hbook";
+    thePersistencyType = "hbook";
   }
 
   gunParticleEnergies = new std::vector<G4double>;
@@ -272,7 +273,7 @@ void XrayFluoAnalysisManager::LoadGunData(G4String fileName, G4bool raileighFlag
   // dal punto di vista della programmazione e' un po' una porcata.....
 
   AIDA::ITreeFactory* treeDataFactory = analysisFactory->createTreeFactory();
-  AIDA::ITree* treeData = treeDataFactory->create(fileName,persistencyType,false, false); // input file
+  AIDA::ITree* treeData = treeDataFactory->create(fileName,thePersistencyType,false, false); // input file
   AIDA::IManagedObject* mo = treeData->find("10");
   assert(mo);
   G4cout <<"mo Name:" << mo->name()<< G4endl;

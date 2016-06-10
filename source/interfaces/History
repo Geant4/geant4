@@ -1,4 +1,4 @@
-$Id: History 78056 2013-12-03 08:29:59Z gcosmo $
+$Id: History 79182 2014-02-20 09:06:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22nd Janvier 2014  Laurent Garnier (interfaces-V09-06-19)
+- G4Qt : BUGFIX : bugzilla 1487 : Explicitly set the LC_NUMBERIC locale to "C"
+
+4nd December 2013  Laurent Garnier (interfaces-V09-06-18)
+- G4UIQt :
+ o Fix problem with resizing the QGLwidget when a macro which open a OGL
+   widget was called by user in UI. Before the OGL widget get the minimum size 
+   (about 50 pixel height), now it does grow as much as it can without going out
+   of the window.
+ o Suppress a "printf" non protected by ifdef
 
 2nd December 2013  Laurent Garnier (interfaces-V09-06-17)
 - G4UIQt : Fix a bad bug fixed 29th November 2013. The menu name was displayed

@@ -17,6 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 21, 2014  T.Nikitina             geom-usolids-V09-06-13
+- Implemented precise safety in UTubs and UCons for SafetyFromOutside().
+  Precise safety is used in UPolycone for calculation of SafetyFromOutside().
+- UPolycone fixes: added validity check of shape for case when RMin > RMax;
+  moved global bounding-box to be a class data member.
+  Corrected implementation of DistanceToOut(p,v) for convexity and normals.
+  Corrected implementation of DistanceToOut(p,v) for stuck tracks due to
+  DistanceToIn=DistanceToOut=0.
+  Corrected implementation of Inside() in case of OpenPhi.    
+
+February 12, 2014  G.Cosmo                geom-usolids-V09-06-12
+- Removed ResetPolyhedron() from G4USolid bridge class. Not necessary as
+  using mutable pointer for solids. Moved 'fPolyhedron' pointer to protected.
+
+February 12, 2014  G.Cosmo
+- Corrected implementation of Clone() method in UBox, UTet, UTrd.
+- Corrected cloning mechanism and copy constructor in G4USolid.
+  Addressing problem report #1553.
+
+January 10, 2014  T.Nikitina
+- Fixed typo in SafetyFromInside() for UTubs for correct calculation of
+  'safePhi'.
+
 November 29, 2013  G.Cosmo                geom-usolids-V09-06-11
 - Corrected library name in GNUmakefile and fixed comment in sources.cmake.
 

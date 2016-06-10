@@ -130,6 +130,16 @@ void G4UPolyhedra::ComputeDimensions(G4VPVParameterisation* p,
 }
 
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UPolyhedra::Clone() const
+{
+  return new G4UPolyhedra(*this);
+}
+
+
 ////////////////////////////////////////////////////////////////////////
 //
 // CreatePolyhedron

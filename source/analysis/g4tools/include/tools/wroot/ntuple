@@ -15,6 +15,7 @@
 #include "../ntuple_booking"
 #include "../sout"
 #include "../scast"
+#include "../forit"
 
 namespace tools {
 namespace wroot {
@@ -92,8 +93,7 @@ public:
   ntuple(idir& a_dir,const ntuple_booking& a_bkg)
   :tree(a_dir,a_bkg.m_name,a_bkg.m_title){
     const std::vector<ntuple_booking::col_t>& cols = a_bkg.m_columns;
-    std::vector<ntuple_booking::col_t>::const_iterator it;
-    for(it=cols.begin();it!=cols.end();++it){
+    tools_vforcit(ntuple_booking::col_t,cols,it){
 
       if((*it).second==_cid(char(0))) {
         create_column<char>((*it).first);
@@ -148,16 +148,12 @@ public:
 
   bool add_row() {
     if(m_cols.empty()) return false;
-   {std::vector<icol*>::iterator it;
-    for(it=m_cols.begin();it!=m_cols.end();++it) (*it)->add();}
+    tools_vforit(icol*,m_cols,it) (*it)->add();
     uint32 n;
     return tree::fill(n);
   }
   void set_basket_size(uint32 a_size) {
-    std::vector<icol*>::iterator it;
-    for(it=m_cols.begin();it!=m_cols.end();++it) {
-      (*it)->set_basket_size(a_size);
-    }
+    tools_vforit(icol*,m_cols,it) (*it)->set_basket_size(a_size);
   }
 protected:
   std::vector<icol*> m_cols;

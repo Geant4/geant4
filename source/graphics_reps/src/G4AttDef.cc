@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.cc 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4AttDef.cc 79152 2014-02-19 15:22:08Z gcosmo $
 
 #include "G4AttDef.hh"
 
@@ -44,15 +44,17 @@ std::ostream& operator<<
   }
   std::map<G4String,G4AttDef>::const_iterator i;
   for (i = definitions->begin(); i != definitions->end(); ++i) {
-    if (i->second.GetCategory() == "Physics") {
-      os << "\n  " << i->second.GetDesc()
-	     << " (" << i->first << "): ";
-      if (!i->second.GetExtra().empty()) {
-	if (i->second.GetExtra() != "G4BestUnit") os << "unit: ";
-	os << i->second.GetExtra() << " (";
+    const G4String& name = i->first;
+    const G4AttDef& attDef = i->second;
+    if (attDef.GetCategory() == "Physics") {
+      os << "\n  " << attDef.GetDesc()
+	     << " (" << name << "): ";
+      if (!attDef.GetExtra().empty()) {
+	if (attDef.GetExtra() != "G4BestUnit") os << "unit: ";
+	os << attDef.GetExtra() << " (";
       }
-      os << i->second.GetValueType();
-      if (!i->second.GetExtra().empty()) os << ")";
+      os << attDef.GetValueType();
+      if (!attDef.GetExtra().empty()) os << ")";
     }
   }
   os << endl;

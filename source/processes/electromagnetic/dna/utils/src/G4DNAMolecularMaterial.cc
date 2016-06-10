@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAMolecularMaterial.cc 79184 2014-02-20 09:14:38Z gcosmo $
 //
 #include "G4DNAMolecularMaterial.hh"
 #include "G4Material.hh"
@@ -83,6 +83,7 @@ void G4DNAMolecularMaterial::Create()
     fpCompDensityTable = 0;
     fpCompNumMolPerVolTable = 0;
     fIsInitialized = false;
+    fNMaterials = 0;
     fInstance = this;
 }
 
@@ -152,6 +153,112 @@ G4DNAMolecularMaterial::~G4DNAMolecularMaterial()
     }
 }
 
+
+void G4DNAMolecularMaterial::Initialize()
+{
+    G4AutoLock l(&aMutex);
+    if(fIsInitialized)
+    {
+        return;
+    }
+
+    const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+
+    fNMaterials = materialTable->size();
+    // This is to prevent segment fault if materials are created later on
+    // Actually this creation should not be done
+
+    if(fpCompFractionTable==0)
+    {
+        fpCompFractionTable = new vector<ComponentMap>(materialTable->size());
+    }
+
+    G4Material* mat(0);
+
+    for(size_t i = 0 ; i < fNMaterials ; i++)
+    {
+        mat = materialTable->at(i);
+        SearchMolecularMaterial(mat,mat,1);
+
+        mat = 0;
+    }
+
+    InitializeDensity();
+    InitializeNumMolPerVol();
+
+    fIsInitialized = true;
+}
+
+void G4DNAMolecularMaterial::InitializeDensity()
+{
+    if(fpCompFractionTable)
+    {
+        const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+        fpCompDensityTable = new vector<ComponentMap>(G4Material::GetMaterialTable()->size());
+
+        G4Material* parentMat;
+        const G4Material* compMat(0);
+        double massFraction = -1;
+        double parentDensity = -1;
+
+        for(size_t i = 0 ; i < fNMaterials ; i++)
+        {
+            parentMat = materialTable->at(i);
+            ComponentMap& massFractionComp = (*fpCompFractionTable)[i];
+            ComponentMap& densityComp = (*fpCompDensityTable)[i];
+
+            parentDensity = parentMat->GetDensity();
+
+            for(ComponentMap::iterator it = massFractionComp.begin() ; it!=massFractionComp.end() ; it++)
+            {
+                compMat = it->first;
+                massFraction = it->second;
+                densityComp[compMat] = massFraction*parentDensity;
+                compMat = 0;
+                massFraction = -1;
+            }
+        }
+    }
+    else
+    {
+        G4ExceptionDescription exceptionDescription;
+        exceptionDescription << "The pointer fpCompFractionTable is not initialized" << G4endl;
+        G4Exception("G4DNAMolecularMaterial::InitializeDensity","G4DNAMolecularMaterial001",
+                    FatalException,exceptionDescription);
+    }
+}
+
+void G4DNAMolecularMaterial::InitializeNumMolPerVol()
+{
+    if(fpCompDensityTable)
+    {
+        fpCompNumMolPerVolTable = new vector<ComponentMap>(fNMaterials);
+
+        const G4Material* compMat(0);
+
+        for(size_t i = 0 ; i < fNMaterials ; i++)
+        {
+            ComponentMap& massFractionComp = (*fpCompFractionTable)[i];
+            ComponentMap& densityComp = (*fpCompDensityTable)[i];
+            ComponentMap& numMolPerVol = (*fpCompNumMolPerVolTable)[i];
+
+            for(ComponentMap::iterator it = massFractionComp.begin() ; it!=massFractionComp.end() ; it++)
+            {
+                compMat = it->first;
+                numMolPerVol[compMat] = densityComp[compMat]/ compMat->GetMassOfMolecule();
+                compMat = 0;
+            }
+        }
+    }
+    else
+    {
+        G4ExceptionDescription exceptionDescription;
+        exceptionDescription << "The pointer fpCompDensityTable is not initialized" << G4endl;
+        G4Exception("G4DNAMolecularMaterial::InitializeNumMolPerVol","G4DNAMolecularMaterial002",
+                    FatalException,exceptionDescription);
+    }
+}
+
 void G4DNAMolecularMaterial::RecordMolecularMaterial(G4Material* parentMaterial, G4Material* molecularMaterial, G4double fraction)
 {
     ComponentMap& matComponent = (*fpCompFractionTable)[parentMaterial->GetIndex()];
@@ -205,107 +312,6 @@ void G4DNAMolecularMaterial::SearchMolecularMaterial(G4Material* parentMaterial,
     }
 }
 
-void G4DNAMolecularMaterial::InitializeDensity()
-{
-    if(fpCompFractionTable)
-    {
-        const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-        fpCompDensityTable = new vector<ComponentMap>(G4Material::GetMaterialTable()->size());
-
-        G4Material* parentMat;
-        const G4Material* compMat(0);
-        double massFraction = -1;
-        double parentDensity = -1;
-
-        for(int i = 0 ; i < int(materialTable->size()) ; i++)
-        {
-            parentMat = materialTable->at(i);
-            ComponentMap& massFractionComp = (*fpCompFractionTable)[i];
-            ComponentMap& densityComp = (*fpCompDensityTable)[i];
-
-            parentDensity = parentMat->GetDensity();
-
-            for(ComponentMap::iterator it = massFractionComp.begin() ; it!=massFractionComp.end() ; it++)
-            {
-                compMat = it->first;
-                massFraction = it->second;
-                densityComp[compMat] = massFraction*parentDensity;
-                compMat = 0;
-                massFraction = -1;
-            }
-        }
-    }
-    else
-    {
-        G4ExceptionDescription exceptionDescription;
-        exceptionDescription << "The pointer fpCompFractionTable is not initialized" << G4endl;
-        G4Exception("G4DNAMolecularMaterial::InitializeDensity","G4DNAMolecularMaterial001",
-                    FatalException,exceptionDescription);
-    }
-}
-
-void G4DNAMolecularMaterial::InitializeNumMolPerVol()
-{
-    if(fpCompDensityTable)
-    {
-        const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-        fpCompNumMolPerVolTable = new vector<ComponentMap>(G4Material::GetMaterialTable()->size());
-
-        const G4Material* compMat(0);
-
-        for(int i = 0 ; i < int(materialTable->size()) ; i++)
-        {
-            ComponentMap& massFractionComp = (*fpCompFractionTable)[i];
-            ComponentMap& densityComp = (*fpCompDensityTable)[i];
-            ComponentMap& numMolPerVol = (*fpCompNumMolPerVolTable)[i];
-
-            for(ComponentMap::iterator it = massFractionComp.begin() ; it!=massFractionComp.end() ; it++)
-            {
-                compMat = it->first;
-                numMolPerVol[compMat] = densityComp[compMat]/ compMat->GetMassOfMolecule();
-                compMat = 0;
-            }
-        }
-    }
-    else
-    {
-        G4ExceptionDescription exceptionDescription;
-        exceptionDescription << "The pointer fpCompDensityTable is not initialized" << G4endl;
-        G4Exception("G4DNAMolecularMaterial::InitializeNumMolPerVol","G4DNAMolecularMaterial002",
-                    FatalException,exceptionDescription);
-    }
-}
-
-void G4DNAMolecularMaterial::Initialize()
-{
-    G4AutoLock l(&aMutex);
-    if(fIsInitialized)
-    {
-        return;
-    }
-
-    const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-
-    if(fpCompFractionTable==0)
-    {
-        fpCompFractionTable = new vector<ComponentMap>(materialTable->size());
-    }
-
-    G4Material* mat(0);
-
-    for(int i = 0 ; i < int(materialTable->size()) ; i++)
-    {
-        mat = materialTable->at(i);
-        SearchMolecularMaterial(mat,mat,1);
-
-        mat = 0;
-    }
-
-    InitializeDensity();
-    InitializeNumMolPerVol();
-
-    fIsInitialized = true;
-}
 
 const std::vector<double>* G4DNAMolecularMaterial::GetDensityTableFor(const G4Material* lookForMaterial) const
 {
@@ -345,7 +351,7 @@ const std::vector<double>* G4DNAMolecularMaterial::GetDensityTableFor(const G4Ma
 
     G4bool materialWasNotFound = true;
 
-    for(int i = 0 ; i < int(materialTable->size()) ; i++)
+    for(size_t i = 0 ; i < fNMaterials ; i++)
     {
         ComponentMap& densityTable = (*fpCompDensityTable)[i];
 
@@ -412,7 +418,7 @@ const std::vector<double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(const
 
     G4bool materialWasNotFound = true;
 
-    for(int i = 0 ; i < int(materialTable->size()) ; i++)
+    for(size_t i = 0 ; i < fNMaterials ; i++)
     {
         ComponentMap& densityTable = (*fpCompNumMolPerVolTable)[i];
 

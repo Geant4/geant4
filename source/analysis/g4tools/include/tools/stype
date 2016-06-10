@@ -52,6 +52,11 @@ inline const std::string& stype(double) {
   return s_v;
 }
 
+inline const std::string& stype(bool) {
+  static const std::string s_v("bool");
+  return s_v;
+}
+
 // for inlib::mcol<T> :
 inline const std::string& stype(int64) {
   static const std::string s_v("tools::int64");
@@ -63,6 +68,22 @@ inline const std::string& stype(uint64) {
 }
 inline const std::string& stype(const std::string&) {
   static const std::string s_v("std::string");
+  return s_v;
+}
+
+// for introspection templated fields or class methods :
+template <class T>
+inline const std::string& stype(const T&) {return T::s_class();}
+
+}
+
+#include <vector>
+
+namespace tools {
+
+// for sg::entries mf_vec< std::vector<std::string> ,std::string> opts;
+inline const std::string& stype(const std::vector<std::string>&) {
+  static const std::string s_v("std::vector<std::string>");
   return s_v;
 }
 

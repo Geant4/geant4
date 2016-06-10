@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc 73929 2013-09-17 08:02:54Z gcosmo $
+// $Id: G4Scintillation.cc 79190 2014-02-20 09:34:52Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -81,6 +81,18 @@
 // Class Implementation
 /////////////////////////
 
+        //////////////////////
+        // static data members
+        //////////////////////
+
+
+G4bool G4Scintillation::fTrackSecondariesFirst = false;
+G4bool G4Scintillation::fFiniteRiseTime = false;
+G4double G4Scintillation::fYieldFactor = 1.0;
+G4double G4Scintillation::fExcitationRatio = 1.0;
+G4bool G4Scintillation::fScintillationByParticleType = false;
+G4EmSaturation* G4Scintillation::fEmSaturation = NULL;
+
         //////////////
         // Operators
         //////////////
@@ -99,27 +111,17 @@ G4Scintillation::G4Scintillation(const G4String& processName,
 {
         SetProcessSubType(fScintillation);
 
-        fTrackSecondariesFirst = false;
-        fFiniteRiseTime = false;
-
-        YieldFactor = 1.0;
-        ExcitationRatio = 1.0;
-
-        scintillationByParticleType = false;
-
 #ifdef G4DEBUG_SCINTILLATION
 	ScintTrackEDep = 0.;
 	ScintTrackYield = 0.;
 #endif
 
-        theFastIntegralTable = NULL;
-        theSlowIntegralTable = NULL;
+        fFastIntegralTable = NULL;
+        fSlowIntegralTable = NULL;
 
         if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;
         }
-
-        emSaturation = NULL;
 }
 
         ////////////////
@@ -128,13 +130,13 @@ G4Scintillation::G4Scintillation(const G4String& processName,
 
 G4Scintillation::~G4Scintillation()
 {
-	if (theFastIntegralTable != NULL) {
-           theFastIntegralTable->clearAndDestroy();
-           delete theFastIntegralTable;
+	if (fFastIntegralTable != NULL) {
+           fFastIntegralTable->clearAndDestroy();
+           delete fFastIntegralTable;
         }
-        if (theSlowIntegralTable != NULL) {
-           theSlowIntegralTable->clearAndDestroy();
-           delete theSlowIntegralTable;
+        if (fSlowIntegralTable != NULL) {
+           fSlowIntegralTable->clearAndDestroy();
+           delete fSlowIntegralTable;
         }
 }
 
@@ -144,7 +146,7 @@ G4Scintillation::~G4Scintillation()
 
 void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-   if (!theFastIntegralTable || !theSlowIntegralTable) BuildThePhysicsTable();
+   if (!fFastIntegralTable || !fSlowIntegralTable) BuildThePhysicsTable();
 }
 
 
@@ -206,7 +208,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4double ScintillationYield = 0.;
 
 	// Scintillation depends on particle type, energy deposited
-        if (scintillationByParticleType) {
+        if (fScintillationByParticleType) {
 
            ScintillationYield =
                           GetScintillationYieldByParticleType(aTrack, aStep);
@@ -218,7 +220,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                                       GetConstProperty("SCINTILLATIONYIELD");
 
            // Units: [# scintillation photons / MeV]
-           ScintillationYield *= YieldFactor;
+           ScintillationYield *= fYieldFactor;
         }
 
         G4double ResolutionScale    = aMaterialPropertiesTable->
@@ -232,14 +234,14 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4double MeanNumberOfPhotons;
 
-        // Birk's correction via emSaturation and specifying scintillation by
+        // Birk's correction via fEmSaturation and specifying scintillation by
         // by particle type are physically mutually exclusive
 
-        if (scintillationByParticleType)
+        if (fScintillationByParticleType)
            MeanNumberOfPhotons = ScintillationYield;
-        else if (emSaturation)
+        else if (fEmSaturation)
            MeanNumberOfPhotons = ScintillationYield*
-                              (emSaturation->VisibleEnergyDeposition(&aStep));
+                              (fEmSaturation->VisibleEnergyDeposition(&aStep));
         else
            MeanNumberOfPhotons = ScintillationYield*TotalEnergyDeposit;
 
@@ -299,7 +301,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                    }
                    ScintillationIntegral =
                    (G4PhysicsOrderedFreeVector*)
-                                       ((*theFastIntegralTable)(materialIndex));
+                                       ((*fFastIntegralTable)(materialIndex));
                  }
                  if (Slow_Intensity) {
                    ScintillationTime   = aMaterialPropertiesTable->
@@ -310,17 +312,17 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                    }
                    ScintillationIntegral =
                    (G4PhysicsOrderedFreeVector*)
-                                       ((*theSlowIntegralTable)(materialIndex));
+                                       ((*fSlowIntegralTable)(materialIndex));
                  }
                }
                else {
-                 G4double YieldRatio = aMaterialPropertiesTable->
+                 G4double yieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
-                 if ( ExcitationRatio == 1.0 || ExcitationRatio == 0.0) {
-                    Num = G4int (std::min(YieldRatio,1.0) * NumPhotons);
+                 if ( fExcitationRatio == 1.0 || fExcitationRatio == 0.0) {
+                    Num = G4int (std::min(yieldRatio,1.0) * NumPhotons);
                  }
                  else {
-                    Num = G4int (std::min(ExcitationRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(fExcitationRatio,1.0) * NumPhotons);
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");
@@ -330,7 +332,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  }
                  ScintillationIntegral =
                  (G4PhysicsOrderedFreeVector*)
-                                      ((*theFastIntegralTable)(materialIndex));
+                                      ((*fFastIntegralTable)(materialIndex));
                }
             }
             else {
@@ -343,7 +345,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                }
                ScintillationIntegral =
                (G4PhysicsOrderedFreeVector*)
-                                      ((*theSlowIntegralTable)(materialIndex));
+                                      ((*fSlowIntegralTable)(materialIndex));
             }
 
             if (!ScintillationIntegral) continue;
@@ -470,7 +472,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 void G4Scintillation::BuildThePhysicsTable()
 {
-        if (theFastIntegralTable && theSlowIntegralTable) return;
+        if (fFastIntegralTable && fSlowIntegralTable) return;
 
         const G4MaterialTable* theMaterialTable =
                                G4Material::GetMaterialTable();
@@ -478,9 +480,9 @@ void G4Scintillation::BuildThePhysicsTable()
 
         // create new physics table
 	
-        if(!theFastIntegralTable)theFastIntegralTable =
+        if(!fFastIntegralTable)fFastIntegralTable =
                                             new G4PhysicsTable(numOfMaterials);
-        if(!theSlowIntegralTable)theSlowIntegralTable =
+        if(!fSlowIntegralTable)fSlowIntegralTable =
                                             new G4PhysicsTable(numOfMaterials);
 
         // loop for materials
@@ -615,10 +617,29 @@ void G4Scintillation::BuildThePhysicsTable()
         // will be inserted in the table(s) according to the
         // position of the material in the material table.
 
-        theFastIntegralTable->insertAt(i,aPhysicsOrderedFreeVector);
-        theSlowIntegralTable->insertAt(i,bPhysicsOrderedFreeVector);
+        fFastIntegralTable->insertAt(i,aPhysicsOrderedFreeVector);
+        fSlowIntegralTable->insertAt(i,bPhysicsOrderedFreeVector);
 
         }
+}
+
+void G4Scintillation::SetTrackSecondariesFirst(const G4bool state)
+{
+        fTrackSecondariesFirst = state;
+}
+
+void G4Scintillation::SetFiniteRiseTime(const G4bool state)
+{
+        fFiniteRiseTime = state;
+}
+
+void G4Scintillation::SetScintillationYieldFactor(const G4double yieldfactor)
+{
+        fYieldFactor = yieldfactor;
+}
+
+void G4Scintillation::SetScintillationExcitationRatio(const G4double excitationratio) {
+        fExcitationRatio = excitationratio;
 }
 
 // Called by the user to set the scintillation yield as a function
@@ -626,12 +647,22 @@ void G4Scintillation::BuildThePhysicsTable()
 
 void G4Scintillation::SetScintillationByParticleType(const G4bool scintType)
 {
-        if (emSaturation) {
+        if (fEmSaturation) {
            G4Exception("G4Scintillation::SetScintillationByParticleType", "Scint02",
                        JustWarning, "Redefinition: Birks Saturation is replaced by ScintillationByParticleType!");
            RemoveSaturation();
         }
-        scintillationByParticleType = scintType;
+        fScintillationByParticleType = scintType;
+}
+
+void G4Scintillation::AddSaturation(G4EmSaturation* sat)
+{
+        fEmSaturation = sat;
+}
+
+void G4Scintillation::RemoveSaturation()
+{
+        fEmSaturation = NULL;
 }
 
 // GetMeanFreePath

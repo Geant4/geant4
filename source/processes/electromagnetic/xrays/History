@@ -1,4 +1,4 @@
-$Id: History 74582 2013-10-15 12:06:25Z gcosmo $
+$Id: History 79190 2014-02-20 09:34:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 Jan 14: P.Gumplinger (xrays-V09-06-08)
+- make all static 'Set/Add/Remove' methods non-inline in G4Scintillation
+  and G4Cerenkov
+
+18 Dec 13: P.Gumplinger
+- make some class members and methods static in G4Cerenkov and
+  G4Scintillation
 
 14 Oct 13: V.Ivanchenko (xrays-V09-06-07)
 - G4SynchrotronRadiation added interface to G4VEmAngularDistribution,

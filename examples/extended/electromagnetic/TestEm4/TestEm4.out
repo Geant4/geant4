@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -139,11 +139,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.03s Real=2.04s Sys=0s
+  User=2.84s Real=5.16s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2123006799, 132034222
+ Current couple of seeds = 1527625921, 1648259411
 ----------------------------------------
 ... write Root file : testem4.root - done
 G4 kernel has come to Quit state.
@@ -157,7 +157,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.024 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.022 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

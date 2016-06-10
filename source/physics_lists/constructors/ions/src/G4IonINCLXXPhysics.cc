@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonINCLXXPhysics.cc 71042 2013-06-10 09:28:44Z gcosmo $
+// $Id: G4IonINCLXXPhysics.cc 79167 2014-02-19 15:57:01Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -68,9 +68,21 @@ G4ThreadLocal std::vector<G4HadronInelasticProcess*>* G4IonINCLXXPhysics::p_list
 G4ThreadLocal std::vector<G4HadronicInteraction*>* G4IonINCLXXPhysics::model_list = 0;
 G4ThreadLocal G4VCrossSectionDataSet* G4IonINCLXXPhysics::theNuclNuclData = 0; 
 G4ThreadLocal G4VComponentCrossSection* G4IonINCLXXPhysics::theGGNuclNuclXS = 0;
+G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXDeuteron = 0;
+G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXTriton = 0;
+G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXHe3 = 0;
+G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXAlpha = 0;
 G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXIons = 0;
-G4ThreadLocal G4HadronicInteraction* G4IonINCLXXPhysics::theFTFP = 0;
-G4ThreadLocal G4FTFBuilder* G4IonINCLXXPhysics::theBuilder = 0;
+G4ThreadLocal G4HadronicInteraction* G4IonINCLXXPhysics::theFTFPDeuteron = 0;
+G4ThreadLocal G4HadronicInteraction* G4IonINCLXXPhysics::theFTFPTriton = 0;
+G4ThreadLocal G4HadronicInteraction* G4IonINCLXXPhysics::theFTFPHe3 = 0;
+G4ThreadLocal G4HadronicInteraction* G4IonINCLXXPhysics::theFTFPAlpha = 0;
+G4ThreadLocal G4HadronicInteraction* G4IonINCLXXPhysics::theFTFPIons = 0;
+G4ThreadLocal G4FTFBuilder* G4IonINCLXXPhysics::theFTFPBuilderDeuteron = 0;
+G4ThreadLocal G4FTFBuilder* G4IonINCLXXPhysics::theFTFPBuilderTriton = 0;
+G4ThreadLocal G4FTFBuilder* G4IonINCLXXPhysics::theFTFPBuilderHe3 = 0;
+G4ThreadLocal G4FTFBuilder* G4IonINCLXXPhysics::theFTFPBuilderAlpha = 0;
+G4ThreadLocal G4FTFBuilder* G4IonINCLXXPhysics::theFTFPBuilderIons = 0;
 G4ThreadLocal G4bool G4IonINCLXXPhysics::wasActivated = false;
 
 G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver) :
@@ -82,7 +94,7 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver) :
   emax_t     = 3 * 3.0 * GeV;
   emax_he3   = 3 * 3.0 * GeV;
   emax_alpha = 4 * 3.0 * GeV;
-  emax       = 16 * 3.0 * GeV;
+  emax       = 18 * 3.0 * GeV;
   emaxFTFP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);
@@ -99,7 +111,7 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(const G4String& name,
   emax_t     = 3 * 3.0 * GeV;
   emax_he3   = 3 * 3.0 * GeV;
   emax_alpha = 4 * 3.0 * GeV;
-  emax       = 16 * 3.0 * GeV;
+  emax       = 18 * 3.0 * GeV;
   emaxFTFP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);
@@ -112,7 +124,11 @@ G4IonINCLXXPhysics::~G4IonINCLXXPhysics()
   //variables are static and if new threads are created we can have problems
   //since variable is still pointing old value
   if(wasActivated) {
-    delete theBuilder; theBuilder=0;
+    delete theFTFPBuilderDeuteron; theFTFPBuilderDeuteron=0;
+    delete theFTFPBuilderTriton; theFTFPBuilderTriton=0;
+    delete theFTFPBuilderHe3; theFTFPBuilderHe3=0;
+    delete theFTFPBuilderAlpha; theFTFPBuilderAlpha=0;
+    delete theFTFPBuilderIons; theFTFPBuilderIons=0;
     delete theGGNuclNuclXS; theGGNuclNuclXS=0;
     delete theNuclNuclData; theGGNuclNuclXS=0;
     G4int i;
@@ -134,24 +150,44 @@ void G4IonINCLXXPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
+  theINCLXXDeuteron= new G4INCLXXInterface();
+  theINCLXXTriton= new G4INCLXXInterface();
+  theINCLXXHe3= new G4INCLXXInterface();
+  theINCLXXAlpha= new G4INCLXXInterface();
   theINCLXXIons= new G4INCLXXInterface();
   if ( model_list == 0 ) model_list = new std::vector<G4HadronicInteraction*>;
+  model_list->push_back(theINCLXXDeuteron);
+  model_list->push_back(theINCLXXTriton);
+  model_list->push_back(theINCLXXHe3);
+  model_list->push_back(theINCLXXAlpha);
   model_list->push_back(theINCLXXIons);
 
   G4ExcitationHandler* handler = new G4ExcitationHandler();
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
-  theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
-  theFTFP = theBuilder->GetModel();
-  model_list->push_back(theFTFP);
+  theFTFPBuilderDeuteron = new G4FTFBuilder("FTFP",thePreCompound);
+  theFTFPDeuteron = theFTFPBuilderDeuteron->GetModel();
+  theFTFPBuilderTriton = new G4FTFBuilder("FTFP",thePreCompound);
+  theFTFPTriton = theFTFPBuilderTriton->GetModel();
+  theFTFPBuilderHe3 = new G4FTFBuilder("FTFP",thePreCompound);
+  theFTFPHe3 = theFTFPBuilderHe3->GetModel();
+  theFTFPBuilderAlpha = new G4FTFBuilder("FTFP",thePreCompound);
+  theFTFPAlpha = theFTFPBuilderAlpha->GetModel();
+  theFTFPBuilderIons = new G4FTFBuilder("FTFP",thePreCompound);
+  theFTFPIons = theFTFPBuilderIons->GetModel();
+  model_list->push_back(theFTFPDeuteron);
+  model_list->push_back(theFTFPTriton);
+  model_list->push_back(theFTFPHe3);
+  model_list->push_back(theFTFPAlpha);
+  model_list->push_back(theFTFPIons);
 
   theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(), theINCLXXIons, theFTFP, emax_d);
-  AddProcess("tInelastic", G4Triton::Triton(), theINCLXXIons, theFTFP, emax_t);
-  AddProcess("He3Inelastic", G4He3::He3(), theINCLXXIons, theFTFP, emax_he3);
-  AddProcess("alphaInelastic", G4Alpha::Alpha(), theINCLXXIons, theFTFP, emax_alpha);
-  AddProcess("ionInelastic", G4GenericIon::GenericIon(), theINCLXXIons, theFTFP, emax);
+  AddProcess("dInelastic", G4Deuteron::Deuteron(), theINCLXXDeuteron, theFTFPDeuteron, emax_d);
+  AddProcess("tInelastic", G4Triton::Triton(), theINCLXXTriton, theFTFPTriton, emax_t);
+  AddProcess("He3Inelastic", G4He3::He3(), theINCLXXHe3, theFTFPHe3, emax_he3);
+  AddProcess("alphaInelastic", G4Alpha::Alpha(), theINCLXXAlpha, theFTFPAlpha, emax_alpha);
+  AddProcess("ionInelastic", G4GenericIon::GenericIon(), theINCLXXIons, theFTFPIons, emax);
 }
 
 void G4IonINCLXXPhysics::AddProcess(const G4String& name,
@@ -170,7 +206,7 @@ void G4IonINCLXXPhysics::AddProcess(const G4String& name,
   hmodel->SetMaxEnergy(inclxxEnergyUpperLimit);
   hadi->RegisterMe(hmodel);
   if(lmodel) {
-    lmodel->SetMinEnergy(inclxxEnergyUpperLimit - MeV);
+    lmodel->SetMinEnergy(inclxxEnergyUpperLimit - 100*MeV);
     lmodel->SetMaxEnergy(emaxFTFP);
     hadi->RegisterMe(lmodel);
   }

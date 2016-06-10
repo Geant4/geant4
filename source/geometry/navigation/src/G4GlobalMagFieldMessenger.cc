@@ -76,7 +76,6 @@ G4GlobalMagFieldMessenger::G4GlobalMagFieldMessenger(const G4ThreeVector& value)
   
   // Set field value (the field is not activated if value is zero)
   SetField(value, "G4GlobalMagFieldMessenger::G4GlobalMagFieldMessenger");
-  
 }
 
 //______________________________________________________________________________
@@ -94,32 +93,29 @@ G4GlobalMagFieldMessenger::~G4GlobalMagFieldMessenger()
 void G4GlobalMagFieldMessenger::SetField(const G4ThreeVector& value,
                                          const G4String& /*inFunction*/)
 {
-  // Check if G4TransportationManager is available
-  //if ( ! G4TransportationManager::GetTransportationManager() ) {
-  //  G4ExceptionDescription description;
-  //  description << "G4TransportationManager instance does not exist.";
-  //  G4Exception(inFunction, "GeomField004", FatalException, description);
-  //}
-
   // Get field manager (or create it if it does not yet exist)
   G4FieldManager* fieldManager
     = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
   // Inactivate field if its value is zero
-  if ( value == G4ThreeVector() ) {
+  if ( value == G4ThreeVector() )
+  {
     fieldManager->SetDetectorField(0);
     fieldManager->CreateChordFinder(0);
     
-    if ( fVerboseLevel > 0 ) {
+    if ( fVerboseLevel > 0 )
+    {
       G4cout << "Magnetic field is inactive, fieldValue = (0,0,0)." << G4endl;
     }
   } 
-  else { 
+  else
+  { 
     fMagField->SetFieldValue(value);
     fieldManager->SetDetectorField(fMagField);
     fieldManager->CreateChordFinder(fMagField);
     
-    if ( fVerboseLevel > 0 ) {
+    if ( fVerboseLevel > 0 )
+    {
       G4cout << "Magnetic field is active, fieldValue = (" 
              << G4BestUnit(value, "Magnetic flux density") 
              << ")." << G4endl;
@@ -131,11 +127,13 @@ void G4GlobalMagFieldMessenger::SetField(const G4ThreeVector& value,
 
 void G4GlobalMagFieldMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if ( command == fSetValueCmd ) {
+  if ( command == fSetValueCmd )
+  {
     SetField(fSetValueCmd->GetNew3VectorValue(newValue),
              "G4GlobalMagFieldMessenger::SetNewValue");
   }
-  else if ( command == fSetVerboseCmd ) {
+  else if ( command == fSetVerboseCmd )
+  {
     SetVerboseLevel(fSetVerboseCmd->GetNewIntValue(newValue));
   }  
 }

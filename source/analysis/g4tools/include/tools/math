@@ -20,13 +20,6 @@ inline double half_pi() {return 1.5707963267948965580E0;}
 
 inline double deg2rad() {return pi()/180.0;}
 
-template <class T>
-inline T power(const T& a_A,unsigned int a_B){
-  T v = T(1);
-  for(unsigned int i=0;i<a_B;i++) v *= a_A; 
-  return v;
-}
-
 // for Lib/ExpFunc.
 inline bool in_domain_all(double){return true;}
 inline bool in_domain_log(double a_x){return (a_x>0?true:false);}
@@ -41,5 +34,7 @@ inline bool in_domain_acos(double a_x){
 }
 
 }
+
+//#include "power"
 
 #endif

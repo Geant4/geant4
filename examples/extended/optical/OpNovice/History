@@ -1,4 +1,4 @@
-$Id: History 77883 2013-11-29 08:40:10Z gcosmo $
+$Id: History 79261 2014-02-20 16:35:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 23, 2013 M. Asai (OpNovice-V09-06-13)
+- Limit invokation of static method only from master/sequential.
+
+December 22, 2013 M. Asai
+- Avoid static G4Scintillation method invoked through a pointer.
+
+December 18, 2013 M. Asai/P. Gumplinger (OpNovice-V10-00-02)
+- allows changes to G4Cerenkov and G4Scintillation in Idle state
+
+December 16, 2013 M. Asai
+- Fix race condision issue in OpNovicePhysicsList.
+
+December 04, 2013 P. Gumplinger
+- Fixes in gui.mac:
+  Commented out command specific to B2 example
+  Let execute vis.mac first to make the command in added menus available;
+  Corrected wireframe parameter
 
 November 28, 2013 P. Gumplinger (OpNovice-V09-06-11)
 - add gui.mac, icons.mac and run.png

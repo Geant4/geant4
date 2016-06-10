@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc 76882 2013-11-18 12:49:10Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.cc 79186 2014-02-20 09:20:02Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -434,11 +434,11 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
     }
     fin1 >> n1;
     if(fin1.fail()) { return; }
-    if(0 > n1) { n1 = 0; }
+    if(0 > n1 || n1 >= INT_MAX) { n1 = 0; }
 
     fin1 >> n2;
     if(fin1.fail()) { return; }
-    if(0 > n2) { n2 = 0; }
+    if(0 > n2 || n2 >= INT_MAX) { n2 = 0; }
 
     fin1 >> x;
     if(fin1.fail()) { return; }

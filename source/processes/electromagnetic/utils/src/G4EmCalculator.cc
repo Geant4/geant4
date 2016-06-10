@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc 70371 2013-05-29 15:18:07Z gcosmo $
+// $Id: G4EmCalculator.cc 79268 2014-02-20 16:46:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -129,8 +129,10 @@ G4EmCalculator::~G4EmCalculator()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4ParticleDefinition* p,
-                                 const G4Material* mat, const G4Region* region)
+G4double G4EmCalculator::GetDEDX(G4double kinEnergy, 
+				 const G4ParticleDefinition* p,
+                                 const G4Material* mat, 
+				 const G4Region* region)
 {
   G4double res = 0.0;
   const G4MaterialCutsCouple* couple = FindCouple(mat, region);
@@ -205,6 +207,15 @@ G4double G4EmCalculator::GetCSDARange(G4double kinEnergy,
 				      const G4Region* region)
 {
   G4double res = 0.0;
+  if(!G4LossTableManager::Instance()->BuildCSDARange()) {
+    G4ExceptionDescription ed;
+    ed << "G4EmCalculator::GetCSDARange: CSDA table is not built; " 
+       << " use UI command: /process/eLoss/CSDARange true";
+    G4Exception("G4EmCalculator::GetCSDARange", "em0077",
+		JustWarning, ed);
+    return res;
+  }
+
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
   if(couple && UpdateParticle(p, kinEnergy)) {
     res = manager->GetCSDARange(p, kinEnergy, couple);
@@ -919,11 +930,12 @@ const G4ParticleDefinition* G4EmCalculator::FindIon(G4int Z, G4int A)
 const G4Material* G4EmCalculator::FindMaterial(const G4String& name)
 {
   if(name != currentMaterialName) {
-    currentMaterial = G4Material::GetMaterial(name);
+    currentMaterial = G4Material::GetMaterial(name, false);
     currentMaterialName = name;
-    if(!currentMaterial)
+    if(!currentMaterial) {
       G4cout << "### WARNING: G4EmCalculator::FindMaterial fails to find " 
 	     << name << G4endl;
+    }
   }
   return currentMaterial;
 }
@@ -947,18 +959,37 @@ const G4MaterialCutsCouple* G4EmCalculator::FindCouple(
 			    const G4Material* material,
 			    const G4Region* region)
 {
-  if(!material) return 0;
-  currentMaterial = material;
-  currentMaterialName = material->GetName();
-  // Access to materials
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  const G4Region* r = region;
-  if(!r) {
-    r = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld");
+  const G4MaterialCutsCouple* couple = 0;
+  if(material) {
+    currentMaterial = material;
+    currentMaterialName = material->GetName();
+    // Access to materials
+    const G4ProductionCutsTable* theCoupleTable=
+      G4ProductionCutsTable::GetProductionCutsTable();
+    const G4Region* r = region;
+    if(r) {
+      couple = theCoupleTable->GetMaterialCutsCouple(material,
+						     r->GetProductionCuts());
+    } else {
+      G4RegionStore* store = G4RegionStore::GetInstance();
+      size_t nr = store->size();
+      if(0 < nr) {
+	for(size_t i=0; i<nr; ++i) {
+	  couple = theCoupleTable->GetMaterialCutsCouple(
+	    material, ((*store)[i])->GetProductionCuts());
+	  if(couple) { break; }
+	}
+      }
+    }
   }
-  return theCoupleTable->GetMaterialCutsCouple(material,r->GetProductionCuts());
-
+  if(!couple) {
+    G4ExceptionDescription ed;
+    ed << "G4EmCalculator::FindCouple: fail for material " << material
+       << " <" << currentMaterialName << " > and region " << region;
+    G4Exception("G4EmCalculator::FindCouple", "em0078",
+		FatalException, ed);
+  }
+  return couple;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

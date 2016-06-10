@@ -82,10 +82,7 @@ class UBox : public VUSolid
     void Extent(UVector3& aMin, UVector3& aMax) const;
     inline double Capacity();
     inline double SurfaceArea();
-    VUSolid* Clone() const
-    {
-      return new UBox(GetName(), fDx, fDy, fDz);
-    }
+    VUSolid* Clone() const;
     UGeometryType GetEntityType() const;
    
     void    ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}

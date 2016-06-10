@@ -1,4 +1,4 @@
-svn log $Id: History 77473 2013-11-25 09:32:54Z gcosmo $
+svn log $Id: History 79120 2014-02-18 14:50:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th January 2014   Gabriele Cosmo  (config-V09-06-18)
+- Fixed setting of -fPIC also for Darwin targets.
+
+13th January 2014   Gabriele Cosmo
+- Fixed setting of -fPIC in MT-mode for Linux-g++ and Linux-icc.
 
 25th November 2013   Gabriele Cosmo  (config-V09-06-17)
 - Corrected settings for Linux-g++ and Linux-icc in the use of -fPIC in

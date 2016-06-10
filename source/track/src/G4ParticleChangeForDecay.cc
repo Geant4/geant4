@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc 68795 2013-04-05 13:24:46Z gcosmo $
+// $Id: G4ParticleChangeForDecay.cc 79225 2014-02-20 15:03:24Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -185,8 +185,12 @@ void G4ParticleChangeForDecay::DumpInfo() const
   G4VParticleChange::DumpInfo();
 
   G4int oldprc = G4cout.precision(3);
-  G4cout << "        Time (ns)           : " 
+  G4cout << " proposed local Time (ns)     : " 
          << std::setw(20) << theTimeChange/ns << G4endl;
+  G4cout << " initial local Time (ns)      : "
+	 << std::setw(20) << theLocalTime0/ns << G4endl;
+  G4cout << " initial global Time (ns)      : "
+	 << std::setw(20) << theGlobalTime0/ns << G4endl;
   G4cout.precision(oldprc);
 }
 
@@ -206,6 +210,8 @@ G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
     G4cout << "  G4ParticleChangeForDecay::CheckIt    : ";
     G4cout << "the local time goes back  !!" 
 	   << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+    G4cout << "initial local time "<< theLocalTime0/ns <<   "[ns] " 
+	   << "initial global time "<< theGlobalTime0/ns  << "[ns] " <<G4endl;
     G4cout << aTrack.GetDefinition()->GetParticleName()
 	   << " E=" << aTrack.GetKineticEnergy()/MeV
 	   << " pos=" << aTrack.GetPosition().x()/m

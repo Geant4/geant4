@@ -1,4 +1,4 @@
-$Id: History 77345 2013-11-22 16:00:21Z gcosmo $
+$Id: History 79186 2014-02-20 09:20:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24.01.2014  V. Ivanchenko, tag emlowen-V09-06-50
+            G4LivermorePhotoElectricModel - fixed Coverity report 
+
+10.01.2014  L. Pandola
+	    Suppress G4Exception (JustWarning) issued by some Penelope 
+            models in UnitTests. Controlled by verbosity flag now (for 
+            diagnostic).
+
+11.12.2013  L. Pandola
+            Allow for (AutoLock-protected) creation on-the-fly of 
+            tables in SampleSecondaries(). Nothing changes for loops driven 
+            by the RunManager. Avoid crash when the loop of SampleSecondaries()
+            is inkoved in a unit test.
+
+22.11.2013  M. Karamitros, tag emlowen-V09-06-49
+	    Remove creation of material in G4MuElect* 
+	    and G4MicroElec* models
 
 21.11.2013  V. Ivanchenko, tag emlowen-V09-06-48
             G4QAOLowEnergyLoss, G4hICRU49He, G4hICRU49p, 

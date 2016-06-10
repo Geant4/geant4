@@ -347,7 +347,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
         // electrons.  The last element is the residual nucleus.
         G4FragmentVector* gammas = deexcitation->BreakUp(nucleus);  // Evaporate only one photon
         G4int nGammas = gammas->size() - 1;
-        G4double finalDaughterExcitation = 
+        G4double finalDaughterExcitation =
                              gammas->operator[](nGammas)->GetExcitationEnergy();
         // Go through each gamma/e- and add it to the decay product.  The
         // angular distribution of the gammas is isotropic, and the residual

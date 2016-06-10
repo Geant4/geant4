@@ -1,4 +1,4 @@
-$Id: History 75130 2013-10-28 10:05:45Z gcosmo $
+$Id: History 79153 2014-02-19 15:23:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9th December 2013  John Allison  (greps-V09-06-13)
+- Another change suggested by PVS.
+
+28th November 2013  John Allison
+- G4VVisManager.hh: Cosmetics.
+
+15th November 2013  John Allison
+- Some changes as suggested by PVS.
 
 25th October 2013  John Allison  (greps-V09-06-12)
 - Cosmetic changes to code layout and comments.

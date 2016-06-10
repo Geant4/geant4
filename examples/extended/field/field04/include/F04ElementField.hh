@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04ElementField.hh 77884 2013-11-29 08:41:11Z gcosmo $
+// $Id: F04ElementField.hh 79251 2014-02-20 16:16:23Z gcosmo $
 //
 /// \file field/field04/include/F04ElementField.hh
 /// \brief Definition of the F04ElementField class
@@ -31,8 +31,6 @@
 
 #ifndef F04ElementField_h
 #define F04ElementField_h 1
-
-class G4VPhysicalVolume;
 
 #include "globals.hh"
 
@@ -65,8 +63,7 @@ class F04ElementField
     F04ElementField(const G4ThreeVector, G4LogicalVolume*);
 
     /// the actual implementation constructs the F04ElementField
-    void Construct(G4VPhysicalVolume* currentWorld);
-    void UpdateWorld(G4VPhysicalVolume* currentWorld);
+    void Construct();
 
     ///  Destructor.
     virtual ~F04ElementField() {}

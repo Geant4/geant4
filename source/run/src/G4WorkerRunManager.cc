@@ -108,16 +108,15 @@ void G4WorkerRunManager::InitializeGeometry() {
                     FatalException, "G4VUserDetectorConstruction is not defined!");
         return;
     }
-    //Step1: Call user's ConstructSDandField()
-    userDetector->ConstructSDandField();
-    userDetector->ConstructParallelSD();
-    //Step2: Get pointer to the physiWorld (note: needs to get the "super pointer, i.e. the one shared by all threads"
+    //Step1: Get pointer to the physiWorld (note: needs to get the "super pointer, i.e. the one shared by all threads"
     G4RunManagerKernel* masterKernel = G4MTRunManager::GetMasterRunManagerKernel();
     G4VPhysicalVolume* worldVol = masterKernel->GetCurrentWorld();
-    //Step3:, Call a new "WorkerDefineWorldVolume( pointer from 2-, false); 
+    //Step2:, Call a new "WorkerDefineWorldVolume( pointer from 2-, false); 
     kernel->WorkerDefineWorldVolume(worldVol,false);
-    
     kernel->SetNumberOfParallelWorld(masterKernel->GetNumberOfParallelWorld());
+    //Step3: Call user's ConstructSDandField()
+    userDetector->ConstructSDandField();
+    userDetector->ConstructParallelSD();
     geometryInitialized = true;
 }
 

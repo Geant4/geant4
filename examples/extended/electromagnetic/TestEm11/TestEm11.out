@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -162,7 +162,6 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
-      Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV
       CSDA range table up to 1 GeV in 80 bins
@@ -453,7 +452,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=3.23s Real=3.23s Sys=0s
+  User=5.36s Real=6.98s Sys=0s
 
  ======================== run summary =====================
 
@@ -462,20 +461,20 @@ Run Summary
 
  ==========================================================
 
- Total Energy deposited        = 452.736 keV +- 101.522 keV
+ Total Energy deposited        = 452.946 keV +- 101.660 keV
 
- Track length of primary track = 887.321 um  +- 189.558 um 
+ Track length of primary track = 886.247 um  +- 189.012 um 
  Range from EmCalculator = 942.765 um  (from full dE/dx)
 
- Projected range               = 318.292 um  +- 204.141 um 
+ Projected range               = 317.931 um  +- 202.827 um 
 
- Nb of steps of primary track  = 21.36 +- 4.79	 Step size= 42.048 um  +- 7.277 um 
+ Nb of steps of primary track  = 21.32 +- 4.77	 Step size= 42.072 um  +- 7.247 um 
 
- absorbed = 80.06 %   transmit = 4.05 %   reflected = 15.89 %
+ absorbed = 80.25 %   transmit = 4.21 %   reflected = 15.54 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 231008573, 702274557
+ Current couple of seeds = 1453963188, 1502176679
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

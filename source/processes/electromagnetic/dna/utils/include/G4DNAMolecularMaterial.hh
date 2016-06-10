@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAMolecularMaterial.hh 79184 2014-02-20 09:14:38Z gcosmo $
 //
 #ifndef G4DNAMolecularMaterial_HH
 #define G4DNAMolecularMaterial_HH
@@ -88,6 +88,7 @@ protected :
     mutable std::map<const G4Material*,bool,CompareMaterial> fWarningPrinted;
 
     G4bool fIsInitialized;
+    size_t fNMaterials;
 };
 
 inline const std::vector<ComponentMap> *G4DNAMolecularMaterial::GetMassFractionTable() const

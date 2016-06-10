@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -269,6 +269,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 51 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -347,6 +353,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 49 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -466,6 +478,12 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  pi+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 45 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -524,30 +542,30 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.76s Real=4.77s Sys=0s
+  User=8.74s Real=11.43s Sys=0s
 
  ===== SUMMARY ===== 
 
  Total number pf events:        100
- Mean number of charged steps:  7265.45
- Mean number of neutral steps:  3902.20
+ Mean number of charged steps:  7273.55
+ Mean number of neutral steps:  3910.44
 
- energy deposit :   94.85 % E0 +-    1.37 % E0
- charged traklen:  481.74 radl +-    7.13 radl
- neutral traklen: 4196.36 radl +-  144.33 radl
+ energy deposit :   94.92 % E0 +-    1.07 % E0
+ charged traklen:  482.14 radl +-    5.48 radl
+ neutral traklen: 4214.37 radl +-  122.53 radl
 
- 90.00 % confinement: radius = 2.98 radl  (2.66 cm )
+ 90.00 % confinement: radius = 3.00 radl  (2.68 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.948512  delEdep= -0.000487937 nrms= -0.595045
-Erms: 0.0137032  delErms= 0.00550325 nrms= 6.71128
-<<<<END>>>>   IS NOT ACCEPTED
+Edep: 0.949194  delEdep= 0.000194182 nrms= 0.236807
+Erms: 0.0106934  delErms= 0.00249339 nrms= 3.04072
+<<<<END>>>>   IS ACCEPTED
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1750027639, 1819482837
+ Current couple of seeds = 238534857, 1609561673
 ----------------------------------------
 ... write Root file : testem2.root - done
 G4 kernel has come to Quit state.

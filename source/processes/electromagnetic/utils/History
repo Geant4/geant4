@@ -1,4 +1,4 @@
-$Id: History 77290 2013-11-22 10:57:50Z gcosmo $
+$Id: History 79268 2014-02-20 16:46:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 February 14: V.Ivant (emutils-V09-06-68)
+- G4LossTableMananger, G4EmProcessOptions - define default 
+    verbosity=0 for worket thread, so summary on EM processes 
+    is not printed out
+- G4VEnergyLossProcess, G4VEmProcess - define fixed precison=6 
+    for initialisation printout
+- G4EmCalculator - added G4Exception inside FindCouple() method if
+    G4MaterialCutsCouple is not found out and incide GetCSDARange()
+    when CSDA table is not initialized 
+
+13 February 14: V.Ivant
+- G4LossTableMananger - fixed bug for initialisation of several runs
+    in one job (affecting muons and e- and providing non-reproducibility)
+
+27 January 14: V.Ivant
+- G4VEnergyLossProcess - fixed division by zero for the case of
+    an ion with charge zero
+- G4EmCalculator - in FindCouple method implemented loop over all
+    regions if G4Region* argument of the method is NULL
 
 21 November 13: V.Ivant (emutils-V09-06-67)
 - G4EnergyLossTables - removed G4ThreadLocal (this class is obsolete)

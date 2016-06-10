@@ -103,3 +103,5 @@ inline bool gunzip_buffer(std::ostream& a_out,
 }
 
 #endif
+
+//exlib_build_use inlib zlib

@@ -11,8 +11,8 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   CXX       := g++
   CXXFLAGS  := -Wall -Wno-non-virtual-dtor -Wno-long-long
 # CXXFLAGS  += -Wunused-parameter -Winline -Wunreachable-code
-  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
-  CXXFLAGS  += -Wno-variadic-macros -Wshadow
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
 # CXXFLAGS  += -stdlib=libstdc++
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
@@ -34,6 +34,11 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     CXXFLAGS  += -O2 -g
     FCFLAGS   += -O2 -g
     CCFLAGS   += -O2 -g
+  endif
+  ifdef G4LIB_BUILD_SHARED
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
   endif
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
@@ -162,13 +167,13 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX)  -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX)  -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 

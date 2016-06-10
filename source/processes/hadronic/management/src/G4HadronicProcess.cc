@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc 67989 2013-03-13 10:54:03Z gcosmo $
+// $Id: G4HadronicProcess.cc 79196 2014-02-20 11:13:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -807,7 +807,7 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
       Myout << "   "<< relResult  <<" relative, limit " << checkLevels.first << ", values E/T(0) = "
              << relative << " p/p(0)= " << relative_mom  << G4endl;
       Myout << "   "<< absResult << " absolute, limit (MeV) " << checkLevels.second/MeV << ", values E / p (MeV) = "
-             << absolute/MeV << " / " << absolute_mom/MeV << G4endl;
+             << absolute/MeV << " / " << absolute_mom/MeV << " 3mom: " << (diff.vect())*1./MeV <<  G4endl;
       Myout << "   "<< chargeResult << " charge/baryon number balance " << (initial_Z-final_Z) << " / " << (initial_A-final_A) << " "<<  G4endl;
       Myout_notempty=true;
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh 69802 2013-05-15 14:52:57Z gcosmo $
+// $Id: G4AttDefStore.hh 79152 2014-02-19 15:22:08Z gcosmo $
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH
@@ -37,7 +37,7 @@ class G4AttDef;
 namespace G4AttDefStore {
 
   std::map<G4String,G4AttDef>*
-  GetInstance(G4String storeKey, G4bool& isNew);
+  GetInstance(const G4String& storeKey, G4bool& isNew);
   // Returns a pointer to the definitions accessed by the given key.
   // "isNew" is true if definitions pointer is new and therefore the
   // needs filling.  The store keeps the ownership of the returned

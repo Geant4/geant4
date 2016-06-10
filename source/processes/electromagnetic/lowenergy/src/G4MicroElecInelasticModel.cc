@@ -62,7 +62,7 @@ G4MicroElecInelasticModel::G4MicroElecInelasticModel(const G4ParticleDefinition*
 :G4VEmModel(nam),fAtomDeexcitation(0),isInitialised(false)
 {
   nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
-
+  
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 

@@ -11,6 +11,7 @@
 #include "../vmanip"
 #include "../sout"
 #include "../tos"
+#include "../forit"
 
 #include <ostream>
 
@@ -163,8 +164,7 @@ public:
       if(m_cols.empty()) return false;
       std::ostringstream sout;
       sout << m_spaces << "<row>" << std::endl;
-      std::vector<iobj*>::const_iterator it;
-      for(it=m_cols.begin();it!=m_cols.end();++it) {
+      tools_vforcit(iobj*,m_cols,it) {
         if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))) {
           sout << m_spaces << "  <entryITuple>" << std::endl;
           sout << sub->value();
@@ -202,8 +202,7 @@ public:
     for(unsigned int i=0;i<a_spaces;i++) m_spaces += " ";
 
     const std::vector<ntuple_booking::col_t>& cols = a_bkg.m_columns;
-    std::vector<ntuple_booking::col_t>::const_iterator it;
-    for(it=cols.begin();it!=cols.end();++it){
+    tools_vforcit(ntuple_booking::col_t,cols,it){
 
       if((*it).second==_cid(int(0))) {
         create_column<int>((*it).first);
@@ -278,8 +277,7 @@ public:
     // <columns> :
     m_writer << m_spaces << "    <columns>" << std::endl;
 
-    std::vector<iobj*>::iterator it;
-    for(it=m_cols.begin();it!=m_cols.end();++it) {
+    tools_vforcit(iobj*,m_cols,it) {
       if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))){
         m_writer << m_spaces << "      <column"
                  << " name=" << sout((*it)->name()) 
@@ -304,8 +302,7 @@ public:
   bool add_row() {
     if(m_cols.empty()) return false;
     m_writer << m_spaces << "      <row>" << std::endl;
-    std::vector<iobj*>::const_iterator it;
-    for(it=m_cols.begin();it!=m_cols.end();++it) {
+    tools_vforcit(iobj*,m_cols,it) {
       if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))){
         m_writer << m_spaces << "        <entryITuple>" << std::endl;
         m_writer << sub->value();
@@ -331,8 +328,7 @@ protected:
                                  std::string& a_string) {
     a_string += "{"; //we need the + because of the tuple in tuple.
 
-    std::vector<iobj*>::const_iterator it;
-    for(it=a_cols.begin();it!=a_cols.end();++it) {
+    tools_vforcit(iobj*,a_cols,it) {
       if(it!=a_cols.begin()) a_string += ",";
 
       std::string type = (*it)->aida_type();

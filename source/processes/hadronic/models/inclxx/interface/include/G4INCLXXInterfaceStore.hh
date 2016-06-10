@@ -80,7 +80,7 @@ class G4INCLXXInterfaceStore {
     /// \brief Setter for accurateProjectile
     void SetAccurateProjectile(const G4bool b);
 
-    /// \brief Setter for theMaxClusterMass
+    /// \brief Setter for the maximum cluster mass
     void SetMaxClusterMass(const G4int aMass);
 
     /// \brief Setter for cascadeMinEnergyPerNucleon
@@ -106,12 +106,8 @@ class G4INCLXXInterfaceStore {
      */
     G4double GetCascadeMinEnergyPerNucleon() const;
 
-    /** \brief Getter for ClusterMaxMass
-     *
-     * The \see{G4INCLXXInterfaceMessenger} class provides a UI command to set
-     * this parameter.
-     */
-    G4int GetMaxClusterMass() const;
+    /// \brief Getter for theConfig
+    G4INCL::Config &GetINCLConfig();
 
 
 
@@ -157,15 +153,15 @@ class G4INCLXXInterfaceStore {
     ~G4INCLXXInterfaceStore();
 
     /// \brief Delete the INCL model engine
-    void DeleteModel() { delete theINCLModel; theINCLModel=NULL; }
+    void DeleteModel();
 
     /// \brief Create a new Config object from the current options
 
     static G4ThreadLocal G4INCLXXInterfaceStore *theInstance;
 
+    G4INCL::Config theConfig;
+
     G4bool accurateProjectile;
-    const G4int theMaxClusterMassDefault;
-    G4int theMaxClusterMass;
     const G4int theMaxProjMassINCL;
     G4double cascadeMinEnergyPerNucleon;
     G4double conservationTolerance;

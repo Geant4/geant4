@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc 74730 2013-10-21 08:54:46Z gcosmo $
+// $Id: G4PhysicsVector.icc 79149 2014-02-19 15:08:06Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -141,6 +141,8 @@ inline
   // is called it is ensured that the energy is inside the bin
   // 0 < idx < numberOfNodes-1
 
+  static const G4double onesixth = 1.0/6.0;
+
   // check bin value
   G4double x1 = binVector[idx];
   G4double x2 = binVector[idx + 1];
@@ -155,7 +157,7 @@ inline
 
   G4double res = a*y1 + b*y2 + 
         ( (a*a*a - a)*secDerivative[idx] +
-          (b*b*b - b)*secDerivative[idx + 1] )*delta*delta/6.0;
+          (b*b*b - b)*secDerivative[idx + 1] )*delta*delta*onesixth;
 
   return res;
 }
@@ -258,7 +260,8 @@ size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
        else { bin3 = bin2; }
      }
 /*
-// V.I. Usage of this algorithm provide identical results
+//   Bin location proposed by K.Genser (FNAL)
+// V.I. Usage of this algorithm provides identical results
 //      no CPU advantage is observed in EM tests
 //      if new validation information will be known this code may be used
      G4PVDataVector::const_iterator it =

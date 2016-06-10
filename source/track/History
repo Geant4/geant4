@@ -1,4 +1,4 @@
-$Id: History 77080 2013-11-21 10:33:55Z gcosmo $
+$Id: History 79225 2014-02-20 15:03:24Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Jan. 04, 2014 H.Kurashige (track-V09-06-05)
+- modify message from CheckIt for G4VParticleChange and G4ParticleChangeForDecay  
 
 - Nov. 21, 2013 H.Kurashige (track-V09-06-04)
 - Fix Coverity deficts in G4Track constructors

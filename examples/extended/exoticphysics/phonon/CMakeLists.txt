@@ -43,6 +43,13 @@ tarGet_link_libraries(XGeBox ${Geant4_LIBRARIES})
 #
 set(dmc_SCRIPTS
     run.in run.out vis.mac
+    CrystalMaps/Ge/config.txt
+    CrystalMaps/Ge/FT.ssv
+    CrystalMaps/Ge/FTVec.ssv
+    CrystalMaps/Ge/L.ssv
+    CrystalMaps/Ge/LVec.ssv
+    CrystalMaps/Ge/ST.ssv
+    CrystalMaps/Ge/STVec.ssv
   )
 
 foreach(_script ${dmc_SCRIPTS})

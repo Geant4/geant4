@@ -1,4 +1,4 @@
-$Id: History 77330 2013-11-22 14:46:29Z gcosmo $
+$Id: History 79140 2014-02-19 13:29:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,14 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-19)
+December 11th, 2013 - G.Cosmo  (geomnav-V09-06-20)
 -----------------------------
-- Fixed compiler warning intruduced with previous update
+- Fixed implementation of G4TransportationManager::SetNavigatorForTracking()
+  to initialise active navigator and propagator-in-field with the new
+  provided instance. Addressing problem report #1537.
+- Minor code cleanup in G4GlobalMagFieldMessenger.
+
+November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-19)
+----------------------------------
+- Fixed compiler warning intruduced with previous update.
 
 November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-18)
------------------------------
+----------------------------------
 - Removed checks for existence of G4TransportationManager
-  from G4GlobalMagFieldMessenger as they do not work as expected
+  from G4GlobalMagFieldMessenger as they do not work as expected.
 
 September 9th, 2013 - G.Cosmo  (geomnav-V09-06-17)
 -----------------------------

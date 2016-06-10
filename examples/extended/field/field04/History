@@ -15,14 +15,28 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 02, 2013
-- More fixes in gui.mac:
-  corrected wireframe parameter
+December 27, 2013 M. Asai - (fieldex04-V09-06-10)
+- F04GlobalField.cc : Fix uninitialized variables.
+
+December 23, 2013 M. Asai
+- Limit static method invokation only for master/sequential.
+
+December 22, 2013 M. Asai
+- Avoid static method being invoked by a pointer.
+
+December 19, 2013 A. Dotti
+- Retagging: previous tag was rejected due to MT issues, but
+  problem is not reproducible. Retagging for debugging
+
+December 04, 2013 P.Gumplinger
+- replace Update method and commands with ReinitializeGeometry
+- put back cleaning volumes and solid stores in Construct()
+- More Fixes in gui.mac:
+  Let execute vis.mac first to make the command in added menus available;
+  Corrected wireframe parameter;
 
 November 30, 2013 M.Asai - (fieldex04-V09-06-08)
 - fix additional thread-safety issues.
-
-November 29, 2013 - I. Hrivnacova
 - Fixed gui.mac (commented out command specific to B2 example)
 
 November 28, 2013 M.Asai - (fieldex04-V09-06-07)

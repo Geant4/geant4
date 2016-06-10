@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -92,10 +92,10 @@ Available colours:
 
 
 ----> The target has been changed to 3 cm of Lead
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
-/build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+/data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
 ### exrdmPhysicsList::ConstructProcess is done
 world cuts are set
 Target cuts are set
@@ -106,9 +106,9 @@ Detector cuts are set
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -362,6 +362,1545 @@ Creating Ntuple RDecayProducts in ROOT file: All Products of RDecay
 ROOT Ntuple tRDecayProducts All Products of RDecay PID:Z:A:Energy:Time:Weight booked 
 exrdmAnalysisManager: Histograms are booked and the run has been started
 ### Run : 0
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : HAD_RDM_011
+      issued by : G4RadioactiveDecay::GetMeanFreePath()
+Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 ROOT: files writing...
 ROOT: files closing...
 exrdmAnalysisManager: Histograms have been saved!

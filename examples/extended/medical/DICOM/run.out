@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -257,6 +257,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 49 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -335,6 +341,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 47 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -453,6 +465,12 @@ hPairProd:   for  pi+    SubType= 4
       Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -850,12 +868,12 @@ EV: 99
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.04s Sys=0s
+  User=0.05s Real=0.04s Sys=0s
 
 --------------------End of Global Run----------------------- 
  The run was 200 events 
 LOCAL TOTAL DOSE : 	0 Gy
-      TOTAL DOSE : 	9.53694e-07 Gy
+      TOTAL DOSE : 	1.03211e-06 Gy
  ###### EndOfRunAction ###### 
 =============================================================
  Number of event processed : 200
@@ -866,35 +884,34 @@ LOCAL TOTAL DOSE : 	0 Gy
     6578     1.25928e-09 Gy
     6579     5.11129e-09 Gy
     8002     3.35046e-10 Gy
-    8130     1.13881e-07 Gy
-    8131     8.54821e-08 Gy
-    8258     5.44781e-08 Gy
-    8259     1.0615e-07 Gy
+    8130     1.06675e-07 Gy
+    8131     1.02614e-07 Gy
+    8258     5.53762e-08 Gy
+    8259     1.22192e-07 Gy
     21159     4.079e-09 Gy
-    24514     8.08753e-08 Gy
-    24515     7.04982e-08 Gy
-    24642     5.55784e-08 Gy
-    24643     6.97661e-08 Gy
+    24514     7.95384e-08 Gy
+    24515     9.36611e-08 Gy
+    24642     5.76385e-08 Gy
+    24643     9.5024e-08 Gy
     33793     2.69846e-11 Gy
     33794     1.97705e-09 Gy
     33921     3.05806e-09 Gy
     37543     1.64355e-09 Gy
     40772     1.36983e-09 Gy
     40773     7.30793e-10 Gy
-    40898     9.33519e-08 Gy
-    40899     6.73881e-08 Gy
-    40900     5.1075e-10 Gy
-    41026     4.40343e-08 Gy
-    41027     8.44603e-08 Gy
-    41948     1.35826e-09 Gy
-    41949     1.38083e-09 Gy
+    40898     8.69516e-08 Gy
+    40899     7.30829e-08 Gy
+    40900     1.37245e-09 Gy
+    40901     9.35888e-10 Gy
+    41026     4.9087e-08 Gy
+    41027     8.34606e-08 Gy
 =============================================
  closed file dicom.out for dose output
 Finished : End of Run Action 0
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.86 Mb
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.93 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
 Graphics systems deleted.

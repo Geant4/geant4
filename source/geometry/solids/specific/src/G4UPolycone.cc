@@ -122,6 +122,17 @@ void G4UPolycone::ComputeDimensions(G4VPVParameterisation* p,
   p->ComputeDimensions(*(G4Polycone*)this,n,pRep);
 }
 
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UPolycone::Clone() const
+{
+  return new G4UPolycone(*this);
+}
+
+
 ////////////////////////////////////////////////////////////////////////
 //
 // CreatePolyhedron

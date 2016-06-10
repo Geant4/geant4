@@ -235,7 +235,8 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
                 definition!=G4PionPlus::PionPlusDefinition() &&
                 definition!=G4PionMinus::PionMinusDefinition() )
         {
-            G4cerr << "You are using G4BinaryCascade for projectiles other than nucleons or pions."<<G4endl;
+            G4cerr << "You are trying to use G4BinaryCascade with " <<definition->GetParticleName()<<" as projectile."<<G4endl;
+            G4cerr << "G4BinaryCascade should not be used for projectiles other than nucleons or pions."<<G4endl;
             G4cerr << "If you want to continue, please switch on the developer environment: "<<G4endl;
             G4cerr << "setenv I_Am_G4BinaryCascade_Developer 1 "<<G4endl<<G4endl;
             throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade - used for unvalid particle type - Fatal");

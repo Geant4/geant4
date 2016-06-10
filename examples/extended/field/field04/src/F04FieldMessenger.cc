@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04FieldMessenger.cc 76690 2013-11-14 08:45:07Z gcosmo $
+// $Id: F04FieldMessenger.cc 79251 2014-02-20 16:16:23Z gcosmo $
 //
 /// \file field/field04/src/F04FieldMessenger.cc
 /// \brief Implementation of the F04FieldMessenger class
@@ -78,12 +78,6 @@ F04FieldMessenger::F04FieldMessenger(F04GlobalField* pEMfield,
   fStepperCMD->SetDefaultValue(4);
   fStepperCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
  
-  fUpdateCMD = new G4UIcmdWithoutParameter("/field/update",this);
-  fUpdateCMD->SetGuidance("Update Field");
-  fUpdateCMD->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCMD->SetGuidance("if you changed field settings.");
-  fUpdateCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fMinStepCMD = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCMD->SetGuidance("Define minimal step");
   fMinStepCMD->SetParameterName("min step",false,false);
@@ -140,7 +134,6 @@ F04FieldMessenger::~F04FieldMessenger()
   delete fDeltaIntersectionCMD;
   delete fEpsMinCMD;
   delete fEpsMaxCMD;
-  delete fUpdateCMD;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,10 +153,6 @@ void F04FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
   if( command == fStepperCMD )
   {
     fGlobalField->SetStepperType(fStepperCMD->GetNewIntValue(newValue));
-  }
-  if( command == fUpdateCMD )
-  {
-    fGlobalField->UpdateField();
   }
   if( command == fMinStepCMD )
   {

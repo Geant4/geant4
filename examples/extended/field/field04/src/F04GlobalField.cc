@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04GlobalField.cc 77884 2013-11-29 08:41:11Z gcosmo $
+// $Id: F04GlobalField.cc 79251 2014-02-20 16:16:23Z gcosmo $
 //
 /// \file field/field04/src/F04GlobalField.cc
 /// \brief Implementation of the F04GlobalField class
@@ -78,6 +78,10 @@ F04GlobalField::F04GlobalField(F04DetectorConstruction* det)
   //  set object
 
   fObject = this;
+  fFirst = true;
+
+  fNfp = 0;
+  fFp = NULL;
 
   ConstructField();
 }
@@ -101,10 +105,7 @@ F04GlobalField::~F04GlobalField()
 
 void F04GlobalField::ConstructField()
 {
-  fFirst = true;
-
-  fNfp = 0;
-  fFp = 0;
+  Clear();
 
   //  Construct equ. of motion of particles through B fields
 //  fEquation = new G4Mag_EqRhs(this);
@@ -158,19 +159,6 @@ void F04GlobalField::ConstructField()
 
   fFieldManager->SetChordFinder(fChordFinder);
 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04GlobalField::UpdateField()
-{
-  fFirst = true;
-
-  fNfp = 0;
-  fFp = 0;
-
-  Clear();
-
   G4double l = 0.0;
   G4double B1 = fDetectorConstruction->GetCaptureMgntB1();
   G4double B2 = fDetectorConstruction->GetCaptureMgntB2();
@@ -198,65 +186,11 @@ void F04GlobalField::UpdateField()
   simpleSolenoid->SetMaxStep(1.5*mm);
   simpleSolenoid->SetMaxStep(2.5*mm);
 
-  if (fEquation) delete fEquation;
-
-  //  Construct equ. of motion of particles through B fields
-//  fEquation = new G4Mag_EqRhs(this);
-  //  Construct equ. of motion of particles through e.m. fields
-//  fEquation = new G4EqMagElectricField(this);
-  //  Construct equ. of motion of particles including spin through B fields
-//  fEquation = new G4Mag_SpinEqRhs(this);
-  //  Construct equ. of motion of particles including spin through e.m. fields
-  fEquation = new G4EqEMFieldWithSpin(this);
-
-  //  Get transportation, field, and propagator managers
-  G4TransportationManager* transportManager =
-         G4TransportationManager::GetTransportationManager();
-
-  fFieldManager = GetGlobalFieldManager();
-
-  fFieldPropagator = transportManager->GetPropagatorInField();
-
-  //  Need to SetFieldChangesEnergy to account for a time varying electric
-  //  field (r.f. fields)
-  fFieldManager->SetFieldChangesEnergy(true);
-
-  //  Choose a stepper for integration of the equation of motion
-  SetStepper();
-
-  if (fChordFinder) delete fChordFinder;
-
-  //  Create a cord finder providing the (global field, min step length,
-  //  a pointer to the stepper)
-  fChordFinder = new G4ChordFinder((G4MagneticField*)this,fMinStep,fStepper);
-
-  // Set accuracy parameters
-  fChordFinder->SetDeltaChord( fDeltaChord );
-
-  fFieldManager->SetAccuraciesWithDeltaOneStep(fDeltaOneStep);
-
-  fFieldManager->SetDeltaIntersection(fDeltaIntersection);
-
-  fFieldPropagator->SetMinimumEpsilonStep(fEpsMin);
-  fFieldPropagator->SetMaximumEpsilonStep(fEpsMax);
-
-  G4cout << "Accuracy Parameters:" <<
-            " MinStep=" << fMinStep <<
-            " DeltaChord=" << fDeltaChord <<
-            " DeltaOneStep=" << fDeltaOneStep << G4endl;
-  G4cout << "                    " <<
-            " DeltaIntersection=" << fDeltaIntersection <<
-            " EpsMin=" << fEpsMin <<
-            " EpsMax=" << fEpsMax <<  G4endl;
-
-  fFieldManager->SetChordFinder(fChordFinder);
-
-  G4VPhysicalVolume* currentWorld = fDetectorConstruction->GetWorld();
   if (fFields) {
      if (fFields->size()>0) {
         FieldList::iterator i;
         for (i=fFields->begin(); i!=fFields->end(); ++i){
-            (*i)->Construct(currentWorld);
+            (*i)->Construct();
         }
      }
   }
@@ -366,11 +300,6 @@ void F04GlobalField::Clear()
   }
 
   if (fFp) delete[] fFp;
-
-  fFirst = true;
-
-  fNfp = 0;
-  fFp = NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

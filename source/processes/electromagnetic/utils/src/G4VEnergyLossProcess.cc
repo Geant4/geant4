@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc 76957 2013-11-19 15:07:20Z gcosmo $
+// $Id: G4VEnergyLossProcess.cc 79268 2014-02-20 16:46:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -876,6 +876,7 @@ void
 G4VEnergyLossProcess::PrintInfoDefinition(const G4ParticleDefinition& part)
 {
   if(0 < verboseLevel) {
+    G4cout << std::setprecision(6);
     G4cout << G4endl << GetProcessName() << ":   for  "
            << part.GetParticleName()
 	   << "    SubType= " << GetProcessSubType() 
@@ -1076,7 +1077,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   // change effective charge of an ion on fly
   if(isIon) {
     G4double q2 = currentModel->ChargeSquareRatio(track);
-    if(q2 != chargeSqRatio) {
+    if(q2 != chargeSqRatio && q2 > 0.0) {
       chargeSqRatio = q2;
       fFactor = q2*biasFactor*(*theDensityFactor)[currentCoupleIndex];
       reduceFactor = 1.0/(fFactor*massRatio);

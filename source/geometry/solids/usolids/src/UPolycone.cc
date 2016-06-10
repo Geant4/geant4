@@ -29,8 +29,6 @@
 
 using namespace std;
 
-UBox box;
-
 UPolycone::UPolycone(const std::string& name,
                      double phiStart,
                      double phiTotal,
@@ -131,7 +129,7 @@ void UPolycone::Init(double phiStart,
      endPhi = phiStart+phiTotal;
      while( endPhi < startPhi ) endPhi += UUtils::kTwoPi;
   }
- // Set Parameters
+  // Set Parameters
   fOriginalParameters = new UPolyconeHistorical();
   fOriginalParameters->fStartAngle = startPhi;
   fOriginalParameters->fOpeningAngle = endPhi-startPhi;
@@ -140,6 +138,25 @@ void UPolycone::Init(double phiStart,
   fOriginalParameters->Rmin.resize(numZPlanes);
   fOriginalParameters->Rmax.resize(numZPlanes);
 
+  // Calculate RMax of Polycone in order to determine convexity of sections
+  //
+  double RMaxextent=rOuter[0];
+  for (int j=1; j < numZPlanes; j++)
+  {
+    if (rOuter[j] > RMaxextent) RMaxextent=rOuter[j];
+    if (rInner[j]>rOuter[j])
+    {
+      std::ostringstream message;
+      message << "Cannot create Polycone with rInner > rOuter for the same Z"
+              << std::endl
+              << "        rInner > rOuter for the same Z !" << std::endl
+              << "        rMin[" << j << "] = " << rInner[j]
+              << " -- rMax[" << j << "] = " << rOuter[j];
+       UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
+                         FatalErrorInArguments, 1, message.str().c_str());
+    }
+  }
+  //
   double prevZ = 0, prevRmax = 0, prevRmin = 0;
   int dirZ = 1;
   if (zPlane[1] < zPlane[0])dirZ = -1;
@@ -223,9 +240,18 @@ void UPolycone::Init(double phiStart,
         section.shift = shift;
         section.tubular = tubular;
         section.solid = solid;
-//        section.left = fZs[zi-1];
-//        section.right = z;
-
+        if(tubular)
+        {
+          if (rMax < RMaxextent) { section.convex = false;}
+          else { section.convex = true;}
+        }
+        else
+        {
+          if ((rMax<prevRmax)||(rMax < RMaxextent)||(prevRmax < RMaxextent))
+            { section.convex = false;}
+          else
+            { section.convex = true;}
+	}
         fSections.push_back(section);
       }
       else
@@ -281,7 +307,7 @@ void UPolycone::Init(double phiStart,
 
   mxy += fgTolerance;
 
-  box.Set(mxy, mxy, (rz->Bmax() - rz->Bmin()) / 2);
+  fBox.Set(mxy, mxy, (rz->Bmax() - rz->Bmin()) / 2);
 
   //
   // Make enclosingCylinder
@@ -421,28 +447,31 @@ VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
   if (r2 < 1e-10) return eInside;
 
   double phi = std::atan2(p.y, p.x); // * UUtils::kTwoPi;
-  if (phi < 0) phi += UUtils::kTwoPi;
+  if ((phi < 0)||(endPhi > UUtils::kTwoPi)) phi += UUtils::kTwoPi;
+
   double ddp = phi - startPhi;
   if (ddp < 0) ddp += UUtils::kTwoPi;
-  if (ddp <= endPhi + frTolerance)
+  if ((phi <= endPhi + frTolerance)&&(phi>= startPhi-frTolerance))
   {
     if (ps.z < -dz + halfTolerance || ps.z > dz - halfTolerance)
       return eSurface;
-    if (endPhi - ddp < frTolerance)
+
+    if (std::fabs(endPhi - phi) < frTolerance)
+      return eSurface;
+    if (std::fabs(startPhi - phi) < frTolerance)
       return eSurface;
 
     return eInside;
   }
   return eOutside;
- 
 }
 
 
 VUSolid::EnumInside UPolycone::Inside(const UVector3& p) const
 {
-  double shift = fZs[0] + box.GetZHalfLength();
+  double shift = fZs[0] + fBox.GetZHalfLength();
   UVector3 pb(p.x, p.y, p.z - shift);
-  if (box.Inside(pb) == eOutside)
+  if (fBox.Inside(pb) == eOutside)
     return eOutside;
 
   static const double htolerance = 0.5 * fgTolerance;
@@ -490,22 +519,24 @@ if (p.z < fZs.front() - htolerance || p.z > fZs.back() + htolerance) return VUSo
 double UPolycone::DistanceToIn(const UVector3& p,
                                const UVector3& v, double) const
 {
-  double shift = fZs[0] + box.GetZHalfLength();
+  double shift = fZs[0] + fBox.GetZHalfLength();
   UVector3 pb(p.x, p.y, p.z - shift);
 
   double idistance;
 
-  idistance = box.DistanceToIn(pb, v); // using only box, this appears
-  // to be faster than: idistance = enclosingCylinder->DistanceTo(pb, v);
+  idistance = fBox.DistanceToIn(pb, v);
+    // using only box, this appears
+    // to be faster than: idistance = enclosingCylinder->DistanceTo(pb, v);
   if (idistance >= UUtils::kInfinity) return idistance;
 
   // this line can be here or not. not a big difference in performance
-  // TODO: fix enclosingCylinder for polyhedra!!! - the current radius appears to be too small
-//  if (enclosingCylinder->ShouldMiss(p, v)) return UUtils::kInfinity;
+  // TODO: fix enclosingCylinder for polyhedra!!! - the current radius
+  // appears to be too small
+  //  if (enclosingCylinder->ShouldMiss(p, v)) return UUtils::kInfinity;
 
   // this just takes too much time
-//  idistance = enclosingCylinder->DistanceTo(pb, v);
-//  if (idistance == UUtils::kInfinity) return idistance;
+  //  idistance = enclosingCylinder->DistanceTo(pb, v);
+  //  if (idistance == UUtils::kInfinity) return idistance;
 
   pb = p + idistance * v;
   int index = GetSection(pb.z);
@@ -525,7 +556,7 @@ double UPolycone::DistanceToIn(const UVector3& p,
     pb.z += section.shift;
   }
   while (index >= 0 && index <= fMaxSection);
-
+  //if(Inside(p)==eInside)return UUtils::kInfinity;
   return distance;
 }
 
@@ -542,64 +573,45 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
   int index =  GetSection(p.z);
   double totalDistance = 0;
   int increment = (v.z > 0) ? 1 : -1;
+  bool convexloc=true;
 
-//  UVector3 normal;
   do
   {
     const UPolyconeSection& section = fSections[index];
     if (totalDistance != 0)
     {
-      pn = p + (totalDistance /*+ 0 * 1e-8*/) * v; // point must be shifted, so it could eventually get into another solid
-      pn.z -= section.shift;
+      pn = p + (totalDistance /*+ 0 * 1e-8*/) * v; // point must be shifted,
+                                                   // so it could eventually
+      pn.z -= section.shift;                       // get into another solid
       if (section.solid->Inside(pn) == eOutside)
       {
-        //index = index;
         break;
       }
     }
     else pn.z -= section.shift;
 
-//    if (totalDistance > 0) totalDistance += 1e-8;
     double distance = section.solid->DistanceToOut(pn, v, n, convex);
-
-    /*
-    if (convex == false)
-    {
-      n.Set(0);
-
-    //      ps += distance * v;
-    //      section.solid->Normal(ps, n);
-    }
-    */
-
-    /*
-    double dif = (n2 - n).Mag();
-    if (dif > 0.0000001)
-      n = n;
-      */
-
-    if (distance == 0)
-    {
-      distance = 0;//distance;
-      break;
-    }
-//    n = normal;
+    if ((convexloc) && (section.convex)) { convexloc = true; }
+    else { convexloc = false; }
 
     totalDistance += distance;
-
     index += increment;
-
-    // pn.z check whether it still relevant
   }
   while (index >= 0 && index <= fMaxSection);
-
-//  pn = p + (totalDistance + 1e-8) * v;
-
-//  Normal(pn, n);
-
-//  convex = (DistanceToIn(pn, n) == UUtils::kInfinity);
-  convex = false;
-
+  
+  convex=convexloc;
+  if (convex)
+  {
+    // Check final convexity for dz
+    //
+    pn = p + (totalDistance) * v;
+    double dz1 = std::fabs(pn.z-fZs[index]);
+    double dz2 = std::fabs(pn.z-fZs[index+1]);
+    double halfTolerance=0.5*fgTolerance;
+    if((dz1 < halfTolerance) && (index>0)) convex = false;
+    if((dz2 < halfTolerance) && (index<fMaxSection)) convex = false;
+  }
+  
   return totalDistance;
 }
 
@@ -1259,6 +1271,7 @@ void UPolycone::CopyStuff(const UPolycone& source)
   phiIsOpen = source.phiIsOpen;
   fCubicVolume    = source.fCubicVolume;
   fSurfaceArea    = source.fSurfaceArea;
+  fBox = source.fBox;
   //
   // The array of planes
   //

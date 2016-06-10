@@ -488,7 +488,7 @@ UVector3 UOrb::GetPointOnSurface() const
 
 VUSolid* UOrb:: Clone() const
 {
-  return new UOrb(GetName(), fR);
+  return new UOrb(*this);
 }
 
 // Copy constructor

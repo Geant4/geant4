@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 67235 2013-02-08 16:34:49Z vnivanch $
+// $Id: HistoManager.hh 79241 2014-02-20 16:03:35Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
+#include "G4StatDouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -117,6 +118,7 @@ private:
   G4bool fHistoBooked;
 
   G4double fTotEdep;
+  G4StatDouble fEdep;
   G4double fOverflow;
   G4DataVector fEgas;
 

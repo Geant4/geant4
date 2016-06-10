@@ -1,4 +1,4 @@
-$Id: History 76274 2013-11-08 11:57:49Z gcosmo $
+$Id: History 79167 2014-02-19 15:57:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,13 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-Jan-2014, Gunter Folger              (phys-ctor-ions-V09-06-06)
+- Removed from photolepton_hadron/muon_nuclear from sources.cmake
+
+08-Jan-2014, Davide Mancusi
+- INCL++ was incorrectly used up to 48 GeV for deuteron, triton, He3 and alpha.
+- Change the upper limit for ions to 18*3 GeV.
 
 07-Nov-2013, Alberto Ribon		(phys-ctor-ions-V09-06-05)
 - Removed low_energy and high_energy from sources.cmake and GNUmakefile.

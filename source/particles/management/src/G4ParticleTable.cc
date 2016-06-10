@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc 77085 2013-11-21 10:37:09Z gcosmo $
+// $Id: G4ParticleTable.cc 79155 2014-02-19 15:27:31Z gcosmo $
 //
 // class G4ParticleTable
 //
@@ -552,7 +552,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index) const
    CheckReadiness();
   if ( (index >=0) && (index < entries()) ) {
     G4PTblDicIterator *piter = fIterator; 
-    piter -> reset();
+    piter -> reset(false);
     G4int counter = 0;
     while( (*piter)() ){
       if ( counter == index ) return piter->value();

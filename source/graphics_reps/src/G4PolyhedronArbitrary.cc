@@ -72,7 +72,7 @@ G4PolyhedronArbitrary::~G4PolyhedronArbitrary ()
 {;}
 ///////////////////////////////////////////////////////////////////////////////
 //
-void G4PolyhedronArbitrary::AddVertex (const G4ThreeVector v)
+void G4PolyhedronArbitrary::AddVertex (const G4ThreeVector& v)
 {
   if (nVertexCount == nvert + 1)
   {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh 74051 2013-09-20 09:39:41Z gcosmo $
+// $Id: G4VVisManager.hh 79152 2014-02-19 15:22:08Z gcosmo $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
@@ -196,6 +196,14 @@ public: // With description
   virtual void GeometryHasChanged () = 0;
   // This is used by the run manager to notify a change of geometry.
 
+  virtual void IgnoreStateChanges(G4bool);
+  // This method shoud be invoked by a class that has its own event loop,
+  // such as the RayTracer, material scanner, etc. If the argument is true,
+  // the following state changes among Idle, GeomClosed and EventProc are
+  // caused by such a class, and thus not by the ordinary event simulation.
+  // The same method with false should be invoked once such an event loop
+  // is over.
+
   virtual void NotifyHandlers () {}
   // Notify scene handlers (G4VGraphicsScene objects) that the scene
   // has changed so that they may rebuild their graphics database, if
@@ -213,27 +221,18 @@ public: // With description
   virtual G4bool FilterDigi(const G4VDigi&) = 0;
   // Digi filter
 
+#ifdef G4MULTITHREADED
+
+  virtual void SetUpForAThread() = 0;
+  // This method is invoked by G4WorkerRunManager
+
+#endif
+
 protected:
 
   static void SetConcreteInstance (G4VVisManager*);
 
   static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
-
-public:
-
-#ifdef G4MULTITHREADED
-  // This method is invoked by G4WorkerRunManager
-  virtual void SetUpForAThread() = 0;
-#endif
-
-  // This method shoud be invoked by a class that has its own event loop, 
-  // such as the RayTracer, material scanner, etc. If the argument is true,
-  // the following state changes among Idle, GeomClosed and EventProc are
-  // caused by such a class, and thus not by the ordinary event simulation.
-  // The same method with false should be invoked once such an event loop 
-  // is over.
-  virtual void IgnoreStateChanges(G4bool);
-  
 };
 
 #endif

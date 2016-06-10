@@ -1,4 +1,4 @@
-$Id: README 75294 2013-10-30 09:28:35Z gcosmo $
+$Id: README 79260 2014-02-20 16:35:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,9 +10,9 @@ $Id: README 75294 2013-10-30 09:28:35Z gcosmo $
 
 This example presently illustrates the following basic concepts, and in
 particular (indicated with ***), how to use G4 for optical photon
-generation and transport. An extended example of what is possible
+generation and transport. Other extended example of what is possible
 in Geant4 with optical photons can be found at
-examples/extended/optical/LXe.
+examples/extended/optical/LXe and wls.
 
 main()
 ------

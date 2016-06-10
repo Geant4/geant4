@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -323,7 +323,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=3.08s Real=3.1s Sys=0.01s
+  User=5.08s Real=9.31s Sys=0s
 
  ======================== run summary ======================
 
@@ -331,29 +331,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.819 MeV
+ total energy deposit: 99.82 MeV
 
- nb tracks/event   neutral:  25.361   charged:  138.46
- nb  steps/event   neutral:  131.24   charged:  204.99
+ nb tracks/event   neutral:  25.261   charged:  137.49
+ nb  steps/event   neutral:  130.38   charged:  203.53
 
  nb of process calls per event: 
-    CoulombScatTransportation     annihil       compt        conv       eBrem       eIoni         msc        phot
-         0.0005      0.9065      1.3965      105.88      1.3965      23.057         180      0.5345      23.059
+   Transportation     annihil       compt        conv       eBrem       eIoni         msc        phot
+         0.9075       1.401      105.12       1.401       22.96      178.72      0.4535      22.956
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.029 cm    rms = 3.8339 cm 
- proj Range = 9.5794 cm    rms = 3.5423 cm 
- proj/true  = 0.86853
- transverse dispersion at end = 1.6675 cm 
-      mass true Range from simulation = 29.78 g/cm2 
+ true Range = 11.136 cm    rms = 3.7593 cm 
+ proj Range = 9.6858 cm    rms = 3.498 cm 
+ proj/true  = 0.86975
+ transverse dispersion at end = 1.665 cm 
+      mass true Range from simulation = 30.068 g/cm2 
        from PhysicsTable (csda range) = 32.099 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1863563076, 174104628
+ Current couple of seeds = 677060992, 1545205346
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

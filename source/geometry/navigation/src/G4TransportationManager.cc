@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc 68709 2013-04-05 09:03:07Z gcosmo $
+// $Id: G4TransportationManager.cc 79140 2014-02-19 13:29:40Z gcosmo $
 //
 //
 // G4TransportationManager 
@@ -122,6 +122,19 @@ void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
    {
       fPropagatorInField -> SetDetectorFieldManager( newFieldManager );
    }
+}
+
+// ----------------------------------------------------------------------------
+// SetNavigatorForTracking()
+//
+// Set the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
+void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
+{
+   fNavigators[0] = newNavigator;
+   fActiveNavigators[0] = newNavigator;
+   fPropagatorInField->SetNavigatorForPropagating(newNavigator);
 }
 
 // ----------------------------------------------------------------------------

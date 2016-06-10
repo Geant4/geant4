@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc 75573 2013-11-04 11:48:15Z gcosmo $
+// $Id: G4PenelopeIonisationModel.cc 79186 2014-02-20 09:20:02Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -263,12 +263,16 @@ G4double G4PenelopeIonisationModel::CrossSectionPerVolume(const G4Material* mate
     {
       //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
       //not filled up. This can happen in a UnitTest or via G4EmCalculator
-      G4ExceptionDescription ed;
-      ed << "Unable to retrieve the cross section table for " << theParticle->GetParticleName() << 
-       " in " << material->GetName() << ", cut = " << cutEnergy/keV << " keV " << G4endl;
-      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
-      G4Exception("G4PenelopeIonisationModel::CrossSectionPerVolume()",
-		  "em2038",JustWarning,ed);
+      if (verboseLevel > 0)
+	{
+	  //Issue a G4Exception (warning) only in verbose mode
+	  G4ExceptionDescription ed;
+	  ed << "Unable to retrieve the cross section table for " << theParticle->GetParticleName() << 
+	    " in " << material->GetName() << ", cut = " << cutEnergy/keV << " keV " << G4endl;
+	  ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+	  G4Exception("G4PenelopeIonisationModel::CrossSectionPerVolume()",
+		      "em2038",JustWarning,ed);
+	}
       //protect file reading via autolock
       G4AutoLock lock(&PenelopeIonisationModelMutex);
       theCrossSectionHandler->BuildXSTable(material,cutEnergy,theParticle);
@@ -372,12 +376,16 @@ G4double G4PenelopeIonisationModel::ComputeDEDXPerVolume(const G4Material* mater
     {
       //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
       //not filled up. This can happen in a UnitTest or via G4EmCalculator
-      G4ExceptionDescription ed;
-      ed << "Unable to retrieve the cross section table for " << theParticle->GetParticleName() <<
-       " in " << material->GetName() << ", cut = " << cutEnergy/keV << " keV " << G4endl;
-      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
-      G4Exception("G4PenelopeIonisationModel::ComputeDEDXPerVolume()",
-		  "em2038",JustWarning,ed);
+      if (verboseLevel > 0)
+	{   
+	  //Issue a G4Exception (warning) only in verbose mode
+	  G4ExceptionDescription ed;
+	  ed << "Unable to retrieve the cross section table for " << theParticle->GetParticleName() <<
+	    " in " << material->GetName() << ", cut = " << cutEnergy/keV << " keV " << G4endl;
+	  ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+	  G4Exception("G4PenelopeIonisationModel::ComputeDEDXPerVolume()",
+		      "em2038",JustWarning,ed);
+	}
       //protect file reading via autolock
       G4AutoLock lock(&PenelopeIonisationModelMutex);
       theCrossSectionHandler->BuildXSTable(material,cutEnergy,theParticle);

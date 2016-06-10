@@ -1,4 +1,4 @@
-$Id: History 73008 2013-08-15 08:43:13Z gcosmo $
+$Id: History 79227 2014-02-20 15:32:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-12-13 L.Pandola (amsEcal-V09-06-02)
+- Add in RunAction a protection against division by zero 
+(bug report 1522)
+
 30-07-13 A.Dotti (amsEcal-V09-06-01)
 - Bug fixing for clang32: warning unused private data field
 

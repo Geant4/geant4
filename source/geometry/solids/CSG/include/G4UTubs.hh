@@ -65,6 +65,8 @@ class G4UTubs : public G4USolid
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
+    G4VSolid* Clone() const;
+
     inline UTubs* GetShape() const;
 
     inline G4double GetInnerRadius   () const;
@@ -125,27 +127,27 @@ inline G4double G4UTubs::GetDeltaPhiAngle() const
 inline void G4UTubs::SetInnerRadius(G4double newRMin)
 {
   GetShape()->SetInnerRadius(newRMin);
-  ResetPolyhedron(); 
+  fPolyhedron = 0;
 }
 inline void G4UTubs::SetOuterRadius(G4double newRMax)
 {
   GetShape()->SetOuterRadius(newRMax);
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 inline void G4UTubs::SetZHalfLength(G4double newDz)
 {
   GetShape()->SetZHalfLength(newDz);
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 inline void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSPhi, trig);
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 inline void G4UTubs::SetDeltaPhiAngle(G4double newDPhi)
 {
   GetShape()->SetDeltaPhiAngle(newDPhi);
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 
 #endif

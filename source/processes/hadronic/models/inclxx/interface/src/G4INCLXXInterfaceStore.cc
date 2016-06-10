@@ -48,8 +48,6 @@ G4ThreadLocal G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL
 
 G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
   accurateProjectile(true),
-  theMaxClusterMassDefault(8),
-  theMaxClusterMass(theMaxClusterMassDefault),
   theMaxProjMassINCL(18),
   cascadeMinEnergyPerNucleon(1.*MeV),
   conservationTolerance(5*MeV),
@@ -66,6 +64,10 @@ G4INCLXXInterfaceStore::~G4INCLXXInterfaceStore() {
   delete theINCLModel;
 }
 
+void G4INCLXXInterfaceStore::DeleteModel() {
+  delete theINCLModel; theINCLModel=NULL;
+}
+
 G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::GetInstance() {
   if(!theInstance)
     theInstance = new G4INCLXXInterfaceStore;
@@ -79,10 +81,9 @@ void G4INCLXXInterfaceStore::DeleteInstance() {
 
 G4INCL::INCL *G4INCLXXInterfaceStore::GetINCLModel() {
   if(!theINCLModel) {
-    G4INCL::Config *theConfig = new G4INCL::Config;
-    theConfig->setClusterMaxMass(theMaxClusterMass);
-    theINCLModel = new G4INCL::INCL(theConfig);
-    // ownership of the Config object is taken over by the INCL model engine
+    G4INCL::Config *aConfig = new G4INCL::Config(theConfig);
+    theINCLModel = new G4INCL::INCL(aConfig);
+    // ownership of the aConfig object is taken over by the INCL model engine
   }
   return theINCLModel;
 }
@@ -117,6 +118,7 @@ void G4INCLXXInterfaceStore::SetAccurateProjectile(const G4bool b) {
 }
 
 void G4INCLXXInterfaceStore::SetMaxClusterMass(const G4int aMass) {
+  const G4int theMaxClusterMass = theConfig.getClusterMaxMass();
   if(theMaxClusterMass!=aMass) {
     // Parameter is changed, emit a big warning message
     std::stringstream ss;
@@ -128,13 +130,13 @@ void G4INCLXXInterfaceStore::SetMaxClusterMass(const G4int aMass) {
       << G4endl
       << "Do this ONLY if you fully understand what this setting does!";
     EmitBigWarning(ss.str());
+
+    // We must delete the model object to make sure that we use the new
+    // parameter
+    DeleteModel();
+
+    theConfig.setClusterMaxMass(aMass);
   }
-
-  // We must delete the model object to make sure that we use the new
-  // parameter
-  DeleteModel();
-
-  theMaxClusterMass=aMass;
 }
 
 
@@ -144,7 +146,7 @@ G4bool G4INCLXXInterfaceStore::GetAccurateProjectile() const { return accuratePr
 
 G4double G4INCLXXInterfaceStore::GetCascadeMinEnergyPerNucleon() const { return cascadeMinEnergyPerNucleon; }
 
-G4int G4INCLXXInterfaceStore::GetMaxClusterMass() const { return theMaxClusterMass; }
+G4INCL::Config &G4INCLXXInterfaceStore::GetINCLConfig() { return theConfig; }
 
 G4double G4INCLXXInterfaceStore::GetConservationTolerance() const { return conservationTolerance; }
 

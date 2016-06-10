@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04FieldMessenger.hh 76690 2013-11-14 08:45:07Z gcosmo $
+// $Id: F04FieldMessenger.hh 79251 2014-02-20 16:16:23Z gcosmo $
 //
 /// \file field/field04/include/F04FieldMessenger.hh
 /// \brief Definition of the F04FieldMessenger class
@@ -69,7 +69,6 @@ class F04FieldMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fDeltaIntersectionCMD;
     G4UIcmdWithADoubleAndUnit* fEpsMinCMD;
     G4UIcmdWithADoubleAndUnit* fEpsMaxCMD;
-    G4UIcmdWithoutParameter*   fUpdateCMD;
 
     F04DetectorConstruction*   fDetector;
 };

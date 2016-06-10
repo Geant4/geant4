@@ -572,6 +572,8 @@ template<class T> TLBE<T>::~TLBE()
 #include "G4NeutronHPCaptureData.hh"
 #include "G4NeutronHPInelastic.hh"
 #include "G4NeutronHPInelasticData.hh"
+#include "G4NeutronCaptureXS.hh"
+#include "G4NeutronRadCapture.hh"
 
 // ConstructHad()
 // Makes discrete physics processes for the hadrons, at present limited
@@ -792,8 +794,12 @@ template<class T> TLBE<T>::~TLBE()
 	G4NeutronHPCapture * theNeutronCaptureHPModel = new G4NeutronHPCapture;
         theNeutronCaptureHPModel->SetMinEnergy( theHPMin );
         theNeutronCaptureHPModel->SetMaxEnergy( theHPMax );
+	G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
+ 	theNeutronRadCapture->SetMinEnergy(theHPMax*0.99); 
 	theCaptureProcess->RegisterMe( theNeutronCaptureHPModel );
+	theCaptureProcess->RegisterMe( theNeutronRadCapture);
 	theCaptureProcess->AddDataSet( new G4NeutronHPCaptureData );
+	theCaptureProcess->AddDataSet( new G4NeutronCaptureXS);
 	pmanager->AddDiscreteProcess(theCaptureProcess);
       }
       else if (particleName == "anti_neutron") 

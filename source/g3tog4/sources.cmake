@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 79126 2014-02-18 15:37:58Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -23,7 +23,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/BREPS/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/Boolean/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)

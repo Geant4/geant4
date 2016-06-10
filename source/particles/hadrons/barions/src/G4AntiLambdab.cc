@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambdab.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4AntiLambdab.cc 79334 2014-02-24 10:53:32Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -73,9 +73,9 @@ G4AntiLambdab* G4AntiLambdab::Definition()
                  name,      5.6202*GeV,  0.462e-9*MeV,          0.,
                     1,              +1,             0,
                     0,               0,             0,
-             "baryon",               0,            +1,       -5122,
+             "baryon",               0,            -1,       -5122,
                 false,      1.425e-3*ns,          NULL,
-                false,       "lambda_b");
+                false,       "anti_lambda_b");
   }
   theInstance = reinterpret_cast<G4AntiLambdab*>(anInstance);
   return theInstance;

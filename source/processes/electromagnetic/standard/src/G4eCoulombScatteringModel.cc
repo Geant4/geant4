@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc 76536 2013-11-12 15:17:41Z gcosmo $
+// $Id: G4eCoulombScatteringModel.cc 79188 2014-02-20 09:22:48Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -129,8 +129,8 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
   */
-  pCuts = 
-    G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  pCuts = &cuts;
+  //  G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   /*
   G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
   	 << part->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 

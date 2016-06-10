@@ -1,4 +1,4 @@
-$Id: History 76257 2013-11-08 11:31:00Z gcosmo $
+$Id: History 79329 2014-02-24 09:04:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 21st, 2014  M.Asai (event-V09-06-23)
+- G4SPSPosDistribution::IsSourceConfined() : Add protection against
+  null pointer. Addressing to Bug report #1255.
+
+January 23rd, 2014  M.Asai (event-V09-06-22)
+- Change the default value of Q (charge) for /gun/ion and /gun/ionL commands.
+  Now electrons are fully stripped (i.e. Q = Z) if Q is not specified.
 
 November 7th, 2013  L.Desorgher (event-V09-06-21)
 - Modification of adjoint classes to migrate to the new RMC schema where reverse

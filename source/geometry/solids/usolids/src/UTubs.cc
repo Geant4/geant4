@@ -1027,7 +1027,7 @@ double UTubs::DistanceToIn(const UVector3& p, const UVector3& v, double) const
 // - Only to phi planes if outside phi extent
 // - Return 0 if point inside
 
-double UTubs::SafetyFromOutside(const UVector3& p, bool) const
+double UTubs::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 {
   double safe = 0.0, rho, safe1, safe2, safe3;
   double safePhi, cosPsi;
@@ -1076,9 +1076,28 @@ double UTubs::SafetyFromOutside(const UVector3& p, bool) const
   }
   if (safe < 0)
   {
-    safe = 0;
+    safe = 0; return safe; // point is Inside;
   }
-  return safe;
+  if (!aAccurate) return safe;
+  double safsq = 0.0;
+  int count = 0;
+  if (safe1 > 0)
+  {
+    safsq += safe1 * safe1;
+    count++;
+  }
+  if (safe2 > 0)
+  {
+    safsq += safe2 * safe2;
+    count++;
+  }
+  if (safe3 > 0)
+  {
+    safsq += safe3 * safe3;
+    count++;
+  }
+  if (count == 1) return safe;
+  return std::sqrt(safsq);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1592,7 +1611,7 @@ double UTubs::SafetyFromInside(const UVector3& p, bool) const
   {
     if (p.y * fCosCPhi - p.x * fSinCPhi <= 0)
     {
-      safePhi = -(p.x * fSinCPhi - p.y * fCosSPhi);
+      safePhi = -(p.x * fSinSPhi - p.y * fCosSPhi);
     }
     else
     {

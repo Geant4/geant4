@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -525,6 +525,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -605,6 +611,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 42 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -734,6 +746,12 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  pi+    SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 39 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -823,37 +841,37 @@ HistoManager: Histograms are booked and run has been started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.21s Real=0.21s Sys=0s
+  User=0.27s Real=0.54s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 0.74768 +- 0.11538 keV    RMS/Emean = 4.8799
-   Mean number of steps in absorber= 1.228  mean number of ion-clusters = 815.78 MeanCluster= 816.34
+   Mean energy deposit in absorber = 16.415 +- 0.6317 keV    RMS/Emean = 1.2169
+   Mean number of steps in absorber= 1.255  mean number of ion-clusters = 820.3 MeanCluster= 820.48
 
- ====== Energy deposit distribution   Noverflows= 0.013 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.019 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           2       0.002
-    2         6          85       0.085
-    3         9         273       0.273
-    4        12         278       0.278
-    5        15         142       0.142
-    6        18          75       0.075
-    7        21          49       0.049
-    8        24          24       0.024
-    9        27          15       0.015
-   10        30          15       0.015
-   11        33           6       0.006
-   12        36           4       0.004
-   13        39           5       0.005
+    1         3           6       0.006
+    2         6         108       0.108
+    3         9         255       0.255
+    4        12         233       0.233
+    5        15         157       0.157
+    6        18          77       0.077
+    7        21          52       0.052
+    8        24          36       0.036
+    9        27          21       0.021
+   10        30          10        0.01
+   11        33           8       0.008
+   12        36           7       0.007
+   13        39           0           0
    14        42           3       0.003
-   15        45           3       0.003
-   16        48           1       0.001
-   17        51           2       0.002
-   18        54           3       0.003
-   19        57           2       0.002
+   15        45           2       0.002
+   16        48           2       0.002
+   17        51           1       0.001
+   18        54           2       0.002
+   19        57           1       0.001
  ================== run end ==========================
 #
 G4 kernel has come to Quit state.
@@ -867,7 +885,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.45 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.46 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

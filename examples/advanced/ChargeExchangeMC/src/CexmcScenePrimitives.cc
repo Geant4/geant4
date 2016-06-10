@@ -42,7 +42,6 @@
  */
 
 #include <cmath>
-#include <G4SystemOfUnits.hh>
 #include <G4Polyline.hh>
 #include <G4Circle.hh>
 #include <G4Polyhedron.hh>
@@ -52,6 +51,7 @@
 #include <G4AffineTransform.hh>
 #include <G4Transform3D.hh>
 #include <G4Point3D.hh>
+#include <G4SystemOfUnits.hh>
 #include "CexmcScenePrimitives.hh"
 #include "CexmcScenePrimitivesMessenger.hh"
 #include "CexmcSetup.hh"

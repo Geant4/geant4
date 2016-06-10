@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc 73153 2013-08-20 07:17:42Z gcosmo $
+// $Id: G4EmStandardPhysics_option1.cc 79157 2014-02-19 15:35:01Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -290,6 +290,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pib, particle);
       ph->RegisterProcess(pip, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
@@ -299,6 +300,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(kb, particle);
       ph->RegisterProcess(kp, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
       //    } else if (particleName == "proton" ) {
     } else if (particleName == "proton" ||
@@ -309,6 +311,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||

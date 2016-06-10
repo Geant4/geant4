@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc 74376 2013-10-04 08:25:47Z gcosmo $
+// $Id: G4EmProcessOptions.cc 79268 2014-02-20 16:46:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -196,7 +196,8 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name,
   if("all" == name) { all = true; }
 
   if(worker && !G4Threading::IsWorkerThread()) { return; }
-
+  else if(!worker && G4Threading::IsWorkerThread()) { return; }
+  
   if(all) { 
     theManager->SetVerbose(val);
     return;

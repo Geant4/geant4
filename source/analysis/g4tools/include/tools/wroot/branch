@@ -8,6 +8,7 @@
 #include "basket"
 #include "itree"
 #include "idir"
+#include "../forit"
 
 namespace tools {
 namespace wroot {
@@ -269,8 +270,7 @@ public:
   }
 protected:
   bool fill_leaves(buffer& a_buffer) {
-    std::vector<base_leaf*>::iterator it;
-    for(it=m_leaves.begin();it!=m_leaves.end();++it) {
+    tools_vforit(base_leaf*,m_leaves,it) {
       if(!(*it)->fill_basket(a_buffer)) return false;
     }
     return true;

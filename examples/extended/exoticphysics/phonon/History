@@ -1,4 +1,4 @@
-$Id: History 76938 2013-11-19 09:51:36Z gcosmo $
+$Id: History 79243 2014-02-20 16:05:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 February 2014:  J. Allison (phononExample-V09-06-10)
+- CMakeLists.txt: Added CrystalMaps to list copied to build directory.
 
 18 November 2013:  M. Kelsey (phononExample-V09-06-09)
 - XDetectorConstruction.cc:  Remove verbosity settings.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4NuclearStopping.hh 79188 2014-02-20 09:22:48Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 // class description
 //
 //  The class simulates nuclear stopping due to multiple scattering
+//  It should be instantiated after G4ionIonisation
 //
 // class description - end
 

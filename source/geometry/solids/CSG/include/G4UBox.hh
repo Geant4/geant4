@@ -58,6 +58,8 @@ class G4UBox : public G4USolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    G4VSolid* Clone() const;
+
     inline UBox* GetShape() const;
 
     inline G4double GetXHalfLength() const;
@@ -105,18 +107,17 @@ inline G4double G4UBox::GetZHalfLength() const
 inline void G4UBox::SetXHalfLength(G4double dx)
 {
   GetShape()->SetXHalfLength(dx);
-  ResetPolyhedron();
-  
+  fPolyhedron = 0;
 }
 inline void G4UBox::SetYHalfLength(G4double dy)
 {
   GetShape()->SetYHalfLength(dy);
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 inline void G4UBox::SetZHalfLength(G4double dz)
 {
   GetShape()->SetZHalfLength(dz);
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 
 #endif

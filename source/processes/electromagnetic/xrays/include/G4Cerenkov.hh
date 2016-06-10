@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh 71106 2013-06-11 10:25:59Z gcosmo $
+// $Id: G4Cerenkov.hh 79190 2014-02-20 09:34:52Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -155,22 +155,32 @@ public:
                                const G4Step&
                               ) {return 0;};
 
-	void SetTrackSecondariesFirst(const G4bool state);
+	static void SetTrackSecondariesFirst(const G4bool state);
         // If set, the primary particle tracking is interrupted and any 
         // produced Cerenkov photons are tracked next. When all have 
-        // been tracked, the tracking of the primary resumes. 
-	
-        void SetMaxBetaChangePerStep(const G4double d);
+        // been tracked, the tracking of the primary resumes.
+
+        G4bool GetTrackSecondariesFirst() const;
+        // Returns the boolean flag for tracking secondaries first.
+
+        static void SetMaxBetaChangePerStep(const G4double d);
         // Set the maximum allowed change in beta = v/c in % (perCent)
         // per step.
 
-	void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
+        G4double GetMaxBetaChangePerStep() const;
+        // Returns the maximum allowed change in beta = v/c in % (perCent)
+
+	static void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
         // Set the maximum number of Cerenkov photons allowed to be 
         // generated during a tracking step. This is an average ONLY; 
         // the actual number will vary around this average. If invoked, 
         // the maximum photon stack will roughly be of the size set.
         // If not called, the step is not limited by the number of 
         // photons generated.
+
+        G4int GetMaxNumPhotonsPerStep() const;
+        // Returns the maximum number of Cerenkov photons allowed to be
+        // generated during a tracking step.
 
         G4PhysicsTable* GetPhysicsTable() const;
         // Returns the address of the physics table.
@@ -204,31 +214,31 @@ protected:
 
 private:
 
-	G4bool fTrackSecondariesFirst;
-        G4double fMaxBetaChange;
-        G4int  fMaxPhotons;
+	static G4bool fTrackSecondariesFirst;
+        static G4double fMaxBetaChange;
+        static G4int  fMaxPhotons;
 };
 
 ////////////////////
 // Inline methods
 ////////////////////
 
-inline 
-void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state) 
-{ 
-	fTrackSecondariesFirst = state;
-}
-
 inline
-void G4Cerenkov::SetMaxBetaChangePerStep(const G4double value)
+G4bool G4Cerenkov::GetTrackSecondariesFirst() const
 {
-        fMaxBetaChange = value*CLHEP::perCent;
+        return fTrackSecondariesFirst;
 }
 
 inline
-void G4Cerenkov::SetMaxNumPhotonsPerStep(const G4int NumPhotons) 
-{ 
-	fMaxPhotons = NumPhotons;
+G4double G4Cerenkov::GetMaxBetaChangePerStep() const
+{
+        return fMaxBetaChange;
+}
+
+inline
+G4int G4Cerenkov::GetMaxNumPhotonsPerStep() const
+{
+        return fMaxPhotons;
 }
 
 inline

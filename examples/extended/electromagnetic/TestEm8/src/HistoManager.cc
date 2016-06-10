@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 78171 2013-12-04 13:22:18Z gunter $
+// $Id: HistoManager.cc 79241 2014-02-20 16:03:35Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -118,11 +118,11 @@ void HistoManager::BeginOfRun()
   if(fHisto->IsActive() && !fHistoBooked) { 
 
     fHisto->Add1D("10","Energy deposition in detector (keV)",
-		  fBinsE,0.0,fMaxEnergy/keV,1.0);
+                  fBinsE,0.0,fMaxEnergy/keV,1.0);
     fHisto->Add1D("11","Number of primary clusters",
-		  fBinsCluster,-0.5,fBinsCluster-0.5,1.0);
+                  fBinsCluster,-0.5,fBinsCluster-0.5,1.0);
     fHisto->Add1D("12","Energy deposition in detector (ADC)",
-		  200,0.0,2000,1.0);
+                  200,0.0,2000,1.0);
 
     fHisto->Activate(0, true); 
     fHisto->Activate(1, true); 
@@ -131,6 +131,7 @@ void HistoManager::BeginOfRun()
   fHisto->Book();
 
   fEgas.resize(fBinsE,0.0);
+  fEdep.reset();
 
   if(fVerbose > 0) {
     G4cout << "HistoManager: Histograms are booked and run has been started"
@@ -152,37 +153,24 @@ void HistoManager::EndOfRun()
   fMeanCluster *= norm;
   fOverflow    *= norm;
 
-  G4double y1 = 0.0;
-  G4double y2 = 0.0;
+  G4double y1 = fEdep.mean();
+  G4double y2 = sqrt(fEdep.rms());
 
   G4double de = fMaxEnergy/G4double(fBinsE);  
   G4double x1 = -de*0.5; 
-
-  for(G4int j=0; j<fBinsE; ++j) {
-    x1 += de;
-    G4double y = fEgas[j]*norm;
-    y1 += y*x1;
-    y2 += y*x1*x1;
-  }
-  G4double norm1 = G4double(fBinsE);
-  if(norm1 > 0.0) { norm1 = 1.0/norm1; }
-  y1 *= norm1;
-  y2 *= norm1;
-  y2 -= y1*y1;
-  if(y2 >= 0.0) { y2 = std::sqrt(y2); }
-
+  
   G4cout << " ================== run summary =====================" << G4endl;
   G4int prec = G4cout.precision(5);
   G4cout << "   End of Run TotNbofEvents    = " 
-	 << G4int(fEvt) << G4endl;
+         << G4int(fEvt) << G4endl;
   G4cout << "   Energy(keV) per ADC channel = " 
-	 << 1.0/(keV*fFactorALICE) << G4endl;
+         << 1.0/(keV*fFactorALICE) << G4endl;
   /*
   G4double p1 = 1*GeV;
   G4double p2 = 3*GeV;
   G4double mass = proton_mass_c2;
-  G4cout << std::sqrt(p1*p1 + mass*mass) - mass << "   " 
-	 << std::sqrt(p2*p2 + mass*mass) - mass << G4endl; 
+  G4cout << sqrt(p1*p1 + mass*mass) - mass << "   " 
+         << sqrt(p2*p2 + mass*mass) - mass << G4endl; 
   */
   G4cout << G4endl;
   G4cout << "   Mean energy deposit in absorber = " <<
@@ -191,8 +179,7 @@ void HistoManager::EndOfRun()
   G4cout << G4endl;
   G4cout << "   Mean number of steps in absorber= " 
          << fTotStepGas << ";  mean number of ion-clusters = " 
-	 << fTotCluster    
-	 << " MeanCluster= " << fMeanCluster    
+         << fTotCluster << " MeanCluster= " << fMeanCluster    
          << G4endl;
   G4cout << G4endl;
 
@@ -254,6 +241,8 @@ void HistoManager::EndOfEvent()
   fHisto->Fill(0,fTotEdep/keV,1.0);
   fHisto->Fill(1,fCluster,1.0);
   fHisto->Fill(2,fTotEdep*fFactorALICE/keV,1.0);
+
+  fEdep.fill(fTotEdep, 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

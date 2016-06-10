@@ -1,4 +1,4 @@
-$Id: History 78051 2013-12-03 08:18:30Z gcosmo $
+$Id: History 79223 2014-02-20 15:01:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 21st, 2014, M. Asai (run-V09-06-142)
+- Making sure worker threads re-build physics tables as well when the
+  master thread is requested to rebuild.
+
+Dec 26th, 2013, M. Asai
+- Change the order of setting world volume pointer to the transportation
+  manager for worker thread to be the same as the master thread and the
+  sequential mode, i.e. prior to invoking ConstructSDandField .
 
 Dec 2nd, 2013, A. Dotti (run-V09-06-141)
 - Adds protection for multiple runs to set SD and FieldMgr for worker

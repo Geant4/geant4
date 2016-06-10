@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Polycone.cc 79142 2014-02-19 13:35:45Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -1085,12 +1085,13 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
   }
   else  // Set parameters(r,z) with Rmin==0 as convention
   {
+#ifdef G4SPECSDEBUG
     std::ostringstream message;
     message << "Polycone " << GetName() << G4endl
             << "cannot be converted to Polycone with (Rmin,Rmaz,Z) parameters!";
     G4Exception("G4Polycone::SetOriginalParameters()", "GeomSolids0002",
                 JustWarning, message);
-
+#endif
     original_parameters = new G4PolyconeHistorical;
     original_parameters->Z_values = new G4double[numPlanes];
     original_parameters->Rmin = new G4double[numPlanes];

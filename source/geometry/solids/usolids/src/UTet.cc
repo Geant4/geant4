@@ -639,6 +639,11 @@ void UTet::GetParametersList(int, double* aArray) const
   aArray[11] = fP4.z;
 }
 //______________________________________________________________________________
+VUSolid* UTet::Clone() const
+{
+  return new UTet(*this);
+}
+//______________________________________________________________________________
 UGeometryType UTet::GetEntityType() const
 {
   return "Tet";

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04OpticalPhysics.cc 68751 2013-04-05 10:21:24Z gcosmo $
+// $Id: F04OpticalPhysics.cc 79251 2014-02-20 16:16:23Z gcosmo $
 //
 /// \file field/field04/src/F04OpticalPhysics.cc
 /// \brief Implementation of the F04OpticalPhysics class
@@ -66,6 +66,7 @@ void F04OpticalPhysics::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
+#include "G4Threading.hh"
 
 void F04OpticalPhysics::ConstructProcess()
 {
@@ -97,14 +98,17 @@ void F04OpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(theBoundaryProcess);
 
-  theWLSProcess->UseTimeProfile("delta");
-//  theWLSProcess->UseTimeProfile("exponential");
-
   pManager->AddDiscreteProcess(theWLSProcess);
 
-  theScintProcess->SetScintillationYieldFactor(1.);
-  theScintProcess->SetScintillationExcitationRatio(0.0);
-  theScintProcess->SetTrackSecondariesFirst(true);
+  if(!G4Threading::IsWorkerThread())
+  {
+    G4OpWLS::UseTimeProfile("delta");
+//  G4OpWLS::UseTimeProfile("exponential");
+
+    G4Scintillation::SetScintillationYieldFactor(1.);
+    G4Scintillation::SetScintillationExcitationRatio(0.0);
+    G4Scintillation::SetTrackSecondariesFirst(true);
+  }
 
   aParticleIterator->reset();
 

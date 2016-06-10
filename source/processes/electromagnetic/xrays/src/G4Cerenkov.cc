@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc 71478 2013-06-17 07:49:29Z gcosmo $
+// $Id: G4Cerenkov.cc 79190 2014-02-20 09:34:52Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -77,6 +77,14 @@
 // Class Implementation  
 /////////////////////////
 
+        //////////////////////
+        // static data members
+        //////////////////////
+
+G4bool G4Cerenkov::fTrackSecondariesFirst = false;
+G4double G4Cerenkov::fMaxBetaChange = 0.;
+G4int G4Cerenkov::fMaxPhotons = 0;
+
         //////////////
         // Operators
         //////////////
@@ -93,10 +101,6 @@ G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
            : G4VProcess(processName, type)
 {
         SetProcessSubType(fCerenkov);
-
-	fTrackSecondariesFirst = false;
-        fMaxBetaChange = 0.;
-	fMaxPhotons = 0;
 
         thePhysicsTable = NULL;
 
@@ -134,6 +138,21 @@ G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
 	!aParticleType.IsShortLived() ) { result = true; }
 
     return result;
+}
+
+void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state)
+{
+        fTrackSecondariesFirst = state;
+}
+
+void G4Cerenkov::SetMaxBetaChangePerStep(const G4double value)
+{
+        fMaxBetaChange = value*CLHEP::perCent;
+}
+
+void G4Cerenkov::SetMaxNumPhotonsPerStep(const G4int NumPhotons)
+{
+        fMaxPhotons = NumPhotons;
 }
 
 void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)

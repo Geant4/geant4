@@ -1,4 +1,4 @@
-$Id: History 75585 2013-11-04 12:24:44Z gcosmo $
+$Id: History 79157 2014-02-19 15:35:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,40 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-Feb-2014, V.Ivanchenko (phys-ctor-em-V09-06-22)
+- G4EmStandardPhysics, G4EmStandardPhysics_option1,
+  G4EmStandardPhysics_option2 - added Coulomb scattering process for
+    pions, kaons, proton, anti-proton in order to have more smooth
+    transition from EM to hadronic scattering
+
+31-Jan-2014, V.Ivanchenko
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmPenelopePhysics, G4EmStandardPhysics_option3 - use the same 
+    order of processes for e+- and the same comments, this does not
+    change any result but make more easy comparison of log
+    files for different EM physics options
+
+15-Jan-2014, V.Ivanchenko
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmPenelopePhysics: use G4UrbanMscModel for pions, kaons, protons
+    instead of WentzelVI to have more accurate ranges of low-energy 
+    hadrons (in particular, protons)
+
+14-Jan-2014, V.Ivanchenko
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmPenelopePhysics: use RangeFactor=0.01 to increase 
+  simulation accuracy
+
+23-Dec-2013, M.Asai
+- Fix other via-pointer invokation to static methods.
+
+22-Dec-2013, M.Asai
+- Avoid static G4Scintillation method invoked through a pointer.
+
+18-Dec-2013, P.Gumplinger
+- Fix race condision issue in OpticalPhysics
+- /optics_engine/setOpProcessUse not available for G4State_Idle
 
 01-Nov-2013, M.K (phys-ctor-em-V09-06-21)
 - Update sources.cmake
